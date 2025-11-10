@@ -35,6 +35,7 @@ htmlcov/
 *.swp
 *.swo
 *~
+.claude/settings.local.json
 
 # OS
 .DS_Store
@@ -46,6 +47,10 @@ tests/**/_reports/
 *.png
 error_log*.txt
 SESSION.md
+PROJECT_CONTEXT.md
+
+# Intellectual property (process docs and framework references)
+docs/
 
 # Environment
 .env

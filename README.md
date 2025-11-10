@@ -100,11 +100,8 @@ py_sel_framework_mcp/
 ├── mcp_server/            # MCP integration (Week 2)
 │   ├── server.py
 │   └── tools/
-├── docs/                  # Process documentation
-│   └── 4D Framework process docs
 ├── tasks/                 # PRDs and task lists
 ├── CLAUDE.md              # AI assistant context and project guidelines
-├── PROJECT_CONTEXT.md     # Idea validation and project scope
 └── README.md              # This file
 ```
 
@@ -118,14 +115,12 @@ py_sel_framework_mcp/
 
 ## Development Process
 
-This project follows the **4D Framework** (Design → Define → Divide → Deliver):
+This project follows a structured approach:
 
 1. **Phase 0 - Design:** Requirements gathering and test planning (current phase)
 2. **Phase 1 - Define:** Formal test plan creation with user stories and acceptance criteria
 3. **Phase 2 - Divide:** Break test plan into implementation tasks
 4. **Phase 3 - Deliver:** Execute tasks and build framework
-
-See `docs/` for detailed process documentation.
 
 ## Why This Project?
 
@@ -163,9 +158,8 @@ Built by [solosza](https://github.com/solosza) as a portfolio demonstration proj
 
 ## Acknowledgments
 
-- Framework architecture inspired by enterprise patterns from production PeopleSoft test automation
+- Framework architecture inspired by enterprise patterns from production test automation
 - Target application provided by [Automation Practice](http://www.automationpractice.pl/)
-- Built using the 4D Framework process (see `CLAUDE.md`)
 
 ---
 
