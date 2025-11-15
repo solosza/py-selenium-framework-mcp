@@ -49,7 +49,7 @@ Then user is logged in successfully
     d1 = json.loads(r1)
     scenario = d1['scenarios'][0]
 
-    print(f"✓ Generated scenario: {scenario['name']}")
+    print(f"[OK] Generated scenario: {scenario['name']}")
     print(f"  Given: {scenario['given']}")
     print(f"  When: {scenario['when']}")
     print(f"  Then: {scenario['then']}")
@@ -67,7 +67,7 @@ Then user is logged in successfully
     d5 = json.loads(r5)
     login_elements = [e for e in d5['elements'] if e['suggested_name'] in ['EMAIL', 'PASSWD', 'SUBMITLOGIN']]
 
-    print(f"✓ Discovered {len(login_elements)} login elements")
+    print(f"[OK] Discovered {len(login_elements)} login elements")
     for elem in login_elements:
         print(f"  - {elem['suggested_name']}: {elem['element_type']}")
     print()
@@ -88,10 +88,10 @@ Then user is logged in successfully
     has_pom_methods = 'def enter_email(' in pom_code and 'def click_submitlogin(' in pom_code
     pom_complete = has_pom_methods and 'TODO' not in pom_code
 
-    print(f"✓ Generated LoginPage POM")
+    print(f"[OK] Generated LoginPage POM")
     print(f"  Has methods: {has_pom_methods}")
     print(f"  Complete (no TODOs): {pom_complete}")
-    print(f"  Status: {'✓ COMPLETE' if pom_complete else '✗ INCOMPLETE'}")
+    print(f"  Status: {'[COMPLETE]' if pom_complete else '[INCOMPLETE]'}")
     print()
 
     # -------------------------------------------------------------------------
@@ -116,11 +116,11 @@ Then user is logged in successfully
     has_implementation = 'self.login_page.enter_email' in task_code
     task_complete = has_login and has_logout and has_implementation
 
-    print(f"✓ Generated AuthTasks")
+    print(f"[OK] Generated AuthTasks")
     print(f"  Has login(): {has_login}")
     print(f"  Has logout(): {has_logout}")
     print(f"  Has implementation: {has_implementation}")
-    print(f"  Status: {'✓ COMPLETE' if task_complete else '✗ INCOMPLETE'}")
+    print(f"  Status: {'[COMPLETE]' if task_complete else '[INCOMPLETE]'}")
     print()
 
     # -------------------------------------------------------------------------
@@ -139,10 +139,10 @@ Then user is logged in successfully
     has_role_impl = 'self.common_tasks.log_in' in role_code
     role_complete = has_role_login and has_role_impl
 
-    print(f"✓ Generated RegisteredUser Role")
+    print(f"[OK] Generated RegisteredUser Role")
     print(f"  Has login(): {has_role_login}")
     print(f"  Has implementation: {has_role_impl}")
-    print(f"  Status: {'✓ COMPLETE' if role_complete else '✗ INCOMPLETE'}")
+    print(f"  Status: {'[COMPLETE]' if role_complete else '[INCOMPLETE]'}")
     print()
 
     # -------------------------------------------------------------------------
@@ -164,12 +164,12 @@ Then user is logged in successfully
     has_todo = 'TODO' in test_code
     test_complete = has_test_data and has_action and has_assertion and not has_todo
 
-    print(f"✓ Generated test_successful_login")
+    print(f"[OK] Generated test_successful_login")
     print(f"  Has test data: {has_test_data}")
     print(f"  Has action call: {has_action}")
     print(f"  Has assertions: {has_assertion}")
     print(f"  Has TODOs: {has_todo}")
-    print(f"  Status: {'✓ COMPLETE' if test_complete else '✗ INCOMPLETE'}")
+    print(f"  Status: {'[COMPLETE]' if test_complete else '[INCOMPLETE]'}")
     print()
 
     # -------------------------------------------------------------------------
@@ -189,7 +189,7 @@ Then user is logged in successfully
     all_complete = all(results.values())
 
     for tool, status in results.items():
-        status_icon = "✓" if status else "✗"
+        status_icon = "[OK]" if status else "[FAIL]"
         status_text = "COMPLETE" if status else "INCOMPLETE"
         print(f"{status_icon} {tool}: {status_text}")
 
