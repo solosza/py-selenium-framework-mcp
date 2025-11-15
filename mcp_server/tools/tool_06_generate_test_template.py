@@ -23,6 +23,7 @@ async def generate_test_template(arguments: dict) -> str:
         arguments: {
             "test_name": str - Test function name
             "workflow": str - Workflow category
+            "role": str - Role class name (e.g., RegisteredUser, GuestUser, PayrollManager)
             "scenario": dict - Optional scenario with given/when/then
         }
 
@@ -31,6 +32,7 @@ async def generate_test_template(arguments: dict) -> str:
     """
     test_name = arguments.get("test_name", "")
     workflow = arguments.get("workflow", "")
+    role = arguments.get("role", "RegisteredUser")  # Default role
     scenario = arguments.get("scenario", {})
 
     # Validation
@@ -46,14 +48,20 @@ async def generate_test_template(arguments: dict) -> str:
             "status": "error"
         }, indent=2)
 
+    if not role:
+        return json.dumps({
+            "error": "role is required (e.g., RegisteredUser, GuestUser, PayrollManager)",
+            "status": "error"
+        }, indent=2)
+
     # Ensure test_name starts with 'test_'
     if not test_name.startswith("test_"):
         test_name = f"test_{test_name}"
 
     try:
-        # Generate test code using code_generator
+        # Generate test code using code_generator WITH ROLE PARAMETER
         from utils.code_generator import generate_test_template as gen_test
-        test_code = gen_test(test_name, workflow, scenario)
+        test_code = gen_test(test_name, workflow, role, scenario)
 
         # Get suggested file path
         file_path = get_file_path_for_component("test", test_name, workflow)
@@ -63,16 +71,16 @@ async def generate_test_template(arguments: dict) -> str:
             "status": "success",
             "test_name": test_name,
             "workflow": workflow,
+            "role": role,  # Include role in response
             "file_path": file_path,
             "code": test_code,
+            "architecture": f"Test -> {role} -> Task -> Page -> WebInterface",
             "next_steps": [
                 "Save this test code to the suggested file path",
-                "Run the test (it will fail - expected in TDD)",
-                "Use generate_role, generate_task, generate_page_object to build supporting code",
-                "Implement test logic in Act and Assert sections",
-                "Run test again until it passes"
-            ],
-            "test_first_note": "This test is a placeholder. It describes WHAT to test. Now build the HOW (role/task/page)."
+                f"Ensure {role} role exists in framework/roles/",
+                "Ensure supporting Task and Page objects exist",
+                "Run pytest to execute the test"
+            ]
         }
 
         return json.dumps(result, indent=2)
