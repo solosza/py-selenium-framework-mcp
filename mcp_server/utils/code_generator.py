@@ -323,9 +323,9 @@ This role represents a user with specific capabilities and permissions.
 """
 
 from typing import Dict, Any
-from roles.role import Role
-from interfaces.web_interface import WebInterface
-from tasks.common_tasks import CommonTasks
+from framework.roles.role import Role
+from framework.interfaces.web_interface import WebInterface
+from framework.tasks.common_tasks import CommonTasks
 
 
 class {role_name}(Role):
