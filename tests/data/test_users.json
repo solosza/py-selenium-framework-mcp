@@ -1,0 +1,84 @@
+{
+  "registered_user": {
+    "email": "test_user_001@example.com",
+    "password": "TestPass123!",
+    "first_name": "John",
+    "last_name": "Doe",
+    "company": "Test Company",
+    "address": {
+      "address1": "123 Main Street",
+      "address2": "Apt 4B",
+      "city": "New York",
+      "state": "New York",
+      "zipcode": "10001",
+      "country": "United States",
+      "phone": "5551234567",
+      "alias": "Home"
+    },
+    "role": "registered_user"
+  },
+  "registered_user_2": {
+    "email": "test_user_002@example.com",
+    "password": "TestPass456!",
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "company": "",
+    "address": {
+      "address1": "456 Oak Avenue",
+      "city": "Los Angeles",
+      "state": "California",
+      "zipcode": "90001",
+      "country": "United States",
+      "phone": "5559876543",
+      "alias": "Work"
+    },
+    "role": "registered_user"
+  },
+  "new_user": {
+    "email": "new_user_{{timestamp}}@example.com",
+    "password": "NewUser123!",
+    "first_name": "Alice",
+    "last_name": "Johnson",
+    "title": "2",
+    "gender": "female",
+    "dob_day": "15",
+    "dob_month": "5",
+    "dob_year": "1990",
+    "company": "New Company Inc",
+    "address_1": "789 Pine Road",
+    "address_2": "",
+    "city": "Chicago",
+    "state": "Illinois",
+    "zipcode": "60601",
+    "zip_code": "60601",
+    "country": "United States",
+    "phone": "5552223333",
+    "mobile_phone": "5552223333",
+    "additional_info": "Ring doorbell twice",
+    "address_alias": "Home Address",
+    "newsletter": true,
+    "special_offers": true,
+    "role": "new_user",
+    "address": {
+      "address1": "789 Pine Road",
+      "address2": "",
+      "city": "Chicago",
+      "state": "Illinois",
+      "zipcode": "60601",
+      "country": "United States",
+      "phone": "5552223333",
+      "additional_info": "Ring doorbell twice",
+      "alias": "Home Address"
+    },
+    "dob": {
+      "day": "15",
+      "month": "5",
+      "year": "1990"
+    }
+  },
+  "invalid_user": {
+    "email": "invalid_user@example.com",
+    "password": "WrongPassword999!",
+    "role": "invalid_user"
+  }
+}

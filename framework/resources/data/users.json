@@ -1,0 +1,62 @@
+[
+  {
+    "role": "registered_user",
+    "email": "testuser_001@example.com",
+    "password": "TestPass123!",
+    "first_name": "John",
+    "last_name": "Doe",
+    "company": "Test Company Inc",
+    "address": {
+      "address1": "123 Main Street",
+      "address2": "Apt 4B",
+      "city": "New York",
+      "state": "New York",
+      "zipcode": "10001",
+      "country": "United States",
+      "phone": "+1-555-123-4567",
+      "mobile_phone": "+1-555-987-6543",
+      "alias": "Home Address"
+    },
+    "notes": "Primary test account for authentication and checkout tests"
+  },
+  {
+    "role": "registered_user",
+    "email": "testuser_002@example.com",
+    "password": "SecurePass456!",
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "company": "",
+    "address": {
+      "address1": "456 Oak Avenue",
+      "address2": "",
+      "city": "Los Angeles",
+      "state": "California",
+      "zipcode": "90001",
+      "country": "United States",
+      "phone": "+1-555-222-3333",
+      "mobile_phone": "+1-555-444-5555",
+      "alias": "My Address"
+    },
+    "notes": "Secondary test account for multi-user scenarios"
+  },
+  {
+    "role": "registered_user_no_address",
+    "email": "testuser_003@example.com",
+    "password": "NoAddress789!",
+    "first_name": "Michael",
+    "last_name": "Johnson",
+    "company": "Acme Corp",
+    "address": null,
+    "notes": "Test account with no saved address (for testing address entry during checkout)"
+  },
+  {
+    "role": "guest_user",
+    "email": null,
+    "password": null,
+    "first_name": null,
+    "last_name": null,
+    "company": null,
+    "address": null,
+    "notes": "Guest user persona (no credentials, uses dynamic data generation)"
+  }
+]
