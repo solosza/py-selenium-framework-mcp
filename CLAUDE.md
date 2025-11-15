@@ -45,18 +45,28 @@
 
 ### Setup
 ```bash
-[To be filled: Installation and setup commands]
+# Install dependencies
+pip install -r requirements.txt
+pip install -r mcp_server/requirements.txt
 ```
 
 ### Testing
 ```bash
-[To be filled: How to run tests]
+# MCP Server development tests (code generation, tool chain)
+cd mcp_server/_dev_tests
+python test_complete_code_generation.py
+
+# Framework tests (pytest)
+cd tests
+pytest -v --html=_reports/report.html --self-contained-html
 ```
 
-### Running
-```bash
-[To be filled: How to start the application]
-```
+### MCP Development Tests Location
+**All MCP server development tests go in:** `mcp_server/_dev_tests/`
+- Test tool chain (Tool 1-6)
+- Code generation validation
+- End-to-end workflow tests
+- DO NOT create test scripts elsewhere - use this directory
 
 ## Project Structure
 
