@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from framework.interfaces.web_interface import WebInterface
+from interfaces.web_interface import WebInterface
 
 
 class LoginPage:
@@ -16,7 +16,7 @@ class LoginPage:
         Args:
             web: WebInterface instance
         """
-        super().__init__(web)
+        self.web = web
 
     # ==================== LOCATORS ====================
 
@@ -38,7 +38,7 @@ class LoginPage:
         Args:
             text: Text to enter
         """
-        self.web.send_keys(*self.EMAIL, text)
+        self.web.type_text(*self.EMAIL, text)
 
     def enter_passwd(self, text: str) -> None:
         """
@@ -47,5 +47,5 @@ class LoginPage:
         Args:
             text: Text to enter
         """
-        self.web.send_keys(*self.PASSWD, text)
+        self.web.type_text(*self.PASSWD, text)
 

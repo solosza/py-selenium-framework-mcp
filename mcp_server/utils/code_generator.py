@@ -323,9 +323,9 @@ This role represents a user with specific capabilities and permissions.
 """
 
 from typing import Dict, Any
-from framework.roles.role import Role
-from framework.interfaces.web_interface import WebInterface
-from framework.tasks.common_tasks import CommonTasks
+from roles.role import Role
+from interfaces.web_interface import WebInterface
+from tasks.common_tasks import CommonTasks
 
 
 class {role_name}(Role):
@@ -595,8 +595,10 @@ def generate_task_template(
 
             if page_name and page_file:
                 # Convert file path to import path
-                # e.g., "framework/pages/auth/loginpage.py" -> "framework.pages.auth.loginpage"
+                # e.g., "framework/pages/auth/loginpage.py" -> "pages.auth.loginpage"
                 import_path = page_file.replace(".py", "").replace("/", ".").replace("\\", ".")
+                # Remove 'framework.' prefix for relative imports within framework
+                import_path = import_path.replace("framework.", "")
                 page_imports += f"from {import_path} import {page_name}\n"
 
                 # Generate page object instance variable name
@@ -652,7 +654,7 @@ to accomplish business workflows.
 """
 
 from typing import Optional
-from framework.interfaces.web_interface import WebInterface
+from interfaces.web_interface import WebInterface
 {page_imports}
 
 
@@ -799,11 +801,10 @@ def generate_page_object_template(
     methods = generate_pom_methods(elements) if elements else ""
 
     code = f'''from selenium.webdriver.common.by import By
-from framework.pages.base_page import BasePage
-from framework.interfaces.web_interface import WebInterface
+from interfaces.web_interface import WebInterface
 
 
-class {page_name}(BasePage):
+class {page_name}:
     """
     {page_name} - Page Object Model
 
@@ -817,7 +818,7 @@ class {page_name}(BasePage):
         Args:
             web: WebInterface instance
         """
-        super().__init__(web)
+        self.web = web
 
     # ==================== LOCATORS ====================
 

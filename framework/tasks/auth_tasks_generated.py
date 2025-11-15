@@ -8,8 +8,8 @@ TODO: Add workflow description
 """
 
 from typing import Optional
-from framework.interfaces.web_interface import WebInterface
-from framework.pages.common.login_page_generated import LoginPage
+from interfaces.web_interface import WebInterface
+from pages.common.login_page_generated import LoginPage
 
 
 
@@ -50,7 +50,7 @@ class AuthTasks:
             True if login successful, False otherwise
         """
         # Navigate to authentication page
-        self.web.navigate(f"{self.base_url}/index.php?controller=authentication")
+        self.web.navigate_to(f"{self.base_url}/index.php?controller=authentication")
 
         # Enter credentials
         self.login_page.enter_email(email)
@@ -61,7 +61,7 @@ class AuthTasks:
 
         # Verify login success (check for account menu or logout link)
         from selenium.webdriver.common.by import By
-        return self.web.is_element_visible(By.CSS_SELECTOR, ".account, .logout")
+        return self.web.is_element_displayed(By.CSS_SELECTOR, ".account, .logout")
 
     def logout(self) -> bool:
         """
@@ -77,8 +77,8 @@ class AuthTasks:
         from selenium.webdriver.common.by import By
 
         # Click logout if visible
-        if self.web.is_element_visible(By.CSS_SELECTOR, ".logout"):
+        if self.web.is_element_displayed(By.CSS_SELECTOR, ".logout"):
             self.web.click(By.CSS_SELECTOR, ".logout")
 
         # Verify logout (login link should be visible)
-        return self.web.is_element_visible(By.CSS_SELECTOR, ".login")
+        return self.web.is_element_displayed(By.CSS_SELECTOR, ".login")
