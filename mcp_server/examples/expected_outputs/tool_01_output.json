@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "user_story_title": "As a user, I want to add products to my shopping cart",
+  "workflow": "cart",
+  "scenarios_count": 1,
+  "scenarios": [
+    {
+      "name": "test_add_product_to_cart_from_detail_page",
+      "description": "Verify user clicks \"Add to Cart\" button",
+      "given": "user is on product detail page",
+      "when": "user clicks \"Add to Cart\" button",
+      "then": "product is added to cart AND cart counter increments by 1 AND success modal is displayed",
+      "workflow": "cart"
+    }
+  ],
+  "next_step": "Use generate_test_template to create pytest test code from these scenarios"
+}

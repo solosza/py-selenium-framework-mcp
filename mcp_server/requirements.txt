@@ -1,0 +1,17 @@
+# MCP Server Dependencies
+
+# Core MCP SDK
+mcp>=1.0.0
+
+# Testing framework (for test execution)
+pytest>=8.0.0
+
+# Web scraping and element discovery
+beautifulsoup4>=4.12.0
+selenium>=4.0.0
+
+# HTML/XML parsing
+lxml>=5.0.0
+
+# JSON schema validation
+jsonschema>=4.0.0
