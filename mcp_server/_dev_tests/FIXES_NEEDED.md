@@ -10,6 +10,12 @@
 
 **Conclusion:** Generated code is syntactically valid and structurally correct!
 
+**Test Execution:** ❌ **FAILED**
+- Error: `TypeError: object.__init__() takes exactly one argument`
+- Location: `login_page_generated.py:19` - `super().__init__(web)`
+- Root Cause: LoginPage doesn't inherit from BasePage, so `super().__init__(web)` fails
+- Fix: Either inherit from BasePage OR remove super().__init__() call
+
 ## Issues Found During Real Test Execution
 
 ### Issue 1: Import Paths - Tasks
@@ -164,9 +170,38 @@ from tasks.{workflow}_tasks import {TaskClass}
 
 ---
 
+### Issue 4: WebInterface Method Name Mismatches
+**Problem:** Generated code calls wrong method names on WebInterface
+**Test Error:** `AttributeError: 'WebInterface' object has no attribute 'navigate'`
+**Root Cause:** Code generator uses method names that don't match actual WebInterface API
+
+**Method Name Mismatches:**
+1. Generated: `navigate()` → Actual: `navigate_to()`
+2. Generated: `send_keys()` → Actual: `type_text()`
+3. Generated: `is_element_visible()` → Actual: `is_element_displayed()`
+
+**Fix Location:** `mcp_server/utils/code_generator.py` - Multiple locations in `generate_task_workflows()` and `generate_page_object_template()`
+
+**Changes Made:**
+```python
+# Fix 1: Navigate method (lines 417, 469)
+# OLD: self.web.navigate(url)
+# NEW: self.web.navigate_to(url)
+
+# Fix 2: Type text method (line 715)
+# OLD: self.web.send_keys(*locator, text)
+# NEW: self.web.type_text(*locator, text)
+
+# Fix 3: Visibility check method (lines 428, 444, 448, 473, 477, 510, 515, 519, 534, 538)
+# OLD: self.web.is_element_visible(*locator)
+# NEW: self.web.is_element_displayed(*locator)
+```
+
+**Impact:** Without this fix, generated task workflows and page objects fail at runtime
+
 ---
 
-### Issue 4: Missing Framework Infrastructure
+### Issue 5: Missing Framework Infrastructure (NOT A BUG)
 **Problem:** Generated code references `framework.interfaces.web_interface.WebInterface` but this file doesn't exist yet
 **Current State:** `framework/interfaces/` directory is empty
 

@@ -13,11 +13,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from tools.tool_01_generate_tests_from_user_story import generate_tests_from_user_story
-from tools.tool_05_discover_page_elements import discover_elements
-from tools.tool_06_generate_page_object import generate_page_object
+from tools.tool_02_discover_page_elements import discover_elements
+from tools.tool_03_generate_page_object import generate_page_object
 from tools.tool_04_generate_task import generate_task
-from tools.tool_03_generate_role import generate_role
-from tools.tool_02_generate_test_template import generate_test_template as gen_test
+from tools.tool_05_generate_role import generate_role
+from tools.tool_06_generate_test_template import generate_test_template as gen_test
 
 
 async def test_complete_workflow():
@@ -56,7 +56,7 @@ Then user is logged in successfully
     print()
 
     # -------------------------------------------------------------------------
-    print("[2/6] Tool 5: Discover Page Elements")
+    print("[2/6] Tool 2: Discover Page Elements")
     print("-" * 100)
 
     r5 = await discover_elements({
@@ -73,7 +73,7 @@ Then user is logged in successfully
     print()
 
     # -------------------------------------------------------------------------
-    print("[3/6] Tool 6: Generate Page Object")
+    print("[3/6] Tool 3: Generate Page Object")
     print("-" * 100)
 
     r6 = await generate_page_object({
@@ -124,7 +124,7 @@ Then user is logged in successfully
     print()
 
     # -------------------------------------------------------------------------
-    print("[5/6] Tool 3: Generate Role")
+    print("[5/6] Tool 5: Generate Role")
     print("-" * 100)
 
     r3 = await generate_role({

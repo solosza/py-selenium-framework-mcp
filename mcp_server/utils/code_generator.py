@@ -414,7 +414,7 @@ def generate_task_workflows(
             True if login successful, False otherwise
         """
         # Navigate to authentication page
-        self.web.navigate(f"{{self.base_url}}/index.php?controller=authentication")
+        self.web.navigate_to(f"{{self.base_url}}/index.php?controller=authentication")
 
         # Enter credentials
         self.{page_var}.{email_method}(email)
@@ -425,7 +425,7 @@ def generate_task_workflows(
 
         # Verify login success (check for account menu or logout link)
         from selenium.webdriver.common.by import By
-        return self.web.is_element_visible(By.CSS_SELECTOR, ".account, .logout")
+        return self.web.is_element_displayed(By.CSS_SELECTOR, ".account, .logout")
 
     def logout(self) -> bool:
         """
@@ -441,11 +441,11 @@ def generate_task_workflows(
         from selenium.webdriver.common.by import By
 
         # Click logout if visible
-        if self.web.is_element_visible(By.CSS_SELECTOR, ".logout"):
+        if self.web.is_element_displayed(By.CSS_SELECTOR, ".logout"):
             self.web.click(By.CSS_SELECTOR, ".logout")
 
         # Verify logout (login link should be visible)
-        return self.web.is_element_visible(By.CSS_SELECTOR, ".login")
+        return self.web.is_element_displayed(By.CSS_SELECTOR, ".login")
 ''')
 
     elif workflow_type == "catalog":
@@ -466,15 +466,15 @@ def generate_task_workflows(
         from selenium.webdriver.common.by import By
 
         # Navigate to homepage
-        self.web.navigate(self.base_url)
+        self.web.navigate_to(self.base_url)
 
         # Click category link
         category_locator = (By.XPATH, f"//a[contains(text(), '{{category_name}}')]")
-        if self.web.is_element_visible(*category_locator):
+        if self.web.is_element_displayed(*category_locator):
             self.web.click(*category_locator)
 
             # Verify category page loaded
-            return self.web.is_element_visible(By.CSS_SELECTOR, ".product-container, .product_list")
+            return self.web.is_element_displayed(By.CSS_SELECTOR, ".product-container, .product_list")
 
         return False
 
@@ -507,16 +507,16 @@ def generate_task_workflows(
 
         # Find and click product
         product_locator = (By.XPATH, f"//a[contains(@title, '{{product_name}}')]")
-        if self.web.is_element_visible(*product_locator):
+        if self.web.is_element_displayed(*product_locator):
             self.web.click(*product_locator)
 
             # Click add to cart button
             add_to_cart_btn = (By.CSS_SELECTOR, ".add-to-cart, button[name='Submit']")
-            if self.web.is_element_visible(*add_to_cart_btn):
+            if self.web.is_element_displayed(*add_to_cart_btn):
                 self.web.click(*add_to_cart_btn)
 
                 # Verify cart confirmation
-                return self.web.is_element_visible(By.CSS_SELECTOR, ".layer_cart_product, #layer_cart")
+                return self.web.is_element_displayed(By.CSS_SELECTOR, ".layer_cart_product, #layer_cart")
 
         return False
 
@@ -531,11 +531,11 @@ def generate_task_workflows(
 
         # Click cart link
         cart_link = (By.CSS_SELECTOR, ".shopping_cart a, a[title='View my shopping cart']")
-        if self.web.is_element_visible(*cart_link):
+        if self.web.is_element_displayed(*cart_link):
             self.web.click(*cart_link)
 
             # Verify cart page loaded
-            return self.web.is_element_visible(By.CSS_SELECTOR, "#cart_summary, .cart_navigation")
+            return self.web.is_element_displayed(By.CSS_SELECTOR, "#cart_summary, .cart_navigation")
 
         return False
 ''')
@@ -595,8 +595,8 @@ def generate_task_template(
 
             if page_name and page_file:
                 # Convert file path to import path
-                # e.g., "framework/pages/auth/loginpage.py" -> "pages.auth.loginpage"
-                import_path = page_file.replace("framework/", "").replace(".py", "").replace("/", ".")
+                # e.g., "framework/pages/auth/loginpage.py" -> "framework.pages.auth.loginpage"
+                import_path = page_file.replace(".py", "").replace("/", ".").replace("\\", ".")
                 page_imports += f"from {import_path} import {page_name}\n"
 
                 # Generate page object instance variable name
@@ -652,7 +652,7 @@ to accomplish business workflows.
 """
 
 from typing import Optional
-from interfaces.web_interface import WebInterface
+from framework.interfaces.web_interface import WebInterface
 {page_imports}
 
 
@@ -712,7 +712,7 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
         Args:
             text: Text to enter
         """
-        self.web.send_keys(*self.{name}, text)
+        self.web.type_text(*self.{name}, text)
 ''')
 
         elif elem_type == "buttons":
@@ -800,7 +800,7 @@ def generate_page_object_template(
 
     code = f'''from selenium.webdriver.common.by import By
 from framework.pages.base_page import BasePage
-from interfaces.web_interface import WebInterface
+from framework.interfaces.web_interface import WebInterface
 
 
 class {page_name}(BasePage):
@@ -858,21 +858,26 @@ def get_file_path_for_component(component_type: str, name: str, workflow: str = 
 
     Args:
         component_type: Type (test, role, task, page)
-        name: Component name
+        name: Component name (PascalCase)
         workflow: Optional workflow for categorization
 
     Returns:
-        Suggested file path
+        Suggested file path (snake_case)
     """
+    import re
+
+    # Convert PascalCase to snake_case
+    # LoginPage -> login_page, AuthTasks -> auth_tasks
+    snake_name = re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
+
     if component_type == "test":
-        return f"tests/{workflow}/{name}.py"
+        return f"tests/{workflow}/{snake_name}.py"
     elif component_type == "role":
-        return f"framework/roles/{name.lower()}.py"
+        return f"framework/roles/{snake_name}.py"
     elif component_type == "task":
-        return f"framework/tasks/{name.lower()}.py"
+        return f"framework/tasks/{snake_name}.py"
     elif component_type == "page":
-        if workflow:
-            return f"framework/pages/{workflow}/{name.lower()}.py"
-        return f"framework/pages/{name.lower()}.py"
+        # Always use common/ directory for pages
+        return f"framework/pages/common/{snake_name}.py"
     else:
-        return f"{name}.py"
+        return f"{snake_name}.py"
