@@ -6,18 +6,35 @@ Used by Tools 2-6 (test, role, task, POM generation).
 """
 
 from typing import Dict, List, Optional, Tuple
+import re
+
+
+def _pascal_to_snake(name: str) -> str:
+    """
+    Convert PascalCase to snake_case.
+
+    Examples:
+        PayrollManager → payroll_manager
+        RegisteredUser → registered_user
+        GuestUser → guest_user
+    """
+    return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
 
 
 def map_scenario_to_test_logic(
     workflow: str,
-    scenario: Dict[str, str]
+    scenario: Dict[str, str],
+    role_class: str
 ) -> Tuple[str, str, str]:
     """
     Map Given-When-Then scenario to actual test code (Arrange, Act, Assert).
 
+    Uses Role layer architecture: Test → Role → Task → Page → WebInterface
+
     Args:
         workflow: Workflow type (auth, catalog, cart, checkout)
         scenario: Scenario dict with given/when/then
+        role_class: Role class name (e.g., PayrollManager, RegisteredUser)
 
     Returns:
         Tuple of (test_data_code, action_code, assertion_code)
@@ -30,6 +47,9 @@ def map_scenario_to_test_logic(
     actions = ""
     assertions = ""
 
+    # Create role instance variable name (PayrollManager → payroll_manager)
+    role_var = _pascal_to_snake(role_class)
+
     # ===== AUTH WORKFLOW MAPPINGS =====
     if workflow == "auth":
         # LOGIN scenarios (check when, given, and then for login keywords)
@@ -39,9 +59,12 @@ def map_scenario_to_test_logic(
             ("logged in" in then or "dashboard" in then)):
             # Determine if valid or invalid credentials
             if "valid" in given or "correct" in given or "registered" in given:
-                test_data = '''test_email = "test@example.com"
-    test_password = "Test123!"'''
-                actions = f'''result = {workflow}_tasks.login(test_email, test_password)'''
+                test_data = f'''user_data = {{
+        "email": "test@example.com",
+        "password": "Test123!"
+    }}
+    {role_var} = {role_class}(web_interface, user_data, base_url)'''
+                actions = f'''result = {role_var}.login()'''
 
                 # Check what should happen (success vs failure)
                 if "success" in then or "logged in" in then or "dashboard" in then:
@@ -50,41 +73,48 @@ def map_scenario_to_test_logic(
                     assertions = '''assert result is True, "Expected login to succeed"'''
 
             elif "invalid" in given or "incorrect" in given or "wrong" in given:
-                test_data = '''test_email = "invalid@example.com"
-    test_password = "WrongPassword123!"'''
-                actions = f'''result = {workflow}_tasks.login(test_email, test_password)'''
+                test_data = f'''user_data = {{
+        "email": "invalid@example.com",
+        "password": "WrongPassword123!"
+    }}
+    {role_var} = {role_class}(web_interface, user_data, base_url)'''
+                actions = f'''result = {role_var}.login()'''
                 assertions = '''assert result is False, "Login should fail with invalid credentials"'''
 
             else:
                 # Generic login
-                test_data = '''test_email = "test@example.com"
-    test_password = "Test123!"'''
-                actions = f'''result = {workflow}_tasks.login(test_email, test_password)'''
+                test_data = f'''user_data = {{
+        "email": "test@example.com",
+        "password": "Test123!"
+    }}
+    {role_var} = {role_class}(web_interface, user_data, base_url)'''
+                actions = f'''result = {role_var}.login()'''
                 assertions = '''assert result is True, "Login should succeed"'''
 
         # LOGOUT scenarios
         elif "logout" in when or "log out" in when or "sign out" in when:
-            test_data = '''# User must be logged in first
-    test_email = "test@example.com"
-    test_password = "Test123!"
-    {workflow}_tasks.login(test_email, test_password)'''.format(workflow=workflow)
-            actions = f'''result = {workflow}_tasks.logout()'''
+            test_data = f'''# User must be logged in first
+    user_data = {{
+        "email": "test@example.com",
+        "password": "Test123!"
+    }}
+    {role_var} = {role_class}(web_interface, user_data, base_url)
+    {role_var}.login()'''
+            actions = f'''result = {role_var}.logout()'''
             assertions = '''assert result is True, "Logout should succeed"'''
 
         # REGISTRATION scenarios
         elif "register" in when or "sign up" in when or "create account" in when:
-            test_data = '''from faker import Faker
+            test_data = f'''from faker import Faker
     fake = Faker()
-    test_email = fake.email()
-    test_password = "NewUser123!"
-    test_first_name = fake.first_name()
-    test_last_name = fake.last_name()'''
-            actions = f'''result = {workflow}_tasks.register_new_user(
-        email=test_email,
-        password=test_password,
-        first_name=test_first_name,
-        last_name=test_last_name
-    )'''
+    user_data = {{
+        "email": fake.email(),
+        "password": "NewUser123!",
+        "first_name": fake.first_name(),
+        "last_name": fake.last_name()
+    }}
+    {role_var} = {role_class}(web_interface, user_data, base_url)'''
+            actions = f'''result = {role_var}.register_new_user()'''
             assertions = '''assert result is True, "Registration should succeed"'''
 
     # ===== CATALOG WORKFLOW MAPPINGS =====
@@ -92,60 +122,79 @@ def map_scenario_to_test_logic(
         # BROWSE scenarios
         if "browse" in when or "view" in when or "navigate" in when:
             if "category" in when:
-                test_data = '''category_name = "Women"'''
-                actions = f'''result = {workflow}_tasks.browse_category(category_name)'''
-                assertions = '''assert result is True, "Should successfully browse category"
-    assert {workflow}_tasks.get_product_count() > 0, "Category should have products"'''.format(workflow=workflow)
+                test_data = f'''user_data = {{}}  # GuestUser or RegisteredUser - no credentials needed for browsing
+    {role_var} = {role_class}(web_interface, user_data, base_url)
+    category_name = "Women"'''
+                actions = f'''result = {role_var}.browse_category(category_name)'''
+                assertions = f'''assert result is True, "Should successfully browse category"
+    assert {role_var}.get_product_count() > 0, "Category should have products"'''
 
         # FILTER scenarios
         elif "filter" in when:
-            test_data = '''filter_criteria = {{"size": "M", "color": "Blue"}}'''
-            actions = f'''result = {workflow}_tasks.filter_products(filter_criteria)'''
+            test_data = f'''user_data = {{}}
+    {role_var} = {role_class}(web_interface, user_data, base_url)
+    filter_criteria = {{"size": "M", "color": "Blue"}}'''
+            actions = f'''result = {role_var}.filter_products(filter_criteria)'''
             assertions = '''assert result is True, "Filters should be applied successfully"'''
 
         # SORT scenarios
         elif "sort" in when:
             if "price" in when:
-                test_data = '''sort_by = "price_low_to_high"'''
+                test_data = f'''user_data = {{}}
+    {role_var} = {role_class}(web_interface, user_data, base_url)
+    sort_by = "price_low_to_high"'''
             else:
-                test_data = '''sort_by = "name"'''
-            actions = f'''result = {workflow}_tasks.sort_products(sort_by)'''
+                test_data = f'''user_data = {{}}
+    {role_var} = {role_class}(web_interface, user_data, base_url)
+    sort_by = "name"'''
+            actions = f'''result = {role_var}.sort_products(sort_by)'''
             assertions = '''assert result is True, "Products should be sorted successfully"'''
 
     # ===== CART WORKFLOW MAPPINGS =====
     elif workflow == "cart":
         # ADD TO CART scenarios
         if "add" in when and "cart" in when:
-            test_data = '''product_name = "Faded Short Sleeve T-shirts"
+            test_data = f'''user_data = {{}}  # GuestUser can add to cart
+    {role_var} = {role_class}(web_interface, user_data, base_url)
+    product_name = "Faded Short Sleeve T-shirts"
     quantity = 1'''
-            actions = f'''result = {workflow}_tasks.add_to_cart(product_name, quantity)'''
-            assertions = '''assert result is True, "Product should be added to cart successfully"
-    assert {workflow}_tasks.get_cart_count() > 0, "Cart should contain items"'''.format(workflow=workflow)
+            actions = f'''result = {role_var}.add_to_cart(product_name, quantity)'''
+            assertions = f'''assert result is True, "Product should be added to cart successfully"
+    assert {role_var}.get_cart_count() > 0, "Cart should contain items"'''
 
         # REMOVE FROM CART scenarios
         elif "remove" in when:
-            test_data = '''# Add item first
+            test_data = f'''# Add item first
+    user_data = {{}}
+    {role_var} = {role_class}(web_interface, user_data, base_url)
     product_name = "Faded Short Sleeve T-shirts"
-    {workflow}_tasks.add_to_cart(product_name, 1)'''.format(workflow=workflow)
-            actions = f'''result = {workflow}_tasks.remove_from_cart(product_name)'''
+    {role_var}.add_to_cart(product_name, 1)'''
+            actions = f'''result = {role_var}.remove_from_cart(product_name)'''
             assertions = '''assert result is True, "Product should be removed from cart"'''
 
         # UPDATE QUANTITY scenarios
         elif "update" in when or "change quantity" in when:
-            test_data = '''# Add item first
+            test_data = f'''# Add item first
+    user_data = {{}}
+    {role_var} = {role_class}(web_interface, user_data, base_url)
     product_name = "Faded Short Sleeve T-shirts"
-    {workflow}_tasks.add_to_cart(product_name, 1)
-    new_quantity = 3'''.format(workflow=workflow)
-            actions = f'''result = {workflow}_tasks.update_quantity(product_name, new_quantity)'''
+    {role_var}.add_to_cart(product_name, 1)
+    new_quantity = 3'''
+            actions = f'''result = {role_var}.update_quantity(product_name, new_quantity)'''
             assertions = '''assert result is True, "Quantity should be updated"'''
 
     # ===== CHECKOUT WORKFLOW MAPPINGS =====
     elif workflow == "checkout":
         if "checkout" in when or "place order" in when:
-            test_data = '''# Add item to cart first
-    catalog_tasks = CatalogTasks(web_interface, base_url)
-    cart_tasks = CartTasks(web_interface, base_url)
-    cart_tasks.add_to_cart("Faded Short Sleeve T-shirts", 1)
+            test_data = f'''# Checkout typically requires a registered user
+    user_data = {{
+        "email": "test@example.com",
+        "password": "Test123!"
+    }}
+    {role_var} = {role_class}(web_interface, user_data, base_url)
+
+    # Add item to cart first
+    {role_var}.add_to_cart("Faded Short Sleeve T-shirts", 1)
 
     # Prepare shipping info
     shipping_info = {{
@@ -154,15 +203,18 @@ def map_scenario_to_test_logic(
         "state": "CA",
         "zip": "90001"
     }}'''
-            actions = f'''result = {workflow}_tasks.complete_checkout(shipping_info)'''
+            actions = f'''result = {role_var}.complete_checkout(shipping_info)'''
             assertions = '''assert result is True, "Checkout should complete successfully"'''
 
     # ===== FALLBACK (Generic) =====
     if not test_data:
-        test_data = f'''# TODO: Add test data for {workflow} workflow'''
+        test_data = f'''# Create role instance
+    user_data = {{}}  # Add required user data
+    {role_var} = {role_class}(web_interface, user_data, base_url)
+    # TODO: Add test data for {workflow} workflow'''
     if not actions:
         actions = f'''# TODO: Implement {workflow} action based on scenario
-    # result = {workflow}_tasks.some_action()'''
+    # result = {role_var}.some_workflow_method()'''
     if not assertions:
         assertions = f'''# TODO: Add assertions for {workflow} workflow
     # assert result is True, "Action should succeed"'''
@@ -173,14 +225,18 @@ def map_scenario_to_test_logic(
 def generate_test_template(
     test_name: str,
     workflow: str,
+    role: str,
     scenario: Optional[Dict[str, str]] = None
 ) -> str:
     """
     Generate pytest test template following framework patterns.
 
+    Uses Role layer architecture: Test → Role → Task → Page → WebInterface
+
     Args:
         test_name: Test function name (e.g., test_add_to_cart)
         workflow: Workflow category (auth, catalog, cart, checkout)
+        role: Role class name (e.g., PayrollManager, RegisteredUser, GuestUser)
         scenario: Optional scenario dict with given/when/then
 
     Returns:
@@ -192,8 +248,9 @@ def generate_test_template(
     then = scenario.get("then", "") if scenario else ""
     description = scenario.get("description", "") if scenario else ""
 
-    # Capitalize task class name
-    task_class = f"{workflow.capitalize()}Tasks"
+    # Convert role class name to module name
+    # PayrollManager → payroll_manager, RegisteredUser → registered_user
+    role_module = _pascal_to_snake(role)
 
     # Generate docstring
     docstring = f'"""\n    {description or test_name}\n\n'
@@ -207,19 +264,19 @@ def generate_test_template(
             docstring += f'        Then: {then}\n'
     docstring += '    """'
 
-    # Map scenario to actual test logic (NEW!)
+    # Map scenario to actual test logic (using Role layer)
     test_data_code = ""
     action_code = ""
     assertion_code = ""
 
     if scenario:
-        test_data_code, action_code, assertion_code = map_scenario_to_test_logic(workflow, scenario)
+        test_data_code, action_code, assertion_code = map_scenario_to_test_logic(workflow, scenario, role)
 
     # If no scenario provided, use generic placeholders
     if not test_data_code:
         test_data_code = f"# TODO: Add test data for {workflow} workflow"
     if not action_code:
-        action_code = f"# TODO: Implement {workflow} action\n    # result = {workflow}_tasks.some_action()"
+        action_code = f"# TODO: Implement {workflow} action\n    # result = role.some_action()"
     if not assertion_code:
         assertion_code = f"# TODO: Add assertions\n    # assert result is True"
 
@@ -238,7 +295,7 @@ import sys
 FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
-from tasks.{workflow}_tasks import {task_class}
+from roles.{role_module} import {role}
 from resources.utilities import autologger
 
 
@@ -248,7 +305,6 @@ def {test_name}(web_interface, config):
     {docstring}
     # Arrange
     base_url = config["url"]
-    {workflow}_tasks = {task_class}(web_interface, base_url)
 
     {test_data_code}
 
@@ -416,12 +472,10 @@ def generate_task_workflows(
         # Navigate to authentication page
         self.web.navigate_to(f"{{self.base_url}}/index.php?controller=authentication")
 
-        # Enter credentials
-        self.{page_var}.{email_method}(email)
-        self.{page_var}.{password_method}(password)
-
-        # Submit login
-        self.{page_var}.{submit_method}()
+        # Enter credentials and submit (fluent interface - method chaining)
+        self.{page_var}.{email_method}(email)\\
+                      .{password_method}(password)\\
+                      .{submit_method}()
 
         # Verify login success (check for account menu or logout link)
         from selenium.webdriver.common.by import By
@@ -703,50 +757,71 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
             continue
 
         # Generate method based on element type
+        # All methods return self for fluent interface
         if elem_type == "inputs":
             # Input field - generate enter_X method
             method_name = f"enter_{name.lower()}"
             methods.append(f'''
-    def {method_name}(self, text: str) -> None:
+    def {method_name}(self, text: str):
         """
         Enter text into {name} field.
 
         Args:
             text: Text to enter
+
+        Returns:
+            self: For method chaining
         """
         self.web.type_text(*self.{name}, text)
+        return self
 ''')
 
         elif elem_type == "buttons":
             # Button - generate click_X method
             method_name = f"click_{name.lower()}"
             methods.append(f'''
-    def {method_name}(self) -> None:
-        """Click {name} button."""
+    def {method_name}(self):
+        """
+        Click {name} button.
+
+        Returns:
+            self: For method chaining
+        """
         self.web.click(*self.{name})
+        return self
 ''')
 
         elif elem_type == "links":
             # Link - generate click_X method
             method_name = f"click_{name.lower()}"
             methods.append(f'''
-    def {method_name}(self) -> None:
-        """Click {name} link."""
+    def {method_name}(self):
+        """
+        Click {name} link.
+
+        Returns:
+            self: For method chaining
+        """
         self.web.click(*self.{name})
+        return self
 ''')
 
         elif elem_type == "selects":
             # Select dropdown - generate select_X method
             method_name = f"select_{name.lower()}"
             methods.append(f'''
-    def {method_name}(self, value: str) -> None:
+    def {method_name}(self, value: str):
         """
         Select option from {name} dropdown.
 
         Args:
             value: Option value to select
+
+        Returns:
+            self: For method chaining
         """
         self.web.select_dropdown_by_value(*self.{name}, option_value=value)
+        return self
 ''')
 
         elif elem_type == "checkboxes":
@@ -754,15 +829,27 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
             check_method = f"check_{name.lower()}"
             uncheck_method = f"uncheck_{name.lower()}"
             methods.append(f'''
-    def {check_method}(self) -> None:
-        """Check {name} checkbox."""
+    def {check_method}(self):
+        """
+        Check {name} checkbox.
+
+        Returns:
+            self: For method chaining
+        """
         if not self.web.is_element_selected(*self.{name}):
             self.web.click(*self.{name})
+        return self
 
-    def {uncheck_method}(self) -> None:
-        """Uncheck {name} checkbox."""
+    def {uncheck_method}(self):
+        """
+        Uncheck {name} checkbox.
+
+        Returns:
+            self: For method chaining
+        """
         if self.web.is_element_selected(*self.{name}):
             self.web.click(*self.{name})
+        return self
 ''')
 
     return "".join(methods)
