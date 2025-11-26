@@ -43,11 +43,17 @@ Thumbs.db
 
 # Project specific
 tests/**/_reports/
+tests/**/screenshots/
+screenshots/
+logs/
 *.html
 *.png
 error_log*.txt
 SESSION.md
 PROJECT_CONTEXT.md
+
+# MCP dev test generated output
+mcp_server/_dev_tests/output/
 
 # Intellectual property (process docs and framework references)
 docs/
