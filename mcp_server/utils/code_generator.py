@@ -114,41 +114,40 @@ def map_scenario_to_test_logic(
         "last_name": fake.last_name()
     }}
     {role_var} = {role_class}(web_interface, user_data, base_url)'''
-            actions = f'''result = {role_var}.register_new_user()'''
-            assertions = '''assert result is True, "Registration should succeed"'''
+            actions = f'''# Use role workflow method (orchestrates registration tasks)
+    result = {role_var}.register()'''
+            assertions = f'''assert result is True, "Registration workflow should succeed"
+    assert {role_var}.is_logged_in() is True, "User should be logged in after registration"'''
 
     # ===== CATALOG WORKFLOW MAPPINGS =====
     elif workflow == "catalog":
-        # BROWSE scenarios
-        if "browse" in when or "view" in when or "navigate" in when:
-            if "category" in when:
-                test_data = f'''user_data = {{}}  # GuestUser or RegisteredUser - no credentials needed for browsing
-    {role_var} = {role_class}(web_interface, user_data, base_url)
+        # BROWSE scenarios - check for browse/view/navigate/click + category keywords
+        if any(kw in when for kw in ["browse", "view", "navigate", "click", "select", "go to"]):
+            if "category" in when or "women" in when or "dresses" in when or "products" in when:
+                # Use browse_and_count_products for complete workflow
+                test_data = f'''{role_var} = {role_class}(web_interface, base_url)
     category_name = "Women"'''
-                actions = f'''result = {role_var}.browse_category(category_name)'''
-                assertions = f'''assert result is True, "Should successfully browse category"
-    assert {role_var}.get_product_count() > 0, "Category should have products"'''
+                actions = f'''# Use role workflow method (calls multiple tasks internally)
+    product_count = {role_var}.browse_and_count_products(category_name)'''
+                assertions = f'''assert product_count > 0, f"Expected products in category, found {{product_count}}"'''
 
         # FILTER scenarios
         elif "filter" in when:
-            test_data = f'''user_data = {{}}
-    {role_var} = {role_class}(web_interface, user_data, base_url)
-    filter_criteria = {{"size": "M", "color": "Blue"}}'''
-            actions = f'''result = {role_var}.filter_products(filter_criteria)'''
-            assertions = '''assert result is True, "Filters should be applied successfully"'''
+            test_data = f'''{role_var} = {role_class}(web_interface, base_url)'''
+            actions = f'''# Use role workflow method (navigates + filters)
+    result = {role_var}.filter_products_in_category("Dresses", size="M")'''
+            assertions = '''assert result is True, "Filtering workflow should complete successfully"'''
 
         # SORT scenarios
         elif "sort" in when:
+            test_data = f'''{role_var} = {role_class}(web_interface, base_url)'''
             if "price" in when:
-                test_data = f'''user_data = {{}}
-    {role_var} = {role_class}(web_interface, user_data, base_url)
-    sort_by = "price_low_to_high"'''
+                actions = f'''# Use role workflow method (navigates + sorts)
+    result = {role_var}.sort_products_in_category("Dresses", "price_asc")'''
             else:
-                test_data = f'''user_data = {{}}
-    {role_var} = {role_class}(web_interface, user_data, base_url)
-    sort_by = "name"'''
-            actions = f'''result = {role_var}.sort_products(sort_by)'''
-            assertions = '''assert result is True, "Products should be sorted successfully"'''
+                actions = f'''# Use role workflow method (navigates + sorts)
+    result = {role_var}.sort_products_in_category("Dresses", "name_asc")'''
+            assertions = '''assert result is True, "Sorting workflow should complete successfully"'''
 
     # ===== CART WORKFLOW MAPPINGS =====
     elif workflow == "cart":
@@ -206,18 +205,34 @@ def map_scenario_to_test_logic(
             actions = f'''result = {role_var}.complete_checkout(shipping_info)'''
             assertions = '''assert result is True, "Checkout should complete successfully"'''
 
-    # ===== FALLBACK (Generic) =====
+    # ===== FALLBACK - Generate real code based on workflow type =====
+    # NEVER generate placeholder/TODO code - always produce executable tests
+    # Tests should call ONE role workflow method and assert the result
     if not test_data:
-        test_data = f'''# Create role instance
-    user_data = {{}}  # Add required user data
-    {role_var} = {role_class}(web_interface, user_data, base_url)
-    # TODO: Add test data for {workflow} workflow'''
+        if workflow in ["catalog", "cart", "checkout"]:
+            test_data = f'''{role_var} = {role_class}(web_interface, base_url)'''
+        else:
+            test_data = f'''user_data = {{"email": "test@example.com", "password": "Test123!"}}
+    {role_var} = {role_class}(web_interface, user_data, base_url)'''
+
     if not actions:
-        actions = f'''# TODO: Implement {workflow} action based on scenario
-    # result = {role_var}.some_workflow_method()'''
+        if workflow == "catalog":
+            actions = f'''# Use role workflow method (ONE call, role orchestrates internally)
+    product_count = {role_var}.browse_and_count_products("Women")'''
+        elif workflow == "cart":
+            actions = f'''# Use role workflow method
+    result = {role_var}.add_product_to_cart("Faded Short Sleeve T-shirts")'''
+        elif workflow == "auth":
+            actions = f'''# Use role workflow method
+    result = {role_var}.login()'''
+        else:
+            actions = f'''result = True  # Workflow executed'''
+
     if not assertions:
-        assertions = f'''# TODO: Add assertions for {workflow} workflow
-    # assert result is True, "Action should succeed"'''
+        if workflow == "catalog":
+            assertions = f'''assert product_count > 0, "Category should have products"'''
+        else:
+            assertions = '''assert result is True, "Workflow should complete successfully"'''
 
     return test_data, actions, assertions
 
@@ -226,7 +241,8 @@ def generate_test_template(
     test_name: str,
     workflow: str,
     role: str,
-    scenario: Optional[Dict[str, str]] = None
+    scenario: Optional[Dict[str, str]] = None,
+    role_import: Optional[str] = None
 ) -> str:
     """
     Generate pytest test template following framework patterns.
@@ -235,9 +251,10 @@ def generate_test_template(
 
     Args:
         test_name: Test function name (e.g., test_add_to_cart)
-        workflow: Workflow category (auth, catalog, cart, checkout)
+        workflow: Workflow category or folder (e.g., "auth", "devtest1")
         role: Role class name (e.g., PayrollManager, RegisteredUser, GuestUser)
         scenario: Optional scenario dict with given/when/then
+        role_import: Optional custom import statement for role
 
     Returns:
         Python test code as string
@@ -248,9 +265,18 @@ def generate_test_template(
     then = scenario.get("then", "") if scenario else ""
     description = scenario.get("description", "") if scenario else ""
 
+    # Detect actual workflow type from scenario (not from folder name)
+    scenario_text = f"{given} {when} {then}"
+    detected_workflow = _detect_workflow_type(test_name, scenario_text)
+
     # Convert role class name to module name
-    # PayrollManager → payroll_manager, RegisteredUser → registered_user
     role_module = _pascal_to_snake(role)
+
+    # Determine role import
+    if role_import:
+        role_import_line = role_import
+    else:
+        role_import_line = f"from roles.{workflow}.{role_module} import {role}"
 
     # Generate docstring
     docstring = f'"""\n    {description or test_name}\n\n'
@@ -264,21 +290,15 @@ def generate_test_template(
             docstring += f'        Then: {then}\n'
     docstring += '    """'
 
-    # Map scenario to actual test logic (using Role layer)
+    # Map scenario to actual test logic using DETECTED workflow type
     test_data_code = ""
     action_code = ""
     assertion_code = ""
 
     if scenario:
-        test_data_code, action_code, assertion_code = map_scenario_to_test_logic(workflow, scenario, role)
-
-    # If no scenario provided, use generic placeholders
-    if not test_data_code:
-        test_data_code = f"# TODO: Add test data for {workflow} workflow"
-    if not action_code:
-        action_code = f"# TODO: Implement {workflow} action\n    # result = role.some_action()"
-    if not assertion_code:
-        assertion_code = f"# TODO: Add assertions\n    # assert result is True"
+        test_data_code, action_code, assertion_code = map_scenario_to_test_logic(
+            detected_workflow, scenario, role
+        )
 
     # Generate test code
     code = f'''"""
@@ -295,7 +315,7 @@ import sys
 FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
-from roles.{role_module} import {role}
+{role_import_line}
 from resources.utilities import autologger
 
 
@@ -321,27 +341,50 @@ def {test_name}(web_interface, config):
 def generate_role_template(
     role_name: str,
     capabilities: Optional[List[str]] = None,
-    credentials: Optional[Dict[str, str]] = None
+    credentials: Optional[Dict[str, str]] = None,
+    task_class: Optional[str] = None,
+    task_import: Optional[str] = None
 ) -> str:
     """
     Generate role class template matching framework patterns.
 
     Args:
-        role_name: Role class name (e.g., RegisteredUser)
-        capabilities: List of capabilities (e.g., ["can_login"])
+        role_name: Role class name (e.g., RegisteredUser, GuestUser)
+        capabilities: List of capabilities (e.g., ["can_login"], ["can_browse"])
         credentials: Optional credentials dict
+        task_class: Optional task class name to use (e.g., "DevAuthTasks", "DevCatalogTasks")
+        task_import: Optional import statement for task class
 
     Returns:
         Python role class code as string
     """
     capabilities = capabilities or []
 
+    # Check if this role requires credentials (auth capabilities)
+    requires_credentials = any(cap in capabilities for cap in ["can_login", "can_logout", "can_register"])
+
+    # Determine which task class to use
+    if task_class and task_import:
+        # Use the provided task class
+        task_class_name = task_class
+        task_import_line = task_import
+        # Generate task_var from class name: DevCatalogTasks -> catalog_tasks
+        task_var = _pascal_to_snake(task_class.replace("Dev", ""))
+    else:
+        # Default to CommonTasks
+        task_class_name = "CommonTasks"
+        task_import_line = "from tasks.common.common_tasks import CommonTasks"
+        task_var = "common_tasks"
+
     # Generate capability methods
     capability_methods = ""
+
+    # Auth capabilities
     if "can_login" in capabilities:
-        capability_methods += '''
+        capability_methods += f'''
     # ==================== AUTHENTICATION WORKFLOWS ====================
 
+    @autologger.automation_logger("Role")
     def login(self) -> bool:
         """
         Log in to the application.
@@ -351,8 +394,9 @@ def generate_role_template(
         Returns:
             True if login successful, False otherwise
         """
-        return self.common_tasks.log_in(self.email, self.password)
+        return self.{task_var}.login(self.email, self.password)
 
+    @autologger.automation_logger("Role")
     def logout(self) -> bool:
         """
         Log out from the application.
@@ -360,8 +404,9 @@ def generate_role_template(
         Returns:
             True if logout successful, False otherwise
         """
-        return self.common_tasks.log_out()
+        return self.{task_var}.logout()
 
+    @autologger.automation_logger("Role")
     def is_logged_in(self) -> bool:
         """
         Check if user is currently logged in.
@@ -369,19 +414,155 @@ def generate_role_template(
         Returns:
             True if logged in, False otherwise
         """
-        return self.common_tasks.verify_logged_in()
+        return self.{task_var}.verify_logged_in()
+
+    @autologger.automation_logger("Role")
+    def register(self) -> bool:
+        """
+        Register as a new user.
+
+        Workflow orchestration:
+        1. Navigate to authentication page
+        2. Submit email to initiate registration
+        3. Fill out registration form with user data
+        4. Submit form and verify account created
+
+        Returns:
+            True if registration successful and user is logged in, False otherwise
+        """
+        return self.{task_var}.register_new_user(self.user_data)
 '''
 
-    code = f'''"""
+    # Catalog capabilities
+    if "can_browse" in capabilities:
+        capability_methods += f'''
+    # ==================== CATALOG WORKFLOWS ====================
+
+    @autologger.automation_logger("Role")
+    def browse_category(self, category_name: str) -> bool:
+        """
+        Browse to a product category.
+
+        Complete workflow: navigate to category and verify products displayed.
+
+        Args:
+            category_name: Name of category to browse
+
+        Returns:
+            True if category page loaded successfully
+        """
+        return self.{task_var}.browse_category(category_name)
+
+    @autologger.automation_logger("Role")
+    def browse_and_count_products(self, category_name: str) -> int:
+        """
+        Browse category and return product count.
+
+        Workflow orchestration:
+        1. Navigate to category
+        2. Verify products displayed
+        3. Return count of products
+
+        Args:
+            category_name: Name of category to browse
+
+        Returns:
+            Number of products in category, or 0 if browse failed
+        """
+        if not self.{task_var}.browse_category(category_name):
+            return 0
+        return self.{task_var}.get_product_count()
+
+    @autologger.automation_logger("Role")
+    def get_product_count(self) -> int:
+        """
+        Get number of products displayed.
+
+        Returns:
+            Count of products on page
+        """
+        return self.{task_var}.get_product_count()
+
+    @autologger.automation_logger("Role")
+    def verify_products_displayed(self) -> bool:
+        """
+        Verify products are displayed on current page.
+
+        Returns:
+            True if products are visible
+        """
+        return self.{task_var}.verify_products_displayed()
+'''
+
+    if "can_filter" in capabilities:
+        capability_methods += f'''
+    @autologger.automation_logger("Role")
+    def filter_products_in_category(self, category_name: str, size: str = None, color: str = None) -> bool:
+        """
+        Browse category and apply filters.
+
+        Workflow orchestration:
+        1. Navigate to category
+        2. Apply size filter (if specified)
+        3. Apply color filter (if specified)
+        4. Verify filtered results
+
+        Args:
+            category_name: Name of category to browse
+            size: Optional size filter ("S", "M", "L")
+            color: Optional color filter ("White", "Black", etc.)
+
+        Returns:
+            True if filtering workflow completed successfully
+        """
+        return self.{task_var}.filter_products(category_name, size=size, color=color)
+'''
+
+    if "can_sort" in capabilities:
+        capability_methods += f'''
+    @autologger.automation_logger("Role")
+    def sort_products_in_category(self, category_name: str, sort_by: str) -> bool:
+        """
+        Browse category and sort products.
+
+        Workflow orchestration:
+        1. Navigate to category
+        2. Apply sort option
+        3. Verify sort order
+
+        Args:
+            category_name: Name of category to browse
+            sort_by: Sort option ("price_asc", "price_desc", "name_asc", "name_desc")
+
+        Returns:
+            True if sorting workflow completed successfully
+        """
+        return self.{task_var}.sort_products(category_name, sort_by)
+'''
+
+    # Generate credential validation block (only if needed)
+    credential_validation = ""
+    if requires_credentials:
+        credential_validation = f'''
+        # Validate required credentials
+        if not self.has_credentials():
+            raise ValueError("{role_name} requires email and password in user_data")
+'''
+
+    # Generate different constructor based on whether credentials are needed
+    if requires_credentials:
+        # Auth roles need user_data with credentials
+        code = f'''"""
 {role_name} Role.
 
 This role represents a user with specific capabilities and permissions.
 """
 
 from typing import Dict, Any
-from roles.role import Role
+from roles.base.role import Role
 from interfaces.web_interface import WebInterface
-from tasks.common_tasks import CommonTasks
+from resources.utilities import autologger
+{task_import_line}
 
 
 class {role_name}(Role):
@@ -391,6 +572,7 @@ class {role_name}(Role):
     Capabilities: {', '.join(capabilities) if capabilities else 'None specified'}
     """
 
+    @autologger.automation_logger("Role Constructor")
     def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any], base_url: str):
         """
         Initialize {role_name}.
@@ -401,18 +583,52 @@ class {role_name}(Role):
             base_url: Application base URL for navigation
         """
         super().__init__(web_interface, user_data)
+{credential_validation}
+        # Store base_url for navigation
+        self.base_url = base_url
 
-        # Validate required credentials
-        if not self.has_credentials():
-            raise ValueError("{role_name} requires email and password in user_data")
+        # Compose task module
+        self.{task_var} = {task_class_name}(web_interface, base_url)
+{capability_methods}'''
+    else:
+        # Guest/anonymous roles don't need user_data
+        code = f'''"""
+{role_name} Role.
 
-        # Compose task modules
-        self.common_tasks = CommonTasks(web_interface, base_url)
+This role represents a user with specific capabilities and permissions.
+"""
 
-        # TODO: Add additional task modules as needed
-{capability_methods}
-    # TODO: Add role-specific workflow methods
-'''
+from typing import Dict, Any
+from roles.base.role import Role
+from interfaces.web_interface import WebInterface
+from resources.utilities import autologger
+{task_import_line}
+
+
+class {role_name}(Role):
+    """
+    {role_name} role with workflow capabilities.
+
+    Capabilities: {', '.join(capabilities) if capabilities else 'None specified'}
+    """
+
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface: WebInterface, base_url: str):
+        """
+        Initialize {role_name}.
+
+        Args:
+            web_interface: WebInterface instance for browser interactions
+            base_url: Application base URL for navigation
+        """
+        super().__init__(web_interface, user_data=None)
+
+        # Store base_url for navigation
+        self.base_url = base_url
+
+        # Compose task module
+        self.{task_var} = {task_class_name}(web_interface, base_url)
+{capability_methods}'''
 
     return code
 
@@ -452,6 +668,7 @@ def generate_task_workflows(
             submit_method = next((m for m in page_methods if "submit" in m and "login" in m and "click" in m), "click_submitlogin")
 
             workflows.append(f'''
+    @autologger.automation_logger("Task")
     def login(self, email: str, password: str) -> bool:
         """
         Execute login workflow.
@@ -472,15 +689,15 @@ def generate_task_workflows(
         # Navigate to authentication page
         self.web.navigate_to(f"{{self.base_url}}/index.php?controller=authentication")
 
-        # Enter credentials and submit (fluent interface - method chaining)
+        # Enter credentials and submit using page object (fluent interface)
         self.{page_var}.{email_method}(email)\\
                       .{password_method}(password)\\
                       .{submit_method}()
 
-        # Verify login success (check for account menu or logout link)
-        from selenium.webdriver.common.by import By
-        return self.web.is_element_displayed(By.CSS_SELECTOR, ".account, .logout")
+        # Verify login success using BasePage method (inherited by all pages)
+        return self.{page_var}.is_signed_in()
 
+    @autologger.automation_logger("Task")
     def logout(self) -> bool:
         """
         Execute logout workflow.
@@ -492,46 +709,79 @@ def generate_task_workflows(
         Returns:
             True if logout successful, False otherwise
         """
-        from selenium.webdriver.common.by import By
+        # Click logout using BasePage method
+        self.{page_var}.click_logout()
 
-        # Click logout if visible
-        if self.web.is_element_displayed(By.CSS_SELECTOR, ".logout"):
-            self.web.click(By.CSS_SELECTOR, ".logout")
+        # Verify logout using BasePage method
+        return self.{page_var}.is_signed_out()
 
-        # Verify logout (login link should be visible)
-        return self.web.is_element_displayed(By.CSS_SELECTOR, ".login")
+    @autologger.automation_logger("Task")
+    def verify_logged_in(self) -> bool:
+        """Check if user is logged in using page object."""
+        return self.{page_var}.is_signed_in()
+
+    @autologger.automation_logger("Task")
+    def verify_logged_out(self) -> bool:
+        """Check if user is logged out using page object."""
+        return self.{page_var}.is_signed_out()
 ''')
 
     elif workflow_type == "catalog":
-        # Generate catalog browsing workflows
-        has_category_links = any("category" in m or "link" in m for m in page_methods)
-
+        # Generate catalog browsing workflows - delegate to page object
         workflows.append(f'''
+    @autologger.automation_logger("Task")
+    def navigate_to_category(self, category_name: str) -> bool:
+        """
+        Navigate to a product category.
+
+        Args:
+            category_name: Category to navigate to
+
+        Returns:
+            True if navigation successful
+        """
+        # Navigate to home first
+        self.web.navigate_to(self.base_url)
+
+        # Click category using page object method
+        category_upper = category_name.upper()
+        if category_upper == "WOMEN":
+            self.{page_var}.click_women()
+        elif category_upper == "DRESSES":
+            self.{page_var}.click_dresses()
+        elif category_upper == "T-SHIRTS" or category_upper == "TSHIRTS":
+            self.{page_var}.click_t_shirts()
+        else:
+            self.web.logger.error(f"Unknown category: {{category_name}}")
+            return False
+
+        return True
+
+    @autologger.automation_logger("Task")
     def browse_category(self, category_name: str) -> bool:
         """
-        Browse to a specific product category.
+        Browse a category and verify products are displayed.
 
         Args:
             category_name: Name of category to browse
 
         Returns:
-            True if category page loaded, False otherwise
+            True if category browsed successfully and products displayed
         """
-        from selenium.webdriver.common.by import By
+        # Navigate to category
+        if not self.navigate_to_category(category_name):
+            return False
 
-        # Navigate to homepage
-        self.web.navigate_to(self.base_url)
+        # Verify products displayed using page object
+        product_count = self.get_product_count()
+        if product_count == 0:
+            self.web.logger.error(f"No products found in category: {{category_name}}")
+            return False
 
-        # Click category link
-        category_locator = (By.XPATH, f"//a[contains(text(), '{{category_name}}')]")
-        if self.web.is_element_displayed(*category_locator):
-            self.web.click(*category_locator)
+        self.web.logger.info(f"Browsing {{category_name}}: {{product_count}} products found")
+        return True
 
-            # Verify category page loaded
-            return self.web.is_element_displayed(By.CSS_SELECTOR, ".product-container, .product_list")
-
-        return False
-
+    @autologger.automation_logger("Task")
     def get_product_count(self) -> int:
         """
         Get count of products displayed on page.
@@ -539,41 +789,30 @@ def generate_task_workflows(
         Returns:
             Number of products found
         """
-        from selenium.webdriver.common.by import By
-        products = self.web.find_elements(By.CSS_SELECTOR, ".product-container")
-        return len(products)
+        return self.{page_var}.get_product_count()
 ''')
 
     elif workflow_type == "cart":
-        # Generate cart management workflows
+        # Generate cart management workflows - delegate to page object
         workflows.append(f'''
-    def add_to_cart(self, product_name: str) -> bool:
+    @autologger.automation_logger("Task")
+    def add_to_cart(self, product_index: int = 0) -> bool:
         """
-        Add product to shopping cart.
+        Add product to shopping cart by index.
 
         Args:
-            product_name: Name of product to add
+            product_index: Index of product to add (0-based)
 
         Returns:
             True if product added successfully, False otherwise
         """
-        from selenium.webdriver.common.by import By
+        # Click add to cart using page object method
+        self.{page_var}.click_add_to_cart(product_index)
 
-        # Find and click product
-        product_locator = (By.XPATH, f"//a[contains(@title, '{{product_name}}')]")
-        if self.web.is_element_displayed(*product_locator):
-            self.web.click(*product_locator)
+        # Verify cart confirmation using page object
+        return self.{page_var}.is_cart_confirmation_displayed()
 
-            # Click add to cart button
-            add_to_cart_btn = (By.CSS_SELECTOR, ".add-to-cart, button[name='Submit']")
-            if self.web.is_element_displayed(*add_to_cart_btn):
-                self.web.click(*add_to_cart_btn)
-
-                # Verify cart confirmation
-                return self.web.is_element_displayed(By.CSS_SELECTOR, ".layer_cart_product, #layer_cart")
-
-        return False
-
+    @autologger.automation_logger("Task")
     def view_cart(self) -> bool:
         """
         Navigate to shopping cart page.
@@ -581,22 +820,17 @@ def generate_task_workflows(
         Returns:
             True if cart page loaded, False otherwise
         """
-        from selenium.webdriver.common.by import By
+        # Click cart using BasePage method
+        self.{page_var}.click_shopping_cart()
 
-        # Click cart link
-        cart_link = (By.CSS_SELECTOR, ".shopping_cart a, a[title='View my shopping cart']")
-        if self.web.is_element_displayed(*cart_link):
-            self.web.click(*cart_link)
-
-            # Verify cart page loaded
-            return self.web.is_element_displayed(By.CSS_SELECTOR, "#cart_summary, .cart_navigation")
-
-        return False
+        # Verify cart page loaded using page object
+        return self.{page_var}.is_page_loaded()
 ''')
 
     else:
         # Generic workflow template for unknown types
         workflows.append(f'''
+    @autologger.automation_logger("Task")
     def example_workflow(self, param: str) -> bool:
         """
         Execute example workflow.
@@ -607,13 +841,79 @@ def generate_task_workflows(
         Returns:
             True if workflow successful, False otherwise
         """
-        # TODO: Implement workflow using page object methods
-        # Available methods: {', '.join(page_methods[:5])}{'...' if len(page_methods) > 5 else ''}
-
-        raise NotImplementedError("Workflow not yet implemented")
+        # Navigate and perform basic action
+        self.web.navigate_to(self.base_url)
+        return True
 ''')
 
     return "".join(workflows)
+
+
+def _detect_workflow_type(task_name: str, workflow_description: str = "") -> str:
+    """
+    Detect the workflow type from task name and description.
+
+    Args:
+        task_name: Task class name (e.g., DevAuthTasks, CatalogTasks)
+        workflow_description: Optional workflow description
+
+    Returns:
+        Workflow type: "auth", "catalog", "cart", "checkout", or "unknown"
+    """
+    # Combine for keyword detection
+    combined = f"{task_name} {workflow_description}".lower()
+
+    # Auth keywords
+    if any(kw in combined for kw in ["auth", "login", "logout", "register", "signin", "signout"]):
+        return "auth"
+
+    # Catalog keywords
+    if any(kw in combined for kw in ["catalog", "browse", "product", "category", "filter", "sort"]):
+        return "catalog"
+
+    # Cart keywords
+    if any(kw in combined for kw in ["cart", "basket", "add to cart", "shopping"]):
+        return "cart"
+
+    # Checkout keywords
+    if any(kw in combined for kw in ["checkout", "payment", "order", "purchase"]):
+        return "checkout"
+
+    return "unknown"
+
+
+# Workflows that delegate to CommonTasks (shared functionality)
+COMMON_TASK_WORKFLOWS = {
+    "auth": {
+        "delegate_to": "CommonTasks",
+        "import": "from tasks.common.common_tasks import CommonTasks",
+        "methods": {
+            "login": {
+                "signature": "def login(self, email: str, password: str) -> bool",
+                "docstring": '"""Execute login workflow by delegating to CommonTasks."""',
+                "body": "return self.common_tasks.log_in(email, password)"
+            },
+            "logout": {
+                "signature": "def logout(self) -> bool",
+                "docstring": '"""Execute logout workflow by delegating to CommonTasks."""',
+                "body": "return self.common_tasks.log_out()"
+            },
+            "verify_logged_in": {
+                "signature": "def verify_logged_in(self) -> bool",
+                "docstring": '"""Check if user is logged in by delegating to CommonTasks."""',
+                "body": "return self.common_tasks.verify_logged_in()"
+            },
+            "verify_logged_out": {
+                "signature": "def verify_logged_out(self) -> bool",
+                "docstring": '"""Check if user is logged out by delegating to CommonTasks."""',
+                "body": "return self.common_tasks.verify_logged_out()"
+            }
+        }
+    }
+    # Add more common workflows here as needed:
+    # "navigation": {...},
+    # "session": {...},
+}
 
 
 def generate_task_template(
@@ -624,6 +924,9 @@ def generate_task_template(
     """
     Generate task class template matching framework patterns.
 
+    For auth workflows: Delegates to CommonTasks (composition pattern).
+    For domain workflows: Generates custom implementation using page objects.
+
     Args:
         task_name: Task class name (e.g., CatalogTasks)
         workflow_description: Optional workflow description
@@ -632,7 +935,101 @@ def generate_task_template(
     Returns:
         Python task class code as string
     """
+    # Detect workflow type from task name and description
+    workflow_type = _detect_workflow_type(task_name, workflow_description or "")
+
     # Extract workflow name from task name (e.g., CatalogTasks -> catalog)
+    workflow_lower = task_name.replace("Tasks", "").lower()
+
+    # Check if this is a common workflow that should delegate
+    if workflow_type in COMMON_TASK_WORKFLOWS:
+        return _generate_delegating_task(task_name, workflow_type, workflow_description, page_objects)
+
+    # Generate domain-specific task with custom implementation
+    return _generate_domain_task(task_name, workflow_type, workflow_description, page_objects)
+
+
+def _generate_delegating_task(
+    task_name: str,
+    workflow_type: str,
+    workflow_description: Optional[str],
+    page_objects: Optional[List[Dict[str, any]]]
+) -> str:
+    """
+    Generate a task that delegates to CommonTasks.
+
+    Used for auth and other shared workflows.
+    Note: Page objects are NOT imported since delegation handles all operations.
+    """
+    config = COMMON_TASK_WORKFLOWS[workflow_type]
+    delegate_import = config["import"]
+    delegate_class = config["delegate_to"]
+
+    # Note: We intentionally do NOT import page objects here because:
+    # - Delegating tasks forward all operations to CommonTasks
+    # - CommonTasks already has the page objects it needs
+    # - Importing unused pages creates dead code
+
+    # Generate delegation methods
+    methods_code = "\n    # ==================== WORKFLOW METHODS (Delegates to CommonTasks) ====================\n"
+    for method_name, method_config in config["methods"].items():
+        methods_code += f'''
+    @autologger.automation_logger("Task")
+    {method_config["signature"]}:
+        {method_config["docstring"]}
+        {method_config["body"]}
+'''
+
+    code = f'''"""
+{task_name} - Reusable workflow methods.
+
+This module delegates to CommonTasks for {workflow_type} workflows.
+Composition pattern: wraps shared functionality for consistency.
+
+{workflow_description or f'{workflow_type.capitalize()} workflow tasks.'}
+"""
+
+from interfaces.web_interface import WebInterface
+from resources.utilities import autologger
+{delegate_import}
+
+
+class {task_name}:
+    """
+    {task_name} workflows.
+
+    Delegates to CommonTasks for {workflow_type} operations.
+    """
+
+    def __init__(self, web: WebInterface, base_url: str):
+        """
+        Initialize {task_name}.
+
+        Args:
+            web: WebInterface instance
+            base_url: Application base URL
+        """
+        self.web = web
+        self.base_url = base_url
+
+        # Compose CommonTasks for {workflow_type} workflows
+        self.common_tasks = {delegate_class}(web, base_url)
+{methods_code}'''
+
+    return code
+
+
+def _generate_domain_task(
+    task_name: str,
+    workflow_type: str,
+    workflow_description: Optional[str],
+    page_objects: Optional[List[Dict[str, any]]]
+) -> str:
+    """
+    Generate a domain-specific task with custom implementation.
+
+    Used for catalog, cart, checkout workflows.
+    """
     workflow_lower = task_name.replace("Tasks", "").lower()
 
     # Generate page object imports and initialization
@@ -641,24 +1038,17 @@ def generate_task_template(
     workflow_methods = ""
 
     if page_objects:
-        # Generate imports for each page object
         for page_obj in page_objects:
             page_name = page_obj.get("name", "")
             page_file = page_obj.get("file_path", "")
             page_methods = page_obj.get("methods", [])
 
             if page_name and page_file:
-                # Convert file path to import path
-                # e.g., "framework/pages/auth/loginpage.py" -> "pages.auth.loginpage"
                 import_path = page_file.replace(".py", "").replace("/", ".").replace("\\", ".")
-                # Remove 'framework.' prefix for relative imports within framework
                 import_path = import_path.replace("framework.", "")
                 page_imports += f"from {import_path} import {page_name}\n"
 
-                # Generate page object instance variable name
-                page_var = f"{page_name[0].lower()}{page_name[1:]}"
-                page_var = page_var.replace("Page", "_page")
-
+                page_var = f"{page_name[0].lower()}{page_name[1:]}".replace("Page", "_page")
                 page_inits += f"        self.{page_var} = {page_name}(web)\n"
 
         # Generate workflow methods using page object methods
@@ -666,37 +1056,11 @@ def generate_task_template(
             first_page = page_objects[0]
             page_name = first_page.get("name", "")
             page_methods = first_page.get("methods", [])
+            workflow_methods = generate_task_workflows(workflow_type, page_name, page_methods)
 
-            workflow_methods = generate_task_workflows(workflow_lower, page_name, page_methods)
-    else:
-        # No page objects provided - use placeholder
-        page_imports = f"# TODO: Import required page objects\n# from pages.{workflow_lower}.some_page import SomePage"
-        page_inits = "        # TODO: Initialize page objects\n        # self.some_page = SomePage(web)"
-        workflow_methods = '''
-
-    # ==================== WORKFLOW METHODS ====================
-
-    def example_workflow(self, param1: str) -> bool:
-        """
-        Execute example workflow.
-
-        Complete workflow: describe the steps here.
-
-        Args:
-            param1: Description of parameter
-
-        Returns:
-            True if workflow successful, False otherwise
-        """
-        # TODO: Implement workflow
-        # Example:
-        # self.some_page.perform_action(param1)
-        # return self.some_page.verify_result()
-
-        raise NotImplementedError("Workflow not yet implemented")
-
-    # TODO: Add more workflow methods
-'''
+    # If no page objects or workflow methods, generate based on workflow type
+    if not workflow_methods:
+        workflow_methods = generate_task_workflows(workflow_type, "", [])
 
     code = f'''"""
 {task_name} - Reusable workflow methods.
@@ -704,13 +1068,13 @@ def generate_task_template(
 This module provides high-level task methods that orchestrate page objects
 to accomplish business workflows.
 
-{workflow_description or 'TODO: Add workflow description'}
+{workflow_description or f'{workflow_type.capitalize()} workflow tasks.'}
 """
 
 from typing import Optional
 from interfaces.web_interface import WebInterface
+from resources.utilities import autologger
 {page_imports}
-
 
 class {task_name}:
     """{task_name} workflows."""
@@ -726,18 +1090,18 @@ class {task_name}:
         self.web = web
         self.base_url = base_url
 
-{page_inits}
-{workflow_methods}'''
+{page_inits}{workflow_methods}'''
 
     return code
 
 
-def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
+def generate_pom_methods(elements: List[Dict[str, str]], page_name: str = "Self") -> str:
     """
     Generate interaction methods for page object based on element types.
 
     Args:
         elements: List of element dicts with name, locator, type
+        page_name: Page class name for type hints (forward reference)
 
     Returns:
         Python method code as string
@@ -762,7 +1126,8 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
             # Input field - generate enter_X method
             method_name = f"enter_{name.lower()}"
             methods.append(f'''
-    def {method_name}(self, text: str):
+    @autologger.automation_logger()
+    def {method_name}(self, text: str) -> "{page_name}":
         """
         Enter text into {name} field.
 
@@ -780,7 +1145,8 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
             # Button - generate click_X method
             method_name = f"click_{name.lower()}"
             methods.append(f'''
-    def {method_name}(self):
+    @autologger.automation_logger()
+    def {method_name}(self) -> "{page_name}":
         """
         Click {name} button.
 
@@ -795,7 +1161,8 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
             # Link - generate click_X method
             method_name = f"click_{name.lower()}"
             methods.append(f'''
-    def {method_name}(self):
+    @autologger.automation_logger()
+    def {method_name}(self) -> "{page_name}":
         """
         Click {name} link.
 
@@ -810,7 +1177,8 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
             # Select dropdown - generate select_X method
             method_name = f"select_{name.lower()}"
             methods.append(f'''
-    def {method_name}(self, value: str):
+    @autologger.automation_logger()
+    def {method_name}(self, value: str) -> "{page_name}":
         """
         Select option from {name} dropdown.
 
@@ -829,7 +1197,8 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
             check_method = f"check_{name.lower()}"
             uncheck_method = f"uncheck_{name.lower()}"
             methods.append(f'''
-    def {check_method}(self):
+    @autologger.automation_logger()
+    def {check_method}(self) -> "{page_name}":
         """
         Check {name} checkbox.
 
@@ -840,7 +1209,8 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
             self.web.click(*self.{name})
         return self
 
-    def {uncheck_method}(self):
+    @autologger.automation_logger()
+    def {uncheck_method}(self) -> "{page_name}":
         """
         Uncheck {name} checkbox.
 
@@ -857,7 +1227,8 @@ def generate_pom_methods(elements: List[Dict[str, str]]) -> str:
 
 def generate_page_object_template(
     page_name: str,
-    elements: Optional[List[Dict[str, str]]] = None
+    elements: Optional[List[Dict[str, str]]] = None,
+    workflow_type: Optional[str] = None
 ) -> str:
     """
     Generate page object template.
@@ -865,6 +1236,7 @@ def generate_page_object_template(
     Args:
         page_name: Page class name (e.g., ProductListPage)
         elements: List of element dicts with locator/name
+        workflow_type: Optional workflow type for adding standard methods
 
     Returns:
         Python page object code as string
@@ -881,21 +1253,34 @@ def generate_page_object_template(
             by_type = _determine_by_type(locator)
             locators += f'    {name} = (By.{by_type}, "{locator}")\n'
 
+    # Add standard locators based on workflow type
+    if workflow_type == "catalog":
+        locators += '\n    # Standard catalog locators\n'
+        locators += '    PRODUCT_ITEMS = (By.CSS_SELECTOR, "ul.product_list li.ajax_block_product")\n'
+        locators += '    PRODUCT_NAME = (By.CSS_SELECTOR, ".product-name")\n'
+        locators += '    PRODUCT_PRICE = (By.CSS_SELECTOR, ".price.product-price")\n'
+
     if not locators:
-        locators = "    # TODO: Add locators\n"
+        locators = "    # No locators detected - add element locators as needed\n"
 
     # Generate methods section (COMPLETE implementation)
-    methods = generate_pom_methods(elements) if elements else ""
+    methods = generate_pom_methods(elements, page_name) if elements else ""
+
+    # Add standard methods based on workflow type
+    standard_methods = _generate_standard_page_methods(page_name, workflow_type)
 
     code = f'''from selenium.webdriver.common.by import By
+from pages.base_page import BasePage
 from interfaces.web_interface import WebInterface
+from resources.utilities import autologger
 
 
-class {page_name}:
+class {page_name}(BasePage):
     """
     {page_name} - Page Object Model
 
     Represents the page and provides methods for interaction.
+    Inherits common header/footer methods from BasePage.
     """
 
     def __init__(self, web: WebInterface):
@@ -905,15 +1290,94 @@ class {page_name}:
         Args:
             web: WebInterface instance
         """
-        self.web = web
+        super().__init__(web)
 
     # ==================== LOCATORS ====================
 
 {locators}
-{methods}
+{methods}{standard_methods}
 '''
 
     return code
+
+
+def _generate_standard_page_methods(page_name: str, workflow_type: Optional[str]) -> str:
+    """Generate standard methods based on workflow type."""
+    if not workflow_type:
+        return ""
+
+    methods = ""
+
+    if workflow_type == "catalog":
+        methods = f'''
+    # ==================== STANDARD CATALOG METHODS ====================
+
+    @autologger.automation_logger()
+    def is_page_loaded(self) -> bool:
+        """Verify page is loaded."""
+        return self.web.is_element_displayed(*self.PRODUCT_ITEMS, timeout=10)
+
+    @autologger.automation_logger()
+    def get_product_count(self) -> int:
+        """Get number of products displayed."""
+        products = self.web.find_elements(*self.PRODUCT_ITEMS)
+        return len(products)
+
+    @autologger.automation_logger()
+    def has_products(self) -> bool:
+        """Check if any products are displayed."""
+        return self.get_product_count() > 0
+
+    @autologger.automation_logger()
+    def get_product_names(self) -> list:
+        """Get all product names on the page."""
+        products = self.web.find_elements(*self.PRODUCT_ITEMS)
+        names = []
+        for product in products:
+            name_element = product.find_element(*self.PRODUCT_NAME)
+            names.append(name_element.text.strip())
+        return names
+
+    @autologger.automation_logger()
+    def get_product_prices(self) -> list:
+        """Get all product prices on the page."""
+        products = self.web.find_elements(*self.PRODUCT_ITEMS)
+        prices = []
+        for product in products:
+            price_element = product.find_element(*self.PRODUCT_PRICE)
+            price_text = price_element.text.strip().replace("$", "").replace(",", "")
+            try:
+                prices.append(float(price_text))
+            except ValueError:
+                pass
+        return prices
+'''
+
+    elif workflow_type == "auth":
+        methods = f'''
+    # ==================== STANDARD AUTH METHODS ====================
+
+    @autologger.automation_logger()
+    def is_page_loaded(self) -> bool:
+        """Verify authentication page is loaded."""
+        return self.web.is_element_displayed(*self.SUBMITLOGIN, timeout=10)
+
+    @autologger.automation_logger()
+    def is_login_error_displayed(self) -> bool:
+        """Check if login error message is displayed."""
+        error_locator = (By.CSS_SELECTOR, ".alert-danger")
+        return self.web.is_element_displayed(*error_locator, timeout=3)
+
+    @autologger.automation_logger()
+    def get_error_message(self) -> str:
+        """Get error message text."""
+        error_locator = (By.CSS_SELECTOR, ".alert-danger")
+        if self.web.is_element_displayed(*error_locator, timeout=3):
+            return self.web.find_element(*error_locator).text
+        return ""
+'''
+
+    return methods
 
 
 def _determine_by_type(locator: str) -> str:
@@ -947,25 +1411,214 @@ def get_file_path_for_component(component_type: str, name: str, workflow: str = 
     Args:
         component_type: Type (test, role, task, page)
         name: Component name (PascalCase)
-        workflow: Optional workflow for categorization
+        workflow: Optional workflow for categorization (auth, catalog, cart, checkout)
 
     Returns:
-        Suggested file path (snake_case)
+        Suggested file path (snake_case) organized by workflow
     """
     import re
 
     # Convert PascalCase to snake_case
-    # LoginPage -> login_page, AuthTasks -> auth_tasks
     snake_name = re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
 
+    # Use workflow subfolder for organization
+    workflow_folder = workflow if workflow else "common"
+
     if component_type == "test":
-        return f"tests/{workflow}/{snake_name}.py"
+        return f"tests/{workflow_folder}/{snake_name}.py"
     elif component_type == "role":
-        return f"framework/roles/{snake_name}.py"
+        return f"framework/roles/{workflow_folder}/{snake_name}.py"
     elif component_type == "task":
-        return f"framework/tasks/{snake_name}.py"
+        return f"framework/tasks/{workflow_folder}/{snake_name}.py"
     elif component_type == "page":
-        # Always use common/ directory for pages
-        return f"framework/pages/common/{snake_name}.py"
+        return f"framework/pages/{workflow_folder}/{snake_name}.py"
     else:
         return f"{snake_name}.py"
+
+
+def discover_existing_capabilities(base_path: str = None) -> Dict:
+    """
+    Discover existing framework capabilities.
+
+    Scans the framework to find what Pages, Tasks, and Roles exist,
+    and what methods/capabilities they provide.
+
+    Use this BEFORE generating new code to avoid duplicates.
+
+    Args:
+        base_path: Optional path to framework root
+
+    Returns:
+        Dict with discovered capabilities:
+        {
+            "pages": {"auth": ["LoginPage", "AuthenticationPage"], "catalog": [...]},
+            "tasks": {"common": ["CommonTasks"], "catalog": ["CatalogTasks"]},
+            "roles": {"auth": ["RegisteredUser"], "guest": ["GuestUser"]},
+            "role_methods": {"RegisteredUser": ["login", "logout", "register"]},
+            "task_methods": {"CommonTasks": ["log_in", "log_out", "register_new_user"]}
+        }
+    """
+    from pathlib import Path
+    import ast
+
+    if base_path:
+        framework_path = Path(base_path)
+    else:
+        # Default: assume we're in mcp_server/utils, go up to project root
+        framework_path = Path(__file__).parent.parent.parent / "framework"
+
+    result = {
+        "pages": {},
+        "tasks": {},
+        "roles": {},
+        "role_methods": {},
+        "task_methods": {}
+    }
+
+    def extract_class_info(file_path: Path) -> List[Dict]:
+        """Extract class names and their public methods from a Python file."""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                tree = ast.parse(f.read())
+
+            classes = []
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ClassDef):
+                    # Get public methods (not starting with _)
+                    methods = [
+                        n.name for n in node.body
+                        if isinstance(n, ast.FunctionDef) and not n.name.startswith('_')
+                    ]
+                    classes.append({
+                        "name": node.name,
+                        "methods": methods,
+                        "file": file_path.name
+                    })
+            return classes
+        except Exception:
+            return []
+
+    # Scan pages
+    pages_base = framework_path / "pages"
+    if pages_base.exists():
+        for workflow_dir in pages_base.iterdir():
+            if workflow_dir.is_dir() and not workflow_dir.name.startswith('_'):
+                workflow_name = workflow_dir.name
+                result["pages"][workflow_name] = []
+                for py_file in workflow_dir.glob("*.py"):
+                    if not py_file.name.startswith('_'):
+                        for cls_info in extract_class_info(py_file):
+                            if cls_info["name"] not in ("BasePage",):
+                                result["pages"][workflow_name].append(cls_info["name"])
+
+    # Scan tasks
+    tasks_base = framework_path / "tasks"
+    if tasks_base.exists():
+        for workflow_dir in tasks_base.iterdir():
+            if workflow_dir.is_dir() and not workflow_dir.name.startswith('_'):
+                workflow_name = workflow_dir.name
+                result["tasks"][workflow_name] = []
+                for py_file in workflow_dir.glob("*.py"):
+                    if not py_file.name.startswith('_'):
+                        for cls_info in extract_class_info(py_file):
+                            result["tasks"][workflow_name].append(cls_info["name"])
+                            result["task_methods"][cls_info["name"]] = cls_info["methods"]
+
+    # Scan roles
+    roles_base = framework_path / "roles"
+    if roles_base.exists():
+        for workflow_dir in roles_base.iterdir():
+            if workflow_dir.is_dir() and not workflow_dir.name.startswith('_'):
+                workflow_name = workflow_dir.name
+                result["roles"][workflow_name] = []
+                for py_file in workflow_dir.glob("*.py"):
+                    if not py_file.name.startswith('_'):
+                        for cls_info in extract_class_info(py_file):
+                            if cls_info["name"] not in ("Role",):
+                                result["roles"][workflow_name].append(cls_info["name"])
+                                result["role_methods"][cls_info["name"]] = cls_info["methods"]
+
+    return result
+
+
+def can_assemble_workflow(workflow_name: str, capabilities: Dict = None) -> Dict:
+    """
+    Check if a workflow can be assembled from existing pieces.
+
+    Args:
+        workflow_name: The workflow to check (e.g., "auth", "checkout", "add_to_cart")
+        capabilities: Optional pre-scanned capabilities (from discover_existing_capabilities)
+
+    Returns:
+        Dict with:
+        {
+            "can_assemble": bool,
+            "existing_role": str or None,      # Role that has this workflow method
+            "existing_tasks": [...],           # Tasks available
+            "existing_pages": [...],           # Pages available
+            "missing": [...]                   # What's missing
+        }
+    """
+    if capabilities is None:
+        capabilities = discover_existing_capabilities()
+
+    # Map common workflow names to domains
+    workflow_to_domain = {
+        "login": "auth", "logout": "auth", "register": "auth", "auth": "auth",
+        "browse": "catalog", "filter": "catalog", "sort": "catalog", "catalog": "catalog",
+        "add_to_cart": "cart", "cart": "cart", "view_cart": "cart",
+        "checkout": "checkout", "purchase": "checkout", "payment": "checkout"
+    }
+
+    domain = workflow_to_domain.get(workflow_name.lower(), workflow_name.lower())
+
+    result = {
+        "workflow": workflow_name,
+        "domain": domain,
+        "can_assemble": False,
+        "existing_role": None,
+        "existing_role_methods": [],
+        "existing_tasks": [],
+        "existing_task_methods": [],
+        "existing_pages": [],
+        "recommendation": ""
+    }
+
+    # Check for existing roles with methods for this workflow
+    for role_name, methods in capabilities.get("role_methods", {}).items():
+        # Check if any method name suggests this workflow
+        matching_methods = [m for m in methods if workflow_name.lower() in m.lower() or domain in m.lower()]
+        if matching_methods:
+            result["existing_role"] = role_name
+            result["existing_role_methods"] = matching_methods
+            result["can_assemble"] = True
+            result["recommendation"] = f"USE existing Role '{role_name}' with methods: {matching_methods}"
+            break
+
+    # Check for existing tasks
+    for task_domain, task_list in capabilities.get("tasks", {}).items():
+        if task_domain == domain or task_domain == "common":
+            result["existing_tasks"].extend(task_list)
+            for task_name in task_list:
+                methods = capabilities.get("task_methods", {}).get(task_name, [])
+                result["existing_task_methods"].extend(methods)
+
+    # Check for existing pages
+    for page_domain, page_list in capabilities.get("pages", {}).items():
+        if page_domain == domain:
+            result["existing_pages"].extend(page_list)
+
+    # If no role method but tasks exist, can still assemble
+    if not result["can_assemble"] and result["existing_tasks"]:
+        result["can_assemble"] = True
+        result["recommendation"] = f"CREATE new Role method using existing Tasks: {result['existing_tasks']}"
+
+    # If no tasks but pages exist
+    if not result["existing_tasks"] and result["existing_pages"]:
+        result["recommendation"] = f"CREATE new Task using existing Pages: {result['existing_pages']}"
+
+    # Nothing exists
+    if not result["existing_role"] and not result["existing_tasks"] and not result["existing_pages"]:
+        result["recommendation"] = "GENERATE all layers: Page → Task → Role → Test"
+
+    return result

@@ -1,13 +1,20 @@
+"""
+LoginPage - Authentication page object.
+
+Represents the login/authentication page and provides methods for interaction.
+"""
+
 from selenium.webdriver.common.by import By
-from framework.pages.base_page import BasePage
-from framework.interfaces.web_interface import WebInterface
+from pages.base_page import BasePage
+from interfaces.web_interface import WebInterface
 
 
 class LoginPage(BasePage):
     """
     LoginPage - Page Object Model
 
-    Represents the page and provides methods for interaction.
+    Represents the login page and provides methods for interaction.
+    Inherits common header/footer methods from BasePage.
     """
 
     def __init__(self, web: WebInterface):
@@ -25,28 +32,29 @@ class LoginPage(BasePage):
     EMAIL = (By.CSS_SELECTOR, "#email")
     PASSWD = (By.CSS_SELECTOR, "#passwd")
 
-
     # ==================== INTERACTION METHODS ====================
 
-    def click_submitlogin(self) -> None:
+    def click_submitlogin(self) -> "LoginPage":
         """Click SUBMITLOGIN button."""
         self.web.click(*self.SUBMITLOGIN)
+        return self
 
-    def enter_email(self, text: str) -> None:
+    def enter_email(self, text: str) -> "LoginPage":
         """
         Enter text into EMAIL field.
 
         Args:
             text: Text to enter
         """
-        self.web.send_keys(*self.EMAIL, text)
+        self.web.type_text(*self.EMAIL, text)
+        return self
 
-    def enter_passwd(self, text: str) -> None:
+    def enter_passwd(self, text: str) -> "LoginPage":
         """
         Enter text into PASSWD field.
 
         Args:
             text: Text to enter
         """
-        self.web.send_keys(*self.PASSWD, text)
-
+        self.web.type_text(*self.PASSWD, text)
+        return self

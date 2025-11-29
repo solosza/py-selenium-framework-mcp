@@ -19,8 +19,8 @@ FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
 from resources.utilities import autologger
-from roles.registered_user import RegisteredUser
-from pages.common.authentication_page import AuthenticationPage
+from roles.auth.registered_user import RegisteredUser
+from pages.auth.authentication_page import AuthenticationPage
 
 
 @pytest.mark.smoke

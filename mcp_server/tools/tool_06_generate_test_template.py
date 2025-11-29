@@ -22,9 +22,10 @@ async def generate_test_template(arguments: dict) -> str:
     Args:
         arguments: {
             "test_name": str - Test function name
-            "workflow": str - Workflow category
+            "workflow": str - Workflow category or folder
             "role": str - Role class name (e.g., RegisteredUser, GuestUser, PayrollManager)
             "scenario": dict - Optional scenario with given/when/then
+            "role_import": str - Optional custom import statement for role
         }
 
     Returns:
@@ -34,6 +35,7 @@ async def generate_test_template(arguments: dict) -> str:
     workflow = arguments.get("workflow", "")
     role = arguments.get("role", "RegisteredUser")  # Default role
     scenario = arguments.get("scenario", {})
+    role_import = arguments.get("role_import", None)
 
     # Validation
     if not test_name:
@@ -44,7 +46,7 @@ async def generate_test_template(arguments: dict) -> str:
 
     if not workflow:
         return json.dumps({
-            "error": "workflow is required (auth, catalog, cart, checkout)",
+            "error": "workflow is required (auth, catalog, cart, checkout, or custom folder)",
             "status": "error"
         }, indent=2)
 
@@ -61,7 +63,7 @@ async def generate_test_template(arguments: dict) -> str:
     try:
         # Generate test code using code_generator WITH ROLE PARAMETER
         from utils.code_generator import generate_test_template as gen_test
-        test_code = gen_test(test_name, workflow, role, scenario)
+        test_code = gen_test(test_name, workflow, role, scenario, role_import=role_import)
 
         # Get suggested file path
         file_path = get_file_path_for_component("test", test_name, workflow)

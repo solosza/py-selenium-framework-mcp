@@ -78,7 +78,7 @@ class ProductListPage(BasePage):
 
     # ==================== NAVIGATION METHODS ====================
 
-    def click_women_category(self):
+    def click_women_category(self) -> "ProductListPage":
         """
         Navigate to Women category.
 
@@ -88,7 +88,7 @@ class ProductListPage(BasePage):
         self.web.click(*self.WOMEN_CATEGORY)
         return self
 
-    def click_dresses_category(self):
+    def click_dresses_category(self) -> "ProductListPage":
         """
         Navigate to Dresses category.
 
@@ -98,7 +98,7 @@ class ProductListPage(BasePage):
         self.web.click(*self.DRESSES_CATEGORY)
         return self
 
-    def click_tshirts_category(self):
+    def click_tshirts_category(self) -> "ProductListPage":
         """
         Navigate to T-shirts category.
 
@@ -108,7 +108,7 @@ class ProductListPage(BasePage):
         self.web.click(*self.TSHIRTS_CATEGORY)
         return self
 
-    def click_subcategory(self, subcategory_name: str):
+    def click_subcategory(self, subcategory_name: str) -> "ProductListPage":
         """
         Click a subcategory by name.
 
@@ -124,7 +124,7 @@ class ProductListPage(BasePage):
 
     # ==================== SORTING METHODS ====================
 
-    def sort_by_price_low_to_high(self):
+    def sort_by_price_low_to_high(self) -> "ProductListPage":
         """
         Sort products by price: lowest first.
 
@@ -135,7 +135,7 @@ class ProductListPage(BasePage):
         time.sleep(2)  # Wait for page to reload with sorted results
         return self
 
-    def sort_by_price_high_to_low(self):
+    def sort_by_price_high_to_low(self) -> "ProductListPage":
         """
         Sort products by price: highest first.
 
@@ -146,7 +146,7 @@ class ProductListPage(BasePage):
         time.sleep(2)  # Wait for page to reload with sorted results
         return self
 
-    def sort_by_name_a_to_z(self):
+    def sort_by_name_a_to_z(self) -> "ProductListPage":
         """
         Sort products by name: A to Z.
 
@@ -157,7 +157,7 @@ class ProductListPage(BasePage):
         time.sleep(2)  # Wait for page to reload with sorted results
         return self
 
-    def sort_by_name_z_to_a(self):
+    def sort_by_name_z_to_a(self) -> "ProductListPage":
         """
         Sort products by name: Z to A.
 
@@ -170,7 +170,7 @@ class ProductListPage(BasePage):
 
     # ==================== FILTERING METHODS ====================
 
-    def filter_by_size(self, size: str):
+    def filter_by_size(self, size: str) -> "ProductListPage":
         """
         Filter products by size.
 
@@ -210,7 +210,7 @@ class ProductListPage(BasePage):
         time.sleep(2)  # Wait for filtered results (AJAX reload)
         return self
 
-    def filter_by_color(self, color: str):
+    def filter_by_color(self, color: str) -> "ProductListPage":
         """
         Filter products by color.
 
@@ -285,7 +285,7 @@ class ProductListPage(BasePage):
 
         return prices
 
-    def click_product_by_index(self, index: int):
+    def click_product_by_index(self, index: int) -> "ProductListPage":
         """
         Click a product by index.
 
@@ -306,7 +306,7 @@ class ProductListPage(BasePage):
 
     # ==================== QUICK VIEW METHODS ====================
 
-    def hover_product_by_index(self, index: int):
+    def hover_product_by_index(self, index: int) -> "ProductListPage":
         """
         Hover over a product to reveal Quick View button.
 
@@ -324,7 +324,7 @@ class ProductListPage(BasePage):
         self.web.hover_over_element(product)
         return self
 
-    def click_quick_view_by_index(self, index: int):
+    def click_quick_view_by_index(self, index: int) -> "ProductListPage":
         """
         Click Quick View button for a product.
 

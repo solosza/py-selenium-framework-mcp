@@ -10,6 +10,7 @@ from typing import Optional
 from interfaces.web_interface import WebInterface
 from pages.catalog.product_list_page import ProductListPage
 from pages.catalog.quick_view_modal import QuickViewModal
+from resources.utilities import autologger
 
 
 class CatalogTasks:
@@ -30,6 +31,7 @@ class CatalogTasks:
 
     # ==================== NAVIGATION METHODS ====================
 
+    @autologger.automation_logger("Task")
     def navigate_to_category(self, category_name: str) -> bool:
         """
         Navigate to a product category.
@@ -67,6 +69,7 @@ class CatalogTasks:
         self.web.logger.info(f"Navigated to category: {category_name}")
         return True
 
+    @autologger.automation_logger("Task")
     def browse_category(self, category_name: str) -> bool:
         """
         Browse a category and verify products are displayed.
@@ -92,6 +95,7 @@ class CatalogTasks:
         self.web.logger.info(f"Browsing {category_name}: {product_count} products found")
         return True
 
+    @autologger.automation_logger("Task")
     def browse_subcategory(self, category_name: str, subcategory_name: str) -> bool:
         """
         Browse a subcategory within a main category.
@@ -125,6 +129,7 @@ class CatalogTasks:
 
     # ==================== FILTERING METHODS ====================
 
+    @autologger.automation_logger("Task")
     def filter_products(self, category_name: str, size: Optional[str] = None, color: Optional[str] = None) -> bool:
         """
         Filter products by size and/or color.
@@ -178,6 +183,7 @@ class CatalogTasks:
 
     # ==================== SORTING METHODS ====================
 
+    @autologger.automation_logger("Task")
     def sort_products(self, category_name: str, sort_by: str) -> bool:
         """
         Sort products in a category.
@@ -232,6 +238,7 @@ class CatalogTasks:
 
     # ==================== QUICK VIEW METHODS ====================
 
+    @autologger.automation_logger("Task")
     def open_quick_view(self, category_name: str, product_index: int = 0) -> bool:
         """
         Open quick view modal for a product.
@@ -276,6 +283,7 @@ class CatalogTasks:
         self.web.logger.info("Quick view modal opened successfully")
         return True
 
+    @autologger.automation_logger("Task")
     def close_quick_view(self) -> bool:
         """
         Close quick view modal.
@@ -294,6 +302,7 @@ class CatalogTasks:
 
     # ==================== VERIFICATION METHODS ====================
 
+    @autologger.automation_logger("Task")
     def verify_products_displayed(self) -> bool:
         """
         Verify products are displayed on current page.
@@ -303,6 +312,7 @@ class CatalogTasks:
         """
         return self.product_list_page.has_products()
 
+    @autologger.automation_logger("Task")
     def verify_sort_order(self, expected_order: str) -> bool:
         """
         Verify current sort order.
@@ -321,6 +331,7 @@ class CatalogTasks:
             self.web.logger.warning(f"Unknown sort order: {expected_order}")
             return False
 
+    @autologger.automation_logger("Task")
     def get_product_count(self) -> int:
         """
         Get number of products currently displayed.
@@ -330,6 +341,7 @@ class CatalogTasks:
         """
         return self.product_list_page.get_product_count()
 
+    @autologger.automation_logger("Task")
     def get_product_names(self) -> list:
         """
         Get list of product names currently displayed.
@@ -339,6 +351,7 @@ class CatalogTasks:
         """
         return self.product_list_page.get_product_names()
 
+    @autologger.automation_logger("Task")
     def get_product_prices(self) -> list:
         """
         Get list of product prices currently displayed.

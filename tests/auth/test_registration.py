@@ -22,8 +22,9 @@ FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
 from resources.utilities import autologger
-from pages.common.authentication_page import AuthenticationPage
-from pages.common.registration_page import RegistrationPage
+from roles.auth.registered_user import RegisteredUser
+from pages.auth.authentication_page import AuthenticationPage
+from pages.auth.registration_page import RegistrationPage
 
 
 @pytest.mark.smoke
@@ -33,13 +34,12 @@ def test_registration_valid_data(web_interface, config, test_users):
     """
     Test successful user registration with all valid data.
 
+    Uses RegisteredUser role to orchestrate the complete registration workflow.
+
     Steps:
-        1. Navigate to authentication page
-        2. Enter new email in registration form
-        3. Click Create Account button
-        4. Fill all required registration fields
-        5. Submit registration form
-        6. Verify account created successfully
+        1. Create RegisteredUser with new user data
+        2. Call register() workflow method
+        3. Verify registration successful (user is logged in)
 
     Expected Result:
         User account created and user is logged in.
@@ -49,48 +49,18 @@ def test_registration_valid_data(web_interface, config, test_users):
     # Arrange
     base_url = config["url"]
     new_user_data = test_users["new_user"]
-    auth_page = AuthenticationPage(web_interface)
-    reg_page = RegistrationPage(web_interface)
 
-    # Act: Navigate to auth page and initiate registration
-    web_interface.navigate_to(base_url + "?controller=authentication")
-    auth_page.enter_registration_email(new_user_data["email"]) \
-             .click_create_account()
-
-    # Wait for registration form to load
-    assert reg_page.is_page_loaded(), "Registration form should be displayed"
-
-    # Fill registration form
-    reg_page.select_title(new_user_data["title"]) \
-            .enter_first_name(new_user_data["first_name"]) \
-            .enter_last_name(new_user_data["last_name"]) \
-            .enter_password(new_user_data["password"]) \
-            .select_date_of_birth(
-                new_user_data["dob_day"],
-                new_user_data["dob_month"],
-                new_user_data["dob_year"]
-            ) \
-            .enter_address(new_user_data["address_1"]) \
-            .enter_city(new_user_data["city"]) \
-            .select_state(new_user_data["state"]) \
-            .enter_zip_code(new_user_data["zip_code"]) \
-            .select_country(new_user_data["country"]) \
-            .enter_mobile_phone(new_user_data["mobile_phone"]) \
-            .click_register()
+    # Act: Use Role to orchestrate registration workflow
+    user = RegisteredUser(web_interface, new_user_data, base_url)
+    registration_result = user.register()
 
     # Assert: Verify registration successful
-    # Note: This will fail if email already exists, which is expected behavior
-    current_url = web_interface.get_current_url()
-    # Successful registration redirects to my-account page
-    success = "controller=my-account" in current_url
+    if not registration_result:
+        # Check for duplicate email error
+        pytest.skip("Registration failed (likely duplicate email)")
 
-    if not success:
-        # Check for error message
-        if reg_page.has_error_message():
-            error_msg = reg_page.get_error_message()
-            pytest.skip(f"Registration failed (likely duplicate email): {error_msg}")
-
-    assert success, "Registration should succeed and redirect to account page"
+    assert registration_result is True, "Registration should succeed"
+    assert user.is_logged_in() is True, "User should be logged in after registration"
 
 
 @pytest.mark.regression

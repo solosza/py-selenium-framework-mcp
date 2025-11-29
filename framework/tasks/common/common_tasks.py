@@ -7,8 +7,9 @@ to accomplish common user workflows like login, logout, and registration.
 
 from typing import Dict, Any
 from interfaces.web_interface import WebInterface
-from pages.common.authentication_page import AuthenticationPage
-from pages.common.registration_page import RegistrationPage
+from pages.auth.authentication_page import AuthenticationPage
+from pages.auth.registration_page import RegistrationPage
+from resources.utilities import autologger
 
 
 class CommonTasks:
@@ -33,17 +34,20 @@ class CommonTasks:
 
     # ==================== NAVIGATION METHODS ====================
 
+    @autologger.automation_logger("Task")
     def navigate_to_login_page(self) -> None:
         """Navigate to the authentication/login page."""
         auth_url = f"{self.base_url}?controller=authentication"
         self.web.navigate_to(auth_url)
 
+    @autologger.automation_logger("Task")
     def navigate_to_home_page(self) -> None:
         """Navigate to the home page."""
         self.web.navigate_to(self.base_url)
 
     # ==================== LOGIN METHODS ====================
 
+    @autologger.automation_logger("Task")
     def log_in(self, email: str, password: str) -> bool:
         """
         Complete login workflow.
@@ -96,6 +100,7 @@ class CommonTasks:
 
     # ==================== LOGOUT METHODS ====================
 
+    @autologger.automation_logger("Task")
     def log_out(self) -> bool:
         """
         Complete logout workflow.
@@ -132,6 +137,7 @@ class CommonTasks:
 
     # ==================== REGISTRATION METHODS ====================
 
+    @autologger.automation_logger("Task")
     def register_new_user(self, user_data: Dict[str, Any]) -> bool:
         """
         Complete new user registration workflow.
@@ -214,6 +220,7 @@ class CommonTasks:
 
     # ==================== VERIFICATION METHODS ====================
 
+    @autologger.automation_logger("Task")
     def verify_logged_in(self) -> bool:
         """
         Verify user is logged in.
@@ -233,6 +240,7 @@ class CommonTasks:
 
         return is_logged_in
 
+    @autologger.automation_logger("Task")
     def verify_logged_out(self) -> bool:
         """
         Verify user is logged out.
@@ -252,6 +260,7 @@ class CommonTasks:
 
         return is_logged_out
 
+    @autologger.automation_logger("Task")
     def get_current_user_state(self) -> str:
         """
         Get current authentication state.
@@ -268,6 +277,7 @@ class CommonTasks:
 
     # ==================== ACCOUNT PAGE METHODS ====================
 
+    @autologger.automation_logger("Task")
     def navigate_to_my_account(self) -> None:
         """Navigate to My Account page using header link (must be logged in)."""
         if not self.verify_logged_in():
@@ -277,6 +287,7 @@ class CommonTasks:
         # Use BasePage inherited method
         self.auth_page.click_my_account()
 
+    @autologger.automation_logger("Task")
     def is_on_account_page(self) -> bool:
         """
         Check if currently on the My Account page.
@@ -287,6 +298,7 @@ class CommonTasks:
         current_url = self.auth_page.get_page_url()
         return self.ACCOUNT_PAGE_URL_PATTERN in current_url
 
+    @autologger.automation_logger("Task")
     def is_on_auth_page(self) -> bool:
         """
         Check if currently on the authentication/login page.

@@ -2,6 +2,7 @@
 Catalog Tests - Quick View Modal.
 
 Tests opening and interacting with quick view modal.
+Uses GuestUser role to orchestrate quick view workflows.
 """
 
 import pytest
@@ -12,7 +13,7 @@ import sys
 FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
-from tasks.catalog_tasks import CatalogTasks
+from roles.guest.guest_user import GuestUser
 from resources.utilities import autologger
 
 
@@ -22,9 +23,11 @@ def test_open_quick_view_modal(web_interface, config):
     """
     Test opening quick view modal for first product.
 
+    Uses GuestUser role to orchestrate the quick view workflow.
+
     Steps:
-        1. Browse Dresses category
-        2. Open quick view for first product (index 0)
+        1. Create GuestUser role
+        2. Call view_product_quick_view() for first product
         3. Verify modal opens successfully
 
     Expected Result:
@@ -32,16 +35,16 @@ def test_open_quick_view_modal(web_interface, config):
     """
     # Arrange
     base_url = config["url"]
-    catalog_tasks = CatalogTasks(web_interface, base_url)
+    guest = GuestUser(web_interface, base_url)
 
-    # Act: Open quick view
-    quick_view_result = catalog_tasks.open_quick_view("Dresses", product_index=0)
+    # Act: Use role to open quick view
+    quick_view_result = guest.view_product_quick_view("Dresses", product_index=0)
 
     # Assert: Verify modal opened
     assert quick_view_result is True, "Failed to open quick view modal"
 
-    # Cleanup: Close modal
-    catalog_tasks.close_quick_view()
+    # Cleanup: Close modal using role
+    guest.close_quick_view()
 
 
 @pytest.mark.catalog
@@ -50,9 +53,11 @@ def test_open_quick_view_second_product(web_interface, config):
     """
     Test opening quick view for second product.
 
+    Uses GuestUser role to orchestrate the quick view workflow.
+
     Steps:
-        1. Browse Women category
-        2. Open quick view for second product (index 1)
+        1. Create GuestUser role
+        2. Call view_product_quick_view() for second product
         3. Verify modal opens
 
     Expected Result:
@@ -60,16 +65,16 @@ def test_open_quick_view_second_product(web_interface, config):
     """
     # Arrange
     base_url = config["url"]
-    catalog_tasks = CatalogTasks(web_interface, base_url)
+    guest = GuestUser(web_interface, base_url)
 
-    # Act: Open quick view for second product
-    quick_view_result = catalog_tasks.open_quick_view("Women", product_index=1)
+    # Act: Use role to open quick view for second product
+    quick_view_result = guest.view_product_quick_view("Women", product_index=1)
 
     # Assert: Verify modal opened
     assert quick_view_result is True, "Failed to open quick view for second product"
 
-    # Cleanup: Close modal
-    catalog_tasks.close_quick_view()
+    # Cleanup: Close modal using role
+    guest.close_quick_view()
 
 
 @pytest.mark.catalog
@@ -78,10 +83,12 @@ def test_close_quick_view_modal(web_interface, config):
     """
     Test opening and closing quick view modal.
 
+    Uses GuestUser role to orchestrate the workflow.
+
     Steps:
-        1. Browse Dresses category
-        2. Open quick view for first product
-        3. Close quick view modal
+        1. Create GuestUser role
+        2. Call view_product_quick_view() to open modal
+        3. Call close_quick_view() to close modal
         4. Verify modal closes successfully
 
     Expected Result:
@@ -89,14 +96,14 @@ def test_close_quick_view_modal(web_interface, config):
     """
     # Arrange
     base_url = config["url"]
-    catalog_tasks = CatalogTasks(web_interface, base_url)
+    guest = GuestUser(web_interface, base_url)
 
-    # Act: Open quick view
-    quick_view_result = catalog_tasks.open_quick_view("Dresses", product_index=0)
+    # Act: Use role to open quick view
+    quick_view_result = guest.view_product_quick_view("Dresses", product_index=0)
     assert quick_view_result is True, "Quick view should open"
 
-    # Act: Close quick view
-    close_result = catalog_tasks.close_quick_view()
+    # Act: Use role to close quick view
+    close_result = guest.close_quick_view()
 
     # Assert: Verify modal closed
     assert close_result is True, "Failed to close quick view modal"
@@ -108,9 +115,11 @@ def test_quick_view_invalid_product_index(web_interface, config):
     """
     Test that invalid product index fails gracefully.
 
+    Uses GuestUser role to test error handling.
+
     Steps:
-        1. Browse T-shirts category
-        2. Attempt to open quick view for product index 999
+        1. Create GuestUser role
+        2. Attempt to view product at invalid index 999
         3. Verify operation returns False
 
     Expected Result:
@@ -118,10 +127,10 @@ def test_quick_view_invalid_product_index(web_interface, config):
     """
     # Arrange
     base_url = config["url"]
-    catalog_tasks = CatalogTasks(web_interface, base_url)
+    guest = GuestUser(web_interface, base_url)
 
-    # Act: Attempt invalid product index
-    quick_view_result = catalog_tasks.open_quick_view("T-shirts", product_index=999)
+    # Act: Use role to attempt invalid product index
+    quick_view_result = guest.view_product_quick_view("T-shirts", product_index=999)
 
     # Assert: Verify operation failed
     assert quick_view_result is False, "Invalid product index should fail"

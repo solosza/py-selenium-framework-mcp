@@ -105,6 +105,238 @@ WebInterface (Selenium wrapper)
 /docs                # Process documentation (gitignored for IP protection)
 ```
 
+## 4-Layer Framework Architecture
+
+**CRITICAL: Follow these patterns exactly. Generated code MUST match production code.**
+
+### Layer Overview
+```
+Test        → Calls ONE role workflow method, asserts result
+Role        → ORCHESTRATES multiple tasks into complete business workflow
+Task        → Orchestrates page object methods for a single domain operation
+Page        → Atomic UI interactions using WebInterface
+WebInterface → Selenium wrapper
+```
+
+### Layer 1: Page Objects (Atomic UI Interactions)
+
+**Purpose:** Single page representation with atomic element interactions.
+
+**Pattern:**
+```python
+from selenium.webdriver.common.by import By
+from pages.base_page import BasePage
+from interfaces.web_interface import WebInterface
+
+class LoginPage(BasePage):
+    # LOCATORS - Class-level constants
+    EMAIL = (By.CSS_SELECTOR, "#email")
+    PASSWORD = (By.CSS_SELECTOR, "#passwd")
+    SUBMIT_BTN = (By.CSS_SELECTOR, "#SubmitLogin")
+
+    def __init__(self, web: WebInterface):
+        super().__init__(web)
+
+    # ATOMIC METHODS - One action per method, return self for chaining
+    def enter_email(self, text: str) -> "LoginPage":
+        self.web.type_text(*self.EMAIL, text)
+        return self
+
+    def enter_password(self, text: str) -> "LoginPage":
+        self.web.type_text(*self.PASSWORD, text)
+        return self
+
+    def click_submit(self) -> "LoginPage":
+        self.web.click(*self.SUBMIT_BTN)
+        return self
+```
+
+**Rules:**
+- Locators ONLY in Page Objects (never in Tasks or Roles)
+- One action per method
+- Return `self` for fluent chaining
+- NO decorators on Page Objects (logging happens at Task/Role level)
+- Inherit from BasePage for common header/footer methods
+
+### Layer 2: Tasks (Domain Operations)
+
+**Purpose:** Orchestrate page object methods for single domain operations.
+
+**Pattern:**
+```python
+from interfaces.web_interface import WebInterface
+from pages.auth.login_page import LoginPage
+from pages.auth.account_page import AccountPage
+from resources.utilities import autologger
+
+class CommonTasks:
+    def __init__(self, web: WebInterface, base_url: str):
+        self.web = web
+        self.base_url = base_url
+        # Compose page objects
+        self.login_page = LoginPage(web)
+        self.account_page = AccountPage(web)
+
+    @autologger.automation_logger("Task")
+    def log_in(self, email: str, password: str) -> bool:
+        """Single domain operation: authenticate user."""
+        self.web.navigate_to(f"{self.base_url}?controller=authentication")
+
+        # Use page object methods (fluent chain)
+        (self.login_page
+            .enter_email(email)
+            .enter_password(password)
+            .click_submit())
+
+        # Verify using page object
+        return self.login_page.is_signed_in()
+
+    @autologger.automation_logger("Task")
+    def log_out(self) -> bool:
+        """Single domain operation: end session."""
+        self.login_page.click_logout()
+        return self.login_page.is_signed_out()
+```
+
+**Rules:**
+- NO locators in Tasks (delegate to page objects)
+- Each task method = one domain operation
+- Use `@autologger.automation_logger("Task")` decorator
+- Return bool for success/failure
+
+### Layer 3: Roles (Workflow Orchestration)
+
+**Purpose:** ORCHESTRATE multiple tasks into complete business workflows.
+
+**Pattern:**
+```python
+from roles.base.role import Role
+from tasks.common.common_tasks import CommonTasks
+from tasks.catalog.catalog_tasks import CatalogTasks
+from tasks.checkout.checkout_tasks import CheckoutTasks
+from resources.utilities import autologger
+
+class RegisteredUser(Role):
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface, user_data, base_url):
+        super().__init__(web_interface, user_data)
+
+        # Compose ALL task modules needed
+        self.common_tasks = CommonTasks(web_interface, base_url)
+        self.catalog_tasks = CatalogTasks(web_interface, base_url)
+        self.checkout_tasks = CheckoutTasks(web_interface, base_url)
+
+    @autologger.automation_logger("Role")
+    def purchase_product(self, product_data: dict) -> bool:
+        """
+        COMPLETE WORKFLOW: Login -> Browse -> Add to Cart -> Checkout
+
+        This is what makes Role different from Task:
+        - Role orchestrates MULTIPLE tasks
+        - Role represents a complete user journey/story
+        """
+        # Step 1: Authenticate
+        if not self.common_tasks.log_in(self.email, self.password):
+            return False
+
+        # Step 2: Find product
+        if not self.catalog_tasks.browse_category(product_data["category"]):
+            return False
+
+        # Step 3: Add to cart
+        if not self.catalog_tasks.add_to_cart(product_data["name"]):
+            return False
+
+        # Step 4: Complete checkout
+        if not self.checkout_tasks.complete_purchase():
+            return False
+
+        return True
+```
+
+**Rules:**
+- Role methods = COMPLETE business workflows (not single operations)
+- Orchestrate MULTIPLE task methods in sequence
+- Use `@autologger.automation_logger("Role")` decorator
+- Each role method tells a complete user story
+
+### Layer 4: Tests (Assertions Only)
+
+**Purpose:** Call ONE role workflow method, assert the result.
+
+**Pattern:**
+```python
+import pytest
+from roles.auth.registered_user import RegisteredUser
+from resources.utilities import autologger
+
+@pytest.mark.purchase
+@autologger.automation_logger("Test")
+def test_user_can_purchase_product(web_interface, config, test_data):
+    """
+    Test that a registered user can complete a purchase.
+
+    NOTE: Test does NOT orchestrate - it calls ONE role method.
+    The Role handles all workflow orchestration.
+    """
+    # Arrange
+    user = RegisteredUser(web_interface, test_data["user"], config["url"])
+    product = test_data["product"]
+
+    # Act - ONE call to workflow method
+    result = user.purchase_product(product)
+
+    # Assert
+    assert result is True, "Purchase workflow should complete successfully"
+```
+
+**Rules:**
+- Test calls ONE role workflow method
+- Test does NOT orchestrate multiple role/task calls
+- Test only does: Arrange, Act (one call), Assert
+- Use `@autologger.automation_logger("Test")` decorator
+
+### Anti-Patterns to AVOID
+
+**WRONG - Role as thin delegate:**
+```python
+# BAD: Role just wraps task methods 1:1
+class RegisteredUser(Role):
+    def login(self):
+        return self.common_tasks.log_in(self.email, self.password)
+
+    def browse(self, category):
+        return self.catalog_tasks.browse_category(category)
+```
+
+**WRONG - Test orchestrates workflow:**
+```python
+# BAD: Test is doing Role's job
+def test_purchase():
+    user.login()           # Multiple calls
+    user.browse("Women")   # Test is orchestrating
+    user.add_to_cart()     # This belongs in Role
+    user.checkout()
+```
+
+**WRONG - Task has locators:**
+```python
+# BAD: Locators belong in Page Objects only
+class CatalogTasks:
+    def browse_category(self, name):
+        from selenium.webdriver.common.by import By
+        self.web.click(By.XPATH, f"//a[text()='{name}']")  # NO!
+```
+
+### Summary: Who Does What
+
+| Layer | Responsibility | Calls |
+|-------|---------------|-------|
+| Test | Assert results | ONE Role method |
+| Role | Orchestrate complete workflow | MULTIPLE Task methods |
+| Task | Single domain operation | Page Object methods |
+| Page | Atomic UI action | WebInterface methods |
+
 ## Intellectual Property Protection
 
 **What's Protected:**

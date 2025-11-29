@@ -7,6 +7,7 @@ and encapsulate their credentials and capabilities.
 
 from typing import Dict, Optional, Any
 from interfaces.web_interface import WebInterface
+from resources.utilities import autologger
 
 
 class Role:
@@ -19,6 +20,7 @@ class Role:
     - WebInterface instance for performing actions
     """
 
+    @autologger.automation_logger("Role Constructor")
     def __init__(self, web_interface: WebInterface, user_data: Optional[Dict[str, Any]] = None):
         """
         Initialize Role with WebInterface and optional user data.
@@ -38,6 +40,11 @@ class Role:
         self.company = self.user_data.get('company', '')
         self.address = self.user_data.get('address')
         self.role_type = self.user_data.get('role', 'unknown')
+
+    @property
+    def rolename(self) -> str:
+        """Return the role class name for logging."""
+        return self.__class__.__name__
 
     def get_full_name(self) -> Optional[str]:
         """

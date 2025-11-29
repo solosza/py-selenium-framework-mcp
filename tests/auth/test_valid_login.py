@@ -12,7 +12,7 @@ import sys
 FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
-from roles.registered_user import RegisteredUser
+from roles.auth.registered_user import RegisteredUser
 from resources.utilities import autologger
 
 

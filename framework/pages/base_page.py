@@ -49,33 +49,39 @@ class BasePage:
 
     # ==================== HEADER NAVIGATION METHODS ====================
 
-    def click_sign_in(self) -> None:
+    def click_sign_in(self) -> "BasePage":
         """Click Sign In link in header."""
         self.web.click(*self.SIGN_IN_LINK)
+        return self
 
-    def click_logout(self) -> None:
+    def click_logout(self) -> "BasePage":
         """Click Logout link in header."""
         self.web.click(*self.LOGOUT_LINK)
+        return self
 
-    def click_my_account(self) -> None:
+    def click_my_account(self) -> "BasePage":
         """Click My Account link in header."""
         self.web.click(*self.MY_ACCOUNT_LINK)
+        return self
 
-    def click_shopping_cart(self) -> None:
+    def click_shopping_cart(self) -> "BasePage":
         """Click Shopping Cart link in header."""
         self.web.click(*self.SHOPPING_CART_LINK)
+        return self
 
-    def click_logo(self) -> None:
+    def click_logo(self) -> "BasePage":
         """Click site logo to return to homepage."""
         self.web.click(*self.SITE_LOGO)
+        return self
 
-    def click_contact_us(self) -> None:
+    def click_contact_us(self) -> "BasePage":
         """Click Contact Us link in header."""
         self.web.click(*self.CONTACT_US_LINK)
+        return self
 
     # ==================== SEARCH METHODS ====================
 
-    def enter_search_query(self, query: str) -> None:
+    def enter_search_query(self, query: str) -> "BasePage":
         """
         Enter search query in search box.
 
@@ -83,12 +89,14 @@ class BasePage:
             query: Search term
         """
         self.web.type_text(*self.SEARCH_INPUT, text=query)
+        return self
 
-    def click_search_button(self) -> None:
+    def click_search_button(self) -> "BasePage":
         """Click search submit button."""
         self.web.click(*self.SEARCH_BUTTON)
+        return self
 
-    def search(self, query: str) -> None:
+    def search(self, query: str) -> "BasePage":
         """
         Perform search.
 
@@ -97,6 +105,7 @@ class BasePage:
         """
         self.enter_search_query(query)
         self.click_search_button()
+        return self
 
     # ==================== HEADER STATE VERIFICATION ====================
 
@@ -127,7 +136,7 @@ class BasePage:
         """
         return self.web.element_exists(*self.MY_ACCOUNT_LINK, timeout=3)
 
-    def wait_for_sign_in_link_visible(self, timeout: int = 10) -> None:
+    def wait_for_sign_in_link_visible(self, timeout: int = 10) -> "BasePage":
         """
         Wait for sign in link to become visible.
 
@@ -138,6 +147,7 @@ class BasePage:
             TimeoutException: If sign in link not visible within timeout
         """
         self.web.wait_for_element_visible(*self.SIGN_IN_LINK, timeout=timeout)
+        return self
 
     # ==================== COMMON UTILITY METHODS ====================
 
@@ -159,9 +169,10 @@ class BasePage:
         """
         return self.web.get_page_title()
 
-    def refresh_page(self) -> None:
+    def refresh_page(self) -> "BasePage":
         """Refresh the current page."""
         self.web.refresh_page()
+        return self
 
     def take_screenshot(self, name: str) -> str:
         """
@@ -175,10 +186,12 @@ class BasePage:
         """
         return self.web.take_screenshot(name)
 
-    def scroll_to_top(self) -> None:
+    def scroll_to_top(self) -> "BasePage":
         """Scroll to top of page."""
         self.web.scroll_to_top()
+        return self
 
-    def scroll_to_bottom(self) -> None:
+    def scroll_to_bottom(self) -> "BasePage":
         """Scroll to bottom of page."""
         self.web.scroll_to_bottom()
+        return self
