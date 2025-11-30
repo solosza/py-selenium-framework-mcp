@@ -109,12 +109,14 @@ WebInterface (Selenium wrapper)
 
 **CRITICAL: Follow these patterns exactly. Generated code MUST match production code.**
 
+**Authoritative Reference:** See `FRAMEWORK.md` for complete architecture documentation with code samples.
+
 ### Layer Overview
 ```
-Test        → Calls ONE role workflow method, asserts result
-Role        → ORCHESTRATES multiple tasks into complete business workflow
-Task        → Orchestrates page object methods for a single domain operation
-Page        → Atomic UI interactions using WebInterface
+Test        → Calls ONE role workflow method, asserts via POM state-check methods
+Role        → ORCHESTRATES multiple tasks into complete business workflow (NO return)
+Task        → Orchestrates page object methods for a single domain operation (NO return)
+Page        → Atomic UI interactions using WebInterface (returns self)
 WebInterface → Selenium wrapper
 ```
 
@@ -125,17 +127,16 @@ WebInterface → Selenium wrapper
 **Pattern:**
 ```python
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
 from interfaces.web_interface import WebInterface
 
-class LoginPage(BasePage):
+class LoginPage:
     # LOCATORS - Class-level constants
     EMAIL = (By.CSS_SELECTOR, "#email")
     PASSWORD = (By.CSS_SELECTOR, "#passwd")
     SUBMIT_BTN = (By.CSS_SELECTOR, "#SubmitLogin")
 
     def __init__(self, web: WebInterface):
-        super().__init__(web)
+        self.web = web  # Compose WebInterface, NO inheritance
 
     # ATOMIC METHODS - One action per method, return self for chaining
     def enter_email(self, text: str) -> "LoginPage":
@@ -149,6 +150,10 @@ class LoginPage(BasePage):
     def click_submit(self) -> "LoginPage":
         self.web.click(*self.SUBMIT_BTN)
         return self
+
+    # STATE-CHECK METHODS - For test assertions
+    def is_logged_in(self) -> bool:
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
 ```
 
 **Rules:**
@@ -156,7 +161,8 @@ class LoginPage(BasePage):
 - One action per method
 - Return `self` for fluent chaining
 - NO decorators on Page Objects (logging happens at Task/Role level)
-- Inherit from BasePage for common header/footer methods
+- NO inheritance - compose WebInterface directly
+- Include state-check methods for test assertions
 
 ### Layer 2: Tasks (Domain Operations)
 
@@ -166,21 +172,19 @@ class LoginPage(BasePage):
 ```python
 from interfaces.web_interface import WebInterface
 from pages.auth.login_page import LoginPage
-from pages.auth.account_page import AccountPage
 from resources.utilities import autologger
 
-class CommonTasks:
+class AuthTasks:
     def __init__(self, web: WebInterface, base_url: str):
         self.web = web
         self.base_url = base_url
         # Compose page objects
         self.login_page = LoginPage(web)
-        self.account_page = AccountPage(web)
 
     @autologger.automation_logger("Task")
-    def log_in(self, email: str, password: str) -> bool:
-        """Single domain operation: authenticate user."""
-        self.web.navigate_to(f"{self.base_url}?controller=authentication")
+    def log_in(self, email: str, password: str):
+        """Single domain operation: authenticate user. NO return value."""
+        self.web.navigate_to(f"{self.base_url}/login")
 
         # Use page object methods (fluent chain)
         (self.login_page
@@ -188,21 +192,20 @@ class CommonTasks:
             .enter_password(password)
             .click_submit())
 
-        # Verify using page object
-        return self.login_page.is_signed_in()
+        # NO return - test asserts via login_page.is_logged_in()
 
     @autologger.automation_logger("Task")
-    def log_out(self) -> bool:
-        """Single domain operation: end session."""
+    def log_out(self):
+        """Single domain operation: end session. NO return value."""
         self.login_page.click_logout()
-        return self.login_page.is_signed_out()
+        # NO return - test asserts via login_page.is_logged_out()
 ```
 
 **Rules:**
 - NO locators in Tasks (delegate to page objects)
 - Each task method = one domain operation
 - Use `@autologger.automation_logger("Task")` decorator
-- Return bool for success/failure
+- **NO return values** - tests assert via POM state-check methods
 
 ### Layer 3: Roles (Workflow Orchestration)
 
@@ -210,64 +213,59 @@ class CommonTasks:
 
 **Pattern:**
 ```python
-from roles.base.role import Role
-from tasks.common.common_tasks import CommonTasks
-from tasks.catalog.catalog_tasks import CatalogTasks
-from tasks.checkout.checkout_tasks import CheckoutTasks
+from typing import Dict, Any
+from interfaces.web_interface import WebInterface
+from tasks.auth_tasks import AuthTasks
+from tasks.catalog_tasks import CatalogTasks
+from tasks.checkout_tasks import CheckoutTasks
 from resources.utilities import autologger
 
-class RegisteredUser(Role):
+class AuthenticatedUser:
     @autologger.automation_logger("Role Constructor")
-    def __init__(self, web_interface, user_data, base_url):
-        super().__init__(web_interface, user_data)
+    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any], base_url: str):
+        self.web = web_interface
+        self.user_data = user_data
+        self.email = user_data.get('email')
+        self.password = user_data.get('password')
 
-        # Compose ALL task modules needed
-        self.common_tasks = CommonTasks(web_interface, base_url)
+        # Compose ALL task modules needed - NO inheritance
+        self.auth_tasks = AuthTasks(web_interface, base_url)
         self.catalog_tasks = CatalogTasks(web_interface, base_url)
         self.checkout_tasks = CheckoutTasks(web_interface, base_url)
 
     @autologger.automation_logger("Role")
-    def purchase_product(self, product_data: dict) -> bool:
+    def purchase_product(self, product_data: dict):
         """
         COMPLETE WORKFLOW: Login -> Browse -> Add to Cart -> Checkout
 
         This is what makes Role different from Task:
         - Role orchestrates MULTIPLE tasks
         - Role represents a complete user journey/story
+        - NO return value - test asserts via POM
         """
-        # Step 1: Authenticate
-        if not self.common_tasks.log_in(self.email, self.password):
-            return False
-
-        # Step 2: Find product
-        if not self.catalog_tasks.browse_category(product_data["category"]):
-            return False
-
-        # Step 3: Add to cart
-        if not self.catalog_tasks.add_to_cart(product_data["name"]):
-            return False
-
-        # Step 4: Complete checkout
-        if not self.checkout_tasks.complete_purchase():
-            return False
-
-        return True
+        self.auth_tasks.log_in(self.email, self.password)
+        self.catalog_tasks.browse_category(product_data["category"])
+        self.catalog_tasks.add_to_cart(product_data["name"])
+        self.checkout_tasks.complete_purchase()
+        # NO return - test asserts via POM state-check methods
 ```
 
 **Rules:**
 - Role methods = COMPLETE business workflows (not single operations)
 - Orchestrate MULTIPLE task methods in sequence
 - Use `@autologger.automation_logger("Role")` decorator
-- Each role method tells a complete user story
+- **NO return values** - tests assert via POM state-check methods
+- NO inheritance - compose Tasks directly
 
 ### Layer 4: Tests (Assertions Only)
 
-**Purpose:** Call ONE role workflow method, assert the result.
+**Purpose:** Call ONE role workflow method, assert via POM state-check methods.
 
 **Pattern:**
 ```python
 import pytest
-from roles.auth.registered_user import RegisteredUser
+from roles.authenticated_user import AuthenticatedUser
+from pages.checkout.order_confirmation_page import OrderConfirmationPage
 from resources.utilities import autologger
 
 @pytest.mark.purchase
@@ -277,36 +275,50 @@ def test_user_can_purchase_product(web_interface, config, test_data):
     Test that a registered user can complete a purchase.
 
     NOTE: Test does NOT orchestrate - it calls ONE role method.
-    The Role handles all workflow orchestration.
+    Assert via POM state-check methods, NOT return values.
     """
     # Arrange
-    user = RegisteredUser(web_interface, test_data["user"], config["url"])
+    user = AuthenticatedUser(web_interface, test_data["user"], config["url"])
     product = test_data["product"]
+    confirmation_page = OrderConfirmationPage(web_interface)
 
-    # Act - ONE call to workflow method
-    result = user.purchase_product(product)
+    # Act - ONE call to workflow method (no return value)
+    user.purchase_product(product)
 
-    # Assert
-    assert result is True, "Purchase workflow should complete successfully"
+    # Assert - Via POM state-check methods
+    assert confirmation_page.is_order_confirmed(), "Order should be confirmed"
+    assert confirmation_page.get_order_total() > 0, "Order total should be positive"
 ```
 
 **Rules:**
 - Test calls ONE role workflow method
 - Test does NOT orchestrate multiple role/task calls
 - Test only does: Arrange, Act (one call), Assert
+- **Assert via POM state-check methods** - NOT return values
 - Use `@autologger.automation_logger("Test")` decorator
 
 ### Anti-Patterns to AVOID
 
-**WRONG - Role as thin delegate:**
+**WRONG - Tasks/Roles returning values:**
 ```python
-# BAD: Role just wraps task methods 1:1
-class RegisteredUser(Role):
-    def login(self):
-        return self.common_tasks.log_in(self.email, self.password)
+# BAD: Tasks should NOT return values
+class AuthTasks:
+    def log_in(self, email, password) -> bool:  # NO!
+        ...
+        return self.login_page.is_logged_in()  # NO!
 
-    def browse(self, category):
-        return self.catalog_tasks.browse_category(category)
+# BAD: Roles should NOT return values
+class AuthenticatedUser:
+    def login(self) -> bool:  # NO!
+        return self.auth_tasks.log_in(...)  # NO!
+```
+
+**WRONG - Test asserts on return value:**
+```python
+# BAD: Test should assert via POM, not return values
+def test_login():
+    result = user.login()  # NO! Role returns nothing
+    assert result is True  # NO! Assert via POM instead
 ```
 
 **WRONG - Test orchestrates workflow:**
@@ -328,14 +340,35 @@ class CatalogTasks:
         self.web.click(By.XPATH, f"//a[text()='{name}']")  # NO!
 ```
 
+**WRONG - Using inheritance:**
+```python
+# BAD: Use composition, not inheritance
+class LoginPage(BasePage):  # NO!
+    pass
+
+class RegisteredUser(Role):  # NO!
+    pass
+```
+
 ### Summary: Who Does What
 
-| Layer | Responsibility | Calls |
-|-------|---------------|-------|
-| Test | Assert results | ONE Role method |
-| Role | Orchestrate complete workflow | MULTIPLE Task methods |
-| Task | Single domain operation | Page Object methods |
-| Page | Atomic UI action | WebInterface methods |
+| Layer | Responsibility | Returns | Calls |
+|-------|---------------|---------|-------|
+| Test | Assert via POM | N/A | ONE Role method + POM state-checks |
+| Role | Orchestrate workflow | None | MULTIPLE Task methods |
+| Task | Single operation | None | Page Object methods |
+| Page | Atomic UI action | self | WebInterface methods |
+
+### Quick Reference
+
+```
+GOLDEN RULES:
+1. Locators ONLY in Page Objects
+2. Tasks/Roles return NOTHING (None)
+3. Tests assert via POM state-check methods
+4. No inheritance - composition only
+5. One responsibility per layer
+```
 
 ## Intellectual Property Protection
 

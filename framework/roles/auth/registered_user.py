@@ -50,41 +50,26 @@ class RegisteredUser:
     # ==================== AUTHENTICATION WORKFLOWS ====================
 
     @autologger.automation_logger("Role")
-    def login(self) -> bool:
+    def login(self) -> None:
         """
         Log in to the application.
 
         High-level business workflow that orchestrates authentication.
-
-        Returns:
-            True if login successful, False otherwise
+        Tests should verify via auth_page.is_signed_in().
         """
-        return self.common_tasks.log_in(self.email, self.password)
+        self.common_tasks.log_in(self.email, self.password)
 
     @autologger.automation_logger("Role")
-    def logout(self) -> bool:
+    def logout(self) -> None:
         """
         Log out from the application.
 
-        High-level business workflow that completes logout process.
-
-        Returns:
-            True if logout successful, False otherwise
+        Tests should verify via auth_page.is_signed_out().
         """
-        return self.common_tasks.log_out()
+        self.common_tasks.log_out()
 
     @autologger.automation_logger("Role")
-    def is_logged_in(self) -> bool:
-        """
-        Check if user is currently logged in.
-
-        Returns:
-            True if logged in, False otherwise
-        """
-        return self.common_tasks.verify_logged_in()
-
-    @autologger.automation_logger("Role")
-    def register(self) -> bool:
+    def register(self) -> None:
         """
         Register as a new user.
 
@@ -92,9 +77,8 @@ class RegisteredUser:
         1. Navigate to authentication page
         2. Submit email to initiate registration
         3. Fill out registration form with user data
-        4. Submit form and verify account created
+        4. Submit form
 
-        Returns:
-            True if registration successful and user is logged in, False otherwise
+        Tests should verify via auth_page.is_signed_in().
         """
-        return self.common_tasks.register_new_user(self.user_data)
+        self.common_tasks.register_new_user(self.user_data)

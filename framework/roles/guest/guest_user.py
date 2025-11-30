@@ -40,38 +40,29 @@ class GuestUser:
     # ==================== CATALOG BROWSING WORKFLOWS ====================
 
     @autologger.automation_logger("Role")
-    def browse_category(self, category_name: str) -> bool:
+    def browse_category(self, category_name: str) -> None:
         """
         Browse a product category.
 
-        Complete workflow: navigate to category and verify products displayed.
+        Tests should verify via product_list_page.has_products().
 
         Args:
             category_name: Name of category to browse ("Women", "Dresses", "T-shirts")
-
-        Returns:
-            True if category loaded with products
         """
-        return self.catalog_tasks.browse_category(category_name)
+        self.catalog_tasks.browse_category(category_name)
 
     @autologger.automation_logger("Role")
     def browse_and_count_products(self, category_name: str) -> int:
         """
         Browse category and return product count.
 
-        Workflow:
-        1. Navigate to category
-        2. Verify products displayed
-        3. Return count of products
-
         Args:
             category_name: Name of category to browse
 
         Returns:
-            Number of products in category, or 0 if browse failed
+            Number of products in category
         """
-        if not self.catalog_tasks.browse_category(category_name):
-            return 0
+        self.catalog_tasks.browse_category(category_name)
         return self.catalog_tasks.get_product_count()
 
     @autologger.automation_logger("Role")
@@ -80,76 +71,51 @@ class GuestUser:
         category_name: str,
         size: Optional[str] = None,
         color: Optional[str] = None
-    ) -> bool:
+    ) -> None:
         """
         Browse category and apply filters.
 
-        Complete workflow:
-        1. Navigate to category
-        2. Apply size filter (if specified)
-        3. Apply color filter (if specified)
-        4. Verify filtered results
+        Tests should verify filtered results via product_list_page.
 
         Args:
             category_name: Name of category to browse
             size: Optional size filter ("S", "M", "L")
             color: Optional color filter ("White", "Black", etc.)
-
-        Returns:
-            True if filtering workflow completed successfully
         """
-        return self.catalog_tasks.filter_products(category_name, size=size, color=color)
+        self.catalog_tasks.filter_products(category_name, size=size, color=color)
 
     @autologger.automation_logger("Role")
-    def sort_products_in_category(self, category_name: str, sort_by: str) -> bool:
+    def sort_products_in_category(self, category_name: str, sort_by: str) -> None:
         """
         Browse category and sort products.
 
-        Complete workflow:
-        1. Navigate to category
-        2. Apply sort option
-        3. Verify sort order
+        Tests should verify sort order via product_list_page.
 
         Args:
             category_name: Name of category to browse
             sort_by: Sort option ("price_asc", "price_desc", "name_asc", "name_desc")
-
-        Returns:
-            True if sorting workflow completed successfully
         """
-        return self.catalog_tasks.sort_products(category_name, sort_by)
+        self.catalog_tasks.sort_products(category_name, sort_by)
 
     @autologger.automation_logger("Role")
-    def view_product_quick_view(self, category_name: str, product_index: int = 0) -> bool:
+    def view_product_quick_view(self, category_name: str, product_index: int = 0) -> None:
         """
         Browse category and open quick view for a product.
 
-        Complete workflow:
-        1. Navigate to category
-        2. Hover over product at index
-        3. Click quick view button
-        4. Verify modal opened
+        Tests should verify via quick_view_modal.is_modal_open().
 
         Args:
             category_name: Name of category to browse
             product_index: Index of product to view (0-based)
-
-        Returns:
-            True if quick view opened successfully
         """
-        return self.catalog_tasks.open_quick_view(category_name, product_index)
+        self.catalog_tasks.open_quick_view(category_name, product_index)
 
     @autologger.automation_logger("Role")
-    def close_quick_view(self) -> bool:
-        """
-        Close the quick view modal.
+    def close_quick_view(self) -> None:
+        """Close the quick view modal."""
+        self.catalog_tasks.close_quick_view()
 
-        Returns:
-            True if modal closed successfully
-        """
-        return self.catalog_tasks.close_quick_view()
-
-    # ==================== VERIFICATION METHODS ====================
+    # ==================== DATA RETRIEVAL METHODS ====================
 
     @autologger.automation_logger("Role")
     def get_product_count(self) -> int:
@@ -160,13 +126,3 @@ class GuestUser:
             Count of products displayed
         """
         return self.catalog_tasks.get_product_count()
-
-    @autologger.automation_logger("Role")
-    def verify_products_displayed(self) -> bool:
-        """
-        Verify products are displayed on current page.
-
-        Returns:
-            True if products are visible
-        """
-        return self.catalog_tasks.verify_products_displayed()

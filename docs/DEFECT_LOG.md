@@ -312,9 +312,55 @@ Removed the line - the following `is_page_loaded()` check has a built-in timeout
 
 ---
 
+### [DEF-014] Task methods return bool instead of None
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Layer:** Task
+**File:** `framework/tasks/common/common_tasks.py`, `framework/tasks/catalog/catalog_tasks.py`
+**Line(s):** Multiple
+
+**Rule Violated:**
+- PRD Section 6.3: Tasks return None
+- FRAMEWORK.md: "Tasks/Roles return NOTHING (None)"
+- Tests should assert via POM state-check methods, not return values
+
+**Description:**
+All Task methods return `bool` (True/False) for success/failure. This violates the architecture - Tasks should return None and tests should assert via POM state-check methods.
+
+**Fix:**
+1. Changed all `-> bool` type hints to `-> None` for action methods
+2. Removed all `return True/False` statements (use `return` for early exits)
+3. Removed verification delegator methods (tests should use POMs directly)
+4. Kept data retrieval methods (get_product_count, get_product_names, etc.) that return int/list
+
+**Resolved Date:** 2025-11-29
+
+---
+
 ### Role Layer (Task 4.0)
 
-_No defects logged yet._
+### [DEF-015] Role methods return bool instead of None
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Layer:** Role
+**File:** `framework/roles/auth/registered_user.py`, `framework/roles/guest/guest_user.py`
+**Line(s):** Multiple
+
+**Rule Violated:**
+- PRD Section 6.3: Roles return None
+- FRAMEWORK.md: "Tasks/Roles return NOTHING (None)"
+- Tests should assert via POM state-check methods, not return values
+
+**Description:**
+All Role workflow methods return `bool` (True/False). This violates the architecture - Roles should return None and tests should assert via POM state-check methods.
+
+**Fix:**
+1. Changed all `-> bool` type hints to `-> None` for workflow methods
+2. Removed all `return True/False` statements
+3. Removed is_logged_in() and verify_products_displayed() methods (tests should use POMs directly)
+4. Kept data retrieval methods (get_product_count, browse_and_count_products) that return int
+
+**Resolved Date:** 2025-11-29
 
 ---
 
@@ -329,10 +375,10 @@ _No defects logged yet._
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
 |-------|----------|------|--------|-----|-------|----------|
 | Page Objects | 1 | 1 | 4 | 3 | 9 | 8 (1 WONT_FIX) |
-| Tasks | 1 | 0 | 0 | 2 | 3 | 3 |
-| Roles | 1 | 0 | 0 | 0 | 1 | 1 |
+| Tasks | 2 | 0 | 0 | 2 | 4 | 4 |
+| Roles | 2 | 0 | 0 | 0 | 2 | 2 |
 | Tests | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **3** | **1** | **4** | **5** | **13** | **12 + 1 WONT_FIX** |
+| **Total** | **5** | **1** | **4** | **5** | **15** | **14 + 1 WONT_FIX** |
 
 ---
 
@@ -340,7 +386,7 @@ _No defects logged yet._
 
 - [x] Task 2.0: Page Objects audited
 - [x] Task 3.0: Tasks audited
-- [ ] Task 4.0: Roles audited
+- [x] Task 4.0: Roles audited
 - [ ] Task 5.0: Tests audited
 - [ ] Task 6.0: All tests passing
 
