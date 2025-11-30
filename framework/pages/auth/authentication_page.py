@@ -59,7 +59,7 @@ class AuthenticationPage(BasePage):
 
     # ==================== LOGIN METHODS ====================
 
-    def enter_login_email(self, email: str):
+    def enter_login_email(self, email: str) -> "AuthenticationPage":
         """
         Enter email in login form.
 
@@ -72,7 +72,7 @@ class AuthenticationPage(BasePage):
         self.web.type_text(*self.LOGIN_EMAIL, text=email)
         return self
 
-    def enter_login_password(self, password: str):
+    def enter_login_password(self, password: str) -> "AuthenticationPage":
         """
         Enter password in login form.
 
@@ -85,7 +85,7 @@ class AuthenticationPage(BasePage):
         self.web.type_text(*self.LOGIN_PASSWORD, text=password)
         return self
 
-    def click_sign_in(self):
+    def click_sign_in(self) -> "AuthenticationPage":
         """
         Click the Sign In button to submit login form.
 
@@ -95,7 +95,7 @@ class AuthenticationPage(BasePage):
         self.web.click(*self.SUBMIT_LOGIN)
         return self
 
-    def click_forgot_password(self):
+    def click_forgot_password(self) -> "AuthenticationPage":
         """
         Click the Forgot Password link.
 
@@ -107,7 +107,7 @@ class AuthenticationPage(BasePage):
 
     # ==================== REGISTRATION INITIATION METHODS ====================
 
-    def enter_registration_email(self, email: str):
+    def enter_registration_email(self, email: str) -> "AuthenticationPage":
         """
         Enter email to create new account.
 
@@ -120,7 +120,7 @@ class AuthenticationPage(BasePage):
         self.web.type_text(*self.EMAIL_CREATE, text=email)
         return self
 
-    def click_create_account(self):
+    def click_create_account(self) -> "AuthenticationPage":
         """
         Click Create Account button to proceed to registration form.
 

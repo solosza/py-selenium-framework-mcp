@@ -56,7 +56,148 @@
 
 ### Page Object Layer (Task 2.0)
 
-_No defects logged yet._
+### [DEF-001] Composite methods in RegistrationPage belong in Task layer
+**Severity:** HIGH
+**Status:** RESOLVED
+**Layer:** Page
+**File:** `framework/pages/auth/registration_page.py`
+**Line(s):** 375-448
+
+**Rule Violated:**
+- POM methods must be atomic (one UI action per method)
+- Composite workflows belong in Task layer
+
+**Description:**
+`fill_registration_form()` and `register_user()` are composite methods that orchestrate multiple field entries. This is Task-layer responsibility, not POM.
+
+**Fix:**
+Remove these methods from POM. Tasks should call individual atomic methods.
+
+---
+
+### [DEF-002] LoginPage missing state-check methods
+**Severity:** MEDIUM
+**Status:** RESOLVED
+**Layer:** Page
+**File:** `framework/pages/auth/login_page.py`
+**Line(s):** N/A
+
+**Rule Violated:**
+- POMs should have state-check methods for assertions
+
+**Description:**
+LoginPage has no state-check methods (is_page_loaded, is_error_displayed, etc.). Tests cannot verify state through this POM.
+
+**Fix:**
+Add state-check methods: `is_page_loaded()`, `has_error_message()`, `get_error_message()`.
+
+---
+
+### [DEF-003] RegistrationPage methods return None instead of self
+**Severity:** MEDIUM
+**Status:** RESOLVED
+**Layer:** Page
+**File:** `framework/pages/auth/registration_page.py`
+**Line(s):** 82-88, 121-149, 191-209, 233-249, 251-258, etc.
+
+**Rule Violated:**
+- POM methods should return `self` for fluent chaining
+
+**Description:**
+Many methods have `-> None` return type or no return statement, breaking fluent chaining pattern. Examples: `select_gender_mr()`, `enter_customer_firstname()`, `check_newsletter()`, etc.
+
+**Fix:**
+Update all action methods to return `self` with proper type hints.
+
+---
+
+### [DEF-004] BasePage.search() is composite method
+**Severity:** MEDIUM
+**Status:** RESOLVED
+**Layer:** Page
+**File:** `framework/pages/base_page.py`
+**Line(s):** 99-108
+
+**Rule Violated:**
+- POM methods must be atomic (one UI action per method)
+
+**Description:**
+`search()` combines `enter_search_query()` + `click_search_button()`. Should be atomic.
+
+**Fix:**
+Remove composite `search()` method. Callers should use individual methods.
+
+---
+
+### [DEF-005] HomePage.search_for() is composite method
+**Severity:** MEDIUM
+**Status:** RESOLVED
+**Layer:** Page
+**File:** `framework/pages/common/home_page.py`
+**Line(s):** 156-171
+
+**Rule Violated:**
+- POM methods must be atomic (one UI action per method)
+
+**Description:**
+`search_for()` combines type_text + send_keys(RETURN). Should be atomic.
+
+**Fix:**
+Split into `enter_search_term()` and `submit_search()` methods.
+
+---
+
+### [DEF-006] LoginPage locator naming convention violation
+**Severity:** LOW
+**Status:** RESOLVED
+**Layer:** Page
+**File:** `framework/pages/auth/login_page.py`
+**Line(s):** 31
+
+**Rule Violated:**
+- Locators should use UPPER_SNAKE_CASE
+
+**Description:**
+`SUBMITLOGIN` should be `SUBMIT_LOGIN` per naming convention.
+
+**Fix:**
+Rename to `SUBMIT_LOGIN`.
+
+---
+
+### [DEF-007] AuthenticationPage missing return type hints
+**Severity:** LOW
+**Status:** RESOLVED
+**Layer:** Page
+**File:** `framework/pages/auth/authentication_page.py`
+**Line(s):** 62-131
+
+**Rule Violated:**
+- Methods should have explicit return type hints
+
+**Description:**
+Several methods document "Returns: self for method chaining" but lack type hints.
+
+**Fix:**
+Add `-> "AuthenticationPage"` return type hints to all chaining methods.
+
+---
+
+### [DEF-008] ProductListPage uses explicit time.sleep()
+**Severity:** LOW
+**Status:** WONT_FIX
+**Layer:** Page
+**File:** `framework/pages/catalog/product_list_page.py`
+**Line(s):** 135, 146, 157, 168, 197, 203, 208, 210, 237, 344
+
+**Rule Violated:**
+- Prefer WebInterface wait methods over explicit sleeps
+
+**Description:**
+Multiple `time.sleep()` calls for AJAX waits. Should use explicit waits where possible.
+
+**Fix:**
+WONT_FIX: time.sleep() is acceptable for complex AJAX interactions where explicit wait conditions are unreliable. These sleeps handle sorting/filtering AJAX reloads.
 
 ---
 
@@ -82,17 +223,17 @@ _No defects logged yet._
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total |
 |-------|----------|------|--------|-----|-------|
-| Page Objects | 0 | 0 | 0 | 0 | 0 |
+| Page Objects | 0 | 1 | 4 | 3 | 8 |
 | Tasks | 0 | 0 | 0 | 0 | 0 |
 | Roles | 0 | 0 | 0 | 0 | 0 |
 | Tests | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **0** | **0** | **0** | **0** | **0** |
+| **Total** | **0** | **1** | **4** | **3** | **8** |
 
 ---
 
 ## Audit Progress
 
-- [ ] Task 2.0: Page Objects audited
+- [x] Task 2.0: Page Objects audited
 - [ ] Task 3.0: Tasks audited
 - [ ] Task 4.0: Roles audited
 - [ ] Task 5.0: Tests audited

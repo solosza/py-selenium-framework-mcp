@@ -79,13 +79,15 @@ class RegistrationPage(BasePage):
 
     # ==================== PERSONAL INFORMATION METHODS ====================
 
-    def select_gender_mr(self) -> None:
+    def select_gender_mr(self) -> "RegistrationPage":
         """Select 'Mr.' title."""
         self.web.click(*self.GENDER_MR)
+        return self
 
-    def select_gender_mrs(self) -> None:
+    def select_gender_mrs(self) -> "RegistrationPage":
         """Select 'Mrs.' title."""
         self.web.click(*self.GENDER_MRS)
+        return self
 
     def select_gender(self, gender: str):
         """
@@ -118,7 +120,7 @@ class RegistrationPage(BasePage):
         """
         return self.select_gender(title)
 
-    def enter_customer_firstname(self, firstname: str) -> None:
+    def enter_customer_firstname(self, firstname: str) -> "RegistrationPage":
         """
         Enter customer first name.
 
@@ -128,7 +130,7 @@ class RegistrationPage(BasePage):
         self.web.type_text(*self.CUSTOMER_FIRSTNAME, text=firstname)
         return self
 
-    def enter_customer_lastname(self, lastname: str) -> None:
+    def enter_customer_lastname(self, lastname: str) -> "RegistrationPage":
         """
         Enter customer last name.
 
@@ -138,7 +140,7 @@ class RegistrationPage(BasePage):
         self.web.type_text(*self.CUSTOMER_LASTNAME, text=lastname)
         return self
 
-    def enter_password(self, password: str) -> None:
+    def enter_password(self, password: str) -> "RegistrationPage":
         """
         Enter password.
 
@@ -188,25 +190,29 @@ class RegistrationPage(BasePage):
         self.web.select_dropdown_by_value(*self.YEAR, option_value=str(year))
         return self
 
-    def check_newsletter(self) -> None:
+    def check_newsletter(self) -> "RegistrationPage":
         """Check the newsletter checkbox."""
         if not self.is_newsletter_checked():
             self.web.click(*self.NEWSLETTER)
+        return self
 
-    def uncheck_newsletter(self) -> None:
+    def uncheck_newsletter(self) -> "RegistrationPage":
         """Uncheck the newsletter checkbox."""
         if self.is_newsletter_checked():
             self.web.click(*self.NEWSLETTER)
+        return self
 
-    def check_special_offers(self) -> None:
+    def check_special_offers(self) -> "RegistrationPage":
         """Check the special offers checkbox."""
         if not self.is_special_offers_checked():
             self.web.click(*self.SPECIAL_OFFERS)
+        return self
 
-    def uncheck_special_offers(self) -> None:
+    def uncheck_special_offers(self) -> "RegistrationPage":
         """Uncheck the special offers checkbox."""
         if self.is_special_offers_checked():
             self.web.click(*self.SPECIAL_OFFERS)
+        return self
 
     def is_newsletter_checked(self) -> bool:
         """
@@ -230,7 +236,7 @@ class RegistrationPage(BasePage):
 
     # ==================== ADDRESS INFORMATION METHODS ====================
 
-    def enter_address_firstname(self, firstname: str) -> None:
+    def enter_address_firstname(self, firstname: str) -> "RegistrationPage":
         """
         Enter first name for address.
 
@@ -238,8 +244,9 @@ class RegistrationPage(BasePage):
             firstname: First name
         """
         self.web.type_text(*self.ADDRESS_FIRSTNAME, text=firstname)
+        return self
 
-    def enter_address_lastname(self, lastname: str) -> None:
+    def enter_address_lastname(self, lastname: str) -> "RegistrationPage":
         """
         Enter last name for address.
 
@@ -247,8 +254,9 @@ class RegistrationPage(BasePage):
             lastname: Last name
         """
         self.web.type_text(*self.ADDRESS_LASTNAME, text=lastname)
+        return self
 
-    def enter_company(self, company: str) -> None:
+    def enter_company(self, company: str) -> "RegistrationPage":
         """
         Enter company name (optional).
 
@@ -256,6 +264,7 @@ class RegistrationPage(BasePage):
             company: Company name
         """
         self.web.type_text(*self.COMPANY, text=company)
+        return self
 
     def enter_address1(self, address: str):
         """
@@ -270,7 +279,7 @@ class RegistrationPage(BasePage):
         self.web.type_text(*self.ADDRESS1, text=address)
         return self
 
-    def enter_address2(self, address: str) -> None:
+    def enter_address2(self, address: str) -> "RegistrationPage":
         """
         Enter address line 2 (optional).
 
@@ -278,8 +287,9 @@ class RegistrationPage(BasePage):
             address: Additional address info
         """
         self.web.type_text(*self.ADDRESS2, text=address)
+        return self
 
-    def enter_city(self, city: str) -> None:
+    def enter_city(self, city: str) -> "RegistrationPage":
         """
         Enter city.
 
@@ -289,7 +299,7 @@ class RegistrationPage(BasePage):
         self.web.type_text(*self.CITY, text=city)
         return self
 
-    def select_state(self, state: str) -> None:
+    def select_state(self, state: str) -> "RegistrationPage":
         """
         Select state from dropdown.
 
@@ -299,7 +309,7 @@ class RegistrationPage(BasePage):
         self.web.select_dropdown_by_visible_text(*self.STATE, text=state)
         return self
 
-    def enter_postcode(self, postcode: str) -> None:
+    def enter_postcode(self, postcode: str) -> "RegistrationPage":
         """
         Enter postal/zip code.
 
@@ -309,7 +319,7 @@ class RegistrationPage(BasePage):
         self.web.type_text(*self.POSTCODE, text=postcode)
         return self
 
-    def select_country(self, country: str) -> None:
+    def select_country(self, country: str) -> "RegistrationPage":
         """
         Select country from dropdown.
 
@@ -319,7 +329,7 @@ class RegistrationPage(BasePage):
         self.web.select_dropdown_by_visible_text(*self.COUNTRY, text=country)
         return self
 
-    def enter_additional_info(self, info: str) -> None:
+    def enter_additional_info(self, info: str) -> "RegistrationPage":
         """
         Enter additional information (optional).
 
@@ -327,10 +337,11 @@ class RegistrationPage(BasePage):
             info: Additional information text
         """
         self.web.type_text(*self.ADDITIONAL_INFO, text=info)
+        return self
 
     # ==================== CONTACT INFORMATION METHODS ====================
 
-    def enter_home_phone(self, phone: str) -> None:
+    def enter_home_phone(self, phone: str) -> "RegistrationPage":
         """
         Enter home phone number (optional).
 
@@ -338,8 +349,9 @@ class RegistrationPage(BasePage):
             phone: Home phone number
         """
         self.web.type_text(*self.HOME_PHONE, text=phone)
+        return self
 
-    def enter_mobile_phone(self, phone: str) -> None:
+    def enter_mobile_phone(self, phone: str) -> "RegistrationPage":
         """
         Enter mobile phone number (required).
 
@@ -351,7 +363,7 @@ class RegistrationPage(BasePage):
 
     # ==================== ADDRESS ALIAS METHODS ====================
 
-    def enter_address_alias(self, alias: str) -> None:
+    def enter_address_alias(self, alias: str) -> "RegistrationPage":
         """
         Enter address alias.
 
@@ -359,6 +371,7 @@ class RegistrationPage(BasePage):
             alias: Address alias (e.g., "Home", "Work")
         """
         self.web.type_text(*self.ALIAS, text=alias, clear_first=True)
+        return self
 
     # ==================== FORM SUBMISSION METHODS ====================
 
@@ -372,80 +385,8 @@ class RegistrationPage(BasePage):
         self.web.click(*self.SUBMIT_ACCOUNT)
         return self
 
-    def fill_registration_form(self, user_data: Dict[str, Any]) -> None:
-        """
-        Fill entire registration form with provided data.
-
-        Args:
-            user_data: Dictionary containing user information
-                Required keys: first_name, last_name, password, address (dict)
-                Optional keys: gender, dob (dict), company, newsletter, special_offers
-
-                Address dict required keys: address1, city, state, zipcode, country, phone
-                Address dict optional keys: address2, additional_info, alias
-
-                DOB dict keys: day, month, year
-        """
-        # Personal Information
-        if 'gender' in user_data:
-            self.select_gender(user_data['gender'])
-
-        self.enter_customer_firstname(user_data['first_name'])
-        self.enter_customer_lastname(user_data['last_name'])
-        self.enter_password(user_data['password'])
-
-        # Date of Birth (optional)
-        if 'dob' in user_data:
-            dob = user_data['dob']
-            self.select_date_of_birth(dob['day'], dob['month'], dob['year'])
-
-        # Newsletter & Offers
-        if user_data.get('newsletter', False):
-            self.check_newsletter()
-
-        if user_data.get('special_offers', False):
-            self.check_special_offers()
-
-        # Address Information
-        address = user_data['address']
-        self.enter_address_firstname(user_data['first_name'])
-        self.enter_address_lastname(user_data['last_name'])
-
-        if 'company' in user_data and user_data['company']:
-            self.enter_company(user_data['company'])
-
-        self.enter_address1(address['address1'])
-
-        if 'address2' in address and address['address2']:
-            self.enter_address2(address['address2'])
-
-        self.enter_city(address['city'])
-        self.select_state(address['state'])
-        self.enter_postcode(address['zipcode'])
-        self.select_country(address.get('country', 'United States'))
-
-        if 'additional_info' in address and address['additional_info']:
-            self.enter_additional_info(address['additional_info'])
-
-        # Contact Information
-        if 'home_phone' in address and address['home_phone']:
-            self.enter_home_phone(address['home_phone'])
-
-        self.enter_mobile_phone(address['phone'])
-
-        # Address Alias
-        if 'alias' in address and address['alias']:
-            self.enter_address_alias(address['alias'])
-
-    def register_user(self, user_data: Dict[str, Any]) -> None:
-        """
-        Fill and submit registration form.
-
-        Args:
-            user_data: Dictionary containing user information (see fill_registration_form)
-        """
-        self.fill_registration_form(user_data)
-        self.click_register()
+    # NOTE: Composite methods (fill_registration_form, register_user) removed.
+    # These belong in the Task layer, not POM. See DEF-001 in DEFECT_LOG.md.
 
     # ==================== ERROR & SUCCESS MESSAGE METHODS ====================
 

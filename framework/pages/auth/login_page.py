@@ -28,15 +28,15 @@ class LoginPage(BasePage):
 
     # ==================== LOCATORS ====================
 
-    SUBMITLOGIN = (By.CSS_SELECTOR, "#SubmitLogin")
+    SUBMIT_LOGIN = (By.CSS_SELECTOR, "#SubmitLogin")
     EMAIL = (By.CSS_SELECTOR, "#email")
     PASSWD = (By.CSS_SELECTOR, "#passwd")
 
     # ==================== INTERACTION METHODS ====================
 
-    def click_submitlogin(self) -> "LoginPage":
-        """Click SUBMITLOGIN button."""
-        self.web.click(*self.SUBMITLOGIN)
+    def click_submit_login(self) -> "LoginPage":
+        """Click submit login button."""
+        self.web.click(*self.SUBMIT_LOGIN)
         return self
 
     def enter_email(self, text: str) -> "LoginPage":
@@ -58,3 +58,36 @@ class LoginPage(BasePage):
         """
         self.web.type_text(*self.PASSWD, text)
         return self
+
+    # ==================== STATE-CHECK METHODS ====================
+
+    def is_page_loaded(self) -> bool:
+        """
+        Check if login page is loaded.
+
+        Returns:
+            True if login form is visible
+        """
+        return self.web.is_element_displayed(*self.EMAIL, timeout=5)
+
+    def has_error_message(self) -> bool:
+        """
+        Check if error message is displayed.
+
+        Returns:
+            True if error alert is visible
+        """
+        ERROR_MESSAGE = (By.CSS_SELECTOR, ".alert-danger")
+        return self.web.is_element_displayed(*ERROR_MESSAGE, timeout=3)
+
+    def get_error_message(self) -> str:
+        """
+        Get error message text.
+
+        Returns:
+            Error message text or empty string
+        """
+        ERROR_MESSAGE = (By.CSS_SELECTOR, ".alert-danger")
+        if not self.has_error_message():
+            return ""
+        return self.web.get_text(*ERROR_MESSAGE)

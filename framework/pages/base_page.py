@@ -96,16 +96,8 @@ class BasePage:
         self.web.click(*self.SEARCH_BUTTON)
         return self
 
-    def search(self, query: str) -> "BasePage":
-        """
-        Perform search.
-
-        Args:
-            query: Search term
-        """
-        self.enter_search_query(query)
-        self.click_search_button()
-        return self
+    # NOTE: Composite search() method removed - use enter_search_query() + click_search_button()
+    # See DEF-004 in DEFECT_LOG.md
 
     # ==================== HEADER STATE VERIFICATION ====================
 

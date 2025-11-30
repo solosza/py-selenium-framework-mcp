@@ -153,9 +153,9 @@ class HomePage(BasePage):
 
     # ==================== SEARCH ====================
 
-    def search_for(self, search_term: str):
+    def enter_search_term(self, search_term: str) -> "HomePage":
         """
-        Enter search term and submit search.
+        Enter search term in search box.
 
         Args:
             search_term: Text to search for
@@ -163,12 +163,23 @@ class HomePage(BasePage):
         Returns:
             self for method chaining
         """
-        from selenium.webdriver.common.keys import Keys
         self.web.type_text(*self.SEARCH_BOX, text=search_term)
-        # Submit search by pressing Enter
+        return self
+
+    def submit_search(self) -> "HomePage":
+        """
+        Submit the search form by pressing Enter.
+
+        Returns:
+            self for method chaining
+        """
+        from selenium.webdriver.common.keys import Keys
         element = self.web.find_element(*self.SEARCH_BOX)
         element.send_keys(Keys.RETURN)
         return self
+
+    # NOTE: Composite search_for() removed - use enter_search_term() + submit_search()
+    # See DEF-005 in DEFECT_LOG.md
 
     def is_search_box_visible(self) -> bool:
         """
