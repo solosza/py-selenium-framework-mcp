@@ -172,10 +172,7 @@ class CommonTasks:
             .enter_registration_email(email)
             .click_create_account())
 
-        # Wait a moment for page transition
-        self.web.driver.implicitly_wait(2)
-
-        # Check if registration form loaded
+        # Check if registration form loaded (is_page_loaded has built-in wait)
         if not self.reg_page.is_page_loaded():
             self.web.logger.error("Registration form page did not load")
 
@@ -192,8 +189,32 @@ class CommonTasks:
         if prefilled_email.lower() != email.lower():
             self.web.logger.warning(f"Email mismatch: expected {email}, got {prefilled_email}")
 
-        # Fill and submit registration form using page object method
-        self.reg_page.register_user(user_data)
+        # Fill registration form using atomic POM methods (fluent chain)
+        # Personal information
+        if user_data.get('gender'):
+            self.reg_page.select_gender(user_data['gender'])
+
+        (self.reg_page
+            .enter_first_name(user_data['first_name'])
+            .enter_last_name(user_data['last_name'])
+            .enter_password(user_data['password']))
+
+        # Date of birth (optional)
+        dob = user_data.get('dob')
+        if dob:
+            self.reg_page.select_date_of_birth(dob['day'], dob['month'], dob['year'])
+
+        # Address information
+        address = user_data.get('address', {})
+        (self.reg_page
+            .enter_address(address.get('address1', ''))
+            .enter_city(address.get('city', ''))
+            .select_state(address.get('state', ''))
+            .enter_zip_code(address.get('zipcode', ''))
+            .enter_mobile_phone(address.get('phone', '')))
+
+        # Submit registration
+        self.reg_page.click_register()
 
         # Wait for account page or error
         try:
@@ -230,7 +251,6 @@ class CommonTasks:
         Returns:
             True if user is logged in, False otherwise
         """
-        # Use BasePage inherited method
         is_logged_in = self.auth_page.is_signed_in()
 
         if is_logged_in:
@@ -250,7 +270,6 @@ class CommonTasks:
         Returns:
             True if user is logged out, False otherwise
         """
-        # Use BasePage inherited method
         is_logged_out = self.auth_page.is_signed_out()
 
         if is_logged_out:
@@ -284,7 +303,6 @@ class CommonTasks:
             self.web.logger.warning("Cannot navigate to My Account - user not logged in")
             return
 
-        # Use BasePage inherited method
         self.auth_page.click_my_account()
 
     @autologger.automation_logger("Task")

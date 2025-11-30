@@ -247,7 +247,68 @@ Base Role class exists and all Roles inherit from it. This violates the explicit
 
 ### Task Layer (Task 3.0)
 
-_No defects logged yet._
+### [DEF-011] CommonTasks calls deleted RegistrationPage.register_user() method
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Layer:** Task
+**File:** `framework/tasks/common/common_tasks.py`
+**Line(s):** 196
+
+**Rule Violated:**
+- Task must call existing POM methods
+- Composite methods belong in Task layer, not POM
+
+**Description:**
+After DEF-001 fix removed `register_user()` from RegistrationPage, CommonTasks still called it. This would cause runtime errors.
+
+**Fix:**
+Replaced composite method call with atomic POM method calls:
+- `select_gender()`, `enter_first_name()`, `enter_last_name()`, `enter_password()`
+- `select_date_of_birth()`, `enter_address()`, `enter_city()`, `select_state()`
+- `enter_zip_code()`, `enter_mobile_phone()`, `click_register()`
+
+**Resolved Date:** 2025-11-29
+
+---
+
+### [DEF-012] Outdated "BasePage inherited method" comments
+**Severity:** LOW
+**Status:** RESOLVED
+**Layer:** Task
+**File:** `framework/tasks/common/common_tasks.py`
+**Line(s):** 233, 253, 287, 298
+
+**Rule Violated:**
+- Comments should be accurate and up-to-date
+
+**Description:**
+After DEF-009 removed BasePage, several comments still referenced "Use BasePage inherited method" which is misleading since there is no BasePage anymore.
+
+**Fix:**
+Removed outdated comments.
+
+**Resolved Date:** 2025-11-29
+
+---
+
+### [DEF-013] Incorrect driver.implicitly_wait() usage
+**Severity:** LOW
+**Status:** RESOLVED
+**Layer:** Task
+**File:** `framework/tasks/common/common_tasks.py`
+**Line(s):** 176
+
+**Rule Violated:**
+- Tasks should use WebInterface methods, not direct driver access
+- `implicitly_wait()` sets timeout, doesn't actually wait
+
+**Description:**
+`self.web.driver.implicitly_wait(2)` was used thinking it would wait 2 seconds, but it only sets the implicit wait timeout. This is incorrect usage and directly accesses driver.
+
+**Fix:**
+Removed the line - the following `is_page_loaded()` check has a built-in timeout.
+
+**Resolved Date:** 2025-11-29
 
 ---
 
@@ -268,17 +329,17 @@ _No defects logged yet._
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
 |-------|----------|------|--------|-----|-------|----------|
 | Page Objects | 1 | 1 | 4 | 3 | 9 | 8 (1 WONT_FIX) |
-| Tasks | 0 | 0 | 0 | 0 | 0 | 0 |
+| Tasks | 1 | 0 | 0 | 2 | 3 | 3 |
 | Roles | 1 | 0 | 0 | 0 | 1 | 1 |
 | Tests | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **2** | **1** | **4** | **3** | **10** | **9 + 1 WONT_FIX** |
+| **Total** | **3** | **1** | **4** | **5** | **13** | **12 + 1 WONT_FIX** |
 
 ---
 
 ## Audit Progress
 
 - [x] Task 2.0: Page Objects audited
-- [ ] Task 3.0: Tasks audited
+- [x] Task 3.0: Tasks audited
 - [ ] Task 4.0: Roles audited
 - [ ] Task 5.0: Tests audited
 - [ ] Task 6.0: All tests passing
