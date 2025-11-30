@@ -1,101 +1,65 @@
 # Session State - 2025-11-29
 
 ## Current Phase
-**Phase:** Phase 3 (Execute Tasks)
-**Status:** Ready to Start
+**Phase:** Framework Audit (Phase A)
+**Status:** On Track
 
 ## What We're Working On
-**Project:** Framework Audit & MCP Alignment
-**PRD:** `docs/projects/audit/1-prd-framework-audit-and-mcp-alignment.md`
-**Tasks:** `docs/projects/audit/2-tasks-framework-audit-and-mcp-alignment.md`
-
-**Next Task:** 1.0 Setup: Create DEFECT_LOG.md
-**Task Status:** Not Started
+**Active Task:** Task 7.0 - Create FRAMEWORK.md (COMPLETE)
+**Branch:** feature/7.0-create-framework-md
+**PR Status:** Ready to merge
 
 ## Progress This Session
 ### Completed
-- [x] Phase 0: Design Discussion - Reviewed sample modules, made architecture decisions
-- [x] Phase 1: Create PRD - Created comprehensive PRD with 4-layer architecture rules
-- [x] Phase 2: Generate Tasks - Created task list with 9 parent tasks, 47 sub-tasks
+- [x] Created FRAMEWORK.md as single source of truth for 4-layer architecture
+- [x] Updated CLAUDE.md to match FRAMEWORK.md (fixed incorrect return patterns)
+- [x] Fixed DEF-014: Task methods no longer return bool (return None)
+- [x] Fixed DEF-015: Role methods no longer return bool (return None)
+- [x] Removed verification delegator methods from Tasks/Roles
+- [x] Updated DEFECT_LOG.md (15 defects: 14 resolved, 1 WONT_FIX)
+- [x] Committed all changes: d60acde
+- [x] Created PR for feature/7.0-create-framework-md
 
-### Ready to Start
-- [ ] Phase 3: Execute Tasks (starting with Task 1.0)
+### Pending
+- [ ] Task 5.0: Audit & Fix Test Files
+- [ ] Task 6.0: Run All Tests and Verify Fixes
+- [ ] Task 8.0: Update CLAUDE.md (additional updates if needed)
+- [ ] Task 9.0: Update README.md
 
-## Key Design Decisions Made
+## Files Changed This Session
+- `FRAMEWORK.md` (NEW) - Complete framework architecture reference
+- `CLAUDE.md` - Fixed return patterns, added Golden Rules
+- `docs/DEFECT_LOG.md` - DEF-014, DEF-015 resolved
+- `framework/tasks/common/common_tasks.py` - Removed bool returns
+- `framework/tasks/catalog/catalog_tasks.py` - Removed bool returns
+- `framework/roles/auth/registered_user.py` - Removed bool returns
+- `framework/roles/guest/guest_user.py` - Removed bool returns
 
-### Layer Rules (CRITICAL - Reference These)
-| Layer | Decorator | Return Value | Composes | Fluent API |
-|-------|-----------|--------------|----------|------------|
-| Page Object | None | `self` | WebInterface | Yes |
-| Task | `@autologger("Task")` | None | Page Objects | No |
-| Role | `@autologger("Role")` | None | Tasks | No |
-| Test | `@autologger("Test")` | N/A | Roles + POMs (assert) | No |
-
-### OOP Principles
-- Encapsulation: Each layer hides internals
-- Composition over inheritance (no base classes)
-- SRP: Each layer has ONE job
-- Locators ONLY in POMs
-- Fluent API ONLY at Page Object level
-- No return values - exceptions bubble up, assert via POM state-check methods
-
-## Files Created This Session
-- `docs/projects/audit/1-prd-framework-audit-and-mcp-alignment.md` - Complete PRD
-- `docs/projects/audit/2-tasks-framework-audit-and-mcp-alignment.md` - Task list
-
-## Resume Point
-**Start with:** Task 1.0 - Create DEFECT_LOG.md
-
-**Steps:**
-1. Read task file to confirm sub-tasks for 1.0
-2. Create `docs/DEFECT_LOG.md` with defect tracking template
-3. Add severity definitions (CRITICAL > HIGH > MEDIUM > LOW)
-4. Mark sub-tasks complete, wait for user approval between each
-5. After all 1.x sub-tasks done: commit with message format from task file
-
-## Important Context for Next Session
-
-### Audit Approach
-- **Bottom-up, layer-by-layer:** Audit layer → Fix layer → Next layer
-- Order: Page Objects (2.0) → Tasks (3.0) → Roles (4.0) → Tests (5.0)
-- Rationale: Layers build on each other, fix foundation first
-
-### Defect Severity
-| Severity | Definition |
-|----------|------------|
-| CRITICAL | Breaks 4-layer architecture (locators in Task/Role) |
-| HIGH | Wrong layer responsibility |
-| MEDIUM | Missing decorators, wrong returns |
-| LOW | Style/naming issues |
-
-### Execution Rules (from 4D framework)
-- One sub-task at a time
-- Wait for user "yes" before next sub-task
-- Mark `[x]` immediately when done
-- Parent task commit only after ALL sub-tasks complete
-- Run tests before committing parent tasks
-
-### Branch Naming
-```
-feature/<task-id>-<short-name>
-```
-Example: `feature/1.0-setup-defect-log`
-
-### Commit Format
-```
-<type>: <description> (Task X.X)
-```
-Example: `docs: Create DEFECT_LOG.md template (Task 1.0)`
-
-## Uncommitted Changes (from previous work)
-Still have uncommitted MCP tool refactoring work from before audit:
-- Modified: base_page.py, product_list_page.py, login_page.py (removed decorators)
-- Modified: MCP tools 3/4/5/6, code_generator.py
-- Deleted: duplicate auth tasks, devtest artifacts
-- See git status for full list
-
-**Decision Needed:** Commit these separately before starting audit, or include in audit fixes?
+## Key Architecture Decisions Made
+1. **Tasks/Roles return NOTHING (None)** - Tests assert via POM state-check methods
+2. **No inheritance** - Composition only (BasePage and base Role deleted)
+3. **Verification in POMs** - Tests call POM methods directly, not Task/Role delegators
 
 ## Test Status
-- Tests not run yet this phase
-- Will run after Task 6.0 (Run All Tests and Verify Fixes)
+- Tests NOT yet run after these changes
+- Task 5.0 (Test audit) and Task 6.0 (Run tests) are pending
+
+## Context for Next Session
+**Resume Point:**
+1. Merge PR for feature/7.0-create-framework-md
+2. Continue with Task 5.0 - Audit Test Files
+3. Tests will need updates to assert via POMs instead of return values
+
+**Important Context:**
+- Tests currently call Task/Role methods expecting bool returns
+- After DEF-014/DEF-015 fixes, tests must be updated to use POM state-check methods
+- Example: `assert auth_page.is_signed_in()` instead of `assert user.login()`
+
+## Defect Summary
+| Layer | Total | Resolved |
+|-------|-------|----------|
+| Page Objects | 9 | 8 (1 WONT_FIX) |
+| Tasks | 4 | 4 |
+| Roles | 2 | 2 |
+| Tests | 0 | 0 |
+| **Total** | **15** | **14 + 1 WONT_FIX** |
