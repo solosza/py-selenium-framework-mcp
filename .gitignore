@@ -57,6 +57,7 @@ mcp_server/_dev_tests/output/
 
 # Intellectual property (process docs and framework references)
 docs/
+!docs/DEFECT_LOG.md
 
 # Environment
 .env
