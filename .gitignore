@@ -49,15 +49,13 @@ logs/
 *.html
 *.png
 error_log*.txt
-SESSION.md
+# SESSION.md now tracked for cross-workstation continuity
 PROJECT_CONTEXT.md
 
 # MCP dev test generated output
 mcp_server/_dev_tests/output/
 
-# Intellectual property (process docs and framework references)
-docs/
-!docs/DEFECT_LOG.md
+# docs/ now tracked for portfolio visibility and cross-workstation continuity
 
 # Environment
 .env
