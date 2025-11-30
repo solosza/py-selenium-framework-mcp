@@ -5,11 +5,10 @@ Represents the login/authentication page and provides methods for interaction.
 """
 
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
 from interfaces.web_interface import WebInterface
 
 
-class LoginPage(BasePage):
+class LoginPage:
     """
     LoginPage - Page Object Model
 
@@ -24,7 +23,7 @@ class LoginPage(BasePage):
         Args:
             web: WebInterface instance
         """
-        super().__init__(web)
+        self.web = web
 
     # ==================== LOCATORS ====================
 

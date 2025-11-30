@@ -201,6 +201,50 @@ WONT_FIX: time.sleep() is acceptable for complex AJAX interactions where explici
 
 ---
 
+### [DEF-009] BasePage violates "No Inheritance" design decision
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Layer:** Page
+**File:** `framework/pages/base_page.py`
+**Line(s):** All
+
+**Rule Violated:**
+- PRD Section 6.5: "No Inheritance - use composition, no base classes"
+
+**Description:**
+BasePage exists and all POMs inherit from it. This violates the explicit "No Inheritance" design decision. POMs should compose WebInterface directly, not inherit from a base class.
+
+**Fix:**
+1. Deleted `framework/pages/base_page.py`
+2. Updated all POMs to compose WebInterface directly (no inheritance)
+3. Header elements already exist in HomePage
+
+**Resolved Date:** 2025-11-29
+
+---
+
+### [DEF-010] Base Role violates "No Inheritance" design decision
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Layer:** Role
+**File:** `framework/roles/base/role.py`
+**Line(s):** All
+
+**Rule Violated:**
+- PRD Section 6.5: "No Inheritance - use composition, no base classes"
+
+**Description:**
+Base Role class exists and all Roles inherit from it. This violates the explicit "No Inheritance" design decision. Roles should compose Tasks directly, not inherit from a base class.
+
+**Fix:**
+1. Deleted `framework/roles/base/role.py`
+2. Updated RegisteredUser and GuestUser to be standalone classes (no inheritance)
+3. Each Role now stores its own user_data and composes Tasks directly
+
+**Resolved Date:** 2025-11-29
+
+---
+
 ### Task Layer (Task 3.0)
 
 _No defects logged yet._
@@ -221,13 +265,13 @@ _No defects logged yet._
 
 ## Summary
 
-| Layer | CRITICAL | HIGH | MEDIUM | LOW | Total |
-|-------|----------|------|--------|-----|-------|
-| Page Objects | 0 | 1 | 4 | 3 | 8 |
-| Tasks | 0 | 0 | 0 | 0 | 0 |
-| Roles | 0 | 0 | 0 | 0 | 0 |
-| Tests | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **0** | **1** | **4** | **3** | **8** |
+| Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
+|-------|----------|------|--------|-----|-------|----------|
+| Page Objects | 1 | 1 | 4 | 3 | 9 | 8 (1 WONT_FIX) |
+| Tasks | 0 | 0 | 0 | 0 | 0 | 0 |
+| Roles | 1 | 0 | 0 | 0 | 1 | 1 |
+| Tests | 0 | 0 | 0 | 0 | 0 | 0 |
+| **Total** | **2** | **1** | **4** | **3** | **10** | **9 + 1 WONT_FIX** |
 
 ---
 

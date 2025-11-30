@@ -7,11 +7,10 @@ Handles browsing, filtering, sorting, and quick view interactions.
 
 import time
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
 from interfaces.web_interface import WebInterface
 
 
-class ProductListPage(BasePage):
+class ProductListPage:
     """
     Page Object for Product List/Catalog pages.
 
@@ -26,7 +25,7 @@ class ProductListPage(BasePage):
         Args:
             web: WebInterface instance
         """
-        super().__init__(web)
+        self.web = web
 
     # ==================== LOCATORS ====================
 

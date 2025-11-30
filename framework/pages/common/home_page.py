@@ -5,11 +5,10 @@ URL: http://www.automationpractice.pl/index.php
 """
 
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
 from interfaces.web_interface import WebInterface
 
 
-class HomePage(BasePage):
+class HomePage:
     """
     Page Object for the Home/Landing page.
 
@@ -27,7 +26,7 @@ class HomePage(BasePage):
         Args:
             web: WebInterface instance
         """
-        super().__init__(web)
+        self.web = web
 
     # ==================== LOCATORS ====================
 

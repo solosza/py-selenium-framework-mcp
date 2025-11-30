@@ -9,14 +9,13 @@ This role represents a logged-in customer who can:
 - Manage account settings
 """
 
-from typing import Dict, Any, Optional
-from roles.base.role import Role
+from typing import Dict, Any
 from interfaces.web_interface import WebInterface
 from tasks.common.common_tasks import CommonTasks
 from resources.utilities import autologger
 
 
-class RegisteredUser(Role):
+class RegisteredUser:
     """
     Registered User role with full e-commerce workflow capabilities.
 
@@ -36,10 +35,13 @@ class RegisteredUser(Role):
                 Optional keys: first_name, last_name, address, phone, etc.
             base_url: Application base URL for navigation
         """
-        super().__init__(web_interface, user_data)
+        self.web = web_interface
+        self.user_data = user_data
+        self.email = user_data.get('email')
+        self.password = user_data.get('password')
 
         # Validate required credentials
-        if not self.has_credentials():
+        if not self.email or not self.password:
             raise ValueError("RegisteredUser requires email and password in user_data")
 
         # Compose task modules

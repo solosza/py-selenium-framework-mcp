@@ -5,11 +5,10 @@ URL: http://www.automationpractice.pl/index.php?controller=authentication
 """
 
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
 from interfaces.web_interface import WebInterface
 
 
-class AuthenticationPage(BasePage):
+class AuthenticationPage:
     """
     Page Object for the Authentication page (login and account creation).
 
@@ -25,7 +24,7 @@ class AuthenticationPage(BasePage):
         Args:
             web: WebInterface instance
         """
-        super().__init__(web)
+        self.web = web
 
     # ==================== LOCATORS ====================
 

@@ -5,12 +5,10 @@ URL: http://www.automationpractice.pl/index.php?controller=authentication&accoun
 """
 
 from selenium.webdriver.common.by import By
-from typing import Dict, Any, Optional
-from pages.base_page import BasePage
 from interfaces.web_interface import WebInterface
 
 
-class RegistrationPage(BasePage):
+class RegistrationPage:
     """
     Page Object for the Account Registration form.
 
@@ -29,7 +27,7 @@ class RegistrationPage(BasePage):
         Args:
             web: WebInterface instance
         """
-        super().__init__(web)
+        self.web = web
 
     # ==================== LOCATORS ====================
 

@@ -6,11 +6,10 @@ Allows viewing product details without leaving the catalog page.
 """
 
 from selenium.webdriver.common.by import By
-from pages.base_page import BasePage
 from interfaces.web_interface import WebInterface
 
 
-class QuickViewModal(BasePage):
+class QuickViewModal:
     """
     Page Object for Quick View modal popup.
 
@@ -25,7 +24,7 @@ class QuickViewModal(BasePage):
         Args:
             web: WebInterface instance
         """
-        super().__init__(web)
+        self.web = web
 
     # ==================== LOCATORS ====================
 

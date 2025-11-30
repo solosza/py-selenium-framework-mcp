@@ -8,14 +8,13 @@ This role represents a guest/anonymous user who can:
 - View cart (but not checkout)
 """
 
-from typing import Dict, Any, Optional
-from roles.base.role import Role
+from typing import Optional
 from interfaces.web_interface import WebInterface
 from tasks.catalog.catalog_tasks import CatalogTasks
 from resources.utilities import autologger
 
 
-class GuestUser(Role):
+class GuestUser:
     """
     Guest User role with catalog browsing workflow capabilities.
 
@@ -32,7 +31,7 @@ class GuestUser(Role):
             web_interface: WebInterface instance for browser interactions
             base_url: Application base URL for navigation
         """
-        super().__init__(web_interface, user_data=None)
+        self.web = web_interface
         self.base_url = base_url
 
         # Compose task modules
