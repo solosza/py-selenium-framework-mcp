@@ -2,10 +2,11 @@
 
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![Selenium](https://img.shields.io/badge/selenium-4.x-green.svg)](https://www.selenium.dev/)
+[![MCP](https://img.shields.io/badge/MCP-enabled-purple.svg)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-18%20passing-brightgreen.svg)](#test-results)
 
-A production-ready, 4-layer test automation framework built with Python and Selenium. Designed for teams who need structure and manual testers learning automation.
+A production-ready, 4-layer test automation framework with **AI-powered test generation** via Model Context Protocol (MCP). Built with Python and Selenium. Designed for teams who need structure and manual testers transitioning to automation.
 
 ```
 Tests → Roles → Tasks → Pages → WebInterface
@@ -33,13 +34,21 @@ This framework provides a **clean, maintainable architecture** for browser test 
 
 ## Features
 
+### Core Framework
 - **4-Layer Architecture** - Clean separation of concerns
 - **Page Object Model** - UI changes don't break your tests
 - **Role-Based Testing** - Test as different user personas
 - **Built-in Logging** - Automatic logging at every layer
 - **HTML Reports** - Professional test reports out of the box
-- **Chrome/Brave Support** - Works with Chromium browsers
+- **Chrome Support** - Works with Chrome browser (other browsers can be added via WebInterface)
 - **JSON Test Data** - Externalized, maintainable test data
+
+### AI Integration (MCP Server)
+- **11 MCP Tools** - Complete test generation workflow
+- **User Story → Tests** - Convert requirements to test scenarios automatically
+- **Element Discovery** - AI discovers page elements for you
+- **Code Generation** - Generate Page Objects, Tasks, Roles, Tests
+- **Agent Agnostic** - Works with Claude Code, Cursor, Windsurf, or any MCP-compatible AI agent
 
 ## Quick Start
 
@@ -154,14 +163,9 @@ Example structure:
 }
 ```
 
-### Browser Options
+### Browser Support
 
-The framework defaults to Chrome. To use Brave browser, modify the driver call:
-
-```python
-# In tests/conftest.py
-chromedriver = create_driver(headless=headless_bool, browser="brave")
-```
+The framework currently supports **Chrome** browser. The architecture is designed to support additional browsers by extending the `WebInterface` class - contributions welcome!
 
 ## How to Use
 
@@ -268,6 +272,159 @@ GOLDEN RULES:
 
 For complete architecture documentation, see [FRAMEWORK.md](FRAMEWORK.md).
 
+## MCP Integration: AI-Powered Test Generation
+
+The framework includes an **MCP (Model Context Protocol) server** that enables AI coding agents to generate tests automatically. This is the bridge from manual testing to automation.
+
+### What is MCP?
+
+[Model Context Protocol](https://modelcontextprotocol.io/) is an open standard that allows AI agents to interact with external tools. This framework provides 11 specialized tools for test automation.
+
+### Supported AI Agents
+
+The MCP server works with any MCP-compatible AI coding agent:
+- **Claude Code** (Anthropic)
+- **Cursor** (with MCP support)
+- **Windsurf** (Codeium)
+- **Any future MCP-compatible agent**
+
+### The 11 MCP Tools
+
+**Code Generation Tools (Bottom-Up Workflow: 1→6)**
+
+| # | Tool | Purpose |
+|---|------|---------|
+| 1 | `generate_tests_from_user_story` | Convert user story → test scenarios (Given-When-Then) |
+| 2 | `discover_page_elements` | Discover interactive elements on any page |
+| 3 | `generate_page_object` | Generate POM code from discovered elements |
+| 4 | `generate_task` | Create task workflow methods from POM |
+| 5 | `generate_role` | Create role class from tasks |
+| 6 | `generate_test_template` | Generate complete pytest test code |
+
+**Utility Tools**
+
+| Tool | Purpose |
+|------|---------|
+| `list_tests` | Catalog all available tests |
+| `get_framework_structure` | Map framework architecture |
+| `run_test` | Execute tests and return results |
+| `analyze_failure` | AI-powered debugging for failed tests |
+| `get_test_coverage` | Calculate test coverage |
+
+### MCP Setup
+
+#### Prerequisites
+- Python 3.12+
+- An MCP-compatible AI agent (Claude Code, Cursor, etc.)
+
+#### Installation
+
+```bash
+# Install MCP server dependencies
+pip install -r mcp_server/requirements.txt
+```
+
+#### Configure Your AI Agent
+
+**For Claude Code:**
+```bash
+# Add the MCP server to Claude Code
+claude mcp add qa-automation -- python /path/to/mcp_server/server.py
+```
+
+**For Other Agents:**
+Configure your agent to run the MCP server:
+```
+Command: python mcp_server/server.py
+```
+
+### From User Story to Working Test
+
+You describe what you want to test. The AI builds everything for you.
+
+**You say:**
+> "I want to test that a guest user can browse the Women category and see products"
+
+**The AI does the rest:**
+
+1. **Creates test scenarios** from your description
+2. **Discovers buttons, links, and forms** on the page
+3. **Generates the Page Object** (code that knows how to click and type)
+4. **Generates the Task** (code that performs actions like "browse category")
+5. **Generates the Role** (code that represents "guest user")
+6. **Generates the test** (ties it all together)
+7. **Runs the test** and shows you the results
+
+**What you get:**
+```python
+def test_browse_women_category(web_interface, config):
+    guest = GuestUser(web_interface, config["url"])
+
+    guest.browse_category("Women")
+
+    assert product_list_page.has_products()
+```
+
+That's it. You described the test in plain English. The AI wrote the code.
+
+### Example Conversation
+
+```
+You: I need to test that users can filter products by size
+
+AI: I'll create that test for you.
+
+    First, here are the test scenarios I came up with:
+    1. Filter by size S - shows only small products
+    2. Filter by size M - shows only medium products
+    3. Filter by invalid size - handles gracefully
+
+    I found the filter elements on the page and generated all the code.
+    The test is ready. Want me to run it?
+
+You: Yes
+
+AI: Test passed! The filter correctly shows only size "S" products.
+```
+
+No manual coding required. You describe, the AI builds.
+
+### Self-Healing Tests
+
+When a test fails, the AI doesn't just report the error. It fixes it.
+
+**Website changed?**
+```
+AI: The test failed - the "Add to Cart" button moved to a different location.
+    I found the new element and updated the Page Object.
+    Re-running... Test passed!
+```
+
+**Generated code has errors?**
+```
+AI: The test failed - my generated code had a syntax error.
+    I checked the framework patterns, fixed the code to match.
+    Re-running... Test passed!
+```
+
+The AI analyzes failures, looks at existing code patterns in your framework, updates the code to match, and re-runs automatically. Whether it's a website change or a code generation mistake, the AI learns from your codebase and fixes it.
+
+### MCP Server Development
+
+The MCP tools are in `mcp_server/tools/`. Each tool follows a consistent pattern:
+
+```python
+async def tool_name(arguments: dict) -> str:
+    """Tool description."""
+    # Implementation
+    return json.dumps(result)
+```
+
+To add new tools:
+1. Create `mcp_server/tools/tool_XX_name.py`
+2. Register in `mcp_server/server.py`
+3. Follow existing patterns
+
 ## For Manual Testers: Your Learning Path
 
 New to automation? Start here:
@@ -352,7 +509,18 @@ py-selenium-framework-mcp/
 ├── docs/                         # Documentation (gitignored)
 │   └── DEFECT_LOG.md             # Issue tracking
 │
-├── mcp_server/                   # AI integration (future)
+├── mcp_server/                   # MCP AI integration
+│   ├── server.py                 # MCP server entry point
+│   ├── requirements.txt          # MCP dependencies
+│   ├── tools/                    # 11 MCP tools
+│   │   ├── tool_01_generate_tests_from_user_story.py
+│   │   ├── tool_02_discover_page_elements.py
+│   │   ├── tool_03_generate_page_object.py
+│   │   ├── tool_04_generate_task.py
+│   │   ├── tool_05_generate_role.py
+│   │   ├── tool_06_generate_test_template.py
+│   │   └── ... (tools 07-11)
+│   └── utils/                    # Code generation utilities
 │
 ├── FRAMEWORK.md                  # Complete architecture reference
 ├── CLAUDE.md                     # AI assistant instructions
@@ -383,18 +551,9 @@ Use these as templates for your own tests:
 
 ## Contributing
 
-Contributions are welcome! This framework is designed to be extended.
+The 4-layer architecture (Roles → Tasks → Pages → WebInterface) is framework-agnostic. The current implementation uses Selenium, but the patterns work anywhere.
 
-### Ways to Contribute
-
-1. **Add Tests** - More test scenarios for the demo site
-2. **Improve Documentation** - Tutorials, guides, examples
-3. **Report Issues** - Found a bug? Open an issue
-4. **Framework Ports** - See below
-
-### Architecture Ports Wanted
-
-The 4-layer architecture (Roles → Tasks → Pages) is framework-agnostic. The current implementation uses Selenium, but the patterns work anywhere.
+### Framework Ports Wanted
 
 **Wanted:** Community implementations for:
 - Playwright (Python)
@@ -408,8 +567,7 @@ The key abstraction point is `WebInterface` - implement the same interface for y
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/your-feature`)
 3. Follow existing code patterns
-4. Add tests for new functionality
-5. Submit a pull request
+4. Submit a pull request
 
 ### Code Standards
 
@@ -418,27 +576,6 @@ The key abstraction point is `WebInterface` - implement the same interface for y
 - Tasks/Roles return `None`
 - Use `@autologger` decorators
 - See [FRAMEWORK.md](FRAMEWORK.md) for patterns
-
-## Roadmap
-
-### Completed
-- [x] 4-layer framework architecture
-- [x] Page Objects for auth and catalog
-- [x] Role-based testing (Guest, Registered)
-- [x] HTML reporting
-- [x] Comprehensive documentation
-
-### Planned
-- [ ] MCP server integration (AI-assisted testing)
-- [ ] Cart and checkout tests
-- [ ] Parallel test execution
-- [ ] Docker support
-- [ ] CI/CD examples (GitHub Actions)
-
-### Community Wishlist
-- [ ] Playwright adapter
-- [ ] Video recording on failure
-- [ ] Allure reporting integration
 
 ## Troubleshooting
 
@@ -461,12 +598,8 @@ Some tests require a registered user that doesn't exist on the demo site. This i
 
 ### Getting Help
 
-1. Check existing [Issues](https://github.com/solosza/py-selenium-framework-mcp/issues)
-2. Read [FRAMEWORK.md](FRAMEWORK.md) for architecture questions
-3. Open a new issue with:
-   - Python version
-   - Error message
-   - Steps to reproduce
+- **Architecture questions:** Read [FRAMEWORK.md](FRAMEWORK.md)
+- **Bug reports:** Open an issue at [GitHub Issues](https://github.com/solosza/py-selenium-framework-mcp/issues) with Python version, error message, and steps to reproduce
 
 ## License
 
