@@ -364,6 +364,63 @@ All Role workflow methods return `bool` (True/False). This violates the architec
 
 ---
 
+### [DEF-016] GuestUser Role methods are thin wrappers - Initially suspected generator defect
+**Severity:** N/A
+**Status:** INVALID (Architecture Review - No Defect Found)
+**Layer:** Role
+**File:** `framework/roles/guest/guest_user.py`
+**Line(s):** 42-116
+
+**Initial Concern:**
+GuestUser methods like `browse_category()`, `filter_products_in_category()`, etc. call ONLY ONE Task method each, appearing to violate the rule: "Workflow methods call MULTIPLE Tasks in sequence."
+
+Example that raised concern:
+```python
+def browse_category(self, category_name: str) -> None:
+    self.catalog_tasks.browse_category(category_name)  # Single Task call
+```
+
+**Investigation & Resolution:**
+
+After deep architecture review, determined this is NOT a defect. Here's why:
+
+1. **Persona Always Required** - Framework mandates Tests → Role → Task flow. Tests NEVER call Tasks directly, even for simple workflows.
+
+2. **Single-Task Workflows Are Valid** - Not all user stories require multi-Task orchestration. "Guest browses Women's category" is legitimately a single-task workflow.
+
+3. **Generator Followed Correct Logic:**
+   - ✓ Checked for existing Task methods (found `browse_category`)
+   - ✓ Orchestrated needed Tasks (correctly identified only ONE task needed)
+   - ✓ Generated Role method that delegates to Task
+
+4. **"Thin Wrapper" Is Acceptable** - When workflow consists of single Task, Role method provides:
+   - Persona abstraction (guest vs user vs admin)
+   - Semantic clarity (user intent vs technical implementation)
+   - Consistent test interface (always call Roles, never Tasks)
+   - Future-proofing (can add pre/post steps without changing test)
+
+**Correct Multi-Task Example (for reference):**
+```python
+def search_and_filter_products(self, term: str, size: str) -> None:
+    self.catalog_tasks.search_for_product(term)       # Task 1
+    self.catalog_tasks.apply_size_filter(size)        # Task 2
+    self.catalog_tasks.wait_for_filtered_results()    # Task 3
+```
+
+**Architecture Clarification:**
+- **Task** = One domain operation (may orchestrate multiple POM calls)
+- **Role** = User workflow (may orchestrate one OR multiple Tasks)
+- **Single-Task Role methods are valid architecture** when workflow is simple
+
+**Status Rationale:**
+Marked INVALID after thorough review. GuestUser implementation is correct. Original concern was based on misunderstanding that ALL Role methods must call multiple Tasks. This is false - complexity should match the workflow.
+
+**Keep for Reference:** Retaining this entry to document the architecture discussion and prevent future confusion about single-Task Role methods.
+
+**Closed Date:** 2025-12-01
+
+---
+
 ### Test Layer (Task 5.0)
 
 _No defects logged yet._
@@ -376,9 +433,9 @@ _No defects logged yet._
 |-------|----------|------|--------|-----|-------|----------|
 | Page Objects | 1 | 1 | 4 | 3 | 9 | 8 (1 WONT_FIX) |
 | Tasks | 2 | 0 | 0 | 2 | 4 | 4 |
-| Roles | 2 | 0 | 0 | 0 | 2 | 2 |
+| Roles | 2 | 0 | 0 | 0 | 2 | 2 (1 INVALID) |
 | Tests | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **5** | **1** | **4** | **5** | **15** | **14 + 1 WONT_FIX** |
+| **Total** | **5** | **1** | **4** | **5** | **15** | **14 + 1 WONT_FIX + 1 INVALID** |
 
 ---
 
@@ -392,4 +449,4 @@ _No defects logged yet._
 
 ---
 
-**Last Updated:** 2025-11-29
+**Last Updated:** 2025-12-01

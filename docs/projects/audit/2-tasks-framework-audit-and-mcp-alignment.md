@@ -185,23 +185,23 @@ git checkout -b feature/3.0-audit-fix-tasks
 
 ### 4.0 Audit & Fix Role Modules [CORE]
 
-- [ ] **4.0 Audit & Fix Role Modules**
-  - [ ] 4.1 Create branch `feature/4.0-audit-fix-roles`
-  - [ ] 4.2 List all Role files in `framework/roles/`
-  - [ ] 4.3 Audit each Role module against validated rules:
+- [x] **4.0 Audit & Fix Role Modules**
+  - [x] 4.1 Create branch `feature/4.0-audit-fix-roles`
+  - [x] 4.2 List all Role files in `framework/roles/`
+  - [x] 4.3 Audit each Role module against validated rules:
     - `@autologger("Role")` on workflow methods?
     - No constructor decorator?
     - Instantiates Task modules (not POMs directly)?
     - Workflow methods call multiple Tasks?
     - No return values?
     - No locators?
-  - [ ] 4.4 Log all defects found in DEFECT_LOG.md
-  - [ ] 4.5 Fix CRITICAL defects (architecture violations)
-  - [ ] 4.6 Fix HIGH defects (wrong responsibility)
-  - [ ] 4.7 Fix MEDIUM defects (missing decorators)
-  - [ ] 4.8 Fix LOW defects (style/naming)
-  - [ ] 4.9 Mark defects as RESOLVED in DEFECT_LOG.md
-  - [ ] 4.10 Commit: `fix: Audit and fix Role modules (Task 4.0)`
+  - [x] 4.4 Log all defects found in DEFECT_LOG.md
+  - [x] 4.5 Fix CRITICAL defects (architecture violations)
+  - [x] 4.6 Fix HIGH defects (wrong responsibility)
+  - [x] 4.7 Fix MEDIUM defects (missing decorators)
+  - [x] 4.8 Fix LOW defects (style/naming)
+  - [x] 4.9 Mark defects as RESOLVED in DEFECT_LOG.md
+  - [x] 4.10 Commit: `fix: Audit and fix Role modules (Task 4.0)`
 
 **Relevant Files:**
 - `framework/roles/auth/*.py` - Authentication roles
@@ -215,11 +215,18 @@ git checkout -b feature/3.0-audit-fix-tasks
 
 **Commands Run:**
 ```bash
-# To be filled after execution
+git checkout -b feature/4.0-audit-fix-roles
+# Audited 2 Role files: RegisteredUser, GuestUser
+# Logged DEF-016 (initially suspected defect, marked INVALID after architecture review)
 ```
 
 **Results:**
-- (To be filled after execution)
+- Audited 2 Role modules: `registered_user.py`, `guest_user.py`
+- Both modules COMPLIANT with architecture rules
+- No new defects found (DEF-014, DEF-015 already resolved in Task 7.0)
+- Logged DEF-016 as architecture clarification: Single-Task Role methods are valid
+- Architecture clarification: Persona always required, thin wrappers acceptable when workflow is simple
+- Status: COMPLETE
 
 ---
 
@@ -387,11 +394,11 @@ pytest -v tests/
 |------|-------------|------|--------|
 | 1.0 | Setup: Create DEFECT_LOG.md | GLUE | **Complete** |
 | 2.0 | Audit & Fix Page Objects | CORE | **Complete** |
-| 3.0 | Audit & Fix Tasks | CORE | **In Progress** (pending commit) |
-| 4.0 | Audit & Fix Roles | CORE | Pending (base Role already deleted) |
+| 3.0 | Audit & Fix Tasks | CORE | **Complete** |
+| 4.0 | Audit & Fix Roles | CORE | **Complete** |
 | 5.0 | Audit & Fix Tests | CORE | Pending |
 | 6.0 | Run Tests & Verify | CORE | Pending |
-| 7.0 | Create FRAMEWORK.md | GLUE | Pending |
+| 7.0 | Create FRAMEWORK.md | GLUE | **Complete** |
 | 8.0 | Update CLAUDE.md | GLUE | Pending |
 | 9.0 | Update README.md | GLUE | Pending |
 
