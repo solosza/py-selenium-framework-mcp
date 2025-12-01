@@ -25,6 +25,7 @@ from resources.utilities import autologger
 from roles.auth.registered_user import RegisteredUser
 from pages.auth.authentication_page import AuthenticationPage
 from pages.auth.registration_page import RegistrationPage
+from pages.common.home_page import HomePage
 
 
 @pytest.mark.smoke
@@ -39,7 +40,7 @@ def test_registration_valid_data(web_interface, config, test_users):
     Steps:
         1. Create RegisteredUser with new user data
         2. Call register() workflow method
-        3. Verify registration successful (user is logged in)
+        3. Verify registration successful via POM (user is logged in)
 
     Expected Result:
         User account created and user is logged in.
@@ -49,18 +50,19 @@ def test_registration_valid_data(web_interface, config, test_users):
     # Arrange
     base_url = config["url"]
     new_user_data = test_users["new_user"]
+    home_page = HomePage(web_interface)
+    reg_page = RegistrationPage(web_interface)
 
     # Act: Use Role to orchestrate registration workflow
     user = RegisteredUser(web_interface, new_user_data, base_url)
-    registration_result = user.register()
+    user.register()
 
-    # Assert: Verify registration successful
-    if not registration_result:
-        # Check for duplicate email error
+    # Assert: Verify registration successful via POM
+    # Check for duplicate email error first
+    if reg_page.has_error_message():
         pytest.skip("Registration failed (likely duplicate email)")
 
-    assert registration_result is True, "Registration should succeed"
-    assert user.is_logged_in() is True, "User should be logged in after registration"
+    assert home_page.is_logout_link_visible(), "User should be logged in after registration"
 
 
 @pytest.mark.regression

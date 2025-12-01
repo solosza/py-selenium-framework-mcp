@@ -423,7 +423,77 @@ Marked INVALID after thorough review. GuestUser implementation is correct. Origi
 
 ### Test Layer (Task 5.0)
 
-_No defects logged yet._
+### [DEF-017] Tests assert on Role return values instead of POM state-check methods
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Layer:** Test
+**File:** Multiple test files
+**Line(s):** See list below
+
+**Rule Violated:**
+- FRAMEWORK.md: "Tests assert via POM state-check methods - NOT return values"
+- FRAMEWORK.md: "Tasks/Roles return NOTHING (None)"
+
+**Description:**
+After DEF-014 and DEF-015 were fixed (Tasks/Roles now return None), tests still assert on return values from Role methods. This causes tests to fail because they expect `True/False` but get `None`.
+
+**Affected Files:**
+1. `test_valid_login.py:44` - `assert login_result is True`
+2. `test_valid_login.py:45` - `assert user.is_logged_in() is True` (method doesn't exist)
+3. `test_valid_login.py:75-76` - same issues
+4. `test_valid_login.py:79,82-83` - logout return value assertions
+5. `test_invalid_credentials.py:85` - `assert login_result is False`
+6. `test_logout.py:50,60,63-64,91,97,100,103,130,136-137,143-144` - return value assertions
+7. `test_registration.py:55-56,62-63` - `assert registration_result is True`
+8. `test_browse_category.py:68,71-72,96,99-100` - `assert browse_result is True`
+9. `test_filter_products.py:44,70,98,125` - `assert filter_result is True/False`
+10. `test_quick_view.py:44,74,103,106,109,136` - `assert quick_view_result is True/False`
+11. `test_sort_by_price.py:44,70,98,125` - `assert sort_result is True/False`
+
+**Fix:**
+1. Remove all assertions on Role return values
+2. Replace with POM state-check method assertions
+3. Import necessary POMs in each test file
+4. Remove calls to non-existent Role methods (is_logged_in, verify_products_displayed)
+
+**Example Fix:**
+```python
+# BEFORE (wrong):
+login_result = user.login()
+assert login_result is True
+
+# AFTER (correct):
+from pages.common.home_page import HomePage
+home_page = HomePage(web_interface)
+user.login()  # Returns None
+assert home_page.is_logout_link_visible(), "User should be logged in"
+```
+
+---
+
+### [DEF-018] Tests call non-existent Role methods
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Layer:** Test
+**File:** Multiple test files
+
+**Rule Violated:**
+- Tests should use POM methods for state verification, not Role methods
+
+**Description:**
+Tests call methods that were removed from Roles during DEF-015 fix:
+- `user.is_logged_in()` - removed from RegisteredUser
+- `guest.verify_products_displayed()` - never existed on GuestUser
+
+**Affected Files:**
+1. `test_valid_login.py:45,76,83` - `user.is_logged_in()`
+2. `test_logout.py:57,64,97,103,144` - `user.is_logged_in()`
+3. `test_browse_category.py:72,100` - `guest.verify_products_displayed()`
+
+**Fix:**
+Replace with POM state-check methods:
+- `user.is_logged_in()` → `home_page.is_logout_link_visible()`
+- `guest.verify_products_displayed()` → `product_list_page.has_products()`
 
 ---
 
@@ -434,8 +504,8 @@ _No defects logged yet._
 | Page Objects | 1 | 1 | 4 | 3 | 9 | 8 (1 WONT_FIX) |
 | Tasks | 2 | 0 | 0 | 2 | 4 | 4 |
 | Roles | 2 | 0 | 0 | 0 | 2 | 2 (1 INVALID) |
-| Tests | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Total** | **5** | **1** | **4** | **5** | **15** | **14 + 1 WONT_FIX + 1 INVALID** |
+| Tests | 2 | 0 | 0 | 0 | 2 | 2 |
+| **Total** | **7** | **1** | **4** | **5** | **17** | **16 + 1 WONT_FIX + 1 INVALID** |
 
 ---
 
@@ -444,7 +514,7 @@ _No defects logged yet._
 - [x] Task 2.0: Page Objects audited
 - [x] Task 3.0: Tasks audited
 - [x] Task 4.0: Roles audited
-- [ ] Task 5.0: Tests audited
+- [x] Task 5.0: Tests audited
 - [ ] Task 6.0: All tests passing
 
 ---

@@ -13,6 +13,7 @@ FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
 from roles.auth.registered_user import RegisteredUser
+from pages.common.home_page import HomePage
 from resources.utilities import autologger
 
 
@@ -26,23 +27,22 @@ def test_valid_login_registered_user(web_interface, config, test_users):
     Steps:
         1. Create RegisteredUser with valid credentials
         2. Call login() method
-        3. Verify login successful (returns True)
-        4. Verify user is logged in (is_logged_in() returns True)
+        3. Verify user is logged in via HomePage state-check
 
     Expected Result:
         User successfully logs in and session is authenticated.
     """
-    # Arrange: Get test user data
+    # Arrange: Get test user data and create POM for assertions
     user_data = test_users["registered_user"]
     base_url = config["url"]
+    home_page = HomePage(web_interface)
 
     # Act: Create user and attempt login
     user = RegisteredUser(web_interface, user_data, base_url)
-    login_result = user.login()
+    user.login()
 
-    # Assert: Verify login successful
-    assert login_result is True, f"Login failed for user: {user_data['email']}"
-    assert user.is_logged_in() is True, "User should be logged in after successful login"
+    # Assert: Verify login successful via POM state-check
+    assert home_page.is_logout_link_visible(), f"Login failed for user: {user_data['email']}"
 
 
 @pytest.mark.smoke
@@ -55,29 +55,27 @@ def test_valid_login_then_logout(web_interface, config, test_users):
     Steps:
         1. Create RegisteredUser with valid credentials
         2. Call login() method
-        3. Verify login successful
+        3. Verify login successful via POM
         4. Call logout() method
-        5. Verify logout successful (returns True)
-        6. Verify user is logged out (is_logged_in() returns False)
+        5. Verify user is logged out via POM
 
     Expected Result:
         User successfully logs in, then logs out, and session ends.
     """
-    # Arrange: Get test user data
+    # Arrange: Get test user data and create POM for assertions
     user_data = test_users["registered_user_2"]
     base_url = config["url"]
+    home_page = HomePage(web_interface)
 
     # Act: Login
     user = RegisteredUser(web_interface, user_data, base_url)
-    login_result = user.login()
+    user.login()
 
-    # Assert: Verify login successful
-    assert login_result is True, f"Login failed for user: {user_data['email']}"
-    assert user.is_logged_in() is True, "User should be logged in"
+    # Assert: Verify login successful via POM
+    assert home_page.is_logout_link_visible(), f"Login failed for user: {user_data['email']}"
 
     # Act: Logout
-    logout_result = user.logout()
+    user.logout()
 
-    # Assert: Verify logout successful
-    assert logout_result is True, "Logout should return True"
-    assert user.is_logged_in() is False, "User should be logged out after logout"
+    # Assert: Verify logout successful via POM
+    assert home_page.is_login_link_visible(), "User should be logged out after logout"

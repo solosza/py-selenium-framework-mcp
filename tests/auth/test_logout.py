@@ -19,7 +19,7 @@ sys.path.insert(0, FRAMEWORK_PATH)
 
 from resources.utilities import autologger
 from roles.auth.registered_user import RegisteredUser
-from roles.guest.guest_user import GuestUser
+from pages.common.home_page import HomePage
 
 
 @pytest.mark.smoke
@@ -32,9 +32,9 @@ def test_logout_after_successful_login(web_interface, config, test_users):
     Steps:
         1. Create RegisteredUser with valid credentials
         2. Perform login
-        3. Verify user is logged in
+        3. Verify user is logged in via POM
         4. Perform logout
-        5. Verify user is logged out
+        5. Verify user is logged out via POM
 
     Expected Result:
         User successfully logs out and session is cleared.
@@ -44,24 +44,21 @@ def test_logout_after_successful_login(web_interface, config, test_users):
     # Arrange
     user_data = test_users["registered_user"]
     base_url = config["url"]
+    home_page = HomePage(web_interface)
 
     # Act: Create user and login
     user = RegisteredUser(web_interface, user_data, base_url)
-    login_result = user.login()
+    user.login()
 
     # Skip test if login fails (expected for non-existent test users)
-    if not login_result:
+    if not home_page.is_logout_link_visible():
         pytest.skip("Cannot test logout - login failed (user doesn't exist on live site)")
 
-    # Verify logged in before logout
-    assert user.is_logged_in(), "User should be logged in before logout"
-
     # Act: Logout
-    logout_result = user.logout()
+    user.logout()
 
-    # Assert: Verify logout successful
-    assert logout_result is True, "Logout should return True"
-    assert not user.is_logged_in(), "User should not be logged in after logout"
+    # Assert: Verify logout successful via POM
+    assert home_page.is_login_link_visible(), "User should be logged out after logout"
 
 
 @pytest.mark.regression
@@ -73,9 +70,9 @@ def test_logout_session_cleared(web_interface, config, test_users):
 
     Steps:
         1. Login as registered user
-        2. Verify user is logged in
+        2. Verify user is logged in via POM
         3. Logout
-        4. Verify user is logged out (session cleared)
+        4. Verify user is logged out (session cleared) via POM
 
     Expected Result:
         After logout, user session is completely cleared.
@@ -85,22 +82,20 @@ def test_logout_session_cleared(web_interface, config, test_users):
     # Arrange
     user_data = test_users["registered_user_2"]
     base_url = config["url"]
+    home_page = HomePage(web_interface)
 
     # Act: Login
     user = RegisteredUser(web_interface, user_data, base_url)
-    login_result = user.login()
+    user.login()
 
-    if not login_result:
+    if not home_page.is_logout_link_visible():
         pytest.skip("Cannot test session clearing - login failed")
-
-    # Verify logged in
-    assert user.is_logged_in(), "User should be logged in"
 
     # Act: Logout
     user.logout()
 
-    # Assert: Session should be cleared (user logged out)
-    assert not user.is_logged_in(), "User should be logged out after logout"
+    # Assert: Session should be cleared (user logged out) via POM
+    assert home_page.is_login_link_visible(), "User should be logged out after logout"
 
 
 @pytest.mark.regression
@@ -124,21 +119,21 @@ def test_multiple_logout_attempts(web_interface, config, test_users):
     # Arrange
     user_data = test_users["registered_user_2"]
     base_url = config["url"]
+    home_page = HomePage(web_interface)
 
     # Act: Login
     user = RegisteredUser(web_interface, user_data, base_url)
-    login_result = user.login()
+    user.login()
 
-    if not login_result:
+    if not home_page.is_logout_link_visible():
         pytest.skip("Cannot test multiple logouts - login failed")
 
     # Act: First logout
-    first_logout = user.logout()
-    assert first_logout is True, "First logout should succeed"
+    user.logout()
+    assert home_page.is_login_link_visible(), "First logout should succeed"
 
-    # Act: Second logout attempt (already logged out)
-    second_logout = user.logout()
+    # Act: Second logout attempt (already logged out - should handle gracefully)
+    user.logout()
 
-    # Assert: Should handle gracefully (return True since already logged out)
-    assert isinstance(second_logout, bool), "Logout should return boolean even when already logged out"
-    assert not user.is_logged_in(), "User should remain logged out"
+    # Assert: Should remain logged out
+    assert home_page.is_login_link_visible(), "User should remain logged out"

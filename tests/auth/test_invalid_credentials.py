@@ -21,6 +21,7 @@ sys.path.insert(0, FRAMEWORK_PATH)
 from resources.utilities import autologger
 from roles.auth.registered_user import RegisteredUser
 from pages.auth.authentication_page import AuthenticationPage
+from pages.common.home_page import HomePage
 
 
 @pytest.mark.smoke
@@ -67,23 +68,25 @@ def test_login_nonexistent_user(web_interface, config, test_users):
     Steps:
         1. Create RegisteredUser with non-existent credentials
         2. Attempt login
-        3. Verify login fails
+        3. Verify user is NOT logged in via POM
         4. Verify error message displayed
 
     Expected Result:
         Login fails with authentication error.
     """
-    # Arrange: Use non-existent test user
+    # Arrange: Use non-existent test user and create POMs for assertions
     user_data = test_users["invalid_user"]
     base_url = config["url"]
+    home_page = HomePage(web_interface)
+    auth_page = AuthenticationPage(web_interface)
 
     # Act: Attempt login
     user = RegisteredUser(web_interface, user_data, base_url)
-    login_result = user.login()
+    user.login()
 
-    # Assert: Verify login failed
-    assert login_result is False, "Login should fail for non-existent user"
-    assert not user.is_logged_in(), "User should not be logged in"
+    # Assert: Verify login failed via POM state-checks
+    assert not home_page.is_logout_link_visible(), "User should not be logged in"
+    assert auth_page.has_error_message(), "Expected authentication error message"
 
 
 @pytest.mark.regression

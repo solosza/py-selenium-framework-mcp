@@ -14,6 +14,7 @@ FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
 from roles.guest.guest_user import GuestUser
+from pages.catalog.product_list_page import ProductListPage
 from resources.utilities import autologger
 
 
@@ -55,7 +56,7 @@ def test_browse_dresses_category(web_interface, config):
     Steps:
         1. Create GuestUser role
         2. Call browse_category() workflow
-        3. Verify success
+        3. Verify products displayed via POM
 
     Expected Result:
         Dresses category loads with products.
@@ -63,13 +64,13 @@ def test_browse_dresses_category(web_interface, config):
     # Arrange
     base_url = config["url"]
     guest = GuestUser(web_interface, base_url)
+    product_list_page = ProductListPage(web_interface)
 
     # Act: Use role to browse Dresses category
-    browse_result = guest.browse_category("Dresses")
+    guest.browse_category("Dresses")
 
-    # Assert: Verify browsing successful
-    assert browse_result is True, "Failed to browse Dresses category"
-    assert guest.verify_products_displayed() is True, "No products displayed in Dresses"
+    # Assert: Verify browsing successful via POM state-check
+    assert product_list_page.has_products(), "No products displayed in Dresses"
 
 
 @pytest.mark.catalog
@@ -83,7 +84,7 @@ def test_browse_tshirts_category(web_interface, config):
     Steps:
         1. Create GuestUser role
         2. Call browse_category() workflow
-        3. Verify success
+        3. Verify products displayed via POM
 
     Expected Result:
         T-shirts category loads with products.
@@ -91,13 +92,13 @@ def test_browse_tshirts_category(web_interface, config):
     # Arrange
     base_url = config["url"]
     guest = GuestUser(web_interface, base_url)
+    product_list_page = ProductListPage(web_interface)
 
     # Act: Use role to browse T-shirts category
-    browse_result = guest.browse_category("T-shirts")
+    guest.browse_category("T-shirts")
 
-    # Assert: Verify browsing successful
-    assert browse_result is True, "Failed to browse T-shirts category"
-    assert guest.verify_products_displayed() is True, "No products displayed in T-shirts"
+    # Assert: Verify browsing successful via POM state-check
+    assert product_list_page.has_products(), "No products displayed in T-shirts"
 
 
 @pytest.mark.catalog
