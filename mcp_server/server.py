@@ -2,13 +2,17 @@
 """
 MCP Server for QA Test Automation Framework
 
-Provides 11 tools following test-first workflow:
-1. generate_tests_from_user_story - Requirements → test scenarios
-2. generate_test_template - Scenario → pytest test (TEST FIRST)
-3. generate_role - Test requirements → role class
-4. generate_task - Test requirements → task methods
-5. discover_page_elements - Page URL → discovered elements (just-in-time)
-6. generate_page_object - Elements → POM code
+Provides tools following the 4-layer architecture workflow:
+
+IMPLEMENTED (Tools 1-6):
+1. generate_tests_from_user_story - User story → test scenarios (Given-When-Then)
+2. discover_page_elements - Page URL → discovered elements
+3. generate_page_object - Elements → POM code
+4. generate_task - POM → Task module
+5. generate_role - Task → Role module
+6. generate_test_runner - Role → pytest runner code
+
+PLANNED (Tools 7-11):
 7. list_tests - Catalog all tests
 8. get_framework_structure - Map framework architecture
 9. run_test - Execute tests
@@ -27,18 +31,29 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from mcp.server import Server
 from mcp.types import Tool, TextContent
 
-# Import tool implementations
+# Import tool implementations (Tools 1-6 implemented)
 from tools.tool_01_generate_tests_from_user_story import generate_tests_from_user_story
-from tools.tool_02_generate_test_template import generate_test_template
-from tools.tool_03_generate_role import generate_role
+from tools.tool_02_discover_page_elements import discover_elements as discover_page_elements
+from tools.tool_03_generate_page_object import generate_page_object
 from tools.tool_04_generate_task import generate_task
-from tools.tool_05_discover_page_elements import discover_page_elements
-from tools.tool_06_generate_page_object import generate_page_object
-from tools.tool_07_list_tests import list_tests
-from tools.tool_08_get_framework_structure import get_framework_structure
-from tools.tool_09_run_test import run_test
-from tools.tool_10_analyze_failure import analyze_failure
-from tools.tool_11_get_test_coverage import get_test_coverage
+from tools.tool_05_generate_role import generate_role
+from tools.tool_06_generate_test_runner import generate_test_runner
+
+# Tools 7-11 not yet implemented - stub functions
+async def list_tests(arguments: dict) -> str:
+    return '{"status": "not_implemented", "message": "Tool 7 (list_tests) is planned but not yet implemented"}'
+
+async def get_framework_structure(arguments: dict) -> str:
+    return '{"status": "not_implemented", "message": "Tool 8 (get_framework_structure) is planned but not yet implemented"}'
+
+async def run_test(arguments: dict) -> str:
+    return '{"status": "not_implemented", "message": "Tool 9 (run_test) is planned but not yet implemented"}'
+
+async def analyze_failure(arguments: dict) -> str:
+    return '{"status": "not_implemented", "message": "Tool 10 (analyze_failure) is planned but not yet implemented"}'
+
+async def get_test_coverage(arguments: dict) -> str:
+    return '{"status": "not_implemented", "message": "Tool 11 (get_test_coverage) is planned but not yet implemented"}'
 
 
 # Initialize MCP server
@@ -70,10 +85,10 @@ async def list_available_tools() -> list[Tool]:
             }
         ),
 
-        # Phase 2: Test-First Development
+        # Tool 6: Generate Test Runner (pytest code)
         Tool(
-            name="generate_test_template",
-            description="Generate pytest test code from scenario (TEST FIRST approach)",
+            name="generate_test_runner",
+            description="Generate pytest test runner code from scenario (executes scenarios from Tool 1)",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -86,12 +101,16 @@ async def list_available_tools() -> list[Tool]:
                         "description": "Workflow category",
                         "enum": ["auth", "catalog", "cart", "checkout"]
                     },
+                    "role": {
+                        "type": "string",
+                        "description": "Role class name (e.g., GuestUser, RegisteredUser)"
+                    },
                     "scenario": {
                         "type": "object",
-                        "description": "Test scenario with given/when/then"
+                        "description": "Test scenario with given/when/then (from Tool 1)"
                     }
                 },
-                "required": ["test_name", "workflow"]
+                "required": ["test_name", "workflow", "role"]
             }
         ),
 
@@ -275,14 +294,16 @@ async def list_available_tools() -> list[Tool]:
 async def call_tool_handler(name: str, arguments: dict) -> list[TextContent]:
     """Route tool calls to appropriate handler."""
 
-    # Tool routing
+    # Tool routing (matches tool file numbers)
     handlers = {
-        "generate_tests_from_user_story": generate_tests_from_user_story,
-        "generate_test_template": generate_test_template,
-        "generate_role": generate_role,
-        "generate_task": generate_task,
-        "discover_page_elements": discover_page_elements,
-        "generate_page_object": generate_page_object,
+        # Tools 1-6: Implemented
+        "generate_tests_from_user_story": generate_tests_from_user_story,  # Tool 1
+        "discover_page_elements": discover_page_elements,                   # Tool 2
+        "generate_page_object": generate_page_object,                       # Tool 3
+        "generate_task": generate_task,                                     # Tool 4
+        "generate_role": generate_role,                                     # Tool 5
+        "generate_test_runner": generate_test_runner,                       # Tool 6
+        # Tools 7-11: Planned (stubs)
         "list_tests": list_tests,
         "get_framework_structure": get_framework_structure,
         "run_test": run_test,

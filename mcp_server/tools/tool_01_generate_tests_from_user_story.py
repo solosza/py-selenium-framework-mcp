@@ -88,7 +88,7 @@ async def generate_tests_from_user_story(arguments: dict) -> str:
             "workflow": workflow,
             "scenarios_count": len(test_scenarios),
             "scenarios": test_scenarios,
-            "next_step": "Use generate_test_template to create pytest test code from these scenarios"
+            "next_step": "Use discover_page_elements (Tool 2) to find elements, then generate_page_object (Tool 3), generate_task (Tool 4), generate_role (Tool 5), and finally generate_test_runner (Tool 6) to create pytest code"
         }
 
         return json.dumps(result, indent=2)

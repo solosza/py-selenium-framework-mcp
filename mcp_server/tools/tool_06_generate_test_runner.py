@@ -1,8 +1,11 @@
 """
-Tool 6: generate_test_template
+Tool 6: generate_test_runner
 
-Generate pytest test code from scenario.
-Final step - generates test AFTER all infrastructure is built (Tools 2-5).
+Generate pytest test runner code from scenario.
+Final step - generates executable test code AFTER all infrastructure is built (Tools 1-5).
+
+Tool 1 generates test SCENARIOS (Given-When-Then).
+Tool 6 generates test RUNNER (pytest code that executes the scenario).
 
 REFACTORED: Now uses dedicated test_generator from utils/generators/
 which embeds patterns from FRAMEWORK.md Section 4.4.
@@ -22,21 +25,21 @@ from utils.generators.test_generator import (
 )
 
 
-async def generate_test_template(arguments: dict) -> str:
+async def generate_test_runner(arguments: dict) -> str:
     """
-    Generate pytest test template from scenario.
+    Generate pytest test runner code from scenario.
 
     Args:
         arguments: {
             "test_name": str - Test function name
             "workflow": str - Workflow category or folder
             "role": str - Role class name (e.g., RegisteredUser, GuestUser, PayrollManager)
-            "scenario": dict - Optional scenario with given/when/then
+            "scenario": dict - Optional scenario with given/when/then (from Tool 1)
             "role_import": str - Optional custom import statement for role
         }
 
     Returns:
-        JSON string with generated test code
+        JSON string with generated pytest runner code
     """
     test_name = arguments.get("test_name", "")
     workflow = arguments.get("workflow", "")
@@ -138,5 +141,5 @@ if __name__ == "__main__":
         }
     }
 
-    result = asyncio.run(generate_test_template(test_args))
+    result = asyncio.run(generate_test_runner(test_args))
     print(result)

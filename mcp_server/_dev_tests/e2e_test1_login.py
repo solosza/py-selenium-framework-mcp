@@ -253,9 +253,9 @@ async def run_e2e_test():
     # ========== TOOL 6: Generate Test ==========
     print_section("STEP 6: Generate Test (Tool 6)")
 
-    from tools.tool_06_generate_test_template import generate_test_template
+    from tools.tool_06_generate_test_runner import generate_test_runner
 
-    result6 = await generate_test_template({
+    result6 = await generate_test_runner({
         "test_name": scenario.get("name"),
         "workflow": DEV_TEST_FOLDER,
         "role": "DevRegisteredUser",

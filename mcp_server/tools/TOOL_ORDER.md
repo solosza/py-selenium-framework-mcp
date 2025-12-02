@@ -27,9 +27,9 @@
 - Output: Complete Role class
 - Next: Tool 6
 
-**Tool 6: generate_test_template** (was Tool 2)
+**Tool 6: generate_test_runner** (was generate_test_template)
 - Input: All components (Tool 1-5) + scenario
-- Output: Complete test with real logic
+- Output: Complete pytest runner code
 - Next: Run the test!
 
 ## Workflow Philosophy: BOTTOM-UP
@@ -48,7 +48,7 @@ This is the OPPOSITE of TDD (test-first), but produces the SAME result: complete
 
 | Old Number | Old Name | New Number | New Name |
 |------------|----------|------------|----------|
-| Tool 2 | generate_test_template | Tool 6 | generate_test_template |
+| Tool 2 | generate_test_template | Tool 6 | generate_test_runner |
 | Tool 3 | generate_role | Tool 5 | generate_role |
 | Tool 5 | discover_page_elements | Tool 2 | discover_page_elements |
 | Tool 6 | generate_page_object | Tool 3 | generate_page_object |
