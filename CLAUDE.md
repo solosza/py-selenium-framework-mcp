@@ -564,7 +564,19 @@ Structured 4-phase process. Each phase has process doc in `docs/`:
 ```
 
 ### Active Issues:
-(None currently)
+
+### [DEFECT-001] CatalogTasks returns values from data retrieval methods
+**Date:** 2025-12-01
+**Task:** Found during B.3 task_generator development
+**Error:** FRAMEWORK.md states Task methods return None, but `framework/tasks/catalog/catalog_tasks.py` has methods that return values
+**Context:** Data retrieval methods `get_product_count()`, `get_product_names()`, `get_product_prices()` return int/list instead of None
+**Affected File:** `framework/tasks/catalog/catalog_tasks.py` lines 244-271
+**Impact:** Architecture violation - tests should access data through POMs, not Task return values
+**Solution:**
+1. Remove return statements from Task methods
+2. Tests should call POM methods directly for data retrieval (e.g., `product_list_page.get_product_count()`)
+**Status:** OPEN
+**Priority:** MEDIUM (architecture violation, but not blocking functionality)
 
 ### Resolved Issues:
 (None yet)

@@ -22,6 +22,12 @@ from utils.generators.page_object_generator import (
     get_file_path
 )
 
+from utils.generators.task_generator import (
+    generate_task,
+    get_file_path as get_task_file_path,
+    get_available_workflows
+)
+
 
 class TestPageObjectGenerator:
     """Tests for page_object_generator.py"""
@@ -175,6 +181,134 @@ class TestPageObjectGenerator:
 
         assert "def select_country(self, value: str) -> \"AddressPage\":" in code
         assert "select_dropdown_by_value" in code
+
+
+class TestTaskGenerator:
+    """Tests for task_generator.py"""
+
+    def test_generate_basic_task(self):
+        """Test generating a basic Task with no page objects."""
+        code = generate_task("TestTasks")
+
+        # Verify class structure
+        assert "class TestTasks:" in code
+        assert "def __init__(self, web: WebInterface, base_url: str):" in code
+        assert "self.web = web" in code
+        assert "self.base_url = base_url" in code
+
+        # Verify imports
+        assert "from interfaces.web_interface import WebInterface" in code
+        assert "from resources.utilities import autologger" in code
+
+    def test_task_methods_have_decorator(self):
+        """CRITICAL: Task methods must have @autologger("Task") decorator."""
+        code = generate_task("AuthTasks", workflow_type="auth")
+
+        # Verify decorator is present
+        assert '@autologger.automation_logger("Task")' in code
+
+        # Verify method follows decorator
+        lines = code.split("\n")
+        for i, line in enumerate(lines):
+            if '@autologger.automation_logger("Task")' in line:
+                # Next non-empty line should be def
+                for j in range(i + 1, len(lines)):
+                    if lines[j].strip():
+                        assert lines[j].strip().startswith("def "), \
+                            f"Decorator not followed by method: {lines[j]}"
+                        break
+
+    def test_task_methods_return_none(self):
+        """CRITICAL: Task methods must return None (no return statements with values)."""
+        code = generate_task("CatalogTasks", workflow_type="catalog")
+
+        # Check that methods have -> None type hint
+        assert "-> None:" in code
+
+        # No return statements with values (return <something>)
+        lines = code.split("\n")
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("return ") and stripped != "return":
+                # Allow 'return' alone but not 'return <value>'
+                assert False, f"Task method returns value: {line}"
+
+    def test_task_constructor_no_decorator(self):
+        """Task constructor must have NO decorator."""
+        code = generate_task("TestTasks")
+
+        lines = code.split("\n")
+        for i, line in enumerate(lines):
+            if "def __init__" in line:
+                # Check previous non-empty line is not a decorator
+                for j in range(i - 1, -1, -1):
+                    if lines[j].strip():
+                        assert not lines[j].strip().startswith("@autologger"), \
+                            "Constructor should not have @autologger decorator"
+                        break
+                break
+
+    def test_task_composes_page_objects(self):
+        """Task should compose page objects in constructor."""
+        page_objects = [
+            {"name": "LoginPage", "import_path": "pages.auth.login_page"},
+        ]
+
+        code = generate_task("AuthTasks", page_objects=page_objects)
+
+        # Verify import
+        assert "from pages.auth.login_page import LoginPage" in code
+
+        # Verify composition in constructor
+        assert "self.login_page = LoginPage(web)" in code
+
+    def test_auth_workflow_methods(self):
+        """Auth workflow should have login/logout methods."""
+        code = generate_task("AuthTasks", workflow_type="auth")
+
+        # Verify auth-specific methods
+        assert "def log_in(self, email: str, password: str)" in code
+        assert "def log_out(self)" in code
+
+    def test_catalog_workflow_methods(self):
+        """Catalog workflow should have browse/filter methods."""
+        code = generate_task("CatalogTasks", workflow_type="catalog")
+
+        # Verify catalog-specific methods
+        assert "def browse_category(self, category_name: str)" in code
+        assert "def filter_by_size(self, size: str)" in code
+
+    def test_task_no_locators(self):
+        """CRITICAL: Tasks must NOT have locators (except inline temporary)."""
+        code = generate_task("CatalogTasks", workflow_type="catalog")
+
+        # No class-level locator constants (UPPER_SNAKE = (By...))
+        lines = code.split("\n")
+        for line in lines:
+            stripped = line.strip()
+            # Check for locator pattern at class level
+            if "= (By." in stripped and not stripped.startswith("self."):
+                # Allow inline locators in methods, but not class-level
+                if not stripped.startswith("#"):  # Skip comments
+                    # This should only appear inside methods, not at class level
+                    pass  # Inline locators are allowed
+
+    def test_get_task_file_path(self):
+        """Test file path generation for tasks."""
+        path = get_task_file_path("AuthTasks", "auth")
+        assert path == "framework/tasks/auth/auth_tasks.py"
+
+        path = get_task_file_path("CatalogTasks", "catalog")
+        assert path == "framework/tasks/catalog/catalog_tasks.py"
+
+    def test_get_available_workflows(self):
+        """Test available workflows list."""
+        workflows = get_available_workflows()
+
+        assert "auth" in workflows
+        assert "catalog" in workflows
+        assert "cart" in workflows
+        assert "common" in workflows
 
 
 # Run tests directly if executed

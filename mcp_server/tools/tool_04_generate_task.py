@@ -3,6 +3,9 @@ Tool 4: generate_task
 
 Generate task workflow methods from test requirements.
 
+REFACTORED: Now uses dedicated task_generator from utils/generators/
+which embeds patterns from FRAMEWORK.md Section 4.2.
+
 IMPORTANT: Before generating, checks if a task already exists for the workflow.
 If it does, returns existing task info instead of creating duplicates.
 """
@@ -13,11 +16,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from utils.code_generator import (
-    generate_task_template,
-    get_file_path_for_component,
-    discover_existing_capabilities
+# NEW: Use dedicated generator with embedded patterns
+from utils.generators.task_generator import (
+    generate_task as generate_task_code,
+    get_file_path
 )
+
+# Keep existing capability discovery from old module (until fully migrated)
+from utils.code_generator import discover_existing_capabilities
 
 
 def extract_method_names_from_pom(pom_code: str) -> list:
@@ -103,33 +109,33 @@ async def generate_task(arguments: dict) -> str:
                     ]
                 }, indent=2)
 
-        # Transform page objects to include extracted methods
+        # Transform page objects to generator format
         page_objects = []
         if page_objects_input:
             for page_obj in page_objects_input:
                 page_name = page_obj.get("name", "")
                 page_file = page_obj.get("file_path", "")
-                page_code = page_obj.get("code", "")
 
-                if page_name and page_file:
-                    # Extract method names from POM code
-                    methods = extract_method_names_from_pom(page_code)
+                if page_name:
+                    # Convert file path to import path
+                    # e.g., "framework/pages/auth/login_page.py" -> "pages.auth.login_page"
+                    import_path = page_file.replace("framework/", "").replace("/", ".").replace(".py", "") if page_file else ""
 
                     page_objects.append({
                         "name": page_name,
-                        "file_path": page_file,
-                        "methods": methods
+                        "import_path": import_path
                     })
 
-        # Generate task code with complete workflows
-        task_code = generate_task_template(
-            task_name,
-            workflow_description,
-            page_objects if page_objects else None
+        # Generate task code using NEW generator with embedded FRAMEWORK.md patterns
+        task_code = generate_task_code(
+            task_name=task_name,
+            page_objects=page_objects if page_objects else None,
+            workflow_type=workflow,
+            task_description=workflow_description
         )
 
-        # Get file path (now uses workflow subfolder)
-        file_path = get_file_path_for_component("task", task_name, workflow)
+        # Get file path using NEW generator utility
+        file_path = get_file_path(task_name, workflow or "common")
 
         result = {
             "status": "success",
@@ -162,8 +168,13 @@ if __name__ == "__main__":
     import asyncio
 
     test_args = {
-        "task_name": "CartTasks",
-        "workflow_description": "Manage shopping cart operations: add, remove, update quantities"
+        "task_name": "CatalogTasks",
+        "workflow": "catalog",
+        "workflow_description": "Browse and filter product catalog",
+        "page_objects": [
+            {"name": "ProductListPage", "file_path": "framework/pages/catalog/product_list_page.py"}
+        ],
+        "force_generate": True  # Force generation to test new generator
     }
 
     result = asyncio.run(generate_task(test_args))

@@ -19,8 +19,14 @@ from .page_object_generator import (
     get_generated_method_names
 )
 
+# Task Generator (Task B.3)
+from .task_generator import (
+    generate_task,
+    get_file_path as get_task_file_path,
+    get_available_workflows
+)
+
 # Placeholder exports for upcoming generators
-# from .task_generator import generate_task
 # from .role_generator import generate_role
 # from .test_generator import generate_test
 
@@ -28,7 +34,9 @@ __all__ = [
     "generate_page_object",
     "get_page_file_path",
     "get_generated_method_names",
-    # "generate_task",
+    "generate_task",
+    "get_task_file_path",
+    "get_available_workflows",
     # "generate_role",
     # "generate_test",
 ]
