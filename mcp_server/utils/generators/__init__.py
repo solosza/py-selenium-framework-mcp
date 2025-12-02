@@ -26,8 +26,14 @@ from .task_generator import (
     get_available_workflows
 )
 
+# Role Generator (Task B.4)
+from .role_generator import (
+    generate_role,
+    get_file_path as get_role_file_path,
+    get_available_role_types
+)
+
 # Placeholder exports for upcoming generators
-# from .role_generator import generate_role
 # from .test_generator import generate_test
 
 __all__ = [
@@ -37,6 +43,8 @@ __all__ = [
     "generate_task",
     "get_task_file_path",
     "get_available_workflows",
-    # "generate_role",
+    "generate_role",
+    "get_role_file_path",
+    "get_available_role_types",
     # "generate_test",
 ]

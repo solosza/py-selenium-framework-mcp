@@ -4,6 +4,9 @@ Tool 5: generate_role
 Generate role class from test requirements.
 Uses output from Tool 4 (generate_task).
 
+REFACTORED: Now uses dedicated role_generator from utils/generators/
+which embeds patterns from FRAMEWORK.md Section 4.3.
+
 IMPORTANT: Before generating, checks if a role already exists for the workflow.
 If it does, returns existing role info instead of creating duplicates.
 """
@@ -14,9 +17,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# NEW: Use dedicated generator with embedded patterns
+from utils.generators.role_generator import (
+    generate_role as generate_role_code,
+    get_file_path
+)
+
+# Keep existing capability discovery from old module (until fully migrated)
 from utils.code_generator import (
-    generate_role_template,
-    get_file_path_for_component,
     discover_existing_capabilities,
     can_assemble_workflow
 )
@@ -83,17 +91,31 @@ async def generate_role(arguments: dict) -> str:
                 # Proceed with generation, but inform about existing tasks
                 task_class = task_class or existing["existing_tasks"][0]
 
-        # Generate role code with optional task class
-        role_code = generate_role_template(
-            role_name,
-            capabilities,
-            credentials,
-            task_class=task_class,
-            task_import=task_import
+        # Transform task class to generator format
+        task_modules = []
+        if task_class:
+            # Convert task class name to import path
+            import_path = task_import or f"tasks.{task_class.lower().replace('tasks', '_tasks')}"
+            task_modules.append({
+                "name": task_class,
+                "import_path": import_path
+            })
+
+        # Determine role type based on workflow or name
+        role_type = "guest" if "guest" in role_name.lower() else "authenticated"
+        if workflow in ("cart", "checkout", "auth"):
+            role_type = "authenticated"
+
+        # Generate role code using NEW generator with embedded FRAMEWORK.md patterns
+        role_code = generate_role_code(
+            role_name=role_name,
+            task_modules=task_modules if task_modules else None,
+            role_type=role_type,
+            requires_credentials=(role_type == "authenticated")
         )
 
-        # Get file path (now uses workflow subfolder)
-        file_path = get_file_path_for_component("role", role_name, workflow)
+        # Get file path using NEW generator utility
+        file_path = get_file_path(role_name)
 
         result = {
             "status": "success",
@@ -125,9 +147,11 @@ if __name__ == "__main__":
     import asyncio
 
     test_args = {
-        "role_name": "RegisteredUser",
-        "capabilities": ["can_login", "can_logout"],
-        "credentials": {"email": "test@example.com", "password": "Test123!"}
+        "role_name": "GuestUser",
+        "workflow": "catalog",
+        "task_class": "CatalogTasks",
+        "task_import": "tasks.catalog.catalog_tasks",
+        "force_generate": True  # Force generation to test new generator
     }
 
     result = asyncio.run(generate_role(test_args))

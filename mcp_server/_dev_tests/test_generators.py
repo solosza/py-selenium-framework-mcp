@@ -28,6 +28,12 @@ from utils.generators.task_generator import (
     get_available_workflows
 )
 
+from utils.generators.role_generator import (
+    generate_role,
+    get_file_path as get_role_file_path,
+    get_available_role_types
+)
+
 
 class TestPageObjectGenerator:
     """Tests for page_object_generator.py"""
@@ -181,6 +187,143 @@ class TestPageObjectGenerator:
 
         assert "def select_country(self, value: str) -> \"AddressPage\":" in code
         assert "select_dropdown_by_value" in code
+
+
+class TestRoleGenerator:
+    """Tests for role_generator.py"""
+
+    def test_generate_basic_role(self):
+        """Test generating a basic Role with no task modules."""
+        code = generate_role("TestRole")
+
+        # Verify class structure
+        assert "class TestRole:" in code
+        assert "def __init__(self, web_interface: WebInterface" in code
+        assert "self.web = web_interface" in code
+        assert "self.base_url = base_url" in code
+
+        # Verify imports
+        assert "from interfaces.web_interface import WebInterface" in code
+        assert "from resources.utilities import autologger" in code
+
+    def test_role_constructor_has_decorator(self):
+        """CRITICAL: Role constructor must have @autologger("Role Constructor") decorator."""
+        code = generate_role("AuthenticatedUser")
+
+        # Verify decorator on constructor
+        assert '@autologger.automation_logger("Role Constructor")' in code
+
+        # Verify decorator is before __init__
+        lines = code.split("\n")
+        for i, line in enumerate(lines):
+            if '@autologger.automation_logger("Role Constructor")' in line:
+                # Next non-empty line should be def __init__
+                for j in range(i + 1, len(lines)):
+                    if lines[j].strip():
+                        assert "def __init__" in lines[j], \
+                            f"Role Constructor decorator not followed by __init__: {lines[j]}"
+                        break
+                break
+
+    def test_role_workflow_methods_have_decorator(self):
+        """CRITICAL: Role workflow methods must have @autologger("Role") decorator."""
+        task_modules = [
+            {"name": "AuthTasks", "import_path": "tasks.auth_tasks"},
+        ]
+        code = generate_role("AuthenticatedUser", task_modules=task_modules, role_type="authenticated")
+
+        # Verify decorator is present
+        assert '@autologger.automation_logger("Role")' in code
+
+    def test_role_methods_return_none(self):
+        """CRITICAL: Role methods must return None (no return statements with values)."""
+        task_modules = [
+            {"name": "CatalogTasks", "import_path": "tasks.catalog_tasks"},
+        ]
+        code = generate_role("GuestUser", task_modules=task_modules, role_type="guest")
+
+        # Check that methods have -> None type hint
+        assert "-> None:" in code
+
+        # No return statements with values (return <something>)
+        lines = code.split("\n")
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("return ") and stripped != "return":
+                assert False, f"Role method returns value: {line}"
+
+    def test_role_composes_task_modules(self):
+        """Role should compose task modules in constructor."""
+        task_modules = [
+            {"name": "AuthTasks", "import_path": "tasks.auth_tasks"},
+            {"name": "CatalogTasks", "import_path": "tasks.catalog_tasks"},
+        ]
+
+        code = generate_role("AuthenticatedUser", task_modules=task_modules)
+
+        # Verify imports
+        assert "from tasks.auth_tasks import AuthTasks" in code
+        assert "from tasks.catalog_tasks import CatalogTasks" in code
+
+        # Verify composition in constructor
+        assert "self.auth_tasks = AuthTasks(web_interface, base_url)" in code
+        assert "self.catalog_tasks = CatalogTasks(web_interface, base_url)" in code
+
+    def test_authenticated_role_has_credentials(self):
+        """Authenticated role should have user_data parameter."""
+        code = generate_role("AuthenticatedUser", role_type="authenticated")
+
+        # Verify user_data parameter
+        assert "user_data: Dict[str, Any]" in code
+        assert "self.user_data = user_data" in code
+        assert "self.email = user_data.get('email')" in code
+        assert "self.password = user_data.get('password')" in code
+
+    def test_guest_role_no_credentials(self):
+        """Guest role should NOT have user_data parameter."""
+        code = generate_role("GuestUser", role_type="guest")
+
+        # Verify no user_data parameter
+        assert "user_data" not in code
+        assert "self.email" not in code
+        assert "self.password" not in code
+
+    def test_authenticated_role_workflow_methods(self):
+        """Authenticated role should have login/logout methods."""
+        task_modules = [
+            {"name": "AuthTasks", "import_path": "tasks.auth_tasks"},
+        ]
+        code = generate_role("AuthenticatedUser", task_modules=task_modules, role_type="authenticated")
+
+        # Verify auth-specific methods
+        assert "def login(self)" in code
+        assert "def logout(self)" in code
+
+    def test_guest_role_workflow_methods(self):
+        """Guest role should have browse methods."""
+        task_modules = [
+            {"name": "CatalogTasks", "import_path": "tasks.catalog_tasks"},
+        ]
+        code = generate_role("GuestUser", task_modules=task_modules, role_type="guest")
+
+        # Verify guest-specific methods
+        assert "def browse_category(self, category_name: str)" in code
+
+    def test_get_role_file_path(self):
+        """Test file path generation for roles."""
+        path = get_role_file_path("AuthenticatedUser")
+        assert path == "framework/roles/authenticated_user.py"
+
+        path = get_role_file_path("GuestUser")
+        assert path == "framework/roles/guest_user.py"
+
+    def test_get_available_role_types(self):
+        """Test available role types list."""
+        types = get_available_role_types()
+
+        assert "guest" in types
+        assert "authenticated" in types
+        assert "admin" in types
 
 
 class TestTaskGenerator:
