@@ -33,8 +33,12 @@ from .role_generator import (
     get_available_role_types
 )
 
-# Placeholder exports for upcoming generators
-# from .test_generator import generate_test
+# Test Generator (Task B.5)
+from .test_generator import (
+    generate_test,
+    get_file_path as get_test_file_path,
+    get_pytest_markers
+)
 
 __all__ = [
     "generate_page_object",
@@ -46,5 +50,7 @@ __all__ = [
     "generate_role",
     "get_role_file_path",
     "get_available_role_types",
-    # "generate_test",
+    "generate_test",
+    "get_test_file_path",
+    "get_pytest_markers",
 ]

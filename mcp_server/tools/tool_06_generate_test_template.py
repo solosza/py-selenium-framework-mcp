@@ -3,6 +3,9 @@ Tool 6: generate_test_template
 
 Generate pytest test code from scenario.
 Final step - generates test AFTER all infrastructure is built (Tools 2-5).
+
+REFACTORED: Now uses dedicated test_generator from utils/generators/
+which embeds patterns from FRAMEWORK.md Section 4.4.
 """
 
 import json
@@ -12,7 +15,11 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from utils.code_generator import generate_test_template, get_file_path_for_component
+# NEW: Use dedicated generator with embedded patterns
+from utils.generators.test_generator import (
+    generate_test as generate_test_code,
+    get_file_path
+)
 
 
 async def generate_test_template(arguments: dict) -> str:
@@ -61,12 +68,33 @@ async def generate_test_template(arguments: dict) -> str:
         test_name = f"test_{test_name}"
 
     try:
-        # Generate test code using code_generator WITH ROLE PARAMETER
-        from utils.code_generator import generate_test_template as gen_test
-        test_code = gen_test(test_name, workflow, role, scenario, role_import=role_import)
+        # Build role and page configurations for generator
+        roles = []
+        pages = []
 
-        # Get suggested file path
-        file_path = get_file_path_for_component("test", test_name, workflow)
+        if role:
+            # Convert role name to import path
+            role_import_path = role_import or f"roles.{role.lower().replace('user', '_user')}"
+            roles.append({
+                "name": role,
+                "import_path": role_import_path
+            })
+
+        # Determine test class name from test_name
+        # test_browse_category -> TestBrowseCategory
+        test_class_name = "Test" + "".join(word.capitalize() for word in test_name.replace("test_", "").split("_"))
+
+        # Generate test code using NEW generator with embedded FRAMEWORK.md patterns
+        test_code = generate_test_code(
+            test_class_name=test_class_name,
+            roles=roles if roles else None,
+            pages=pages if pages else None,
+            workflow_type=workflow,
+            test_description=scenario.get("description", "") if scenario else None
+        )
+
+        # Get suggested file path using NEW generator utility
+        file_path = get_file_path(test_class_name, workflow)
 
         # Return result
         result = {
@@ -100,20 +128,14 @@ async def generate_test_template(arguments: dict) -> str:
 if __name__ == "__main__":
     import asyncio
 
-    # Test with scenario from Tool 1
-    test_scenario = {
-        "name": "test_add_product_to_cart",
-        "description": "Verify user can add product to cart",
-        "given": "user is on product detail page",
-        "when": "user clicks \"Add to Cart\" button",
-        "then": "product is added to cart AND cart counter increments by 1",
-        "workflow": "cart"
-    }
-
+    # Test with catalog browse scenario
     test_args = {
-        "test_name": test_scenario["name"],
-        "workflow": test_scenario["workflow"],
-        "scenario": test_scenario
+        "test_name": "test_browse_category",
+        "workflow": "catalog",
+        "role": "GuestUser",
+        "scenario": {
+            "description": "Verify user can browse product categories"
+        }
     }
 
     result = asyncio.run(generate_test_template(test_args))

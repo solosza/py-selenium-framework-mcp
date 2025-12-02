@@ -34,6 +34,12 @@ from utils.generators.role_generator import (
     get_available_role_types
 )
 
+from utils.generators.test_generator import (
+    generate_test,
+    get_file_path as get_test_file_path,
+    get_pytest_markers
+)
+
 
 class TestPageObjectGenerator:
     """Tests for page_object_generator.py"""
@@ -187,6 +193,123 @@ class TestPageObjectGenerator:
 
         assert "def select_country(self, value: str) -> \"AddressPage\":" in code
         assert "select_dropdown_by_value" in code
+
+
+class TestTestGenerator:
+    """Tests for test_generator.py"""
+
+    def test_generate_basic_test(self):
+        """Test generating a basic Test with no roles or pages."""
+        code = generate_test("TestBasic")
+
+        # Verify class structure
+        assert "class TestBasic:" in code
+        assert "def setup(self, web_interface, config):" in code
+        assert "self.web = web_interface" in code
+        assert "self.config = config" in code
+
+        # Verify imports
+        assert "import pytest" in code
+        assert "from resources.utilities import autologger" in code
+
+    def test_test_methods_have_decorator(self):
+        """CRITICAL: Test methods must have @autologger("Test") decorator."""
+        code = generate_test("TestLogin", workflow_type="auth")
+
+        # Verify decorator is present
+        assert '@autologger.automation_logger("Test")' in code
+
+    def test_test_methods_have_pytest_marker(self):
+        """Test methods should have pytest markers."""
+        code = generate_test("TestCatalog", workflow_type="catalog")
+
+        # Verify pytest marker is present
+        assert "@pytest.mark.catalog" in code
+
+    def test_test_asserts_via_pom_not_return_values(self):
+        """CRITICAL: Tests must assert via POM state-check methods, NOT return values."""
+        pages = [
+            {"name": "LoginPage", "import_path": "pages.auth.login_page"},
+        ]
+        code = generate_test("TestLogin", pages=pages, workflow_type="auth")
+
+        # Verify assertions use POM methods
+        assert "assert self.login_page." in code
+
+        # Verify no assertions on return values (like "result = user.login()")
+        assert "result = " not in code
+        assert "return_value = " not in code
+
+    def test_test_calls_one_role_method(self):
+        """Test should call ONE role workflow method (AAA pattern)."""
+        roles = [
+            {"name": "GuestUser", "import_path": "roles.guest_user"},
+        ]
+        pages = [
+            {"name": "ProductListPage", "import_path": "pages.catalog.product_list_page"},
+        ]
+        code = generate_test("TestCatalog", roles=roles, pages=pages, workflow_type="catalog")
+
+        # Verify AAA pattern comments
+        assert "# Arrange" in code
+        assert "# Act" in code
+        assert "# Assert" in code
+
+    def test_test_instantiates_pages_in_setup(self):
+        """Test should instantiate POMs in setup fixture."""
+        pages = [
+            {"name": "ProductListPage", "import_path": "pages.catalog.product_list_page"},
+        ]
+        code = generate_test("TestCatalog", pages=pages)
+
+        # Verify POM instantiation in setup
+        assert "self.product_list_page = ProductListPage(web_interface)" in code
+
+    def test_auth_workflow_generates_login_tests(self):
+        """Auth workflow should generate login/logout tests."""
+        roles = [
+            {"name": "AuthenticatedUser", "import_path": "roles.authenticated_user"},
+        ]
+        pages = [
+            {"name": "LoginPage", "import_path": "pages.auth.login_page"},
+        ]
+        code = generate_test("TestLogin", roles=roles, pages=pages, workflow_type="auth")
+
+        # Verify auth-specific tests
+        assert "def test_valid_login(self):" in code
+        assert "user.login()" in code
+        assert "is_logged_in()" in code
+
+    def test_catalog_workflow_generates_browse_tests(self):
+        """Catalog workflow should generate browse tests."""
+        roles = [
+            {"name": "GuestUser", "import_path": "roles.guest_user"},
+        ]
+        pages = [
+            {"name": "ProductListPage", "import_path": "pages.catalog.product_list_page"},
+        ]
+        code = generate_test("TestCatalog", roles=roles, pages=pages, workflow_type="catalog")
+
+        # Verify catalog-specific tests
+        assert "def test_browse_category(self):" in code
+        assert "browse_category(" in code
+        assert "has_products()" in code
+
+    def test_get_test_file_path(self):
+        """Test file path generation for tests."""
+        path = get_test_file_path("TestLogin", "auth")
+        assert path == "tests/auth/test_login.py"
+
+        path = get_test_file_path("TestCatalog", "catalog")
+        assert path == "tests/catalog/test_catalog.py"
+
+    def test_get_pytest_markers(self):
+        """Test available pytest markers list."""
+        markers = get_pytest_markers()
+
+        assert "auth" in markers
+        assert "catalog" in markers
+        assert "smoke" in markers
 
 
 class TestRoleGenerator:
