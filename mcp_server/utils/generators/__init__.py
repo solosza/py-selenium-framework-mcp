@@ -3,7 +3,7 @@ MCP Code Generators Package
 
 Dedicated generators for each framework layer.
 Each generator embeds its layer's patterns and produces code
-matching the validated 4-layer architecture.
+matching the validated 4-layer architecture from FRAMEWORK.md.
 
 Generators:
 - page_object_generator: POMs with NO decorators, returns self
@@ -12,14 +12,22 @@ Generators:
 - test_generator: Tests that assert via POM state-check methods
 """
 
-# Placeholder exports - will be populated as generators are created
-# from .page_object_generator import generate_page_object
+# Page Object Generator (Task B.2)
+from .page_object_generator import (
+    generate_page_object,
+    get_file_path as get_page_file_path,
+    get_generated_method_names
+)
+
+# Placeholder exports for upcoming generators
 # from .task_generator import generate_task
 # from .role_generator import generate_role
 # from .test_generator import generate_test
 
 __all__ = [
-    # "generate_page_object",
+    "generate_page_object",
+    "get_page_file_path",
+    "get_generated_method_names",
     # "generate_task",
     # "generate_role",
     # "generate_test",

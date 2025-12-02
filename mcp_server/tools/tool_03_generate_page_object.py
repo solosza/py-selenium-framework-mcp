@@ -4,6 +4,9 @@ Tool 3: generate_page_object
 Generate Page Object Model code from discovered elements.
 Uses output from Tool 2 (discover_page_elements).
 
+REFACTORED: Now uses dedicated page_object_generator from utils/generators/
+which embeds patterns from FRAMEWORK.md Section 4.1.
+
 IMPORTANT: Before generating, checks if a page already exists for the workflow.
 If it does, returns existing page info instead of creating duplicates.
 """
@@ -14,11 +17,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from utils.code_generator import (
-    generate_page_object_template,
-    get_file_path_for_component,
-    discover_existing_capabilities
+# NEW: Use dedicated generator with embedded patterns
+from utils.generators.page_object_generator import (
+    generate_page_object as generate_pom_code,
+    get_file_path
 )
+
+# Keep existing capability discovery from old module (until fully migrated)
+from utils.code_generator import discover_existing_capabilities
 
 
 def _detect_workflow_type(page_name: str, workflow: str = "") -> str:
@@ -105,7 +111,7 @@ async def generate_page_object(arguments: dict) -> str:
                         ]
                     }, indent=2)
 
-        # Transform Tool 2 output to code_generator format
+        # Transform Tool 2 output to generator format
         transformed_elements = []
 
         for elem in elements:
@@ -116,16 +122,21 @@ async def generate_page_object(arguments: dict) -> str:
 
             if locator and name:
                 transformed_elements.append({
-                    "name": name,
+                    "suggested_name": name,  # Generator expects suggested_name
                     "locator": locator,
                     "element_type": element_type  # PRESERVE for method generation
                 })
 
-        # Generate POM code with workflow-specific standard methods
-        pom_code = generate_page_object_template(page_name, transformed_elements, workflow_type)
+        # Generate POM code using NEW generator with embedded FRAMEWORK.md patterns
+        pom_code = generate_pom_code(
+            page_name=page_name,
+            elements=transformed_elements,
+            workflow_type=workflow_type,
+            page_description=f"{page_name} - Page Object Model"
+        )
 
-        # Get file path (now uses workflow subfolder)
-        file_path = get_file_path_for_component("page", page_name, workflow_type)
+        # Get file path using NEW generator utility
+        file_path = get_file_path(page_name, workflow_type or "common")
 
         result = {
             "status": "success",
@@ -156,44 +167,30 @@ async def generate_page_object(arguments: dict) -> str:
 if __name__ == "__main__":
     import asyncio
 
-    # Test with sample discovered elements (from Tool 5 output)
+    # Test with sample discovered elements (from Tool 2 output)
     test_elements = [
         {
-            "suggested_name": "EMAIL_CREATE",
-            "locator_id": "#email_create",
-            "locator_css": "",
-            "locator_xpath": "//input[@id='email_create']"
-        },
-        {
-            "suggested_name": "SUBMITCREATE",
-            "locator_id": "#SubmitCreate",
-            "locator_css": "",
-            "locator_xpath": "//button[@id='SubmitCreate']"
-        },
-        {
-            "suggested_name": "EMAIL",
+            "suggested_name": "email",
             "locator_id": "#email",
-            "locator_css": "",
-            "locator_xpath": "//input[@id='email']"
+            "element_type": "inputs"
         },
         {
-            "suggested_name": "PASSWD",
+            "suggested_name": "passwd",
             "locator_id": "#passwd",
-            "locator_css": "",
-            "locator_xpath": "//input[@id='passwd']"
+            "element_type": "inputs"
         },
         {
-            "suggested_name": "SUBMITLOGIN",
+            "suggested_name": "submitlogin",
             "locator_id": "#SubmitLogin",
-            "locator_css": "",
-            "locator_xpath": "//button[@id='SubmitLogin']"
+            "element_type": "buttons"
         }
     ]
 
     test_args = {
         "page_name": "LoginPage",
         "elements": test_elements,
-        "workflow": "auth"
+        "workflow": "auth",
+        "force_generate": True  # Force generation to test new generator
     }
 
     result = asyncio.run(generate_page_object(test_args))
