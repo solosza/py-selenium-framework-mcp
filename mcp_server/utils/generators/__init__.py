@@ -22,22 +22,22 @@ from .page_object_generator import (
 # Task Generator (Task B.3)
 from .task_generator import (
     generate_task,
+    generate_task_with_metadata,
     get_file_path as get_task_file_path,
-    get_available_workflows
 )
 
 # Role Generator (Task B.4)
 from .role_generator import (
     generate_role,
     get_file_path as get_role_file_path,
-    get_available_role_types
+    get_available_role_types,
 )
 
 # Test Generator (Task B.5)
 from .test_generator import (
     generate_test,
     get_file_path as get_test_file_path,
-    get_pytest_markers
+    get_pytest_markers,
 )
 
 __all__ = [
@@ -45,8 +45,8 @@ __all__ = [
     "get_page_file_path",
     "get_generated_method_names",
     "generate_task",
+    "generate_task_with_metadata",
     "get_task_file_path",
-    "get_available_workflows",
     "generate_role",
     "get_role_file_path",
     "get_available_role_types",

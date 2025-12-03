@@ -290,6 +290,22 @@ def generate_action_methods_block(
 # STATE-CHECK METHOD GENERATION
 # =============================================================================
 
+# Templates for generating state-check methods from expected_states (PRD FR-15, FR-16)
+# These are generated based on the "Then" clause extracted by AI in Step 2
+EXPECTED_STATE_BOOL_TEMPLATE = '''
+    def {method_name}(self) -> bool:
+        """Check if {description}."""
+        # TODO: Implement actual check - replace with appropriate locator
+        raise NotImplementedError("Implement {method_name} with appropriate locator")
+'''
+
+EXPECTED_STATE_VALUE_TEMPLATE = '''
+    def {method_name}(self) -> {return_type}:
+        """Get {description}."""
+        # TODO: Implement actual getter - replace with appropriate locator
+        raise NotImplementedError("Implement {method_name} with appropriate locator")
+'''
+
 # Base state-check methods (always included)
 BASE_STATE_CHECK_TEMPLATE = '''
     def is_page_loaded(self) -> bool:
@@ -384,9 +400,73 @@ CART_STATE_CHECK_TEMPLATE = '''
 '''
 
 
-def generate_state_check_methods_block(workflow_type: Optional[str] = None) -> str:
+def _generate_expected_state_methods(expected_states: List[Dict[str, str]]) -> str:
+    """
+    Generate state-check methods from expected_states parameter.
+
+    Args:
+        expected_states: List of dicts with {name, description}
+            - name: Method name (e.g., "is_logged_in", "has_products", "get_total")
+            - description: Human-readable description for docstring
+
+    Returns:
+        State-check methods code block
+    """
+    if not expected_states:
+        return ""
+
+    methods = []
+    seen_names = set()
+
+    for state in expected_states:
+        method_name = state.get("name", "")
+        description = state.get("description", method_name.replace("_", " "))
+
+        if not method_name or method_name in seen_names:
+            continue
+
+        seen_names.add(method_name)
+
+        # Determine return type based on method name prefix
+        if method_name.startswith("is_") or method_name.startswith("has_"):
+            methods.append(EXPECTED_STATE_BOOL_TEMPLATE.format(
+                method_name=method_name,
+                description=description
+            ))
+        elif method_name.startswith("get_"):
+            # Determine return type from name hints
+            if "count" in method_name or "number" in method_name or "total" in method_name:
+                return_type = "int"
+            elif "list" in method_name or "names" in method_name or "items" in method_name:
+                return_type = "list"
+            else:
+                return_type = "str"
+
+            methods.append(EXPECTED_STATE_VALUE_TEMPLATE.format(
+                method_name=method_name,
+                description=description,
+                return_type=return_type
+            ))
+        else:
+            # Default to bool for unknown prefixes
+            methods.append(EXPECTED_STATE_BOOL_TEMPLATE.format(
+                method_name=method_name,
+                description=description
+            ))
+
+    return "".join(methods)
+
+
+def generate_state_check_methods_block(
+    workflow_type: Optional[str] = None,
+    expected_states: Optional[List[Dict[str, str]]] = None
+) -> str:
     """
     Generate state-check methods block matching FRAMEWORK.md pattern.
+
+    Priority:
+    1. If expected_states provided, generate methods from those (PRD FR-15, FR-16)
+    2. Otherwise, fall back to workflow-based defaults
 
     Pattern from FRAMEWORK.md Section 4.1:
         def is_logged_in(self) -> bool:
@@ -395,10 +475,17 @@ def generate_state_check_methods_block(workflow_type: Optional[str] = None) -> s
 
     Args:
         workflow_type: Optional workflow type (auth, catalog, cart)
+        expected_states: Optional list of expected state dicts from AI Step 2
+            Each dict has {name, description}
 
     Returns:
         State-check methods code block
     """
+    # If expected_states provided, use those (PRD requirement)
+    if expected_states:
+        return _generate_expected_state_methods(expected_states)
+
+    # Fall back to workflow-based defaults
     if workflow_type == "auth":
         return AUTH_STATE_CHECK_TEMPLATE
     elif workflow_type == "catalog":
@@ -542,15 +629,60 @@ def _build_action_methods_metadata(
     return methods
 
 
-def _build_state_methods_metadata(workflow_type: Optional[str] = None) -> List[Dict[str, any]]:
+def _build_state_methods_metadata(
+    workflow_type: Optional[str] = None,
+    expected_states: Optional[List[Dict[str, str]]] = None
+) -> List[Dict[str, any]]:
     """
-    Build metadata for state-check methods based on workflow type.
+    Build metadata for state-check methods.
+
+    Priority:
+    1. If expected_states provided, build metadata from those (PRD FR-15, FR-16)
+    2. Otherwise, fall back to workflow-based defaults
+
+    Args:
+        workflow_type: Optional workflow type (auth, catalog, cart)
+        expected_states: Optional list of expected state dicts from AI Step 2
+            Each dict has {name, description}
 
     Returns:
         List of state method metadata dicts with {name, params[], returns}
     """
-    methods = []
+    # If expected_states provided, use those (PRD requirement)
+    if expected_states:
+        methods = []
+        seen_names = set()
 
+        for state in expected_states:
+            method_name = state.get("name", "")
+
+            if not method_name or method_name in seen_names:
+                continue
+
+            seen_names.add(method_name)
+
+            # Determine return type based on method name prefix
+            if method_name.startswith("is_") or method_name.startswith("has_"):
+                returns = "bool"
+            elif method_name.startswith("get_"):
+                if "count" in method_name or "number" in method_name or "total" in method_name:
+                    returns = "int"
+                elif "list" in method_name or "names" in method_name or "items" in method_name:
+                    returns = "list"
+                else:
+                    returns = "str"
+            else:
+                returns = "bool"
+
+            methods.append({
+                "name": method_name,
+                "params": [],
+                "returns": returns
+            })
+
+        return methods
+
+    # Fall back to workflow-based defaults
     if workflow_type == "auth":
         methods = [
             {"name": "is_logged_in", "params": [], "returns": "bool"},
@@ -589,7 +721,8 @@ def generate_page_object(
     page_name: str,
     elements: Optional[List[Dict[str, str]]] = None,
     workflow_type: Optional[str] = None,
-    page_description: Optional[str] = None
+    page_description: Optional[str] = None,
+    expected_states: Optional[List[Dict[str, str]]] = None
 ) -> str:
     """
     Generate complete Page Object class code matching FRAMEWORK.md patterns.
@@ -602,6 +735,8 @@ def generate_page_object(
         elements: List of element dicts with name, locator, element_type
         workflow_type: Optional workflow type (auth, catalog, cart, checkout)
         page_description: Optional description for docstring
+        expected_states: Optional list of expected state dicts from AI Step 2
+            Each dict has {name, description} - generates state-check methods
 
     Returns:
         Complete Python page object code as string
@@ -613,7 +748,10 @@ def generate_page_object(
     # Generate each block using embedded templates
     locators_block = generate_locators_block(elements)
     action_methods_block = generate_action_methods_block(elements, page_name)
-    state_check_methods_block = generate_state_check_methods_block(workflow_type)
+    state_check_methods_block = generate_state_check_methods_block(
+        workflow_type=workflow_type,
+        expected_states=expected_states
+    )
 
     # Assemble using the master template
     code = PAGE_OBJECT_TEMPLATE.format(
@@ -633,7 +771,8 @@ def generate_page_object_with_metadata(
     elements: Optional[List[Dict[str, str]]] = None,
     workflow_type: Optional[str] = None,
     page_description: Optional[str] = None,
-    workflow: str = "common"
+    workflow: str = "common",
+    expected_states: Optional[List[Dict[str, str]]] = None
 ) -> Dict[str, any]:
     """
     Generate Page Object code AND metadata for downstream tools.
@@ -648,6 +787,8 @@ def generate_page_object_with_metadata(
         workflow_type: Optional workflow type (auth, catalog, cart, checkout)
         page_description: Optional description for docstring
         workflow: Workflow folder for import path (e.g., "auth", "catalog")
+        expected_states: Optional list of expected state dicts from AI Step 2
+            Each dict has {name, description} - generates state-check methods
 
     Returns:
         Dict with {code, metadata} where metadata has:
@@ -664,7 +805,8 @@ def generate_page_object_with_metadata(
         page_name=page_name,
         elements=elements,
         workflow_type=workflow_type,
-        page_description=page_description
+        page_description=page_description,
+        expected_states=expected_states
     )
 
     # Build metadata
@@ -676,7 +818,10 @@ def generate_page_object_with_metadata(
         "import_path": import_path,
         "locators": _build_locator_metadata(elements),
         "action_methods": _build_action_methods_metadata(elements, page_name),
-        "state_methods": _build_state_methods_metadata(workflow_type)
+        "state_methods": _build_state_methods_metadata(
+            workflow_type=workflow_type,
+            expected_states=expected_states
+        )
     }
 
     return {

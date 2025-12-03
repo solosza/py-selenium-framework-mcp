@@ -60,6 +60,9 @@ async def generate_page_object(arguments: dict) -> str:
             "elements": list - List of element dicts from Tool 2
             "workflow": str - Optional workflow for file path (e.g., "auth")
             "force_generate": bool - Skip existing check (default: False)
+            "expected_states": list - Optional list of expected state dicts from AI Step 2
+                Each dict has {name, description} - generates state-check methods
+                Example: [{"name": "is_logged_in", "description": "user is logged in"}]
         }
 
     Returns:
@@ -69,6 +72,7 @@ async def generate_page_object(arguments: dict) -> str:
     elements = arguments.get("elements", [])
     workflow = arguments.get("workflow", "")
     force_generate = arguments.get("force_generate", False)
+    expected_states = arguments.get("expected_states", [])
 
     if not page_name:
         return json.dumps({
@@ -130,12 +134,14 @@ async def generate_page_object(arguments: dict) -> str:
 
         # Generate POM code AND metadata using NEW generator
         # Metadata is used by downstream tools (Task, Role, Test generators)
+        # expected_states from AI Step 2 generates state-check methods (PRD FR-15, FR-16)
         generation_result = generate_page_object_with_metadata(
             page_name=page_name,
             elements=transformed_elements,
             workflow_type=workflow_type,
             page_description=f"{page_name} - Page Object Model",
-            workflow=workflow_type or "common"
+            workflow=workflow_type or "common",
+            expected_states=expected_states
         )
 
         pom_code = generation_result["code"]

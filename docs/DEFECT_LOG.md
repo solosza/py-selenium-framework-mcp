@@ -723,6 +723,38 @@ This happens when workflow type doesn't match predefined templates (auth, catalo
 
 ---
 
+### Phase B - MCP Tool Chain Refactor (Task B.x)
+
+### [DEF-B01] generators/__init__.py imports non-existent function get_available_workflows
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Layer:** MCP Tool
+**File:** `mcp_server/utils/generators/__init__.py`
+**Line(s):** 26
+
+**Rule Violated:**
+- Import statements must reference existing functions
+
+**Description:**
+The `__init__.py` tries to import `get_available_workflows` from `task_generator.py`, but this function doesn't exist. This causes an ImportError when any tool tries to import from the generators package.
+
+```python
+from .task_generator import (
+    generate_task,
+    get_file_path as get_task_file_path,
+    get_available_workflows  # Does not exist!
+)
+```
+
+**Fix:**
+Removed non-existent imports (`get_available_workflows`) and added existing function `generate_task_with_metadata`.
+
+**Verified:** Cumulative live test Steps 1-5 (Tools 1-3) passed successfully.
+
+**Resolved Date:** 2025-12-03
+
+---
+
 ## Summary
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
@@ -732,7 +764,8 @@ This happens when workflow type doesn't match predefined templates (auth, catalo
 | Roles | 2 | 1 | 0 | 0 | 3 | 2 (1 INVALID) |
 | Tests | 2 | 0 | 0 | 0 | 2 | 2 |
 | MCP Tools | 1 | 3 | 0 | 0 | 4 | 0 (4 IN_PROGRESS) |
-| **Total** | **8** | **6** | **4** | **5** | **23** | **16 + 1 WONT_FIX + 1 INVALID + 4 IN_PROGRESS** |
+| MCP Tools (Phase B) | 1 | 0 | 0 | 0 | 1 | 1 |
+| **Total** | **9** | **6** | **4** | **5** | **24** | **16 + 1 WONT_FIX + 1 INVALID + 4 IN_PROGRESS** |
 
 ---
 
