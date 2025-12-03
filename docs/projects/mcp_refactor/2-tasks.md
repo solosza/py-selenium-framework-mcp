@@ -67,25 +67,25 @@
   - [x] B.2.6 Test Tool 3 with sample expected_states input
   - [x] B.2.7 Verify generated POM has correct state-check methods
   - [x] B.2.8 Record results
-  - [ ] B.2.9 Commit: `feat: add expected_states support to Tool 3 (Task B.2)`
+  - [x] B.2.9 Commit: `feat: add expected_states support to Tool 3 (Task B.2)`
 
-- [ ] B.3 Tool 4 Refactor [CORE]
-  - [ ] B.3.1 Create branch `feature/B.3-tool-4-refactor`
-  - [ ] B.3.2 Implement check-existing pattern in Tool 4:
+- [x] B.3 Tool 4 Refactor [CORE]
+  - [x] B.3.1 Create branch `feature/B.3-tool-4-refactor`
+  - [x] B.3.2 Implement check-existing pattern in Tool 4:
     - Scan `framework/tasks/` for existing Task classes
     - Return `existing_found` status if task already handles intent
     - Include existing_class, existing_methods in response
-  - [ ] B.3.3 Update `task_generator.py` to use POM metadata:
+  - [x] B.3.3 Update `task_generator.py` to use POM metadata:
     - Read action_methods from pom_metadata
     - Generate Task methods that call actual POM methods
     - No hardcoded method names
-  - [ ] B.3.4 Ensure task_metadata output includes:
+  - [x] B.3.4 Ensure task_metadata output includes:
     - class_name, import_path, composed_pages[], task_methods[]
-  - [ ] B.3.5 Test Tool 4 with check_existing=True (should find CommonTasks)
-  - [ ] B.3.6 Test Tool 4 with pom_metadata input
-  - [ ] B.3.7 Verify generated Task calls actual POM methods from metadata
-  - [ ] B.3.8 Record results
-  - [ ] B.3.9 Commit: `feat: add check-existing and POM metadata to Tool 4 (Task B.3)`
+  - [x] B.3.5 Test Tool 4 with check_existing=True (should find CommonTasks)
+  - [x] B.3.6 Test Tool 4 with pom_metadata input
+  - [x] B.3.7 Verify generated Task calls actual POM methods from metadata
+  - [x] B.3.8 Record results
+  - [x] B.3.9 Commit: `feat: add check-existing and POM metadata to Tool 4 (Task B.3)`
 
 - [ ] B.4 Tool 5 Refactor [CORE]
   - [ ] B.4.1 Create branch `feature/B.4-tool-5-refactor`
@@ -262,3 +262,29 @@ python mcp_server/tools/tool_02_discover_page_elements.py
   - `is_logged_in()` found in generated code ✓
   - `is_account_page_displayed()` found in generated code ✓
   - `metadata.state_methods` contains both methods ✓
+
+### Task B.3 Results (2025-12-03)
+
+**Implementation Verified:**
+- Tool 4 and task_generator.py already implemented correctly from prior work
+- No code changes needed - verification only
+
+**Check-Existing Pattern:**
+- Status: SUCCESS
+- Found existing: `['CommonTasks']` for auth workflow
+- Existing methods: `['navigate_to_login_page', 'log_in', 'log_out', 'register_new_user', ...]`
+
+**Metadata-Driven Generation:**
+- Input: `pom_metadata` with action_methods + state_methods
+- Generated: `AuthTasks` with `log_in(email, password)` calling `[enter_email, enter_passwd, click_submitlogin]`
+- task_metadata output: class_name, import_path, composed_pages[], task_methods[] ✓
+
+**Cumulative Live Test (Steps 1-6, Tools 1-4):**
+- Step 1: User input - login requirement + URL
+- Step 2: AI extracted role=RegisteredUser, domain=auth, expected_states
+- Step 3 (Tool 1): Generated test scenario `test_valid_login_with_email_and_password` - SUCCESS
+- Step 4 (Tool 2): Discovered 23 elements, filtered 3 for login - SUCCESS
+- Step 5 (Tool 3): Generated LoginPage with expected_states methods - SUCCESS
+- Step 6 (Tool 4): Check-existing found CommonTasks, force-generated AuthTasks - SUCCESS
+  - `log_in()` calls actual POM methods from metadata ✓
+  - task_metadata.task_methods contains both methods ✓
