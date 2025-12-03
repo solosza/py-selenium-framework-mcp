@@ -53,20 +53,20 @@
   - [x] B.1.5 Test Tool 2 standalone: `python mcp_server/tools/tool_02_discover_page_elements.py`
   - [x] B.1.6 Verify metadata output format matches PRD Section 6.2
   - [x] B.1.7 Record results
-  - [ ] B.1.8 Commit: `feat: add metadata output to Tools 1-2 (Task B.1)`
+  - [x] B.1.8 Commit: `feat: add metadata output to Tools 1-2 (Task B.1)`
 
-- [ ] B.2 Tool 3 expected_states [CORE]
-  - [ ] B.2.1 Create branch `feature/B.2-tool-3-expected-states`
-  - [ ] B.2.2 Update `page_object_generator.py` to accept `expected_states` parameter
-  - [ ] B.2.3 Generate state-check methods from expected_states:
+- [x] B.2 Tool 3 expected_states [CORE]
+  - [x] B.2.1 Create branch `feature/B.2-tool-3-expected-states`
+  - [x] B.2.2 Update `page_object_generator.py` to accept `expected_states` parameter
+  - [x] B.2.3 Generate state-check methods from expected_states:
     - `is_*` methods return bool
     - `has_*` methods return bool
     - `get_*` methods return str/int
-  - [ ] B.2.4 Update Tool 3 to pass expected_states to generator
-  - [ ] B.2.5 Ensure pom_metadata.state_methods includes generated state methods
-  - [ ] B.2.6 Test Tool 3 with sample expected_states input
-  - [ ] B.2.7 Verify generated POM has correct state-check methods
-  - [ ] B.2.8 Record results
+  - [x] B.2.4 Update Tool 3 to pass expected_states to generator
+  - [x] B.2.5 Ensure pom_metadata.state_methods includes generated state methods
+  - [x] B.2.6 Test Tool 3 with sample expected_states input
+  - [x] B.2.7 Verify generated POM has correct state-check methods
+  - [x] B.2.8 Record results
   - [ ] B.2.9 Commit: `feat: add expected_states support to Tool 3 (Task B.2)`
 
 - [ ] B.3 Tool 4 Refactor [CORE]
@@ -240,3 +240,25 @@ python mcp_server/tools/tool_02_discover_page_elements.py
 - PRD FR-09: Changed `name` to `title`
 - FRAMEWORK.md Section 8.4: Changed `name` to `title`
 - Task list: Updated to reflect `title` field
+
+### Task B.2 Results (2025-12-03)
+
+**Defect Found & Fixed:**
+- DEF-B01: `generators/__init__.py` imported non-existent `get_available_workflows` - RESOLVED
+
+**Implementation:**
+- Added `expected_states` parameter to `generate_page_object()` and `generate_page_object_with_metadata()`
+- Added `_generate_expected_state_methods()` function to create state-check methods from expected_states
+- Updated `generate_state_check_methods_block()` to accept expected_states (priority over workflow defaults)
+- Updated `_build_state_methods_metadata()` to build metadata from expected_states
+- Updated Tool 3 to pass expected_states to generator
+
+**Cumulative Live Test (Steps 1-5, Tools 1-3):**
+- Step 1: User input - "As a registered user, I want to login with email and password"
+- Step 2: AI extracted role=RegisteredUser, domain=auth, expected_states=[is_logged_in, is_account_page_displayed]
+- Step 3 (Tool 1): Generated test scenario `test_valid_login_with_email_and_password` - SUCCESS
+- Step 4 (Tool 2): Discovered 23 elements, filtered 3 for login (EMAIL, PASSWD, SUBMITLOGIN) - SUCCESS
+- Step 5 (Tool 3): Generated LoginPage with expected_states methods - SUCCESS
+  - `is_logged_in()` found in generated code ✓
+  - `is_account_page_displayed()` found in generated code ✓
+  - `metadata.state_methods` contains both methods ✓
