@@ -1,106 +1,78 @@
-# Session State - 2025-12-02 (Current)
+# Session State - 2025-12-02
 
 ## Current Phase
-**Phase:** Phase B - MCP Tool Refactor (B.6.5 Metadata Architecture)
-**Status:** Documentation Complete, Ready for Testing
-**Resume Word:** METADATA-TEST
+**Phase:** Phase B - MCP Tool Chain Refactor
+**Status:** Ready to Start Task B.1
+**Resume Word:** B1-START
 
 ## What We're Working On
-**Active Task:** B.6.5 - Implement Metadata-Passing Architecture
-**Task Status:** In Progress (60%)
+**Active Task:** B.1 - Tool 1-2 Metadata Output
+**Task Status:** Not Started (0%)
 
 ## Progress This Session
 
 ### Completed
-- [x] Documented complete MCP workflow in FRAMEWORK.md Section 8
-- [x] Added Steps 1-9 with visual diagrams
-- [x] Added AI prompting rules for ALL steps (Step 2 + Tools 1-6)
-- [x] Added 15 Design Decisions (DD-01 through DD-15)
-- [x] Deleted TOOL_ORDER.md (consolidated into FRAMEWORK.md)
-- [x] Clarified: domain vs workflow vs intent terminology
-- [x] Clarified: expected_states extraction from BDD "Then" clause
-- [x] Clarified: check existing before creating new pattern
-- [x] Clarified: one test file per scenario pattern
+- [x] Updated CLAUDE.md with complete 9-step flow diagram and enforcement rules
+- [x] Updated PRD to v2.0 (full 9-step scope, removed validation script)
+- [x] Updated task list (8 tasks: B.1-B.8)
+- [x] Committed all changes and merged to main
+- [x] Deleted old feature branches (B.1-B.7 from previous task structure)
+- [x] Cleaned up test artifacts (devtest2/, nul)
+- [x] Pushed to origin/main
 
-### Key Design Decisions Made This Session
-| ID | Decision |
-|----|----------|
-| DD-01 | User must specify persona in requirement ("As a...") |
-| DD-02 | URL required upfront with requirement |
-| DD-03 | Metadata context accumulated through tool chain |
-| DD-04 | Single documentation source (FRAMEWORK.md) |
-| DD-05 | Exact method names emerge from tool chain, not upfront |
-| DD-06 | AI extracts intent, not exact method names |
-| DD-07 | Domain determined by AI in Step 2, passed through metadata |
-| DD-08 | AI orchestrates tool chain, tools don't call other tools |
-| DD-09 | AI extracts expected_states from BDD "Then" clause |
-| DD-10 | Action methods derived from element types |
-| DD-11 | State method naming: is_*/has_* for bool, get_* for values |
-| DD-12 | Check existing classes/methods before generating new |
-| DD-13 | Each tool has specific AI prompting rules |
-| DD-14 | One test file per scenario, grouped by domain folder |
-| DD-15 | Test assertions use POM state methods from metadata |
+### Key Decisions Made
+- Removed validation script (B.6) - E2E with visible browser IS the validation
+- AI enforcement rules live in CLAUDE.md → FRAMEWORK.md Section 8 (no code needed)
+- Full 9-step flow scope (Tools 1-6, not just 3-6)
+
+## Git State
+- Branch: `main`
+- Status: Clean, up to date with `origin/main`
+- Old branches deleted: B.1-B.7 (from previous task structure)
 
 ## Files Changed This Session
-- `FRAMEWORK.md` - Added Section 8: MCP Tool Chain & AI Workflow (Steps 1-9, Design Decisions, Prompting Rules)
-- `CLAUDE.md` - Added MCP Tool Usage section with mandatory rules and NO HALLUCINATIONS policy
-- `mcp_server/tools/TOOL_ORDER.md` - DELETED (consolidated into FRAMEWORK.md)
+- `CLAUDE.md` - Added 9-step flow diagram, enforcement rules, metadata context
+- `docs/projects/mcp_refactor/1-prd-mcp-tool-refactor.md` - PRD v2.0
+- `docs/projects/mcp_refactor/2-tasks.md` - New task list (B.1-B.8)
 
-## Remaining Work (in order)
-1. **Test Tool 3 → Tool 4 metadata flow** ← NEXT
-2. Refactor `role_generator.py` to accept Task metadata
-3. Update `tool_05_generate_role.py`
-4. Refactor `test_generator.py` to accept Role + POM metadata
-5. Update `tool_06_generate_test_runner.py`
-6. Test full metadata chain with E2E test
-7. Run E2E test with visible browser
-8. If passes, mark DEF-021/022/023/024 as RESOLVED
-9. Continue to B.7, B.8, B.9
+## Next Steps (Task B.1)
+1. Create branch `feature/B.1-tool-1-2-metadata`
+2. Update Tool 1 to output `test_scenarios[]` in metadata format
+3. Update Tool 2 to output `discovered_elements[]` in metadata format
+4. Test both tools standalone
+5. Commit and merge
+
+## Task List Summary
+| Task | Type | Description | Status |
+|------|------|-------------|--------|
+| B.1 | CORE | Tool 1-2 metadata output | Not Started |
+| B.2 | CORE | Tool 3 expected_states | Pending |
+| B.3 | CORE | Tool 4 check-existing + POM metadata | Pending |
+| B.4 | CORE | Tool 5 check-existing + Task metadata | Pending |
+| B.5 | CORE | Tool 6 Role + POM metadata | Pending |
+| B.6 | GLUE | Simple E2E (catalog, visible browser) | Pending |
+| B.7 | GLUE | Medium E2E (auth+catalog, visible browser) | Pending |
+| B.8 | GLUE | Cleanup + merge to main | Pending |
 
 ## Context for Next Session
 
-**Resume Word:** METADATA-TEST
+**Resume Word:** B1-START
 
-**Resume Point:** Test Tool 3 → Tool 4 metadata flow before continuing to refactor Role and Test generators.
+**Resume Point:** Create feature branch and start Task B.1
 
-**Key Files:**
-- `FRAMEWORK.md` Section 8 - Complete MCP workflow documentation
-- `mcp_server/utils/generators/page_object_generator.py` - Has `generate_page_object_with_metadata()`
-- `mcp_server/utils/generators/task_generator.py` - Has `generate_task_with_metadata()`
-- `mcp_server/tools/tool_03_generate_page_object.py` - Returns metadata
-- `mcp_server/tools/tool_04_generate_task.py` - Accepts POM metadata
-
-**Test Location:** `mcp_server/_dev_tests/`
-
-**What to Test:**
-1. Call Tool 3 with elements → get POM code + metadata
-2. Pass POM metadata to Tool 4 → get Task code + metadata
-3. Verify Task methods call actual POM methods (no hardcoded names)
-
-## Defects Status
-| ID | Description | Status |
-|----|-------------|--------|
-| DEF-021 | Invalid import syntax | IN_PROGRESS |
-| DEF-022 | Duplicate locator names | IN_PROGRESS |
-| DEF-023 | Duplicate method names | IN_PROGRESS |
-| DEF-024 | Placeholder test logic | IN_PROGRESS |
-
-Note: All marked IN_PROGRESS - cannot mark RESOLVED until E2E test passes.
-
-## Todo List State
+**Commands to run:**
+```bash
+git checkout -b feature/B.1-tool-1-2-metadata
 ```
-[x] Update tool_04_generate_task.py to use metadata-driven generator
-[x] Document MCP workflow Step 1 & 2 in FRAMEWORK.md
-[x] Document MCP workflow Step 3 (Tool 1) in FRAMEWORK.md
-[x] Document MCP workflow Step 4 (Tool 2) in FRAMEWORK.md
-[x] Document MCP workflow Step 5 (Tool 3) in FRAMEWORK.md
-[x] Document MCP workflow Steps 6-9 (Tools 4-6 + Save)
-[x] Delete TOOL_ORDER.md (consolidated into FRAMEWORK.md)
-[ ] Test Tool 3 → Tool 4 metadata flow ← NEXT
-[ ] Refactor role_generator.py to accept Task metadata
-[ ] Refactor test_generator.py to accept Role + POM metadata
-[ ] Test full metadata chain with E2E test
-```
+
+**Key Files to Update:**
+- `mcp_server/tools/tool_01_generate_tests_from_user_story.py`
+- `mcp_server/tools/tool_02_discover_page_elements.py`
+
+**Reference Docs:**
+- `docs/projects/mcp_refactor/2-tasks.md` - Full task list
+- `docs/projects/mcp_refactor/1-prd-mcp-tool-refactor.md` - PRD v2.0
+- `FRAMEWORK.md` Section 8 - MCP workflow and AI rules
 
 ---
 **Last Updated:** 2025-12-02
