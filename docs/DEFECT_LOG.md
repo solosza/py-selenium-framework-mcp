@@ -497,15 +497,242 @@ Replace with POM state-check methods:
 
 ---
 
+### [DEF-019] Task data retrieval methods return values - violates "Tasks return None" rule
+**Severity:** HIGH
+**Status:** OPEN
+**Layer:** Task
+**File:** `framework/tasks/catalog/catalog_tasks.py`
+**Line(s):** 244-271
+
+**Rule Violated:**
+- FRAMEWORK.md: "Tasks/Roles return NOTHING (None)"
+- PRD Section 6.3: Tasks return None
+
+**Description:**
+DEF-014 fix removed `return True/False` from action methods but intentionally kept data retrieval methods (`get_product_count`, `get_product_names`, `get_product_prices`) that return int/list. However, this still violates the architecture rule that Tasks return None.
+
+Tests should call POM methods directly for data retrieval, not go through Task layer:
+- `product_list_page.get_product_count()` instead of `catalog_tasks.get_product_count()`
+
+**Current Methods:**
+```python
+def get_product_count(self) -> int:       # Returns int
+def get_product_names(self) -> list:      # Returns list
+def get_product_prices(self) -> list:     # Returns list
+```
+
+**Proposed Fix:**
+1. Remove these Task methods entirely
+2. Tests should call POM methods directly for data retrieval
+3. If orchestration is needed, create Task methods that don't return (just perform actions)
+
+**Design Question:**
+Is there a valid use case for Task-layer data retrieval, or should this strictly go POM → Test?
+
+---
+
+### [DEF-020] Role data retrieval methods return values - violates "Roles return None" rule
+**Severity:** HIGH
+**Status:** OPEN
+**Layer:** Role
+**File:** `framework/roles/guest/guest_user.py`
+**Line(s):** 55-67, 120-128
+
+**Rule Violated:**
+- FRAMEWORK.md: "Tasks/Roles return NOTHING (None)"
+- PRD Section 6.3: Roles return None
+
+**Description:**
+DEF-015 fix removed `return True/False` from workflow methods but kept data retrieval methods that return values:
+- `browse_and_count_products()` returns int
+- `get_product_count()` returns int
+
+**Current Methods:**
+```python
+def browse_and_count_products(self, category_name: str) -> int:
+    self.catalog_tasks.browse_category(category_name)
+    return self.catalog_tasks.get_product_count()  # Returns int
+
+def get_product_count(self) -> int:
+    return self.catalog_tasks.get_product_count()  # Returns int
+```
+
+**Proposed Fix:**
+1. Remove `get_product_count()` from Role entirely
+2. Change `browse_and_count_products()` to `browse_category()` (no return)
+3. Tests should call POM for product count: `product_list_page.get_product_count()`
+
+### MCP Tool Chain (Phase B Refactor)
+
+### [DEF-021] Tool 6 generates invalid import syntax
+**Severity:** CRITICAL
+**Status:** IN_PROGRESS
+**Layer:** MCP Tool
+**File:** `mcp_server/tools/tool_06_generate_test_runner.py`
+**Line(s):** 83-92
+
+**Rule Violated:**
+- Generated code must be syntactically valid Python
+
+**Description:**
+Tool 6 generates invalid import statement with duplicate keywords:
+```python
+from from roles.devtest2.dev_guest_user import DevGuestUser import DevGuestUser
+```
+Should be:
+```python
+from roles.devtest2.dev_guest_user import DevGuestUser
+```
+
+**Root Cause:** E2E test passed full import statement as `role_import` parameter, but tool expected just a path.
+
+**Fix:**
+Added logic in `tool_06_generate_test_runner.py` to detect and parse full import statements vs path-only:
+```python
+if role_import and role_import.startswith("from "):
+    # Extract path from full import statement: "from X import Y" -> "X"
+    parts = role_import.split(" import ")
+    role_import_path = parts[0].replace("from ", "").strip()
+else:
+    role_import_path = role_import or f"roles.{role.lower().replace('user', '_user')}"
+```
+
+**Resolved Date:** 2025-12-01
+
+---
+
+### [DEF-022] Tool 3 generates duplicate locator names
+**Severity:** HIGH
+**Status:** IN_PROGRESS
+**Layer:** MCP Tool
+**File:** `mcp_server/utils/generators/page_object_generator.py`
+**Line(s):** 117-138
+
+**Rule Violated:**
+- Locators must have unique names
+- Python class attributes with same name overwrite each other
+
+**Description:**
+When page has multiple elements with same type (e.g., 7 "Add to Compare" links), Tool 3 generates:
+```python
+ADD_TO_COMPARE = (By.CSS_SELECTOR, "a.add_to_compare")
+ADD_TO_COMPARE = (By.CSS_SELECTOR, "a.add_to_compare")  # Overwrites previous
+ADD_TO_COMPARE = (By.CSS_SELECTOR, "a.add_to_compare")  # Overwrites previous
+# ... 4 more times
+```
+
+**Fix:**
+Added deduplication using `seen_names` and `seen_locators` sets in `generate_locators_block()`:
+```python
+seen_names = set()  # Track unique locator names
+seen_locators = set()  # Track unique locator values
+
+for elem in elements:
+    # Skip duplicates - same name or same locator value
+    if name in seen_names or locator in seen_locators:
+        continue
+    seen_names.add(name)
+    seen_locators.add(locator)
+```
+
+**Resolved Date:** 2025-12-01
+
+---
+
+### [DEF-023] Tool 3 generates duplicate method names
+**Severity:** HIGH
+**Status:** IN_PROGRESS
+**Layer:** MCP Tool
+**File:** `mcp_server/utils/generators/page_object_generator.py`
+**Line(s):** 212-234
+
+**Rule Violated:**
+- Method names must be unique
+- Python class methods with same name overwrite each other
+
+**Description:**
+Same root cause as DEF-022. Duplicate locators generate duplicate methods:
+```python
+def click_add_to_compare(self) -> "DevCategoryPage":  # Method 1
+    ...
+def click_add_to_compare(self) -> "DevCategoryPage":  # Overwrites Method 1
+    ...
+```
+
+**Fix:**
+Same approach as DEF-022 - added `seen_method_names` and `seen_locators` sets in `generate_action_methods_block()`:
+```python
+seen_method_names = set()  # Track unique method names
+seen_locators = set()  # Track unique locator values
+
+for elem in elements:
+    # Skip duplicates - same method name or same locator value
+    if method_name in seen_method_names or locator in seen_locators:
+        continue
+    seen_method_names.add(method_name)
+    if locator:
+        seen_locators.add(locator)
+```
+
+**Resolved Date:** 2025-12-01
+
+---
+
+### [DEF-024] Tool 6 generates placeholder test instead of real test logic
+**Severity:** HIGH
+**Status:** IN_PROGRESS
+**Layer:** MCP Tool
+**File:** `mcp_server/utils/generators/test_generator.py`
+**Line(s):** 71-94, 346-358
+
+**Rule Violated:**
+- Generated tests should be executable without manual editing
+
+**Description:**
+Tool 6 generated a test with placeholder content:
+```python
+def test_placeholder(self):
+    # TODO: Create role with appropriate data
+    # TODO: Call role workflow method
+    # TODO: assert page.state_check_method(), "Expected result"
+    pass
+```
+
+This happens when workflow type doesn't match predefined templates (auth, catalog) and no custom tests are provided.
+
+**Root Cause:**
+1. `_detect_workflow_type()` didn't use role name for detection
+2. Custom folder names like "devtest2" weren't recognized as catalog workflows
+3. GuestUser role wasn't detected as catalog-related
+
+**Fix:**
+1. Enhanced `_detect_workflow_type()` to include role name in detection:
+   ```python
+   def _detect_workflow_type(test_name: str, description: str = "", role_name: str = "") -> str:
+       combined = f"{test_name} {description} {role_name}".lower()
+       # "guest" keyword now triggers catalog workflow
+       if any(kw in combined for kw in ["catalog", "browse", "product", "category", "filter", "guest"]):
+           return "catalog"
+   ```
+2. Updated `generate_test()` to extract primary role name and use detection result
+3. Added catalog workflow templates that match generated Role methods (`browse_products`)
+4. Also updated `task_generator.py` to include `navigate_to_category()` method
+5. Updated `role_generator.py` to include `browse_products()` method
+
+**Resolved Date:** 2025-12-01
+
+---
+
 ## Summary
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
 |-------|----------|------|--------|-----|-------|----------|
 | Page Objects | 1 | 1 | 4 | 3 | 9 | 8 (1 WONT_FIX) |
-| Tasks | 2 | 0 | 0 | 2 | 4 | 4 |
-| Roles | 2 | 0 | 0 | 0 | 2 | 2 (1 INVALID) |
+| Tasks | 2 | 1 | 0 | 2 | 5 | 4 |
+| Roles | 2 | 1 | 0 | 0 | 3 | 2 (1 INVALID) |
 | Tests | 2 | 0 | 0 | 0 | 2 | 2 |
-| **Total** | **7** | **1** | **4** | **5** | **17** | **16 + 1 WONT_FIX + 1 INVALID** |
+| MCP Tools | 1 | 3 | 0 | 0 | 4 | 0 (4 IN_PROGRESS) |
+| **Total** | **8** | **6** | **4** | **5** | **23** | **16 + 1 WONT_FIX + 1 INVALID + 4 IN_PROGRESS** |
 
 ---
 

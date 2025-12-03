@@ -17,9 +17,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# NEW: Use dedicated generator with embedded patterns
+# NEW: Use dedicated generator with embedded patterns and metadata support
 from utils.generators.page_object_generator import (
     generate_page_object as generate_pom_code,
+    generate_page_object_with_metadata,
     get_file_path
 )
 
@@ -127,13 +128,18 @@ async def generate_page_object(arguments: dict) -> str:
                     "element_type": element_type  # PRESERVE for method generation
                 })
 
-        # Generate POM code using NEW generator with embedded FRAMEWORK.md patterns
-        pom_code = generate_pom_code(
+        # Generate POM code AND metadata using NEW generator
+        # Metadata is used by downstream tools (Task, Role, Test generators)
+        generation_result = generate_page_object_with_metadata(
             page_name=page_name,
             elements=transformed_elements,
             workflow_type=workflow_type,
-            page_description=f"{page_name} - Page Object Model"
+            page_description=f"{page_name} - Page Object Model",
+            workflow=workflow_type or "common"
         )
+
+        pom_code = generation_result["code"]
+        metadata = generation_result["metadata"]
 
         # Get file path using NEW generator utility
         file_path = get_file_path(page_name, workflow_type or "common")
@@ -145,11 +151,13 @@ async def generate_page_object(arguments: dict) -> str:
             "workflow": workflow_type,
             "elements_count": len(transformed_elements),
             "code": pom_code,
+            # METADATA for downstream tools (Task generator uses this)
+            "metadata": metadata,
             "next_steps": [
                 "Save POM code to suggested file path",
+                "Pass metadata to Tool 4 (generate_task) for dynamic Task generation",
                 "Import POM in task methods",
-                "Use POM methods in task workflows",
-                "Write tests that use task methods"
+                "Use POM methods in task workflows"
             ]
         }
 

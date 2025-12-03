@@ -115,12 +115,22 @@ def generate_locators_block(elements: List[Dict[str, str]]) -> str:
         return "    # Add locators as needed\n    pass\n"
 
     lines = []
+    seen_names = set()  # Track unique locator names
+    seen_locators = set()  # Track unique locator values
+
     for elem in elements:
         name = (elem.get("suggested_name") or elem.get("name", "")).upper()
         locator = elem.get("locator", "")
 
         if not name or not locator:
             continue
+
+        # Skip duplicates - same name or same locator value
+        if name in seen_names or locator in seen_locators:
+            continue
+
+        seen_names.add(name)
+        seen_locators.add(locator)
 
         by_type = _determine_by_type(locator)
         lines.append(f'    {name} = (By.{by_type}, "{locator}")')
@@ -200,10 +210,13 @@ def generate_action_methods_block(
         return ""
 
     methods = []
+    seen_method_names = set()  # Track unique method names
+    seen_locators = set()  # Track unique locator values
 
     for elem in elements:
         name = (elem.get("suggested_name") or elem.get("name", ""))
         elem_type = elem.get("element_type", "")
+        locator = elem.get("locator", "")
 
         if not name or not elem_type:
             continue
@@ -211,6 +224,14 @@ def generate_action_methods_block(
         locator_name = name.upper()
         method_name = name.lower()
         readable_name = name.replace("_", " ").lower()
+
+        # Skip duplicates - same method name or same locator value
+        if method_name in seen_method_names or locator in seen_locators:
+            continue
+
+        seen_method_names.add(method_name)
+        if locator:
+            seen_locators.add(locator)
 
         # Determine appropriate parameter name for inputs
         param_name = method_name
@@ -389,6 +410,178 @@ def generate_state_check_methods_block(workflow_type: Optional[str] = None) -> s
 
 
 # =============================================================================
+# METADATA GENERATION
+# =============================================================================
+
+def _build_locator_metadata(elements: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    """
+    Build metadata for locators from elements.
+
+    Returns:
+        List of locator metadata dicts with {name, by, value}
+    """
+    locators = []
+    seen_names = set()
+    seen_values = set()
+
+    for elem in elements:
+        name = (elem.get("suggested_name") or elem.get("name", "")).upper()
+        locator = elem.get("locator", "")
+
+        if not name or not locator:
+            continue
+        if name in seen_names or locator in seen_values:
+            continue
+
+        seen_names.add(name)
+        seen_values.add(locator)
+
+        by_type = _determine_by_type(locator)
+        locators.append({
+            "name": name,
+            "by": by_type,
+            "value": locator
+        })
+
+    return locators
+
+
+def _build_action_methods_metadata(
+    elements: List[Dict[str, str]],
+    page_name: str
+) -> List[Dict[str, any]]:
+    """
+    Build metadata for action methods from elements.
+
+    Returns:
+        List of method metadata dicts with {name, params[], returns, element_type}
+    """
+    methods = []
+    seen_method_names = set()
+    seen_locators = set()
+
+    for elem in elements:
+        name = (elem.get("suggested_name") or elem.get("name", ""))
+        elem_type = elem.get("element_type", "")
+        locator = elem.get("locator", "")
+
+        if not name or not elem_type:
+            continue
+
+        method_name_base = name.lower()
+
+        # Skip duplicates
+        if method_name_base in seen_method_names or locator in seen_locators:
+            continue
+
+        seen_method_names.add(method_name_base)
+        if locator:
+            seen_locators.add(locator)
+
+        # Determine parameter name for inputs
+        param_name = method_name_base
+        if "email" in method_name_base:
+            param_name = "email"
+        elif "password" in method_name_base or "passwd" in method_name_base:
+            param_name = "password"
+        elif "text" in method_name_base or "input" in method_name_base:
+            param_name = "text"
+
+        if elem_type == "inputs":
+            methods.append({
+                "name": f"enter_{method_name_base}",
+                "params": [f"{param_name}: str"],
+                "returns": "self",
+                "element_type": elem_type,
+                "locator_name": name.upper()
+            })
+
+        elif elem_type == "buttons":
+            methods.append({
+                "name": f"click_{method_name_base}",
+                "params": [],
+                "returns": "self",
+                "element_type": elem_type,
+                "locator_name": name.upper()
+            })
+
+        elif elem_type == "links":
+            methods.append({
+                "name": f"click_{method_name_base}",
+                "params": [],
+                "returns": "self",
+                "element_type": elem_type,
+                "locator_name": name.upper()
+            })
+
+        elif elem_type == "selects":
+            methods.append({
+                "name": f"select_{method_name_base}",
+                "params": ["value: str"],
+                "returns": "self",
+                "element_type": elem_type,
+                "locator_name": name.upper()
+            })
+
+        elif elem_type == "checkboxes":
+            methods.append({
+                "name": f"check_{method_name_base}",
+                "params": [],
+                "returns": "self",
+                "element_type": elem_type,
+                "locator_name": name.upper()
+            })
+            methods.append({
+                "name": f"uncheck_{method_name_base}",
+                "params": [],
+                "returns": "self",
+                "element_type": elem_type,
+                "locator_name": name.upper()
+            })
+
+    return methods
+
+
+def _build_state_methods_metadata(workflow_type: Optional[str] = None) -> List[Dict[str, any]]:
+    """
+    Build metadata for state-check methods based on workflow type.
+
+    Returns:
+        List of state method metadata dicts with {name, params[], returns}
+    """
+    methods = []
+
+    if workflow_type == "auth":
+        methods = [
+            {"name": "is_logged_in", "params": [], "returns": "bool"},
+            {"name": "is_logged_out", "params": [], "returns": "bool"},
+            {"name": "has_error_message", "params": [], "returns": "bool"},
+            {"name": "get_error_message", "params": [], "returns": "str"},
+            {"name": "is_page_loaded", "params": [], "returns": "bool"},
+        ]
+    elif workflow_type == "catalog":
+        methods = [
+            {"name": "is_page_loaded", "params": [], "returns": "bool"},
+            {"name": "has_products", "params": [], "returns": "bool"},
+            {"name": "get_product_count", "params": [], "returns": "int"},
+            {"name": "get_product_names", "params": [], "returns": "list"},
+        ]
+    elif workflow_type == "cart":
+        methods = [
+            {"name": "is_page_loaded", "params": [], "returns": "bool"},
+            {"name": "has_items", "params": [], "returns": "bool"},
+            {"name": "get_item_count", "params": [], "returns": "int"},
+            {"name": "is_cart_empty", "params": [], "returns": "bool"},
+        ]
+    else:
+        methods = [
+            {"name": "is_page_loaded", "params": [], "returns": "bool"},
+        ]
+
+    return methods
+
+
+# =============================================================================
 # MAIN GENERATOR FUNCTION
 # =============================================================================
 
@@ -433,6 +626,63 @@ def generate_page_object(
     )
 
     return code
+
+
+def generate_page_object_with_metadata(
+    page_name: str,
+    elements: Optional[List[Dict[str, str]]] = None,
+    workflow_type: Optional[str] = None,
+    page_description: Optional[str] = None,
+    workflow: str = "common"
+) -> Dict[str, any]:
+    """
+    Generate Page Object code AND metadata for downstream tools.
+
+    This is the primary function for the metadata-passing architecture.
+    It returns both the generated code and structured metadata that
+    Tool 4 (Task generator) will use to know what POM methods exist.
+
+    Args:
+        page_name: Page class name (e.g., ProductListPage, LoginPage)
+        elements: List of element dicts with name, locator, element_type
+        workflow_type: Optional workflow type (auth, catalog, cart, checkout)
+        page_description: Optional description for docstring
+        workflow: Workflow folder for import path (e.g., "auth", "catalog")
+
+    Returns:
+        Dict with {code, metadata} where metadata has:
+        - class_name: str
+        - import_path: str
+        - locators: List[{name, by, value}]
+        - action_methods: List[{name, params[], returns, element_type, locator_name}]
+        - state_methods: List[{name, params[], returns}]
+    """
+    elements = elements or []
+
+    # Generate the code
+    code = generate_page_object(
+        page_name=page_name,
+        elements=elements,
+        workflow_type=workflow_type,
+        page_description=page_description
+    )
+
+    # Build metadata
+    snake_name = _pascal_to_snake(page_name)
+    import_path = f"pages.{workflow}.{snake_name}"
+
+    metadata = {
+        "class_name": page_name,
+        "import_path": import_path,
+        "locators": _build_locator_metadata(elements),
+        "action_methods": _build_action_methods_metadata(elements, page_name),
+        "state_methods": _build_state_methods_metadata(workflow_type)
+    }
+
+    return {
+        "code": code,
+        "metadata": metadata
+    }
 
 
 # =============================================================================

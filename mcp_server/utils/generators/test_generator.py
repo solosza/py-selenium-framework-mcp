@@ -68,13 +68,23 @@ def _pascal_to_snake(name: str) -> str:
     return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
 
 
-def _detect_workflow_type(test_name: str, description: str = "") -> str:
-    """Detect workflow type from test name and description."""
-    combined = f"{test_name} {description}".lower()
+def _detect_workflow_type(test_name: str, description: str = "", role_name: str = "") -> str:
+    """
+    Detect workflow type from test name, description, and role name.
 
-    if any(kw in combined for kw in ["login", "logout", "auth", "register"]):
+    Args:
+        test_name: Test class or function name
+        description: Test description
+        role_name: Role class name (e.g., GuestUser, RegisteredUser)
+
+    Returns:
+        Workflow type string (auth, catalog, cart, checkout, general)
+    """
+    combined = f"{test_name} {description} {role_name}".lower()
+
+    if any(kw in combined for kw in ["login", "logout", "auth", "register", "registered"]):
         return "auth"
-    if any(kw in combined for kw in ["catalog", "browse", "product", "category", "filter"]):
+    if any(kw in combined for kw in ["catalog", "browse", "product", "category", "filter", "guest"]):
         return "catalog"
     if any(kw in combined for kw in ["cart", "basket", "add"]):
         return "cart"
@@ -194,28 +204,28 @@ CATALOG_BROWSE_TEST = '''
         3. Assert - Use POM state-check method
         """
         # Arrange
-        guest = {role_name}(self.web, self.base_url)
+        guest = {role_name}(self.web, {{}}, self.base_url)
 
         # Act - ONE workflow call, NO return value
-        guest.browse_category("Women")
+        guest.browse_products()
 
         # Assert - Via Page Object state-check method (NOT return value)
-        assert self.{page_var}.has_products(), "Products should be displayed"
+        assert self.{page_var}.is_page_loaded(), "Category page should be loaded"
 '''
 
-CATALOG_FILTER_TEST = '''
+CATALOG_VERIFY_TEST = '''
     @pytest.mark.catalog
     @autologger.automation_logger("Test")
-    def test_browse_and_filter(self):
-        """Test that user can browse and filter products."""
+    def test_verify_products_displayed(self):
+        """Test that products are displayed on category page."""
         # Arrange
-        guest = {role_name}(self.web, self.base_url)
+        guest = {role_name}(self.web, {{}}, self.base_url)
 
-        # Act - ONE workflow call that orchestrates multiple tasks
-        guest.browse_and_filter("Women", "M")
+        # Act - ONE workflow call, NO return value
+        guest.browse_products()
 
         # Assert - Via Page Object state-check method
-        assert self.{page_var}.has_products(), "Filtered products should be displayed"
+        assert self.{page_var}.has_products(), "Products should be displayed"
 '''
 
 # Generic test template
@@ -278,7 +288,7 @@ def generate_test_methods(
 
     elif workflow_type == "catalog":
         methods.append(CATALOG_BROWSE_TEST.format(role_name=role_name, page_var=page_var))
-        methods.append(CATALOG_FILTER_TEST.format(role_name=role_name, page_var=page_var))
+        methods.append(CATALOG_VERIFY_TEST.format(role_name=role_name, page_var=page_var))
 
     # Add custom tests if provided
     if custom_tests:
@@ -336,8 +346,17 @@ def generate_test(
     roles = roles or []
     pages = pages or []
 
-    # Auto-detect workflow type if not provided
-    detected_workflow = workflow_type or _detect_workflow_type(test_class_name, test_description or "")
+    # Get primary role name for detection
+    primary_role_name = roles[0].get("name", "") if roles else ""
+
+    # Auto-detect workflow type if not provided or if custom folder name
+    # Use role name as additional context for detection
+    detected_workflow = _detect_workflow_type(test_class_name, test_description or "", primary_role_name)
+
+    # If explicit workflow_type is a standard type, use it; otherwise use detection
+    if workflow_type in ("auth", "catalog", "cart", "checkout"):
+        detected_workflow = workflow_type
+
     workflow_readable = detected_workflow.replace("_", " ").title()
 
     # Generate description

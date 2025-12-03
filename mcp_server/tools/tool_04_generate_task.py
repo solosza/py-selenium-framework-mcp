@@ -3,8 +3,11 @@ Tool 4: generate_task
 
 Generate task workflow methods from test requirements.
 
-REFACTORED: Now uses dedicated task_generator from utils/generators/
-which embeds patterns from FRAMEWORK.md Section 4.2.
+METADATA-DRIVEN ARCHITECTURE:
+- Accepts POM metadata from Tool 3 (not just code)
+- Uses metadata to generate Task methods that call actual POM methods
+- Outputs Task metadata for Tool 5 (Role generator)
+- No hardcoded method names - all derived from POM metadata
 
 IMPORTANT: Before generating, checks if a task already exists for the workflow.
 If it does, returns existing task info instead of creating duplicates.
@@ -16,9 +19,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# NEW: Use dedicated generator with embedded patterns
+# Use dedicated generator with metadata support
 from utils.generators.task_generator import (
-    generate_task as generate_task_code,
+    generate_task_with_metadata,
     get_file_path
 )
 
@@ -26,29 +29,12 @@ from utils.generators.task_generator import (
 from utils.code_generator import discover_existing_capabilities
 
 
-def extract_method_names_from_pom(pom_code: str) -> list:
-    """
-    Extract method names from generated POM code.
-
-    Args:
-        pom_code: POM class code as string
-
-    Returns:
-        List of method names (e.g., ['enter_email', 'click_submitlogin'])
-    """
-    import re
-
-    # Match method definitions: "def method_name(self"
-    pattern = r'def\s+([a-z_]+)\(self'
-    matches = re.findall(pattern, pom_code)
-
-    # Filter out __init__ and other special methods
-    return [m for m in matches if not m.startswith('__')]
-
-
 async def generate_task(arguments: dict) -> str:
     """
-    Generate task class with COMPLETE workflow implementations.
+    Generate task class using METADATA from Tool 3.
+
+    METADATA-DRIVEN: Accepts POM metadata to generate Task methods that
+    call actual POM methods (no hardcoded method names).
 
     CHECKS EXISTING FIRST: If a task already exists for this workflow domain,
     returns existing task info instead of generating duplicate code.
@@ -58,18 +44,22 @@ async def generate_task(arguments: dict) -> str:
             "task_name": str - Task name (e.g., CatalogTasks)
             "workflow": str - Workflow domain (auth, catalog, cart, checkout)
             "workflow_description": str - Optional workflow description
-            "page_objects": list - Optional list of page object dicts
+            "pom_metadata": dict - POM metadata from Tool 3 (preferred)
+            "page_objects": list - Legacy: list of page object dicts (deprecated)
             "force_generate": bool - Skip existing check (default: False)
+            "base_url_path": str - URL path for navigation (optional)
         }
 
     Returns:
-        JSON string with generated task code OR existing task info
+        JSON string with generated task code, metadata, OR existing task info
     """
     task_name = arguments.get("task_name", "")
     workflow = arguments.get("workflow", "")
     workflow_description = arguments.get("workflow_description", "")
-    page_objects_input = arguments.get("page_objects", [])
+    pom_metadata = arguments.get("pom_metadata")  # NEW: metadata from Tool 3
+    page_objects_input = arguments.get("page_objects", [])  # Legacy support
     force_generate = arguments.get("force_generate", False)
+    base_url_path = arguments.get("base_url_path", "")
 
     if not task_name:
         return json.dumps({
@@ -109,32 +99,46 @@ async def generate_task(arguments: dict) -> str:
                     ]
                 }, indent=2)
 
-        # Transform page objects to generator format
-        page_objects = []
-        if page_objects_input:
+        # Build POM metadata list for generator
+        pom_metadata_list = []
+
+        # PREFERRED: Use pom_metadata directly from Tool 3
+        if pom_metadata:
+            pom_metadata_list.append(pom_metadata)
+
+        # LEGACY: Extract from page_objects if pom_metadata not provided
+        elif page_objects_input:
             for page_obj in page_objects_input:
-                page_name = page_obj.get("name", "")
-                page_file = page_obj.get("file_path", "")
+                # Check if this has metadata (new format)
+                if "metadata" in page_obj:
+                    pom_metadata_list.append(page_obj["metadata"])
+                else:
+                    # Legacy format - build minimal metadata
+                    page_name = page_obj.get("name", "")
+                    page_file = page_obj.get("file_path", "")
 
-                if page_name:
-                    # Convert file path to import path
-                    # e.g., "framework/pages/auth/login_page.py" -> "pages.auth.login_page"
-                    import_path = page_file.replace("framework/", "").replace("/", ".").replace(".py", "") if page_file else ""
+                    if page_name:
+                        import_path = page_file.replace("framework/", "").replace("/", ".").replace(".py", "") if page_file else ""
+                        pom_metadata_list.append({
+                            "class_name": page_name,
+                            "import_path": import_path,
+                            "action_methods": [],
+                            "state_methods": []
+                        })
 
-                    page_objects.append({
-                        "name": page_name,
-                        "import_path": import_path
-                    })
-
-        # Generate task code using NEW generator with embedded FRAMEWORK.md patterns
-        task_code = generate_task_code(
+        # Generate task code AND metadata using metadata-driven generator
+        generation_result = generate_task_with_metadata(
             task_name=task_name,
-            page_objects=page_objects if page_objects else None,
-            workflow_type=workflow,
-            task_description=workflow_description
+            pom_metadata_list=pom_metadata_list if pom_metadata_list else None,
+            task_description=workflow_description,
+            base_url_path=base_url_path,
+            workflow=workflow or "common"
         )
 
-        # Get file path using NEW generator utility
+        task_code = generation_result["code"]
+        task_metadata = generation_result["metadata"]
+
+        # Get file path
         file_path = get_file_path(task_name, workflow or "common")
 
         result = {
@@ -143,13 +147,15 @@ async def generate_task(arguments: dict) -> str:
             "file_path": file_path,
             "workflow": workflow,
             "code": task_code,
-            "page_objects_used": len(page_objects),
-            "workflows_generated": "COMPLETE" if page_objects else "PLACEHOLDER",
+            # METADATA for downstream tools (Role generator uses this)
+            "metadata": task_metadata,
+            "pom_metadata_used": len(pom_metadata_list),
+            "task_methods_generated": len(task_metadata.get("task_methods", [])),
             "next_steps": [
                 "Save task code to suggested file path",
+                "Pass metadata to Tool 5 (generate_role) for dynamic Role generation",
                 "Import task in role classes",
-                "Use task methods in tests",
-                "Verify workflows execute correctly"
+                "Use task methods in tests"
             ]
         }
 

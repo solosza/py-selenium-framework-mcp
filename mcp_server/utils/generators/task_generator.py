@@ -2,7 +2,13 @@
 Task Generator
 
 Generates Task class code following the validated 4-layer framework patterns.
-This generator embeds the authoritative code pattern template from FRAMEWORK.md Section 4.2.
+This generator uses METADATA from POM generator to create dynamic Task methods.
+
+METADATA-DRIVEN ARCHITECTURE:
+- Accepts POM metadata (action_methods[], state_methods[])
+- Generates Task methods that call actual POM methods
+- No hardcoded method names - all derived from POM metadata
+- Outputs Task metadata for Role generator
 
 EMBEDDED PATTERN RULES (from FRAMEWORK.md):
 - @autologger.automation_logger("Task") on all methods
@@ -17,13 +23,12 @@ TEMPLATE SOURCE: FRAMEWORK.md Section 4.2 Task Layer
 """
 
 import re
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 
 # =============================================================================
 # EMBEDDED CODE PATTERN TEMPLATE (from FRAMEWORK.md Section 4.2)
 # =============================================================================
-# This is the authoritative pattern that all generated Tasks must match.
 
 TASK_TEMPLATE = '''"""
 {task_description}
@@ -73,343 +78,355 @@ def _pascal_to_snake(name: str) -> str:
     return re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
 
 
-def _detect_workflow_type(task_name: str, description: str = "") -> str:
-    """Detect workflow type from task name and description."""
-    combined = f"{task_name} {description}".lower()
-
-    if any(kw in combined for kw in ["auth", "login", "logout", "register", "signin"]):
-        return "auth"
-    if any(kw in combined for kw in ["catalog", "browse", "product", "category", "filter", "sort"]):
-        return "catalog"
-    if any(kw in combined for kw in ["cart", "basket", "shopping"]):
-        return "cart"
-    if any(kw in combined for kw in ["checkout", "payment", "order"]):
-        return "checkout"
-
-    return "common"
-
-
 # =============================================================================
-# PAGE IMPORT GENERATION
+# DYNAMIC TASK METHOD GENERATION (from POM metadata)
 # =============================================================================
 
-def generate_page_imports(page_objects: List[Dict[str, str]]) -> str:
+def _generate_task_method_from_pom(
+    method_name: str,
+    pom_methods_to_call: List[Dict[str, Any]],
+    page_var: str,
+    description: str = ""
+) -> str:
     """
-    Generate import statements for page objects.
+    Generate a single Task method that calls POM methods.
 
     Args:
-        page_objects: List of dicts with 'name' and 'import_path'
+        method_name: Task method name (e.g., "log_in")
+        pom_methods_to_call: List of POM method metadata to call
+        page_var: Page object variable name (e.g., "login_page")
+        description: Method description
 
     Returns:
-        Import statements block
+        Task method code string
     """
-    if not page_objects:
-        return ""
+    # Build parameter list from POM methods that need params
+    task_params = []
+    for pom_method in pom_methods_to_call:
+        for param in pom_method.get("params", []):
+            # Extract param name (before colon)
+            param_name = param.split(":")[0].strip()
+            if param_name and param not in task_params:
+                task_params.append(param)
 
+    params_str = ", ".join(task_params)
+    if params_str:
+        params_str = ", " + params_str
+
+    # Build fluent chain of POM method calls
+    pom_calls = []
+    for pom_method in pom_methods_to_call:
+        method_call = f".{pom_method['name']}("
+        # Add arguments if method has params
+        if pom_method.get("params"):
+            args = [p.split(":")[0].strip() for p in pom_method["params"]]
+            method_call += ", ".join(args)
+        method_call += ")"
+        pom_calls.append(method_call)
+
+    # Format as fluent chain
+    if pom_calls:
+        fluent_chain = f"        (self.{page_var}\n"
+        for i, call in enumerate(pom_calls):
+            fluent_chain += f"            {call}"
+            if i < len(pom_calls) - 1:
+                fluent_chain += "\n"
+            else:
+                fluent_chain += ")\n"
+    else:
+        fluent_chain = f"        pass  # TODO: Add POM method calls\n"
+
+    desc = description or f"Execute {method_name.replace('_', ' ')} operation."
+
+    return f'''
+    @autologger.automation_logger("Task")
+    def {method_name}(self{params_str}) -> None:
+        """
+        {desc}
+
+        NO return value - test asserts via POM state-check methods.
+        """
+{fluent_chain}        # NO return - test asserts via POM
+'''
+
+
+def generate_task_methods_from_metadata(
+    pom_metadata: Dict[str, Any],
+    base_url_path: str = ""
+) -> tuple:
+    """
+    Generate Task methods dynamically from POM metadata.
+
+    This is the key function for metadata-driven generation.
+    It analyzes what POM methods exist and creates appropriate Task methods.
+
+    Args:
+        pom_metadata: Metadata from POM generator with action_methods[], state_methods[]
+        base_url_path: URL path for navigation (e.g., "/index.php?controller=authentication")
+
+    Returns:
+        Tuple of (methods_code: str, task_methods_metadata: List[Dict])
+    """
+    methods_code = []
+    task_methods_metadata = []
+
+    page_name = pom_metadata.get("class_name", "Page")
+    page_var = _pascal_to_snake(page_name)
+    action_methods = pom_metadata.get("action_methods", [])
+    state_methods = pom_metadata.get("state_methods", [])
+
+    # Group action methods by type for intelligent task creation
+    input_methods = [m for m in action_methods if m["name"].startswith("enter_")]
+    click_methods = [m for m in action_methods if m["name"].startswith("click_")]
+    select_methods = [m for m in action_methods if m["name"].startswith("select_")]
+
+    # Generate navigate method if we have a URL path
+    if base_url_path:
+        nav_method = f'''
+    @autologger.automation_logger("Task")
+    def navigate_to_page(self) -> None:
+        """Navigate to the page."""
+        self.web.navigate_to(f"{{self.base_url}}{base_url_path}")
+        # NO return - test asserts via POM
+'''
+        methods_code.append(nav_method)
+        task_methods_metadata.append({
+            "name": "navigate_to_page",
+            "params": [],
+            "calls": []
+        })
+
+    # Strategy: Create a main workflow method that chains all inputs + a submit click
+    # This is the typical "fill form and submit" pattern
+    if input_methods:
+        # Find submit/login button if exists
+        submit_methods = [m for m in click_methods if any(
+            kw in m["name"].lower() for kw in ["submit", "login", "signin", "register", "save", "send"]
+        )]
+
+        # Create main form submission task
+        methods_to_call = input_methods.copy()
+        if submit_methods:
+            methods_to_call.append(submit_methods[0])
+
+        if methods_to_call:
+            # Determine task name based on page
+            if "login" in page_name.lower():
+                task_name = "log_in"
+                description = "Complete login operation. Single domain operation: authenticate user."
+            elif "register" in page_name.lower():
+                task_name = "register"
+                description = "Complete registration operation."
+            else:
+                task_name = "submit_form"
+                description = "Fill and submit the form."
+
+            method_code = _generate_task_method_from_pom(
+                method_name=task_name,
+                pom_methods_to_call=methods_to_call,
+                page_var=page_var,
+                description=description
+            )
+            methods_code.append(method_code)
+
+            # Build metadata
+            task_methods_metadata.append({
+                "name": task_name,
+                "params": [p for m in methods_to_call for p in m.get("params", [])],
+                "calls": [m["name"] for m in methods_to_call]
+            })
+
+    # Generate individual click methods for non-submit buttons
+    for click_method in click_methods:
+        # Skip if already used in form submission
+        if any(kw in click_method["name"].lower() for kw in ["submit", "login", "signin", "register"]):
+            continue
+
+        # Create a task method for this click
+        task_method_name = click_method["name"].replace("click_", "do_")
+        method_code = _generate_task_method_from_pom(
+            method_name=task_method_name,
+            pom_methods_to_call=[click_method],
+            page_var=page_var,
+            description=f"Click {click_method['name'].replace('click_', '').replace('_', ' ')}."
+        )
+        methods_code.append(method_code)
+        task_methods_metadata.append({
+            "name": task_method_name,
+            "params": [],
+            "calls": [click_method["name"]]
+        })
+
+    # If no methods generated, create a placeholder
+    if not methods_code:
+        placeholder = f'''
+    @autologger.automation_logger("Task")
+    def execute_workflow(self) -> None:
+        """
+        Execute the primary workflow.
+
+        TODO: Implement using page object methods.
+        NO return value - test asserts via POM.
+        """
+        pass
+        # NO return
+'''
+        methods_code.append(placeholder)
+        task_methods_metadata.append({
+            "name": "execute_workflow",
+            "params": [],
+            "calls": []
+        })
+
+    return "".join(methods_code), task_methods_metadata
+
+
+# =============================================================================
+# IMPORT AND COMPOSITION GENERATION
+# =============================================================================
+
+def generate_page_imports(pom_metadata_list: List[Dict[str, Any]]) -> str:
+    """Generate import statements for page objects from metadata."""
     imports = []
-    for page in page_objects:
-        name = page.get("name", "")
-        import_path = page.get("import_path", "")
-
-        if name and import_path:
-            imports.append(f"from {import_path} import {name}")
-
+    for pom in pom_metadata_list:
+        class_name = pom.get("class_name", "")
+        import_path = pom.get("import_path", "")
+        if class_name and import_path:
+            imports.append(f"from {import_path} import {class_name}")
     return "\n".join(imports)
 
 
-def generate_page_compositions(page_objects: List[Dict[str, str]]) -> str:
-    """
-    Generate page object composition in constructor.
-
-    Pattern from FRAMEWORK.md:
-        self.login_page = LoginPage(web)
-
-    Args:
-        page_objects: List of dicts with 'name'
-
-    Returns:
-        Page composition code block
-    """
-    if not page_objects:
-        return ""
-
+def generate_page_compositions(pom_metadata_list: List[Dict[str, Any]]) -> str:
+    """Generate page object composition in constructor."""
     lines = []
-    for page in page_objects:
-        name = page.get("name", "")
-        if name:
-            # Convert LoginPage -> login_page
-            var_name = _pascal_to_snake(name)
-            lines.append(f"        self.{var_name} = {name}(web)")
-
+    for pom in pom_metadata_list:
+        class_name = pom.get("class_name", "")
+        if class_name:
+            var_name = _pascal_to_snake(class_name)
+            lines.append(f"        self.{var_name} = {class_name}(web)")
     return "\n".join(lines) + "\n" if lines else ""
 
 
 # =============================================================================
-# TASK METHOD TEMPLATES
-# =============================================================================
-
-# Auth workflow method templates (from FRAMEWORK.md Section 4.2)
-AUTH_LOGIN_METHOD = '''
-    @autologger.automation_logger("Task")
-    def log_in(self, email: str, password: str) -> None:
-        """
-        Complete login operation.
-
-        Single domain operation: authenticate user.
-        NO return value - test asserts via POM.
-        """
-        # Navigate to login page
-        self.web.navigate_to(f"{{self.base_url}}/index.php?controller=authentication")
-
-        # Use fluent POM API (method chaining)
-        (self.{page_var}
-            .enter_email(email)
-            .enter_password(password)
-            .click_submit())
-
-        # NO return - test will assert via {page_var}.is_logged_in()
-'''
-
-AUTH_LOGOUT_METHOD = '''
-    @autologger.automation_logger("Task")
-    def log_out(self) -> None:
-        """
-        Complete logout operation.
-
-        NO return value.
-        """
-        # Click logout link (uses page object method)
-        logout_locator = (By.CSS_SELECTOR, ".logout")
-        self.web.click(*logout_locator)
-
-        # NO return - test will assert via {page_var}.is_logged_out()
-'''
-
-AUTH_NAVIGATE_METHOD = '''
-    @autologger.automation_logger("Task")
-    def navigate_to_login_page(self) -> None:
-        """Navigate to authentication page."""
-        self.web.navigate_to(f"{{self.base_url}}/index.php?controller=authentication")
-        # NO return
-'''
-
-# Catalog workflow method templates
-CATALOG_BROWSE_METHOD = '''
-    @autologger.automation_logger("Task")
-    def browse_category(self, category_name: str) -> None:
-        """
-        Browse a product category.
-
-        Single domain operation: navigate to category.
-        NO return value - test asserts via POM.
-
-        Args:
-            category_name: Category to browse ("Women", "Dresses", "T-shirts")
-        """
-        # Navigate to home first
-        self.web.navigate_to(self.base_url)
-
-        # Click category based on name (using POM methods)
-        category_upper = category_name.upper()
-        if category_upper == "WOMEN":
-            self.{page_var}.click_women_category()
-        elif category_upper == "DRESSES":
-            self.{page_var}.click_dresses_category()
-        elif category_upper in ("T-SHIRTS", "TSHIRTS"):
-            self.{page_var}.click_tshirts_category()
-        else:
-            self.web.logger.error(f"Unknown category: {{category_name}}")
-            return
-
-        self.web.logger.info(f"Browsed to category: {{category_name}}")
-        # NO return - test asserts via {page_var}.has_products()
-'''
-
-CATALOG_FILTER_METHOD = '''
-    @autologger.automation_logger("Task")
-    def filter_by_size(self, size: str) -> None:
-        """
-        Filter products by size.
-
-        Args:
-            size: Size filter ("S", "M", "L")
-        """
-        self.{page_var}.filter_by_size(size)
-        self.web.logger.info(f"Applied size filter: {{size}}")
-        # NO return - test asserts via {page_var}.has_products()
-'''
-
-CATALOG_SORT_METHOD = '''
-    @autologger.automation_logger("Task")
-    def sort_by_price(self, ascending: bool = True) -> None:
-        """
-        Sort products by price.
-
-        Args:
-            ascending: True for low-to-high, False for high-to-low
-        """
-        if ascending:
-            self.{page_var}.sort_by_price_low_to_high()
-        else:
-            self.{page_var}.sort_by_price_high_to_low()
-
-        self.web.logger.info(f"Sorted by price: {{'ascending' if ascending else 'descending'}}")
-        # NO return - test asserts via {page_var}.is_sorted_by_price_ascending()
-'''
-
-# Cart workflow method templates
-CART_ADD_METHOD = '''
-    @autologger.automation_logger("Task")
-    def add_to_cart(self, product_index: int = 0) -> None:
-        """
-        Add product to cart by index.
-
-        Args:
-            product_index: Index of product to add (0-based)
-        """
-        self.{page_var}.click_add_to_cart(product_index)
-        self.web.logger.info(f"Added product at index {{product_index}} to cart")
-        # NO return - test asserts via {page_var}.is_cart_confirmation_displayed()
-'''
-
-# Generic task method template
-GENERIC_TASK_METHOD = '''
-    @autologger.automation_logger("Task")
-    def {method_name}(self{params}) -> None:
-        """
-        {method_description}
-
-        NO return value - test asserts via POM.
-        """
-        # TODO: Implement using page object methods
-        pass
-        # NO return
-'''
-
-
-def generate_task_methods(
-    workflow_type: str,
-    page_objects: List[Dict[str, str]],
-    custom_methods: Optional[List[Dict[str, str]]] = None
-) -> str:
-    """
-    Generate task methods based on workflow type.
-
-    Args:
-        workflow_type: Type of workflow (auth, catalog, cart, etc.)
-        page_objects: List of page objects (to get variable names)
-        custom_methods: Optional list of custom method definitions
-
-    Returns:
-        Task methods code block
-    """
-    methods = []
-
-    # Get primary page object variable name
-    page_var = "page"
-    if page_objects:
-        primary_page = page_objects[0].get("name", "")
-        if primary_page:
-            page_var = _pascal_to_snake(primary_page)
-
-    # Add workflow-specific methods
-    if workflow_type == "auth":
-        methods.append(AUTH_LOGIN_METHOD.format(page_var=page_var))
-        methods.append(AUTH_LOGOUT_METHOD.format(page_var=page_var))
-        methods.append(AUTH_NAVIGATE_METHOD)
-
-    elif workflow_type == "catalog":
-        methods.append(CATALOG_BROWSE_METHOD.format(page_var=page_var))
-        methods.append(CATALOG_FILTER_METHOD.format(page_var=page_var))
-        methods.append(CATALOG_SORT_METHOD.format(page_var=page_var))
-
-    elif workflow_type == "cart":
-        methods.append(CART_ADD_METHOD.format(page_var=page_var))
-
-    # Add custom methods if provided
-    if custom_methods:
-        for method in custom_methods:
-            name = method.get("name", "custom_method")
-            description = method.get("description", "Custom task method.")
-            params = method.get("params", "")
-
-            if params and not params.startswith(", "):
-                params = f", {params}"
-
-            methods.append(GENERIC_TASK_METHOD.format(
-                method_name=name,
-                params=params,
-                method_description=description
-            ))
-
-    # If no methods generated, add a placeholder
-    if not methods:
-        methods.append(GENERIC_TASK_METHOD.format(
-            method_name="execute_workflow",
-            params="",
-            method_description="Execute the workflow."
-        ))
-
-    return "".join(methods)
-
-
-# =============================================================================
-# MAIN GENERATOR FUNCTION
+# MAIN GENERATOR FUNCTIONS
 # =============================================================================
 
 def generate_task(
     task_name: str,
-    page_objects: Optional[List[Dict[str, str]]] = None,
-    workflow_type: Optional[str] = None,
+    pom_metadata_list: Optional[List[Dict[str, Any]]] = None,
     task_description: Optional[str] = None,
-    custom_methods: Optional[List[Dict[str, str]]] = None
+    base_url_path: str = ""
 ) -> str:
     """
-    Generate complete Task class code matching FRAMEWORK.md patterns.
-
-    This function uses the embedded TASK_TEMPLATE to produce code that
-    exactly matches the authoritative pattern from FRAMEWORK.md Section 4.2.
+    Generate Task class code using POM metadata (legacy interface).
 
     Args:
         task_name: Task class name (e.g., AuthTasks, CatalogTasks)
-        page_objects: List of page object dicts with 'name' and 'import_path'
-        workflow_type: Optional workflow type (auto-detected if not provided)
+        pom_metadata_list: List of POM metadata dicts from Tool 3
         task_description: Optional description for docstring
-        custom_methods: Optional list of custom method definitions
+        base_url_path: URL path for navigation
 
     Returns:
         Complete Python task class code as string
     """
-    page_objects = page_objects or []
+    result = generate_task_with_metadata(
+        task_name=task_name,
+        pom_metadata_list=pom_metadata_list,
+        task_description=task_description,
+        base_url_path=base_url_path
+    )
+    return result["code"]
 
-    # Auto-detect workflow type if not provided
-    detected_workflow = workflow_type or _detect_workflow_type(task_name, task_description or "")
-    workflow_readable = detected_workflow.replace("_", " ").title()
 
-    # Generate description
+def generate_task_with_metadata(
+    task_name: str,
+    pom_metadata_list: Optional[List[Dict[str, Any]]] = None,
+    task_description: Optional[str] = None,
+    base_url_path: str = "",
+    workflow: str = "common"
+) -> Dict[str, Any]:
+    """
+    Generate Task class code AND metadata for downstream tools.
+
+    This is the primary function for the metadata-passing architecture.
+    It uses POM metadata to generate dynamic Task methods and outputs
+    Task metadata for the Role generator.
+
+    Args:
+        task_name: Task class name (e.g., AuthTasks, CatalogTasks)
+        pom_metadata_list: List of POM metadata dicts from Tool 3
+        task_description: Optional description for docstring
+        base_url_path: URL path for navigation
+        workflow: Workflow folder for import path
+
+    Returns:
+        Dict with {code, metadata} where metadata has:
+        - class_name: str
+        - import_path: str
+        - composed_pages: List[str]
+        - task_methods: List[{name, params[], calls[]}]
+    """
+    pom_metadata_list = pom_metadata_list or []
+
+    # Detect workflow type from task name
+    workflow_readable = "General"
+    if "auth" in task_name.lower():
+        workflow_readable = "Authentication"
+    elif "catalog" in task_name.lower():
+        workflow_readable = "Catalog"
+    elif "cart" in task_name.lower():
+        workflow_readable = "Cart"
+
     description = task_description or f"{task_name} - Task module for {workflow_readable} workflows."
 
-    # Generate each section
-    page_imports = generate_page_imports(page_objects)
-    page_compositions = generate_page_compositions(page_objects)
-    task_methods = generate_task_methods(detected_workflow, page_objects, custom_methods)
+    # Generate imports and compositions from POM metadata
+    page_imports = generate_page_imports(pom_metadata_list)
+    page_compositions = generate_page_compositions(pom_metadata_list)
 
-    # Add By import if auth workflow (for logout locator)
-    extra_import = ""
-    if detected_workflow == "auth":
-        extra_import = "\nfrom selenium.webdriver.common.by import By"
+    # Generate task methods from POM metadata
+    all_task_methods_code = []
+    all_task_methods_metadata = []
 
-    # Assemble using the master template
+    for pom_metadata in pom_metadata_list:
+        methods_code, methods_metadata = generate_task_methods_from_metadata(
+            pom_metadata=pom_metadata,
+            base_url_path=base_url_path
+        )
+        all_task_methods_code.append(methods_code)
+        all_task_methods_metadata.extend(methods_metadata)
+
+    task_methods = "".join(all_task_methods_code) if all_task_methods_code else '''
+    @autologger.automation_logger("Task")
+    def execute_workflow(self) -> None:
+        """Execute the workflow. TODO: Implement."""
+        pass
+'''
+
+    # Assemble code using template
     code = TASK_TEMPLATE.format(
         task_description=description,
         task_name=task_name,
         workflow_readable=workflow_readable,
-        page_imports=page_imports + extra_import,
+        page_imports=page_imports,
         page_compositions=page_compositions,
         task_methods=task_methods
     )
 
-    return code
+    # Build metadata for Role generator
+    snake_name = _pascal_to_snake(task_name)
+    import_path = f"tasks.{workflow}.{snake_name}"
+
+    metadata = {
+        "class_name": task_name,
+        "import_path": import_path,
+        "composed_pages": [p.get("class_name", "") for p in pom_metadata_list],
+        "task_methods": all_task_methods_metadata
+    }
+
+    return {
+        "code": code,
+        "metadata": metadata
+    }
 
 
 # =============================================================================
@@ -429,8 +446,3 @@ def get_file_path(task_name: str, workflow: str = "common") -> str:
     """
     snake_name = _pascal_to_snake(task_name)
     return f"framework/tasks/{workflow}/{snake_name}.py"
-
-
-def get_available_workflows() -> List[str]:
-    """Get list of available workflow types."""
-    return ["auth", "catalog", "cart", "checkout", "common"]

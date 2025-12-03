@@ -195,11 +195,24 @@ AUTH_LOGIN_AND_ACTION_METHOD = '''
 '''
 
 # Guest user workflow methods
-GUEST_BROWSE_METHOD = '''
+GUEST_BROWSE_PRODUCTS_METHOD = '''
+    @autologger.automation_logger("Role")
+    def browse_products(self) -> None:
+        """
+        Browse products workflow (no login required).
+
+        Navigates to product catalog and displays products.
+        NO return value - test asserts via POM.
+        """
+        self.catalog_tasks.navigate_to_category()
+        # NO return - test asserts via POM state-check methods
+'''
+
+GUEST_BROWSE_CATEGORY_METHOD = '''
     @autologger.automation_logger("Role")
     def browse_category(self, category_name: str) -> None:
         """
-        Browse category workflow (no login required).
+        Browse specific category workflow (no login required).
 
         Args:
             category_name: Category to browse
@@ -278,7 +291,8 @@ def generate_workflow_methods(
 
     elif role_type == "guest":
         if has_catalog_tasks:
-            methods.append(GUEST_BROWSE_METHOD)
+            methods.append(GUEST_BROWSE_PRODUCTS_METHOD)
+            methods.append(GUEST_BROWSE_CATEGORY_METHOD)
             methods.append(GUEST_FILTER_METHOD)
 
     # Add custom workflows if provided

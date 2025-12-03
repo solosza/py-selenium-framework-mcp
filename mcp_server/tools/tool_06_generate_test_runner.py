@@ -77,7 +77,16 @@ async def generate_test_runner(arguments: dict) -> str:
 
         if role:
             # Convert role name to import path
-            role_import_path = role_import or f"roles.{role.lower().replace('user', '_user')}"
+            # Handle both formats:
+            # - Full import: "from roles.devtest2.dev_guest_user import DevGuestUser"
+            # - Path only: "roles.devtest2.dev_guest_user"
+            if role_import and role_import.startswith("from "):
+                # Extract path from full import statement: "from X import Y" -> "X"
+                parts = role_import.split(" import ")
+                role_import_path = parts[0].replace("from ", "").strip()
+            else:
+                role_import_path = role_import or f"roles.{role.lower().replace('user', '_user')}"
+
             roles.append({
                 "name": role,
                 "import_path": role_import_path

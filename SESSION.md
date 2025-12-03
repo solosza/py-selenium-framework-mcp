@@ -1,96 +1,106 @@
-# Session State - 2025-12-01
+# Session State - 2025-12-02 (Current)
 
 ## Current Phase
-**Phase:** Framework Audit (Phase 3 - Execute Tasks)
-**Status:** COMPLETE - 100% (9/9 tasks done)
+**Phase:** Phase B - MCP Tool Refactor (B.6.5 Metadata Architecture)
+**Status:** Documentation Complete, Ready for Testing
+**Resume Word:** METADATA-TEST
 
 ## What We're Working On
-**Active Task:** Task 9.0 - Update README.md (COMPLETE)
-**Next Task:** None - Audit project complete!
-**Branch:** feature/9.0-update-readme
+**Active Task:** B.6.5 - Implement Metadata-Passing Architecture
+**Task Status:** In Progress (60%)
 
 ## Progress This Session
+
 ### Completed
-- [x] Task 6.0 - Run All Tests and Verify Fixes
-  - Test Results: 33 tests - 18 PASSED, 10 FAILED, 3 SKIPPED
-  - Framework architecture VERIFIED working
-  - Failures are environment issues, not framework bugs
-  - Committed: 1fc131f
+- [x] Documented complete MCP workflow in FRAMEWORK.md Section 8
+- [x] Added Steps 1-9 with visual diagrams
+- [x] Added AI prompting rules for ALL steps (Step 2 + Tools 1-6)
+- [x] Added 15 Design Decisions (DD-01 through DD-15)
+- [x] Deleted TOOL_ORDER.md (consolidated into FRAMEWORK.md)
+- [x] Clarified: domain vs workflow vs intent terminology
+- [x] Clarified: expected_states extraction from BDD "Then" clause
+- [x] Clarified: check existing before creating new pattern
+- [x] Clarified: one test file per scenario pattern
 
-- [x] Task 9.0 - Update README.md
-  - Complete rewrite (~490 lines)
-  - New structure: Hero, Quick Start, Setup, Usage, Architecture, Learning Path
-  - Positioned for: teams + manual testers learning automation
-  - Community contribution: Playwright/Cypress/Puppeteer ports wanted
+### Key Design Decisions Made This Session
+| ID | Decision |
+|----|----------|
+| DD-01 | User must specify persona in requirement ("As a...") |
+| DD-02 | URL required upfront with requirement |
+| DD-03 | Metadata context accumulated through tool chain |
+| DD-04 | Single documentation source (FRAMEWORK.md) |
+| DD-05 | Exact method names emerge from tool chain, not upfront |
+| DD-06 | AI extracts intent, not exact method names |
+| DD-07 | Domain determined by AI in Step 2, passed through metadata |
+| DD-08 | AI orchestrates tool chain, tools don't call other tools |
+| DD-09 | AI extracts expected_states from BDD "Then" clause |
+| DD-10 | Action methods derived from element types |
+| DD-11 | State method naming: is_*/has_* for bool, get_* for values |
+| DD-12 | Check existing classes/methods before generating new |
+| DD-13 | Each tool has specific AI prompting rules |
+| DD-14 | One test file per scenario, grouped by domain folder |
+| DD-15 | Test assertions use POM state methods from metadata |
 
-### All Tasks Complete
-- [x] Task 1.0: Setup DEFECT_LOG.md
-- [x] Task 2.0: Audit & Fix Page Objects
-- [x] Task 3.0: Audit & Fix Tasks
-- [x] Task 4.0: Audit & Fix Roles
-- [x] Task 5.0: Audit & Fix Tests
-- [x] Task 6.0: Run Tests & Verify
-- [x] Task 7.0: Create FRAMEWORK.md
-- [x] Task 8.0: Update CLAUDE.md
-- [x] Task 9.0: Update README.md
+## Files Changed This Session
+- `FRAMEWORK.md` - Added Section 8: MCP Tool Chain & AI Workflow (Steps 1-9, Design Decisions, Prompting Rules)
+- `CLAUDE.md` - Added MCP Tool Usage section with mandatory rules and NO HALLUCINATIONS policy
+- `mcp_server/tools/TOOL_ORDER.md` - DELETED (consolidated into FRAMEWORK.md)
 
-## Test Results Summary
-| Test Suite | Passed | Failed | Skipped |
-|------------|--------|--------|---------|
-| test_invalid_credentials | 6 | 0 | 0 |
-| test_browse_category | 4 | 0 | 0 |
-| test_filter_products | 4 | 0 | 0 |
-| test_sort_by_price | 4 | 0 | 0 |
-| test_registration | 1 | 5 | 0 |
-| test_valid_login | 0 | 2 | 0 |
-| test_quick_view | 1 | 3 | 0 |
-| test_logout | 0 | 0 | 3 |
-| **TOTAL** | **18** | **10** | **3** |
+## Remaining Work (in order)
+1. **Test Tool 3 → Tool 4 metadata flow** ← NEXT
+2. Refactor `role_generator.py` to accept Task metadata
+3. Update `tool_05_generate_role.py`
+4. Refactor `test_generator.py` to accept Role + POM metadata
+5. Update `tool_06_generate_test_runner.py`
+6. Test full metadata chain with E2E test
+7. Run E2E test with visible browser
+8. If passes, mark DEF-021/022/023/024 as RESOLVED
+9. Continue to B.7, B.8, B.9
 
-## Defect Summary (Final)
-| Layer | Total | Resolved | Status |
-|-------|-------|----------|--------|
-| Page Objects | 9 | 8 | 1 WONT_FIX |
-| Tasks | 4 | 4 | All resolved |
-| Roles | 3 | 2 | 1 INVALID (DEF-016) |
-| Tests | 2 | 2 | All resolved (DEF-017, DEF-018) |
-| **Total** | **18** | **16** | **1 WONT_FIX + 1 INVALID** |
+## Context for Next Session
 
-## Framework Audit Project - COMPLETE
+**Resume Word:** METADATA-TEST
 
-### What Was Accomplished
-1. **Audited all layers** against architecture rules
-2. **Fixed 16 defects** across Page Objects, Tasks, Roles, Tests
-3. **Created FRAMEWORK.md** - Complete architecture reference (700+ lines)
-4. **Updated CLAUDE.md** - Added FRAMEWORK.md reference
-5. **Rewrote README.md** - User-focused documentation (490+ lines)
-6. **Verified framework** - 18 tests passing, architecture validated
+**Resume Point:** Test Tool 3 → Tool 4 metadata flow before continuing to refactor Role and Test generators.
 
-### Key Architecture Decisions
-- No inheritance - composition only (BasePage, base Role deleted)
-- Tasks/Roles return None - tests assert via POM state-checks
-- Single-Task Role methods ARE valid (persona abstraction always required)
-- Locators ONLY in Page Objects
+**Key Files:**
+- `FRAMEWORK.md` Section 8 - Complete MCP workflow documentation
+- `mcp_server/utils/generators/page_object_generator.py` - Has `generate_page_object_with_metadata()`
+- `mcp_server/utils/generators/task_generator.py` - Has `generate_task_with_metadata()`
+- `mcp_server/tools/tool_03_generate_page_object.py` - Returns metadata
+- `mcp_server/tools/tool_04_generate_task.py` - Accepts POM metadata
 
-### README Positioning
-- **Primary audiences:** Teams needing structure + Manual testers learning automation
-- **Community contribution:** Architecture ports to Playwright/Cypress/Puppeteer
-- **Honest framing:** Selenium implementation, framework-agnostic architecture patterns
+**Test Location:** `mcp_server/_dev_tests/`
 
-## Git State
-**Current Branch:** feature/9.0-update-readme
-**Pending Changes:**
-- README.md (complete rewrite)
-- docs/projects/audit/2-tasks-framework-audit-and-mcp-alignment.md
-- SESSION.md
+**What to Test:**
+1. Call Tool 3 with elements → get POM code + metadata
+2. Pass POM metadata to Tool 4 → get Task code + metadata
+3. Verify Task methods call actual POM methods (no hardcoded names)
 
-## Next Steps (Post-Audit)
-- [ ] Merge all feature branches to main
-- [ ] Push to GitHub
-- [ ] MCP server integration (future project)
-- [ ] Additional test scenarios (cart, checkout)
+## Defects Status
+| ID | Description | Status |
+|----|-------------|--------|
+| DEF-021 | Invalid import syntax | IN_PROGRESS |
+| DEF-022 | Duplicate locator names | IN_PROGRESS |
+| DEF-023 | Duplicate method names | IN_PROGRESS |
+| DEF-024 | Placeholder test logic | IN_PROGRESS |
+
+Note: All marked IN_PROGRESS - cannot mark RESOLVED until E2E test passes.
+
+## Todo List State
+```
+[x] Update tool_04_generate_task.py to use metadata-driven generator
+[x] Document MCP workflow Step 1 & 2 in FRAMEWORK.md
+[x] Document MCP workflow Step 3 (Tool 1) in FRAMEWORK.md
+[x] Document MCP workflow Step 4 (Tool 2) in FRAMEWORK.md
+[x] Document MCP workflow Step 5 (Tool 3) in FRAMEWORK.md
+[x] Document MCP workflow Steps 6-9 (Tools 4-6 + Save)
+[x] Delete TOOL_ORDER.md (consolidated into FRAMEWORK.md)
+[ ] Test Tool 3 → Tool 4 metadata flow ← NEXT
+[ ] Refactor role_generator.py to accept Task metadata
+[ ] Refactor test_generator.py to accept Role + POM metadata
+[ ] Test full metadata chain with E2E test
+```
 
 ---
-
-**Last Updated:** 2025-12-01
-**Project Status:** Framework Audit COMPLETE
+**Last Updated:** 2025-12-02
