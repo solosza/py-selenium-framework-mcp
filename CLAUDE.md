@@ -68,6 +68,132 @@ pytest -v --html=_reports/report.html --self-contained-html
 - End-to-end workflow tests
 - DO NOT create test scripts elsewhere - use this directory
 
+## MCP Tool Usage (MANDATORY - NO EXCEPTIONS)
+
+**CRITICAL: Before calling ANY MCP tool (Tools 1-6), you MUST read and follow FRAMEWORK.md Section 8.**
+
+### Enforcement Rule
+```
+BEFORE executing ANY step in the MCP tool chain:
+1. STOP and read FRAMEWORK.md Section 8
+2. Find the "AI PROMPTING RULES" box for that specific step
+3. Follow EVERY rule in that box - no exceptions
+4. If a rule says "ASK user" - you MUST ask before proceeding
+```
+
+### Complete 9-Step Flow (MUST follow in order)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 1: USER INPUT                                                       │
+│ - User provides requirement with persona ("As a...")                     │
+│ - User provides target URL                                               │
+│ - If missing, ASK before proceeding (DD-01, DD-02)                       │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 2: AI PROCESSING (you do this, no tool call)                        │
+│ - Extract role_name from persona                                         │
+│ - Extract intent (descriptive, not method name)                          │
+│ - Determine domain (auth/catalog/cart/checkout)                          │
+│ - Convert to BDD format (Given/When/Then)                                │
+│ - Extract expected_states from "Then" clause (DD-09)                     │
+│ - Initialize metadata context                                            │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 3: TOOL 1 - generate_tests_from_user_story                          │
+│ - Input: BDD user story, workflow/domain                                 │
+│ - Output: test_scenarios[] → add to metadata                             │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 4: TOOL 2 - discover_page_elements                                  │
+│ - Input: URL from Step 1                                                 │
+│ - Output: discovered_elements[] → add to metadata                        │
+│ - Filter elements relevant to intent                                     │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 5: TOOL 3 - generate_page_object                                    │
+│ - Input: elements, expected_states, domain                               │
+│ - Output: POM code + pom_metadata → add to metadata                      │
+│ - CHECK EXISTING first (DD-12)                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 6: TOOL 4 - generate_task                                           │
+│ - Input: pom_metadata from Step 5                                        │
+│ - Output: Task code + task_metadata → add to metadata                    │
+│ - CHECK EXISTING first (DD-12) - CommonTasks may already handle it       │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 7: TOOL 5 - generate_role                                           │
+│ - Input: task_metadata from Step 6                                       │
+│ - Output: Role code + role_metadata → add to metadata                    │
+│ - CHECK EXISTING first (DD-12) - RegisteredUser may already exist        │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 8: TOOL 6 - generate_test_runner                                    │
+│ - Input: role_metadata + pom_metadata (for assertions)                   │
+│ - Output: Test file with AAA pattern                                     │
+│ - Assertions use POM state methods from metadata (DD-15)                 │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│ STEP 9: SAVE FILES & REPORT                                              │
+│ - Save generated code to suggested file paths                            │
+│ - Report to user: files created, files reused, run command               │
+│ - Optionally run test with --headless=False                              │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### AI Prompting Rules Location
+**FRAMEWORK.md Section 8** contains detailed "AI PROMPTING RULES" boxes for each step:
+- **Step 2 Rules:** Validate input, extract role, determine domain, convert BDD, extract expected_states
+- **Tool 1 Rules:** Format BDD, pass workflow, validate output, update metadata
+- **Tool 2 Rules:** Validate URL, validate output, filter elements, update metadata
+- **Tool 3 Rules:** Determine page name, pass expected_states, check existing, validate output
+- **Tool 4 Rules:** Check existing tasks, determine class, naming conventions
+- **Tool 5 Rules:** Check existing roles, match persona, naming conventions
+- **Tool 6 Rules:** File organization, AAA pattern, use POM state methods for assertions
+
+### Key Design Decisions (MUST follow)
+| ID | Rule |
+|----|------|
+| DD-01 | User MUST specify persona ("As a...") - ASK if missing |
+| DD-02 | URL required upfront - ASK if missing |
+| DD-03 | Metadata context accumulated through tool chain |
+| DD-08 | AI orchestrates tool chain, tools don't call other tools |
+| DD-09 | Extract expected_states from BDD "Then" clause for POM state methods |
+| DD-12 | Check existing classes/methods BEFORE generating new |
+| DD-15 | Test assertions MUST use POM state methods from metadata |
+
+### NO HALLUCINATIONS Policy
+- NEVER guess method names - use metadata from previous tool
+- NEVER assume a class exists - scan framework/ first
+- NEVER hardcode method calls - derive from POM/Task/Role metadata
+- If unsure, ASK the user for clarification
+
+### Metadata Context Structure
+AI maintains this context through the tool chain:
+```python
+metadata_context = {
+    "role_name": "RegisteredUser",       # From Step 2
+    "intent": "login",                    # From Step 2
+    "domain": "auth",                     # From Step 2
+    "url": "http://...",                  # From Step 1
+    "expected_states": [...],             # From Step 2 (BDD "Then" clause)
+    "test_scenarios": [...],              # From Tool 1
+    "discovered_elements": [...],         # From Tool 2
+    "pom_metadata": {...},                # From Tool 3
+    "task_metadata": {...},               # From Tool 4
+    "role_metadata": {...}                # From Tool 5
+}
+```
+
 ## Project Structure
 
 **Architecture:** 4-Layer Test Automation Framework
@@ -564,22 +690,10 @@ Structured 4-phase process. Each phase has process doc in `docs/`:
 ```
 
 ### Active Issues:
-
-### [DEFECT-001] CatalogTasks returns values from data retrieval methods
-**Date:** 2025-12-01
-**Task:** Found during B.3 task_generator development
-**Error:** FRAMEWORK.md states Task methods return None, but `framework/tasks/catalog/catalog_tasks.py` has methods that return values
-**Context:** Data retrieval methods `get_product_count()`, `get_product_names()`, `get_product_prices()` return int/list instead of None
-**Affected File:** `framework/tasks/catalog/catalog_tasks.py` lines 244-271
-**Impact:** Architecture violation - tests should access data through POMs, not Task return values
-**Solution:**
-1. Remove return statements from Task methods
-2. Tests should call POM methods directly for data retrieval (e.g., `product_list_page.get_product_count()`)
-**Status:** OPEN
-**Priority:** MEDIUM (architecture violation, but not blocking functionality)
+(See `docs/DEFECT_LOG.md` for full defect tracking - DEF-019 and DEF-020 are open)
 
 ### Resolved Issues:
-(None yet)
+(See `docs/DEFECT_LOG.md`)
 
 ## Session Close Protocol
 

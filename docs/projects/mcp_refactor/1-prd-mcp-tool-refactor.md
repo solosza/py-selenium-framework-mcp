@@ -1,33 +1,38 @@
-# PRD: MCP Tool Refactor (Phase B)
+# PRD: MCP Tool Chain Refactor (Phase B)
 
-**Version:** 1.0
+**Version:** 2.0
 **Status:** Draft
-**Date:** 2025-12-01
+**Date:** 2025-12-02
+**Previous Version:** 1.0 (2025-12-01)
 
 ---
 
 ## 1. Introduction / Overview
 
-This PRD defines the scope and requirements for refactoring MCP code generation tools (3-6) to produce code that matches the validated 4-layer framework architecture patterns established in Phase A.
+This PRD defines the scope and requirements for refactoring the MCP tool chain to implement the complete 9-step AI-assisted test generation workflow documented in FRAMEWORK.md Section 8.
 
 **Problem Statement:**
-- Current `code_generator.py` is monolithic (1625 lines) and hard to maintain
-- Generated code violates architecture rules (returns from Role/Task, decorators on POM)
-- Generated tests assert on return values instead of POM state-check methods
-- No separation of concerns - one file handles all layer generation
+- Current tools (3-6) are partially refactored but don't follow the full 9-step flow
+- Tools 1-2 output doesn't include metadata needed by downstream tools
+- No enforcement of AI prompting rules across the tool chain
+- Generated code has architecture violations (returns from Role/Task, decorators on POM)
+- Tests assert on return values instead of POM state-check methods
+- No `expected_states` extraction from BDD "Then" clause
 
 **Goal:**
-Refactor tools 3-6 with dedicated per-layer generators that produce code matching production framework patterns exactly.
+Implement the complete 9-step workflow with metadata passing, AI rule enforcement, and E2E validation with visible browser and HTML reports.
 
 ---
 
 ## 2. Goals
 
-1. **Split `code_generator.py`** into dedicated generators per layer in `utils/generators/`
-2. **Fix architecture violations** in generated code (no returns, no POM decorators)
-3. **Validate generated code** via automated checks + manual review
-4. **Demonstrate E2E workflow** - visible browser test from generation to HTML report
-5. **Clean up dev test folders** before creating new test artifacts
+1. **Implement full 9-step flow** as documented in FRAMEWORK.md Section 8
+2. **Add metadata output** to Tools 1-2 for downstream consumption
+3. **Enforce AI prompting rules** via CLAUDE.md + FRAMEWORK.md Section 8
+4. **Fix architecture violations** in generated code (no returns, no POM decorators)
+5. **Implement expected_states extraction** from BDD "Then" clause (DD-09)
+6. **Implement check-existing pattern** for Tools 4-5 (DD-12)
+7. **Demonstrate E2E workflow** with visible browser + HTML report
 
 ---
 
@@ -35,8 +40,9 @@ Refactor tools 3-6 with dedicated per-layer generators that produce code matchin
 
 | As a... | I want to... | So that... |
 |---------|--------------|------------|
+| AI Agent | Have clear rules for each step in the tool chain | I generate correct code without hallucinations |
+| AI Agent | Receive metadata from each tool | I can pass accurate method names to downstream tools |
 | Developer | Have separate generator files per layer | Code is maintainable and easy to update |
-| AI Agent | Generate code that matches production patterns | No manual fixes needed after generation |
 | QA Engineer | See generated tests run in visible browser | I can verify the workflow works correctly |
 | Portfolio Reviewer | See clean, consistent generated code | MCP tools demonstrate professional quality |
 
@@ -44,58 +50,102 @@ Refactor tools 3-6 with dedicated per-layer generators that produce code matchin
 
 ## 4. Functional Requirements
 
-### 4.1 Generator Refactoring
+### 4.1 Step 1-2: User Input & AI Processing
 
 | ID | Requirement |
 |----|-------------|
-| FR-01 | Create `mcp_server/utils/generators/` directory structure |
-| FR-02 | Create `page_object_generator.py` - generates POMs with NO decorators, returns `self` |
-| FR-03 | Create `task_generator.py` - generates Tasks with `@autologger("Task")`, returns `None` |
-| FR-04 | Create `role_generator.py` - generates Roles with `@autologger("Role")`, returns `None` |
-| FR-05 | Create `test_generator.py` - generates Tests that assert via POM state-check methods |
-| FR-06 | Each generator embeds its layer's patterns inline (self-contained) |
-| FR-07 | Generated code includes docstrings and inline comments on key code blocks |
+| FR-01 | AI must ask for persona ("As a...") if missing (DD-01) |
+| FR-02 | AI must ask for URL if missing (DD-02) |
+| FR-03 | AI must extract role_name from persona |
+| FR-04 | AI must determine domain from intent (auth/catalog/cart/checkout) |
+| FR-05 | AI must convert requirement to BDD format (Given/When/Then) |
+| FR-06 | AI must extract expected_states from BDD "Then" clause (DD-09) |
+| FR-07 | AI must initialize metadata context before calling tools |
 
-### 4.2 Tool Updates
-
-| ID | Requirement |
-|----|-------------|
-| FR-08 | Update Tool 3 (`tool_03_generate_page_object.py`) to use `page_object_generator` |
-| FR-09 | Update Tool 4 (`tool_04_generate_task.py`) to use `task_generator` |
-| FR-10 | Update Tool 5 (`tool_05_generate_role.py`) to use `role_generator` |
-| FR-11 | Update Tool 6 (`tool_06_generate_test_template.py`) to use `test_generator` |
-
-### 4.3 Validation Requirements
+### 4.2 Tool 1: generate_tests_from_user_story
 
 | ID | Requirement |
 |----|-------------|
-| FR-12 | Create automated validation script to check generated code against rules |
-| FR-13 | Validation checks: no returns from Role/Task, no decorators on POM, correct imports |
-| FR-14 | Manual review: compare generated code against existing framework code |
+| FR-08 | Tool 1 must output `test_scenarios[]` in metadata format |
+| FR-09 | Each scenario must include: name, given, when, then, workflow |
+| FR-10 | AI must add test_scenarios to metadata context |
 
-### 4.4 Cleanup Requirements
-
-| ID | Requirement |
-|----|-------------|
-| FR-15 | Clean up existing dev test folders (`devtest1/`, etc.) before new testing |
-
-### 4.5 E2E Demonstration Requirements
+### 4.3 Tool 2: discover_page_elements
 
 | ID | Requirement |
 |----|-------------|
-| FR-16 | Simple test case: Generate catalog browse test (navigate → verify products) |
-| FR-17 | Medium complex test case: Generate auth + catalog test (login → browse → verify → logout) |
-| FR-18 | Run generated tests with `--headless=False` (visible browser) |
-| FR-19 | Generate HTML report for test results |
-| FR-20 | Document full E2E workflow: generation → execution → report |
+| FR-11 | Tool 2 must output `discovered_elements[]` in metadata format |
+| FR-12 | Each element must include: name, type, locator |
+| FR-13 | AI must filter elements relevant to intent before passing to Tool 3 |
+| FR-14 | AI must add discovered_elements to metadata context |
+
+### 4.4 Tool 3: generate_page_object
+
+| ID | Requirement |
+|----|-------------|
+| FR-15 | Tool 3 must accept `expected_states` parameter |
+| FR-16 | Tool 3 must generate state-check methods from expected_states |
+| FR-17 | Tool 3 must output `pom_metadata` with: class_name, import_path, locators[], action_methods[], state_methods[] |
+| FR-18 | Generated POM must have NO decorators, return `self` from action methods |
+| FR-19 | AI must add pom_metadata to metadata context |
+
+### 4.5 Tool 4: generate_task
+
+| ID | Requirement |
+|----|-------------|
+| FR-20 | Tool 4 must accept `pom_metadata` as input |
+| FR-21 | Tool 4 must check existing tasks before generating new (DD-12) |
+| FR-22 | Tool 4 must return `existing_found` status if task already exists |
+| FR-23 | Tool 4 must generate Task methods that call actual POM methods from metadata |
+| FR-24 | Tool 4 must output `task_metadata` with: class_name, import_path, composed_pages[], task_methods[] |
+| FR-25 | Generated Task must have `@autologger("Task")`, return `None` |
+| FR-26 | AI must add task_metadata to metadata context |
+
+### 4.6 Tool 5: generate_role
+
+| ID | Requirement |
+|----|-------------|
+| FR-27 | Tool 5 must accept `task_metadata` as input |
+| FR-28 | Tool 5 must check existing roles before generating new (DD-12) |
+| FR-29 | Tool 5 must return `existing_found` status if role already exists |
+| FR-30 | Tool 5 must generate Role methods that call actual Task methods from metadata |
+| FR-31 | Tool 5 must output `role_metadata` with: class_name, import_path, composed_tasks[], workflow_methods[] |
+| FR-32 | Generated Role must have `@autologger("Role")`, return `None` |
+| FR-33 | AI must add role_metadata to metadata context |
+
+### 4.7 Tool 6: generate_test_runner
+
+| ID | Requirement |
+|----|-------------|
+| FR-34 | Tool 6 must accept `role_metadata` + `pom_metadata` as input |
+| FR-35 | Tool 6 must generate tests that call actual Role methods from metadata |
+| FR-36 | Tool 6 must generate assertions using actual POM state methods from metadata (DD-15) |
+| FR-37 | Generated Test must follow AAA pattern: Arrange, Act (ONE call), Assert (via POM) |
+| FR-38 | Generated Test must have `@autologger("Test")`, `@pytest.mark.<domain>` |
+
+### 4.8 Step 9: Save Files & Report
+
+| ID | Requirement |
+|----|-------------|
+| FR-39 | AI must save generated files to suggested paths |
+| FR-40 | AI must report: files created, files reused (existing), pytest run command |
+| FR-41 | AI must offer to run test with `--headless=False` |
+
+### 4.9 Generator Refactoring
+
+| ID | Requirement |
+|----|-------------|
+| FR-42 | Maintain `mcp_server/utils/generators/` directory structure |
+| FR-43 | Each generator embeds its layer's patterns inline (self-contained) |
+| FR-44 | Generated code includes docstrings and inline comments |
+| FR-45 | No hardcoded method names in generators - all derived from metadata |
 
 ---
 
 ## 5. Non-Goals (Out of Scope)
 
-- Tools 1-2 refactoring (requirements gathering, not code generation)
 - Tools 7-11 refactoring (utility tools, don't generate framework code)
-- Adding new MCP tools
+- Adding new MCP tools beyond 1-6
 - Changing the 4-layer architecture itself
 - Refactoring WebInterface layer
 - Adding new framework features
@@ -104,97 +154,127 @@ Refactor tools 3-6 with dedicated per-layer generators that produce code matchin
 
 ## 6. Design Considerations
 
-### 6.1 Directory Structure
+### 6.1 AI Rule Enforcement
+
+**Location:** FRAMEWORK.md Section 8 + CLAUDE.md
+
+**Pattern:**
+```
+CLAUDE.md                    FRAMEWORK.md Section 8
+    │                              │
+    │  "Read Section 8 before      │  Detailed "AI PROMPTING RULES"
+    │   ANY tool call"             │  boxes for each step
+    │                              │
+    └──────────────────────────────┘
+                   │
+                   ▼
+         AI follows rules for each step
+```
+
+### 6.2 Metadata Flow Architecture
+
+```
+Step 1-2 (User Input + AI Processing)
+    │
+    ├── role_name: "RegisteredUser"
+    ├── intent: "login"
+    ├── domain: "auth"
+    ├── url: "http://..."
+    ├── expected_states: [{name: "is_logged_in", ...}]
+    └── bdd_scenarios: [...]
+          │
+          ▼
+Tool 1 (generate_tests_from_user_story)
+    │
+    └── test_scenarios: [{name, given, when, then, workflow}]
+          │
+          ▼
+Tool 2 (discover_page_elements)
+    │
+    └── discovered_elements: [{name, type, locator}]
+          │
+          ▼
+Tool 3 (generate_page_object)
+    │
+    └── pom_metadata: {class_name, import_path, locators[], action_methods[], state_methods[]}
+          │
+          ▼
+Tool 4 (generate_task)
+    │
+    └── task_metadata: {class_name, import_path, composed_pages[], task_methods[]}
+          │
+          ▼
+Tool 5 (generate_role)
+    │
+    └── role_metadata: {class_name, import_path, composed_tasks[], workflow_methods[]}
+          │
+          ▼
+Tool 6 (generate_test_runner)
+    │
+    └── Test file with correct method calls and assertions
+```
+
+### 6.3 Check-Existing Pattern (DD-12)
+
+**Tool 4 (Task):**
+```python
+# Before generating new Task
+1. Scan framework/tasks/ for existing Task classes
+2. Check if existing class has method matching intent
+3. If found: return {"status": "existing_found", "existing_class": "CommonTasks", ...}
+4. AI decides: use existing OR force_generate=True
+```
+
+**Tool 5 (Role):**
+```python
+# Before generating new Role
+1. Scan framework/roles/ for existing Role classes
+2. Check if existing class matches persona
+3. If found: return {"status": "existing_found", "existing_class": "RegisteredUser", ...}
+4. AI decides: use existing OR force_generate=True
+```
+
+### 6.4 expected_states Extraction (DD-09)
+
+**Source:** BDD "Then" clause from Step 2
+
+**Process:**
+```
+"Then user is logged in"
+    → expected_state: {name: "is_logged_in", type: "bool", description: "user is logged in"}
+
+"Then error message is displayed"
+    → expected_state: {name: "has_error_message", type: "bool", description: "error message displayed"}
+
+"Then cart shows 2 items"
+    → expected_state: {name: "get_cart_count", type: "int", description: "cart item count"}
+```
+
+**Naming Conventions:**
+- `is_*` → returns bool (state check)
+- `has_*` → returns bool (presence check)
+- `get_*` → returns value (str/int)
+
+### 6.5 Directory Structure
 
 ```
 mcp_server/
+├── tools/
+│   ├── tool_01_generate_tests_from_user_story.py  # Add metadata output
+│   ├── tool_02_discover_page_elements.py          # Add metadata output
+│   ├── tool_03_generate_page_object.py            # Accept expected_states
+│   ├── tool_04_generate_task.py                   # Check existing, accept POM metadata
+│   ├── tool_05_generate_role.py                   # Check existing, accept Task metadata
+│   └── tool_06_generate_test_runner.py            # Accept Role + POM metadata
 ├── utils/
 │   ├── generators/
 │   │   ├── __init__.py
-│   │   ├── page_object_generator.py   # POM patterns + generation
-│   │   ├── task_generator.py          # Task patterns + generation
-│   │   ├── role_generator.py          # Role patterns + generation
-│   │   └── test_generator.py          # Test patterns + generation
-│   ├── code_generator.py              # (deprecate after migration)
-│   └── ...other utils
-├── tools/
-│   ├── tool_03_generate_page_object.py  # Thin wrapper → page_object_generator
-│   ├── tool_04_generate_task.py         # Thin wrapper → task_generator
-│   ├── tool_05_generate_role.py         # Thin wrapper → role_generator
-│   └── tool_06_generate_test_template.py # Thin wrapper → test_generator
-```
-
-### 6.2 Generated Code Patterns
-
-**Page Object (NO decorators, returns `self`):**
-```python
-class ProductListPage:
-    PRODUCT_ITEMS = (By.CSS_SELECTOR, "ul.product_list li")
-
-    def __init__(self, web: WebInterface):
-        self.web = web
-
-    def click_category(self, name: str) -> "ProductListPage":
-        """Click category link. Returns self for chaining."""
-        self.web.click(*self.CATEGORY_LINK)
-        return self
-
-    def has_products(self) -> bool:
-        """State-check method for test assertions."""
-        return self.get_product_count() > 0
-```
-
-**Task (`@autologger("Task")`, returns `None`):**
-```python
-class CatalogTasks:
-    @autologger.automation_logger("Task")
-    def browse_category(self, category_name: str) -> None:
-        """Browse to category. Tests assert via POM."""
-        self.web.navigate_to(self.base_url)
-        self.product_list_page.click_category(category_name)
-        # NO return - test asserts via product_list_page.has_products()
-```
-
-**Role (`@autologger("Role")`, returns `None`):**
-```python
-class GuestUser:
-    @autologger.automation_logger("Role")
-    def browse_category(self, category_name: str) -> None:
-        """Browse category workflow. Tests assert via POM."""
-        self.catalog_tasks.browse_category(category_name)
-        # NO return - test asserts via POM state-check methods
-```
-
-**Test (asserts via POM, NOT return values):**
-```python
-@pytest.mark.catalog
-@autologger.automation_logger("Test")
-def test_browse_women_category(web_interface, config):
-    """Test browsing Women category."""
-    # Arrange
-    guest = GuestUser(web_interface, config["url"])
-    product_list_page = ProductListPage(web_interface)
-
-    # Act - ONE role method call, NO return value
-    guest.browse_category("Women")
-
-    # Assert - Via POM state-check methods
-    assert product_list_page.has_products(), "Products should be displayed"
-```
-
-### 6.3 Test Folder Structure
-
-```
-framework/
-├── pages/test1/       # Generated POMs for simple test
-├── pages/test2/       # Generated POMs for medium test
-├── tasks/test1/
-├── tasks/test2/
-├── roles/test1/
-├── roles/test2/
-tests/
-├── test1/             # Simple test: catalog browse
-├── test2/             # Medium test: auth + catalog
+│   │   ├── page_object_generator.py   # POM patterns + metadata
+│   │   ├── task_generator.py          # Task patterns + metadata
+│   │   ├── role_generator.py          # Role patterns + metadata
+│   │   └── test_generator.py          # Test patterns + metadata
+│   └── ...
+└── _dev_tests/                        # E2E test scripts
 ```
 
 ---
@@ -202,43 +282,13 @@ tests/
 ## 7. Technical Considerations
 
 ### 7.1 Dependencies
-- Existing `code_generator.py` functions can be referenced during refactor
-- Tools currently import from `utils.code_generator` - update imports incrementally
+- Existing generators in `utils/generators/` - update with metadata support
+- Tools currently partially refactored - complete the metadata chain
 - Generated code must use existing framework imports (`WebInterface`, `autologger`)
 
-### 7.2 Deprecation Strategy
-1. Create new generators in `utils/generators/`
-2. Update tools one at a time (3 → 4 → 5 → 6)
-3. Keep `code_generator.py` during transition
-4. Delete `code_generator.py` after all tools migrated and validated
-
-### 7.3 Validation Script Rules
-```python
-# Automated checks for generated code:
-VALIDATION_RULES = {
-    "page_object": {
-        "no_decorators": True,           # No @autologger on methods
-        "returns_self": True,            # Action methods return self
-        "locators_as_constants": True,   # UPPER_SNAKE at class level
-        "has_state_checks": True         # Methods like is_*, has_*, get_*
-    },
-    "task": {
-        "has_decorator": "@autologger.automation_logger(\"Task\")",
-        "returns_none": True,            # No return statements
-        "no_locators": True              # Locators only in POM
-    },
-    "role": {
-        "has_decorator": "@autologger.automation_logger(\"Role\")",
-        "returns_none": True,            # No return statements
-        "composes_tasks": True           # Has task instances
-    },
-    "test": {
-        "has_decorator": "@autologger.automation_logger(\"Test\")",
-        "asserts_via_pom": True,         # assert page.method(), not result
-        "single_role_call": True         # ONE workflow method call
-    }
-}
-```
+### 7.2 Backwards Compatibility
+- Tools must still work if called without full metadata (graceful degradation)
+- Existing test artifacts should not break
 
 ---
 
@@ -246,14 +296,16 @@ VALIDATION_RULES = {
 
 | Metric | Target |
 |--------|--------|
-| All 4 generators created | 100% |
-| All 4 tools updated | 100% |
-| Automated validation passes | 100% |
-| Manual review confirms pattern match | Yes |
-| Simple test case runs with visible browser | Yes |
-| Medium test case runs with visible browser | Yes |
+| Full 9-step flow documented | Yes |
+| Tools 1-2 output metadata | Yes |
+| Tools 3-6 accept/output metadata | Yes |
+| Check-existing implemented (Tools 4-5) | Yes |
+| expected_states extraction works | Yes |
+| Simple E2E test (catalog browse) passes | Yes |
+| Medium E2E test (auth + catalog) passes | Yes |
+| Tests run with visible browser | Yes |
 | HTML reports generated | Yes |
-| `code_generator.py` deprecated | Yes |
+| User validates E2E tests visually | Yes |
 
 ---
 
@@ -262,141 +314,150 @@ VALIDATION_RULES = {
 ### 9.1 Unit Tests
 - Location: `mcp_server/_dev_tests/`
 - Each generator has unit tests validating output patterns
+- Each tool has unit tests validating metadata output
 - Run with: `python -m pytest mcp_server/_dev_tests/ -v`
 
-### 9.2 Integration Tests
-- Generate code via MCP tools
-- Place in `test1/`, `test2/` folders
-- Run with visible browser: `pytest tests/test1/ -v --headless=False`
-- Verify HTML report: `--html=reports/test1_report.html`
+### 9.2 E2E Tests
+Two scenarios executed through full 9-step flow:
 
-### 9.3 E2E Demonstration
-Full workflow demonstration:
-1. User provides requirement
-2. MCP tools generate all layers (POM → Task → Role → Test)
-3. Run pytest with `--headless=False`
-4. Watch browser execute test
-5. View HTML report
+**Simple (Catalog Browse):**
+```
+Requirement: "As a guest, I want to browse products in the Women category"
+URL: http://automationpractice.pl/index.php
+Expected: Browser opens, navigates to Women category, verifies products displayed
+```
+
+**Medium (Auth + Catalog):**
+```
+Requirement: "As a registered user, I want to login and browse products"
+URL: http://automationpractice.pl/index.php?controller=authentication
+Expected: Browser opens, logs in, browses category, verifies products, logs out
+```
+
+### 9.3 E2E Demonstration Requirements
+- Run with `--headless=False` (visible browser)
+- Generate HTML report: `--html=reports/<test>_report.html`
+- User watches browser execute test
+- User validates report generated
 
 ---
 
 ## 10. Acceptance Tests
 
-### AT-01: Page Object Generator
+### AT-01: Step 2 AI Processing
 ```
-GIVEN a request to generate a ProductListPage
-WHEN the page_object_generator creates code
-THEN the code has NO @autologger decorators
-AND action methods return self
-AND locators are class-level UPPER_SNAKE constants
-AND state-check methods (has_products, is_loaded) exist
-```
-
-### AT-02: Task Generator
-```
-GIVEN a request to generate CatalogTasks
-WHEN the task_generator creates code
-THEN methods have @autologger.automation_logger("Task") decorator
-AND methods return None (no return statements)
-AND no locators are present in the code
-AND page objects are composed in __init__
+GIVEN a user requirement "As a registered user, I want to login"
+WHEN AI processes the requirement
+THEN AI extracts role_name = "RegisteredUser"
+AND AI determines domain = "auth"
+AND AI extracts expected_states from "Then" clause
+AND AI initializes metadata context
 ```
 
-### AT-03: Role Generator
+### AT-02: Tool 1 Metadata Output
 ```
-GIVEN a request to generate GuestUser role
-WHEN the role_generator creates code
-THEN workflow methods have @autologger.automation_logger("Role") decorator
-AND methods return None (no return statements)
-AND tasks are composed in __init__
-AND workflow methods call multiple task methods
+GIVEN a BDD user story
+WHEN Tool 1 processes it
+THEN output includes test_scenarios[] with name, given, when, then, workflow
 ```
 
-### AT-04: Test Generator
+### AT-03: Tool 2 Metadata Output
 ```
-GIVEN a request to generate test_browse_women_category
-WHEN the test_generator creates code
-THEN test has @autologger.automation_logger("Test") decorator
-AND test calls ONE role workflow method
-AND assertions use POM state-check methods (assert page.has_products())
-AND assertions do NOT check return values (not: assert result is True)
+GIVEN a page URL
+WHEN Tool 2 discovers elements
+THEN output includes discovered_elements[] with name, type, locator
 ```
 
-### AT-05: Simple E2E Test (Catalog Browse)
+### AT-04: Tool 3 expected_states
 ```
-GIVEN generated code for catalog browse test
+GIVEN expected_states = [{name: "is_logged_in", ...}]
+WHEN Tool 3 generates POM
+THEN POM includes is_logged_in() state-check method
+AND pom_metadata.state_methods includes is_logged_in
+```
+
+### AT-05: Tool 4 Check Existing
+```
+GIVEN intent = "login" and CommonTasks already has log_in method
+WHEN Tool 4 is called with check_existing=True
+THEN Tool 4 returns status = "existing_found"
+AND returns existing_class = "CommonTasks"
+```
+
+### AT-06: Tool 5 Check Existing
+```
+GIVEN role_name = "RegisteredUser" and RegisteredUser already exists
+WHEN Tool 5 is called with check_existing=True
+THEN Tool 5 returns status = "existing_found"
+AND returns existing_class = "RegisteredUser"
+```
+
+### AT-07: Tool 6 Assertions via POM
+```
+GIVEN pom_metadata with state_methods = ["is_logged_in"]
+WHEN Tool 6 generates test
+THEN test assertions use login_page.is_logged_in()
+AND test does NOT assert on return values
+```
+
+### AT-08: Simple E2E Test
+```
+GIVEN full 9-step flow for catalog browse requirement
 WHEN running pytest with --headless=False
 THEN browser opens visibly
-AND navigates to category page
+AND navigates to Women category
 AND test passes
-AND HTML report is generated
+AND HTML report generated
 ```
 
-### AT-06: Medium E2E Test (Auth + Catalog)
+### AT-09: Medium E2E Test
 ```
-GIVEN generated code for auth + catalog test
+GIVEN full 9-step flow for auth + catalog requirement
 WHEN running pytest with --headless=False
 THEN browser opens visibly
 AND user logs in
-AND browses to category
-AND verifies products displayed
-AND logs out
+AND browses category
 AND test passes
-AND HTML report is generated
-```
-
-### AT-07: Automated Validation
-```
-GIVEN generated code from all tools
-WHEN running validation script
-THEN all architecture rules pass
-AND no violations reported
+AND HTML report generated
 ```
 
 ---
 
 ## 11. Implementation Order
 
-Sequential bottom-up (matches framework layers):
-
 | Phase | Task | Description |
 |-------|------|-------------|
-| B.1 | Setup | Create `utils/generators/` structure, cleanup dev folders |
-| B.2 | Tool 3 | Create `page_object_generator.py`, update tool |
-| B.3 | Tool 4 | Create `task_generator.py`, update tool |
-| B.4 | Tool 5 | Create `role_generator.py`, update tool |
-| B.5 | Tool 6 | Create `test_generator.py`, update tool |
-| B.6 | Validation | Create automated validation script |
-| B.7 | Simple E2E | Generate + run catalog browse test (visible browser) |
-| B.8 | Medium E2E | Generate + run auth + catalog test (visible browser) |
-| B.9 | Cleanup | Deprecate `code_generator.py`, final documentation |
+| B.1 | Tool 1-2 Metadata | Add metadata output to Tools 1-2 |
+| B.2 | Tool 3 expected_states | Add expected_states input to Tool 3 |
+| B.3 | Tool 4 Refactor | Check-existing + accept POM metadata |
+| B.4 | Tool 5 Refactor | Check-existing + accept Task metadata |
+| B.5 | Tool 6 Refactor | Accept Role + POM metadata for assertions |
+| B.6 | Simple E2E | Full 9-step flow - catalog browse (visible browser) |
+| B.7 | Medium E2E | Full 9-step flow - auth + catalog (visible browser) |
+| B.8 | Cleanup | Final docs, merge to main |
 
 ---
 
 ## 12. Open Questions
 
-None - all questions resolved during Phase 0 design discussion.
+None - all questions resolved via FRAMEWORK.md Section 8 Design Decisions.
 
 ---
 
 ## 13. Relevant Files
 
-### Files to Create
-- `mcp_server/utils/generators/__init__.py`
-- `mcp_server/utils/generators/page_object_generator.py`
-- `mcp_server/utils/generators/task_generator.py`
-- `mcp_server/utils/generators/role_generator.py`
-- `mcp_server/utils/generators/test_generator.py`
-- `mcp_server/_dev_tests/test_generators.py` (validation script)
-
 ### Files to Update
-- `mcp_server/tools/tool_03_generate_page_object.py`
-- `mcp_server/tools/tool_04_generate_task.py`
-- `mcp_server/tools/tool_05_generate_role.py`
-- `mcp_server/tools/tool_06_generate_test_template.py`
-
-### Files to Deprecate
-- `mcp_server/utils/code_generator.py` (after migration complete)
+- `mcp_server/tools/tool_01_generate_tests_from_user_story.py` - Add metadata output
+- `mcp_server/tools/tool_02_discover_page_elements.py` - Add metadata output
+- `mcp_server/tools/tool_03_generate_page_object.py` - Accept expected_states
+- `mcp_server/tools/tool_04_generate_task.py` - Check existing, accept POM metadata
+- `mcp_server/tools/tool_05_generate_role.py` - Check existing, accept Task metadata
+- `mcp_server/tools/tool_06_generate_test_runner.py` - Accept Role + POM metadata
+- `mcp_server/utils/generators/page_object_generator.py` - Generate state methods from expected_states
+- `mcp_server/utils/generators/task_generator.py` - Accept POM metadata
+- `mcp_server/utils/generators/role_generator.py` - Accept Task metadata
+- `mcp_server/utils/generators/test_generator.py` - Accept Role + POM metadata
+- `CLAUDE.md` - Updated with 9-step flow (DONE)
 
 ### Test Artifacts
 - `framework/pages/test1/`, `framework/pages/test2/`

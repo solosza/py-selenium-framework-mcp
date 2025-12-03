@@ -682,5 +682,641 @@ GOLDEN RULES:
 
 ---
 
+## 8. MCP Tool Chain & AI Workflow
+
+This section documents the complete AI-assisted test generation workflow. The MCP server exposes tools that generate code following the 4-layer architecture patterns defined above.
+
+### 8.1 Workflow Overview
+
+The tool chain uses a **bottom-up approach**: Page Object → Task → Role → Test. Each layer needs information from the previous one to generate accurate method calls.
+
+```
+USER INPUT → AI PROCESSING → TOOL 1 → TOOL 2 → TOOL 3 → TOOL 4 → TOOL 5 → TOOL 6 → GENERATED CODE
+```
+
+### 8.2 Step 1: User Input
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              STEP 1: USER INPUT                             │
+│                                                                             │
+│  User provides:                                                             │
+│  1. Plain English requirement with persona                                  │
+│     "As a registered user, I want to login with email and password"         │
+│     "As a guest, I want to browse products by category"                     │
+│                                                                             │
+│  2. Target URL                                                              │
+│     "http://automationpractice.pl/index.php?controller=authentication"      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.3 Step 2: AI Processing
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 2: AI PROCESSING                               │
+│                                                                             │
+│  AI receives input and:                                                     │
+│                                                                             │
+│  1. Extracts ROLE from requirement                                          │
+│     "As a registered user..." → RegisteredUser                              │
+│     "As a guest..." → GuestUser                                             │
+│                                                                             │
+│  2. Extracts USER INTENT (descriptive)                                      │
+│     "I want to login" → intent: "login"                                     │
+│     "I want to browse products" → intent: "browse_products"                 │
+│                                                                             │
+│  3. Determines DOMAIN (for folder organization)                             │
+│     login/logout/register → domain: "auth"                                  │
+│     browse/filter/search products → domain: "catalog"                       │
+│     add to cart/update cart → domain: "cart"                                │
+│     checkout/payment → domain: "checkout"                                   │
+│                                                                             │
+│  4. Converts plain English → BDD format                                     │
+│     Given user is on login page                                             │
+│     When user enters valid credentials and clicks login                     │
+│     Then user is logged in and sees account page                            │
+│                                                                             │
+│  5. Extracts EXPECTED STATES from "Then" clause (for POM state methods)     │
+│     "Then user is logged in" → expected_state: "is_logged_in"               │
+│     "Then error message is displayed" → expected_state: "has_error_message" │
+│     "Then cart shows 2 items" → expected_state: "get_cart_count"            │
+│                                                                             │
+│     Naming conventions for state methods:                                   │
+│     - Boolean checks: is_* or has_* (returns bool)                          │
+│     - Value retrieval: get_* (returns str/int)                              │
+│                                                                             │
+│  6. Initializes metadata context (passed through tool chain)                │
+│     {                                                                       │
+│       "role_name": "RegisteredUser",                                        │
+│       "intent": "login",                                                    │
+│       "domain": "auth",                                                     │
+│       "url": "http://...",                                                  │
+│       "bdd_scenarios": [...],                                               │
+│       "expected_states": [                                                  │
+│         { "name": "is_logged_in", "description": "user is logged in" }      │
+│       ]                                                                     │
+│     }                                                                       │
+│                                                                             │
+│  NOTE: Exact method names emerge from tool chain execution, not from this   │
+│        step. Bottom-up approach means POM methods determine Task methods,   │
+│        which determine Role methods.                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AI PROMPTING RULES FOR STEP 2:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  When processing user input, AI MUST:                                       │
+│                                                                             │
+│  1. VALIDATE USER INPUT                                                     │
+│     - Requirement MUST contain persona ("As a...")                          │
+│     - If missing, ASK user: "What type of user performs this action?"       │
+│     - URL MUST be provided                                                  │
+│     - If missing, ASK user for the target page URL                          │
+│                                                                             │
+│  2. EXTRACT ROLE NAME ACCURATELY                                            │
+│     - "As a registered user" → RegisteredUser                               │
+│     - "As a guest" / "As a visitor" → GuestUser                             │
+│     - "As an admin" / "As an administrator" → AdminUser                     │
+│     - If ambiguous, ASK user to clarify                                     │
+│                                                                             │
+│  3. DETERMINE DOMAIN FROM INTENT                                            │
+│     - Keywords: login, logout, sign in, register → domain: "auth"           │
+│     - Keywords: browse, catalog, products, filter, search → domain:"catalog"│
+│     - Keywords: cart, basket, add to cart → domain: "cart"                  │
+│     - Keywords: checkout, payment, order → domain: "checkout"               │
+│                                                                             │
+│  4. CONVERT TO PROPER BDD FORMAT                                            │
+│     - Each scenario MUST have Given, When, Then                             │
+│     - Given = precondition/state                                            │
+│     - When = action performed                                               │
+│     - Then = expected outcome (becomes state-check method)                  │
+│                                                                             │
+│  5. EXTRACT EXPECTED STATES FOR ASSERTIONS                                  │
+│     - Parse "Then" clause for state descriptions                            │
+│     - Convert to method names: is_*, has_*, get_*                           │
+│     - Example: "user is logged in" → is_logged_in                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.4 Step 3: Tool 1 (generate_tests_from_user_story)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 3: TOOL 1                                      │
+│                         generate_tests_from_user_story                      │
+│                                                                             │
+│  Input (from AI):                                                           │
+│  {                                                                          │
+│    "user_story": "As a registered user, I want to login...\n                │
+│                   Given user is on login page\n                             │
+│                   When user enters valid credentials and clicks login\n     │
+│                   Then user is logged in",                                  │
+│    "workflow": "auth"                                                       │
+│  }                                                                          │
+│                                                                             │
+│  Tool does:                                                                 │
+│  1. Parses BDD scenarios from user story text                               │
+│  2. Validates Given/When/Then structure                                     │
+│  3. Generates test scenario names from scenario content                     │
+│                                                                             │
+│  Output:                                                                    │
+│  {                                                                          │
+│    "status": "success",                                                     │
+│    "scenarios": [                                                           │
+│      {                                                                      │
+│        "name": "test_user_logs_in_with_valid_credentials",                  │
+│        "given": "user is on login page",                                    │
+│        "when": "user enters valid credentials and clicks login",            │
+│        "then": "user is logged in"                                          │
+│      }                                                                      │
+│    ],                                                                       │
+│    "workflow": "auth"                                                       │
+│  }                                                                          │
+│                                                                             │
+│  AI updates metadata context:                                               │
+│  {                                                                          │
+│    "role_name": "RegisteredUser",                                           │
+│    "intent": "login",                                                       │
+│    "domain": "auth",                                                        │
+│    "url": "http://...",                                                     │
+│    "bdd_scenarios": [...],                                                  │
+│    "test_scenarios": [...]  ← Added from Tool 1 output                      │
+│  }                                                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AI PROMPTING RULES FOR TOOL 1:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Before calling Tool 1, AI MUST:                                            │
+│                                                                             │
+│  1. FORMAT BDD CORRECTLY                                                    │
+│     - Include full user story with "As a..., I want..., So that..."         │
+│     - Each scenario has Given/When/Then on separate lines                   │
+│     - Use clear, action-oriented language                                   │
+│                                                                             │
+│  2. PASS CORRECT WORKFLOW                                                   │
+│     - workflow = domain determined in Step 2                                │
+│     - Must be one of: "auth", "catalog", "cart", "checkout"                 │
+│                                                                             │
+│  3. VALIDATE TOOL OUTPUT                                                    │
+│     - Check status = "success"                                              │
+│     - Verify scenarios array is not empty                                   │
+│     - Each scenario must have name, given, when, then                       │
+│                                                                             │
+│  4. UPDATE METADATA CONTEXT                                                 │
+│     - Add test_scenarios from Tool 1 output to metadata                     │
+│     - Preserve all existing metadata fields                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.5 Step 4: Tool 2 (discover_page_elements)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 4: TOOL 2                                      │
+│                         discover_page_elements                              │
+│                                                                             │
+│  Input (from AI):                                                           │
+│  {                                                                          │
+│    "url": "http://automationpractice.pl/index.php?controller=authentication"│
+│  }                                                                          │
+│                                                                             │
+│  Tool does:                                                                 │
+│  1. Fetches page HTML via Selenium/requests                                 │
+│  2. Parses DOM for interactive elements                                     │
+│  3. Extracts: inputs, buttons, links, selects, forms                        │
+│  4. Generates locators (CSS selectors, IDs, names)                          │
+│                                                                             │
+│  Output:                                                                    │
+│  {                                                                          │
+│    "status": "success",                                                     │
+│    "url": "http://...",                                                     │
+│    "elements": [                                                            │
+│      { "name": "email", "type": "input", "locator": "#email" },             │
+│      { "name": "passwd", "type": "input", "locator": "#passwd" },           │
+│      { "name": "SubmitLogin", "type": "button", "locator": "#SubmitLogin" } │
+│    ]                                                                        │
+│  }                                                                          │
+│                                                                             │
+│  AI updates metadata context:                                               │
+│  {                                                                          │
+│    "role_name": "RegisteredUser",                                           │
+│    "intent": "login",                                                       │
+│    "domain": "auth",                                                        │
+│    "url": "http://...",                                                     │
+│    "bdd_scenarios": [...],                                                  │
+│    "test_scenarios": [...],                                                 │
+│    "discovered_elements": [...]  ← Added from Tool 2 output                 │
+│  }                                                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AI PROMPTING RULES FOR TOOL 2:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Before calling Tool 2, AI MUST:                                            │
+│                                                                             │
+│  1. VALIDATE URL                                                            │
+│     - URL must be complete (include protocol http/https)                    │
+│     - URL must be accessible (target application must be running)           │
+│                                                                             │
+│  2. VALIDATE TOOL OUTPUT                                                    │
+│     - Check status = "success"                                              │
+│     - Verify elements array is not empty                                    │
+│     - Each element must have name, type, locator                            │
+│     - If empty, WARN user: "No interactive elements found on page"          │
+│                                                                             │
+│  3. FILTER RELEVANT ELEMENTS                                                │
+│     - Focus on elements relevant to the user's intent                       │
+│     - For login: email input, password input, submit button                 │
+│     - For catalog: product links, filter controls, sort dropdowns           │
+│     - Ignore generic navigation elements unless relevant                    │
+│                                                                             │
+│  4. UPDATE METADATA CONTEXT                                                 │
+│     - Add discovered_elements from Tool 2 output to metadata                │
+│     - Preserve all existing metadata fields                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.6 Step 5: Tool 3 (generate_page_object)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 5: TOOL 3                                      │
+│                         generate_page_object                                │
+│                                                                             │
+│  Input (from AI):                                                           │
+│  {                                                                          │
+│    "page_name": "LoginPage",                                                │
+│    "elements": [...],           ← From Tool 2                               │
+│    "domain": "auth",            ← From metadata                             │
+│    "expected_states": [         ← From AI (extracted from BDD "Then")       │
+│      { "name": "is_logged_in", "description": "user is logged in" }         │
+│    ]                                                                        │
+│  }                                                                          │
+│                                                                             │
+│  Tool does:                                                                 │
+│  1. Generates Page Object class with locators as UPPER_SNAKE constants      │
+│  2. Creates atomic action methods based on element types:                   │
+│     - input → enter_<name>(value: str)                                      │
+│     - button → click_<name>()                                               │
+│     - link → click_<name>()                                                 │
+│     - select → select_<name>(option: str)                                   │
+│     - checkbox → check_<name>(), uncheck_<name>()                           │
+│  3. Creates state-check methods from expected_states:                       │
+│     - is_* methods return bool                                              │
+│     - has_* methods return bool                                             │
+│     - get_* methods return str/int                                          │
+│  4. Builds metadata describing all generated methods                        │
+│                                                                             │
+│  Output:                                                                    │
+│  {                                                                          │
+│    "status": "success",                                                     │
+│    "code": "class LoginPage:\n    EMAIL_INPUT = ...",                       │
+│    "file_path": "framework/pages/auth/login_page.py",                       │
+│    "metadata": {                                                            │
+│      "class_name": "LoginPage",                                             │
+│      "import_path": "pages.auth.login_page",                                │
+│      "locators": [                                                          │
+│        { "name": "EMAIL_INPUT", "by": "CSS_SELECTOR", "value": "#email" }   │
+│      ],                                                                     │
+│      "action_methods": [                                                    │
+│        { "name": "enter_email", "params": ["email: str"], "returns": "self"}│
+│      ],                                                                     │
+│      "state_methods": [                                                     │
+│        { "name": "is_logged_in", "params": [], "returns": "bool" }          │
+│      ]                                                                      │
+│    }                                                                        │
+│  }                                                                          │
+│                                                                             │
+│  AI updates metadata context:                                               │
+│  {                                                                          │
+│    ...,                                                                     │
+│    "pom_metadata": { ... }  ← Added from Tool 3 output                      │
+│  }                                                                          │
+│                                                                             │
+│  NOTE: POM metadata is critical - Tool 4 uses it to generate Task methods   │
+│        that call actual POM methods (no hardcoding).                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AI PROMPTING RULES FOR TOOL 3:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Before calling Tool 3, AI MUST:                                            │
+│                                                                             │
+│  1. DETERMINE PAGE NAME                                                     │
+│     - Use intent + "Page" suffix: LoginPage, ProductListPage, CartPage      │
+│     - Name should reflect the page's purpose, not URL                       │
+│                                                                             │
+│  2. PASS EXPECTED STATES                                                    │
+│     - Include expected_states from Step 2 metadata                          │
+│     - These become state-check methods in the POM                           │
+│     - Without this, Tool 3 cannot generate correct assertions               │
+│                                                                             │
+│  3. CHECK FOR EXISTING POM                                                  │
+│     - Scan framework/pages/<domain>/ for existing page objects              │
+│     - If similar page exists, consider extending vs creating new            │
+│                                                                             │
+│  4. VALIDATE TOOL OUTPUT                                                    │
+│     - Check status = "success"                                              │
+│     - Verify metadata contains class_name, action_methods, state_methods    │
+│     - Verify state_methods includes methods from expected_states            │
+│                                                                             │
+│  5. UPDATE METADATA CONTEXT                                                 │
+│     - Add pom_metadata from Tool 3 output                                   │
+│     - This is CRITICAL for Tool 4 to generate correct Task methods          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.7 Step 6: Tool 4 (generate_task)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 6: TOOL 4                                      │
+│                         generate_task                                       │
+│                                                                             │
+│  IMPORTANT: Check existing before creating new!                             │
+│                                                                             │
+│  Input (from AI):                                                           │
+│  {                                                                          │
+│    "task_name": "CommonTasks",       ← May use existing class               │
+│    "domain": "auth",                                                        │
+│    "pom_metadata": { ... },          ← From Tool 3                          │
+│    "check_existing": true            ← Flag to scan for existing tasks      │
+│  }                                                                          │
+│                                                                             │
+│  Tool does:                                                                 │
+│  1. FIRST: Scans framework/tasks/ for existing Task classes                 │
+│  2. If matching Task exists with needed methods → return existing info      │
+│  3. If no match → generate new Task class                                   │
+│  4. Reads POM metadata to know available action methods                     │
+│  5. Groups related actions into Task methods                                │
+│  6. Generates with @autologger("Task") decorators, NO return values         │
+│  7. Builds metadata describing Task methods                                 │
+│                                                                             │
+│  Output (existing found):                                                   │
+│  {                                                                          │
+│    "status": "existing_found",                                              │
+│    "message": "CommonTasks already has log_in method",                      │
+│    "existing_class": "CommonTasks",                                         │
+│    "existing_methods": ["log_in", "log_out", "register_new_user"],          │
+│    "file_path": "framework/tasks/common/common_tasks.py",                   │
+│    "metadata": { ... }               ← Metadata of existing class           │
+│  }                                                                          │
+│                                                                             │
+│  Output (new generated):                                                    │
+│  {                                                                          │
+│    "status": "success",                                                     │
+│    "code": "class CatalogTasks:\n    @autologger...",                       │
+│    "file_path": "framework/tasks/catalog/catalog_tasks.py",                 │
+│    "metadata": {                                                            │
+│      "class_name": "CatalogTasks",                                          │
+│      "import_path": "tasks.catalog.catalog_tasks",                          │
+│      "composed_pages": ["ProductListPage"],                                 │
+│      "task_methods": [                                                      │
+│        { "name": "browse_category", "params": ["category: str"] }           │
+│      ]                                                                      │
+│    }                                                                        │
+│  }                                                                          │
+│                                                                             │
+│  AI updates metadata context:                                               │
+│  {                                                                          │
+│    ...,                                                                     │
+│    "task_metadata": { ... }  ← From Tool 4 output (existing or new)         │
+│  }                                                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AI PROMPTING RULES FOR TOOL 4:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Before calling Tool 4, AI MUST:                                            │
+│                                                                             │
+│  1. CHECK EXISTING TASKS FIRST                                              │
+│     - Scan framework/tasks/ for existing Task classes                       │
+│     - CommonTasks handles: log_in, log_out, register_new_user               │
+│     - CatalogTasks handles: browse_category, filter_products, etc.          │
+│     - If intent matches existing method → use it, don't create new          │
+│                                                                             │
+│  2. DETERMINE CORRECT TASK CLASS                                            │
+│     - Auth operations → CommonTasks (already exists)                        │
+│     - Catalog operations → CatalogTasks                                     │
+│     - Cart operations → CartTasks                                           │
+│     - Checkout operations → CheckoutTasks                                   │
+│                                                                             │
+│  3. ONLY CREATE NEW IF:                                                     │
+│     - No existing Task class handles the domain, OR                         │
+│     - Existing class lacks the specific method needed                       │
+│                                                                             │
+│  4. NAMING CONVENTIONS                                                      │
+│     - Task class: <Domain>Tasks (e.g., CatalogTasks)                        │
+│     - Task methods: verb_noun (e.g., browse_category, add_to_cart)          │
+│     - Use snake_case for all method names                                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.8 Step 7: Tool 5 (generate_role)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 7: TOOL 5                                      │
+│                         generate_role                                       │
+│                                                                             │
+│  IMPORTANT: Check existing before creating new!                             │
+│                                                                             │
+│  Input (from AI):                                                           │
+│  {                                                                          │
+│    "role_name": "RegisteredUser",    ← From Step 2                          │
+│    "domain": "auth",                                                        │
+│    "task_metadata": { ... },         ← From Tool 4                          │
+│    "intent": "login",                ← Workflow method to generate          │
+│    "check_existing": true                                                   │
+│  }                                                                          │
+│                                                                             │
+│  Tool does:                                                                 │
+│  1. FIRST: Scans framework/roles/ for existing Role classes                 │
+│  2. If Role exists with needed workflow method → return existing info       │
+│  3. If no match → generate new Role class or add method to existing         │
+│  4. Reads Task metadata to know available Task methods                      │
+│  5. Generates workflow method that orchestrates Task calls                  │
+│  6. @autologger("Role") decorators, NO return values                        │
+│                                                                             │
+│  Output (existing found):                                                   │
+│  {                                                                          │
+│    "status": "existing_found",                                              │
+│    "existing_class": "RegisteredUser",                                      │
+│    "existing_methods": ["login", "logout", "register"],                     │
+│    "file_path": "framework/roles/auth/registered_user.py",                  │
+│    "metadata": { ... }                                                      │
+│  }                                                                          │
+│                                                                             │
+│  Output (new generated):                                                    │
+│  {                                                                          │
+│    "status": "success",                                                     │
+│    "code": "class GuestUser:\n    @autologger...",                          │
+│    "file_path": "framework/roles/guest/guest_user.py",                      │
+│    "metadata": {                                                            │
+│      "class_name": "GuestUser",                                             │
+│      "import_path": "roles.guest.guest_user",                               │
+│      "composed_tasks": ["CatalogTasks"],                                    │
+│      "workflow_methods": [                                                  │
+│        { "name": "browse_category", "params": ["category: str"] }           │
+│      ]                                                                      │
+│    }                                                                        │
+│  }                                                                          │
+│                                                                             │
+│  AI updates metadata context:                                               │
+│  {                                                                          │
+│    ...,                                                                     │
+│    "role_metadata": { ... }  ← From Tool 5 output (existing or new)         │
+│  }                                                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AI PROMPTING RULES FOR TOOL 5:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Before calling Tool 5, AI MUST:                                            │
+│                                                                             │
+│  1. CHECK EXISTING ROLES FIRST                                              │
+│     - Scan framework/roles/ for existing Role classes                       │
+│     - RegisteredUser handles: login, logout, register                       │
+│     - GuestUser handles: browse_category, filter_products, etc.             │
+│     - If intent matches existing method → use it, don't create new          │
+│                                                                             │
+│  2. MATCH ROLE TO PERSONA                                                   │
+│     - "As a registered user..." → RegisteredUser                            │
+│     - "As a guest..." → GuestUser                                           │
+│     - "As an admin..." → AdminUser                                          │
+│                                                                             │
+│  3. ONLY CREATE NEW IF:                                                     │
+│     - No existing Role class matches the persona, OR                        │
+│     - Existing Role lacks the specific workflow method needed               │
+│                                                                             │
+│  4. NAMING CONVENTIONS                                                      │
+│     - Role class: <Persona>User or <Persona> (e.g., RegisteredUser, Admin)  │
+│     - Workflow methods: simple verb (login, logout, browse_category)        │
+│     - Don't duplicate persona in method name (login, not login_as_user)     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.9 Step 8: Tool 6 (generate_test_runner)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 8: TOOL 6                                      │
+│                         generate_test_runner                                │
+│                                                                             │
+│  Input (from AI):                                                           │
+│  {                                                                          │
+│    "test_name": "test_valid_login",                                         │
+│    "domain": "auth",                                                        │
+│    "role_metadata": { ... },         ← From Tool 5                          │
+│    "pom_metadata": { ... },          ← From Tool 3 (for assertions)         │
+│    "test_scenarios": [ ... ]         ← From Tool 1                          │
+│  }                                                                          │
+│                                                                             │
+│  Tool does:                                                                 │
+│  1. Generates pytest file (one file per scenario)                           │
+│  2. Creates test function(s) from BDD scenarios                             │
+│  3. Each test: Arrange (create Role), Act (ONE workflow call), Assert       │
+│  4. Assertions use POM state-check methods (from pom_metadata)              │
+│  5. @autologger("Test") decorator, @pytest.mark.<domain>                    │
+│                                                                             │
+│  Output:                                                                    │
+│  {                                                                          │
+│    "status": "success",                                                     │
+│    "code": "@pytest.mark.auth\ndef test_valid_login...",                    │
+│    "file_path": "tests/auth/test_valid_login.py"                            │
+│  }                                                                          │
+│                                                                             │
+│  AI saves file and reports to user.                                         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+AI PROMPTING RULES FOR TOOL 6:
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Before calling Tool 6, AI MUST:                                            │
+│                                                                             │
+│  1. TEST FILE ORGANIZATION                                                  │
+│     - One file per test scenario (not one class with many methods)          │
+│     - Group by domain folder: tests/auth/, tests/catalog/, etc.             │
+│     - File naming: test_<scenario>.py (e.g., test_valid_login.py)           │
+│     - Multiple related test functions can be in same file                   │
+│                                                                             │
+│  2. TEST STRUCTURE (AAA Pattern)                                            │
+│     - Arrange: Create Role instance, create POM for assertions              │
+│     - Act: Call ONE Role workflow method (no return value)                  │
+│     - Assert: Use POM state-check methods (from pom_metadata)               │
+│                                                                             │
+│  3. ASSERTIONS MUST USE POM STATE METHODS                                   │
+│     - Get state method names from pom_metadata.state_methods                │
+│     - Example: assert login_page.is_logged_in(), "message"                  │
+│     - NEVER assert on return values (Role methods return None)              │
+│                                                                             │
+│  4. DECORATORS AND MARKERS                                                  │
+│     - @pytest.mark.<domain> (e.g., @pytest.mark.auth)                       │
+│     - @pytest.mark.smoke for critical path tests                            │
+│     - @autologger.automation_logger("Test")                                 │
+│                                                                             │
+│  5. FIXTURES                                                                │
+│     - Use: web_interface, config, test_users (from conftest.py)             │
+│     - Don't create new fixtures unless necessary                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.10 Step 9: AI Saves Files and Reports
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 9: AI SAVES & REPORTS                          │
+│                                                                             │
+│  After all tools complete, AI:                                              │
+│                                                                             │
+│  1. Saves generated files (if new code was generated)                       │
+│     - POM: framework/pages/<domain>/<name>_page.py                          │
+│     - Task: framework/tasks/<domain>/<name>_tasks.py                        │
+│     - Role: framework/roles/<domain>/<name>.py                              │
+│     - Test: tests/<domain>/test_<scenario>.py                               │
+│                                                                             │
+│  2. Reports to user what was created/reused                                 │
+│     - List of new files created                                             │
+│     - List of existing files reused                                         │
+│     - Command to run the test                                               │
+│                                                                             │
+│  3. Optionally runs the test                                                │
+│     pytest tests/<domain>/test_<scenario>.py -v --headless=False            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.11 Design Decisions
+
+| ID | Decision | Rationale |
+|----|----------|-----------|
+| DD-01 | User must specify persona in requirement ("As a...") | Eliminates ambiguity in Role naming |
+| DD-02 | URL required upfront with requirement | Enables autonomous tool chain execution |
+| DD-03 | Metadata context accumulated through tool chain | Consistent pattern, no separate state files |
+| DD-04 | Single documentation source (FRAMEWORK.md) | One source of truth for framework + MCP workflow |
+| DD-05 | Exact method names emerge from tool chain, not upfront | Bottom-up approach - POM → Task → Role determines naming |
+| DD-06 | AI extracts intent, not exact method names | Intent guides generation; actual names depend on discovered elements |
+| DD-07 | Domain determined by AI in Step 2, passed through metadata | Used for folder organization (auth/, catalog/, etc.) |
+| DD-08 | AI orchestrates tool chain, tools don't call other tools | AI can handle errors, inspect outputs, make decisions; tools stay simple |
+| DD-09 | AI extracts expected_states from BDD "Then" clause | Ensures correct state-check methods are generated; Tool 3 can't infer business logic |
+| DD-10 | Action methods derived from element types (input→enter, button→click) | Predictable, consistent naming based on UI element semantics |
+| DD-11 | State method naming: is_*/has_* for bool, get_* for values | Follows common naming conventions; clear return type expectations |
+| DD-12 | Check existing classes/methods before generating new | Avoid duplicates; reuse production code; CommonTasks already handles auth |
+| DD-13 | Each tool has specific AI prompting rules | Ensures consistent enforcement of patterns across all tool calls |
+| DD-14 | One test file per scenario, grouped by domain folder | Better modularity; clearer reports; can run by marker or file |
+| DD-15 | Test assertions use POM state methods from metadata | Ensures tests assert on actual generated methods; no hardcoding |
+
+---
+
 **Document Status:** This is the authoritative source of truth for framework architecture.
 **Related Docs:** CLAUDE.md (quick reference), README.md (overview)
