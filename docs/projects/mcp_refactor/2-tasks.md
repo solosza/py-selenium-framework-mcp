@@ -41,18 +41,18 @@
 
 ## Tasks
 
-- [ ] B.1 Tool 1-2 Metadata Output [CORE]
-  - [ ] B.1.1 Create branch `feature/B.1-tool-1-2-metadata`
-  - [ ] B.1.2 Update Tool 1 to output `test_scenarios[]` in metadata format:
-    - Each scenario: {name, given, when, then, workflow}
+- [x] B.1 Tool 1-2 Metadata Output [CORE]
+  - [x] B.1.1 Create branch `feature/B.1-tool-1-2-metadata`
+  - [x] B.1.2 Update Tool 1 to output `test_scenarios[]` in metadata format:
+    - Each scenario: {title, given, when, then, workflow}
     - Add `metadata` key to JSON response
-  - [ ] B.1.3 Update Tool 2 to output `discovered_elements[]` in metadata format:
+  - [x] B.1.3 Update Tool 2 to output `discovered_elements[]` in metadata format:
     - Each element: {name, type, locator}
     - Ensure consistent with what Tool 3 expects
-  - [ ] B.1.4 Test Tool 1 standalone: `python mcp_server/tools/tool_01_generate_tests_from_user_story.py`
-  - [ ] B.1.5 Test Tool 2 standalone: `python mcp_server/tools/tool_02_discover_page_elements.py`
-  - [ ] B.1.6 Verify metadata output format matches PRD Section 6.2
-  - [ ] B.1.7 Record results
+  - [x] B.1.4 Test Tool 1 standalone: `python mcp_server/tools/tool_01_generate_tests_from_user_story.py`
+  - [x] B.1.5 Test Tool 2 standalone: `python mcp_server/tools/tool_02_discover_page_elements.py`
+  - [x] B.1.6 Verify metadata output format matches PRD Section 6.2
+  - [x] B.1.7 Record results
   - [ ] B.1.8 Commit: `feat: add metadata output to Tools 1-2 (Task B.1)`
 
 - [ ] B.2 Tool 3 expected_states [CORE]
@@ -211,9 +211,32 @@
 ## Commands Run
 
 ```bash
-# To be filled during execution
+# Task B.1 - Tool 1-2 Metadata Output
+git checkout -b feature/B.1-tool-1-2-metadata
+python mcp_server/tools/tool_01_generate_tests_from_user_story.py
+python mcp_server/tools/tool_02_discover_page_elements.py
 ```
 
 ## Results
 
-- To be recorded during execution
+### Task B.1 Results (2025-12-03)
+
+**Tool 1 Output:**
+- Status: SUCCESS
+- `metadata.test_scenarios[]` contains: `{title, given, when, then, workflow}`
+- Changed field name from `name` to `title` for clarity
+
+**Tool 2 Output:**
+- Status: SUCCESS
+- `metadata.discovered_elements[]` contains: `{name, type, locator}`
+- Discovered 23 elements on auth page (4 buttons, 12 links, 5 inputs, 2 images)
+
+**Live Test (Login Flow):**
+- Step 1-2: AI extracted role=RegisteredUser, domain=auth, expected_states=[is_logged_in]
+- Step 3 (Tool 1): Generated test scenario `test_valid_login_with_email_and_password`
+- Step 4 (Tool 2): Discovered EMAIL, PASSWD, SUBMITLOGIN elements with correct locators
+
+**Documentation Updated:**
+- PRD FR-09: Changed `name` to `title`
+- FRAMEWORK.md Section 8.4: Changed `name` to `title`
+- Task list: Updated to reflect `title` field

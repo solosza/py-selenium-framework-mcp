@@ -71,17 +71,44 @@ async def discover_elements(arguments: dict) -> str:
                     grouped[elem_type] = []
                 grouped[elem_type].append(elem)
 
+            # Build metadata for downstream tools (PRD FR-11, FR-12, FR-13, FR-14)
+            # This is the standardized format that AI passes to Tool 3
+            # Format per FRAMEWORK.md Section 8.5 and PRD Section 6.2:
+            # discovered_elements: [{name, type, locator}]
+            def get_best_locator(elem):
+                """Get the best available locator (priority: id > css > xpath)."""
+                if elem.get("locator_id"):
+                    return elem["locator_id"]
+                elif elem.get("locator_css"):
+                    return elem["locator_css"]
+                elif elem.get("locator_xpath"):
+                    return elem["locator_xpath"]
+                return ""
+
+            metadata = {
+                "discovered_elements": [
+                    {
+                        "name": elem.get("suggested_name", ""),
+                        "type": elem.get("element_type", ""),
+                        "locator": get_best_locator(elem)
+                    }
+                    for elem in elements
+                    if elem.get("suggested_name") and get_best_locator(elem)
+                ]
+            }
+
             result = {
                 "status": "success",
                 "url": url,
                 "total_elements": len(elements),
                 "elements_by_type": {k: len(v) for k, v in grouped.items()},
-                "elements": elements,
+                "elements": elements,  # Legacy detailed format for backwards compatibility
+                "metadata": metadata,  # Standardized metadata for downstream tools
                 "next_steps": [
                     "Review discovered elements",
                     "Select relevant elements for POM",
-                    "Use Tool 6 (generate_page_object) to create POM code",
-                    "Optionally filter elements before passing to Tool 6"
+                    "Use Tool 3 (generate_page_object) to create POM code",
+                    "Optionally filter elements before passing to Tool 3"
                 ]
             }
 

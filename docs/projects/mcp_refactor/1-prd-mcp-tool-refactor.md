@@ -67,7 +67,7 @@ Implement the complete 9-step workflow with metadata passing, AI rule enforcemen
 | ID | Requirement |
 |----|-------------|
 | FR-08 | Tool 1 must output `test_scenarios[]` in metadata format |
-| FR-09 | Each scenario must include: name, given, when, then, workflow |
+| FR-09 | Each scenario must include: title, given, when, then, workflow |
 | FR-10 | AI must add test_scenarios to metadata context |
 
 ### 4.3 Tool 2: discover_page_elements
@@ -186,7 +186,7 @@ Step 1-2 (User Input + AI Processing)
           ▼
 Tool 1 (generate_tests_from_user_story)
     │
-    └── test_scenarios: [{name, given, when, then, workflow}]
+    └── test_scenarios: [{title, given, when, then, workflow}]
           │
           ▼
 Tool 2 (discover_page_elements)
@@ -358,7 +358,7 @@ AND AI initializes metadata context
 ```
 GIVEN a BDD user story
 WHEN Tool 1 processes it
-THEN output includes test_scenarios[] with name, given, when, then, workflow
+THEN output includes test_scenarios[] with title, given, when, then, workflow
 ```
 
 ### AT-03: Tool 2 Metadata Output

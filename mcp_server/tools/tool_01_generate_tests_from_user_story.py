@@ -71,7 +71,7 @@ async def generate_tests_from_user_story(arguments: dict) -> str:
             test_name = generate_test_name(scenario, workflow)
 
             test_scenario = {
-                "name": test_name,
+                "title": test_name,  # Test function name (e.g., test_valid_login)
                 "description": f"Verify {scenario.get('when', 'scenario')}",
                 "given": scenario.get("given", ""),
                 "when": scenario.get("when", ""),
@@ -81,13 +81,31 @@ async def generate_tests_from_user_story(arguments: dict) -> str:
 
             test_scenarios.append(test_scenario)
 
+        # Build metadata for downstream tools (PRD FR-08, FR-09, FR-10)
+        # This is the standardized format that AI passes to subsequent tools
+        # Format per FRAMEWORK.md Section 8.4 and PRD Section 6.2:
+        # test_scenarios: [{title, given, when, then, workflow}]
+        metadata = {
+            "test_scenarios": [
+                {
+                    "title": scenario["title"],  # Test function name
+                    "given": scenario["given"],
+                    "when": scenario["when"],
+                    "then": scenario["then"],
+                    "workflow": scenario["workflow"]
+                }
+                for scenario in test_scenarios
+            ]
+        }
+
         # Return structured JSON
         result = {
             "status": "success",
             "user_story_title": parsed["title"],
             "workflow": workflow,
             "scenarios_count": len(test_scenarios),
-            "scenarios": test_scenarios,
+            "scenarios": test_scenarios,  # Legacy format for backwards compatibility
+            "metadata": metadata,  # Standardized metadata for downstream tools
             "next_step": "Use discover_page_elements (Tool 2) to find elements, then generate_page_object (Tool 3), generate_task (Tool 4), generate_role (Tool 5), and finally generate_test_runner (Tool 6) to create pytest code"
         }
 
