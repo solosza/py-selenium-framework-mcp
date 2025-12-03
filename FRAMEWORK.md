@@ -827,7 +827,7 @@ AI PROMPTING RULES FOR STEP 2:
 │    "status": "success",                                                     │
 │    "scenarios": [                                                           │
 │      {                                                                      │
-│        "name": "test_user_logs_in_with_valid_credentials",                  │
+│        "title": "test_user_logs_in_with_valid_credentials",                 │
 │        "given": "user is on login page",                                    │
 │        "when": "user enters valid credentials and clicks login",            │
 │        "then": "user is logged in"                                          │
@@ -864,7 +864,7 @@ AI PROMPTING RULES FOR TOOL 1:
 │  3. VALIDATE TOOL OUTPUT                                                    │
 │     - Check status = "success"                                              │
 │     - Verify scenarios array is not empty                                   │
-│     - Each scenario must have name, given, when, then                       │
+│     - Each scenario must have title, given, when, then                      │
 │                                                                             │
 │  4. UPDATE METADATA CONTEXT                                                 │
 │     - Add test_scenarios from Tool 1 output to metadata                     │
