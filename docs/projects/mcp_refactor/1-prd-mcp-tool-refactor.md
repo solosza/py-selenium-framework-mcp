@@ -152,6 +152,8 @@ Implement the complete 9-step workflow with metadata passing, AI rule enforcemen
 | FR-47 | AI must override Tool 6 file paths to `tests/test1/`, `tests/test2/` (DD-16) |
 | FR-48 | AI must inject actual parameter values from requirement, not placeholders (DD-17) |
 | FR-49 | AI must validate import paths before saving generated files (DD-18) |
+| FR-50 | For dynamic discovery, AI tries autonomously first; asks SDET specific questions when stuck (DD-21) |
+| FR-51 | Alternate: AI may use Playwright MCP for visual reconnaissance before Selenium (DD-21, higher token cost) |
 
 ---
 

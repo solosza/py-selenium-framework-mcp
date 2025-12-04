@@ -170,7 +170,7 @@ framework/
   - [x] B.6.5.7 Test dynamic flow: Tool 2 with driver_session + scope
   - [x] B.6.5.8 Run checks (syntax OK) + Add DD-21 documentation
   - [x] B.6.5.9 Record results
-  - [ ] B.6.5.10 Commit: `feat: add dynamic element discovery to Tool 2 (DD-20, DD-21)`
+  - [x] B.6.5.10 Commit: `feat: add dynamic element discovery to Tool 2 (DD-20, DD-21)`
 
 - [ ] B.7 Medium E2E Test - Add to Cart [GLUE]
   - [ ] B.7.1 Create branch `feature/B.7-medium-e2e`
