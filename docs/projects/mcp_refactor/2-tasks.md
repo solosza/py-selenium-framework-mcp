@@ -158,7 +158,7 @@ framework/
   - [x] B.6.13 Generate HTML report: `--html=reports/test1_report.html --self-contained-html`
   - [x] B.6.14 User validates: browser visible, test passes, report generated
   - [x] B.6.15 Record results
-  - [ ] B.6.16 Commit: `feat: simple E2E test - catalog browse (Task B.6)`
+  - [x] B.6.16 Commit: `feat: simple E2E test - catalog browse (Task B.6)`
 
 - [ ] B.7 Medium E2E Test [GLUE]
   - [ ] B.7.1 Create branch `feature/B.7-medium-e2e`
