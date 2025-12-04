@@ -29,6 +29,7 @@ from .task_generator import (
 # Role Generator (Task B.4)
 from .role_generator import (
     generate_role,
+    generate_role_with_metadata,
     get_file_path as get_role_file_path,
     get_available_role_types,
 )
@@ -48,6 +49,7 @@ __all__ = [
     "generate_task_with_metadata",
     "get_task_file_path",
     "generate_role",
+    "generate_role_with_metadata",
     "get_role_file_path",
     "get_available_role_types",
     "generate_test",
