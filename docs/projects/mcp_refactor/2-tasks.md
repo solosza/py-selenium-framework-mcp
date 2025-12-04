@@ -105,23 +105,23 @@
   - [x] B.4.8 Record results
   - [x] B.4.9 Commit: `feat: add check-existing and Task metadata to Tool 5 (Task B.4)`
 
-- [ ] B.5 Tool 6 Refactor [CORE]
-  - [ ] B.5.1 Create branch `feature/B.5-tool-6-refactor`
-  - [ ] B.5.2 Update `test_generator.py` to accept Role + POM metadata:
+- [x] B.5 Tool 6 Refactor [CORE]
+  - [x] B.5.1 Create branch `feature/B.5-tool-6-refactor`
+  - [x] B.5.2 Update `test_generator.py` to accept Role + POM metadata:
     - Read workflow_methods from role_metadata
     - Read state_methods from pom_metadata
-  - [ ] B.5.3 Generate test assertions using actual POM state methods:
+  - [x] B.5.3 Generate test assertions using actual POM state methods:
     - `assert page.is_logged_in()` not `assert result == True`
     - Use method names from pom_metadata.state_methods
-  - [ ] B.5.4 Ensure AAA pattern in generated tests:
+  - [x] B.5.4 Ensure AAA pattern in generated tests:
     - Arrange: Create Role and POM instances
     - Act: ONE Role workflow method call
     - Assert: Via POM state-check methods
-  - [ ] B.5.5 Test Tool 6 with role_metadata + pom_metadata input
-  - [ ] B.5.6 Verify generated test uses actual method names from metadata
-  - [ ] B.5.7 Verify no hardcoded method names in generated test
-  - [ ] B.5.8 Record results
-  - [ ] B.5.9 Commit: `feat: add Role + POM metadata to Tool 6 (Task B.5)`
+  - [x] B.5.5 Test Tool 6 with role_metadata + pom_metadata input
+  - [x] B.5.6 Verify generated test uses actual method names from metadata
+  - [x] B.5.7 Verify no hardcoded method names in generated test
+  - [x] B.5.8 Record results
+  - [x] B.5.9 Commit: `feat: add Role + POM metadata to Tool 6 (Task B.5)`
 
 - [ ] B.6 Simple E2E Test [GLUE]
   - [ ] B.6.1 Create branch `feature/B.6-simple-e2e`
@@ -316,3 +316,55 @@ python mcp_server/tools/tool_02_discover_page_elements.py
 - Step 7 (Tool 5): Check-existing found RegisteredUser, force-generated with metadata - SUCCESS
   - `login()` calls `auth_tasks.log_in(self.email, self.password)` ✓
   - role_metadata.workflow_methods contains login ✓
+
+### Task B.5 Results (2025-12-03)
+
+**Implementation:**
+- Updated `test_generator.py`:
+  - Added `_generate_test_method_from_metadata()` function
+  - Added `generate_test_methods_from_metadata()` function
+  - Added `generate_test_with_metadata()` function
+  - Returns code + metadata for downstream validation
+- Updated `tool_06_generate_test_runner.py`:
+  - Accepts `role_metadata` and `pom_metadata` parameters
+  - Prefers metadata over legacy `role` parameter
+  - Returns test_metadata with methods and assertions used
+- Updated `generators/__init__.py`:
+  - Exported `generate_test_with_metadata`
+
+**PRD Requirements Implemented:**
+- FR-34: Tool 6 accepts role_metadata + pom_metadata ✓
+- FR-35: Generate tests calling actual Role methods from metadata ✓
+- FR-36: Generate assertions using POM state methods from metadata ✓
+- FR-37: AAA pattern (Arrange, Act ONE call, Assert via POM) ✓
+- FR-38: @autologger("Test"), @pytest.mark.<domain> ✓
+
+**Cumulative Live Test (Steps 1-8, Tools 1-6):**
+- Step 1: User input - login requirement + URL
+- Step 2: AI extracted role=RegisteredUser, domain=auth, expected_states
+- Step 3 (Tool 1): Generated test scenario - SUCCESS
+- Step 4 (Tool 2): Discovered 3 elements (mock) - SUCCESS
+- Step 5 (Tool 3): Generated LoginPage with 3 action, 2 state methods - SUCCESS
+- Step 6 (Tool 4): Check-existing found CommonTasks, force-generated AuthTasks - SUCCESS
+- Step 7 (Tool 5): Check-existing found RegisteredUser, force-generated with metadata - SUCCESS
+- Step 8 (Tool 6): Generated TestLogin using role_metadata + pom_metadata - SUCCESS
+  - Test class: `TestLogin` ✓
+  - Role used: `RegisteredUser` ✓
+  - Page used: `LoginPage` ✓
+  - Test methods: `['test_login']` ✓
+  - Assertions: `['is_logged_in', 'is_account_page_displayed']` ✓
+
+**Generated Test Code (key portion):**
+```python
+def test_login(self):
+    # Arrange
+    user_data = {"email": "testuser@example.com", "password": "TestPass123"}
+    user = RegisteredUser(self.web, user_data, self.base_url)
+
+    # Act - ONE workflow call, NO return value
+    user.login()
+
+    # Assert - Via Page Object state-check methods (NOT return value)
+    assert self.login_page.is_logged_in(), "Is Logged In"
+    assert self.login_page.is_account_page_displayed(), "Is Account Page Displayed"
+```

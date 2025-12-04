@@ -2,11 +2,11 @@
 
 ## Current Phase
 **Phase:** Phase B - MCP Tool Chain Refactor
-**Status:** B.1-B.4 Complete, Ready for B.5
-**Resume Word:** B5-START
+**Status:** B.1-B.5 Complete, Ready for B.6
+**Resume Word:** B6-START
 
 ## What We're Working On
-**Active Task:** B.5 - Tool 6 Refactor (Role + POM metadata)
+**Active Task:** B.6 - Simple E2E Test (catalog, visible browser)
 **Task Status:** Not Started (0%)
 
 ## Progress This Session
@@ -33,7 +33,14 @@
   - role_metadata output: class_name, import_path, composed_tasks[], workflow_methods[]
   - Fixed role scanning to flatten roles across all domains
 
-### Cumulative Live Test Results (Steps 1-7)
+- [x] B.5 - Tool 6 Refactor (merged: e95dbdf)
+  - Added `generate_test_with_metadata()` to test_generator.py
+  - Tool 6 accepts role_metadata + pom_metadata parameters
+  - Generates test assertions using actual POM state methods from metadata
+  - Follows AAA pattern: Arrange, Act (ONE call), Assert (via POM)
+  - Returns test_metadata with methods and assertions used
+
+### Cumulative Live Test Results (Steps 1-8)
 All tools tested together in sequence:
 - Step 1: User input (requirement + URL)
 - Step 2: AI processing (role, domain, expected_states)
@@ -42,10 +49,11 @@ All tools tested together in sequence:
 - Step 5 (Tool 3): Generated LoginPage with expected_states methods - SUCCESS
 - Step 6 (Tool 4): Check-existing found CommonTasks, force-generated AuthTasks - SUCCESS
 - Step 7 (Tool 5): Check-existing found RegisteredUser, force-generated with metadata - SUCCESS
+- Step 8 (Tool 6): Generated TestLogin using role_metadata + pom_metadata - SUCCESS
 
 ## Git State
 - Branch: `main`
-- Latest commit: `abf0bef` (Task B.4)
+- Latest commit: `e95dbdf` (Task B.5)
 - Status: Clean
 
 ## Key Files (for reference)
@@ -53,8 +61,9 @@ All tools tested together in sequence:
 - `mcp_server/tools/tool_02_discover_page_elements.py` - metadata output
 - `mcp_server/tools/tool_03_generate_page_object.py` - expected_states
 - `mcp_server/tools/tool_04_generate_task.py` - check-existing + pom_metadata
-- `mcp_server/utils/generators/page_object_generator.py` - state methods
-- `mcp_server/utils/generators/task_generator.py` - metadata-driven
+- `mcp_server/tools/tool_05_generate_role.py` - check-existing + task_metadata
+- `mcp_server/tools/tool_06_generate_test_runner.py` - role_metadata + pom_metadata
+- `mcp_server/utils/generators/test_generator.py` - metadata-driven test generation
 
 ## Task List Summary
 | Task | Type | Description | Status |
@@ -63,41 +72,40 @@ All tools tested together in sequence:
 | B.2 | CORE | Tool 3 expected_states | DONE |
 | B.3 | CORE | Tool 4 check-existing + POM metadata | DONE |
 | B.4 | CORE | Tool 5 check-existing + Task metadata | DONE |
-| B.5 | CORE | Tool 6 Role + POM metadata | NOT STARTED |
-| B.6 | GLUE | Simple E2E (catalog, visible browser) | Pending |
+| B.5 | CORE | Tool 6 Role + POM metadata | DONE |
+| B.6 | GLUE | Simple E2E (catalog, visible browser) | NOT STARTED |
 | B.7 | GLUE | Medium E2E (auth+catalog, visible browser) | Pending |
 | B.8 | GLUE | Cleanup + merge to main | Pending |
 
 ## Context for Next Session
 
-**Resume Word:** B5-START
+**Resume Word:** B6-START
 
-**Resume Point:** Start Task B.5 - Tool 6 Refactor
+**Resume Point:** Start Task B.6 - Simple E2E Test
 
 **What to do:**
-1. Create branch `feature/B.5-tool-6-refactor`
-2. Read Tool 6 and test_generator.py to understand current state
-3. Update test_generator.py to accept Role + POM metadata
-4. Generate test assertions using POM state methods from metadata
-5. Ensure AAA pattern (Arrange, Act ONE call, Assert via POM)
-6. Run cumulative live test (Steps 1-8)
+1. Create branch `feature/B.6-simple-e2e`
+2. Define test requirement:
+   - "As a guest, I want to browse products in the Women category"
+   - URL: http://automationpractice.pl/index.php
+   - Expected: Products displayed in Women category
+3. Execute Steps 1-9 of the full workflow
+4. Save files to `e2e_simple/` directories
+5. Run test with visible browser: `pytest tests/e2e_simple/ -v --headless=False`
+6. Generate HTML report
 7. Commit and merge
 
-**PRD Requirements for B.5:**
-- FR-34: Tool 6 accepts role_metadata + pom_metadata as input
-- FR-35: Generate tests that call actual Role methods from metadata
-- FR-36: Generate assertions using actual POM state methods from metadata
-- FR-37: AAA pattern: Arrange, Act (ONE call), Assert (via POM)
-- FR-38: Generated Test must have @autologger("Test"), @pytest.mark.<domain>
-
-**Key Files to Update:**
-- `mcp_server/tools/tool_06_generate_test_runner.py`
-- `mcp_server/utils/generators/test_generator.py`
+**Key Requirement for B.6:**
+This is a GLUE task - the goal is to validate the complete tool chain works end-to-end with a real browser. User must visually verify:
+- Browser opens and is visible
+- Navigation to Women category works
+- Products are displayed
+- Test passes
+- HTML report is generated
 
 **Reference Docs:**
-- `docs/projects/mcp_refactor/2-tasks.md` - Task list with B.5 subtasks
-- `docs/projects/mcp_refactor/1-prd-mcp-tool-refactor.md` - PRD Section 4.7
-- `FRAMEWORK.md` Section 8.9 - Tool 6 AI rules
+- `docs/projects/mcp_refactor/2-tasks.md` - Task list with B.6 subtasks
+- `FRAMEWORK.md` Section 8 - 9-Step AI Workflow
 
 ---
 **Last Updated:** 2025-12-03
