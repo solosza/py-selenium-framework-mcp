@@ -87,23 +87,23 @@
   - [x] B.3.8 Record results
   - [x] B.3.9 Commit: `feat: add check-existing and POM metadata to Tool 4 (Task B.3)`
 
-- [ ] B.4 Tool 5 Refactor [CORE]
-  - [ ] B.4.1 Create branch `feature/B.4-tool-5-refactor`
-  - [ ] B.4.2 Implement check-existing pattern in Tool 5:
+- [x] B.4 Tool 5 Refactor [CORE]
+  - [x] B.4.1 Create branch `feature/B.4-tool-5-refactor`
+  - [x] B.4.2 Implement check-existing pattern in Tool 5:
     - Scan `framework/roles/` for existing Role classes
     - Return `existing_found` status if role matches persona
     - Include existing_class, existing_methods in response
-  - [ ] B.4.3 Update `role_generator.py` to use Task metadata:
+  - [x] B.4.3 Update `role_generator.py` to use Task metadata:
     - Read task_methods from task_metadata
     - Generate Role methods that call actual Task methods
     - No hardcoded method names
-  - [ ] B.4.4 Ensure role_metadata output includes:
+  - [x] B.4.4 Ensure role_metadata output includes:
     - class_name, import_path, composed_tasks[], workflow_methods[]
-  - [ ] B.4.5 Test Tool 5 with check_existing=True (should find RegisteredUser if exists)
-  - [ ] B.4.6 Test Tool 5 with task_metadata input
-  - [ ] B.4.7 Verify generated Role calls actual Task methods from metadata
-  - [ ] B.4.8 Record results
-  - [ ] B.4.9 Commit: `feat: add check-existing and Task metadata to Tool 5 (Task B.4)`
+  - [x] B.4.5 Test Tool 5 with check_existing=True (should find RegisteredUser if exists)
+  - [x] B.4.6 Test Tool 5 with task_metadata input
+  - [x] B.4.7 Verify generated Role calls actual Task methods from metadata
+  - [x] B.4.8 Record results
+  - [x] B.4.9 Commit: `feat: add check-existing and Task metadata to Tool 5 (Task B.4)`
 
 - [ ] B.5 Tool 6 Refactor [CORE]
   - [ ] B.5.1 Create branch `feature/B.5-tool-6-refactor`
@@ -288,3 +288,31 @@ python mcp_server/tools/tool_02_discover_page_elements.py
 - Step 6 (Tool 4): Check-existing found CommonTasks, force-generated AuthTasks - SUCCESS
   - `log_in()` calls actual POM methods from metadata ✓
   - task_metadata.task_methods contains both methods ✓
+
+### Task B.4 Results (2025-12-03)
+
+**Check-Existing Pattern:**
+- Status: SUCCESS
+- Found existing: `RegisteredUser` in auth domain, `GuestUser` in guest domain
+- Existing methods: `['login', 'logout', 'register']` for RegisteredUser
+
+**Metadata-Driven Generation:**
+- Input: `task_metadata` with class_name, import_path, task_methods[]
+- Generated: `RegisteredUser` with `login()` calling `self.auth_tasks.log_in(self.email, self.password)`
+- role_metadata output: class_name, import_path, composed_tasks[], workflow_methods[] ✓
+
+**Bug Fixed:**
+- Check-existing was not flattening roles across domains
+- Roles are stored as `{"auth": ["RegisteredUser"], "guest": ["GuestUser"]}`
+- Fixed to iterate all domains and flatten before matching
+
+**Cumulative Live Test (Steps 1-7, Tools 1-5):**
+- Step 1: User input - login requirement + URL
+- Step 2: AI extracted role=RegisteredUser, domain=auth, expected_states
+- Step 3 (Tool 1): Generated test scenario - SUCCESS
+- Step 4 (Tool 2): Discovered 3 elements (mock) - SUCCESS
+- Step 5 (Tool 3): Generated LoginPage with 3 action, 2 state methods - SUCCESS
+- Step 6 (Tool 4): Check-existing found CommonTasks, force-generated AuthTasks - SUCCESS
+- Step 7 (Tool 5): Check-existing found RegisteredUser, force-generated with metadata - SUCCESS
+  - `login()` calls `auth_tasks.log_in(self.email, self.password)` ✓
+  - role_metadata.workflow_methods contains login ✓

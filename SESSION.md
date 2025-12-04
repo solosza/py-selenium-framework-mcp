@@ -2,11 +2,11 @@
 
 ## Current Phase
 **Phase:** Phase B - MCP Tool Chain Refactor
-**Status:** B.1-B.3 Complete, Ready for B.4
-**Resume Word:** B4-START
+**Status:** B.1-B.4 Complete, Ready for B.5
+**Resume Word:** B5-START
 
 ## What We're Working On
-**Active Task:** B.4 - Tool 5 Refactor (check-existing + Task metadata)
+**Active Task:** B.5 - Tool 6 Refactor (Role + POM metadata)
 **Task Status:** Not Started (0%)
 
 ## Progress This Session
@@ -27,18 +27,25 @@
   - Verified metadata-driven generation (log_in calls actual POM methods)
   - No code changes needed - already implemented correctly
 
-### Cumulative Live Test Results (Steps 1-6)
+- [x] B.4 - Tool 5 Refactor (merged: abf0bef)
+  - Check-existing finds RegisteredUser, GuestUser with methods [login, logout, register]
+  - Metadata-driven generation: Role.login() calls AuthTasks.log_in(self.email, self.password)
+  - role_metadata output: class_name, import_path, composed_tasks[], workflow_methods[]
+  - Fixed role scanning to flatten roles across all domains
+
+### Cumulative Live Test Results (Steps 1-7)
 All tools tested together in sequence:
 - Step 1: User input (requirement + URL)
 - Step 2: AI processing (role, domain, expected_states)
 - Step 3 (Tool 1): Generated test_scenarios - SUCCESS
 - Step 4 (Tool 2): Discovered 23 elements, filtered 3 for login - SUCCESS
 - Step 5 (Tool 3): Generated LoginPage with expected_states methods - SUCCESS
-- Step 6 (Tool 4): Check-existing found CommonTasks, generated AuthTasks - SUCCESS
+- Step 6 (Tool 4): Check-existing found CommonTasks, force-generated AuthTasks - SUCCESS
+- Step 7 (Tool 5): Check-existing found RegisteredUser, force-generated with metadata - SUCCESS
 
 ## Git State
 - Branch: `main`
-- Latest commit: `4a5a84c` (Task B.3)
+- Latest commit: `abf0bef` (Task B.4)
 - Status: Clean
 
 ## Key Files (for reference)
@@ -55,43 +62,42 @@ All tools tested together in sequence:
 | B.1 | CORE | Tool 1-2 metadata output | DONE |
 | B.2 | CORE | Tool 3 expected_states | DONE |
 | B.3 | CORE | Tool 4 check-existing + POM metadata | DONE |
-| B.4 | CORE | Tool 5 check-existing + Task metadata | NOT STARTED |
-| B.5 | CORE | Tool 6 Role + POM metadata | Pending |
+| B.4 | CORE | Tool 5 check-existing + Task metadata | DONE |
+| B.5 | CORE | Tool 6 Role + POM metadata | NOT STARTED |
 | B.6 | GLUE | Simple E2E (catalog, visible browser) | Pending |
 | B.7 | GLUE | Medium E2E (auth+catalog, visible browser) | Pending |
 | B.8 | GLUE | Cleanup + merge to main | Pending |
 
 ## Context for Next Session
 
-**Resume Word:** B4-START
+**Resume Word:** B5-START
 
-**Resume Point:** Start Task B.4 - Tool 5 Refactor
+**Resume Point:** Start Task B.5 - Tool 6 Refactor
 
 **What to do:**
-1. Create branch `feature/B.4-tool-5-refactor`
-2. Read Tool 5 and role_generator.py to understand current state
-3. Implement check-existing pattern (scan framework/roles/)
-4. Update role_generator.py to use Task metadata
-5. Ensure role_metadata output: class_name, import_path, composed_tasks[], workflow_methods[]
-6. Run cumulative live test (Steps 1-7)
+1. Create branch `feature/B.5-tool-6-refactor`
+2. Read Tool 6 and test_generator.py to understand current state
+3. Update test_generator.py to accept Role + POM metadata
+4. Generate test assertions using POM state methods from metadata
+5. Ensure AAA pattern (Arrange, Act ONE call, Assert via POM)
+6. Run cumulative live test (Steps 1-8)
 7. Commit and merge
 
-**PRD Requirements for B.4:**
-- FR-27: Tool 5 accepts task_metadata as input
-- FR-28: Check existing roles before generating new
-- FR-29: Return existing_found status
-- FR-30: Generate Role methods from Task metadata
-- FR-31: Output role_metadata
-- FR-32: @autologger("Role"), return None
+**PRD Requirements for B.5:**
+- FR-34: Tool 6 accepts role_metadata + pom_metadata as input
+- FR-35: Generate tests that call actual Role methods from metadata
+- FR-36: Generate assertions using actual POM state methods from metadata
+- FR-37: AAA pattern: Arrange, Act (ONE call), Assert (via POM)
+- FR-38: Generated Test must have @autologger("Test"), @pytest.mark.<domain>
 
 **Key Files to Update:**
-- `mcp_server/tools/tool_05_generate_role.py`
-- `mcp_server/utils/generators/role_generator.py`
+- `mcp_server/tools/tool_06_generate_test_runner.py`
+- `mcp_server/utils/generators/test_generator.py`
 
 **Reference Docs:**
-- `docs/projects/mcp_refactor/2-tasks.md` - Task list with B.4 subtasks
-- `docs/projects/mcp_refactor/1-prd-mcp-tool-refactor.md` - PRD Section 4.6
-- `FRAMEWORK.md` Section 8.8 - Tool 5 AI rules
+- `docs/projects/mcp_refactor/2-tasks.md` - Task list with B.5 subtasks
+- `docs/projects/mcp_refactor/1-prd-mcp-tool-refactor.md` - PRD Section 4.7
+- `FRAMEWORK.md` Section 8.9 - Tool 6 AI rules
 
 ---
 **Last Updated:** 2025-12-03
