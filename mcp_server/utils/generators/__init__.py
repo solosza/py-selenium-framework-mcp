@@ -37,6 +37,7 @@ from .role_generator import (
 # Test Generator (Task B.5)
 from .test_generator import (
     generate_test,
+    generate_test_with_metadata,
     get_file_path as get_test_file_path,
     get_pytest_markers,
 )
@@ -53,6 +54,7 @@ __all__ = [
     "get_role_file_path",
     "get_available_role_types",
     "generate_test",
+    "generate_test_with_metadata",
     "get_test_file_path",
     "get_pytest_markers",
 ]
