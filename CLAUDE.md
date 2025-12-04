@@ -205,12 +205,29 @@ user.browse_category("Women")  # From "browse products in Women category"
 │ ⚠️  ERROR OCCURRED? STOP AND DO THIS:                                    │
 ├─────────────────────────────────────────────────────────────────────────┤
 │ 1. STOP - Do NOT attempt to debug/fix inline                            │
-│ 2. LOG - Create defect entry in docs/DEFECT_LOG.md immediately          │
-│ 3. INVESTIGATE - Then investigate root cause                            │
-│ 4. FIX - Apply fix                                                       │
-│ 5. RERUN - Full E2E from Tool 1 (not partial rerun)                     │
-│ 6. VERIFY - Mark RESOLVED only after clean E2E pass                     │
+│ 2. CLASSIFY - Before logging, determine error type (see below)          │
+│ 3. LOG - If defect, create entry in docs/DEFECT_LOG.md                  │
+│ 4. INVESTIGATE - Then investigate root cause                            │
+│ 5. FIX - Apply fix                                                       │
+│ 6. RERUN - Full E2E from Tool 1 (not partial rerun)                     │
+│ 7. VERIFY - Mark RESOLVED only after clean E2E pass                     │
 └─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Error Classification (MUST report to user before logging):**
+```
+Before logging ANY defect, STOP and tell user:
+1. What failed (error message)
+2. What layer/component is affected
+3. Classification:
+   - AGENTIC DEFECT: AI rules/prompts need updating (DD-XX)
+   - TOOL DEFECT: MCP tool code needs fixing
+   - FRAMEWORK DEFECT: Framework layer code needs fixing
+   - TEST SCRIPT BUG: AI-generated validation script has bugs (NOT a defect)
+   - EXTERNAL ISSUE: Third-party/environment issue (NOT a defect)
+
+Only log to DEFECT_LOG.md if classification is AGENTIC/TOOL/FRAMEWORK DEFECT.
+Test script bugs and external issues are just debugging - fix and continue.
 ```
 
 When running E2E tests (B.6 test1, B.7 test2, etc.), follow this process exactly:

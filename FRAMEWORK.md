@@ -997,6 +997,64 @@ AI PROMPTING RULES FOR TOOL 2:
 │     - Preserve all existing metadata fields                                 │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
+
+DD-21: AI-SDET COLLABORATION FOR DYNAMIC DISCOVERY
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  When AI is preparing page state for dynamic discovery (DD-20), it may      │
+│  encounter issues: elements with zero dimensions, wrong page structure,     │
+│  out-of-stock products, iframes, etc.                                       │
+│                                                                             │
+│  PRIMARY APPROACH (token-optimized):                                        │
+│  ───────────────────────────────────                                        │
+│                                                                             │
+│    ┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐         │
+│    │ AI tries │────▶│  Fails   │────▶│ AI tries │────▶│  Fails   │         │
+│    │ script 1 │     │          │     │ script 2 │     │  again   │         │
+│    └──────────┘     └──────────┘     └──────────┘     └────┬─────┘         │
+│                                                            │                │
+│                           AI recognizes: "Same error pattern, I'm stuck"    │
+│                                                            │                │
+│                                                            ▼                │
+│    ┌────────────────────────────────────────────────────────────────────┐  │
+│    │  AI asks SDET specific question:                                   │  │
+│    │  - "Products report zero dimensions. Different page structure?"    │  │
+│    │  - "Modal appeared but 0 elements. Is content in iframe?"          │  │
+│    │  - "Add to Cart clicked but no modal. Product out of stock?"       │  │
+│    └────────────────────────────────────────────────────────────────────┘  │
+│                                                            │                │
+│                                                            ▼                │
+│    ┌──────────┐     ┌──────────────────────────────────────────────────┐   │
+│    │  SDET    │────▶│  AI continues with new knowledge                 │   │
+│    │ provides │     │  "Use category page, switch to iframe first"     │   │
+│    │ guidance │     └──────────────────────────────────────────────────┘   │
+│    └──────────┘                                                             │
+│                                                                             │
+│  ALTERNATE APPROACH (fully autonomous, higher token cost):                  │
+│  ─────────────────────────────────────────────────────────                  │
+│                                                                             │
+│    ┌────────────────┐     ┌────────────────┐     ┌────────────────┐        │
+│    │ AI uses        │────▶│ AI documents   │────▶│ AI writes      │        │
+│    │ Playwright MCP │     │ site quirks:   │     │ Selenium script│        │
+│    │ for visual     │     │ - iframes      │     │ with that      │        │
+│    │ reconnaissance │     │ - selectors    │     │ knowledge      │        │
+│    └────────────────┘     │ - page struct  │     └────────────────┘        │
+│                           └────────────────┘                                │
+│                                                                             │
+│    Playwright = eyes for exploration                                        │
+│    Selenium = hands for Tool 2 integration                                  │
+│                                                                             │
+│  WHEN TO USE ALTERNATE:                                                     │
+│  ──────────────────────                                                     │
+│    - SDET unavailable or wants hands-off                                    │
+│    - Complex site with many dynamic elements                                │
+│    - Token cost acceptable for full autonomy                                │
+│    - Manual testers learning test automation (AI guides discovery)          │
+│    - Junior devs/SDETs (reduces need for senior expertise)                  │
+│                                                                             │
+│  STATUS: Alternate approach documented for future testing                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### 8.6 Step 5: Tool 3 (generate_page_object)
@@ -1377,6 +1435,7 @@ AI PROMPTING RULES FOR TOOL 6:
 | DD-18 | AI validates import paths before saving | Prevents runtime errors from incorrect imports |
 | DD-19 | Tool invocation: ALWAYS import from `tools/`, never `utils/` | Tool wrappers handle arguments correctly; utils have different signatures |
 | DD-20 | Dynamic element discovery: AI prepares page state before Tool 2 | Enables discovery of modals, hover elements, AJAX content |
+| DD-21 | AI-SDET collaboration for dynamic discovery (see 8.5) | Balances autonomy with efficiency; human helps when AI stuck |
 
 ### 8.12 DD-16, DD-17, DD-18: AI Post-Processing Rules
 

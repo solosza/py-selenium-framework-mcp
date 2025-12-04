@@ -18,10 +18,17 @@ async def discover_elements(arguments: dict) -> str:
     """
     Discover interactive elements on a web page.
 
+    Supports two flows (DD-20):
+    - STATIC: Pass URL, Tool 2 creates driver, discovers, closes driver
+    - DYNAMIC: Pass driver_session (+ optional scope), Tool 2 uses existing driver,
+               discovers within scope, does NOT close driver (AI owns lifecycle)
+
     Args:
         arguments: {
-            "url": str - Page URL to inspect
+            "url": str - Page URL to inspect (STATIC flow)
             "headless": bool - Run browser in headless mode (default: True)
+            "driver_session": WebDriver - Existing driver instance (DYNAMIC flow, DD-20)
+            "scope": str - CSS selector to limit discovery scope (optional, for DYNAMIC)
         }
 
     Returns:
@@ -29,39 +36,52 @@ async def discover_elements(arguments: dict) -> str:
     """
     url = arguments.get("url", "")
     headless = arguments.get("headless", True)
+    driver_session = arguments.get("driver_session", None)
+    scope = arguments.get("scope", None)
 
-    if not url:
-        return json.dumps({
-            "error": "url is required",
-            "status": "error"
-        }, indent=2)
+    # DD-20: Determine flow based on inputs
+    is_dynamic_flow = driver_session is not None
 
-    # Validate URL format
-    if not url.startswith("http"):
-        return json.dumps({
-            "error": "url must start with http:// or https://",
-            "status": "error"
-        }, indent=2)
+    # Validation for STATIC flow
+    if not is_dynamic_flow:
+        if not url:
+            return json.dumps({
+                "error": "url is required for static flow (or provide driver_session for dynamic flow)",
+                "status": "error"
+            }, indent=2)
+
+        # Validate URL format
+        if not url.startswith("http"):
+            return json.dumps({
+                "error": "url must start with http:// or https://",
+                "status": "error"
+            }, indent=2)
 
     try:
         # Import Selenium dependencies
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options
 
-        # Configure driver
-        options = Options()
-        if headless:
-            options.add_argument("--headless")
-            options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
-
-        # Create driver
-        driver = webdriver.Chrome(options=options)
+        # DD-20: DYNAMIC flow - use existing driver
+        if is_dynamic_flow:
+            driver = driver_session
+            created_driver = False
+            # Get current URL from existing driver for reporting
+            url = driver.current_url
+        else:
+            # STATIC flow - create new driver
+            options = Options()
+            if headless:
+                options.add_argument("--headless")
+                options.add_argument("--disable-gpu")
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            driver = webdriver.Chrome(options=options)
+            created_driver = True
 
         try:
-            # Discover elements
-            elements = discover_page_elements(url, driver)
+            # Discover elements (with optional scope for dynamic flow)
+            elements = discover_page_elements(url, driver, scope=scope)
 
             # Group elements by type
             grouped = {}
@@ -115,8 +135,10 @@ async def discover_elements(arguments: dict) -> str:
             return json.dumps(result, indent=2)
 
         finally:
-            # Clean up driver
-            driver.quit()
+            # DD-20: Only clean up driver if WE created it (STATIC flow)
+            # For DYNAMIC flow, AI owns driver lifecycle
+            if created_driver:
+                driver.quit()
 
     except ImportError as e:
         return json.dumps({

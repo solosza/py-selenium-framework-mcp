@@ -37,30 +37,56 @@ class ElementDiscovery:
         """
         self.driver = driver
 
-    def discover_elements(self, url: str, wait_seconds: int = 10) -> List[Dict[str, str]]:
+    def discover_elements(
+        self,
+        url: str,
+        wait_seconds: int = 10,
+        scope: Optional[str] = None
+    ) -> List[Dict[str, str]]:
         """
         Navigate to URL and discover interactive elements.
 
         Args:
-            url: Page URL to inspect
+            url: Page URL to inspect (skipped if scope provided - assumes page ready)
             wait_seconds: Seconds to wait for page load
+            scope: Optional CSS selector to limit discovery (DD-20)
+                   When provided, skips navigation and discovers within scope element
 
         Returns:
             List of discovered element dictionaries
         """
-        # Navigate to page
-        self.driver.get(url)
+        # DD-20: If scope provided, assume page is already in correct state
+        # (AI has prepared the page - e.g., opened modal, triggered dropdown)
+        if scope is None:
+            # STATIC flow: Navigate to page
+            self.driver.get(url)
 
-        # Wait for page to load
-        WebDriverWait(self.driver, wait_seconds).until(
-            EC.presence_of_element_located((By.TAG_NAME, "body"))
-        )
+            # Wait for page to load
+            WebDriverWait(self.driver, wait_seconds).until(
+                EC.presence_of_element_located((By.TAG_NAME, "body"))
+            )
+
+        # Determine root element for discovery
+        if scope:
+            try:
+                # Wait for scope element to be present
+                root_element = WebDriverWait(self.driver, wait_seconds).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, scope))
+                )
+            except Exception as e:
+                raise ValueError(f"Scope element '{scope}' not found: {e}")
+        else:
+            root_element = self.driver
 
         # Discover all interactive elements
         discovered = []
 
         for element_type, selector in self.INTERACTIVE_SELECTORS.items():
-            elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
+            # Find elements within scope (or whole page if no scope)
+            if scope:
+                elements = root_element.find_elements(By.CSS_SELECTOR, selector)
+            else:
+                elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
 
             for index, element in enumerate(elements):
                 try:
@@ -240,13 +266,19 @@ class ElementDiscovery:
         return locators
 
 
-def discover_page_elements(url: str, driver: Optional[webdriver.Chrome] = None) -> List[Dict[str, str]]:
+def discover_page_elements(
+    url: str,
+    driver: Optional[webdriver.Chrome] = None,
+    scope: Optional[str] = None
+) -> List[Dict[str, str]]:
     """
     Convenience function to discover elements on a page.
 
     Args:
-        url: Page URL to inspect
+        url: Page URL to inspect (ignored if driver already on target page)
         driver: Optional existing WebDriver instance (creates new one if None)
+        scope: Optional CSS selector to limit discovery scope (DD-20)
+               e.g., "#layer_cart" to discover only within cart modal
 
     Returns:
         List of discovered element dictionaries
@@ -263,7 +295,7 @@ def discover_page_elements(url: str, driver: Optional[webdriver.Chrome] = None) 
 
     try:
         discovery = ElementDiscovery(driver)
-        elements = discovery.discover_elements(url)
+        elements = discovery.discover_elements(url, scope=scope)
         return elements
     finally:
         # Clean up driver if we created it
