@@ -835,6 +835,101 @@ Tool 6 generates placeholder parameter values when actual values aren't in metad
 
 ---
 
+### [DEF-B05] Tool 2 cannot discover dynamic/modal elements
+**Severity:** HIGH
+**Status:** IN_PROGRESS
+**Caught By:** B.7 test2
+**Code Version:** feature/B.7-medium-e2e
+**Layer:** MCP Tool
+**File:** `mcp_server/tools/tool_02_discover_page_elements.py`
+
+**Description:**
+Tool 2 only discovers elements present on page load. It cannot discover:
+- Elements that appear on hover (e.g., "Add to Cart" buttons)
+- Modal dialogs that appear after user interaction (e.g., cart confirmation modal)
+- Any dynamic content requiring user action to reveal
+
+**Impact:**
+Any workflow involving modals or hover-triggered elements will be blocked. This affects:
+- Cart workflows (confirmation modal)
+- Quick view workflows (modal popup)
+- Any AJAX-loaded content
+- Dropdown menus, tooltips, etc.
+
+**Root Cause:**
+Tool 2 uses static page discovery - navigates to URL, waits for load, scans DOM. No capability to perform interactions before discovery.
+
+**Fix Required:**
+Add optional `pre_discovery_actions` parameter to Tool 2:
+```python
+discover_elements({
+    'url': '...',
+    'pre_discovery_actions': [
+        {'hover': '.product-container'},
+        {'click': '.ajax_add_to_cart_button'},
+        {'wait': 2}
+    ]
+})
+```
+
+**Design Notes:**
+- Only Tool 2 needs this - downstream tools work with metadata, not raw elements
+- Actions prepare page state, then existing discovery logic runs
+- SRP maintained: Tool 2 still "discovers elements from a page state"
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-B04] AI called wrong function for Tool 2 - utility vs tool wrapper
+**Severity:** MEDIUM
+**Status:** IN_PROGRESS
+**Caught By:** B.7 test2
+**Code Version:** feature/B.7-medium-e2e
+**Layer:** AI Orchestration
+**File:** N/A (AI behavior)
+
+**Error Message:**
+```
+selenium.common.exceptions.InvalidArgumentException: Message: invalid argument: 'url' must be a string
+```
+
+**Description:**
+During B.7 E2E, AI called the wrong function for Tool 2:
+- **WRONG:** `from utils.element_discovery import discover_page_elements` (utility function)
+- **RIGHT:** `from tools.tool_02_discover_page_elements import discover_elements` (tool wrapper)
+
+The utility function has a different signature and doesn't handle the arguments dict properly, causing Selenium to receive None instead of URL string.
+
+**Root Cause:**
+AI confusion between:
+1. `discover_page_elements()` - low-level utility in `utils/element_discovery.py`
+2. `discover_elements()` - tool wrapper in `tools/tool_02_discover_page_elements.py`
+
+Both have similar names but different purposes and signatures.
+
+**Fix Required:**
+Add explicit guidance to CLAUDE.md about correct tool invocation patterns.
+
+**Prevention Rule (DD-19):**
+```
+When calling MCP Tools (1-6), ALWAYS import from tools/ directory:
+- Tool 1: from tools.tool_01_generate_tests_from_user_story import generate_tests_from_user_story
+- Tool 2: from tools.tool_02_discover_page_elements import discover_elements
+- Tool 3: from tools.tool_03_generate_page_object import generate_page_object
+- Tool 4: from tools.tool_04_generate_task import generate_task
+- Tool 5: from tools.tool_05_generate_role import generate_role
+- Tool 6: from tools.tool_06_generate_test_runner import generate_test_runner
+
+NEVER import directly from utils/ when executing E2E tool chain.
+```
+
+**Verified:** TBD - after adding DD-19 and rerunning E2E from start
+**Resolved Date:** TBD
+
+---
+
 ## Summary
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |

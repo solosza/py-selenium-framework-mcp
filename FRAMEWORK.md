@@ -879,19 +879,61 @@ AI PROMPTING RULES FOR TOOL 1:
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                         STEP 4: TOOL 2                                      │
 │                         discover_page_elements                              │
+├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  Input (from AI):                                                           │
-│  {                                                                          │
-│    "url": "http://automationpractice.pl/index.php?controller=authentication"│
-│  }                                                                          │
+│  DECISION: Static or Dynamic Elements?                                      │
+│  ─────────────────────────────────────                                      │
 │                                                                             │
-│  Tool does:                                                                 │
-│  1. Fetches page HTML via Selenium/requests                                 │
-│  2. Parses DOM for interactive elements                                     │
-│  3. Extracts: inputs, buttons, links, selects, forms                        │
-│  4. Generates locators (CSS selectors, IDs, names)                          │
+│  AI analyzes the requirement and determines:                                │
+│  - Are target elements visible on page load? → STATIC FLOW                  │
+│  - Do elements require interaction to appear? → DYNAMIC FLOW (DD-20)        │
 │                                                                             │
-│  Output:                                                                    │
+│  Examples:                                                                  │
+│  - Login form fields → STATIC (visible on load)                             │
+│  - Cart confirmation modal → DYNAMIC (appears after Add to Cart click)      │
+│  - Dropdown menu items → DYNAMIC (appears on hover/click)                   │
+│  - Product list → STATIC (visible on load)                                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┴───────────────┐
+                    ▼                               ▼
+┌─────────────────────────────────┐ ┌─────────────────────────────────────────┐
+│      STATIC FLOW                │ │      DYNAMIC FLOW (DD-20)               │
+│      (elements on page load)    │ │      (elements require interaction)     │
+├─────────────────────────────────┤ ├─────────────────────────────────────────┤
+│                                 │ │                                         │
+│  Input (from AI):               │ │  AI PREPARES PAGE STATE FIRST:          │
+│  {                              │ │                                         │
+│    "url": "http://..."          │ │  1. AI reasons about page behavior:     │
+│  }                              │ │     "Modal appears after Add to Cart"   │
+│                                 │ │     "Button visible on product hover"   │
+│  Tool 2 does:                   │ │                                         │
+│  1. Creates WebDriver session   │ │  2. AI creates driver and manipulates:  │
+│  2. Navigates to URL            │ │     driver = create_webdriver()         │
+│  3. Waits for page load         │ │     driver.get(url)                     │
+│  4. Discovers elements          │ │     driver.hover(".product-container")  │
+│  5. Returns elements            │ │     driver.click(".add-to-cart")        │
+│  6. Closes driver               │ │     wait(2)  # modal appears            │
+│                                 │ │                                         │
+│                                 │ │  3. AI calls Tool 2 with session:       │
+│                                 │ │     {                                   │
+│                                 │ │       "driver_session": driver,         │
+│                                 │ │       "scope": "#modal-container"       │
+│                                 │ │     }                                   │
+│                                 │ │                                         │
+│                                 │ │  Tool 2 does:                           │
+│                                 │ │  1. Uses existing driver (no nav)       │
+│                                 │ │  2. Discovers within scope              │
+│                                 │ │  3. Returns elements                    │
+│                                 │ │  4. Does NOT close driver (AI owns it)  │
+│                                 │ │                                         │
+└─────────────────────────────────┘ └─────────────────────────────────────────┘
+                    │                               │
+                    └───────────────┬───────────────┘
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Tool 2 Output (same format for both flows):                                │
 │  {                                                                          │
 │    "status": "success",                                                     │
 │    "url": "http://...",                                                     │
@@ -899,7 +941,10 @@ AI PROMPTING RULES FOR TOOL 1:
 │      { "name": "email", "type": "input", "locator": "#email" },             │
 │      { "name": "passwd", "type": "input", "locator": "#passwd" },           │
 │      { "name": "SubmitLogin", "type": "button", "locator": "#SubmitLogin" } │
-│    ]                                                                        │
+│    ],                                                                       │
+│    "metadata": {                                                            │
+│      "discovered_elements": [...]                                           │
+│    }                                                                        │
 │  }                                                                          │
 │                                                                             │
 │  AI updates metadata context:                                               │
@@ -917,25 +962,37 @@ AI PROMPTING RULES FOR TOOL 1:
 
 AI PROMPTING RULES FOR TOOL 2:
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  Before calling Tool 2, AI MUST:                                            │
 │                                                                             │
-│  1. VALIDATE URL                                                            │
+│  1. DETERMINE STATIC vs DYNAMIC                                             │
+│     - Analyze requirement: do target elements exist on page load?           │
+│     - If NO → use dynamic flow (prepare page state first)                   │
+│     - If YES → use static flow (just pass URL)                              │
+│                                                                             │
+│  2. FOR DYNAMIC FLOW (DD-20)                                                │
+│     - AI reasons about HOW to reveal the elements                           │
+│     - AI creates WebDriver session using framework's WebInterface           │
+│     - AI performs necessary interactions (hover, click, wait, etc.)         │
+│     - AI passes driver_session to Tool 2 (NOT url)                          │
+│     - AI optionally provides scope to limit discovery area                  │
+│     - AI is responsible for closing driver after all discovery complete     │
+│                                                                             │
+│  3. VALIDATE URL (static flow only)                                         │
 │     - URL must be complete (include protocol http/https)                    │
 │     - URL must be accessible (target application must be running)           │
 │                                                                             │
-│  2. VALIDATE TOOL OUTPUT                                                    │
+│  4. VALIDATE TOOL OUTPUT                                                    │
 │     - Check status = "success"                                              │
 │     - Verify elements array is not empty                                    │
 │     - Each element must have name, type, locator                            │
-│     - If empty, WARN user: "No interactive elements found on page"          │
+│     - If empty, WARN user: "No interactive elements found"                  │
 │                                                                             │
-│  3. FILTER RELEVANT ELEMENTS                                                │
+│  5. FILTER RELEVANT ELEMENTS                                                │
 │     - Focus on elements relevant to the user's intent                       │
 │     - For login: email input, password input, submit button                 │
-│     - For catalog: product links, filter controls, sort dropdowns           │
+│     - For modal: confirmation buttons, status text, close button            │
 │     - Ignore generic navigation elements unless relevant                    │
 │                                                                             │
-│  4. UPDATE METADATA CONTEXT                                                 │
+│  6. UPDATE METADATA CONTEXT                                                 │
 │     - Add discovered_elements from Tool 2 output to metadata                │
 │     - Preserve all existing metadata fields                                 │
 │                                                                             │
@@ -1315,6 +1372,60 @@ AI PROMPTING RULES FOR TOOL 6:
 | DD-13 | Each tool has specific AI prompting rules | Ensures consistent enforcement of patterns across all tool calls |
 | DD-14 | One test file per scenario, grouped by domain folder | Better modularity; clearer reports; can run by marker or file |
 | DD-15 | Test assertions use POM state methods from metadata | Ensures tests assert on actual generated methods; no hardcoding |
+| DD-16 | AI overrides Tool 6 file paths to project convention | Tool 6 suggests `tests/<domain>/`, AI saves to `tests/test1/`, `tests/test2/` |
+| DD-17 | AI injects actual parameter values from requirement | Tool generates placeholders; AI replaces with real values from user story |
+| DD-18 | AI validates import paths before saving | Prevents runtime errors from incorrect imports |
+| DD-19 | Tool invocation: ALWAYS import from `tools/`, never `utils/` | Tool wrappers handle arguments correctly; utils have different signatures |
+| DD-20 | Dynamic element discovery: AI prepares page state before Tool 2 | Enables discovery of modals, hover elements, AJAX content |
+
+### 8.12 DD-16, DD-17, DD-18: AI Post-Processing Rules
+
+Tools generate code, but AI must post-process before saving:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ AI POST-PROCESSING (after Tool 6, before saving)                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ DD-16: FILE PATH OVERRIDE                                                   │
+│ ─────────────────────────                                                   │
+│   Tool 6 suggests: tests/catalog/test_browse_category.py                   │
+│   AI overrides to: tests/test1/test_browse_category.py                     │
+│                                                                             │
+│ DD-17: PARAMETER VALUE INJECTION                                            │
+│ ────────────────────────────────                                            │
+│   Tool 6 generates: user.browse_category("category_name_value")            │
+│   AI replaces with: user.browse_category("Women")  ← from requirement      │
+│                                                                             │
+│ DD-18: IMPORT PATH VALIDATION                                               │
+│ ─────────────────────────────                                               │
+│   Before saving, AI verifies:                                               │
+│   - Import paths match actual file locations                                │
+│   - Classes exist at specified paths                                        │
+│   - No circular imports                                                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 8.13 DD-19: Tool Invocation Pattern
+
+When AI calls MCP Tools (1-6), use correct imports:
+
+```python
+# CORRECT - Tool wrappers (async, take arguments dict)
+from tools.tool_01_generate_tests_from_user_story import generate_tests_from_user_story
+from tools.tool_02_discover_page_elements import discover_elements
+from tools.tool_03_generate_page_object import generate_page_object
+from tools.tool_04_generate_task import generate_task
+from tools.tool_05_generate_role import generate_role
+from tools.tool_06_generate_test_runner import generate_test_runner
+
+# WRONG - Utility functions (different signatures, will cause errors)
+from utils.element_discovery import discover_page_elements  # NO!
+from utils.generators.page_object_generator import generate_page_object  # NO!
+```
+
+**Why:** Tool wrappers handle argument parsing, validation, and return JSON. Utility functions have different signatures and will fail with confusing errors.
 
 ---
 

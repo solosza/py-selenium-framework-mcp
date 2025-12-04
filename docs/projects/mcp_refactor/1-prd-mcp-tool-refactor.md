@@ -78,6 +78,10 @@ Implement the complete 9-step workflow with metadata passing, AI rule enforcemen
 | FR-12 | Each element must include: name, type, locator |
 | FR-13 | AI must filter elements relevant to intent before passing to Tool 3 |
 | FR-14 | AI must add discovered_elements to metadata context |
+| FR-14a | Tool 2 must support static discovery (URL input) for elements visible on page load |
+| FR-14b | Tool 2 must support dynamic discovery (`driver_session` + `scope` input) for elements requiring interaction (DD-20) |
+| FR-14c | AI must determine static vs dynamic flow based on requirement analysis |
+| FR-14d | For dynamic flow, AI creates driver, manipulates page to reveal elements, then calls Tool 2 with `driver_session` |
 
 ### 4.4 Tool 3: generate_page_object
 
@@ -140,6 +144,15 @@ Implement the complete 9-step workflow with metadata passing, AI rule enforcemen
 | FR-44 | Generated code includes docstrings and inline comments |
 | FR-45 | No hardcoded method names in generators - all derived from metadata |
 
+### 4.10 AI Orchestration Rules
+
+| ID | Requirement |
+|----|-------------|
+| FR-46 | AI must import tools from `mcp_server/tools/`, never from `mcp_server/utils/` (DD-19) |
+| FR-47 | AI must override Tool 6 file paths to `tests/test1/`, `tests/test2/` (DD-16) |
+| FR-48 | AI must inject actual parameter values from requirement, not placeholders (DD-17) |
+| FR-49 | AI must validate import paths before saving generated files (DD-18) |
+
 ---
 
 ## 5. Non-Goals (Out of Scope)
@@ -189,7 +202,12 @@ Tool 1 (generate_tests_from_user_story)
     └── test_scenarios: [{title, given, when, then, workflow}]
           │
           ▼
-Tool 2 (discover_page_elements)
+Tool 2 (discover_page_elements) - STATIC or DYNAMIC (DD-20)
+    │
+    ├── STATIC: Tool 2 receives URL, discovers elements on page load
+    │
+    └── DYNAMIC: AI prepares page state (hover, click, wait), then
+                 Tool 2 receives driver_session + scope, discovers within scope
     │
     └── discovered_elements: [{name, type, locator}]
           │

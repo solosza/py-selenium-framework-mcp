@@ -160,32 +160,49 @@ framework/
   - [x] B.6.15 Record results
   - [x] B.6.16 Commit: `feat: simple E2E test - catalog browse (Task B.6)`
 
-- [ ] B.7 Medium E2E Test [GLUE]
+- [ ] B.6.5 Tool 2 Dynamic Discovery Enhancement [CORE]
+  - [ ] B.6.5.1 Create branch `feature/B.6.5-tool2-dynamic-discovery`
+  - [ ] B.6.5.2 Update Tool 2 to accept `driver_session` parameter (existing WebDriver instance)
+  - [ ] B.6.5.3 Update Tool 2 to accept `scope` parameter (CSS selector to limit discovery)
+  - [ ] B.6.5.4 When `driver_session` provided: skip creating new driver, use existing
+  - [ ] B.6.5.5 When `driver_session` provided: do NOT close driver (AI owns lifecycle)
+  - [ ] B.6.5.6 Test static flow: Tool 2 with URL only (existing behavior)
+  - [ ] B.6.5.7 Test dynamic flow: Tool 2 with driver_session + scope
+  - [ ] B.6.5.8 Run checks (lint, tests)
+  - [ ] B.6.5.9 Record results
+  - [ ] B.6.5.10 Commit: `feat: add dynamic element discovery to Tool 2 (DD-20)`
+
+- [ ] B.7 Medium E2E Test - Add to Cart [GLUE]
   - [ ] B.7.1 Create branch `feature/B.7-medium-e2e`
   - [ ] B.7.2 Define test requirement:
-    - "As a registered user, I want to login and browse products"
-    - URL: http://automationpractice.pl/index.php?controller=authentication
-    - Expected: Login successful, products displayed
+    - "As a guest, I want to add a product to my cart so I can purchase it later"
+    - URL: http://www.automationpractice.pl/index.php
+    - Expected: Product added, cart confirmation modal displayed with correct product
   - [ ] B.7.3 Execute Step 1-2 (AI Processing):
-    - Extract role_name: RegisteredUser
-    - Extract domain: auth (primary), catalog (secondary)
-    - Extract expected_states: [{name: "is_logged_in"}, {name: "has_products"}]
+    - Extract role_name: GuestUser
+    - Extract domain: cart
+    - Extract expected_states: [{name: "is_modal_displayed"}, {name: "has_product_in_cart"}]
+    - Identify DYNAMIC elements: cart confirmation modal (requires Add to Cart click)
     - Initialize metadata context
   - [ ] B.7.4 Execute Step 3 (Tool 1): Parse BDD, get test_scenarios
-  - [ ] B.7.5 Execute Step 4 (Tool 2): Discover elements on login page
-  - [ ] B.7.6 Execute Step 5 (Tool 3): Check existing LoginPage, generate if needed
-  - [ ] B.7.7 Execute Step 4 again (Tool 2): Discover elements on catalog page
-  - [ ] B.7.8 Execute Step 5 again (Tool 3): Check existing ProductListPage, generate if needed
-  - [ ] B.7.9 Execute Step 6 (Tool 4): Check existing Tasks (CommonTasks, CatalogTasks), reuse or generate
-  - [ ] B.7.10 Execute Step 7 (Tool 5): Check existing Roles (RegisteredUser), reuse or generate
-  - [ ] B.7.11 Execute Step 8 (Tool 6): Generate Test with metadata
-  - [ ] B.7.12 Execute Step 9: Save test to `tests/test2/`, new classes to `framework/*/test2/`
-  - [ ] B.7.13 Add `__init__.py` files to new directories
-  - [ ] B.7.14 Run test with visible browser: `pytest tests/test2/ -v --headless=False`
-  - [ ] B.7.15 Generate HTML report: `--html=reports/test2_report.html --self-contained-html`
-  - [ ] B.7.16 User validates: browser visible, login works, test passes, report generated
-  - [ ] B.7.17 Record results
-  - [ ] B.7.18 Commit: `feat: medium E2E test - auth + catalog (Task B.7)`
+  - [ ] B.7.5 Execute Step 4 (Tool 2) - DYNAMIC FLOW (DD-20):
+    - AI creates WebDriver instance
+    - AI navigates to product page
+    - AI hovers over product, clicks "Add to Cart"
+    - AI waits for modal to appear
+    - AI calls Tool 2 with driver_session + scope="#layer_cart"
+    - Tool 2 discovers modal elements
+  - [ ] B.7.6 Execute Step 5 (Tool 3): Generate CartConfirmationModal POM (NEW)
+  - [ ] B.7.7 Execute Step 6 (Tool 4): Generate CartTasks (NEW)
+  - [ ] B.7.8 Execute Step 7 (Tool 5): Extend GuestUser with add_to_cart workflow
+  - [ ] B.7.9 Execute Step 8 (Tool 6): Generate Test with metadata
+  - [ ] B.7.10 Execute Step 9: Save test to `tests/test2/`, new classes to appropriate dirs
+  - [ ] B.7.11 Add `__init__.py` files to new directories
+  - [ ] B.7.12 Run test with visible browser: `pytest tests/test2/ -v --headless=False`
+  - [ ] B.7.13 Generate HTML report: `--html=reports/test2_report.html --self-contained-html`
+  - [ ] B.7.14 User validates: browser visible, modal appears, test passes, report generated
+  - [ ] B.7.15 Record results
+  - [ ] B.7.16 Commit: `feat: medium E2E test - add to cart with dynamic discovery (Task B.7)`
 
 - [ ] B.8 Cleanup [GLUE]
   - [ ] B.8.1 Create branch `feature/B.8-cleanup`
@@ -421,3 +438,30 @@ pytest tests/test1/ -v --headless=False --html=reports/test1_report.html --self-
 - DD-16: File path override - AI saves to `tests/test1/`, `tests/test2/`
 - DD-17: Parameter value injection - AI replaces placeholders with actual values
 - DD-18: Import path validation - AI verifies imports match file locations
+
+### Task B.6.5 Results (Pending)
+
+*Tool 2 Dynamic Discovery Enhancement - Not yet implemented*
+
+### Task B.7 Results (In Progress)
+
+**Test Requirement (Updated):**
+- "As a guest, I want to add a product to my cart so I can purchase it later"
+- URL: http://www.automationpractice.pl/index.php
+- Requires DYNAMIC element discovery (cart modal)
+
+**Defects Found During B.7:**
+- DEF-B04: AI called wrong function for Tool 2 - utility vs tool wrapper
+  - AI imported `discover_page_elements` from `utils/` instead of `discover_elements` from `tools/`
+  - Fix: DD-19 added - always import from `tools/`, never `utils/`
+  - Status: IN_PROGRESS (awaiting clean E2E rerun)
+
+- DEF-B05: Tool 2 cannot discover dynamic/modal elements
+  - Tool 2 only discovers elements present on page load
+  - Cannot discover modals, hover elements, AJAX content
+  - Fix: DD-20 added - AI prepares page state, passes driver_session to Tool 2
+  - Status: IN_PROGRESS (awaiting Tool 2 enhancement)
+
+**Design Decisions Added:**
+- DD-19: Tool invocation - always import from `tools/`, never `utils/`
+- DD-20: Dynamic element discovery - AI prepares page state before Tool 2

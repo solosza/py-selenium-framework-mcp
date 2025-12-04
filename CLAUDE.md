@@ -109,7 +109,7 @@ BEFORE executing ANY step in the MCP tool chain:
                                     ↓
 ┌─────────────────────────────────────────────────────────────────────────┐
 │ STEP 4: TOOL 2 - discover_page_elements                                  │
-│ - Input: URL from Step 1                                                 │
+│ - Input: URL or driver_session (DD-20 for dynamic elements)             │
 │ - Output: discovered_elements[] → add to metadata                        │
 │ - Filter elements relevant to intent                                     │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -154,13 +154,16 @@ BEFORE executing ANY step in the MCP tool chain:
 **FRAMEWORK.md Section 8** contains detailed "AI PROMPTING RULES" boxes for each step:
 - **Step 2 Rules:** Validate input, extract role, determine domain, convert BDD, extract expected_states
 - **Tool 1 Rules:** Format BDD, pass workflow, validate output, update metadata
-- **Tool 2 Rules:** Validate URL, validate output, filter elements, update metadata
+- **Tool 2 Rules:** Determine static vs dynamic (DD-20), validate output, filter elements, update metadata
 - **Tool 3 Rules:** Determine page name, pass expected_states, check existing, validate output
 - **Tool 4 Rules:** Check existing tasks, determine class, naming conventions
 - **Tool 5 Rules:** Check existing roles, match persona, naming conventions
 - **Tool 6 Rules:** File organization, AAA pattern, use POM state methods for assertions
 
-### Key Design Decisions (MUST follow)
+### Key Design Decisions (Quick Reference)
+
+**Full details in FRAMEWORK.md Section 8.11-8.14**
+
 | ID | Rule |
 |----|------|
 | DD-01 | User MUST specify persona ("As a...") - ASK if missing |
@@ -170,9 +173,11 @@ BEFORE executing ANY step in the MCP tool chain:
 | DD-09 | Extract expected_states from BDD "Then" clause for POM state methods |
 | DD-12 | Check existing classes/methods BEFORE generating new |
 | DD-15 | Test assertions MUST use POM state methods from metadata |
-| DD-16 | **File path override** - AI saves test files to `tests/test1/`, `tests/test2/` per project convention, ignoring Tool 6's workflow-based path |
-| DD-17 | **Parameter value injection** - AI replaces placeholder values with actual values from requirement (e.g., `"Women"` not `"category_name_value"`) |
-| DD-18 | **Import path validation** - AI verifies import paths match actual file locations before saving |
+| DD-16 | AI overrides Tool 6 file paths to `tests/test1/`, `tests/test2/` |
+| DD-17 | AI injects actual parameter values from requirement |
+| DD-18 | AI validates import paths before saving |
+| DD-19 | Tool invocation: import from `tools/`, never `utils/` |
+| DD-20 | Dynamic elements: AI prepares page state before Tool 2 |
 
 ### NO HALLUCINATIONS Policy
 - NEVER guess method names - use metadata from previous tool
@@ -193,6 +198,20 @@ user.browse_category("Women")  # From "browse products in Women category"
 ```
 
 ### E2E Testing Process (MANDATORY)
+
+**⚠️ STOP-CHECK: On ANY Error During E2E**
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ ⚠️  ERROR OCCURRED? STOP AND DO THIS:                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 1. STOP - Do NOT attempt to debug/fix inline                            │
+│ 2. LOG - Create defect entry in docs/DEFECT_LOG.md immediately          │
+│ 3. INVESTIGATE - Then investigate root cause                            │
+│ 4. FIX - Apply fix                                                       │
+│ 5. RERUN - Full E2E from Tool 1 (not partial rerun)                     │
+│ 6. VERIFY - Mark RESOLVED only after clean E2E pass                     │
+└─────────────────────────────────────────────────────────────────────────┘
+```
 
 When running E2E tests (B.6 test1, B.7 test2, etc.), follow this process exactly:
 
@@ -235,6 +254,50 @@ When running E2E tests (B.6 test1, B.7 test2, etc.), follow this process exactly
 - NEVER skip Step 4 (rerun from start) - partial reruns don't verify the fix
 - AI orchestration is part of E2E - defects in AI behavior get logged too
 - Delete test files before rerun to ensure clean generation
+
+### Agentic Defect Resolution Process
+
+When AI makes a mistake during E2E (wrong function call, incorrect parameter, missed rule, etc.), treat it as a defect that needs a permanent fix:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ AGENTIC DEFECT WORKFLOW                                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 1. STOP - Don't continue or work around the error                       │
+│                                                                          │
+│ 2. LOG DEFECT                                                            │
+│    - Create entry in docs/DEFECT_LOG.md                                 │
+│    - Layer: "AI Orchestration"                                          │
+│    - Include: what AI did wrong, exact error, root cause                │
+│                                                                          │
+│ 3. IDENTIFY ROOT CAUSE                                                   │
+│    - Why did AI make this mistake?                                      │
+│    - What rule/guidance was missing or unclear?                         │
+│                                                                          │
+│ 4. CREATE DESIGN DECISION (DD-XX)                                        │
+│    - Write explicit rule to prevent recurrence                          │
+│    - Add to "Key Design Decisions" table in CLAUDE.md                   │
+│    - Add detailed explanation section if needed                         │
+│                                                                          │
+│ 5. RERUN E2E FROM START                                                  │
+│    - Delete any generated files                                         │
+│    - Execute full workflow from Tool 1                                  │
+│    - Verify AI now follows the new DD rule                              │
+│                                                                          │
+│ 6. MARK RESOLVED                                                         │
+│    - Only after clean E2E pass                                          │
+│    - Update defect with "Verified:" and "Resolved Date:"                │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Why this matters:** Agentic defects are systematic - if AI made a mistake once, it will make it again unless there's an explicit rule. Design Decisions become "learned lessons" that persist across sessions.
+
+**Examples of Agentic Defects:**
+| Defect | Root Cause | Design Decision |
+|--------|------------|-----------------|
+| DEF-B02 | AI didn't override Tool 6's file path | DD-16: File path override |
+| DEF-B03 | AI didn't inject actual parameter values | DD-17: Parameter value injection |
+| DEF-B04 | AI called utils/ instead of tools/ | DD-19: Tool invocation pattern |
 
 ### Metadata Context Structure
 AI maintains this context through the tool chain:
