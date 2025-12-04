@@ -789,6 +789,52 @@ Removed non-existent imports (`get_available_workflows`) and added existing func
 
 ---
 
+### [DEF-B02] AI did not apply file path override (DD-16)
+**Severity:** MEDIUM
+**Status:** RESOLVED
+**Caught By:** B.6 test1
+**Code Version:** feature/B.6-simple-e2e (pre-commit)
+**Layer:** AI Orchestration
+**File:** N/A (AI behavior, not code)
+
+**Error Message:**
+Tool 6 suggested `tests/catalog/test_browse_women_category.py` but project convention requires `tests/test1/`
+
+**Description:**
+AI initially did not override Tool 6's suggested file path. Tool 6 generates paths based on workflow (e.g., `tests/catalog/`), but project convention uses `tests/test1/`, `tests/test2/` for E2E tests. AI must override tool suggestions per DD-16.
+
+**Fix:**
+1. Added DD-16 to CLAUDE.md: "AI saves test files to `tests/test1/`, `tests/test2/` per project convention"
+2. AI manually corrected path before saving
+
+**Verified:** B.6 test1 rerun passed with correct file location
+**Resolved Date:** 2025-12-03
+
+---
+
+### [DEF-B03] AI did not inject actual parameter values (DD-17)
+**Severity:** MEDIUM
+**Status:** RESOLVED
+**Caught By:** B.6 test1
+**Code Version:** feature/B.6-simple-e2e (pre-commit)
+**Layer:** AI Orchestration
+**File:** N/A (AI behavior, not code)
+
+**Error Message:**
+Tool 6 generated `user.browse_category("category_name_value")` instead of `user.browse_category("Women")`
+
+**Description:**
+Tool 6 generates placeholder parameter values when actual values aren't in metadata. AI must extract actual values from the user requirement and inject them. The requirement was "browse products in Women category" so the value should be "Women".
+
+**Fix:**
+1. Added DD-17 to CLAUDE.md: "AI replaces placeholder values with actual values from requirement"
+2. AI manually replaced `"category_name_value"` with `"Women"` before saving
+
+**Verified:** B.6 test1 rerun passed with correct parameter value
+**Resolved Date:** 2025-12-03
+
+---
+
 ## Summary
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
@@ -798,8 +844,9 @@ Removed non-existent imports (`get_available_workflows`) and added existing func
 | Roles | 2 | 1 | 0 | 0 | 3 | 2 (1 INVALID) |
 | Tests | 2 | 0 | 0 | 0 | 2 | 2 |
 | MCP Tools | 1 | 3 | 0 | 0 | 4 | 0 (4 IN_PROGRESS) |
-| MCP Tools (Phase B) | 1 | 0 | 0 | 0 | 1 | 1 |
-| **Total** | **9** | **6** | **4** | **5** | **24** | **16 + 1 WONT_FIX + 1 INVALID + 4 IN_PROGRESS** |
+| MCP Tools (Phase B) | 1 | 0 | 2 | 0 | 3 | 3 |
+| AI Orchestration | 0 | 0 | 2 | 0 | 2 | 2 |
+| **Total** | **9** | **6** | **6** | **5** | **26** | **18 + 1 WONT_FIX + 1 INVALID + 4 IN_PROGRESS** |
 
 ---
 

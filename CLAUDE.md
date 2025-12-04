@@ -170,12 +170,27 @@ BEFORE executing ANY step in the MCP tool chain:
 | DD-09 | Extract expected_states from BDD "Then" clause for POM state methods |
 | DD-12 | Check existing classes/methods BEFORE generating new |
 | DD-15 | Test assertions MUST use POM state methods from metadata |
+| DD-16 | **File path override** - AI saves test files to `tests/test1/`, `tests/test2/` per project convention, ignoring Tool 6's workflow-based path |
+| DD-17 | **Parameter value injection** - AI replaces placeholder values with actual values from requirement (e.g., `"Women"` not `"category_name_value"`) |
+| DD-18 | **Import path validation** - AI verifies import paths match actual file locations before saving |
 
 ### NO HALLUCINATIONS Policy
 - NEVER guess method names - use metadata from previous tool
 - NEVER assume a class exists - scan framework/ first
 - NEVER hardcode method calls - derive from POM/Task/Role metadata
 - If unsure, ASK the user for clarification
+
+### AI Orchestration Rules (Post-Tool Processing)
+Tools generate code, but AI must post-process before saving. See DD-16, DD-17, DD-18.
+
+**Example DD-17 (Parameter Value Injection):**
+```python
+# Tool 6 generates:
+user.browse_category("category_name_value")
+
+# AI must replace with actual value from requirement:
+user.browse_category("Women")  # From "browse products in Women category"
+```
 
 ### Metadata Context Structure
 AI maintains this context through the tool chain:

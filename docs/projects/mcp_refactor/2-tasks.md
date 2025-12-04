@@ -411,4 +411,13 @@ pytest tests/test1/ -v --headless=False --html=reports/test1_report.html --self-
 - Assertions passed
 - HTML report generated at `reports/test1_report.html`
 
-**Defects Found:** None - test passed on first run
+**Defects Found & Fixed:**
+- DEF-B02: AI did not apply file path override (DD-16) - RESOLVED
+  - Tool 6 suggested `tests/catalog/`, fixed to `tests/test1/`
+- DEF-B03: AI did not inject actual parameter values (DD-17) - RESOLVED
+  - Tool 6 generated `"category_name_value"`, fixed to `"Women"`
+
+**Design Decisions Added:**
+- DD-16: File path override - AI saves to `tests/test1/`, `tests/test2/`
+- DD-17: Parameter value injection - AI replaces placeholders with actual values
+- DD-18: Import path validation - AI verifies imports match file locations
