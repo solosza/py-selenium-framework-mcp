@@ -192,6 +192,50 @@ user.browse_category("category_name_value")
 user.browse_category("Women")  # From "browse products in Women category"
 ```
 
+### E2E Testing Process (MANDATORY)
+
+When running E2E tests (B.6 test1, B.7 test2, etc.), follow this process exactly:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│ E2E TESTING WORKFLOW                                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│ 1. RUN E2E TEST                                                          │
+│    - Execute full workflow (Tools 1-6 + AI orchestration)               │
+│    - Apply DD-16, DD-17, DD-18 when saving files                        │
+│    - Run pytest with visible browser                                     │
+│                                                                          │
+│ 2. IF TEST FAILS OR ISSUES FOUND                                         │
+│    - Log defect in DEFECT_LOG.md with "Caught By: B.X testY"            │
+│    - Include code version/commit                                         │
+│    - Set status: IN_PROGRESS                                             │
+│                                                                          │
+│ 3. FIX THE ISSUE                                                         │
+│    - Update code or documentation                                        │
+│    - Add Design Decisions if needed (DD-XX)                              │
+│                                                                          │
+│ 4. RERUN E2E FROM START (MANDATORY)                                      │
+│    - Delete generated test files                                         │
+│    - Rerun FULL workflow from Tool 1                                     │
+│    - This verifies the fix works end-to-end                              │
+│                                                                          │
+│ 5. MARK DEFECT RESOLVED                                                  │
+│    - Only after successful E2E rerun                                     │
+│    - Update "Verified:" field with rerun result                          │
+│    - Set "Resolved Date:"                                                │
+│                                                                          │
+│ 6. COMMIT                                                                │
+│    - Only after all defects are RESOLVED                                 │
+│    - Include defect IDs in commit message                                │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key Rules:**
+- NEVER mark defect RESOLVED without clean E2E rerun
+- NEVER skip Step 4 (rerun from start) - partial reruns don't verify the fix
+- AI orchestration is part of E2E - defects in AI behavior get logged too
+- Delete test files before rerun to ensure clean generation
+
 ### Metadata Context Structure
 AI maintains this context through the tool chain:
 ```python
