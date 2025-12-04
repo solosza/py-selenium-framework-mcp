@@ -21,21 +21,33 @@
 - `mcp_server/utils/generators/test_generator.py` - Use Role + POM metadata for assertions
 
 ### Test Artifacts (Generated During E2E)
-- `framework/pages/e2e_simple/` - Simple E2E POMs (catalog)
-- `framework/tasks/e2e_simple/` - Simple E2E Tasks
-- `framework/roles/e2e_simple/` - Simple E2E Roles
-- `tests/e2e_simple/` - Simple E2E test (catalog browse)
-- `framework/pages/e2e_medium/` - Medium E2E POMs (auth + catalog)
-- `framework/tasks/e2e_medium/` - Medium E2E Tasks
-- `framework/roles/e2e_medium/` - Medium E2E Roles
-- `tests/e2e_medium/` - Medium E2E test (auth + catalog)
-- `reports/e2e_simple_report.html` - Simple E2E HTML report
-- `reports/e2e_medium_report.html` - Medium E2E HTML report
+
+**File Placement Rules:**
+1. **Test files** always go in `tests/test1/`, `tests/test2/`
+2. **NEW classes** (if needed) go in `framework/*/test1/`, `framework/*/test2/`
+3. **AI dynamically discovers** existing classes via Tools 4-5 check-existing pattern (DD-12)
+
+**Directory Structure:**
+```
+tests/
+  test1/                    # B.6 Simple E2E test
+  test2/                    # B.7 Medium E2E test
+
+framework/
+  pages/test1/              # NEW POMs only if check-existing finds no match
+  tasks/test1/              # NEW Tasks only if check-existing finds no match
+  roles/test1/              # NEW Roles only if check-existing finds no match
+```
+
+**Reports:**
+- `reports/test1_report.html` - Simple E2E HTML report
+- `reports/test2_report.html` - Medium E2E HTML report
 
 ### Notes
-- Run E2E tests visible: `pytest tests/e2e_simple/ -v --headless=False`
-- Generate HTML report: `--html=reports/e2e_simple_report.html --self-contained-html`
-- AI enforcement rules are in CLAUDE.md → FRAMEWORK.md Section 8 (no code needed)
+- Run E2E tests visible: `pytest tests/test1/ -v --headless=False`
+- Generate HTML report: `--html=reports/test1_report.html --self-contained-html`
+- AI dynamically scans framework/ via Tools 4-5 to find reusable classes
+- No hardcoded "reuse list" - AI discovers at runtime
 
 ---
 
@@ -123,29 +135,29 @@
   - [x] B.5.8 Record results
   - [x] B.5.9 Commit: `feat: add Role + POM metadata to Tool 6 (Task B.5)`
 
-- [ ] B.6 Simple E2E Test [GLUE]
-  - [ ] B.6.1 Create branch `feature/B.6-simple-e2e`
-  - [ ] B.6.2 Define test requirement:
+- [x] B.6 Simple E2E Test [GLUE]
+  - [x] B.6.1 Create branch `feature/B.6-simple-e2e`
+  - [x] B.6.2 Define test requirement:
     - "As a guest, I want to browse products in the Women category"
     - URL: http://automationpractice.pl/index.php
     - Expected: Products displayed in Women category
-  - [ ] B.6.3 Execute Step 1-2 (AI Processing):
+  - [x] B.6.3 Execute Step 1-2 (AI Processing):
     - Extract role_name: GuestUser
     - Extract domain: catalog
     - Extract expected_states: [{name: "has_products", ...}]
     - Initialize metadata context
-  - [ ] B.6.4 Execute Step 3 (Tool 1): Parse BDD, get test_scenarios
-  - [ ] B.6.5 Execute Step 4 (Tool 2): Discover elements on catalog page
-  - [ ] B.6.6 Execute Step 5 (Tool 3): Generate POM with expected_states
-  - [ ] B.6.7 Execute Step 6 (Tool 4): Generate Task (or use existing)
-  - [ ] B.6.8 Execute Step 7 (Tool 5): Generate Role (or use existing)
-  - [ ] B.6.9 Execute Step 8 (Tool 6): Generate Test with metadata
-  - [ ] B.6.10 Execute Step 9: Save files to `e2e_simple/` directories
-  - [ ] B.6.11 Add `__init__.py` files to e2e_simple directories
-  - [ ] B.6.12 Run test with visible browser: `pytest tests/e2e_simple/ -v --headless=False`
-  - [ ] B.6.13 Generate HTML report: `--html=reports/e2e_simple_report.html --self-contained-html`
-  - [ ] B.6.14 User validates: browser visible, test passes, report generated
-  - [ ] B.6.15 Record results
+  - [x] B.6.4 Execute Step 3 (Tool 1): Parse BDD, get test_scenarios
+  - [x] B.6.5 Execute Step 4 (Tool 2): Skipped - reusing existing ProductListPage
+  - [x] B.6.6 Execute Step 5 (Tool 3): Skipped - reusing existing ProductListPage
+  - [x] B.6.7 Execute Step 6 (Tool 4): Check-existing found CatalogTasks - REUSED
+  - [x] B.6.8 Execute Step 7 (Tool 5): Check-existing found GuestUser - REUSED
+  - [x] B.6.9 Execute Step 8 (Tool 6): Generate Test with metadata
+  - [x] B.6.10 Execute Step 9: Save test to `tests/test1/`
+  - [x] B.6.11 Add `__init__.py` files to new directories
+  - [x] B.6.12 Run test with visible browser: `pytest tests/test1/ -v --headless=False`
+  - [x] B.6.13 Generate HTML report: `--html=reports/test1_report.html --self-contained-html`
+  - [x] B.6.14 User validates: browser visible, test passes, report generated
+  - [x] B.6.15 Record results
   - [ ] B.6.16 Commit: `feat: simple E2E test - catalog browse (Task B.6)`
 
 - [ ] B.7 Medium E2E Test [GLUE]
@@ -161,16 +173,16 @@
     - Initialize metadata context
   - [ ] B.7.4 Execute Step 3 (Tool 1): Parse BDD, get test_scenarios
   - [ ] B.7.5 Execute Step 4 (Tool 2): Discover elements on login page
-  - [ ] B.7.6 Execute Step 5 (Tool 3): Generate LoginPage POM with expected_states
+  - [ ] B.7.6 Execute Step 5 (Tool 3): Check existing LoginPage, generate if needed
   - [ ] B.7.7 Execute Step 4 again (Tool 2): Discover elements on catalog page
-  - [ ] B.7.8 Execute Step 5 again (Tool 3): Generate ProductListPage POM
-  - [ ] B.7.9 Execute Step 6 (Tool 4): Generate Tasks (check existing first)
-  - [ ] B.7.10 Execute Step 7 (Tool 5): Generate Role (check existing first)
+  - [ ] B.7.8 Execute Step 5 again (Tool 3): Check existing ProductListPage, generate if needed
+  - [ ] B.7.9 Execute Step 6 (Tool 4): Check existing Tasks (CommonTasks, CatalogTasks), reuse or generate
+  - [ ] B.7.10 Execute Step 7 (Tool 5): Check existing Roles (RegisteredUser), reuse or generate
   - [ ] B.7.11 Execute Step 8 (Tool 6): Generate Test with metadata
-  - [ ] B.7.12 Execute Step 9: Save files to `e2e_medium/` directories
-  - [ ] B.7.13 Add `__init__.py` files to e2e_medium directories
-  - [ ] B.7.14 Run test with visible browser: `pytest tests/e2e_medium/ -v --headless=False`
-  - [ ] B.7.15 Generate HTML report: `--html=reports/e2e_medium_report.html --self-contained-html`
+  - [ ] B.7.12 Execute Step 9: Save test to `tests/test2/`, new classes to `framework/*/test2/`
+  - [ ] B.7.13 Add `__init__.py` files to new directories
+  - [ ] B.7.14 Run test with visible browser: `pytest tests/test2/ -v --headless=False`
+  - [ ] B.7.15 Generate HTML report: `--html=reports/test2_report.html --self-contained-html`
   - [ ] B.7.16 User validates: browser visible, login works, test passes, report generated
   - [ ] B.7.17 Record results
   - [ ] B.7.18 Commit: `feat: medium E2E test - auth + catalog (Task B.7)`
@@ -179,8 +191,8 @@
   - [ ] B.8.1 Create branch `feature/B.8-cleanup`
   - [ ] B.8.2 Verify all tools (1-6) output correct metadata format
   - [ ] B.8.3 Verify no hardcoded method names remain in generators
-  - [ ] B.8.4 Run both E2E tests: `pytest tests/e2e_simple/ tests/e2e_medium/ -v`
-  - [ ] B.8.5 Clean up old test artifacts (devtest1/, devtest2/, test1/, test2/ if exist)
+  - [ ] B.8.4 Run both E2E tests: `pytest tests/test1/ tests/test2/ -v`
+  - [ ] B.8.5 Clean up old test artifacts (devtest1/, devtest2/ if exist)
   - [ ] B.8.6 Update PRD status to "Complete"
   - [ ] B.8.7 Update SESSION.md with Phase B completion
   - [ ] B.8.8 Record final results
@@ -368,3 +380,35 @@ def test_login(self):
     assert self.login_page.is_logged_in(), "Is Logged In"
     assert self.login_page.is_account_page_displayed(), "Is Account Page Displayed"
 ```
+
+### Task B.6 Results (2025-12-03)
+
+**Test Requirement:**
+- "As a guest, I want to browse products in the Women category"
+- URL: http://www.automationpractice.pl/index.php
+
+**Reused Existing Classes (DD-12 check-existing):**
+- `GuestUser` - Role with `browse_category()` method
+- `CatalogTasks` - Task with `browse_category()` method
+- `ProductListPage` - POM with `has_products()` and `is_page_loaded()` state methods
+
+**Generated Files:**
+- `tests/test1/test_browse_women_category.py` - Test file
+- `tests/test1/__init__.py` - Package init
+
+**No New Framework Classes Generated** - All needed classes already existed
+
+**Test Execution:**
+```
+pytest tests/test1/ -v --headless=False --html=reports/test1_report.html --self-contained-html
+============================= 1 passed in 10.74s ==============================
+```
+
+**Validation:**
+- Browser opened and was visible
+- Navigated to Women category
+- Products displayed (7 products)
+- Assertions passed
+- HTML report generated at `reports/test1_report.html`
+
+**Defects Found:** None - test passed on first run

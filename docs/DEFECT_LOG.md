@@ -34,7 +34,7 @@
 ### [DEF-XXX] Brief Description
 **Severity:** CRITICAL | HIGH | MEDIUM | LOW
 **Status:** OPEN | IN_PROGRESS | RESOLVED | WONT_FIX
-**Layer:** Page | Task | Role | Test
+**Layer:** Page | Task | Role | Test | MCP Tool
 **File:** `path/to/file.py`
 **Line(s):** XX-XX
 
@@ -49,6 +49,40 @@
 
 **Resolved Date:** YYYY-MM-DD (if resolved)
 ```
+
+## E2E Test Defect Template
+
+For defects caught during E2E testing (B.6 test1, B.7 test2), use this extended format:
+
+```markdown
+### [DEF-XXX] Brief Description
+**Severity:** CRITICAL | HIGH | MEDIUM | LOW
+**Status:** OPEN | IN_PROGRESS | RESOLVED | WONT_FIX
+**Caught By:** B.6 test1 | B.7 test2
+**Code Version:** commit hash or branch name
+**Layer:** Page | Task | Role | Test | MCP Tool
+**File:** `path/to/file.py`
+**Line(s):** XX-XX
+
+**Error Message:**
+[Exact error or failure message]
+
+**Description:**
+[What is wrong and why it's a problem]
+
+**Fix:**
+[How it was fixed]
+
+**Verified:** Rerun of test1/test2 passed
+**Resolved Date:** YYYY-MM-DD
+```
+
+**E2E Defect Workflow:**
+1. Run E2E test (test1 or test2)
+2. If failure → Log defect with "Caught By" field
+3. Fix the issue
+4. Rerun E2E from start
+5. Mark RESOLVED only after successful rerun
 
 ---
 
