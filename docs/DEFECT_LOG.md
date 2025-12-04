@@ -805,9 +805,9 @@ AI initially did not override Tool 6's suggested file path. Tool 6 generates pat
 
 **Fix:**
 1. Added DD-16 to CLAUDE.md: "AI saves test files to `tests/test1/`, `tests/test2/` per project convention"
-2. AI manually corrected path before saving
+2. Rerun E2E from start to verify AI applies DD-16
 
-**Verified:** B.6 test1 rerun passed with correct file location
+**Verified:** E2E rerun passed - AI correctly saved to `tests/test1/test_browse_women_category.py`
 **Resolved Date:** 2025-12-03
 
 ---
@@ -828,9 +828,9 @@ Tool 6 generates placeholder parameter values when actual values aren't in metad
 
 **Fix:**
 1. Added DD-17 to CLAUDE.md: "AI replaces placeholder values with actual values from requirement"
-2. AI manually replaced `"category_name_value"` with `"Women"` before saving
+2. Rerun E2E from start to verify AI applies DD-17
 
-**Verified:** B.6 test1 rerun passed with correct parameter value
+**Verified:** E2E rerun passed - AI correctly injected `"Women"` from requirement
 **Resolved Date:** 2025-12-03
 
 ---
@@ -844,7 +844,7 @@ Tool 6 generates placeholder parameter values when actual values aren't in metad
 | Roles | 2 | 1 | 0 | 0 | 3 | 2 (1 INVALID) |
 | Tests | 2 | 0 | 0 | 0 | 2 | 2 |
 | MCP Tools | 1 | 3 | 0 | 0 | 4 | 0 (4 IN_PROGRESS) |
-| MCP Tools (Phase B) | 1 | 0 | 2 | 0 | 3 | 3 |
+| MCP Tools (Phase B) | 1 | 0 | 0 | 0 | 1 | 1 |
 | AI Orchestration | 0 | 0 | 2 | 0 | 2 | 2 |
 | **Total** | **9** | **6** | **6** | **5** | **26** | **18 + 1 WONT_FIX + 1 INVALID + 4 IN_PROGRESS** |
 
