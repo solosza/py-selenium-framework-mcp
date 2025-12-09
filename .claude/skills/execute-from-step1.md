@@ -4,6 +4,17 @@
 
 ---
 
+## Prerequisites (Verify First)
+
+| Check | Command/Action | Fix |
+|-------|----------------|-----|
+| MCP Server | `/mcp` → qa-automation connected | `pip install -r requirements.txt` then restart |
+| Dependencies | `pip install -r requirements.txt` | Check Python 3.8+ |
+| Chrome | Browser installed | Install Chrome |
+| Target Site | Open http://www.automationpractice.pl | Check internet |
+
+---
+
 ## Before Starting
 
 1. Get from user (if not already known):
@@ -16,6 +27,25 @@
    - tests/test1/ (simple, single domain)
    - tests/test2/ (medium, multi-domain)
    - Or custom path
+
+3. **DevTest vs Production Folders:**
+
+   ```
+   DevTest Mode (tool chain validation):
+   ├── tests/test1/          # Test files
+   ├── framework/pages/test1/
+   ├── framework/tasks/test1/
+   └── framework/roles/test1/
+
+   Production Mode (real test suite):
+   ├── tests/{domain}/       # e.g., tests/auth/, tests/cart/
+   ├── framework/pages/{domain}/
+   ├── framework/tasks/{domain}/
+   └── framework/roles/auth/  # ALL roles go in auth/ folder
+   ```
+
+   **Role Folder Rule:** All roles (GuestUser, RegisteredUser, AdminUser)
+   belong in `framework/roles/auth/` - they are authentication personas.
 
 ---
 
@@ -294,16 +324,36 @@ When AI encounters issues discovering elements:
 
 ## Defect Handling (CRITICAL)
 
-If ANY issue is found at ANY step:
+If ANY error is encountered at ANY step:
 
 1. **STOP** - Do not continue to next step
-2. **LOG** - Create defect entry:
-   ```
-   | DEF-BXX | [Description] | Step X | OPEN |
-   ```
-3. **FIX** - Resolve the issue
-4. **RESTART FROM STEP 1** - Do NOT resume from where you stopped
-5. **RESOLVE** - Only mark defect RESOLVED after full chain passes
+2. **EXPLAIN** - Tell user:
+   - What step failed
+   - The exact error message
+   - What you think might be the cause
+3. **COLLABORATE** - Troubleshoot WITH the user:
+   - Propose 1-2 investigation steps
+   - Ask user if they want to proceed or have ideas
+   - Work together to identify root cause
+4. **FIX** - Implement the fix together
+5. **RESTART FROM STEP 1** - After fix, do NOT resume mid-workflow
+6. **RESOLVE** - Only mark defect RESOLVED after full chain passes
+
+**Example Error Dialogue:**
+```
+AI: "Step 3 failed with error: 'No scenarios found in user story'
+
+I think the issue is: [hypothesis]
+
+Let me investigate by: [action]
+
+Should I proceed, or do you have a different idea?"
+```
+
+**DO NOT:**
+- Silently retry without telling user
+- Continue to next step after error
+- Assume you know the fix without verifying
 
 ---
 
