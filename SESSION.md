@@ -1,4 +1,4 @@
-# Session State - 2025-12-03
+# Session State - 2025-12-04
 
 ## Current Phase
 **Phase:** Phase B - MCP Tool Chain Refactor
@@ -12,41 +12,41 @@
 ## Progress This Session
 
 ### Completed
-- [x] B.1 - Tool 1-2 Metadata Output (merged: 887acd2)
-- [x] B.2 - Tool 3 expected_states (merged: ae679f4)
-- [x] B.3 - Tool 4 Refactor (merged: 4a5a84c)
-- [x] B.4 - Tool 5 Refactor (merged: abf0bef)
-- [x] B.5 - Tool 6 Refactor (merged: e95dbdf)
-- [x] B.6 - Simple E2E Test (merged: bdc585b)
-  - Test: `tests/test1/test_browse_women_category.py`
-  - Reused: GuestUser, CatalogTasks, ProductListPage (DD-12)
-  - Defects found & fixed: DEF-B02, DEF-B03
-  - Added: DD-16, DD-17, DD-18 (AI orchestration rules)
-  - Added: E2E Testing Process (mandatory rerun workflow)
+- [x] B.6.5 - Tool 2 Dynamic Discovery Enhancement (DD-20)
+  - Added `driver_session` and `scope` parameters to Tool 2
+  - AI can now discover dynamic elements (modals, hover-triggered content)
+  - Test validation: 16 elements found in Quick View modal
+  - Commits: `76e1a18`, `d12b196`
 
 ### Design Decisions Added This Session
 | ID | Rule |
 |----|------|
-| DD-16 | File path override - AI saves to `tests/test1/`, `tests/test2/` |
-| DD-17 | Parameter value injection - AI replaces placeholders with actual values |
-| DD-18 | Import path validation - AI verifies imports match file locations |
+| DD-20 | Dynamic elements: AI prepares page state before Tool 2 |
+| DD-21 | AI-SDET collaboration: AI tries autonomously, asks SDET specific questions when stuck |
 
-### Defects Logged & Resolved This Session
-| ID | Description | Caught By | Status |
-|----|-------------|-----------|--------|
-| DEF-B02 | AI did not apply file path override | B.6 test1 | RESOLVED |
-| DEF-B03 | AI did not inject actual parameter values | B.6 test1 | RESOLVED |
+### Key Learnings (DD-20/DD-21)
+**Dynamic Discovery Pain Points:**
+1. Homepage products have zero dimensions - use category pages instead
+2. Quick View modal content is in iframe - need `driver.switch_to.frame()`
+3. Standard Selenium clicks fail - use JavaScript clicks
+4. Products may be out of stock - different modals appear
+
+**DD-21 Approaches:**
+- **Primary:** AI tries → fails → AI tries again → asks SDET specific questions
+- **Alternate:** AI uses Playwright MCP for visual reconnaissance (higher token cost)
+- Use alternate for: SDET unavailable, manual testers learning automation, junior devs
 
 ## Git State
 - Branch: `main`
-- Latest commit: `bdc585b` (E2E testing process docs)
+- Latest commit: `d12b196` (docs: add DD-21 requirements to PRD)
 - Status: Clean
 
-## Key Files (for reference)
-- `CLAUDE.md` - AI orchestration rules (DD-16-18) and E2E testing process
-- `docs/DEFECT_LOG.md` - Defect tracking with E2E template
-- `docs/projects/mcp_refactor/2-tasks.md` - Task list with B.6 results
-- `tests/test1/test_browse_women_category.py` - B.6 E2E test
+## Key Files Modified
+- `mcp_server/tools/tool_02_discover_page_elements.py` - Added driver_session, scope
+- `mcp_server/utils/element_discovery.py` - Added scope support
+- `mcp_server/_dev_tests/test_tool2_dynamic_flow.py` - Dynamic flow test
+- `FRAMEWORK.md` Section 8.5 - DD-21 visual diagram
+- `docs/projects/mcp_refactor/1-prd-mcp-tool-refactor.md` - FR-50, FR-51
 
 ## Task List Summary
 | Task | Type | Description | Status |
@@ -92,4 +92,4 @@ This test spans TWO domains (auth + catalog), so it will:
 - `FRAMEWORK.md` Section 8 - 9-Step AI Workflow
 
 ---
-**Last Updated:** 2025-12-03
+**Last Updated:** 2025-12-04
