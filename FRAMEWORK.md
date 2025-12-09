@@ -1488,5 +1488,41 @@ from utils.generators.page_object_generator import generate_page_object  # NO!
 
 ---
 
+### 8.14 Claude Code Skills
+
+Claude Code Skills provide on-demand workflow guidance loaded via `/skill <name>`.
+
+**Available Skills:**
+
+| Skill | Purpose | When to Use |
+|-------|---------|-------------|
+| `execute-from-step1` | Full 9-step MCP workflow with autonomous troubleshooting | Running E2E tests, validating tool chain |
+
+**Skill: execute-from-step1**
+
+Location: `.claude/skills/execute-from-step1.md`
+
+Features:
+- Complete 9-step workflow guide
+- Autonomous troubleshooting (DD-21):
+  - Iframe/frame detection and switching
+  - Shadow DOM handling
+  - Dynamic content waits
+  - Multiple selector strategies
+  - JavaScript DOM queries and event triggering
+- Step-by-step DevTools guidance when AI needs user help
+- Defect handling with mandatory restart-from-step-1
+
+Usage:
+```
+/skill execute-from-step1
+```
+
+**Skills vs CLAUDE.md:**
+- CLAUDE.md: Core rules (DD-01 through DD-21), always loaded
+- Skills: Detailed procedures, loaded on-demand to save tokens
+
+---
+
 **Document Status:** This is the authoritative source of truth for framework architecture.
-**Related Docs:** CLAUDE.md (quick reference), README.md (overview)
+**Related Docs:** CLAUDE.md (quick reference), README.md (overview), `.claude/skills/` (workflow skills)

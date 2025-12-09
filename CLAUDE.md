@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-**Version:** v1.6.0 | **Status:** Active Development
+**Version:** v1.7.0 | **Status:** Active Development
 
 ---
 
@@ -72,93 +72,34 @@ pytest -v --html=_reports/report.html --self-contained-html
 
 **CRITICAL: Before calling ANY MCP tool (Tools 1-6), you MUST read and follow FRAMEWORK.md Section 8.**
 
-### Enforcement Rule
+### Quick Start: Use the Skill
+
+For full 9-step workflow with autonomous troubleshooting:
 ```
-BEFORE executing ANY step in the MCP tool chain:
-1. STOP and read FRAMEWORK.md Section 8
-2. Find the "AI PROMPTING RULES" box for that specific step
-3. Follow EVERY rule in that box - no exceptions
-4. If a rule says "ASK user" - you MUST ask before proceeding
+/skill execute-from-step1
 ```
 
-### Complete 9-Step Flow (MUST follow in order)
+The skill provides:
+- Complete 9-step workflow guide
+- Autonomous troubleshooting (iframe detection, shadow DOM, JS fallbacks)
+- Step-by-step DevTools guidance when AI needs help
+- Defect handling with mandatory restart-from-step-1
+
+### 9-Step Flow Summary
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 1: USER INPUT                                                       │
-│ - User provides requirement with persona ("As a...")                     │
-│ - User provides target URL                                               │
-│ - If missing, ASK before proceeding (DD-01, DD-02)                       │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 2: AI PROCESSING (you do this, no tool call)                        │
-│ - Extract role_name from persona                                         │
-│ - Extract intent (descriptive, not method name)                          │
-│ - Determine domain (auth/catalog/cart/checkout)                          │
-│ - Convert to BDD format (Given/When/Then)                                │
-│ - Extract expected_states from "Then" clause (DD-09)                     │
-│ - Initialize metadata context                                            │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 3: TOOL 1 - generate_tests_from_user_story                          │
-│ - Input: BDD user story, workflow/domain                                 │
-│ - Output: test_scenarios[] → add to metadata                             │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 4: TOOL 2 - discover_page_elements                                  │
-│ - Input: URL or driver_session (DD-20 for dynamic elements)             │
-│ - Output: discovered_elements[] → add to metadata                        │
-│ - Filter elements relevant to intent                                     │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 5: TOOL 3 - generate_page_object                                    │
-│ - Input: elements, expected_states, domain                               │
-│ - Output: POM code + pom_metadata → add to metadata                      │
-│ - CHECK EXISTING first (DD-12)                                           │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 6: TOOL 4 - generate_task                                           │
-│ - Input: pom_metadata from Step 5                                        │
-│ - Output: Task code + task_metadata → add to metadata                    │
-│ - CHECK EXISTING first (DD-12) - CommonTasks may already handle it       │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 7: TOOL 5 - generate_role                                           │
-│ - Input: task_metadata from Step 6                                       │
-│ - Output: Role code + role_metadata → add to metadata                    │
-│ - CHECK EXISTING first (DD-12) - RegisteredUser may already exist        │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 8: TOOL 6 - generate_test_runner                                    │
-│ - Input: role_metadata + pom_metadata (for assertions)                   │
-│ - Output: Test file with AAA pattern                                     │
-│ - Assertions use POM state methods from metadata (DD-15)                 │
-└─────────────────────────────────────────────────────────────────────────┘
-                                    ↓
-┌─────────────────────────────────────────────────────────────────────────┐
-│ STEP 9: SAVE FILES & REPORT                                              │
-│ - Save generated code to suggested file paths                            │
-│ - Report to user: files created, files reused, run command               │
-│ - Optionally run test with --headless=False                              │
-└─────────────────────────────────────────────────────────────────────────┘
+Step 1: User Input (persona + URL)
+Step 2: AI Processing (extract role, domain, BDD, expected_states)
+Step 3: Tool 1 - generate_tests_from_user_story
+Step 4: Tool 2 - discover_page_elements (static or dynamic DD-20)
+Step 5: Tool 3 - generate_page_object
+Step 6: Tool 4 - generate_task (check-existing DD-12)
+Step 7: Tool 5 - generate_role (check-existing DD-12)
+Step 8: Tool 6 - generate_test_runner
+Step 9: Save files & run test
 ```
 
-### AI Prompting Rules Location
-**FRAMEWORK.md Section 8** contains detailed "AI PROMPTING RULES" boxes for each step:
-- **Step 2 Rules:** Validate input, extract role, determine domain, convert BDD, extract expected_states
-- **Tool 1 Rules:** Format BDD, pass workflow, validate output, update metadata
-- **Tool 2 Rules:** Determine static vs dynamic (DD-20), validate output, filter elements, update metadata
-- **Tool 3 Rules:** Determine page name, pass expected_states, check existing, validate output
-- **Tool 4 Rules:** Check existing tasks, determine class, naming conventions
-- **Tool 5 Rules:** Check existing roles, match persona, naming conventions
-- **Tool 6 Rules:** File organization, AAA pattern, use POM state methods for assertions
+**Detailed rules:** FRAMEWORK.md Section 8
 
 ### Key Design Decisions (Quick Reference)
 
@@ -197,141 +138,18 @@ user.browse_category("category_name_value")
 user.browse_category("Women")  # From "browse products in Women category"
 ```
 
-### E2E Testing Process (MANDATORY)
+### E2E Testing & Defect Handling
 
-**⚠️ STOP-CHECK: On ANY Error During E2E**
+**Use the skill for detailed workflow:**
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│ ⚠️  ERROR OCCURRED? STOP AND DO THIS:                                    │
-├─────────────────────────────────────────────────────────────────────────┤
-│ 1. STOP - Do NOT attempt to debug/fix inline                            │
-│ 2. CLASSIFY - Before logging, determine error type (see below)          │
-│ 3. LOG - If defect, create entry in docs/DEFECT_LOG.md                  │
-│ 4. INVESTIGATE - Then investigate root cause                            │
-│ 5. FIX - Apply fix                                                       │
-│ 6. RERUN - Full E2E from Tool 1 (not partial rerun)                     │
-│ 7. VERIFY - Mark RESOLVED only after clean E2E pass                     │
-└─────────────────────────────────────────────────────────────────────────┘
+/skill execute-from-step1
 ```
 
-**Error Classification (MUST report to user before logging):**
-```
-Before logging ANY defect, STOP and tell user:
-1. What failed (error message)
-2. What layer/component is affected
-3. Classification:
-   - AGENTIC DEFECT: AI rules/prompts need updating (DD-XX)
-   - TOOL DEFECT: MCP tool code needs fixing
-   - FRAMEWORK DEFECT: Framework layer code needs fixing
-   - TEST SCRIPT BUG: AI-generated validation script has bugs (NOT a defect)
-   - EXTERNAL ISSUE: Third-party/environment issue (NOT a defect)
-
-Only log to DEFECT_LOG.md if classification is AGENTIC/TOOL/FRAMEWORK DEFECT.
-Test script bugs and external issues are just debugging - fix and continue.
-```
-
-When running E2E tests (B.6 test1, B.7 test2, etc.), follow this process exactly:
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│ E2E TESTING WORKFLOW                                                     │
-├─────────────────────────────────────────────────────────────────────────┤
-│ 1. RUN E2E TEST                                                          │
-│    - Execute full workflow (Tools 1-6 + AI orchestration)               │
-│    - Apply DD-16, DD-17, DD-18 when saving files                        │
-│    - Run pytest with visible browser                                     │
-│                                                                          │
-│ 2. IF TEST FAILS OR ISSUES FOUND                                         │
-│    - Log defect in DEFECT_LOG.md with "Caught By: B.X testY"            │
-│    - Include code version/commit                                         │
-│    - Set status: IN_PROGRESS                                             │
-│                                                                          │
-│ 3. FIX THE ISSUE                                                         │
-│    - Update code or documentation                                        │
-│    - Add Design Decisions if needed (DD-XX)                              │
-│                                                                          │
-│ 4. RERUN E2E FROM START (MANDATORY)                                      │
-│    - Delete generated test files                                         │
-│    - Rerun FULL workflow from Tool 1                                     │
-│    - This verifies the fix works end-to-end                              │
-│                                                                          │
-│ 5. MARK DEFECT RESOLVED                                                  │
-│    - Only after successful E2E rerun                                     │
-│    - Update "Verified:" field with rerun result                          │
-│    - Set "Resolved Date:"                                                │
-│                                                                          │
-│ 6. COMMIT                                                                │
-│    - Only after all defects are RESOLVED                                 │
-│    - Include defect IDs in commit message                                │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-**Key Rules:**
-- NEVER mark defect RESOLVED without clean E2E rerun
-- NEVER skip Step 4 (rerun from start) - partial reruns don't verify the fix
-- AI orchestration is part of E2E - defects in AI behavior get logged too
-- Delete test files before rerun to ensure clean generation
-
-### Agentic Defect Resolution Process
-
-When AI makes a mistake during E2E (wrong function call, incorrect parameter, missed rule, etc.), treat it as a defect that needs a permanent fix:
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│ AGENTIC DEFECT WORKFLOW                                                  │
-├─────────────────────────────────────────────────────────────────────────┤
-│ 1. STOP - Don't continue or work around the error                       │
-│                                                                          │
-│ 2. LOG DEFECT                                                            │
-│    - Create entry in docs/DEFECT_LOG.md                                 │
-│    - Layer: "AI Orchestration"                                          │
-│    - Include: what AI did wrong, exact error, root cause                │
-│                                                                          │
-│ 3. IDENTIFY ROOT CAUSE                                                   │
-│    - Why did AI make this mistake?                                      │
-│    - What rule/guidance was missing or unclear?                         │
-│                                                                          │
-│ 4. CREATE DESIGN DECISION (DD-XX)                                        │
-│    - Write explicit rule to prevent recurrence                          │
-│    - Add to "Key Design Decisions" table in CLAUDE.md                   │
-│    - Add detailed explanation section if needed                         │
-│                                                                          │
-│ 5. RERUN E2E FROM START                                                  │
-│    - Delete any generated files                                         │
-│    - Execute full workflow from Tool 1                                  │
-│    - Verify AI now follows the new DD rule                              │
-│                                                                          │
-│ 6. MARK RESOLVED                                                         │
-│    - Only after clean E2E pass                                          │
-│    - Update defect with "Verified:" and "Resolved Date:"                │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-**Why this matters:** Agentic defects are systematic - if AI made a mistake once, it will make it again unless there's an explicit rule. Design Decisions become "learned lessons" that persist across sessions.
-
-**Examples of Agentic Defects:**
-| Defect | Root Cause | Design Decision |
-|--------|------------|-----------------|
-| DEF-B02 | AI didn't override Tool 6's file path | DD-16: File path override |
-| DEF-B03 | AI didn't inject actual parameter values | DD-17: Parameter value injection |
-| DEF-B04 | AI called utils/ instead of tools/ | DD-19: Tool invocation pattern |
-
-### Metadata Context Structure
-AI maintains this context through the tool chain:
-```python
-metadata_context = {
-    "role_name": "RegisteredUser",       # From Step 2
-    "intent": "login",                    # From Step 2
-    "domain": "auth",                     # From Step 2
-    "url": "http://...",                  # From Step 1
-    "expected_states": [...],             # From Step 2 (BDD "Then" clause)
-    "test_scenarios": [...],              # From Tool 1
-    "discovered_elements": [...],         # From Tool 2
-    "pom_metadata": {...},                # From Tool 3
-    "task_metadata": {...},               # From Tool 4
-    "role_metadata": {...}                # From Tool 5
-}
-```
+**Key Rules (always apply):**
+- On ANY error: STOP → LOG → FIX → RESTART FROM STEP 1
+- NEVER mark defect RESOLVED without clean E2E rerun from Step 1
+- Agentic defects require new Design Decision (DD-XX) to prevent recurrence
+- See `docs/DEFECT_LOG.md` for defect tracking format
 
 ## Project Structure
 

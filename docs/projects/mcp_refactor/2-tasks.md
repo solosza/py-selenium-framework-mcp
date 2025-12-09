@@ -43,11 +43,15 @@ framework/
 - `reports/test1_report.html` - Simple E2E HTML report
 - `reports/test2_report.html` - Medium E2E HTML report
 
+### Claude Code Skills
+- `.claude/skills/execute-from-step1.md` - Full 9-step workflow with autonomous troubleshooting
+
 ### Notes
 - Run E2E tests visible: `pytest tests/test1/ -v --headless=False`
 - Generate HTML report: `--html=reports/test1_report.html --self-contained-html`
 - AI dynamically scans framework/ via Tools 4-5 to find reusable classes
 - No hardcoded "reuse list" - AI discovers at runtime
+- Invoke skill with `/skill execute-from-step1` for guided workflow execution
 
 ---
 
@@ -493,3 +497,28 @@ pytest tests/test1/ -v --headless=False --html=reports/test1_report.html --self-
 **Design Decisions Added:**
 - DD-19: Tool invocation - always import from `tools/`, never `utils/`
 - DD-20: Dynamic element discovery - AI prepares page state before Tool 2
+
+### Claude Code Skill Created (2025-12-08)
+
+**Skill:** `.claude/skills/execute-from-step1.md`
+
+**Purpose:** Full 9-step MCP workflow with autonomous troubleshooting and restart-from-step-1 enforcement.
+
+**Features:**
+- Complete 9-step workflow guide
+- Autonomous troubleshooting (DD-21):
+  - Iframe/frame detection and switching
+  - Shadow DOM handling
+  - Dynamic content waits
+  - Multiple selector strategies (CSS, XPath, name, data-testid)
+  - JavaScript DOM queries and event triggering
+  - Page state inspection (URL, source, console logs, screenshots)
+- Step-by-step DevTools guidance for users when AI needs help
+- Defect handling with mandatory restart-from-step-1
+
+**Usage:** `/skill execute-from-step1`
+
+**CLAUDE.md Optimization:**
+- Removed ~200 lines of detailed workflow (now in skill)
+- Kept DD rules quick reference table
+- Added skill reference for detailed procedures

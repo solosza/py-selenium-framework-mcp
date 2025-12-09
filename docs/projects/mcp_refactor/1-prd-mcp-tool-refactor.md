@@ -1,7 +1,7 @@
 # PRD: MCP Tool Chain Refactor (Phase B)
 
-**Version:** 2.0
-**Status:** Draft
+**Version:** 2.1
+**Status:** In Progress
 **Date:** 2025-12-02
 **Previous Version:** 1.0 (2025-12-01)
 
@@ -154,6 +154,16 @@ Implement the complete 9-step workflow with metadata passing, AI rule enforcemen
 | FR-49 | AI must validate import paths before saving generated files (DD-18) |
 | FR-50 | For dynamic discovery, AI tries autonomously first; asks SDET specific questions when stuck (DD-21) |
 | FR-51 | Alternate: AI may use Playwright MCP for visual reconnaissance before Selenium (DD-21, higher token cost) |
+
+### 4.11 Claude Code Skills
+
+| ID | Requirement |
+|----|-------------|
+| FR-52 | Skill `execute-from-step1` provides full 9-step workflow with autonomous troubleshooting |
+| FR-53 | Skill includes iframe/shadow DOM detection, JS fallbacks, multiple selector strategies |
+| FR-54 | Skill guides user with step-by-step DevTools instructions when AI needs help |
+| FR-55 | Skill enforces restart-from-step-1 on any defect |
+| FR-56 | CLAUDE.md references skill for detailed workflow, keeps only DD rules quick reference |
 
 ---
 
@@ -477,7 +487,8 @@ None - all questions resolved via FRAMEWORK.md Section 8 Design Decisions.
 - `mcp_server/utils/generators/task_generator.py` - Accept POM metadata
 - `mcp_server/utils/generators/role_generator.py` - Accept Task metadata
 - `mcp_server/utils/generators/test_generator.py` - Accept Role + POM metadata
-- `CLAUDE.md` - Updated with 9-step flow (DONE)
+- `CLAUDE.md` - Updated with 9-step flow (DONE), optimized with skill reference
+- `.claude/skills/execute-from-step1.md` - Full 9-step workflow skill with autonomous troubleshooting
 
 ### Test Artifacts
 - `framework/pages/test1/`, `framework/pages/test2/`
