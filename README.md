@@ -78,13 +78,9 @@ source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Install MCP server dependencies (for AI-powered test generation)
-pip install -r mcp_server/requirements.txt
-
-# Configure MCP server with your AI agent (Claude Code example)
-claude mcp add qa-automation -- python mcp_server/server.py
 ```
+
+For AI-powered test generation, see the [MCP Setup](#mcp-setup) section below.
 
 ### Run Your First Test
 
@@ -204,15 +200,80 @@ Works with any MCP-compatible AI coding agent:
 
 ### MCP Setup
 
+The AI-powered test generation requires two MCP servers:
+1. **qa-automation** - This framework's test generation tools
+2. **playwright** - Browser automation for element discovery
+
+#### Step 1: Install Dependencies
+
 ```bash
 # Install MCP server dependencies
 pip install -r mcp_server/requirements.txt
 
-# For Claude Code:
-claude mcp add qa-automation -- python /path/to/mcp_server/server.py
+# Install Node.js (required for Playwright MCP)
+# Download from: https://nodejs.org/
 ```
 
-For detailed MCP workflow documentation, contact the repository maintainer.
+#### Step 2: Configure MCP Servers
+
+Create or edit `.mcp.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "qa-automation": {
+      "command": "python",
+      "args": ["mcp_server/server.py"],
+      "cwd": "/path/to/py-selenium-framework-mcp/mcp_server"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    }
+  }
+}
+```
+
+**Windows users:** Use full paths and forward slashes:
+```json
+{
+  "mcpServers": {
+    "qa-automation": {
+      "command": "C:/Users/YOUR_USER/AppData/Local/Programs/Python/Python311/python.exe",
+      "args": ["D:/path/to/py-selenium-framework-mcp/mcp_server/server.py"],
+      "cwd": "D:/path/to/py-selenium-framework-mcp/mcp_server"
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp"]
+    }
+  }
+}
+```
+
+#### Step 3: Verify MCP Servers are Running
+
+In Claude Code, check that both servers are enabled:
+```bash
+claude mcp list
+```
+
+You should see both `qa-automation` and `playwright` listed and enabled.
+
+#### Common MCP Issues
+
+**Server not starting:**
+- Check Python path is correct (run `where python` or `which python`)
+- Ensure `mcp_server/server.py` path is absolute
+- Check Node.js is installed (`node --version`)
+
+**Playwright MCP not working:**
+- Run `npx -y @playwright/mcp` manually to test
+- On Windows, use `cmd /c npx` instead of just `npx`
+
+**Tools not appearing:**
+- Restart Claude Code after config changes
+- Check `.mcp.json` syntax (valid JSON, no trailing commas)
 
 ## For Manual Testers: Your Learning Path
 
