@@ -1,0 +1,187 @@
+"""
+ProductDetailPage - Product detail page object.
+
+This page represents the individual product detail view.
+Handles adding products to cart with size/color selection.
+"""
+
+import time
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+
+class ProductDetailPage:
+    """Page Object for Product Detail page."""
+
+    def __init__(self, web: WebInterface):
+        """
+        Initialize ProductDetailPage.
+
+        Args:
+            web: WebInterface instance
+        """
+        self.web = web
+
+    # ==================== LOCATORS ====================
+
+    PRODUCT_NAME = (By.CSS_SELECTOR, "h1[itemprop='name']")
+    PRODUCT_PRICE = (By.CSS_SELECTOR, "#our_price_display")
+    SIZE_SELECT = (By.CSS_SELECTOR, "#group_1")
+    COLOR_PICKER = (By.CSS_SELECTOR, "#color_to_pick_list a")
+    QUANTITY_INPUT = (By.CSS_SELECTOR, "#quantity_wanted")
+    QUANTITY_PLUS = (By.CSS_SELECTOR, ".product_quantity_up")
+    QUANTITY_MINUS = (By.CSS_SELECTOR, ".product_quantity_down")
+    ADD_TO_CART_BTN = (By.CSS_SELECTOR, "#add_to_cart button.exclusive")
+    AVAILABILITY_STATUS = (By.CSS_SELECTOR, "#availability_value")
+
+    # Add to cart success modal
+    LAYER_CART_MODAL = (By.CSS_SELECTOR, "#layer_cart")
+    MODAL_PRODUCT_TITLE = (By.CSS_SELECTOR, "#layer_cart .product-name")
+    MODAL_SUCCESS_MESSAGE = (By.CSS_SELECTOR, "#layer_cart .layer_cart_product h2")
+    PROCEED_TO_CHECKOUT_BTN = (By.CSS_SELECTOR, "a[title='Proceed to checkout']")
+    CONTINUE_SHOPPING_BTN = (By.CSS_SELECTOR, ".continue.btn")
+
+    # ==================== PAGE METHODS ====================
+
+    def is_page_loaded(self) -> bool:
+        """
+        Verify product detail page is loaded.
+
+        Returns:
+            True if product name is visible
+        """
+        return self.web.is_element_displayed(*self.PRODUCT_NAME, timeout=10)
+
+    # ==================== PRODUCT INFO METHODS ====================
+
+    def get_product_name(self) -> str:
+        """
+        Get product name.
+
+        Returns:
+            Product name text
+        """
+        element = self.web.find_element(*self.PRODUCT_NAME)
+        return element.text.strip()
+
+    def get_product_price(self) -> str:
+        """
+        Get product price.
+
+        Returns:
+            Product price as string
+        """
+        element = self.web.find_element(*self.PRODUCT_PRICE)
+        return element.text.strip()
+
+    def get_availability(self) -> str:
+        """
+        Get availability status.
+
+        Returns:
+            Availability text (e.g., "In stock", "Out of stock")
+        """
+        element = self.web.find_element(*self.AVAILABILITY_STATUS)
+        return element.text.strip()
+
+    def is_in_stock(self) -> bool:
+        """
+        Check if product is in stock.
+
+        Returns:
+            True if product is available
+        """
+        availability = self.get_availability().lower()
+        return "in stock" in availability
+
+    # ==================== SIZE SELECTION METHODS ====================
+
+    def select_size(self, size: str) -> "ProductDetailPage":
+        """
+        Select product size.
+
+        Args:
+            size: Size value (e.g., "S", "M", "L")
+
+        Returns:
+            self for method chaining
+        """
+        self.web.select_dropdown_by_visible_text(*self.SIZE_SELECT, text=size)
+        time.sleep(0.5)  # Wait for price update
+        return self
+
+    # ==================== COLOR SELECTION METHODS ====================
+
+    def select_color_by_name(self, color_name: str) -> "ProductDetailPage":
+        """
+        Select product color by name.
+
+        Args:
+            color_name: Color name (e.g., "Green", "Blue")
+
+        Returns:
+            self for method chaining
+        """
+        # Use CSS selector with name attribute (links are colored boxes with name attribute)
+        color_locator = (By.CSS_SELECTOR, f"#color_to_pick_list a[name='{color_name}']")
+        self.web.click(*color_locator)
+        time.sleep(1)  # Wait for AJAX update
+        return self
+
+    # ==================== QUANTITY METHODS ====================
+
+    def set_quantity(self, quantity: int) -> "ProductDetailPage":
+        """
+        Set product quantity.
+
+        Args:
+            quantity: Desired quantity
+
+        Returns:
+            self for method chaining
+        """
+        input_el = self.web.find_element(*self.QUANTITY_INPUT)
+        input_el.clear()
+        input_el.send_keys(str(quantity))
+        return self
+
+    # ==================== ADD TO CART METHODS ====================
+
+    def click_add_to_cart(self) -> "ProductDetailPage":
+        """
+        Click Add to Cart button.
+
+        Returns:
+            self for method chaining
+        """
+        self.web.click(*self.ADD_TO_CART_BTN)
+        return self
+
+    def is_add_to_cart_modal_displayed(self) -> bool:
+        """
+        Check if add to cart success modal is displayed.
+
+        Returns:
+            True if modal is visible
+        """
+        return self.web.is_element_displayed(*self.LAYER_CART_MODAL, timeout=10)
+
+    def click_proceed_to_checkout(self) -> "ProductDetailPage":
+        """
+        Click Proceed to checkout in modal.
+
+        Returns:
+            self for method chaining
+        """
+        self.web.click(*self.PROCEED_TO_CHECKOUT_BTN)
+        return self
+
+    def click_continue_shopping(self) -> "ProductDetailPage":
+        """
+        Click Continue shopping in modal.
+
+        Returns:
+            self for method chaining
+        """
+        self.web.click(*self.CONTINUE_SHOPPING_BTN)
+        return self

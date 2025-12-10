@@ -4,7 +4,6 @@
 [![Selenium](https://img.shields.io/badge/selenium-4.x-green.svg)](https://www.selenium.dev/)
 [![MCP](https://img.shields.io/badge/MCP-enabled-purple.svg)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-18%20passing-brightgreen.svg)](#test-results)
 
 A production-ready, 4-layer test automation framework with **AI-powered test generation** via Model Context Protocol (MCP). Built with Python and Selenium. Designed for teams who need structure and manual testers transitioning to automation.
 
@@ -38,17 +37,17 @@ This framework provides a **clean, maintainable architecture** for browser test 
 - **4-Layer Architecture** - Clean separation of concerns
 - **Page Object Model** - UI changes don't break your tests
 - **Role-Based Testing** - Test as different user personas
+- **TDD-Ready Structure** - Architecture supports test-driven development workflows
 - **Built-in Logging** - Automatic logging at every layer
 - **HTML Reports** - Professional test reports out of the box
-- **Chrome Support** - Works with Chrome browser (other browsers can be added via WebInterface)
+- **Chrome Support** - Works with Chrome browser (extensible to others)
 - **JSON Test Data** - Externalized, maintainable test data
 
 ### AI Integration (MCP Server)
-- **11 MCP Tools** - Complete test generation workflow
-- **User Story → Tests** - Convert requirements to test scenarios automatically
-- **Element Discovery** - AI discovers page elements for you
-- **Code Generation** - Generate Page Objects, Tasks, Roles, Tests
-- **Agent Agnostic** - Works with Claude Code, Cursor, Windsurf, or any MCP-compatible AI agent
+- **AI-Powered Test Generation** - Convert requirements to working tests
+- **Element Discovery** - AI discovers page elements automatically
+- **Framework-Aware Code Generation** - Generated code follows all architecture conventions
+- **Agent Agnostic** - Works with Claude Code, Cursor, Windsurf, or any MCP-compatible agent
 
 ## Quick Start
 
@@ -59,6 +58,7 @@ Get running in 5 minutes:
 - Python 3.12 or higher
 - Chrome browser installed
 - Git
+- MCP-compatible AI coding agent (Claude Code, Cursor, or Windsurf) - for AI-powered test generation
 
 ### Installation
 
@@ -100,110 +100,6 @@ pytest tests/ -v --headless=True
 
 After running tests, open `reports/report.html` in your browser for a detailed report.
 
-## Test Results
-
-Current test suite against [Automation Practice](http://www.automationpractice.pl/):
-
-| Test Suite | Tests | Status |
-|------------|-------|--------|
-| Invalid Credentials | 6 | All Passing |
-| Browse Category | 4 | All Passing |
-| Filter Products | 4 | All Passing |
-| Sort by Price | 4 | All Passing |
-| Registration | 1/6 | Environment Issues* |
-| Valid Login | 0/2 | Environment Issues* |
-| Quick View | 1/4 | Website Issues* |
-| Logout | 0/3 | Skipped (requires login) |
-
-**Total: 18 passing, 10 failing, 3 skipped**
-
-*Failures are due to test environment (no pre-registered user on live site) and website bugs - not framework issues. The framework architecture is fully validated.
-
-## Detailed Setup
-
-### Environment Configuration
-
-The framework uses JSON configuration files:
-
-```
-framework/resources/config/environment_config.json
-```
-
-Default configuration points to Automation Practice demo site. To test your own application, update the URL:
-
-```json
-{
-  "DEFAULT": {
-    "url": "https://your-app-url.com"
-  }
-}
-```
-
-### Test Data
-
-Test user data is stored in:
-
-```
-tests/data/test_users.json
-```
-
-Example structure:
-
-```json
-{
-  "registered_user": {
-    "email": "test@example.com",
-    "password": "SecurePass123!"
-  },
-  "new_user": {
-    "email": "newuser@example.com",
-    "first_name": "John",
-    "last_name": "Doe"
-  }
-}
-```
-
-### Browser Support
-
-The framework currently supports **Chrome** browser. The architecture is designed to support additional browsers by extending the `WebInterface` class - contributions welcome!
-
-## How to Use
-
-### Running Tests
-
-```bash
-# All tests
-pytest tests/ -v
-
-# By marker (category)
-pytest tests/ -v -m catalog
-pytest tests/ -v -m auth
-pytest tests/ -v -m smoke
-
-# Single test file
-pytest tests/catalog/test_browse_category.py -v
-
-# Single test function
-pytest tests/catalog/test_browse_category.py::test_browse_women_category -v
-
-# With HTML report
-pytest tests/ -v --html=reports/report.html --self-contained-html
-
-# Headless mode (CI/CD)
-pytest tests/ -v --headless=True
-```
-
-### Understanding Test Output
-
-```
-tests/catalog/test_browse_category.py::test_browse_women_category PASSED [25%]
-```
-
-- `PASSED` - Test succeeded
-- `FAILED` - Assertion failed (check report for details)
-- `ERROR` - Test crashed (setup/teardown issue)
-- `SKIPPED` - Intentionally skipped (missing prerequisite)
-
 ## Architecture
 
 ### The 4-Layer Pattern
@@ -221,7 +117,7 @@ tests/catalog/test_browse_category.py::test_browse_women_category PASSED [25%]
 │ ROLE LAYER                                                  │
 │ • User personas (GuestUser, RegisteredUser)                 │
 │ • Orchestrates multiple tasks into workflows                │
-│ • Contains user credentials/context                         │
+│ • Contains user context                                     │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -270,160 +166,47 @@ GOLDEN RULES:
 5. One responsibility per layer
 ```
 
-For complete architecture documentation, see [FRAMEWORK.md](FRAMEWORK.md).
+For complete architecture documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## MCP Integration: AI-Powered Test Generation
 
-The framework includes an **MCP (Model Context Protocol) server** that enables AI coding agents to generate tests automatically. This is the bridge from manual testing to automation.
+The framework includes an **MCP (Model Context Protocol) server** that enables AI-assisted test generation specifically designed for this framework's architecture.
 
-### What is MCP?
+### What It Does
 
-[Model Context Protocol](https://modelcontextprotocol.io/) is an open standard that allows AI agents to interact with external tools. This framework provides 11 specialized tools for test automation.
+The end product is a **working test automation script** that tests the supplied requirement. This is achieved through AI orchestration combined with the MCP server:
+
+1. You provide a requirement (e.g., "As a registered user, I want to login")
+2. AI orchestrates the MCP tools to generate all necessary components
+3. Output: executable Page Objects, Tasks, Roles, and Tests that follow framework conventions
+
+### Why Framework-Specific?
+
+Generic AI code generation often produces code that doesn't follow project conventions. This MCP server understands the 4-layer architecture, ensuring generated code:
+- Uses correct layer separation
+- Applies proper decorators
+- Implements state-check methods for assertions
+- Returns appropriate values (self for POMs, None for Tasks/Roles)
 
 ### Supported AI Agents
 
-The MCP server works with any MCP-compatible AI coding agent:
+Works with any MCP-compatible AI coding agent:
 - **Claude Code** (Anthropic)
 - **Cursor** (with MCP support)
 - **Windsurf** (Codeium)
 - **Any future MCP-compatible agent**
 
-### The 11 MCP Tools
-
-**Code Generation Tools (Bottom-Up Workflow: 1→6)**
-
-| # | Tool | Purpose |
-|---|------|---------|
-| 1 | `generate_tests_from_user_story` | Convert user story → test scenarios (Given-When-Then) |
-| 2 | `discover_page_elements` | Discover interactive elements on any page |
-| 3 | `generate_page_object` | Generate POM code from discovered elements |
-| 4 | `generate_task` | Create task workflow methods from POM |
-| 5 | `generate_role` | Create role class from tasks |
-| 6 | `generate_test_template` | Generate complete pytest test code |
-
-**Utility Tools**
-
-| Tool | Purpose |
-|------|---------|
-| `list_tests` | Catalog all available tests |
-| `get_framework_structure` | Map framework architecture |
-| `run_test` | Execute tests and return results |
-| `analyze_failure` | AI-powered debugging for failed tests |
-| `get_test_coverage` | Calculate test coverage |
-
 ### MCP Setup
-
-#### Prerequisites
-- Python 3.12+
-- An MCP-compatible AI agent (Claude Code, Cursor, etc.)
-
-#### Installation
 
 ```bash
 # Install MCP server dependencies
 pip install -r mcp_server/requirements.txt
-```
 
-#### Configure Your AI Agent
-
-**For Claude Code:**
-```bash
-# Add the MCP server to Claude Code
+# For Claude Code:
 claude mcp add qa-automation -- python /path/to/mcp_server/server.py
 ```
 
-**For Other Agents:**
-Configure your agent to run the MCP server:
-```
-Command: python mcp_server/server.py
-```
-
-### From User Story to Working Test
-
-You describe what you want to test. The AI builds everything for you.
-
-**You say:**
-> "I want to test that a guest user can browse the Women category and see products"
-
-**The AI does the rest:**
-
-1. **Creates test scenarios** from your description
-2. **Discovers buttons, links, and forms** on the page
-3. **Generates the Page Object** (code that knows how to click and type)
-4. **Generates the Task** (code that performs actions like "browse category")
-5. **Generates the Role** (code that represents "guest user")
-6. **Generates the test** (ties it all together)
-7. **Runs the test** and shows you the results
-
-**What you get:**
-```python
-def test_browse_women_category(web_interface, config):
-    guest = GuestUser(web_interface, config["url"])
-
-    guest.browse_category("Women")
-
-    assert product_list_page.has_products()
-```
-
-That's it. You described the test in plain English. The AI wrote the code.
-
-### Example Conversation
-
-```
-You: I need to test that users can filter products by size
-
-AI: I'll create that test for you.
-
-    First, here are the test scenarios I came up with:
-    1. Filter by size S - shows only small products
-    2. Filter by size M - shows only medium products
-    3. Filter by invalid size - handles gracefully
-
-    I found the filter elements on the page and generated all the code.
-    The test is ready. Want me to run it?
-
-You: Yes
-
-AI: Test passed! The filter correctly shows only size "S" products.
-```
-
-No manual coding required. You describe, the AI builds.
-
-### Self-Healing Tests
-
-When a test fails, the AI doesn't just report the error. It fixes it.
-
-**Website changed?**
-```
-AI: The test failed - the "Add to Cart" button moved to a different location.
-    I found the new element and updated the Page Object.
-    Re-running... Test passed!
-```
-
-**Generated code has errors?**
-```
-AI: The test failed - my generated code had a syntax error.
-    I checked the framework patterns, fixed the code to match.
-    Re-running... Test passed!
-```
-
-The AI analyzes failures, looks at existing code patterns in your framework, updates the code to match, and re-runs automatically. Whether it's a website change or a code generation mistake, the AI learns from your codebase and fixes it.
-
-### MCP Server Development
-
-The MCP tools are in `mcp_server/tools/`. Each tool follows a consistent pattern:
-
-```python
-async def tool_name(arguments: dict) -> str:
-    """Tool description."""
-    # Implementation
-    return json.dumps(result)
-```
-
-To add new tools:
-1. Create `mcp_server/tools/tool_XX_name.py`
-2. Register in `mcp_server/server.py`
-3. Follow existing patterns
+For detailed MCP workflow documentation, contact the repository maintainer.
 
 ## For Manual Testers: Your Learning Path
 
@@ -467,17 +250,25 @@ That's it. The test reads like a user story.
 4. Task calls `navigation_menu.click_category("Women")`
 5. Page Object calls `self.web.click(locator)`
 
-### Step 4: Write Your First Test
+### Step 4: Generate Your First Test (AI-Powered)
 
-Copy an existing test and modify:
+Use the MCP server with your AI coding agent:
 
-1. Pick a test file to copy
-2. Change the category or action
-3. Run it: `pytest tests/your_test.py -v`
+1. Set up MCP server (see MCP Setup section above)
+2. Provide a requirement: "As a guest user, I want to browse the Women category"
+3. AI orchestrates the 9-step workflow to generate all framework components
+4. Run the generated test:
+   ```bash
+   # Quick run - console output only
+   pytest tests/your_test.py -v
+
+   # With HTML report - opens in browser for detailed results
+   pytest tests/your_test.py -v --html=reports/report.html --self-contained-html
+   ```
 
 ### Step 5: Go Deeper
 
-Read [FRAMEWORK.md](FRAMEWORK.md) for complete patterns and examples.
+Read [ARCHITECTURE.md](ARCHITECTURE.md) for complete patterns and examples.
 
 ## Project Structure
 
@@ -497,7 +288,6 @@ py-selenium-framework-mcp/
 │   │   └── guest/                # GuestUser
 │   └── resources/
 │       ├── config/               # Environment settings
-│       ├── chromedriver/         # Driver factory
 │       └── utilities/            # Logging, helpers
 │
 ├── tests/                        # Test scenarios
@@ -506,76 +296,88 @@ py-selenium-framework-mcp/
 │   ├── auth/                     # Authentication tests
 │   └── catalog/                  # Catalog tests
 │
-├── docs/                         # Documentation (gitignored)
-│   └── DEFECT_LOG.md             # Issue tracking
-│
 ├── mcp_server/                   # MCP AI integration
 │   ├── server.py                 # MCP server entry point
 │   ├── requirements.txt          # MCP dependencies
-│   ├── tools/                    # 11 MCP tools
-│   │   ├── tool_01_generate_tests_from_user_story.py
-│   │   ├── tool_02_discover_page_elements.py
-│   │   ├── tool_03_generate_page_object.py
-│   │   ├── tool_04_generate_task.py
-│   │   ├── tool_05_generate_role.py
-│   │   ├── tool_06_generate_test_template.py
-│   │   └── ... (tools 07-11)
-│   └── utils/                    # Code generation utilities
+│   └── tools/                    # MCP tools
 │
-├── FRAMEWORK.md                  # Complete architecture reference
-├── CLAUDE.md                     # AI assistant instructions
+├── ARCHITECTURE.md               # Complete architecture reference
 └── README.md                     # This file
 ```
 
-## Test Examples
+## Configuration
 
-The included tests serve dual purposes:
+### Environment Configuration
 
-### For Portfolio Review
+The framework uses JSON configuration files:
 
-These tests demonstrate production-quality automation:
-- 33 test scenarios across authentication and catalog
-- 18 passing tests validating framework architecture
-- Real-world error handling and edge cases
+```
+framework/resources/config/environment_config.json
+```
 
-### For Learning & Reference
+Default configuration points to Automation Practice demo site. To test your own application, update the URL:
 
-Use these as templates for your own tests:
+```json
+{
+  "DEFAULT": {
+    "url": "https://your-app-url.com"
+  }
+}
+```
 
-| Test File | What It Demonstrates |
-|-----------|---------------------|
-| `test_browse_category.py` | Simple happy path testing |
-| `test_invalid_credentials.py` | Negative testing patterns |
-| `test_filter_products.py` | Complex user workflows |
-| `test_sort_by_price.py` | State verification patterns |
+### Test Data
 
-## Contributing
+Test user data is stored in:
 
-The 4-layer architecture (Roles → Tasks → Pages → WebInterface) is framework-agnostic. The current implementation uses Selenium, but the patterns work anywhere.
+```
+framework/resources/data/users.json
+```
 
-### Framework Ports Wanted
+Example structure:
 
-**Wanted:** Community implementations for:
-- Playwright (Python)
-- Cypress (JavaScript)
-- Puppeteer (Node.js)
+```json
+{
+  "registered_user": {
+    "email": "test@example.com",
+    "password": "SecurePass123!"
+  }
+}
+```
 
-The key abstraction point is `WebInterface` - implement the same interface for your framework of choice.
+## Running Tests
 
-### How to Contribute
+```bash
+# All tests
+pytest tests/ -v
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Follow existing code patterns
-4. Submit a pull request
+# By marker (category)
+pytest tests/ -v -m catalog
+pytest tests/ -v -m auth
+pytest tests/ -v -m smoke
 
-### Code Standards
+# Single test file
+pytest tests/catalog/test_browse_category.py -v
 
-- Follow the 4-layer architecture
-- Locators only in Page Objects
-- Tasks/Roles return `None`
-- Use `@autologger` decorators
-- See [FRAMEWORK.md](FRAMEWORK.md) for patterns
+# Single test function
+pytest tests/catalog/test_browse_category.py::test_browse_women_category -v
+
+# With HTML report
+pytest tests/ -v --html=reports/report.html --self-contained-html
+
+# Headless mode (CI/CD)
+pytest tests/ -v --headless=True
+```
+
+### Understanding Test Output
+
+```
+tests/catalog/test_browse_category.py::test_browse_women_category PASSED [25%]
+```
+
+- `PASSED` - Test succeeded
+- `FAILED` - Assertion failed (check report for details)
+- `ERROR` - Test crashed (setup/teardown issue)
+- `SKIPPED` - Intentionally skipped (missing prerequisite)
 
 ## Troubleshooting
 
@@ -593,33 +395,39 @@ selenium.common.exceptions.TimeoutException
 ```
 Solution: The target website may be slow. Increase timeout in `web_interface.py` or check if the site is accessible.
 
-**Tests fail on first run**
-Some tests require a registered user that doesn't exist on the demo site. This is expected - see [Test Results](#test-results).
-
 ### Getting Help
 
-- **Architecture questions:** Read [FRAMEWORK.md](FRAMEWORK.md)
-- **Bug reports:** Open an issue at [GitHub Issues](https://github.com/solosza/py-selenium-framework-mcp/issues) with Python version, error message, and steps to reproduce
+- **Architecture questions:** Read [ARCHITECTURE.md](ARCHITECTURE.md)
+- **Bug reports:** Open an issue with Python version, error message, and steps to reproduce
+
+## Contributing
+
+The 4-layer architecture is framework-agnostic. The current implementation uses Selenium, but the patterns work with any browser automation tool.
+
+**Contribution Ideas:**
+- Port to Playwright (Python or TypeScript)
+- Port to Cypress
+- Add browser support (Firefox, Edge)
+- Improve MCP tools
+
+### Code Standards
+
+- Follow the 4-layer architecture
+- Locators only in Page Objects
+- Tasks/Roles return `None`
+- Use `@autologger` decorators
+- See [ARCHITECTURE.md](ARCHITECTURE.md) for patterns
 
 ## License
 
 MIT License - See [LICENSE](LICENSE) for details.
 
-Free to use, modify, and distribute. Attribution appreciated but not required.
+Free to use, modify, and distribute.
 
 ## Author
 
-Built by [solosza](https://github.com/solosza) as a portfolio project demonstrating QA engineering and test architecture skills.
-
-## Acknowledgments
-
-- Architecture patterns inspired by enterprise test automation frameworks
-- Demo site: [Automation Practice](http://www.automationpractice.pl/)
-- Selenium WebDriver team
-- pytest and pytest-html maintainers
+Built by [Alain Ignacio](https://github.com/solosza) as a portfolio project demonstrating QA engineering and test architecture skills.
 
 ---
 
-**Questions?** Open an issue or check the [documentation](FRAMEWORK.md).
-
-**Found this useful?** Star the repo to show support!
+**Questions?** Open an issue or check [ARCHITECTURE.md](ARCHITECTURE.md).

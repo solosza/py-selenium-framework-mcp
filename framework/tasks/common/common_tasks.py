@@ -59,6 +59,8 @@ class CommonTasks:
             email: User email address
             password: User password
         """
+        import time
+
         # Navigate to login page
         self.navigate_to_login_page()
 
@@ -73,17 +75,23 @@ class CommonTasks:
             .enter_login_password(password)
             .click_sign_in())
 
-        # Wait for page transition
-        try:
-            self.web.wait_for_url_contains(self.ACCOUNT_PAGE_URL_PATTERN, timeout=10)
-            self.web.logger.info(f"Successfully logged in as: {email}")
-        except Exception:
-            # Check for login error
-            if self.auth_page.is_login_error_displayed():
-                error_msg = self.auth_page.get_error_message()
-                self.web.logger.error(f"Login error: {error_msg}")
-            else:
-                self.web.logger.error("Login did not redirect to account page")
+        # Wait for login to complete - check for logout link (signed in state)
+        time.sleep(2)  # Allow page to load
+
+        # Verify login success via header state
+        max_attempts = 10
+        for i in range(max_attempts):
+            if self.auth_page.is_signed_in():
+                self.web.logger.info(f"Successfully logged in as: {email}")
+                return
+            time.sleep(1)
+
+        # Check for login error
+        if self.auth_page.is_login_error_displayed():
+            error_msg = self.auth_page.get_error_message()
+            self.web.logger.error(f"Login error: {error_msg}")
+        else:
+            self.web.logger.error("Login did not complete - user not signed in")
 
     # ==================== LOGOUT METHODS ====================
 

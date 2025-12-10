@@ -49,8 +49,17 @@ logs/
 *.html
 *.png
 error_log*.txt
-# SESSION.md now tracked for cross-workstation continuity
+
+# Workflow-specific files (not useful for clones)
+SESSION.md
 PROJECT_CONTEXT.md
+CLAUDE.md
+FRAMEWORK.md
+
+# Debug artifacts
+stderr.txt
+stdout.txt
+nul
 
 # MCP dev test generated output
 mcp_server/_dev_tests/output/

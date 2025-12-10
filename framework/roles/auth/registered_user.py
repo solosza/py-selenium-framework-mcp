@@ -12,6 +12,8 @@ This role represents a logged-in customer who can:
 from typing import Dict, Any
 from interfaces.web_interface import WebInterface
 from tasks.common.common_tasks import CommonTasks
+from tasks.cart.cart_tasks import CartTasks
+from tasks.checkout.checkout_tasks import CheckoutTasks
 from resources.utilities import autologger
 
 
@@ -46,6 +48,8 @@ class RegisteredUser:
 
         # Compose task modules
         self.common_tasks = CommonTasks(web_interface, base_url)
+        self.cart_tasks = CartTasks(web_interface, base_url)
+        self.checkout_tasks = CheckoutTasks(web_interface, base_url)
 
     # ==================== AUTHENTICATION WORKFLOWS ====================
 
@@ -82,3 +86,39 @@ class RegisteredUser:
         Tests should verify via auth_page.is_signed_in().
         """
         self.common_tasks.register_new_user(self.user_data)
+
+    # ==================== PURCHASE WORKFLOWS ====================
+
+    @autologger.automation_logger("Role")
+    def purchase_product(self, product_data: Dict[str, Any]) -> None:
+        """
+        Complete end-to-end purchase workflow.
+
+        COMPLETE WORKFLOW: Login -> Add to Cart -> Checkout -> Confirm
+
+        This is what makes Role different from Task:
+        - Role orchestrates MULTIPLE tasks
+        - Role represents a complete user journey/story
+        - NO return value - test asserts via POM
+
+        Args:
+            product_data: Dictionary containing product information
+                Required keys: url (product URL)
+                Optional keys: size, color, quantity, payment_method
+
+        Tests should verify via order_confirmation_page.is_order_confirmed().
+        """
+        # Step 1: Login
+        self.common_tasks.log_in(self.email, self.password)
+
+        # Step 2: Add product to cart and proceed to checkout
+        self.cart_tasks.add_product_and_proceed_to_checkout(
+            product_url=product_data.get('url'),
+            size=product_data.get('size'),
+            color=product_data.get('color'),
+            quantity=product_data.get('quantity', 1)
+        )
+
+        # Step 3: Complete checkout process
+        payment_method = product_data.get('payment_method', 'bank_wire')
+        self.checkout_tasks.complete_checkout(payment_method=payment_method)

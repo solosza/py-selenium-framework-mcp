@@ -37,6 +37,11 @@ class AuthenticationPage:
     SUBMIT_LOGIN = (By.ID, "SubmitLogin")
     FORGOT_PASSWORD_LINK = (By.CSS_SELECTOR, ".lost_password.form-group")
 
+    # Header navigation (sign in/out state)
+    SIGN_IN_LINK = (By.CSS_SELECTOR, ".header_user_info .login")
+    LOGOUT_LINK = (By.CSS_SELECTOR, ".header_user_info .logout")
+    MY_ACCOUNT_LINK = (By.CSS_SELECTOR, ".header_user_info .account")
+
     # Registration section (New Customer)
     EMAIL_CREATE = (By.ID, "email_create")
     SUBMIT_CREATE = (By.ID, "SubmitCreate")
@@ -225,3 +230,55 @@ class AuthenticationPage:
             Email field value
         """
         return self.web.get_attribute(*self.EMAIL_CREATE, attribute="value") or ""
+
+    # ==================== AUTHENTICATION STATE METHODS ====================
+
+    def is_signed_in(self) -> bool:
+        """
+        Check if user is currently signed in.
+
+        Returns:
+            True if logout link is visible in header
+        """
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=3)
+
+    def is_signed_out(self) -> bool:
+        """
+        Check if user is currently signed out.
+
+        Returns:
+            True if sign in link is visible in header
+        """
+        return self.web.is_element_displayed(*self.SIGN_IN_LINK, timeout=3)
+
+    def click_logout(self) -> "AuthenticationPage":
+        """
+        Click logout link in header.
+
+        Returns:
+            self for method chaining
+        """
+        self.web.click(*self.LOGOUT_LINK)
+        return self
+
+    def click_my_account(self) -> "AuthenticationPage":
+        """
+        Click My Account link in header.
+
+        Returns:
+            self for method chaining
+        """
+        self.web.click(*self.MY_ACCOUNT_LINK)
+        return self
+
+    def wait_for_sign_in_link_visible(self, timeout: int = 10) -> bool:
+        """
+        Wait for sign in link to become visible (after logout).
+
+        Args:
+            timeout: Maximum wait time in seconds
+
+        Returns:
+            True if sign in link becomes visible
+        """
+        return self.web.is_element_displayed(*self.SIGN_IN_LINK, timeout=timeout)
