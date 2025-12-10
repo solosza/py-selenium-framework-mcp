@@ -78,6 +78,12 @@ source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Install MCP server dependencies (for AI-powered test generation)
+pip install -r mcp_server/requirements.txt
+
+# Configure MCP server with your AI agent (Claude Code example)
+claude mcp add qa-automation -- python mcp_server/server.py
 ```
 
 ### Run Your First Test
