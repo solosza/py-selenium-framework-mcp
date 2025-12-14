@@ -50,6 +50,16 @@ logs/
 *.png
 error_log*.txt
 
+# Training Assistant IP (PRD, tasks, design docs, planning)
+training-assistant/docs/
+training-assistant/*_Context.md
+
+# MCP local config
+.mcp.json
+
+# Artifact files
+=1.0.0
+
 # Workflow-specific files (not useful for clones)
 SESSION.md
 PROJECT_CONTEXT.md

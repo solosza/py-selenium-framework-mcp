@@ -1,3 +1,8 @@
+---
+name: execute-from-step1
+description: Execute the 9-step MCP tool chain for generating Selenium test automation code. Use WHEN user wants to create tests from user stories, generate page objects, tasks, or roles using the MCP qa-automation tools. Use WHEN user mentions "step 1", "9-step workflow", "generate test", "create page object", or "MCP tools". Triggers on test generation requests for the QA automation framework.
+---
+
 # Execute Test from Step 1
 
 **Purpose:** Validate the full 9-step MCP tool chain. If ANY defect is found, fix it and RESTART FROM STEP 1.
@@ -222,7 +227,7 @@ When AI encounters issues discovering elements:
    so user knows exactly how to find what AI needs.
 
    EXAMPLE - Finding a locator:
-   ─────────────────────────────
+   -----------------------------
    "I need the locator for the login submit button. Here's how to find it:
 
    1. Open the page in Chrome: [URL]
@@ -239,7 +244,7 @@ When AI encounters issues discovering elements:
    What attributes do you see on the button?"
 
    EXAMPLE - Checking for iframe:
-   ──────────────────────────────
+   ------------------------------
    "I can't find the form elements. They might be inside an iframe.
    Here's how to check:
 
@@ -257,7 +262,7 @@ When AI encounters issues discovering elements:
    What do you see?"
 
    EXAMPLE - Element not visible:
-   ──────────────────────────────
+   ------------------------------
    "The element exists but isn't visible. Here's how to check why:
 
    1. Open DevTools (F12)
@@ -274,7 +279,7 @@ When AI encounters issues discovering elements:
    What CSS is hiding the element? Is there a trigger to show it?"
 
    EXAMPLE - Dynamic content:
-   ──────────────────────────
+   --------------------------
    "The content might load after a user action. Let me guide you:
 
    1. Open the page in browser
