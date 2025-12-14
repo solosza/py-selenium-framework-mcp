@@ -33,7 +33,7 @@ Evaluation
 
 ## Learning Curriculum Per Component
 
-For EACH RAG component, follow this 7-step process:
+For EACH RAG component, follow this 8-step process:
 
 ### Step 1: Concept
 Explain before implementing:
@@ -76,15 +76,49 @@ Implement the chosen approach:
 - Explain non-obvious parts
 - Keep code simple and readable
 
-### Step 5: Experiment
-Prompt user to modify and observe:
-- "Change X to Y, run again — what changed?"
-- "Try this edge case: [example]"
-- "What happens with a very long/short input?"
+### Step 5: Test
+Write tests covering happy path, negative, and edge cases:
+- What inputs should work?
+- What inputs should fail gracefully?
+- What are the boundary conditions?
 
-Provide specific experiments, not vague suggestions.
+For domain-specific test examples per component, see `references/testing.md`.
 
-### Step 6: Evaluate
+### Step 6: Experiment
+Interactive, AI-guided experimentation. Follow this flow for each experiment:
+
+```
+1. AI EXPLAINS   → What we're testing, why it matters
+2. AI PREDICTS   → Expected result (models good reasoning)
+3. AI ADJUSTS    → Changes parameters
+4. AI RUNS       → Executes experiment
+5. AI ANALYZES   → Actual result + why it happened
+6. USER OBSERVES → Pause for questions/observations
+7. REPEAT        → Next experiment
+```
+
+**Experiment format:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXPERIMENT N: [Name]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Testing: [what we're changing]
+Learning: [what this teaches]
+Prediction: [expected outcome]
+
+[runs code]
+
+Result: [actual outcome]
+Analysis: [why this happened]
+
+Questions before next experiment?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+User can request variations or ask questions between experiments.
+For component-specific experiments, see `references/experiments.md`.
+
+### Step 7: Evaluate
 Assess output quality together:
 - "Did retrieval return relevant chunks?"
 - "Compare result A vs result B — which is better? Why?"
@@ -92,7 +126,7 @@ Assess output quality together:
 
 Use concrete test queries with expected results.
 
-### Step 7: Reflect
+### Step 8: Reflect
 Ask user to document:
 - "What did you learn?"
 - "What surprised you?"

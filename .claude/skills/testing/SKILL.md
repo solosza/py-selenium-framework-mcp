@@ -19,6 +19,28 @@ For project-specific conventions (folder structures, report locations), see `ref
 3. **Persistent reports required** — HTML report every run
 4. **Failures require discussion** — Never auto-fix
 5. **Defects are tracked** — Failures logged systematically
+6. **Fix options analyzed** — Consider alternatives before fixing
+
+## Test Coverage Framework
+
+For each component, apply the test matrix process:
+
+```
+1. LIST      → What test types apply? (unit, integration, e2e, etc.)
+2. CATEGORIZE → What scenarios? (happy, negative, edge, etc.)
+3. PRIORITIZE → P0 (must) | P1 (should) | P2 (nice to have)
+4. SCHEDULE  → When to run? (commit, PR, nightly, release)
+5. CREATE    → Write tests
+6. GATE      → Pass criteria met before moving on
+```
+
+**Quality gates:**
+- Function complete → Unit tests pass
+- Component complete → Integration tests pass
+- Release ready → Full suite passes
+
+For full test matrix (types, categories, templates), see `references/test-matrix.md`.
+For domain-specific examples, see project-level testing references.
 
 ## When to Run Tests
 
@@ -79,10 +101,24 @@ pytest {test_path} -v --html={report_path} --self-contained-html
 | 2. REPORT | Show: test name, error, location |
 | 3. ANALYZE | Explain: expected vs actual, likely cause |
 | 4. DISCUSS DEFECT | Ask user: "Create defect entry?" |
-| 5. DISCUSS FIX | Ask user: "Proposed fix: X. Proceed?" |
-| 6. FIX | Implement approved fix only |
-| 7. RE-TEST | Run same tests again |
-| 8. RESOLVE | Update defect status if tracked |
+| 5. FIX OPTIONS | Present 2-3 fix approaches with tradeoffs |
+| 6. DISCUSS FIX | Ask user: "Which fix approach? Proceed?" |
+| 7. FIX | Implement approved fix only |
+| 8. RE-TEST | Run same tests again |
+| 9. RESOLVE | Update defect status if tracked |
+
+**Step 5 (Fix Options) format:**
+
+```
+| Option | Approach | Tradeoff |
+|--------|----------|----------|
+| A | [approach] | [pro/con] |
+| B | [approach] | [pro/con] |
+
+Recommendation: [option] because [reason]
+```
+
+Never implement the first solution that comes to mind. Analyze alternatives.
 
 For detailed failure handling and defect format, see `references/failure-handling.md`.
 
@@ -94,10 +130,13 @@ For detailed failure handling and defect format, see `references/failure-handlin
 | Silent failures | STOP and REPORT every failure |
 | No HTML report | Generate report every run |
 | Auto-fix without asking | Discuss with user first |
+| First solution bias | Analyze 2-3 fix options |
 | Untracked failures | Create defect entry |
 | Fix without re-testing | Re-run after every fix |
 
 ## References
 
+- `references/test-matrix.md` — Test types, categories, matrix template, process flow
+- `references/test-coverage.md` — Coverage targets, gap analysis, reporting
 - `references/conventions.md` — Folder structures, report locations by project type
 - `references/failure-handling.md` — Detailed failure protocol, defect format, RCA template
