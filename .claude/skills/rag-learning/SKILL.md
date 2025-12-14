@@ -12,9 +12,27 @@ Guide users through understanding RAG by building. Don't just implement — teac
 User learns by:
 1. Understanding concepts before code
 2. Choosing between options with tradeoffs
-3. Experimenting and breaking things
-4. Evaluating results
-5. Documenting learnings
+3. Building with proper testing (SDLC)
+4. Experimenting and breaking things
+5. Evaluating results
+6. Documenting learnings
+
+## Testing as Part of Learning
+
+**Testing is not optional.** Every RAG component includes:
+- Unit tests during BUILD phase
+- Test plan updates after each component
+- Lessons include test coverage review
+
+**Test Plan Location:** `docs/TEST_PLAN.md` (living document)
+
+**Why test while learning:**
+- Tests validate your understanding
+- Tests catch misconceptions early
+- Tests document expected behavior
+- Tests are part of the SDLC — learn it properly
+
+See Testing Skill for full test process: `.claude/skills/testing/SKILL.md`
 
 ## RAG Pipeline Components
 
@@ -84,39 +102,92 @@ Write tests covering happy path, negative, and edge cases:
 
 For domain-specific test examples per component, see `references/testing.md`.
 
-### Step 6: Experiment
-Interactive, AI-guided experimentation. Follow this flow for each experiment:
+### Step 6: Lessons & Experiments
+Interactive, AI-guided learning with hands-on experiments.
+
+**Structure: Lesson > Experiments > Takeaways**
+
+Each RAG component has multiple lessons. Each lesson contains:
 
 ```
-1. AI EXPLAINS   → What we're testing, why it matters
-2. AI PREDICTS   → Expected result (models good reasoning)
-3. AI ADJUSTS    → Changes parameters
-4. AI RUNS       → Executes experiment
-5. AI ANALYZES   → Actual result + why it happened
-6. USER OBSERVES → Pause for questions/observations
-7. REPEAT        → Next experiment
+LESSON N: [Topic Name]
+│
+├── Key Terms
+│   - **[Term]** - [Simple definition]
+│
+├── Concepts to Understand
+│   - [What user must learn]
+│   - [Why it matters]
+│
+├── Experiment N.1: [Name]
+│   └── Predict → Run → Analyze
+│
+├── Experiment N.2: [Optional deeper dive]
+│
+└── Key Points to Remember
+    1. [Most important takeaway]
+    2. [Practical application]
+    3. [Common pitfall to avoid]
 ```
 
-**Experiment format:**
+**Lesson Coverage Per Component:**
+
+| Component | Minimum Lessons | Topics to Cover |
+|-----------|-----------------|-----------------|
+| Loading | 2 | File types, metadata extraction |
+| Chunking | 3 | Size, overlap, boundaries |
+| Embedding | 3 | Models, dimensions, similarity |
+| Vector Store | 2 | Storage options, indexing |
+| Search | 3 | Semantic, keyword, hybrid |
+| Prompt | 2 | Template design, context stuffing |
+| Generation | 2 | Model selection, parameters |
+| Evaluation | 2 | Metrics, test sets |
+
+**Experiment Flow (within each lesson):**
+
+| Step | AI Does | Then Asks |
+|------|---------|-----------|
+| 1. EXPLAINS | Key terms + concepts to understand | "Any concepts need clarification?" |
+| 2. PREDICTS | Shows prediction with reasoning | "What's YOUR prediction?" |
+| 3. ADJUSTS | Shows current parameters | "Want to modify anything?" |
+| 4. RUNS | Executes experiment | "Ready to see analysis?" |
+| 5. ANALYZES | Compares prediction vs result | "What patterns do you see?" |
+| 6. OBSERVES | Open discussion | "What to explore next?" |
+| 7. SUMMARIZE | Key points to remember | "Ready for next experiment?" |
+
+**Interactive Format - ALWAYS use numbered options:**
+
+Every pause point presents numbered choices. Last option is ALWAYS "ask a question".
+
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EXPERIMENT N: [Name]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Testing: [what we're changing]
-Learning: [what this teaches]
-Prediction: [expected outcome]
+**Are any of these concepts unclear?**
 
-[runs code]
-
-Result: [actual outcome]
-Analysis: [why this happened]
-
-Questions before next experiment?
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. "[Concept A] - what it means"
+2. "[Concept B] - what it means"
+3. "All clear, continue"
+4. "I have a different question"
 ```
 
-User can request variations or ask questions between experiments.
+**Key principles:**
+- Numbered options let user respond with just a number
+- Always offer clarification before moving forward
+- Last option is always open-ended question
+- Pause between experiments for discussion
+- End every lesson with "Key Points to Remember"
+
+**Visuals:** Use ASCII art to illustrate concepts:
+```
+Document: [===========================================]
+
+Chunk 1:  [████████████]
+Chunk 2:       [████████████]      ← overlap
+Chunk 3:            [████████████]
+```
+Keep visuals simple, text-based, works in terminal.
+
 For component-specific experiments, see `references/experiments.md`.
+For full interaction format details, see `references/interaction-format.md`.
+For test coverage tracking, see project's `docs/TEST_PLAN.md`.
 
 ### Step 7: Evaluate
 Assess output quality together:

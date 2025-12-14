@@ -21,17 +21,104 @@ For project-specific conventions (folder structures, report locations), see `ref
 5. **Defects are tracked** — Failures logged systematically
 6. **Fix options analyzed** — Consider alternatives before fixing
 
-## Test Coverage Framework
+## Test Plan (Living Document)
 
-For each component, apply the test matrix process:
+Every project should have a `docs/TEST_PLAN.md` — a living document.
+
+**Standard QA Test Plan Sections:**
+
+| Section | Purpose |
+|---------|---------|
+| 1. Overview | Project summary, objectives, document history |
+| 2. Scope | In-scope, out-of-scope, assumptions |
+| 3. Test Strategy | Test types, levels, approach per component |
+| 4. Test Environment | Hardware, software, data requirements |
+| 5. Entry/Exit Criteria | When to start, when to stop testing |
+| 6. Test Schedule | Timeline, milestones, phases |
+| 7. Resources | Team roles, responsibilities, tools |
+| 8. Risk Analysis | Risks, impact, mitigation strategies |
+| 9. Test Matrix | Components × test categories grid |
+| 10. Test Cases | Detailed cases or reference to test files |
+| 11. Defect Management | Tracking process, severity definitions |
+| 12. Metrics & Reporting | KPIs, report frequency, dashboards |
+
+**Living Document Updates:**
+
+| Trigger | Update |
+|---------|--------|
+| Component built | Add to test matrix, update status |
+| Tests executed | Update metrics, last run date |
+| Defect found | Add to defect section |
+| Risk identified | Add to risk analysis |
+| Scope change | Update scope section |
+
+**Template:** `references/test-plan-template.md`
+
+## Testing Strategy Framework
+
+### Test Pyramid (Domain-Specific)
+
+Generate a test pyramid for each domain/feature before writing tests:
 
 ```
-1. LIST      → What test types apply? (unit, integration, e2e, etc.)
-2. CATEGORIZE → What scenarios? (happy, negative, edge, etc.)
-3. PRIORITIZE → P0 (must) | P1 (should) | P2 (nice to have)
-4. SCHEDULE  → When to run? (commit, PR, nightly, release)
-5. CREATE    → Write tests
-6. GATE      → Pass criteria met before moving on
+┌─────────────────────────────────────────────────────┐
+│                    TEST PYRAMID                     │
+├─────────────────────────────────────────────────────┤
+│  1. DATA STRUCTURE    - Does the class work?        │
+│  2. CORE LOGIC        - Does the algorithm work?    │
+│  3. BATCH OPERATIONS  - Does it scale to N inputs?  │
+│  4. EDGE CASES        - Does it handle weird input? │
+│  5. ERROR HANDLING    - Does it fail gracefully?    │
+└─────────────────────────────────────────────────────┘
+```
+
+**Pyramid varies by domain:**
+- RAG Chunker: Data Structure → Core Logic → Batch → Edge → Error
+- API Endpoint: Request Parsing → Business Logic → Response → Auth → Error
+- UI Component: Render → Interaction → State → Accessibility → Error
+
+**Always define pyramid layers for your specific domain first.**
+
+### Test Coverage Matrix
+
+For each functional area, apply these test categories:
+
+| Category | Purpose | Example |
+|----------|---------|---------|
+| **Happy Path** | Normal expected behavior | Valid input → correct output |
+| **Negative** | Invalid input, error conditions | Bad input → graceful error |
+| **Edge Cases** | Unusual but valid inputs | Empty, unicode, special chars |
+| **Boundary** | At limits, exact boundaries | Min, max, exact size |
+| **Parametric** | Multiple parameter combinations | Size × overlap matrix |
+| **Concurrency** | Race conditions, parallel safety | Thread-safe operations |
+| **State** | State transitions | Before/after state correct |
+
+### Test Case Organization
+
+Group tests by functional area with status tracking:
+
+```
+## [Functional Area Name]
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | [description] | Done |
+| Happy | [description] | Done |
+| Negative | [description] | Missing |
+| Edge | [description] | Done |
+```
+
+**Status values:** Done | Missing | Failing
+
+## Test Coverage Process
+
+```
+1. PYRAMID    → Define test layers for this domain
+2. LIST       → What functional areas need coverage?
+3. MATRIX     → For each area: happy + negative + edge + boundary
+4. PRIORITIZE → P0 (must) | P1 (should) | P2 (nice to have)
+5. CREATE     → Write tests, track status
+6. GATE       → All P0/P1 done before moving on
 ```
 
 **Quality gates:**
@@ -39,7 +126,7 @@ For each component, apply the test matrix process:
 - Component complete → Integration tests pass
 - Release ready → Full suite passes
 
-For full test matrix (types, categories, templates), see `references/test-matrix.md`.
+For full test matrix templates, see `references/test-matrix.md`.
 For domain-specific examples, see project-level testing references.
 
 ## When to Run Tests
@@ -136,6 +223,7 @@ For detailed failure handling and defect format, see `references/failure-handlin
 
 ## References
 
+- `references/test-plan-template.md` — Full QA test plan template (12 sections)
 - `references/test-matrix.md` — Test types, categories, matrix template, process flow
 - `references/test-coverage.md` — Coverage targets, gap analysis, reporting
 - `references/conventions.md` — Folder structures, report locations by project type

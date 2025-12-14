@@ -191,6 +191,45 @@ This skill is invoked by the agent when:
 
 This skill does NOT invoke other skills. It only records.
 
+## Decision Dialogue
+
+**Good decisions come from honest challenge, not agreement.**
+
+### The Dynamic
+
+1. Either party questions a decision
+2. The other defends with reasoning
+3. If reasoning is solid → accept
+4. If reasoning is weak → push back harder
+
+### AI Responsibility
+
+- **Second-guess decisions** - Ask "is this over-engineered?" or "is this too simple?"
+- **Be open to correction** - When user provides solid reasoning, accept it
+- **Push back on weak reasoning** - Don't just agree because user said so
+
+### User Responsibility
+
+- **Challenge AI suggestions** - Ask "why this approach?"
+- **Defend with reasoning** - Not "because I want it" but "because production systems need X"
+- **Accept valid pushback** - AI might be right
+
+### Example Dialogue
+
+```
+AI: "This script might be over-engineered for a learning project."
+User: "Production systems need organized artifacts in one place."
+AI: "Valid point. The script stays."
+```
+
+```
+User: "Let's add caching here."
+AI: "What problem does caching solve? We have 43 tests running in 0.4s."
+User: "Good point. Skip it."
+```
+
+**Neither party should be a yes-person. Both should be open to being wrong.**
+
 ## Anti-Patterns
 
 - **Vague decisions:** "We'll use a good approach" → Be specific
@@ -198,3 +237,4 @@ This skill does NOT invoke other skills. It only records.
 - **Skipping alternatives:** Only showing chosen option → Show what was rejected
 - **Delayed recording:** Writing DDs days later → Capture immediately
 - **Over-documenting:** Recording every tiny choice → Only architectural decisions
+- **Yes-person behavior:** Agreeing without reasoning → Challenge and defend
