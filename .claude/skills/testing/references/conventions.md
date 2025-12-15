@@ -65,20 +65,38 @@ rag/
   ingestion/
     tests/
       test_loader.py
+      test_chunker.py
+      test_embedder.py
       _reports/
-        report.html
+        run_tests.py        # Project test runner (USE THIS)
+        YYYY-MM-DD_HHMMSS/  # Timestamped report folders
+          report.html
+          coverage/
+          coverage_summary.txt
   retrieval/
     tests/
       _reports/
-        report.html
+        run_tests.py
 ```
 
-**Command:**
+**Command (USE THE TEST RUNNER):**
 ```bash
-pytest rag/ingestion/tests/ -v --html=rag/ingestion/tests/_reports/report.html --self-contained-html
+# From training-assistant directory:
+python rag/ingestion/tests/_reports/run_tests.py
+
+# Run specific test file:
+python rag/ingestion/tests/_reports/run_tests.py test_embedder.py
+
+# Run specific test class:
+python rag/ingestion/tests/_reports/run_tests.py test_embedder.py::TestSemanticCorrectness
 ```
 
-**Convention:** Per-layer reports (Pattern B).
+**DO NOT use raw pytest** — always use the project's `run_tests.py` for:
+- Timestamped report folders
+- Consistent coverage settings
+- Organized output
+
+**Convention:** Per-layer reports (Pattern B) with timestamped subfolders.
 
 ## Defect Log Location
 

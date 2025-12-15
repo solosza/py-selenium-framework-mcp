@@ -56,28 +56,71 @@ Every project should have a `docs/TEST_PLAN.md` — a living document.
 
 ## Testing Strategy Framework
 
-### Test Pyramid (Domain-Specific)
+### Test Pyramid (Dynamically Generated)
 
-Generate a test pyramid for each domain/feature before writing tests:
+**CRITICAL: Generate a UNIQUE test pyramid for each component by analyzing what it does. Never reuse layers from other components without analysis.**
+
+**Layer Discovery Process:**
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                    TEST PYRAMID                     │
-├─────────────────────────────────────────────────────┤
-│  1. DATA STRUCTURE    - Does the class work?        │
-│  2. CORE LOGIC        - Does the algorithm work?    │
-│  3. BATCH OPERATIONS  - Does it scale to N inputs?  │
-│  4. EDGE CASES        - Does it handle weird input? │
-│  5. ERROR HANDLING    - Does it fail gracefully?    │
-└─────────────────────────────────────────────────────┘
+ANALYZE THE COMPONENT
+=====================
+
+Ask these questions about YOUR specific component:
+
+1. What does this component DO?
+   → Core functionality layer(s)
+
+2. What data does it handle?
+   → Data structure / validation layer(s)
+
+3. Does it depend on external systems?
+   → Dependency / integration layer(s)
+
+4. What makes THIS component different from others?
+   → Domain-specific layer(s)  ← THIS IS THE KEY QUESTION
+
+5. What can go wrong?
+   → Error handling / edge case layer(s)
+
+6. Are there non-functional requirements?
+   → Performance / security / reliability layer(s)
 ```
 
-**Pyramid varies by domain:**
-- RAG Chunker: Data Structure → Core Logic → Batch → Edge → Error
-- API Endpoint: Request Parsing → Business Logic → Response → Auth → Error
-- UI Component: Render → Interaction → State → Accessibility → Error
+**Question 4 is critical.** Every component has unique characteristics that require unique test layers. If your pyramid could be copy-pasted to another component, you missed something.
 
-**Always define pyramid layers for your specific domain first.**
+**Layer Discovery Examples (how to think, not what to copy):**
+
+| If component... | Then consider testing... |
+|-----------------|-------------------------|
+| Has external dependencies | Dependency loading, connection handling |
+| Produces output that must be consistent | Determinism, reproducibility |
+| Deals with meaning/semantics | Correctness of interpretation |
+| Has security implications | Authorization, input sanitization |
+| Has time-based behavior | Timing, expiration, sequencing |
+| Maintains state | State transitions, persistence |
+| Processes in batches | Batch efficiency, partial failures |
+
+**Output format:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│            [COMPONENT NAME] TEST PYRAMID                    │
+├─────────────────────────────────────────────────────────────┤
+│  1. [LAYER]    - [What question does this answer?]          │
+│  2. [LAYER]    - [What question does this answer?]          │
+│  ...                                                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Validate before proceeding:**
+
+| Check | If No, Then... |
+|-------|----------------|
+| Did I answer all 6 discovery questions? | Go back and analyze |
+| Is each layer answering a distinct question? | Merge or clarify |
+| Would this pyramid be WRONG for a different component? | Good - it's specific |
+| Did I identify what's UNIQUE about this component? | Re-analyze question 4 |
 
 ### Test Coverage Matrix
 
@@ -140,6 +183,12 @@ For domain-specific examples, see project-level testing references.
 **Agent prompts:** "Should I run tests for this component?"
 
 ## Test Command Format
+
+**FIRST: Check if project has a test runner script.** See `references/conventions.md` for project-specific runners.
+
+If project has `run_tests.py` or similar → USE IT instead of raw pytest.
+
+**Fallback (only if no project runner exists):**
 
 ```bash
 pytest {test_path} -v --html={report_path} --self-contained-html
