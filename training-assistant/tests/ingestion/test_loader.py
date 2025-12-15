@@ -1,53 +1,64 @@
 """
 Tests for document loader.
 
-Framework analogy:
-    Like test_login.py tests AuthTasks.log_in()
-    This tests load_file() and load_documents()
-
 Run with:
     cd training-assistant
-    python -m pytest rag/ingestion/tests/test_loader.py -v
+    python tests/_reports/run_tests.py test_loader.py
 """
 
-import sys
-from pathlib import Path
+import pytest
 
-# Add training-assistant to path for imports
-training_assistant_path = Path(__file__).parent.parent.parent.parent
-sys.path.insert(0, str(training_assistant_path))
-
-from rag.ingestion import Document, load_file, load_documents, get_loader_stats
+from rag.core import Document
+from rag.ingestion import load_file, load_documents, get_loader_stats
 
 
+@pytest.mark.loader
+@pytest.mark.unit
 class TestDocument:
-    """Test the Document data structure."""
+    """Tests for Document data structure."""
 
     def test_document_creation(self):
-        """Document can be created with text and metadata."""
-        doc = Document(
-            text="Hello world",
-            metadata={"source": "test.md"}
-        )
-        assert doc.text == "Hello world"
-        assert doc.metadata["source"] == "test.md"
+        """P0: Document can be created with text and metadata."""
+        # Arrange
+        text = "Hello world"
+        metadata = {"source": "test.md"}
+
+        # Act
+        doc = Document(text=text, metadata=metadata)
+
+        # Assert
+        assert doc.text == "Hello world", "Text should be stored"
+        assert doc.metadata["source"] == "test.md", "Metadata should be stored"
 
     def test_document_length(self):
-        """Document length returns character count."""
+        """P0: Document length returns character count."""
+        # Arrange
         doc = Document(text="12345", metadata={})
-        assert len(doc) == 5
+
+        # Act
+        length = len(doc)
+
+        # Assert
+        assert length == 5, "Length should be character count"
 
     def test_document_repr(self):
-        """Document repr shows source and preview."""
+        """P1: Document repr shows source and preview."""
+        # Arrange
         doc = Document(
             text="This is a test document with some content",
             metadata={"source": "test.md"}
         )
+
+        # Act
         repr_str = repr(doc)
-        assert "test.md" in repr_str
-        assert "This is a test" in repr_str
+
+        # Assert
+        assert "test.md" in repr_str, "Source should appear in repr"
+        assert "This is a test" in repr_str, "Preview should appear in repr"
 
 
+@pytest.mark.loader
+@pytest.mark.unit
 class TestLoadFile:
     """Test single file loading."""
 
@@ -95,6 +106,8 @@ class TestLoadFile:
         assert "notes.txt" in doc.metadata["source"]
 
 
+@pytest.mark.loader
+@pytest.mark.unit
 class TestLoadDocuments:
     """Test batch document loading."""
 
@@ -184,14 +197,10 @@ class TestLoadDocuments:
         assert len(docs) == 2
 
 
+@pytest.mark.loader
+@pytest.mark.unit
 class TestGetLoaderStats:
-    """
-    Test loader statistics (state verification).
-
-    Framework analogy:
-        Like is_logged_in() verifies auth state
-        get_loader_stats() verifies loading state
-    """
+    """Test loader statistics (state verification)."""
 
     def test_empty_documents(self):
         """Stats for empty document list."""

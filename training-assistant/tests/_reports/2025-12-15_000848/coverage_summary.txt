@@ -1,0 +1,102 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.2, pytest-9.0.1, pluggy-1.5.0 -- C:\Users\solos\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.11.2', 'Platform': 'Windows-10-10.0.26100-SP0', 'Packages': {'pytest': '9.0.1', 'pluggy': '1.5.0'}, 'Plugins': {'anyio': '4.12.0', 'Faker': '38.0.0', 'cov': '7.0.0', 'html': '4.1.1', 'metadata': '3.1.1', 'rerunfailures': '16.1'}}
+rootdir: D:\my_ai_projects\py_sel_framework_mcp\training-assistant
+plugins: anyio-4.12.0, Faker-38.0.0, cov-7.0.0, html-4.1.1, metadata-3.1.1, rerunfailures-16.1
+collecting ... collected 73 items
+
+tests/ingestion/test_chunker.py::TestChunk::test_chunk_creation PASSED   [  1%]
+tests/ingestion/test_chunker.py::TestChunk::test_chunk_length PASSED     [  2%]
+tests/ingestion/test_chunker.py::TestChunk::test_chunk_token_estimate PASSED [  4%]
+tests/ingestion/test_chunker.py::TestChunk::test_chunk_repr PASSED       [  5%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_small_document_single_chunk PASSED [  6%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_empty_document PASSED [  8%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_exact_chunk_size PASSED [  9%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_multiple_chunks_created PASSED [ 10%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_overlap_present PASSED [ 12%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_metadata_preserved PASSED [ 13%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_chunk_metadata_added PASSED [ 15%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_start_end_char_positions PASSED [ 16%]
+tests/ingestion/test_chunker.py::TestChunkDocument::test_invalid_overlap_raises_error PASSED [ 17%]
+tests/ingestion/test_chunker.py::TestChunkDocuments::test_multiple_documents PASSED [ 19%]
+tests/ingestion/test_chunker.py::TestChunkDocuments::test_empty_list PASSED [ 20%]
+tests/ingestion/test_chunker.py::TestChunkDocuments::test_mixed_sizes PASSED [ 21%]
+tests/ingestion/test_chunker.py::TestChunkingNegative::test_chunk_size_zero_raises_error PASSED [ 23%]
+tests/ingestion/test_chunker.py::TestChunkingNegative::test_chunk_size_negative_raises_error PASSED [ 24%]
+tests/ingestion/test_chunker.py::TestChunkingNegative::test_overlap_negative_raises_error PASSED [ 26%]
+tests/ingestion/test_chunker.py::TestChunkingNegative::test_none_in_document_list_raises_error PASSED [ 27%]
+tests/ingestion/test_chunker.py::TestChunkingEdgeCases::test_whitespace_only PASSED [ 28%]
+tests/ingestion/test_chunker.py::TestChunkingEdgeCases::test_single_character PASSED [ 30%]
+tests/ingestion/test_chunker.py::TestChunkingEdgeCases::test_unicode_content PASSED [ 31%]
+tests/ingestion/test_chunker.py::TestChunkingEdgeCases::test_code_content PASSED [ 32%]
+tests/ingestion/test_chunker.py::TestLoaderChunkerIntegration::test_load_and_chunk_single_file PASSED [ 34%]
+tests/ingestion/test_chunker.py::TestLoaderChunkerIntegration::test_load_and_chunk_directory PASSED [ 35%]
+tests/ingestion/test_chunker.py::TestLoaderChunkerIntegration::test_metadata_flows_through_pipeline PASSED [ 36%]
+tests/ingestion/test_chunker.py::TestLoaderChunkerIntegration::test_empty_file_through_pipeline PASSED [ 38%]
+tests/ingestion/test_embedder.py::TestEmbeddingDataclass::test_embedding_creation PASSED [ 39%]
+tests/ingestion/test_embedder.py::TestEmbeddingDataclass::test_embedding_dimensions PASSED [ 41%]
+tests/ingestion/test_embedder.py::TestEmbeddingDataclass::test_embedding_to_list PASSED [ 42%]
+tests/ingestion/test_embedder.py::TestEmbeddingDataclass::test_embedding_repr PASSED [ 43%]
+tests/ingestion/test_embedder.py::TestModelLoading::test_embedder_initialization PASSED [ 45%]
+tests/ingestion/test_embedder.py::TestModelLoading::test_model_loads_successfully PASSED [ 46%]
+tests/ingestion/test_embedder.py::TestModelLoading::test_lazy_loading PASSED [ 47%]
+tests/ingestion/test_embedder.py::TestCoreEmbedding::test_embed_text_returns_vector PASSED [ 49%]
+tests/ingestion/test_embedder.py::TestCoreEmbedding::test_embed_text_correct_dimensions PASSED [ 50%]
+tests/ingestion/test_embedder.py::TestCoreEmbedding::test_embed_text_values_are_floats PASSED [ 52%]
+tests/ingestion/test_embedder.py::TestSemanticCorrectness::test_same_text_similarity_one PASSED [ 53%]
+tests/ingestion/test_embedder.py::TestSemanticCorrectness::test_synonyms_high_similarity PASSED [ 54%]
+tests/ingestion/test_embedder.py::TestSemanticCorrectness::test_unrelated_low_similarity PASSED [ 56%]
+tests/ingestion/test_embedder.py::TestSemanticCorrectness::test_related_higher_than_unrelated PASSED [ 57%]
+tests/ingestion/test_embedder.py::TestDeterminism::test_same_input_same_output PASSED [ 58%]
+tests/ingestion/test_embedder.py::TestDeterminism::test_batch_matches_single PASSED [ 60%]
+tests/ingestion/test_embedder.py::TestBatchOperations::test_embed_multiple_chunks PASSED [ 61%]
+tests/ingestion/test_embedder.py::TestBatchOperations::test_metadata_preserved PASSED [ 63%]
+tests/ingestion/test_embedder.py::TestBatchOperations::test_model_name_added_to_metadata PASSED [ 64%]
+tests/ingestion/test_embedder.py::TestBatchOperations::test_empty_list_returns_empty PASSED [ 65%]
+tests/ingestion/test_embedder.py::TestBatchOperations::test_batch_ten_chunks PASSED [ 67%]
+tests/ingestion/test_embedder.py::TestEdgeCases::test_empty_string_returns_zero_vector PASSED [ 68%]
+tests/ingestion/test_embedder.py::TestEdgeCases::test_whitespace_only PASSED [ 69%]
+tests/ingestion/test_embedder.py::TestEdgeCases::test_unicode_text PASSED [ 71%]
+tests/ingestion/test_embedder.py::TestErrorHandling::test_cosine_similarity_dimension_mismatch PASSED [ 72%]
+tests/ingestion/test_embedder.py::TestErrorHandling::test_cosine_similarity_zero_vector PASSED [ 73%]
+tests/ingestion/test_embedder.py::TestIntegration::test_embed_chunk_from_document PASSED [ 75%]
+tests/ingestion/test_embedder.py::TestIntegration::test_metadata_flows_through_pipeline PASSED [ 76%]
+tests/ingestion/test_embedder.py::TestStatsFunction::test_empty_embeddings_stats PASSED [ 78%]
+tests/ingestion/test_embedder.py::TestStatsFunction::test_stats_counts PASSED [ 79%]
+tests/ingestion/test_loader.py::TestDocument::test_document_creation PASSED [ 80%]
+tests/ingestion/test_loader.py::TestDocument::test_document_length PASSED [ 82%]
+tests/ingestion/test_loader.py::TestDocument::test_document_repr PASSED  [ 83%]
+tests/ingestion/test_loader.py::TestLoadFile::test_load_markdown_file PASSED [ 84%]
+tests/ingestion/test_loader.py::TestLoadFile::test_load_python_file PASSED [ 86%]
+tests/ingestion/test_loader.py::TestLoadFile::test_load_file_preserves_source_path PASSED [ 87%]
+tests/ingestion/test_loader.py::TestLoadDocuments::test_load_single_file_path PASSED [ 89%]
+tests/ingestion/test_loader.py::TestLoadDocuments::test_load_directory PASSED [ 90%]
+tests/ingestion/test_loader.py::TestLoadDocuments::test_skip_unsupported_extensions PASSED [ 91%]
+tests/ingestion/test_loader.py::TestLoadDocuments::test_skip_pycache PASSED [ 93%]
+tests/ingestion/test_loader.py::TestLoadDocuments::test_no_duplicate_files PASSED [ 94%]
+tests/ingestion/test_loader.py::TestLoadDocuments::test_mixed_files_and_directories PASSED [ 95%]
+tests/ingestion/test_loader.py::TestGetLoaderStats::test_empty_documents PASSED [ 97%]
+tests/ingestion/test_loader.py::TestGetLoaderStats::test_stats_counts PASSED [ 98%]
+tests/ingestion/test_loader.py::TestGetLoaderStats::test_stats_by_file_type PASSED [100%]
+
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.11.2-final-0 _______________
+
+Name                         Stmts   Miss  Cover   Missing
+----------------------------------------------------------
+rag\__init__.py                  1      0   100%
+rag\core\__init__.py             1      0   100%
+rag\core\document.py            12      0   100%
+rag\generation\__init__.py       0      0   100%
+rag\ingestion\__init__.py        4      0   100%
+rag\ingestion\chunker.py        49      0   100%
+rag\ingestion\embedder.py       71      1    99%   121
+rag\ingestion\loader.py         50      3    94%   45-47, 108
+rag\retrieval\__init__.py        0      0   100%
+rag\storage\__init__.py          0      0   100%
+----------------------------------------------------------
+TOTAL                          188      4    98%
+Coverage HTML written to dir D:\my_ai_projects\py_sel_framework_mcp\training-assistant\tests\_reports\2025-12-15_000848/coverage
+- Generated html report: file:///D:/my_ai_projects/py_sel_framework_mcp/training-assistant/tests/_reports/2025-12-15_000848/report.html -
+============================= 73 passed in 15.16s =============================

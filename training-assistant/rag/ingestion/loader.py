@@ -15,7 +15,7 @@ Separation of concerns:
 
 from pathlib import Path
 from typing import List, Union
-from .document import Document
+from ..core.document import Document
 
 
 # File extensions we know how to load

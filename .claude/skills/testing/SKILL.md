@@ -272,6 +272,7 @@ For detailed failure handling and defect format, see `references/failure-handlin
 
 ## References
 
+- `references/test-case-structure.md` — AAA pattern, fixtures, markers, docstrings (HOW to write tests)
 - `references/test-plan-template.md` — Full QA test plan template (12 sections)
 - `references/test-matrix.md` — Test types, categories, matrix template, process flow
 - `references/test-coverage.md` — Coverage targets, gap analysis, reporting

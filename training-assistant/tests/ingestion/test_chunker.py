@@ -1,28 +1,21 @@
 """
 Tests for text chunker.
 
-Framework analogy:
-    Like test_catalog.py tests CatalogTasks.browse_category()
-    This tests chunk_document() and chunk_documents()
-
 Run with:
     cd training-assistant
-    python -m pytest rag/ingestion/tests/test_chunker.py -v
+    python tests/_reports/run_tests.py test_chunker.py
 """
 
-import sys
-from pathlib import Path
-
-# Add training-assistant to path for imports
-training_assistant_path = Path(__file__).parent.parent.parent.parent
-sys.path.insert(0, str(training_assistant_path))
-
 import pytest
-from rag.ingestion import Document, Chunk, chunk_document, chunk_documents, load_documents
+
+from rag.core import Document
+from rag.ingestion import Chunk, chunk_document, chunk_documents, load_documents
 
 
+@pytest.mark.chunker
+@pytest.mark.unit
 class TestChunk:
-    """Test the Chunk data structure."""
+    """Tests for Chunk data structure."""
 
     def test_chunk_creation(self):
         """Chunk can be created with text and metadata."""
@@ -55,6 +48,8 @@ class TestChunk:
         assert "This is test" in repr_str
 
 
+@pytest.mark.chunker
+@pytest.mark.unit
 class TestChunkDocument:
     """Test single document chunking."""
 
@@ -163,6 +158,8 @@ class TestChunkDocument:
             chunk_document(doc, chunk_size=100, overlap=150)
 
 
+@pytest.mark.chunker
+@pytest.mark.unit
 class TestChunkDocuments:
     """Test batch document chunking."""
 
@@ -201,6 +198,8 @@ class TestChunkDocuments:
         assert chunks[0].metadata["source"] == "small.md"
 
 
+@pytest.mark.chunker
+@pytest.mark.unit
 class TestChunkingNegative:
     """Negative tests - invalid inputs and error conditions."""
 
@@ -237,6 +236,8 @@ class TestChunkingNegative:
             chunk_documents(docs, chunk_size=100, overlap=10)
 
 
+@pytest.mark.chunker
+@pytest.mark.unit
 class TestChunkingEdgeCases:
     """Test edge cases and boundary conditions."""
 
@@ -282,6 +283,8 @@ class TestChunkingEdgeCases:
         assert '"""Docstring"""' in combined
 
 
+@pytest.mark.chunker
+@pytest.mark.integration
 class TestLoaderChunkerIntegration:
     """Integration tests: loader + chunker working together."""
 

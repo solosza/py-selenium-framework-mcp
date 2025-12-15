@@ -22,14 +22,19 @@ from pathlib import Path
 def run_tests(test_target: str = ""):
     """Run tests with coverage and generate organized reports."""
 
-    # Paths relative to this script's location (_reports folder)
+    # Paths relative to this script's location (tests/_reports folder)
     script_dir = Path(__file__).parent.resolve()
-    tests_dir = script_dir.parent  # rag/ingestion/tests/
-    training_assistant_dir = tests_dir.parent.parent.parent  # training-assistant/
+    tests_dir = script_dir.parent  # tests/
+    training_assistant_dir = tests_dir.parent  # training-assistant/
 
     # Test path
     if test_target:
-        test_path = tests_dir / test_target
+        # Check if it's a path or just a filename
+        if "/" in test_target or "\\" in test_target:
+            test_path = tests_dir / test_target
+        else:
+            # Assume it's in ingestion/ subfolder for now
+            test_path = tests_dir / "ingestion" / test_target
     else:
         test_path = tests_dir
 

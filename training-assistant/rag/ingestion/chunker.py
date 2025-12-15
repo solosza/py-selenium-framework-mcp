@@ -12,7 +12,7 @@ Design Decision: DD-RAG-007
 
 from dataclasses import dataclass, field
 from typing import Dict, Any, List
-from .document import Document
+from ..core.document import Document
 
 
 @dataclass

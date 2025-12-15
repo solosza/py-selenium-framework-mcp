@@ -1,6 +1,10 @@
 """
 Tests for Embedder module.
 
+Run with:
+    cd training-assistant
+    python tests/_reports/run_tests.py test_embedder.py
+
 Test Pyramid Layers:
 1. DATA STRUCTURE     - Embedding dataclass
 2. MODEL LOADING      - Model initialization
@@ -16,16 +20,17 @@ Test Pyramid Layers:
 import pytest
 import numpy as np
 
-from ..embedder import Embedding, Embedder, cosine_similarity, get_embedder_stats
-from ..chunker import Chunk
-from ..loader import load_documents
-from ..document import Document
+from rag.core import Document
+from rag.ingestion import Chunk, load_documents
+from rag.ingestion import Embedding, Embedder, cosine_similarity, get_embedder_stats
 
 
 # =============================================================================
 # Layer 1: DATA STRUCTURE - Embedding Dataclass
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.unit
 class TestEmbeddingDataclass:
     """Tests for Embedding dataclass."""
 
@@ -79,6 +84,8 @@ class TestEmbeddingDataclass:
 # Layer 2: MODEL LOADING
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.slow
 class TestModelLoading:
     """Tests for model initialization."""
 
@@ -115,13 +122,11 @@ class TestModelLoading:
 # Layer 3: CORE EMBEDDING
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.unit
 class TestCoreEmbedding:
     """Tests for embed_text functionality."""
-
-    @pytest.fixture
-    def embedder(self):
-        """Shared embedder instance."""
-        return Embedder()
+    # Uses session-scoped embedder fixture from conftest.py
 
     def test_embed_text_returns_vector(self, embedder):
         """P0: Embed normal text returns numpy array."""
@@ -146,13 +151,11 @@ class TestCoreEmbedding:
 # Layer 4: SEMANTIC CORRECTNESS
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.unit
 class TestSemanticCorrectness:
     """Tests for semantic meaning preservation."""
-
-    @pytest.fixture
-    def embedder(self):
-        """Shared embedder instance."""
-        return Embedder()
+    # Uses session-scoped embedder fixture from conftest.py
 
     def test_same_text_similarity_one(self, embedder):
         """P0: Same text has similarity ~1.0."""
@@ -196,13 +199,11 @@ class TestSemanticCorrectness:
 # Layer 5: DETERMINISM
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.unit
 class TestDeterminism:
     """Tests for consistent output."""
-
-    @pytest.fixture
-    def embedder(self):
-        """Shared embedder instance."""
-        return Embedder()
+    # Uses session-scoped embedder fixture from conftest.py
 
     def test_same_input_same_output(self, embedder):
         """P0: Same text produces identical vector."""
@@ -227,13 +228,11 @@ class TestDeterminism:
 # Layer 6: BATCH OPERATIONS
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.unit
 class TestBatchOperations:
     """Tests for batch embedding."""
-
-    @pytest.fixture
-    def embedder(self):
-        """Shared embedder instance."""
-        return Embedder()
+    # Uses session-scoped embedder fixture from conftest.py
 
     def test_embed_multiple_chunks(self, embedder):
         """P0: Embed multiple chunks returns list of embeddings."""
@@ -290,13 +289,11 @@ class TestBatchOperations:
 # Layer 7: EDGE CASES
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.unit
 class TestEdgeCases:
     """Tests for unusual but valid inputs."""
-
-    @pytest.fixture
-    def embedder(self):
-        """Shared embedder instance."""
-        return Embedder()
+    # Uses session-scoped embedder fixture from conftest.py
 
     def test_empty_string_returns_zero_vector(self, embedder):
         """P0: Empty string returns zero vector."""
@@ -323,6 +320,8 @@ class TestEdgeCases:
 # Layer 8: ERROR HANDLING
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.unit
 class TestErrorHandling:
     """Tests for error conditions."""
 
@@ -350,13 +349,11 @@ class TestErrorHandling:
 # Layer 9: INTEGRATION
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.integration
 class TestIntegration:
     """Tests for integration with other components."""
-
-    @pytest.fixture
-    def embedder(self):
-        """Shared embedder instance."""
-        return Embedder()
+    # Uses session-scoped embedder fixture from conftest.py
 
     def test_embed_chunk_from_document(self, embedder):
         """P0: Embed chunk created from Document."""
@@ -402,6 +399,8 @@ class TestIntegration:
 # Layer 10: STATS FUNCTION
 # =============================================================================
 
+@pytest.mark.embedder
+@pytest.mark.unit
 class TestStatsFunction:
     """Tests for get_embedder_stats."""
 
