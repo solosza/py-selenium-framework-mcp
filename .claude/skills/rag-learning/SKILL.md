@@ -112,23 +112,44 @@ Each RAG component has multiple lessons. Each lesson contains:
 ```
 LESSON N: [Topic Name]
 │
-├── Key Terms
-│   - **[Term]** - [Simple definition]
+├── Key Terms (table format)
 │
-├── Concepts to Understand
-│   - [What user must learn]
-│   - [Why it matters]
+├── Concepts to Understand (with ASCII visuals)
 │
 ├── Experiment N.1: [Name]
 │   └── Predict → Run → Analyze
 │
 ├── Experiment N.2: [Optional deeper dive]
 │
-└── Key Points to Remember
-    1. [Most important takeaway]
-    2. [Practical application]
-    3. [Common pitfall to avoid]
+├── Key Points to Remember
+│
+└── Practical Application (AI evaluates which elements to include)
 ```
+
+### Practical Application Section (REQUIRED)
+
+Every lesson ends with a Practical Application section. AI evaluates at lesson time which elements are relevant based on lesson content and user discussion.
+
+**Example elements (AI may include these or others as appropriate):**
+
+| Element | Example Use Case |
+|---------|------------------|
+| Quick Reference | Cheatsheet table summarizing key info |
+| Decision Framework | "How do I choose chunk size for my project?" |
+| Starting Defaults | "Use 1000-2000 chars, 10% overlap to start" |
+| Tuning Process | "Test → Observe → Adjust → Repeat" workflow |
+| Common Pitfalls | "Don't use tiny chunks for prose documents" |
+| Warning Signs | "If retrieval returns incomplete context, chunks may be too small" |
+| When to Revisit | "Re-evaluate when adding new file types to corpus" |
+
+**AI evaluation at lesson time:**
+- Review what was covered in the lesson
+- Review what questions user asked during discussion
+- Include elements that provide actionable, reusable guidance
+- Add other elements if they help the user apply knowledge
+- Quick Reference is always included (minimum)
+
+**Format:** Use tables and ASCII visuals for all elements (see `references/interaction-format.md`)
 
 **Lesson Coverage Per Component:**
 

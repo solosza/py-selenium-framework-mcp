@@ -4,49 +4,125 @@ Detailed guide for running interactive, AI-guided lessons with hands-on experime
 
 ## Core Principles
 
-1. **Numbered options** - User can respond with just a number
-2. **Last option = question** - Always allow open-ended questions
-3. **Clarify before proceeding** - Ask if concepts need explanation
-4. **Pause between steps** - Don't rush through
-5. **Key terms first** - Define vocabulary before using it
-6. **Summarize at end** - Every lesson ends with key takeaways
+| # | Principle | Description |
+|---|-----------|-------------|
+| 1 | Numbered options | User can respond with just a number |
+| 2 | Last option = question | Always allow open-ended questions |
+| 3 | Clarify before proceeding | Ask if concepts need explanation |
+| 4 | Pause between steps | Don't rush through |
+| 5 | Key terms first | Define vocabulary before using it |
+| 6 | Summarize at end | Every lesson ends with key takeaways |
+
+## Formatting Rules (MANDATORY)
+
+### Always Use Tables
+
+| Data Type | Format | Example |
+|-----------|--------|---------|
+| Key Terms | Markdown table | `\| Term \| Definition \|` |
+| Options/Trade-offs | Markdown table | `\| Option A \| Option B \|` |
+| Parameters | Markdown table | `\| Param \| Value \| Purpose \|` |
+| Results | Markdown table | `\| Metric \| Predicted \| Actual \|` |
+| Comparisons | Markdown table | `\| Ours \| Framework \|` |
+
+**NEVER use bullet lists for structured data:**
+
+```
+BAD (bullet list):
+- Boundary - Where a chunk cuts the text
+- Hard boundary - Fixed position cut
+- Soft boundary - Respects natural breaks
+
+GOOD (table):
+| Term | Definition |
+|------|------------|
+| Boundary | Where a chunk cuts the text |
+| Hard boundary | Fixed position cut |
+| Soft boundary | Respects natural breaks |
+```
+
+### Always Include ASCII Visuals
+
+Every AI response should include ASCII art/diagrams when it helps explain the concept.
+
+```
+GOOD CUT (at sentence):         BAD CUT (mid-sentence):
+┌─────────────────────┐         ┌─────────────────────┐
+│ The fox jumps over  │         │ The fox jumps over  │
+│ the lazy dog.       │         │ the laz             │
+└─────────────────────┘         └─────────────────────┘
+                                ┌─────────────────────┐
+                                │ y dog.              │
+                                └─────────────────────┘
+```
+
+**Visual types to use:**
+
+| Concept | Visual Style |
+|---------|--------------|
+| Boundaries/cuts | Box diagrams with `┌─┐└─┘` |
+| Flow/sequence | Arrow diagrams `→` |
+| Comparison | Side-by-side boxes |
+| Structure | Tree with `├──` and `└──` |
+| Data chunks | `[████████]` blocks |
+
+### Every Response Includes
+
+```
+┌─────────────────────────────────────┐
+│  1. Tables for structured data      │
+│  2. ASCII visuals for concepts      │
+│  3. Both when helpful               │
+└─────────────────────────────────────┘
+```
 
 ## Lesson Structure
 
 ```
 LESSON N: [Topic Name]
 │
-├── Key Terms (define vocabulary)
-├── Concepts to Understand (learning objectives)
-├── Experiment N.1 (hands-on test)
-├── Experiment N.2 (optional deeper dive)
-└── Key Points to Remember (takeaways)
+├── 1. Key Terms (table format)
+├── 2. Concepts to Understand (visuals + tables)
+├── 3. Experiment N.1 (hands-on test)
+├── 4. Key Points to Remember (summary visual)
+└── [Optional] Experiment N.2 (deeper dive)
 ```
 
-## Full Lesson Template
+## Section Templates
 
-### Opening: Key Terms & Concepts
+### Section 1: Lesson Opening (Key Terms + Concepts)
 
-```
+```markdown
+---
 # LESSON N: [Topic Name]
 
-## Key Terms
+## 1. Key Terms
 
-- **[Term 1]** - [Simple, clear definition]
-- **[Term 2]** - [Simple, clear definition]
-- **[Term 3]** - [Simple, clear definition]
+| Term | Definition |
+|------|------------|
+| Term 1 | Simple, clear definition |
+| Term 2 | Simple, clear definition |
+| Term 3 | Simple, clear definition |
 
-## Concepts to Understand
+## 2. Concepts to Understand
 
-Before we experiment, you need to understand:
+### [Concept Heading]
 
-1. **[Concept 1]** - [Why it matters]
-2. **[Concept 2]** - [Why it matters]
-3. **[Concept 3]** - [Why it matters]
+[Brief explanation]
 
-**Framework analogy:** [Relate to testing/QA if applicable]
-- [Comparison point 1]
-- [Comparison point 2]
+```
+ASCII VISUAL ILLUSTRATING THE CONCEPT
+```
+
+### [Second Concept Heading]
+
+| Column A | Column B | Column C |
+|----------|----------|----------|
+| Data | Data | Data |
+
+```
+ANOTHER VISUAL IF HELPFUL
+```
 
 ---
 
@@ -54,34 +130,33 @@ Before we experiment, you need to understand:
 
 1. "Explain [Term/Concept 1] more"
 2. "Explain [Term/Concept 2] more"
-3. "What's the framework analogy about?"
-4. "All clear, continue to experiment"
-5. "I have a different question"
+3. "All clear, continue to experiment"
+4. "I have a different question"
 ```
 
-### Experiment Section
+### Section 2: Experiment Introduction + Prediction
+
+```markdown
+---
+## 3. Experiment N.1: [Experiment Name]
+
+**What this tests:** [One sentence]
 
 ```
-## Experiment N.1: [Name]
-
-**What this tests:** [One sentence description]
-
-**Trade-offs:**
-| Option A | Option B |
-|----------|----------|
-| Pro | Pro |
-| Con | Con |
+VISUAL SHOWING WHAT WE'RE TESTING
 ```
 
-### Step 2: AI PREDICTS
+| Parameter | Value | Purpose |
+|-----------|-------|---------|
+| param1 | value | reason |
+| param2 | value | reason |
 
-```
-**My predictions for [experiment]:**
+**My predictions:**
 
-| Variable | Prediction | Reasoning |
-|----------|------------|-----------|
-| [A] | [value] | [why] |
-| [B] | [value] | [why] |
+| What I'm Measuring | Prediction | Reasoning |
+|--------------------|------------|-----------|
+| Metric A | X | Because... |
+| Metric B | Y | Because... |
 
 ---
 
@@ -90,190 +165,184 @@ Before we experiment, you need to understand:
 1. "I agree with your predictions"
 2. "I think [X] will be different because..."
 3. "I have no idea what to expect"
-4. "I don't understand your reasoning"
-5. "I have a different question"
+4. "I have a different question"
 ```
 
-### Step 3: AI ADJUSTS
+### Section 3: Parameter Adjustment
 
-```
-**Current parameters:**
+```markdown
+---
+**Current experiment parameters:**
+
 | Parameter | Value | Purpose |
 |-----------|-------|---------|
-| [param1] | [val] | [why] |
-| [param2] | [val] | [why] |
+| chunk_size | 60 | Force multiple cuts |
+| overlap | 10 | See boundary recovery |
+
+```
+VISUAL OF PARAMETER EFFECT (if helpful)
+```
 
 ---
 
 **Want to modify the experiment?**
 
 1. "Run as-is"
-2. "Change [parameter] to [new value]"
-3. "Add another test case"
-4. "Explain what each parameter does"
-5. "I have a different question"
+2. "Change [parameter] to [value]"
+3. "Explain what each parameter does"
+4. "I have a different question"
 ```
 
-### Step 4: AI RUNS
+### Section 4: Run Experiment
+
+```markdown
+---
+**Running experiment...**
 
 ```
-[Executes experiment, shows output]
+[ACTUAL OUTPUT FROM CODE]
+```
 
 ---
 
-**Results are ready. How would you like to proceed?**
+**Results ready. How to proceed?**
 
-1. "Show me the full raw output"
-2. "Go straight to your analysis"
+1. "Show me your analysis"
+2. "Show raw output again"
 3. "What do these numbers mean?"
 4. "I have a different question"
 ```
 
-### Step 5: AI ANALYZES
+### Section 5: Analysis
 
-```
+```markdown
+---
+## Analysis
+
 **Prediction vs Reality:**
 
-| Variable | Predicted | Actual | Assessment |
-|----------|-----------|--------|------------|
-| [A] | [pred] | [actual] | [hit/miss] |
-| [B] | [pred] | [actual] | [hit/miss] |
+| Metric | Predicted | Actual | Result |
+|--------|-----------|--------|--------|
+| A | X | X' | Hit/Miss |
+| B | Y | Y' | Hit/Miss |
 
-**Key insights:**
-1. [Observation 1]
-2. [Observation 2]
-3. [Observation 3]
+```
+VISUAL SHOWING WHAT HAPPENED
+
+Example:
+Chunk 1: [████████████]
+Chunk 2:      [████████████]  ← overlap zone
+Chunk 3:           [████████████]
+```
+
+**Key observations:**
+
+| # | Observation |
+|---|-------------|
+| 1 | What we saw |
+| 2 | Why it matters |
+| 3 | Implication |
 
 ---
 
 **What patterns do you notice?**
 
 1. "I see [specific pattern]"
-2. "I'm curious about [specific data point]"
-3. "Why did [X] happen?"
-4. "I don't see any patterns"
-5. "I have a different question"
+2. "Why did [X] happen?"
+3. "I don't see any patterns"
+4. "I have a different question"
 ```
 
-### Step 6: USER OBSERVES (Discussion)
+### Section 6: Discussion
+
+```markdown
+---
+**Discussion**
+
+[Response to user's observation]
+
+| Scenario | Recommendation | Why |
+|----------|----------------|-----|
+| Case A | Option 1 | Reason |
+| Case B | Option 2 | Reason |
 
 ```
-**Discussion time. What would you like to explore?**
-
-1. "What would you recommend for [use case]?"
-2. "Show me a concrete example of [X]"
-3. "How does this compare to [industry/framework]?"
-4. "I'm ready for the next experiment"
-5. "I have a different question"
+VISUAL IF IT HELPS EXPLAIN
 ```
 
-### Step 7: SUMMARIZE (End of Lesson)
+---
+
+**What would you like to explore?**
+
+1. "Run another experiment with different parameters"
+2. "How does this apply to [use case]?"
+3. "I'm ready for the key takeaways"
+4. "I have a different question"
+```
+
+### Section 7: Lesson Summary
+
+```markdown
+---
+## 4. Key Points to Remember
 
 ```
-## Key Points to Remember
+LESSON N SUMMARY
+================
 
-1. **[Most important takeaway]** - [Why it matters]
-2. **[Second takeaway]** - [Practical application]
-3. **[Common pitfall]** - [How to avoid]
+[ASCII VISUAL summarizing the main concept]
+
+┌─────────────────────────────────────────────┐
+│  Key Takeaway 1: [Most important point]     │
+│  Key Takeaway 2: [Practical application]    │
+│  Key Takeaway 3: [Pitfall to avoid]         │
+└─────────────────────────────────────────────┘
+```
+
+| Takeaway | Application |
+|----------|-------------|
+| Point 1 | When/how to use |
+| Point 2 | When/how to use |
+| Point 3 | What to avoid |
 
 ---
 
 **Ready to continue?**
 
 1. "Yes, continue to Lesson [N+1]"
-2. "Run another experiment with different parameters"
+2. "Run another experiment first"
 3. "I have questions about this lesson"
-4. "Take a break, save progress"
+4. "Save progress and take a break"
 5. "I have a different question"
 ```
 
-**Key Points must include:**
-- At least one conceptual takeaway
-- At least one practical application
-- At least one pitfall to avoid
+## Interaction Flow Summary
+
+| Section | User Sees | Includes | Pause For |
+|---------|-----------|----------|-----------|
+| 1. Opening | Key Terms + Concepts | Tables + Visuals | Clarification |
+| 2. Experiment Intro | Setup + AI Prediction | Tables + Visual | User prediction |
+| 3. Parameters | Current values | Table | Adjustments |
+| 4. Run | Raw output | Code output | Ready for analysis |
+| 5. Analysis | Prediction vs Reality | Table + Visual | User observations |
+| 6. Discussion | Response + context | Table + Visual | Exploration |
+| 7. Summary | Key Points | Summary visual + Table | Next lesson |
 
 ## Handling User Responses
 
-### When user picks a number
-- Execute that option immediately
-- No need to confirm
-
-### When user picks "I have a different question"
-- Wait for their question
-- Answer thoroughly
-- Return to the menu with same options
-
-### When user gives a custom response
-- Address their input
-- Then offer to continue or return to menu
-
-## Common Clarification Patterns
-
-### Concept clarification
-```
-**You asked about [concept]. Here's a deeper explanation:**
-
-[Detailed explanation]
-
-**Framework analogy:** [Relate to testing/QA if applicable]
-
----
-
-**Does this clarify it?**
-
-1. "Yes, continue where we left off"
-2. "Still confused about [specific part]"
-3. "I have a different question"
-```
-
-### "Why would anyone choose differently?"
-```
-**Great question. Here's why different choices make sense:**
-
-| Use Case | Better Choice | Why |
-|----------|---------------|-----|
-| [Case 1] | [Option A] | [Reason] |
-| [Case 2] | [Option B] | [Reason] |
-
-**The real answer:** It depends on [key factor].
-
----
-
-**Does this clarify the trade-off?**
-
-1. "Yes, makes sense"
-2. "Show me a concrete example"
-3. "What would you recommend for our case?"
-4. "I have a different question"
-```
-
-### Framework vs Custom
-```
-**Our implementation vs [Framework]:**
-
-| Ours | Framework |
-|------|-----------|
-| `our_method()` | `framework.Method()` |
-
-**Why we built it ourselves:**
-- Learning: [benefit]
-- Control: [benefit]
-- Understanding: [benefit]
-
----
-
-**Clear on build-to-learn vs use-framework?**
-
-1. "Yes, continue"
-2. "When would I use a framework instead?"
-3. "Show me more framework examples"
-4. "I have a different question"
-```
+| User Does | AI Does |
+|-----------|---------|
+| Picks a number | Execute that option immediately |
+| Picks "I have a different question" | Wait for question, answer, return to menu |
+| Gives custom response | Address input, offer to continue |
 
 ## Anti-Patterns
 
-- **Don't skip options** - Always provide numbered choices
-- **Don't assume understanding** - Offer clarification proactively
-- **Don't rush** - Wait for user response before proceeding
-- **Don't forget the question option** - Last option is always open-ended
-- **Don't use more than 5-6 options** - Keep menus scannable
+| Don't | Do Instead |
+|-------|------------|
+| Use bullet lists for definitions | Use markdown tables |
+| Skip visuals | Include ASCII art when helpful |
+| Rush through steps | Pause for user input |
+| Assume understanding | Offer clarification proactively |
+| Use more than 5-6 options | Keep menus scannable |
+| Forget question option | Last option always open-ended |
