@@ -126,16 +126,132 @@ LESSON N: [Topic Name]
 └── Practical Application (AI evaluates which elements to include)
 ```
 
+### Decision Frameworks (MANDATORY)
+
+**Every concept MUST be evaluated for a Decision Framework.**
+
+Decision Frameworks are reusable guides the user can save to their notes and apply to future RAG projects. They answer: "How do I make this decision for MY project?"
+
+**CRITICAL: One Concept at a Time**
+
+```
+WRONG (overwhelming):
+  Concept 1, Concept 2, Concept 3 → [dump all at once]
+  DF 1, DF 2, DF 3 → [dump all at once, user lost]
+
+RIGHT (interactive):
+  Concept 1 → [explain clearly]
+    │
+    ├── Pause: "Is this clear?"
+    │
+    └── IF DF applies → Present DF for Concept 1
+          │
+          └── Pause: "Does this framework help?"
+    │
+    ▼
+  Concept 2 → [explain clearly]
+    │
+    └── [repeat pattern]
+```
+
+**Why one at a time:**
+- User absorbs before moving on
+- DF reinforces concept while context is fresh
+- User isn't overwhelmed with information
+- Allows questions/clarification at each step
+
+**Evaluation Process (for EVERY concept):**
+
+```
+FOR EACH CONCEPT EXPLAINED:
+    │
+    ├── Does this involve a CHOICE? (size, type, approach, threshold)
+    │   └── YES → Create Decision Framework
+    │
+    ├── Does this involve TRADEOFFS? (speed vs accuracy, simple vs complex)
+    │   └── YES → Create Decision Framework
+    │
+    ├── Does this have CONTEXT-DEPENDENT answers? (varies by content type, scale)
+    │   └── YES → Create Decision Framework
+    │
+    └── Is the answer "it depends"?
+        └── YES → Decision Framework REQUIRED (explain what it depends ON)
+```
+
+**Decision Framework Format:**
+
+```
+DECISION FRAMEWORK: [Topic Name]
+==================================
+
+START HERE
+    │
+    ▼
+┌─────────────────────────────────────┐
+│  [First branching question]         │
+└─────────────────────────────────────┘
+    │
+    ├── [Option A] ──→ [Recommendation + why]
+    ├── [Option B] ──→ [Recommendation + why]
+    └── [Option C] ──→ [Recommendation + why]
+
+STARTING POINTS BY CONTEXT:
+
+| Context/Situation | Recommendation | Why |
+|-------------------|----------------|-----|
+| [Situation 1]     | [Value/Choice] | [Reason] |
+| [Situation 2]     | [Value/Choice] | [Reason] |
+
+TUNING PROCESS:
+
+Step 1: [Start with defaults]
+    │
+    ▼
+Step 2: [Test/observe]
+    │
+    ▼
+Step 3: [Diagnose problems]
+    │
+    ├── [Problem A] ──→ [Adjustment]
+    ├── [Problem B] ──→ [Adjustment]
+    │
+    ▼
+Step 4: [Iterate]
+
+QUICK DIAGNOSIS TABLE:
+
+| Problem You See | Likely Cause | Adjustment |
+|-----------------|--------------|------------|
+| [Symptom 1]     | [Cause]      | [Fix]      |
+| [Symptom 2]     | [Cause]      | [Fix]      |
+```
+
+**When to provide Decision Frameworks:**
+
+| Concept Type | Framework Needed? | Example |
+|--------------|-------------------|---------|
+| Parameter selection | YES | Chunk size, overlap %, top-k |
+| Algorithm choice | YES | ANN vs exact, cosine vs euclidean |
+| Tool/library selection | YES | Chroma vs FAISS vs Pinecone |
+| Threshold setting | YES | Similarity cutoff, max tokens |
+| Architecture choice | YES | In-memory vs persistent |
+| Factual explanation | NO | "What is a vector?" |
+| Definition only | NO | "ANN stands for..." |
+
+**Key principle:** If user would Google "how to choose X for my project" — provide a Decision Framework.
+
 ### Practical Application Section (REQUIRED)
 
 Every lesson ends with a Practical Application section. AI evaluates at lesson time which elements are relevant based on lesson content and user discussion.
 
-**Example elements (AI may include these or others as appropriate):**
+**Required elements:**
+- **Decision Framework** — ALWAYS included if concept involves choices (see above)
+- **Quick Reference** — ALWAYS included (minimum cheatsheet)
+
+**Optional elements (include as appropriate):**
 
 | Element | Example Use Case |
 |---------|------------------|
-| Quick Reference | Cheatsheet table summarizing key info |
-| Decision Framework | "How do I choose chunk size for my project?" |
 | Starting Defaults | "Use 1000-2000 chars, 10% overlap to start" |
 | Tuning Process | "Test → Observe → Adjust → Repeat" workflow |
 | Common Pitfalls | "Don't use tiny chunks for prose documents" |
@@ -145,9 +261,9 @@ Every lesson ends with a Practical Application section. AI evaluates at lesson t
 **AI evaluation at lesson time:**
 - Review what was covered in the lesson
 - Review what questions user asked during discussion
+- **For EVERY concept: explicitly evaluate if Decision Framework applies**
 - Include elements that provide actionable, reusable guidance
 - Add other elements if they help the user apply knowledge
-- Quick Reference is always included (minimum)
 
 **Format:** Use tables and ASCII visuals for all elements (see `references/interaction-format.md`)
 

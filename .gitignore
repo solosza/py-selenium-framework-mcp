@@ -54,6 +54,9 @@ error_log*.txt
 training-assistant/docs/
 training-assistant/*_Context.md
 
+# Business IP (strategy, planning, market analysis)
+# .business/  # Repo is private - tracking IP docs
+
 # MCP local config
 .mcp.json
 
@@ -63,9 +66,9 @@ training-assistant/*_Context.md
 # Workflow-specific files (not useful for clones)
 SESSION.md
 PROJECT_CONTEXT.md
-CLAUDE.md
-FRAMEWORK.md
-docs/
+# CLAUDE.md  # Repo is private - tracking IP docs
+# FRAMEWORK.md  # Repo is private - tracking IP docs
+# docs/  # Repo is private - tracking IP docs
 
 # Debug artifacts
 stderr.txt
