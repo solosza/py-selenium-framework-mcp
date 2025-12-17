@@ -191,6 +191,109 @@ So that the developer gets a clear pass/fail report.
 | QA-MID-001 | Mid | Browse products by category |
 | QA-HARD-001 | Hard | Add product to cart (dynamic modal) |
 
+### SR QA Engineer Agent - Detailed Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SR QA ENGINEER AGENT                                                        │
+│  Tool: get_scenario (in-process MCP via @tool decorator)                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ INPUT
+          ▼
+┌─────────────────────────────────────────┐
+│  args: { "level": "easy|mid|hard" }     │
+│         OR                              │
+│  args: { "level": "QA-EASY-001" }       │
+└─────────────────────────────────────────┘
+          │
+          │ PROCESSING
+          ▼
+┌─────────────────────────────────────────┐
+│  1. Parse level (case-insensitive)      │
+│  2. If QA-XXX-NNN: lookup by ID         │
+│  3. Else: get first match by complexity │
+│  4. Format Step 1 input                 │
+└─────────────────────────────────────────┘
+          │
+          │ OUTPUT
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  {                                                                           │
+│    "id": "QA-EASY-001",                                                      │
+│    "name": "Valid login with correct credentials",                          │
+│    "complexity": "easy",                                                     │
+│    "persona": "registered user",                                             │
+│    "requirement": "As a registered user, I want to login...",               │
+│    "url": "http://www.automationpractice.pl/index.php?controller=auth...",  │
+│    "expected_artifacts": ["framework/pages/...", "tests/..."],              │
+│    "validation_points": [{"dd_id": "DD-03", "check": "..."}]                │
+│  }                                                                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Reviewer Agent - Detailed Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  QA REVIEWER AGENT                                                           │
+│  Tool: validate_artifacts (in-process MCP via @tool decorator)               │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ INPUT
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  args: { "paths": [                                                          │
+│    "framework/pages/auth/login_page.py",                                     │
+│    "framework/tasks/auth/auth_tasks.py",                                     │
+│    "framework/roles/registered_user.py",                                     │
+│    "tests/auth/test_valid_login.py"                                          │
+│  ]}                                                                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ PROCESSING (per file)
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  1. Detect file type (page/task/role/test) from path                         │
+│  2. Read file content                                                        │
+│  3. Run DD checks:                                                           │
+│     ├── DD-03: Locators only in POM (CRITICAL)                              │
+│     ├── DD-09: No return values in Task/Role (HIGH)                         │
+│     ├── DD-11: State method naming is_*/has_*/get_* (MEDIUM)                │
+│     ├── DD-15: Assertions use POM state methods (CRITICAL)                  │
+│     ├── DD-18: Valid import paths (HIGH)                                    │
+│     └── DD-19: Import from tools/, not utils/ (HIGH)                        │
+│  4. Collect violations with severity                                         │
+│  5. Count blocking (CRITICAL + HIGH)                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ OUTPUT
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  {                                                                           │
+│    "status": "APPROVE" | "REJECT",                                          │
+│    "violations": [                                                           │
+│      {                                                                       │
+│        "dd_id": "DD-03",                                                     │
+│        "severity": "CRITICAL",                                               │
+│        "file_path": "framework/tasks/auth/auth_tasks.py",                   │
+│        "line_number": 24,                                                    │
+│        "description": "Locator found in task layer",                        │
+│        "code_snippet": "self.web.click(By.ID, 'submit')"                    │
+│      }                                                                       │
+│    ],                                                                        │
+│    "summary": "BLOCKED: 2 CRITICAL/HIGH violations found",                  │
+│    "files_reviewed": [...],                                                  │
+│    "blocking_violations": 2,                                                 │
+│    "total_violations": 3                                                     │
+│  }                                                                           │
+│                                                                              │
+│  Decision Logic:                                                             │
+│  ├── blocking_violations > 0 → REJECT (cannot execute Step 9)               │
+│  └── blocking_violations == 0 → APPROVE (proceed to Step 9)                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## 7. Technical Considerations

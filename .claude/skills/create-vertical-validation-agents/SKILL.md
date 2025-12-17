@@ -154,6 +154,9 @@ These DDs apply to ALL vertical validation agent systems.
 | DD-VA-11 | Agent tests live WITH agents | Separation of concerns from domain tests |
 | DD-VA-12 | Raw test functions for @tool | Decorator returns SdkMcpTool, not callable |
 | DD-VA-13 | Separate pytest config for agents | Avoid conflicts with domain test framework |
+| DD-VA-14 | DD severity mapping | CRITICAL/HIGH block, MEDIUM/LOW don't |
+| DD-VA-15 | Regex-based validation checks | File type detection + pattern matching |
+| DD-VA-16 | Post-module review mandatory | Update skill/PRD after each agent module |
 
 ### DD-VA-01: Use Claude Agent SDK
 
@@ -309,6 +312,105 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+```
+
+### DD-VA-14: DD Severity Mapping Pattern
+
+**Decision:** Map all domain DDs to severity levels for consistent blocking logic.
+
+**Applies to:** All verticals with domain rules/DDs
+
+**Severity Levels:**
+| Level | Meaning | Blocks Execution? |
+|-------|---------|-------------------|
+| CRITICAL | Must fix before any execution | Yes |
+| HIGH | Should fix, significant issue | Yes |
+| MEDIUM | Should fix, minor issue | No |
+| LOW | Nice to fix, cosmetic | No |
+
+**Pattern:**
+```python
+from enum import Enum
+
+class Severity(str, Enum):
+    CRITICAL = "CRITICAL"
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
+
+DD_SEVERITY: Dict[str, Severity] = {
+    "DD-03": Severity.CRITICAL,  # Locators only in POM
+    "DD-15": Severity.CRITICAL,  # Assertions use POM
+    "DD-09": Severity.HIGH,      # No return values
+    # ... map all domain DDs
+}
+
+# Blocking logic
+blocking_count = sum(1 for v in violations
+                     if v.severity in [Severity.CRITICAL, Severity.HIGH])
+status = "REJECT" if blocking_count > 0 else "APPROVE"
+```
+
+### DD-VA-15: Reviewer Validation Pattern
+
+**Decision:** Use regex-based checks with file type detection for automated DD validation.
+
+**Applies to:** All verticals with code artifacts
+
+**File Type Detection:**
+```python
+def detect_file_type(file_path: str, content: str) -> str:
+    """Detect file type from path patterns."""
+    path_lower = file_path.lower().replace("\\", "/")
+
+    if "/pages/" in path_lower: return "page"
+    if "/tasks/" in path_lower: return "task"
+    if "/roles/" in path_lower: return "role"
+    if "/tests/" in path_lower: return "test"
+    return "unknown"
+```
+
+**Validation Check Pattern:**
+```python
+def check_dd_XX(file_path: str, content: str, file_type: str) -> List[Violation]:
+    """Check DD-XX: <description>."""
+    violations = []
+
+    # Only check relevant file types
+    if file_type != "task":
+        return violations
+
+    lines = content.split("\n")
+    for i, line in enumerate(lines, 1):
+        # Skip comments/docstrings
+        stripped = line.strip()
+        if stripped.startswith("#") or stripped.startswith('"""'):
+            continue
+
+        # Regex pattern check
+        if re.search(r"<bad_pattern>", line):
+            violations.append(Violation(
+                dd_id="DD-XX",
+                severity=Severity.HIGH.value,
+                file_path=file_path,
+                line_number=i,
+                description="<violation description>",
+                code_snippet=stripped[:100]
+            ))
+
+    return violations
+```
+
+**Review Result Format:**
+```python
+@dataclass
+class ReviewResult:
+    status: str           # "APPROVE" or "REJECT"
+    violations: List[Violation]
+    summary: str          # Human-readable summary
+    files_reviewed: List[str]
+    blocking_violations: int
+    total_violations: int
 ```
 
 ---
@@ -668,11 +770,23 @@ Create 3+ scenarios per complexity level (9+ total minimum).
 
 - [ ] Domain context defined
 - [ ] Domain Expert Agent designed
+  - [ ] **Post-module review**: Update skill with learnings, add visual flows to PRD
 - [ ] Reviewer Agent designed
+  - [ ] **Post-module review**: Update skill with learnings, add visual flows to PRD
+- [ ] Supervisor Agent designed
+  - [ ] **Post-module review**: Update skill with learnings, add visual flows to PRD
 - [ ] Domain DDs documented
 - [ ] Test scenarios defined (3+ per level)
-- [ ] Supervisor configuration complete
 - [ ] Integration tested
+- [ ] Final documentation review
+
+### Post-Module Review Questions (MANDATORY after each agent)
+
+After completing each agent module, ask:
+1. **Learnings**: Did we learn anything that should be added to the vertical agent skill?
+2. **Documentation**: Is anything missing from the skill that we discovered during implementation?
+3. **Visual Flows**: Do we need visual flows for this module in the PRD?
+4. **New DDs**: Should we add any new Design Decisions (DD-VA-XX)?
 
 ---
 
@@ -680,6 +794,7 @@ Create 3+ scenarios per complexity level (9+ total minimum).
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3 | 2025-12-16 | Added DD-VA-14/15/16: Severity mapping, validation patterns, post-module review |
 | 1.2 | 2025-12-16 | Added DD-VA-11/12/13: Agent test organization, tool testing pattern |
 | 1.1 | 2025-12-16 | Added visual flows, DDs, SDK code patterns |
 | 1.0 | 2025-12 | Initial template based on QA vertical |
