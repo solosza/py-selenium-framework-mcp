@@ -328,12 +328,26 @@ Scenario: Generated test finds bug in target app
 
 ## 11. Open Questions
 
-| # | Question | Status |
-|---|----------|--------|
-| 1 | Claude Agent SDK capabilities - can it invoke MCP tools? | Needs research |
-| 2 | How to programmatically trigger Claude Code? | Needs research |
-| 3 | Exact format for agent-to-agent handoffs? | Design during implementation |
-| 4 | Where to store generated artifacts during validation? | Design during implementation |
+| # | Question | Status | Answer |
+|---|----------|--------|--------|
+| 1 | Claude Agent SDK capabilities - can it invoke MCP tools? | **RESOLVED** | Yes - via `mcp_servers` option (external or in-process) |
+| 2 | How to programmatically trigger Claude Code? | **RESOLVED** | SDK wraps Claude Code - use `query()` with Task tool for subagents |
+| 3 | Exact format for agent-to-agent handoffs? | **RESOLVED** | Custom tools return JSON via MCP protocol |
+| 4 | Where to store generated artifacts during validation? | **RESOLVED** | Working directory via `cwd` option in ClaudeAgentOptions |
+
+### Architecture Decision (Task 1.0 Research)
+
+**Chosen Approach:** Option C (Hybrid)
+
+| Agent | Implementation |
+|-------|---------------|
+| Supervisor | SDK main agent (`query()`) |
+| SR QA Engineer | Custom tool (`@tool` decorator, in-process MCP) |
+| Reviewer | Custom tool (`@tool` decorator, in-process MCP) |
+| Orchestrator | Task tool → Claude Code + MCP |
+
+**Prototype:** `agents/prototypes/minimal_agent_poc.py`
+**Full Research:** `docs/projects/qa-validation-agents/research-notes.md`
 
 ---
 

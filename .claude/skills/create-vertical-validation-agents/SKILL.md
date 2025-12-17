@@ -1,6 +1,6 @@
 # Skill: Create Vertical Validation Agents
 
-**Version:** 1.0
+**Version:** 1.1
 **Purpose:** Template for creating AI agent validation systems for any DaaS vertical
 
 ---
@@ -10,6 +10,217 @@
 This skill provides a reusable pattern for creating AI agents that validate domain-specific enforcement layers before human users.
 
 **Use when:** Setting up validation agents for a new vertical (QA, RAG, API, Sales Contracts, etc.)
+
+---
+
+## Visual Flow
+
+### Validation Run Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           VALIDATION RUN                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SUPERVISOR AGENT (Claude Agent SDK)                                         │
+│  ┌─────────────────────────────────────────────────────────────────────────┐│
+│  │  system_prompt: "You are a [vertical] validation supervisor..."         ││
+│  │  allowed_tools: [domain_expert_tool, reviewer_tool, Task, Read, Glob]   ││
+│  │  mcp_servers: {validation: in-process, domain-tools: external}          ││
+│  └─────────────────────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ Step 1: Get domain input
+          ▼
+┌─────────────────────────────────────────┐
+│  @tool("get_scenario")                  │
+│  DOMAIN EXPERT (in-process)             │
+│  ├── Input: complexity level            │
+│  └── Output: domain-specific input      │
+└─────────────────────────────────────────┘
+          │
+          │ Returns input for tool chain
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SUPERVISOR invokes Task tool for complex work                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ Run domain tool chain
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  Task tool → ORCHESTRATOR (Claude Code + Domain MCP)                         │
+│  ┌─────────────────────────────────────────────────────────────────────────┐│
+│  │  Runs domain-specific tool chain                                        ││
+│  │  Generates domain artifacts                                             ││
+│  └─────────────────────────────────────────────────────────────────────────┘│
+│  └── Output: Generated artifacts                                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ Returns generated artifacts
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SUPERVISOR invokes Reviewer                                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ Validate before execution
+          ▼
+┌─────────────────────────────────────────┐
+│  @tool("validate_artifacts")            │
+│  REVIEWER (in-process)                  │
+│  ├── Input: artifact paths              │
+│  ├── Reads: Domain reference docs       │
+│  ├── Checks: Domain DDs                 │
+│  └── Output: APPROVE / REJECT + details │
+└─────────────────────────────────────────┘
+          │
+          ├── REJECT ──→ STOP, Report Failure
+          │
+          │ APPROVE
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SUPERVISOR → Execute / Test artifacts                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SUPERVISOR generates validation report                                      │
+│  └── Pass/Fail, violations, artifacts, logs                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Technology Stack
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        CLAUDE AGENT SDK                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐       │
+│  │  Built-in Tools  │    │  Custom Tools    │    │  MCP Servers     │       │
+│  ├──────────────────┤    ├──────────────────┤    ├──────────────────┤       │
+│  │  Read            │    │  @tool decorator │    │  External (stdio)│       │
+│  │  Write           │    │  In-process MCP  │    │  domain-tools    │       │
+│  │  Edit            │    │  Python functions│    │                  │       │
+│  │  Bash            │    │                  │    │  In-process      │       │
+│  │  Glob            │    │  get_scenario    │    │  validation      │       │
+│  │  Grep            │    │  validate_artif. │    │                  │       │
+│  │  Task (subagent) │    │                  │    │                  │       │
+│  └──────────────────┘    └──────────────────┘    └──────────────────┘       │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Failure Handling
+
+```
+FAILURE TYPES
+─────────────
+
+TYPE 1: VALIDATION FAILURE (Reviewer rejects)
+    Artifacts ──→ Reviewer ──→ DD Violation ──→ STOP IMMEDIATELY
+
+TYPE 2: EXECUTION FAILURE - GOOD (Validates system works)
+    Artifacts ──→ Reviewer ──→ APPROVE ──→ Execute ──→ Finds real issue
+    └── SUCCESS for validation (system correctly identified problem)
+
+TYPE 3: EXECUTION FAILURE - BAD (System issue)
+    Artifacts ──→ Reviewer ──→ APPROVE ──→ Execute ──→ Fails due to bug
+    └── STOP IMMEDIATELY, investigate system
+
+TYPE 4: AGENT FAILURE (Crash)
+    Any Agent ──→ Exception ──→ STOP IMMEDIATELY, fix agent
+```
+
+---
+
+## Design Decisions (Cross-Vertical)
+
+These DDs apply to ALL vertical validation agent systems.
+
+| ID | Decision | Rationale |
+|----|----------|-----------|
+| DD-VA-01 | Use Claude Agent SDK | Official SDK, built-in tools, MCP support |
+| DD-VA-02 | Supervisor is main agent | SDK native pattern, simpler than multi-process |
+| DD-VA-03 | Domain Expert as custom tool | Simple output, in-process, fast |
+| DD-VA-04 | Reviewer as custom tool | Reads files, checks patterns, in-process |
+| DD-VA-05 | Orchestrator via Task tool | Needs full Claude Code + MCP capabilities |
+| DD-VA-06 | Stop immediately on failure | Fail fast, investigate, fix, restart |
+| DD-VA-07 | Pre-defined scenarios in YAML | Reproducible, version controlled |
+| DD-VA-08 | Full validation report | Audit trail, debugging support |
+| DD-VA-09 | Human escalation for complex | Some scenarios need human guidance |
+| DD-VA-10 | Execution finds issue = SUCCESS | Validates the system works correctly |
+
+### DD-VA-01: Use Claude Agent SDK
+
+**Decision:** Use Claude Agent SDK (Python) for all agent implementation.
+
+**Applies to:** All verticals
+
+**Rationale:**
+- Official Anthropic SDK
+- Same capabilities as Claude Code
+- Built-in tools (Read, Write, Bash, etc.)
+- MCP server support (external and in-process)
+- Subagent support via Task tool
+- Hooks for validation/logging
+
+**Installation:**
+```bash
+pip install claude-agent-sdk
+```
+
+**Requires:** Python 3.10+, ANTHROPIC_API_KEY
+
+### DD-VA-02: Supervisor as Main Agent
+
+**Decision:** Supervisor is the main SDK agent; Domain Expert and Reviewer are custom tools.
+
+**Applies to:** All verticals
+
+**Pattern:**
+```python
+from claude_agent_sdk import query, ClaudeAgentOptions, tool, create_sdk_mcp_server
+
+@tool("get_scenario", "Get test scenario", {"level": str})
+async def get_scenario(args):
+    # Domain Expert logic
+    return {"content": [{"type": "text", "text": scenario_json}]}
+
+@tool("validate_artifacts", "Validate against DDs", {"paths": list})
+async def validate_artifacts(args):
+    # Reviewer logic
+    return {"content": [{"type": "text", "text": result_json}]}
+
+server = create_sdk_mcp_server(name="validation", version="1.0.0",
+                                tools=[get_scenario, validate_artifacts])
+
+async for message in query(
+    prompt="Run validation for [scenario]",
+    options=ClaudeAgentOptions(
+        system_prompt="You are a [vertical] validation supervisor...",
+        mcp_servers={"validation": server},
+        allowed_tools=["mcp__validation__get_scenario",
+                       "mcp__validation__validate_artifacts",
+                       "Task", "Bash", "Read"]
+    )
+):
+    process(message)
+```
+
+### DD-VA-06: Stop Immediately on Failure
+
+**Decision:** Stop validation run immediately on any failure (Type 1, 3, or 4).
+
+**Applies to:** All verticals
+
+**Rationale:**
+- Fail fast principle
+- Earlier failures may cause cascading issues
+- Human needs to investigate and fix
+
+**Exception:** Type 2 (execution finds real issue) is SUCCESS, not failure.
 
 ---
 
@@ -357,7 +568,9 @@ Create 3+ scenarios per complexity level (9+ total minimum).
 
 | Resource | URL |
 |----------|-----|
-| Claude Agent SDK | TBD - research needed |
+| Claude Agent SDK (Python) | https://github.com/anthropics/claude-agent-sdk-python |
+| Agent SDK Docs | https://platform.claude.com/docs/en/api/agent-sdk/overview |
+| Building Agents Guide | https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk |
 | Claude Code Hooks | `.claude/settings.json` |
 
 ---
@@ -378,6 +591,7 @@ Create 3+ scenarios per complexity level (9+ total minimum).
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2025-12-16 | Added visual flows, DDs, SDK code patterns |
 | 1.0 | 2025-12 | Initial template based on QA vertical |
 
 ---
