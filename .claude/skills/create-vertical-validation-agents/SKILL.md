@@ -151,6 +151,9 @@ These DDs apply to ALL vertical validation agent systems.
 | DD-VA-08 | Full validation report | Audit trail, debugging support |
 | DD-VA-09 | Human escalation for complex | Some scenarios need human guidance |
 | DD-VA-10 | Execution finds issue = SUCCESS | Validates the system works correctly |
+| DD-VA-11 | Agent tests live WITH agents | Separation of concerns from domain tests |
+| DD-VA-12 | Raw test functions for @tool | Decorator returns SdkMcpTool, not callable |
+| DD-VA-13 | Separate pytest config for agents | Avoid conflicts with domain test framework |
 
 ### DD-VA-01: Use Claude Agent SDK
 
@@ -221,6 +224,92 @@ async for message in query(
 - Human needs to investigate and fix
 
 **Exception:** Type 2 (execution finds real issue) is SUCCESS, not failure.
+
+### DD-VA-11: Agent Tests Live WITH Agents
+
+**Decision:** Agent tests live in `agents/tests/`, not in domain test folder.
+
+**Applies to:** All verticals
+
+**Rationale:**
+- Agents are separate concern from domain (e.g., QA framework)
+- Agent tests don't need domain fixtures (Selenium, browser)
+- Can run agent tests independently and fast
+- Clear separation: `tests/` = domain, `agents/tests/` = agents
+
+**Directory Structure:**
+```
+agents/
+├── __init__.py
+├── tools/
+│   └── domain_expert.py
+├── tests/                    # Agent tests live HERE
+│   ├── __init__.py
+│   ├── conftest.py           # Path setup, async fixtures
+│   ├── pytest.ini            # Agent-specific config
+│   └── test_domain_expert.py
+└── prototypes/
+```
+
+### DD-VA-12: Raw Test Functions for @tool
+
+**Decision:** Create `_test_<function>()` raw functions for testing decorated tools.
+
+**Applies to:** All custom tools
+
+**Rationale:**
+- `@tool` decorator returns `SdkMcpTool` object, not callable function
+- Raw function allows direct testing without MCP overhead
+- Same logic, testable in isolation
+
+**Pattern:**
+```python
+@tool("get_scenario", "Get test scenario", {"level": str})
+async def get_scenario(args: Dict[str, Any]) -> Dict[str, Any]:
+    return await _test_get_scenario(args)  # Delegate to raw
+
+async def _test_get_scenario(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Raw implementation for testing."""
+    level = args.get("level", "easy")
+    # ... actual logic ...
+    return result
+
+# In tests:
+result = await _test_get_scenario({"level": "easy"})
+assert result["complexity"] == "easy"
+```
+
+### DD-VA-13: Separate Pytest Config for Agents
+
+**Decision:** Agent tests have their own `pytest.ini` with agent-specific settings.
+
+**Applies to:** All verticals
+
+**Required Settings:**
+```ini
+[pytest]
+# Async support
+asyncio_mode = auto
+
+# Agent test markers
+markers =
+    unit: Fast unit tests (no external dependencies)
+    integration: Tests requiring external services
+
+# Console output with coverage and HTML
+addopts = -v --tb=short --cov=agents --cov-report=html:agents/tests/_reports/coverage --html=agents/tests/_reports/report.html --self-contained-html
+```
+
+**conftest.py Pattern:**
+```python
+import sys
+from pathlib import Path
+
+# Add project root to path for agents module imports
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+```
 
 ---
 
@@ -591,6 +680,7 @@ Create 3+ scenarios per complexity level (9+ total minimum).
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2025-12-16 | Added DD-VA-11/12/13: Agent test organization, tool testing pattern |
 | 1.1 | 2025-12-16 | Added visual flows, DDs, SDK code patterns |
 | 1.0 | 2025-12 | Initial template based on QA vertical |
 
