@@ -294,6 +294,73 @@ So that the developer gets a clear pass/fail report.
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### Supervisor Agent - Detailed Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SUPERVISOR AGENT                                                            │
+│  Tool: run_validation, run_standard_validation, get_validation_report        │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ INPUT
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  args: { "scenarios": ["QA-EASY-001", "QA-MID-001", "QA-HARD-001"] }         │
+│         OR                                                                   │
+│  args: { } for run_standard_validation (default 3 scenarios)                │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ SEQUENTIAL EXECUTION (per scenario)
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  FOR EACH SCENARIO:                                                          │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ 1. Get scenario from SR QA Engineer (_test_get_scenario)               │ │
+│  │ 2. (Simulated) Generate artifacts via Orchestrator                     │ │
+│  │ 3. Validate artifacts via Reviewer (_test_validate_artifacts)          │ │
+│  │ 4. Record result (ScenarioResult dataclass)                            │ │
+│  │                                                                         │ │
+│  │ ON FAILURE (Review REJECT or Execution Error):                         │ │
+│  │ ├── Mark current scenario as FAILED                                    │ │
+│  │ ├── Mark remaining scenarios as SKIPPED                                │ │
+│  │ └── EXIT LOOP (fail-fast)                                              │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ AGGREGATION
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ValidationReport (dataclass):                                               │
+│  ├── report_id: "VAL-20251216-235254"                                       │
+│  ├── overall_status: PASSED | FAILED | PARTIAL                              │
+│  ├── total_scenarios: 3                                                      │
+│  ├── scenarios_passed: 1                                                     │
+│  ├── scenarios_failed: 1                                                     │
+│  ├── scenarios_skipped: 1                                                    │
+│  ├── total_dd_violations: 2                                                  │
+│  ├── violations_by_severity: { "CRITICAL": 1, "HIGH": 1 }                   │
+│  └── scenario_results: [ScenarioResult, ...]                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          │ OUTPUT
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  {                                                                           │
+│    "report_id": "VAL-20251216-235254",                                      │
+│    "overall_status": "FAILED",                                               │
+│    "summary": { "total": 3, "passed": 1, "failed": 1, "skipped": 1 },       │
+│    "scenario_results": [...],                                                │
+│    "formatted_report": "==============================\n..."                │
+│  }                                                                           │
+│                                                                              │
+│  Overall Status Logic:                                                       │
+│  ├── All PASSED → overall_status = "PASSED"                                 │
+│  ├── Any FAILED → overall_status = "FAILED"                                 │
+│  ├── Some PASSED, none FAILED → overall_status = "PARTIAL"                  │
+│  └── No results → overall_status = "NO_RESULTS"                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## 7. Technical Considerations

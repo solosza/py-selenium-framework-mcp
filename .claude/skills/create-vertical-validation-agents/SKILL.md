@@ -1,6 +1,6 @@
 # Skill: Create Vertical Validation Agents
 
-**Version:** 1.1
+**Version:** 1.4
 **Purpose:** Template for creating AI agent validation systems for any DaaS vertical
 
 ---
@@ -157,6 +157,9 @@ These DDs apply to ALL vertical validation agent systems.
 | DD-VA-14 | DD severity mapping | CRITICAL/HIGH block, MEDIUM/LOW don't |
 | DD-VA-15 | Regex-based validation checks | File type detection + pattern matching |
 | DD-VA-16 | Post-module review mandatory | Update skill/PRD after each agent module |
+| DD-VA-17 | Dataclasses for structured reports | ScenarioResult, ValidationReport with typed fields |
+| DD-VA-18 | Fail-fast with scenario skipping | Stop on failure, mark remaining as SKIPPED |
+| DD-VA-19 | Report aggregation pattern | Violations by severity, timing, pass/fail counts |
 
 ### DD-VA-01: Use Claude Agent SDK
 
@@ -411,6 +414,183 @@ class ReviewResult:
     files_reviewed: List[str]
     blocking_violations: int
     total_violations: int
+```
+
+### DD-VA-17: Dataclasses for Structured Reports
+
+**Decision:** Use Python dataclasses for all structured agent output.
+
+**Applies to:** All agent tools returning complex data
+
+**Rationale:**
+- Type safety with typed fields
+- Easy conversion to dict via `asdict()`
+- Default values with `field(default_factory=list)`
+- Clear documentation of expected fields
+
+**Pattern:**
+```python
+from dataclasses import dataclass, field, asdict
+from typing import List, Optional, Dict, Any
+from enum import Enum
+
+class ScenarioStatus(str, Enum):
+    PENDING = "PENDING"
+    RUNNING = "RUNNING"
+    PASSED = "PASSED"
+    FAILED = "FAILED"
+    SKIPPED = "SKIPPED"
+
+@dataclass
+class ScenarioResult:
+    """Result of a single scenario execution."""
+    scenario_id: str
+    scenario_name: str
+    complexity: str
+    status: ScenarioStatus
+
+    # Timing
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
+    duration_seconds: Optional[float] = None
+
+    # Review result
+    review_status: Optional[str] = None
+    violations: List[Dict[str, Any]] = field(default_factory=list)
+    blocking_violations: int = 0
+
+    # Failure info
+    failure_type: Optional[str] = None
+    failure_message: Optional[str] = None
+
+@dataclass
+class ValidationReport:
+    """Complete validation report for all scenarios."""
+    report_id: str
+    created_at: str
+    overall_status: str = "PENDING"
+    total_scenarios: int = 0
+    scenarios_passed: int = 0
+    scenarios_failed: int = 0
+    scenarios_skipped: int = 0
+    scenario_results: List[ScenarioResult] = field(default_factory=list)
+    total_dd_violations: int = 0
+    violations_by_severity: Dict[str, int] = field(default_factory=dict)
+
+# Usage in tests
+result = await _test_run_scenario("QA-EASY-001")
+assert result["status"] == ScenarioStatus.PASSED.value
+```
+
+### DD-VA-18: Fail-Fast with Scenario Skipping
+
+**Decision:** Stop validation on first failure, mark remaining scenarios as SKIPPED.
+
+**Applies to:** Supervisor validation suite
+
+**Rationale:**
+- Earlier failures may cause cascading issues
+- No point running more if first fails
+- Human needs to fix before continuing
+- Clear audit trail showing what was skipped
+
+**Pattern:**
+```python
+async def _run_validation_suite(scenarios: List[str]) -> ValidationReport:
+    report = ValidationReport(total_scenarios=len(scenarios))
+
+    for scenario_id in scenarios:
+        result = await _run_scenario(scenario_id)
+        report.scenario_results.append(result)
+
+        if result.status == ScenarioStatus.PASSED:
+            report.scenarios_passed += 1
+        elif result.status == ScenarioStatus.FAILED:
+            report.scenarios_failed += 1
+
+            # FAIL-FAST: Skip remaining scenarios
+            remaining = scenarios[scenarios.index(scenario_id) + 1:]
+            for skip_id in remaining:
+                report.scenario_results.append(ScenarioResult(
+                    scenario_id=skip_id,
+                    scenario_name="...",
+                    complexity="...",
+                    status=ScenarioStatus.SKIPPED,
+                    failure_message="Skipped due to previous failure"
+                ))
+                report.scenarios_skipped += 1
+            break  # Exit loop after skipping
+
+    return report
+```
+
+### DD-VA-19: Report Aggregation Pattern
+
+**Decision:** Aggregate violations, timing, and counts into comprehensive report.
+
+**Applies to:** Supervisor validation report
+
+**Key Aggregations:**
+- Violations by severity (CRITICAL: 2, HIGH: 1, etc.)
+- Total duration across all scenarios
+- Pass/fail/skip counts
+- Human intervention count
+
+**Pattern:**
+```python
+def _finalize_report(report: ValidationReport) -> None:
+    # Aggregate violations by severity
+    for result in report.scenario_results:
+        for violation in result.violations:
+            severity = violation.get("severity", "UNKNOWN")
+            report.violations_by_severity[severity] = \
+                report.violations_by_severity.get(severity, 0) + 1
+        report.total_dd_violations += len(result.violations)
+
+    # Calculate overall status
+    if report.scenarios_failed == 0 and report.scenarios_passed == report.total_scenarios:
+        report.overall_status = "PASSED"
+    elif report.scenarios_failed > 0:
+        report.overall_status = "FAILED"
+    elif report.scenarios_passed > 0:
+        report.overall_status = "PARTIAL"
+    else:
+        report.overall_status = "NO_RESULTS"
+```
+
+**Formatted Report Output:**
+```
+======================================================================
+QA VALIDATION REPORT: VAL-20251216-235254
+======================================================================
+
+Status: FAILED
+Created: 2025-12-16T23:52:54
+Duration: 1.54s
+
+--- SUMMARY ---
+Total Scenarios: 3
+  Passed:  1
+  Failed:  1
+  Skipped: 1
+
+--- DD VIOLATIONS ---
+Total: 2
+  CRITICAL: 1
+  HIGH: 1
+
+--- SCENARIO RESULTS ---
+[PASS] QA-EASY-001: Valid login with correct credentials
+       Duration: 0.12s
+[FAIL] QA-MID-001: Browse products by category
+       Failure: TYPE_1_REVIEW_REJECT
+       Message: Review REJECTED: 2 blocking violations found
+       Blocking Violations: 2
+[SKIP] QA-HARD-001: Add product to cart via quick view modal
+
+======================================================================
+END OF REPORT
+======================================================================
 ```
 
 ---
@@ -794,6 +974,7 @@ After completing each agent module, ask:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.4 | 2025-12-16 | Added DD-VA-17/18/19: Dataclasses, fail-fast, report aggregation (Supervisor) |
 | 1.3 | 2025-12-16 | Added DD-VA-14/15/16: Severity mapping, validation patterns, post-module review |
 | 1.2 | 2025-12-16 | Added DD-VA-11/12/13: Agent test organization, tool testing pattern |
 | 1.1 | 2025-12-16 | Added visual flows, DDs, SDK code patterns |
