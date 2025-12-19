@@ -1,6 +1,24 @@
 # CLAUDE.md
 
-**Version:** v1.7.0 | **Status:** Active Development
+**Version:** v1.9.0 | **Status:** Active Development
+
+---
+
+# DIALOGUE PROTOCOL (Always Apply)
+
+## After Every User Message
+1. **STOP** - Do not respond immediately
+2. **CHECK** - Does this fit existing patterns? If not, propose new reference with rationale
+3. **RESPOND** - Following rules below
+
+## Quick Rules
+- **One topic at a time** - Queue multiple topics, present sequentially
+- **Number all options** - User responds with just a number (1, 2, 3...)
+- **Stop after each task** - When executing multiple tasks, stop after first, await confirmation
+- **Never create new categories without approval** - Propose with rationale, wait for user
+
+## Full Details
+See `.claude/skills/dialogue-engine/` for complete protocol and references.
 
 ---
 
@@ -121,6 +139,9 @@ Step 9: Save files & run test
 | DD-20 | Dynamic elements: AI prepares page state before Tool 2 |
 | DD-21 | AI-SDET collaboration for dynamic discovery |
 | DD-22 | On ANY blocker: STOP → REPORT → DISCUSS with user → then proceed |
+| DD-24 | Test credentials: ASK user which strategy (static/dynamic/self-contained) |
+| DD-25 | Skeleton code quality gate: STOP if any tool generates incomplete code |
+| DD-28 | Test data organization: ASK user shared vs workflow-specific data location |
 
 ### DD-22: Stop-and-Discuss Protocol (CRITICAL)
 
@@ -138,6 +159,104 @@ Step 9: Save files & run test
 - Build/import errors
 
 **NEVER loop through multiple fix attempts without user consultation.**
+
+### DD-24: Test Credential Strategy
+
+**When test requires user credentials, AI MUST ask which strategy:**
+
+```
+"Test requires credentials. Which approach?
+1. Static - Use pre-existing account from test_users.json
+2. Dynamic - Register fresh user, save to config for later tests
+3. Self-contained - Test registers and uses within same test"
+```
+
+| Strategy | Description | Use When |
+|----------|-------------|----------|
+| **Static** | Pre-existing account in `tests/data/test_users.json`. Tests READ via conftest `test_users` fixture. | Login-only tests, known account needed |
+| **Dynamic** | Test registers fresh user, saves to config via utility function (NOT conftest modification). | Registration → subsequent action flow |
+| **Self-contained** | Test registers and uses credentials within same test run. | Independent tests, no cross-test dependency |
+
+**Rules:**
+- ASK at Step 1 (User Input) when credentials are involved
+- NEVER modify conftest.py for credential saving
+- Static credentials use existing `test_users` fixture
+- Dynamic credentials use utility function to write to `test_users.json`
+
+### DD-25: Skeleton Code Quality Gate (CRITICAL)
+
+**After ANY MCP tool generates code (Tools 3-6), AI MUST verify completeness.**
+
+**Skeleton code indicators (ANY of these = FAIL):**
+- Empty sections with `pass` or `# Add ... as needed`
+- Missing locators in POMs
+- Missing atomic methods in POMs
+- Missing workflow methods in Tasks/Roles
+- Placeholder comments instead of actual code
+- Empty method bodies
+
+**Quality gate checklist:**
+
+| Module | Required Components |
+|--------|---------------------|
+| **POM (Tool 3)** | Locators as class constants, atomic methods (return self), state-check methods |
+| **Task (Tool 4)** | Constructor with POM composition, @autologger decorated methods, NO return values |
+| **Role (Tool 5)** | Constructor with Task composition, @autologger decorated workflow methods, NO return values |
+| **Test (Tool 6)** | Fixtures, AAA pattern, POM state assertions, proper imports |
+
+**When skeleton code detected:**
+1. **STOP** - Do not proceed to next step
+2. **REPORT** - Identify which tool generated skeleton code
+3. **FIX** - Either fix the tool OR AI manually completes the code
+4. **VERIFY** - Confirm code is complete before proceeding
+5. **RESTART** - After fix, restart from Step 1
+
+**This is a hard quality gate. Incomplete code MUST NOT propagate through the tool chain.**
+
+### DD-28: Test Data Organization Strategy
+
+**When test requires test data, AI MUST ask which location strategy:**
+
+```
+"Test requires test data. Where should it live?
+1. Shared - tests/data/ (credentials, cross-workflow data)
+2. Workflow-specific - tests/{workflow}/data/ (isolated test data)
+3. Both - shared credentials + workflow-specific test cases"
+```
+
+**Hybrid Data Model:**
+
+```
+tests/
+├── data/                      ← SHARED (cross-workflow)
+│   └── test_users.json        ← Credentials used by auth, cart, checkout
+├── auth/
+│   ├── data/                  ← WORKFLOW-SPECIFIC
+│   │   └── invalid_logins.json
+│   └── test_registration.py
+├── catalog/
+│   ├── data/
+│   │   └── products.json      ← Catalog-specific test data
+│   └── test_browse.py
+└── conftest.py                ← Smart data loader (workflow-first, shared fallback)
+```
+
+| Data Type | Location | Example |
+|-----------|----------|---------|
+| **Credentials** | `tests/data/` | User accounts used across workflows |
+| **Workflow-specific** | `tests/{workflow}/data/` | Invalid login combos, product lists |
+| **Documents/files** | `tests/{workflow}/data/input/` | Upload test files |
+
+**Rules:**
+- ASK at Step 1 (User Input) when test data is involved
+- Shared credentials → `tests/data/test_users.json`
+- Workflow-isolated data → `tests/{workflow}/data/`
+- conftest.py provides smart loader with fallback logic
+
+**Implementation Note:**
+Per-step skills are being created to enforce tool chain contracts. DD-28 implementation
+will be integrated into the appropriate step skill (likely Step 1 or Step 9) once
+DDs are ported to dedicated skills. See DEF-B08/DEF-B09 for skill architecture plan.
 
 ### NO HALLUCINATIONS Policy
 - NEVER guess method names - use metadata from previous tool

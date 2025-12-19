@@ -1,14 +1,30 @@
 """
 SR QA Engineer Agent Tool
 
-Simulates a Senior QA Engineer providing test requirements.
-Generates Step 1 input for the 9-step MCP tool chain.
+Simulates a Senior QA Engineer (SDET) who:
+1. Provides test requirements (Step 1 input)
+2. Instructs AI Orchestrator to invoke the testing skill
 
 Design Decisions:
+- DD-VA-01: Four-component architecture (Supervisor, SQA, AI Orchestrator, Reviewer)
+- DD-VA-02: SQA Agent MUST invoke skill (not just provide requirements) - CRITICAL
 - DD-VA-03: Domain Expert as custom tool (in-process, fast)
-- DD-AVS-03: SR QA Engineer as in-process custom tool
 
-Output Format (Step 1 input):
+Architecture Role:
+```
+SUPERVISOR (coordinates agents)
+    |
+    v
+SQA AGENT (this tool - provides requirements + invokes skill)
+    |
+    v
+AI ORCHESTRATOR (Claude Code + MCP tools - executes 9-step)
+    |
+    v
+REVIEWER (validates artifacts)
+```
+
+Output Format:
 {
     "id": "QA-<LEVEL>-<NUM>",
     "persona": "As a <user type>",
@@ -16,7 +32,12 @@ Output Format (Step 1 input):
     "url": "<target page URL>",
     "complexity": "easy|mid|hard",
     "expected_artifacts": [...],
-    "validation_points": [...]
+    "validation_points": [...],
+    "next_action": {
+        "instruction": "Invoke skill to trigger AI Orchestrator",
+        "skill": "/skill execute-from-step1",
+        "input": "<formatted Step 1 input>"
+    }
 }
 """
 
@@ -58,9 +79,9 @@ SITE_KNOWLEDGE = {
         }
     },
     "user_types": [
+        "new user",
         "registered user",
-        "guest user",
-        "new user"
+        "guest user"
     ],
     "features": [
         "authentication",
@@ -81,23 +102,23 @@ SCENARIOS: Dict[str, Dict[str, Any]] = {
     # Easy scenarios - static elements, simple flow
     "QA-EASY-001": {
         "id": "QA-EASY-001",
-        "name": "Valid login with correct credentials",
+        "name": "Create new account with valid data",
         "complexity": "easy",
-        "persona": "registered user",
-        "requirement": "As a registered user, I want to login with my email and password so that I can access my account",
+        "persona": "new user",
+        "requirement": "As a new user, I want to create an account with my email so that I can shop on the site",
         "url": SITE_KNOWLEDGE["pages"]["authentication"]["url"],
         "expected_artifacts": [
-            "framework/pages/auth/login_page.py",
+            "framework/pages/auth/registration_page.py",
             "framework/tasks/auth/auth_tasks.py",
-            "framework/roles/registered_user.py",
-            "tests/auth/test_valid_login.py"
+            "framework/roles/new_user.py",
+            "tests/auth/test_registration.py"
         ],
         "validation_points": [
-            {"dd_id": "DD-03", "check": "Locators only in LoginPage"},
-            {"dd_id": "DD-15", "check": "Test uses is_logged_in() for assertion"},
-            {"dd_id": "DD-17", "check": "Actual email/password values injected"}
+            {"dd_id": "DD-03", "check": "Locators only in RegistrationPage"},
+            {"dd_id": "DD-15", "check": "Test uses is_account_created() for assertion"},
+            {"dd_id": "DD-17", "check": "Actual email/form values injected"}
         ],
-        "notes": "Static form elements, straightforward validation"
+        "notes": "Static form elements, registration flow. Use unique email (timestamp-based)."
     },
 
     "QA-EASY-002": {
@@ -269,7 +290,13 @@ async def get_scenario(args: Dict[str, Any]) -> Dict[str, Any]:
 
         scenario = matching[0]
 
-    # Format output for Step 1
+    # Format Step 1 input for skill invocation
+    step1_text = f"""As a {scenario["persona"]}, {scenario["requirement"].split(', I want to ')[1] if ', I want to ' in scenario["requirement"] else scenario["requirement"]}
+
+Target URL: {scenario["url"]}
+"""
+
+    # Format output with next_action instruction (DD-VA-02)
     step1_input = {
         "id": scenario["id"],
         "name": scenario["name"],
@@ -279,7 +306,14 @@ async def get_scenario(args: Dict[str, Any]) -> Dict[str, Any]:
         "url": scenario["url"],
         "expected_artifacts": scenario["expected_artifacts"],
         "validation_points": scenario["validation_points"],
-        "notes": scenario.get("notes", "")
+        "notes": scenario.get("notes", ""),
+        # DD-VA-02: SQA Agent MUST include skill invocation instruction
+        "next_action": {
+            "instruction": "AI Orchestrator: Invoke the testing skill with the Step 1 input below",
+            "skill": "/skill execute-from-step1",
+            "step1_input": step1_text,
+            "critical": "Do NOT just provide requirements - EXECUTE the skill to trigger artifact generation"
+        }
     }
 
     return {
@@ -375,6 +409,12 @@ async def _test_get_scenario(args):
             return {"error": f"No scenarios found for level '{level}'"}
         scenario = matching[0]
 
+    # Format Step 1 input for skill invocation
+    step1_text = f"""As a {scenario["persona"]}, {scenario["requirement"].split(', I want to ')[1] if ', I want to ' in scenario["requirement"] else scenario["requirement"]}
+
+Target URL: {scenario["url"]}
+"""
+
     return {
         "id": scenario["id"],
         "name": scenario["name"],
@@ -383,7 +423,14 @@ async def _test_get_scenario(args):
         "requirement": scenario["requirement"],
         "url": scenario["url"],
         "expected_artifacts": scenario["expected_artifacts"],
-        "validation_points": scenario["validation_points"]
+        "validation_points": scenario["validation_points"],
+        # DD-VA-02: Include skill invocation instruction
+        "next_action": {
+            "instruction": "AI Orchestrator: Invoke the testing skill with the Step 1 input below",
+            "skill": "/skill execute-from-step1",
+            "step1_input": step1_text,
+            "critical": "Do NOT just provide requirements - EXECUTE the skill to trigger artifact generation"
+        }
     }
 
 

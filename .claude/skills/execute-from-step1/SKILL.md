@@ -59,6 +59,13 @@ description: Execute the 9-step MCP tool chain for generating Selenium test auto
 ### Step 1: User Input
 - Confirm persona, intent, URL, expected outcome
 - If missing, ASK before proceeding (DD-01, DD-02)
+- If test involves credentials, ASK which strategy (DD-24):
+  ```
+  "Test requires credentials. Which approach?
+  1. Static - Use pre-existing account from test_users.json
+  2. Dynamic - Register fresh user, save to config for later tests
+  3. Self-contained - Test registers and uses within same test"
+  ```
 
 ### Step 2: AI Processing (no tool call)
 - Extract role_name from persona
@@ -68,7 +75,25 @@ description: Execute the 9-step MCP tool chain for generating Selenium test auto
 - Initialize metadata_context
 
 ### Step 3: Tool 1 - generate_tests_from_user_story
-- Input: BDD user story, workflow/domain
+
+**DD-23: BDD Format Required**
+
+Tool 1 requires explicit BDD keywords. MUST format as:
+```
+As a [role]
+I want to [action]
+So that [benefit]
+
+Scenario: [scenario name]
+Given [context]
+When [action]
+And [additional action]
+Then [expected outcome]
+```
+
+**NEVER use bullet-point acceptance criteria format.**
+
+- Input: BDD user story (with Scenario/Given/When/Then), workflow/domain
 - Output: test_scenarios[] → add to metadata_context
 
 ### Step 4: Tool 2 - discover_page_elements
@@ -300,16 +325,19 @@ When AI encounters issues discovering elements:
 - CHECK EXISTING first (DD-12): scan framework/pages/{domain}/
 - Input: elements, expected_states, domain
 - Output: POM code + pom_metadata → add to metadata_context
+- **QUALITY GATE (DD-25):** Verify POM has locators, atomic methods, state-check methods. If skeleton → STOP
 
 ### Step 6: Tool 4 - generate_task
 - CHECK EXISTING first (DD-12): scan framework/tasks/{domain}/
 - Input: pom_metadata from Step 5
 - Output: Task code + task_metadata → add to metadata_context
+- **QUALITY GATE (DD-25):** Verify Task has POM composition, @autologger methods. If skeleton → STOP
 
 ### Step 7: Tool 5 - generate_role
 - CHECK EXISTING first (DD-12): scan framework/roles/
 - Input: task_metadata from Step 6
 - Output: Role code + role_metadata → add to metadata_context
+- **QUALITY GATE (DD-25):** Verify Role has Task composition, workflow methods. If skeleton → STOP
 
 ### Step 8: Tool 6 - generate_test_runner
 - Input: role_metadata + pom_metadata
@@ -319,11 +347,28 @@ When AI encounters issues discovering elements:
   - DD-16: Override file path to tests/test1/ or tests/test2/
   - DD-17: Inject actual parameter values (not placeholders)
   - DD-18: Validate import paths match file locations
+- **QUALITY GATE (DD-25):** Verify test has fixtures, AAA pattern, assertions. If skeleton → STOP
 
 ### Step 9: Save & Run
 - Save generated code to file paths
 - Add __init__.py files if needed
 - Run: `pytest {path} -v --headless=False --html=reports/{name}_report.html --self-contained-html`
+
+---
+
+## Test Run Tracking
+
+**Run ID Format:** `YYYY-MM-DD-RN` (e.g., `2025-12-17-R1`)
+
+- Assign Run ID at start of each 9-step execution
+- Increment run number (R1, R2, R3...) for same-day runs
+- Use Run ID in defect logs to track which run caught the defect
+
+**Defect Log Entry:**
+```markdown
+**Run ID:** 2025-12-17-R1
+**Caught By:** Test 1 Registration (Step 3)
+```
 
 ---
 
@@ -389,6 +434,6 @@ from utils.element_discovery import discover_page_elements  # NO!
 
 ## Reference
 
-- CLAUDE.md: DD-01 through DD-21, E2E Testing Process
+- CLAUDE.md: DD-01 through DD-25, E2E Testing Process
 - FRAMEWORK.md Section 8: 9-Step AI Workflow
 - docs/DEFECT_LOG.md: Defect tracking format

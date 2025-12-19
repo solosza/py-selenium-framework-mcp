@@ -143,5 +143,3 @@ def pytest_configure(config):
         'Test Executor': 'Selenium WebDriver + ChromeDriver',
         'Report Generated': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
-
-

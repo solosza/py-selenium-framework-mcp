@@ -600,10 +600,10 @@ def get_product_count(self) -> int:
 
 ### [DEF-021] Tool 6 generates invalid import syntax
 **Severity:** CRITICAL
-**Status:** IN_PROGRESS
+**Status:** RESOLVED
 **Layer:** MCP Tool
 **File:** `mcp_server/tools/tool_06_generate_test_runner.py`
-**Line(s):** 83-92
+**Line(s):** 130-134
 
 **Rule Violated:**
 - Generated code must be syntactically valid Python
@@ -637,10 +637,10 @@ else:
 
 ### [DEF-022] Tool 3 generates duplicate locator names
 **Severity:** HIGH
-**Status:** IN_PROGRESS
+**Status:** RESOLVED
 **Layer:** MCP Tool
 **File:** `mcp_server/utils/generators/page_object_generator.py`
-**Line(s):** 117-138
+**Line(s):** 118-133
 
 **Rule Violated:**
 - Locators must have unique names
@@ -675,10 +675,10 @@ for elem in elements:
 
 ### [DEF-023] Tool 3 generates duplicate method names
 **Severity:** HIGH
-**Status:** IN_PROGRESS
+**Status:** RESOLVED
 **Layer:** MCP Tool
 **File:** `mcp_server/utils/generators/page_object_generator.py`
-**Line(s):** 212-234
+**Line(s):** 213-234
 
 **Rule Violated:**
 - Method names must be unique
@@ -714,10 +714,10 @@ for elem in elements:
 
 ### [DEF-024] Tool 6 generates placeholder test instead of real test logic
 **Severity:** HIGH
-**Status:** IN_PROGRESS
+**Status:** RESOLVED
 **Layer:** MCP Tool
 **File:** `mcp_server/utils/generators/test_generator.py`
-**Line(s):** 71-94, 346-358
+**Line(s):** 78-101, 529-533
 
 **Rule Violated:**
 - Generated tests should be executable without manual editing
@@ -856,28 +856,36 @@ Any workflow involving modals or hover-triggered elements will be blocked. This 
 - Any AJAX-loaded content
 - Dropdown menus, tooltips, etc.
 
-**Root Cause:**
-Tool 2 uses static page discovery - navigates to URL, waits for load, scans DOM. No capability to perform interactions before discovery.
+**Root Cause (Updated 2025-12-18):**
+~~Tool 2 uses static page discovery~~ - WRONG. Tool 2 already has DD-20 dynamic flow support.
 
-**Fix Required:**
-Add optional `pre_discovery_actions` parameter to Tool 2:
+**Actual Root Cause:** AI did not follow DD-20 despite it being documented in:
+- FRAMEWORK.md Section 8.5
+- execute-from-step1 skill (lines 101-113)
+
+This is an **enforcement gap**, not a code gap. DDs are passive - AI forgets mid-workflow.
+
+**DD-20 Solution (Already Implemented):**
 ```python
+# AI prepares page state first (hover, click modal, etc.)
+# Then calls Tool 2 with existing driver:
 discover_elements({
-    'url': '...',
-    'pre_discovery_actions': [
-        {'hover': '.product-container'},
-        {'click': '.ajax_add_to_cart_button'},
-        {'wait': 2}
-    ]
+    'driver_session': driver,  # AI's prepared driver
+    'scope': '#modal_container'  # Optional: limit to modal
 })
 ```
 
-**Design Notes:**
-- Only Tool 2 needs this - downstream tools work with metadata, not raw elements
-- Actions prepare page state, then existing discovery logic runs
-- SRP maintained: Tool 2 still "discovers elements from a page state"
+**Fix Options:**
 
-**Verified:** TBD
+| Option | Description |
+|--------|-------------|
+| **Quality gate MCP tools** | Create validation tools that enforce checks before each step proceeds |
+| **SDK orchestration** | Code enforces step order and validations programmatically |
+| **Pre-tool checkpoint in skill** | Add explicit "STOP: Is this static or dynamic?" before Tool 2 |
+
+**Recommended Fix:** Quality gate MCP tools - enforce DD compliance at each step transition.
+
+**Verified:** TBD - requires E2E rerun with enforcement in place
 **Resolved Date:** TBD
 
 ---
@@ -925,7 +933,336 @@ When calling MCP Tools (1-6), ALWAYS import from tools/ directory:
 NEVER import directly from utils/ when executing E2E tool chain.
 ```
 
+**Status Update (2025-12-18):**
+DD-19 is now documented in:
+- CLAUDE.md (line 138)
+- FRAMEWORK.md Section 8.13
+
+**Remaining Gap:** AI enforcement. Same pattern as DEF-B05 - DD exists but AI didn't follow it.
+
+**Recommended Fix:** Quality gate MCP tools to validate imports before tool execution.
+
 **Verified:** TBD - after adding DD-19 and rerunning E2E from start
+**Resolved Date:** TBD
+
+---
+
+### [DEF-B06] AI did not format user story in explicit BDD before Tool 1
+**Severity:** MEDIUM
+**Status:** OPEN
+**Run ID:** 2025-12-17-R1
+**Caught By:** Test 1 Registration (Step 3)
+**Code Version:** feature/2.0-sr-qa-engineer-agent
+**Layer:** AI Orchestration
+**File:** N/A (AI behavior)
+
+**Error Message:**
+```
+{
+  "error": "No scenarios found in user story. Please include Given-When-Then scenarios.",
+  "status": "error",
+  "hint": "Format: Given <context> When <action> Then <expected outcome>"
+}
+```
+
+**Description:**
+AI called Tool 1 (generate_tests_from_user_story) with a user story formatted as bullet-point acceptance criteria instead of explicit BDD Given-When-Then syntax. Tool 1 requires explicit BDD keywords.
+
+AI sent:
+```
+As a new user
+I want to register an account
+So that I can access member features
+
+Acceptance Criteria:
+- User can navigate to registration page
+...
+```
+
+Tool 1 expects:
+```
+As a new user
+I want to register an account
+So that I can access member features
+
+Scenario: Successful user registration
+Given I am on the authentication page
+When I enter my email to create an account
+And I fill in my personal information
+Then I should see my account page
+```
+
+**Root Cause:**
+AI Step 2 (AI Processing) converted intent to BDD format in metadata_context but did not use that formatted BDD when calling Tool 1. Instead, AI re-wrote the user story with bullet-point acceptance criteria.
+
+**Fix Required:**
+Add explicit rule DD-23 to CLAUDE.md and execute-from-step1 skill:
+- AI MUST include explicit "Scenario:" and "Given/When/Then" keywords when calling Tool 1
+- AI should use the BDD already prepared in Step 2, not reformat
+
+**Prevention Rule (DD-23):**
+```
+When calling Tool 1 (generate_tests_from_user_story):
+- MUST include "Scenario:" keyword
+- MUST include explicit "Given", "When", "Then" keywords
+- Use BDD prepared in Step 2 metadata_context
+- NEVER use bullet-point acceptance criteria format
+```
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-B07] Tool 6 ignores scenario parameter and generates generic template
+**Severity:** HIGH
+**Status:** OPEN
+**Run ID:** 2025-12-17-R2
+**Caught By:** Test 1 Registration (Step 8)
+**Code Version:** feature/2.0-sr-qa-engineer-agent
+**Layer:** MCP Tool
+**File:** `mcp_server/tools/tool_06_generate_test_runner.py`
+
+**Error Message:**
+Tool 6 generated `test_valid_login` and `test_logout` methods instead of `test_successful_user_registration`.
+
+**Description:**
+Tool 6 was called with explicit scenario:
+```python
+scenario={
+    "title": "test_successful_user_registration",
+    "given": "I am on the authentication page",
+    "when": "I enter my email... AND submit registration",
+    "then": "I should see my account page with welcome message"
+}
+```
+
+But Tool 6 ignored this and generated a generic auth template with login/logout tests instead of the registration test requested.
+
+**Root Cause:**
+Tool 6 likely uses workflow type ("auth") to select a template rather than using the actual scenario provided. The auth template defaults to login/logout regardless of the scenario content.
+
+**Fix Required:**
+Tool 6 should:
+1. Parse the scenario title to determine test method name
+2. Use scenario's "when" clause to determine which Role method to call
+3. Use scenario's "then" clause to determine assertion method
+4. Not default to hardcoded templates
+
+**Workaround:**
+Manually write the test file.
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-B08] AI passed wrong element format to Tool 3 (not Tool 2 output format)
+**Severity:** HIGH
+**Status:** OPEN
+**Run ID:** 2025-12-17-R3
+**Caught By:** Test 2 Login + Cart (Step 5)
+**Code Version:** feature/2.0-sr-qa-engineer-agent
+**Layer:** AI Orchestration
+**File:** N/A (AI behavior)
+
+**Error Message:**
+Tool 3 generated skeleton POM with no locators or atomic methods.
+
+**Description:**
+AI manually constructed elements for Tool 3 instead of passing Tool 2 output directly. The formats don't match:
+
+**Tool 2 outputs:**
+```json
+{
+  "suggested_name": "EMAIL",
+  "element_type": "inputs",
+  "locator_id": "#email",
+  "locator_css": "",
+  "locator_xpath": "//input[@id='email']"
+}
+```
+
+**AI incorrectly passed:**
+```json
+{
+  "name": "EMAIL",           // Wrong key - should be "suggested_name"
+  "type": "inputs",          // Wrong key - should be "element_type"
+  "locator": "#email"        // Wrong key - should be "locator_id"
+}
+```
+
+**Root Cause:**
+Tool 3's transformation logic (lines 122-127 in tool_03_generate_page_object.py) expects Tool 2's exact output format with keys: `suggested_name`, `element_type`, `locator_id`/`locator_css`/`locator_xpath`. AI invented a different schema.
+
+**Generator code is correct** - the skeleton was produced because elements array was effectively empty after transformation (no matching keys found).
+
+**Fix Options:**
+
+**Option 1: Add DD-26 + Update execute-from-step1 skill**
+Add explicit code pattern reference showing exact data to pass:
+```
+Tool 2 → Tool 3 Element Contract:
+CORRECT: elements = tool_2_result["elements"]  # Use as-is
+WRONG: elements = [{"name": "X", "type": "Y", "locator": "Z"}]  # Invented format
+
+Required keys: suggested_name, element_type, locator_id/locator_css/locator_xpath
+```
+
+**Option 2: Create dedicated skills per tool/step**
+Create separate skills for each step with explicit input/output contracts:
+- `.claude/skills/tool-2-discover-elements/SKILL.md`
+- `.claude/skills/tool-3-generate-pom/SKILL.md`
+- etc.
+
+Each skill would document:
+- Exact input format expected
+- Exact output format produced
+- Code examples of correct invocation
+- Common mistakes to avoid
+
+**Selected Fix:** TBD (discuss with user)
+
+**Prevention Rule (DD-26):**
+```
+Tool Chain Data Contracts:
+- Each tool expects specific input format from previous tool
+- AI MUST pass tool output directly to next tool (filter ok, transform not ok)
+- Skill documents exact contract for each tool transition
+```
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-B09] Tool 4 generates skeleton Task code when POM metadata not passed
+**Severity:** HIGH
+**Status:** OPEN
+**Run ID:** 2025-12-17-R3
+**Caught By:** Test 2 Login + Cart (Step 6)
+**Code Version:** feature/2.0-sr-qa-engineer-agent
+**Layer:** MCP Tool / AI Orchestration
+**File:** `mcp_server/tools/tool_04_generate_task.py`
+
+**Error Message:**
+Tool 4 generated skeleton Task with `pass` placeholder:
+```python
+@autologger.automation_logger("Task")
+def execute_workflow(self) -> None:
+    """Execute the workflow. TODO: Implement."""
+    pass
+```
+Output showed: `pom_metadata_used: 0`, `task_methods_generated: 0`
+
+**Description:**
+Tool 4 requires POM metadata from Tool 3 to generate proper Task methods. When called with only `task_name` and `workflow_description` (no POM metadata), it generates a skeleton class with placeholder methods instead of actual Task methods that compose and use POM atomic methods.
+
+**Root Cause:**
+Similar to DEF-B08 - AI did not pass the POM metadata from Tool 3 output to Tool 4. The tool expected:
+```json
+{
+  "task_name": "AuthTasks",
+  "pom_metadata": {  // From Tool 3 output
+    "class_name": "LoginPage",
+    "action_methods": [...],
+    "state_methods": [...]
+  }
+}
+```
+
+AI only passed:
+```json
+{
+  "task_name": "AuthTasks",
+  "workflow_description": "..."  // Text description, not structured metadata
+}
+```
+
+**DD-25 Violation:**
+Skeleton code detected → STOP triggered (correct behavior per DD-25)
+
+**Fix Required:**
+Same pattern as DEF-B08 - Tool chain data contracts must be enforced:
+1. Tool 3 outputs `metadata` with `action_methods`, `state_methods`
+2. Tool 4 MUST receive this metadata to generate Task methods
+3. AI MUST pass Tool 3 `metadata` field to Tool 4
+
+**Prevention Rule (extend DD-26):**
+```
+Tool 3 → Tool 4 Data Contract:
+- Tool 3 outputs: metadata.action_methods[], metadata.state_methods[]
+- Tool 4 expects: pom_metadata with these methods
+- AI MUST: task_input["pom_metadata"] = tool_3_result["metadata"]
+```
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-B10] AI manual Task code included locators (architecture violation)
+**Severity:** CRITICAL
+**Status:** OPEN
+**Run ID:** 2025-12-17-R3
+**Caught By:** Test 2 Login + Cart (Step 6 manual fix attempt)
+**Code Version:** feature/2.0-sr-qa-engineer-agent
+**Layer:** AI Orchestration
+**File:** N/A (AI-generated code, not saved)
+
+**Error Message:**
+User caught: "ai code is wrong in task module also. there should be no locators in the task module"
+
+**Description:**
+When AI attempted to manually fix Tool 4's skeleton output, the generated Task code included Selenium locators:
+
+```python
+# WRONG - AI generated this in CatalogTasks:
+from selenium.webdriver.common.by import By
+...
+product_locator = (By.CSS_SELECTOR, f"ul.product_list li.ajax_block_product:nth-child({product_index + 1})")
+add_to_cart_locator = (By.CSS_SELECTOR, f"ul.product_list li.ajax_block_product:nth-child({product_index + 1}) a.ajax_add_to_cart_button")
+```
+
+**Rule Violated:**
+- FRAMEWORK.md: "Locators ONLY in Page Objects"
+- CLAUDE.md Layer architecture: "Task = Orchestrates page object methods (NO locators)"
+- PRD Section 6.3: Tasks delegate all UI interaction to POMs
+
+**Root Cause:**
+AI hallucinated Task implementation instead of using POM methods. Correct pattern:
+```python
+# CORRECT - Task delegates to POM:
+def add_product_to_cart(self, product_index: int = 0) -> None:
+    self.catalog_page.hover_product(product_index)
+    self.catalog_page.click_add_to_cart_button()
+```
+
+**Impact:**
+- Breaks 4-layer architecture separation
+- Duplicates locator responsibility
+- Makes tests brittle (locator changes need updates in multiple places)
+- Violates fundamental framework design
+
+**Fix Required:**
+1. Add explicit quality gate for AI-generated Task code
+2. Check for `By.` imports or `(By.CSS_SELECTOR, ...)` patterns
+3. If detected → STOP → flag architecture violation
+4. Add to execute-from-step1 skill as Task code validation step
+
+**Prevention Rule (DD-27):**
+```
+Task Code Quality Gate (AI Manual Fix):
+BEFORE saving any Task code, verify:
+- [ ] NO imports from selenium.webdriver.common.by
+- [ ] NO (By.*, "...") locator tuples
+- [ ] NO driver.find_element() calls
+- [ ] ONLY calls to POM methods (self.page.method_name())
+
+If ANY locator pattern found → ARCHITECTURE VIOLATION → STOP
+```
+
+**Verified:** TBD
 **Resolved Date:** TBD
 
 ---
@@ -938,10 +1275,10 @@ NEVER import directly from utils/ when executing E2E tool chain.
 | Tasks | 2 | 1 | 0 | 2 | 5 | 4 |
 | Roles | 2 | 1 | 0 | 0 | 3 | 2 (1 INVALID) |
 | Tests | 2 | 0 | 0 | 0 | 2 | 2 |
-| MCP Tools | 1 | 3 | 0 | 0 | 4 | 0 (4 IN_PROGRESS) |
+| MCP Tools | 1 | 5 | 0 | 0 | 6 | 0 (4 IN_PROGRESS + 2 OPEN) |
 | MCP Tools (Phase B) | 1 | 0 | 0 | 0 | 1 | 1 |
-| AI Orchestration | 0 | 0 | 2 | 0 | 2 | 2 |
-| **Total** | **9** | **6** | **6** | **5** | **26** | **18 + 1 WONT_FIX + 1 INVALID + 4 IN_PROGRESS** |
+| AI Orchestration | 1 | 1 | 3 | 0 | 5 | 2 |
+| **Total** | **10** | **9** | **7** | **5** | **31** | **18 + 1 WONT_FIX + 1 INVALID + 4 IN_PROGRESS + 5 OPEN** |
 
 ---
 

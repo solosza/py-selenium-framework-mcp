@@ -1,8 +1,8 @@
 # FRAMEWORK.md - Complete Architecture Reference
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** Authoritative Source of Truth
-**Last Updated:** 2025-11-29
+**Last Updated:** 2025-12-18
 
 ---
 
@@ -21,6 +21,28 @@
 5. [Terminology](#5-terminology)
 6. [Directory Structure](#6-directory-structure)
 7. [Naming Conventions](#7-naming-conventions)
+8. [MCP Tool Chain & AI Workflow](#8-mcp-tool-chain--ai-workflow)
+   - [8.1 Workflow Overview](#81-workflow-overview)
+   - [8.2 Step 1: User Input](#82-step-1-user-input)
+   - [8.3 Step 2: AI Processing](#83-step-2-ai-processing)
+   - [8.4 Step 3: Tool 1](#84-step-3-tool-1-generate_tests_from_user_story)
+   - [8.5 Step 4: Tool 2](#85-step-4-tool-2-discover_page_elements)
+   - [8.6 Step 5: Tool 3](#86-step-5-tool-3-generate_page_object)
+   - [8.7 Step 6: Tool 4](#87-step-6-tool-4-generate_task)
+   - [8.8 Step 7: Tool 5](#88-step-7-tool-5-generate_role)
+   - [8.9 Step 8: Tool 6](#89-step-8-tool-6-generate_test_runner)
+   - [8.10 Step 9: Save & Report](#810-step-9-ai-saves--reports)
+   - [8.11 Design Decisions (DD-01 to DD-28)](#811-design-decisions)
+   - [8.12 DD-16, DD-17, DD-18: AI Post-Processing](#812-dd-16-dd-17-dd-18-ai-post-processing-rules)
+   - [8.13 DD-19: Tool Invocation Pattern](#813-dd-19-tool-invocation-pattern)
+   - [8.14 DD-22: Stop-and-Discuss Protocol](#814-dd-22-stop-and-discuss-protocol-critical)
+   - [8.15 Claude Code Skills](#815-claude-code-skills)
+   - [8.16 DD-23: BDD Format Required](#816-dd-23-bdd-format-required-for-tool-1)
+   - [8.17 DD-24: Test Credential Strategies](#817-dd-24-test-credential-strategies)
+   - [8.18 DD-25: Skeleton Code Quality Gate](#818-dd-25-skeleton-code-quality-gate)
+   - [8.19 DD-26: Tool Chain Data Contracts](#819-dd-26-tool-chain-data-contracts)
+   - [8.20 DD-27: Task Code Quality Gate](#820-dd-27-task-code-quality-gate-no-locators)
+   - [8.21 DD-28: Test Data Organization](#821-dd-28-test-data-organization)
 
 ---
 
@@ -1437,6 +1459,12 @@ AI PROMPTING RULES FOR TOOL 6:
 | DD-20 | Dynamic element discovery: AI prepares page state before Tool 2 | Enables discovery of modals, hover elements, AJAX content |
 | DD-21 | AI-SDET collaboration for dynamic discovery (see 8.5) | Balances autonomy with efficiency; human helps when AI stuck |
 | DD-22 | Stop-and-Discuss: On ANY blocker, STOP → REPORT → DISCUSS → proceed | Prevents AI from looping on fixes; ensures user collaboration on blockers |
+| DD-23 | BDD format required for Tool 1 (explicit Given/When/Then) | Tool 1 parser requires explicit BDD keywords; plain English fails (see 8.16) |
+| DD-24 | Test credentials: ASK user which strategy (static/dynamic/self-contained) | Three strategies for credential management; prevents hardcoding (see 8.17) |
+| DD-25 | Skeleton code quality gate: STOP if any tool generates incomplete code | Prevents broken code from propagating through tool chain (see 8.18) |
+| DD-26 | Tool chain data contracts: pass metadata directly between tools | Tool outputs must flow unchanged to next tool; AI enforces contracts (see 8.19) |
+| DD-27 | Task code quality gate: NO locators in Tasks (CRITICAL) | Architecture violation if Tasks contain By.* locators (see 8.20) |
+| DD-28 | Test data organization: ASK user shared vs workflow-specific location | Hybrid model: shared + workflow-specific data; smart loader (see 8.21) |
 
 ### 8.12 DD-16, DD-17, DD-18: AI Post-Processing Rules
 
@@ -1583,8 +1611,426 @@ Usage:
 ```
 
 **Skills vs CLAUDE.md:**
-- CLAUDE.md: Core rules (DD-01 through DD-21), always loaded
+- CLAUDE.md: Core rules (DD-01 through DD-28), always loaded
 - Skills: Detailed procedures, loaded on-demand to save tokens
+
+---
+
+### 8.16 DD-23: BDD Format Required for Tool 1
+
+Tool 1 (generate_tests_from_user_story) parses BDD scenarios using explicit keyword detection.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-23: BDD FORMAT REQUIREMENT                                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ Tool 1 Parser expects explicit keywords: Given, When, Then                  │
+│                                                                             │
+│ ✗ FAILS - Plain English:                                                    │
+│ ─────────────────────────                                                   │
+│   "As a registered user, I want to login with email and password            │
+│    so that I can access my account"                                         │
+│                                                                             │
+│   Result: { "scenarios": [] }  ← Empty! No keywords found                   │
+│                                                                             │
+│ ✓ WORKS - Explicit BDD:                                                     │
+│ ─────────────────────────                                                   │
+│   "As a registered user, I want to login...                                 │
+│                                                                             │
+│    Given user is on the login page                                          │
+│    When user enters valid email and password                                │
+│    And user clicks the sign in button                                       │
+│    Then user is logged in and sees account page"                            │
+│                                                                             │
+│   Result: { "scenarios": [{ "given": "...", "when": "...", "then": "..." }] │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ AI RULE: Convert plain English to explicit BDD in Step 2 before Tool 1      │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Keywords Parsed:**
+- `Given` - Precondition/initial state
+- `When` - Action performed
+- `And` - Additional steps (appended to previous section)
+- `Then` - Expected outcome (→ becomes state-check method)
+
+---
+
+### 8.17 DD-24: Test Credential Strategies
+
+When a test requires user credentials, AI must ask which strategy to use.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-24: TEST CREDENTIAL STRATEGIES                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ AI PROMPT (when credentials needed):                                        │
+│ ────────────────────────────────────                                        │
+│   "Test requires credentials. Which approach?                               │
+│    1. Static - Use pre-existing account from test_users.json                │
+│    2. Dynamic - Register fresh user, save to config for later tests         │
+│    3. Self-contained - Test registers and uses within same test"            │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ STRATEGY COMPARISON:                                                        │
+│                                                                             │
+│ ┌─────────────┬───────────────────────────────┬──────────────────────────┐  │
+│ │ Strategy    │ How It Works                  │ Use When                 │  │
+│ ├─────────────┼───────────────────────────────┼──────────────────────────┤  │
+│ │ STATIC      │ Read from tests/data/         │ Login-only tests         │  │
+│ │             │ test_users.json via fixture   │ Known account needed     │  │
+│ ├─────────────┼───────────────────────────────┼──────────────────────────┤  │
+│ │ DYNAMIC     │ Test registers user, saves    │ Registration → action    │  │
+│ │             │ to config via utility func    │ Multi-test flows         │  │
+│ ├─────────────┼───────────────────────────────┼──────────────────────────┤  │
+│ │ SELF-CONT   │ Test registers and uses       │ Independent tests        │  │
+│ │             │ within same test run          │ No cross-test deps       │  │
+│ └─────────────┴───────────────────────────────┴──────────────────────────┘  │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ DATA FLOW BY STRATEGY:                                                      │
+│                                                                             │
+│ STATIC:                                                                     │
+│   tests/data/test_users.json ──► conftest.py fixture ──► test              │
+│                                                                             │
+│ DYNAMIC:                                                                    │
+│   test registers ──► utility func ──► test_users.json ──► later tests      │
+│                                                                             │
+│ SELF-CONTAINED:                                                             │
+│   test registers ──► same test uses credentials ──► test ends (no save)    │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ RULES:                                                                      │
+│ - ASK at Step 1 (User Input) when credentials are involved                  │
+│ - NEVER modify conftest.py for credential saving                            │
+│ - Static credentials use existing test_users fixture                        │
+│ - Dynamic credentials use utility function to write to test_users.json      │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 8.18 DD-25: Skeleton Code Quality Gate
+
+After ANY MCP tool generates code (Tools 3-6), AI MUST verify completeness.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-25: SKELETON CODE QUALITY GATE (HARD STOP)                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ SKELETON CODE INDICATORS (ANY = FAIL):                                      │
+│ ──────────────────────────────────────                                      │
+│   ✗ Empty sections with `pass` or `# Add ... as needed`                     │
+│   ✗ Missing locators in POMs                                                │
+│   ✗ Missing atomic methods in POMs                                          │
+│   ✗ Missing workflow methods in Tasks/Roles                                 │
+│   ✗ Placeholder comments instead of actual code                             │
+│   ✗ Empty method bodies                                                     │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ QUALITY CHECKLIST BY MODULE:                                                │
+│                                                                             │
+│ ┌────────────┬──────────────────────────────────────────────────────────┐   │
+│ │ Module     │ Required Components                                      │   │
+│ ├────────────┼──────────────────────────────────────────────────────────┤   │
+│ │ POM        │ Locators as class constants                              │   │
+│ │ (Tool 3)   │ Atomic methods (return self)                             │   │
+│ │            │ State-check methods (return bool/value)                  │   │
+│ ├────────────┼──────────────────────────────────────────────────────────┤   │
+│ │ Task       │ Constructor with POM composition                         │   │
+│ │ (Tool 4)   │ @autologger decorated methods                            │   │
+│ │            │ NO return values, NO locators                            │   │
+│ ├────────────┼──────────────────────────────────────────────────────────┤   │
+│ │ Role       │ Constructor with Task composition                        │   │
+│ │ (Tool 5)   │ @autologger decorated workflow methods                   │   │
+│ │            │ NO return values                                         │   │
+│ ├────────────┼──────────────────────────────────────────────────────────┤   │
+│ │ Test       │ Fixtures (web_interface, config, test_users)             │   │
+│ │ (Tool 6)   │ AAA pattern (Arrange, Act, Assert)                       │   │
+│ │            │ POM state assertions, proper imports                     │   │
+│ └────────────┴──────────────────────────────────────────────────────────┘   │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ WHEN SKELETON CODE DETECTED:                                                │
+│ ────────────────────────────                                                │
+│                                                                             │
+│   Tool output ──► AI checks quality ──► SKELETON DETECTED                   │
+│                                              │                              │
+│                                              ▼                              │
+│                            ┌─────────────────────────────────┐              │
+│                            │ 1. STOP - Do not proceed        │              │
+│                            │ 2. REPORT - Which tool failed   │              │
+│                            │ 3. FIX - AI completes OR tool   │              │
+│                            │ 4. VERIFY - Check completeness  │              │
+│                            │ 5. RESTART - From Step 1        │              │
+│                            └─────────────────────────────────┘              │
+│                                                                             │
+│ This is a HARD QUALITY GATE. Incomplete code MUST NOT propagate.            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Example Skeleton Code (FAIL):**
+```python
+# BAD - Tool 4 generated skeleton task
+class AuthTasks:
+    def __init__(self, web, base_url):
+        self.web = web
+        self.base_url = base_url
+        # Add page compositions as needed  ← SKELETON INDICATOR
+        pass  ← SKELETON INDICATOR
+
+    @autologger.automation_logger("Task")
+    def log_in(self, email, password):
+        # Add login implementation  ← SKELETON INDICATOR
+        pass  ← SKELETON INDICATOR
+```
+
+---
+
+### 8.19 DD-26: Tool Chain Data Contracts
+
+Tool outputs MUST flow to next tool unchanged. AI enforces contracts.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-26: TOOL CHAIN DATA CONTRACTS                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ DATA FLOW BETWEEN TOOLS:                                                    │
+│                                                                             │
+│  Tool 1 ──► Tool 2 ──► Tool 3 ──► Tool 4 ──► Tool 5 ──► Tool 6              │
+│    │          │          │          │          │          │                 │
+│    ▼          ▼          ▼          ▼          ▼          ▼                 │
+│  scenarios  elements   pom_meta   task_meta  role_meta   test               │
+│                                                                             │
+│ EACH TOOL OUTPUT BECOMES NEXT TOOL INPUT                                    │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ CONTRACT: Tool 3 → Tool 4                                                   │
+│ ─────────────────────────                                                   │
+│                                                                             │
+│ Tool 3 outputs pom_metadata:                                                │
+│ {                                                                           │
+│   "class_name": "LoginPage",                                                │
+│   "import_path": "pages.auth.login_page",                                   │
+│   "action_methods": [                                                       │
+│     { "name": "enter_email", "params": ["email: str"] },                    │
+│     { "name": "enter_password", "params": ["password: str"] },              │
+│     { "name": "click_submit", "params": [] }                                │
+│   ],                                                                        │
+│   "state_methods": [                                                        │
+│     { "name": "is_logged_in", "returns": "bool" }                           │
+│   ]                                                                         │
+│ }                                                                           │
+│                                                                             │
+│ Tool 4 MUST receive this EXACTLY to generate correct Task code:             │
+│ - Task composes LoginPage                                                   │
+│ - Task methods call enter_email(), enter_password(), click_submit()         │
+│ - Task DOES NOT hardcode method names                                       │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ AI ENFORCEMENT:                                                             │
+│ ───────────────                                                             │
+│                                                                             │
+│  ┌──────────┐    pom_metadata    ┌──────────┐                               │
+│  │ Tool 3   │ ───────────────►  │ AI       │                                │
+│  └──────────┘                    │ (stores) │                                │
+│                                  └────┬─────┘                                │
+│                                       │                                      │
+│                    pom_metadata       │                                      │
+│                    (unchanged)        ▼                                      │
+│                                  ┌──────────┐                                │
+│                                  │ Tool 4   │                                │
+│                                  └──────────┘                                │
+│                                                                             │
+│ AI stores metadata in context, passes DIRECTLY to next tool.                │
+│ AI does NOT modify, transform, or "interpret" metadata between tools.       │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ ANTI-PATTERN:                                                               │
+│ ─────────────                                                               │
+│   Tool 3 outputs: { "action_methods": [...] }                               │
+│   AI "forgets" to pass it                                                   │
+│   Tool 4 receives: {} ← Empty!                                              │
+│   Tool 4 generates: skeleton code with pass statements                      │
+│                                                                             │
+│ DEFECT: DEF-B09 - Skeleton tasks from missing pom_metadata                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 8.20 DD-27: Task Code Quality Gate (No Locators)
+
+Tasks MUST NOT contain locators. This is a CRITICAL architecture violation.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-27: TASK CODE QUALITY GATE - NO LOCATORS (CRITICAL)                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ ARCHITECTURE RULE: Locators ONLY in Page Objects                            │
+│                                                                             │
+│ ┌─────────────────────────────────────────────────────────────────────────┐ │
+│ │ Layer           │ Locators? │ Why                                       │ │
+│ ├─────────────────┼───────────┼───────────────────────────────────────────┤ │
+│ │ Page Object     │ ✓ YES     │ Owns UI element definitions               │ │
+│ │ Task            │ ✗ NO      │ Orchestrates POMs, not UI elements        │ │
+│ │ Role            │ ✗ NO      │ Orchestrates Tasks, higher abstraction    │ │
+│ │ Test            │ ✗ NO      │ Asserts via POM methods                   │ │
+│ └─────────────────┴───────────┴───────────────────────────────────────────┘ │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ VIOLATION INDICATORS:                                                       │
+│ ─────────────────────                                                       │
+│                                                                             │
+│ ✗ VIOLATION - Locators in Task:                                             │
+│   from selenium.webdriver.common.by import By  ← VIOLATION                  │
+│                                                                             │
+│   class AuthTasks:                                                          │
+│       EMAIL_INPUT = (By.ID, "email")  ← VIOLATION                           │
+│       PASSWORD = (By.ID, "passwd")    ← VIOLATION                           │
+│                                                                             │
+│       def log_in(self, email, password):                                    │
+│           self.web.type_text(*self.EMAIL_INPUT, email)  ← VIOLATION         │
+│                                                                             │
+│ ✓ CORRECT - Task uses POM methods:                                          │
+│   class AuthTasks:                                                          │
+│       def __init__(self, web, base_url):                                    │
+│           self.login_page = LoginPage(web)  ← Compose POM                   │
+│                                                                             │
+│       def log_in(self, email, password):                                    │
+│           (self.login_page                                                  │
+│               .enter_email(email)  ← Call POM method                        │
+│               .enter_password(password)                                     │
+│               .click_submit())                                              │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ DETECTION CHECKLIST:                                                        │
+│ ────────────────────                                                        │
+│                                                                             │
+│ Scan Task code for these patterns:                                          │
+│ [ ] "from selenium.webdriver.common.by import By"                           │
+│ [ ] "By.ID", "By.CSS_SELECTOR", "By.XPATH", etc.                            │
+│ [ ] Tuple locator patterns: (By.*, "...")                                   │
+│ [ ] Direct self.web.click/type_text with locators                           │
+│                                                                             │
+│ If ANY found → CRITICAL VIOLATION → STOP → FIX → RESTART FROM STEP 1        │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ DEFECT REFERENCE: DEF-B10 - AI manual Task code included locators           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 8.21 DD-28: Test Data Organization
+
+Test data can be shared or workflow-specific. AI must ask which strategy.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-28: TEST DATA ORGANIZATION (HYBRID MODEL)                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ AI PROMPT (when test data needed):                                          │
+│ ──────────────────────────────────                                          │
+│   "Test requires test data. Where should it live?                           │
+│    1. Shared - tests/data/ (credentials, cross-workflow data)               │
+│    2. Workflow-specific - tests/{workflow}/data/ (isolated test data)       │
+│    3. Both - shared credentials + workflow-specific test cases"             │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ HYBRID DATA MODEL STRUCTURE:                                                │
+│ ────────────────────────────                                                │
+│                                                                             │
+│   tests/                                                                    │
+│   ├── data/                      ← SHARED (cross-workflow)                  │
+│   │   └── test_users.json        ← Credentials for auth, cart, checkout    │
+│   │                                                                         │
+│   ├── auth/                                                                 │
+│   │   ├── data/                  ← WORKFLOW-SPECIFIC                        │
+│   │   │   └── invalid_logins.json ← Auth-specific test cases               │
+│   │   ├── test_registration.py                                              │
+│   │   └── test_login.py                                                     │
+│   │                                                                         │
+│   ├── catalog/                                                              │
+│   │   ├── data/                  ← WORKFLOW-SPECIFIC                        │
+│   │   │   └── products.json      ← Catalog-specific product data           │
+│   │   └── test_browse.py                                                    │
+│   │                                                                         │
+│   ├── cart/                                                                 │
+│   │   ├── data/                  ← WORKFLOW-SPECIFIC                        │
+│   │   │   └── cart_items.json    ← Cart-specific item combinations         │
+│   │   └── test_add_to_cart.py                                               │
+│   │                                                                         │
+│   └── conftest.py                ← Smart data loader (workflow→shared)      │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ DATA TYPE → LOCATION MAPPING:                                               │
+│                                                                             │
+│ ┌─────────────────────┬──────────────────────────┬─────────────────────────┐│
+│ │ Data Type           │ Location                 │ Example                 ││
+│ ├─────────────────────┼──────────────────────────┼─────────────────────────┤│
+│ │ Credentials         │ tests/data/              │ User accounts           ││
+│ │ Cross-workflow      │ tests/data/              │ Shared config           ││
+│ │ Workflow-specific   │ tests/{workflow}/data/   │ Invalid logins          ││
+│ │ Documents/files     │ tests/{workflow}/input/  │ Upload test files       ││
+│ └─────────────────────┴──────────────────────────┴─────────────────────────┘│
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ SMART DATA LOADER (conftest.py):                                            │
+│ ────────────────────────────────                                            │
+│                                                                             │
+│   @pytest.fixture                                                           │
+│   def test_data(request):                                                   │
+│       """Load test data: workflow-specific first, shared fallback."""       │
+│       test_dir = Path(request.fspath).parent                                │
+│       workflow_data = test_dir / "data"                                     │
+│       shared_data = Path(__file__).parent / "data"                          │
+│                                                                             │
+│       # Try workflow-specific first                                         │
+│       if (workflow_data / "test_data.json").exists():                       │
+│           return load_json(workflow_data / "test_data.json")                │
+│                                                                             │
+│       # Fallback to shared                                                  │
+│       return load_json(shared_data / "test_data.json")                      │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ RULES:                                                                      │
+│ ──────                                                                      │
+│ - ASK at Step 1 (User Input) when test data is involved                     │
+│ - Shared credentials → tests/data/test_users.json                           │
+│ - Workflow-isolated data → tests/{workflow}/data/                           │
+│ - conftest.py provides smart loader with fallback logic                     │
+│                                                                             │
+│ IMPLEMENTATION NOTE:                                                        │
+│ Per-step skills are being created to enforce tool chain contracts.          │
+│ DD-28 implementation will be integrated into the appropriate step skill     │
+│ (likely Step 1 or Step 9) once DDs are ported to dedicated skills.          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 

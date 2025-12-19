@@ -532,7 +532,77 @@ Scenario: Generated test finds bug in target app
 
 ---
 
-## Appendix: 22 Design Decisions (Quick Reference)
+## 13. Critical Finding: Enforcement Skill Required (Task 7.0)
+
+### Problem Discovered
+
+During initial Task 7.0 validation run attempt, we discovered that **Design Decisions are passive documentation**. The AI Orchestrator (Claude Code) reads DDs at conversation start but does not re-read them after each tool call. This caused cascading failures:
+
+```
+DEF-VA-003: Tool 3 silently ignored wrong element format
+DEF-VA-004: Metadata not passed between tools (CRITICAL)
+DEF-VA-005: Reviewer approved skeleton code (no completeness checks)
+DEF-VA-006: Visual Logger didn't show detailed audit
+
+Root Cause: AI didn't follow DDs → cascading failures downstream
+```
+
+### Solution: Active Enforcement via Skill
+
+DDs are passive. Skills are active. We need a skill that:
+
+1. **CHECKPOINTs** after each step (validates DD compliance)
+2. **STOREs** tool outputs (forces metadata accumulation)
+3. **MUST_PASS** explicit handoff to next tool
+4. **STOP_ON_FAIL** prevents cascading
+
+### Skill Architecture (SRP - Option B)
+
+```
+.claude/skills/qa-enforcement/
+├── SKILL.md                     # Light orchestrator (~100 lines)
+├── references/
+│   ├── skill-design-guide.md    # How to build skills (template for verticals)
+│   ├── dd-checkpoints.md        # CHECKPOINT definitions per step
+│   ├── metadata-schema.md       # What Tool N outputs, Tool N+1 expects
+│   ├── tool-chain-steps.md      # Steps 3-8 tool invocation
+│   ├── troubleshooting.md       # DD-21 autonomous fixes
+│   └── defect-handling.md       # Stop/Log/Fix/Restart
+```
+
+### DD Migration Pattern
+
+| Stage | DD Location | Reason |
+|-------|-------------|--------|
+| Development | FRAMEWORK.md | Source of truth during design |
+| Skill Creation | Move to skill | Self-contained, AI reads during workflow |
+| Maintenance | Skill only | Single source, no sync issues |
+
+**Rule:** When creating/updating a skill, move associated DDs from FRAMEWORK.md into the skill's references. The skill becomes the enforcement layer.
+
+### Impact on DaaS Product
+
+This is the core of DaaS value proposition:
+
+| What DaaS Promises | Before (broken) | After (fixed) |
+|-------------------|-----------------|---------------|
+| "DDs enforce patterns" | DDs are docs, AI forgets | Skill enforces at runtime |
+| "Consistent every time" | Cascading failures | Checkpoints catch deviations |
+| "Domain expertise as rules" | Rules exist but passive | Rules actively checked |
+
+### New Functional Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-06.1 | AI Orchestrator MUST use qa-enforcement skill (not raw tools) |
+| FR-06.2 | Skill MUST checkpoint after each tool invocation |
+| FR-06.3 | Skill MUST store and pass metadata between tools |
+| FR-06.4 | Skill MUST stop on checkpoint failure |
+| FR-06.5 | Skill MUST include all relevant DDs as self-contained references |
+
+---
+
+## Appendix A: Framework Design Decisions (DD-01 to DD-22)
 
 | ID | Decision | Severity |
 |----|----------|----------|
@@ -558,6 +628,52 @@ Scenario: Generated test finds bug in target app
 | DD-20 | Dynamic elements: AI prepares page state | MEDIUM |
 | DD-21 | AI-SDET collaboration | MEDIUM |
 | DD-22 | Stop-and-discuss on blockers | CRITICAL |
+
+---
+
+## Appendix B: Validation Agent Design Decisions (DD-VA-XX)
+
+*Added from Task 7.0 lessons learned (DEF-VA-001, DEF-VA-002)*
+
+### Agent Architecture
+
+| ID | Decision | Severity |
+|----|----------|----------|
+| DD-VA-01 | Four-component architecture required: Supervisor, SQA Agent, AI Orchestrator, Reviewer | CRITICAL |
+| DD-VA-02 | SQA Agent must invoke skill to trigger AI Orchestrator (not just provide requirements) | CRITICAL |
+| DD-VA-03 | Supervisor only coordinates/triggers, does NOT execute workflows | HIGH |
+
+**DD-VA-01 Architecture:**
+```
+SUPERVISOR (triggers)
+    |
+    +-> SQA AGENT (simulates SDET user, invokes skill)
+            |
+            +-> AI ORCHESTRATOR (Claude Code + MCP tools, follows DDs)
+                    |
+                    +-> REVIEWER (validates artifacts)
+```
+
+### Logging & Visibility
+
+| ID | Decision | Severity |
+|----|----------|----------|
+| DD-VA-04 | Visual workflow logging required for all validation runs | HIGH |
+| DD-VA-05 | Sub-step logging for AI Orchestrator MCP tool invocations | MEDIUM |
+
+### Failure Handling
+
+| ID | Decision | Severity |
+|----|----------|----------|
+| DD-VA-06 | Fail-fast on any step failure, skip remaining steps | HIGH |
+| DD-VA-07 | All failures must be logged in `agents/docs/DEFECT_LOG.md` | HIGH |
+
+### Testing
+
+| ID | Decision | Severity |
+|----|----------|----------|
+| DD-VA-08 | Integration tests must use real flow, not mock data that hides gaps | HIGH |
+| DD-VA-09 | Test scenarios must be executable against live target app | MEDIUM |
 
 ---
 

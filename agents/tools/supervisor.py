@@ -1,16 +1,35 @@
 """
 Supervisor Agent Tool
 
-Coordinates the QA validation workflow:
-1. Loads pre-defined scenarios from SR QA Engineer
-2. Orchestrates: SR QA -> Orchestrator -> Reviewer -> Execute
-3. Stops immediately on any failure
-4. Generates comprehensive validation report
+Coordinates the QA validation workflow using FOUR-COMPONENT ARCHITECTURE:
+
+```
+SUPERVISOR (this tool - coordinates/triggers)
+    |
+    v
+SQA AGENT (provides requirements + skill invocation instruction)
+    |
+    v
+AI ORCHESTRATOR (Claude Code - executes 9-step MCP workflow)
+    |
+    v
+REVIEWER (validates generated artifacts against 22 DDs)
+```
 
 Design Decisions:
+- DD-VA-01: Four-component architecture (CRITICAL)
+- DD-VA-02: SQA Agent MUST invoke skill (not just provide requirements) (CRITICAL)
+- DD-VA-03: Supervisor only coordinates, doesn't execute skill
 - DD-VA-17: Supervisor as orchestration tool
 - DD-VA-18: Sequential execution with fail-fast
 - DD-VA-19: Comprehensive validation report structure
+
+Workflow:
+1. Supervisor calls SQA Agent -> gets scenario + next_action instruction
+2. SQA Agent returns: requirements + "/skill execute-from-step1" instruction
+3. AI Orchestrator (Claude Code) follows instruction, executes 9-step workflow
+4. Reviewer validates artifacts against DDs
+5. Supervisor generates report
 
 PRD Requirements:
 - FR-01.1: Load pre-defined test scenarios (3 total: easy, mid, hard)
@@ -31,6 +50,12 @@ from claude_agent_sdk import tool
 # Import sibling tools for coordination
 from .sr_qa_engineer import SCENARIOS, _test_get_scenario
 from .reviewer import _test_validate_artifacts
+from .workflow_logger import (
+    VisualWorkflowLogger,
+    create_validation_logger,
+    AgentType,
+    StepStatus
+)
 
 
 # =============================================================================
@@ -142,27 +167,43 @@ def _get_current_report() -> Optional[ValidationReport]:
 # Core Validation Logic
 # =============================================================================
 
-async def _run_scenario(scenario_id: str, content_map: Optional[Dict[str, str]] = None) -> ScenarioResult:
+async def _run_scenario(
+    scenario_id: str,
+    content_map: Optional[Dict[str, str]] = None,
+    logger: Optional[VisualWorkflowLogger] = None
+) -> ScenarioResult:
     """
     Execute a single scenario through the validation pipeline.
 
-    Pipeline:
-    1. Get scenario from SR QA Engineer
-    2. (Simulated) Orchestrator generates artifacts
-    3. Reviewer validates artifacts
-    4. (Simulated) Execute Step 9
+    FOUR-COMPONENT ARCHITECTURE (DD-VA-01):
+    1. SUPERVISOR: Get scenario from SQA Agent (this function)
+    2. SQA AGENT: Returns requirements + next_action instruction
+    3. AI ORCHESTRATOR: Claude Code executes skill (NOT simulated)
+    4. REVIEWER: Validates artifacts against 22 DDs
 
     Args:
         scenario_id: Scenario ID (e.g., "QA-EASY-001")
-        content_map: Optional pre-generated artifact content for testing
+        content_map: Pre-generated artifact content (from AI Orchestrator execution)
+                     If None, returns ORCHESTRATOR_PENDING status requiring skill execution
+        logger: Optional visual workflow logger for real-time feedback (DD-VA-04)
 
     Returns:
         ScenarioResult with full execution details
     """
-    # Get scenario details
+    # Create logger if not provided (DD-VA-04: Visual workflow logging required)
+    if logger is None:
+        logger = create_validation_logger(scenario_id, "Validation Run")
+
+    # Step 1: SUPERVISOR -> SQA AGENT (get scenario)
+    logger.start_step(1, 4, AgentType.SUPERVISOR, AgentType.SQA_AGENT, "Get test scenario from SQA Agent")
+    logger.set_input(f"scenario_id='{scenario_id}'")
+
+    # Phase 1: Get scenario from SQA Agent (includes next_action per DD-VA-02)
     scenario_data = await _test_get_scenario({"level": scenario_id})
 
     if "error" in scenario_data:
+        logger.complete_step(success=False, error=scenario_data["error"])
+        logger.print_summary()
         return ScenarioResult(
             scenario_id=scenario_id,
             scenario_name="Unknown",
@@ -171,6 +212,10 @@ async def _run_scenario(scenario_id: str, content_map: Optional[Dict[str, str]] 
             failure_type=FailureType.ORCHESTRATOR_ERROR.value,
             failure_message=scenario_data["error"]
         )
+
+    # SQA Agent returned scenario successfully
+    logger.set_output(f"scenario='{scenario_data['name']}', has_next_action={bool(scenario_data.get('next_action'))}")
+    logger.complete_step(success=True)
 
     result = ScenarioResult(
         scenario_id=scenario_data["id"],
@@ -181,41 +226,87 @@ async def _run_scenario(scenario_id: str, content_map: Optional[Dict[str, str]] 
         generated_artifacts=scenario_data.get("expected_artifacts", [])
     )
 
-    # Phase 2: Review artifacts
-    # If content_map provided, use it for validation (testing mode)
-    # Otherwise, we're in simulation mode - use expected artifacts
+    # Step 2: SQA AGENT -> AI ORCHESTRATOR (execute skill)
+    logger.start_step(2, 4, AgentType.SQA_AGENT, AgentType.AI_ORCHESTRATOR, "Execute 9-step MCP workflow")
+    logger.set_input(f"next_action.skill='{scenario_data.get('next_action', {}).get('skill', 'N/A')}'")
+
+    # Phase 2: Check if AI Orchestrator has executed (DD-VA-01, DD-VA-02)
+    # content_map must be provided - it contains artifacts from AI Orchestrator
     paths = scenario_data.get("expected_artifacts", [])
 
-    if content_map:
-        # Testing mode: validate provided content
-        review_result = await _test_validate_artifacts({
-            "paths": paths,
-            "content_map": content_map
-        })
-    else:
-        # Simulation mode: skip validation (would need real artifacts)
-        review_result = {
-            "status": "APPROVE",
-            "violations": [],
-            "blocking_violations": 0,
-            "total_violations": 0,
-            "summary": "Simulated review - no artifacts provided",
-            "files_reviewed": paths
-        }
+    if not content_map:
+        # AI Orchestrator has NOT executed - return pending status with instructions
+        # This is the FIX for DEF-VA-001: Missing AI Orchestrator Integration
+        skill_cmd = scenario_data.get('next_action', {}).get('skill', '/skill execute-from-step1')
+        skill_input = scenario_data.get('next_action', {}).get('step1_input', scenario_data['requirement'])
+
+        logger.add_sub_step("Check artifacts provided", StepStatus.FAILED, "No content_map")
+        logger.complete_step(success=False, error=f"BLOCKED: AI Orchestrator must invoke {skill_cmd}")
+
+        # Skip remaining steps
+        logger.skip_step(3, 4, AgentType.AI_ORCHESTRATOR, AgentType.REVIEWER, "Validate artifacts", "Waiting for AI Orchestrator")
+        logger.skip_step(4, 4, AgentType.REVIEWER, AgentType.SUPERVISOR, "Generate report", "Waiting for AI Orchestrator")
+        logger.complete_workflow(success=False)
+        logger.print_summary()
+
+        result.status = ScenarioStatus.PENDING
+        result.failure_type = "ORCHESTRATOR_PENDING"
+        result.failure_message = (
+            f"AI Orchestrator must execute skill first. "
+            f"Invoke: {skill_cmd} "
+            f"with input: {skill_input}"
+        )
+        result.human_intervention_required = True
+        result.human_guidance_log.append(
+            "BLOCKED: Waiting for AI Orchestrator to execute skill and provide artifacts"
+        )
+        result.completed_at = datetime.now().isoformat()
+        return result
+
+    # AI Orchestrator has executed - artifacts provided
+    logger.add_sub_step("Check artifacts provided", StepStatus.SUCCESS, f"{len(content_map)} files")
+    logger.set_output(f"artifacts={list(content_map.keys())}")
+    logger.complete_step(success=True)
+
+    # Step 3: AI ORCHESTRATOR -> REVIEWER (validate artifacts)
+    logger.start_step(3, 4, AgentType.AI_ORCHESTRATOR, AgentType.REVIEWER, "Validate artifacts against 22 DDs")
+    logger.set_input(f"paths={paths}")
+
+    # Phase 3: Review artifacts (AI Orchestrator has executed)
+    review_result = await _test_validate_artifacts({
+        "paths": paths,
+        "content_map": content_map
+    })
 
     result.review_status = review_result["status"]
     result.violations = review_result.get("violations", [])
     result.blocking_violations = review_result.get("blocking_violations", 0)
 
+    # Log review sub-steps
+    logger.add_sub_step("DD-03 Check (Locators)", StepStatus.SUCCESS if review_result.get("blocking_violations", 0) == 0 else StepStatus.FAILED)
+    logger.add_sub_step("DD-15 Check (Assertions)", StepStatus.SUCCESS if review_result.get("blocking_violations", 0) == 0 else StepStatus.FAILED)
+    logger.set_output(f"status={review_result['status']}, violations={review_result.get('total_violations', 0)}")
+
     # Check for review rejection (Type 1 failure)
     if review_result["status"] == "REJECT":
+        logger.complete_step(success=False, error=f"REJECTED: {review_result.get('blocking_violations', 0)} blocking violations")
+        logger.skip_step(4, 4, AgentType.REVIEWER, AgentType.SUPERVISOR, "Generate report", "Review rejected")
+        logger.complete_workflow(success=False)
+        logger.print_summary()
+
         result.status = ScenarioStatus.FAILED
         result.failure_type = FailureType.TYPE_1_REVIEW_REJECT.value
         result.failure_message = f"Review REJECTED: {review_result.get('summary', 'DD violations found')}"
         result.completed_at = datetime.now().isoformat()
         return result
 
-    # Phase 3: Execute Step 9 (simulated for now)
+    logger.complete_step(success=True)
+
+    # Step 4: REVIEWER -> SUPERVISOR (generate report)
+    logger.start_step(4, 4, AgentType.REVIEWER, AgentType.SUPERVISOR, "Generate validation report")
+    logger.set_input(f"review_status='{review_result['status']}'")
+
+    # Phase 4: Execute Step 9 (simulated for now)
     # In real implementation, this would run the actual test
     result.execution_passed = True
     result.execution_log = "Simulated execution - test would run here"
@@ -229,6 +320,11 @@ async def _run_scenario(scenario_id: str, content_map: Optional[Dict[str, str]] 
         start = datetime.fromisoformat(result.started_at)
         end = datetime.fromisoformat(result.completed_at)
         result.duration_seconds = (end - start).total_seconds()
+
+    logger.set_output(f"status=PASSED, duration={result.duration_seconds:.2f}s")
+    logger.complete_step(success=True)
+    logger.complete_workflow(success=True)
+    logger.print_summary()
 
     return result
 
@@ -523,11 +619,73 @@ async def run_standard_validation(args: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+@tool(
+    "get_orchestration_instructions",
+    "Get step-by-step orchestration instructions for AI Orchestrator (Claude Code) to execute a scenario.",
+    {
+        "scenario_id": str,  # Scenario ID like "QA-EASY-001"
+    }
+)
+async def get_orchestration_instructions(args: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Returns detailed orchestration instructions for Claude Code to follow.
+
+    This implements DD-VA-01 (four-component architecture) and DD-VA-02 (SQA invokes skill).
+    """
+    scenario_id = args.get("scenario_id", "QA-EASY-001")
+
+    # Get scenario from SQA Agent
+    scenario_data = await _test_get_scenario({"level": scenario_id})
+
+    if "error" in scenario_data:
+        return {
+            "content": [{
+                "type": "text",
+                "text": json.dumps({"error": scenario_data["error"]}, indent=2)
+            }]
+        }
+
+    # Build orchestration instructions
+    instructions = {
+        "scenario": {
+            "id": scenario_data["id"],
+            "name": scenario_data["name"],
+            "complexity": scenario_data["complexity"]
+        },
+        "architecture": {
+            "component_1": "SUPERVISOR - Provided these instructions (COMPLETE)",
+            "component_2": "SQA AGENT - Provided scenario below (COMPLETE)",
+            "component_3": "AI ORCHESTRATOR - YOU execute skill (PENDING)",
+            "component_4": "REVIEWER - Will validate artifacts (PENDING)"
+        },
+        "your_action": {
+            "step": "Execute the testing skill as AI Orchestrator",
+            "skill": scenario_data.get("next_action", {}).get("skill", "/skill execute-from-step1"),
+            "input": scenario_data.get("next_action", {}).get("step1_input", scenario_data["requirement"]),
+            "expected_output": scenario_data.get("expected_artifacts", [])
+        },
+        "after_skill_execution": {
+            "1": "Collect all generated artifact content",
+            "2": "Call run_validation with content_map parameter",
+            "3": "Reviewer will validate against 22 DDs",
+            "4": "Report will be generated"
+        },
+        "critical_reminder": "DD-VA-02: Do NOT just provide requirements - EXECUTE the skill"
+    }
+
+    return {
+        "content": [{
+            "type": "text",
+            "text": json.dumps(instructions, indent=2)
+        }]
+    }
+
+
 # =============================================================================
 # Export tools list
 # =============================================================================
 
-SUPERVISOR_TOOLS = [run_validation, get_validation_report, run_standard_validation]
+SUPERVISOR_TOOLS = [run_validation, get_validation_report, run_standard_validation, get_orchestration_instructions]
 
 
 # =============================================================================

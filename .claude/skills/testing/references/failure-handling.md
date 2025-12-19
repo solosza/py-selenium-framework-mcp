@@ -150,6 +150,23 @@ If defect was created, update status:
 - Sequential numbering: DEF-001, DEF-002, etc.
 - Project-specific: Each project tracks its own sequence
 
+## Test Run ID Convention
+
+- Format: `YYYY-MM-DD-RN` (e.g., `2025-12-17-R1`)
+- Assign Run ID at start of each test execution session
+- Increment run number (R1, R2, R3...) for same-day runs
+- Include Run ID in defect entries to track which run caught the defect
+
+**Defect entry with Run ID:**
+```markdown
+### DEF-{XXX}: {Brief Description}
+
+**Run ID:** 2025-12-17-R1
+**Date:** YYYY-MM-DD
+**Test:** {full test path}
+...
+```
+
 ## Common Failure Categories
 
 | Category | Typical Cause | Typical Fix |

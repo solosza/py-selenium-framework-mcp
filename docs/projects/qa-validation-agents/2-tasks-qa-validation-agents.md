@@ -160,18 +160,88 @@
 
 ---
 
-- [ ] 7.0 Validation Run & Documentation [GLUE]
-  - [ ] 7.1 Create branch `feature/7.0-validation-run`
-  - [ ] 7.2 Execute validation: QA-EASY-001
-  - [ ] 7.3 Fix any issues, re-run until pass
-  - [ ] 7.4 Execute validation: QA-MID-001
-  - [ ] 7.5 Fix any issues, re-run until pass
-  - [ ] 7.6 Execute validation: QA-HARD-001 (expect human input)
-  - [ ] 7.7 Fix any issues, re-run until pass
-  - [ ] 7.8 Generate final validation report
-  - [ ] 7.9 Document results in `docs/projects/qa-validation-agents/validation-results.md`
-  - [ ] 7.10 Update SESSION.md with completion status
-  - [ ] 7.11 Commit: `docs: validation complete (Task 7.0)`
+- [ ] 7.0 Build QA Execution Engine [CORE] - **CRITICAL**
+  - [ ] 7.1 Create branch `feature/7.0-qa-execution-engine`
+  - [ ] 7.2 Create skill directory structure:
+        ```
+        .claude/skills/qa-execution-engine/
+        ├── SKILL.md
+        └── references/
+        ```
+  - [ ] 7.3 Create `references/metadata-schema.md` (Tool N outputs → Tool N+1 inputs)
+  - [ ] 7.4 Create `references/dd-checkpoints.md` (CHECKPOINT per step)
+  - [ ] 7.5 Create `references/tool-chain-steps.md` (Steps 3-8 details)
+  - [ ] 7.6 Create `references/troubleshooting.md` (DD-21 autonomous fixes)
+  - [ ] 7.7 Create `references/defect-handling.md` (Stop/Log/Fix/Restart)
+  - [ ] 7.8 Create main `SKILL.md` orchestrator with checkpoints
+  - [ ] 7.9 Move relevant DDs from FRAMEWORK.md to skill references
+  - [ ] 7.10 Test skill with simple scenario (manual invocation)
+  - [ ] 7.11 Commit: `feat: implement qa-execution-engine skill (Task 7.0)`
+
+  **Done When:**
+  - Skill structure follows SRP (Option B - Modular References)
+  - All references created
+  - CHECKPOINTs defined for each step
+  - Metadata schema documents Tool outputs/inputs
+  - Manual test passes
+
+  **Critical Files:**
+  - `.claude/skills/qa-execution-engine/SKILL.md` - Main orchestrator
+  - `.claude/skills/qa-execution-engine/references/metadata-schema.md` - Tool chain contract
+  - `.claude/skills/qa-execution-engine/references/dd-checkpoints.md` - Enforcement rules
+
+---
+
+- [ ] 7.5 Review Agents for Instruction Compliance [CORE]
+  - [ ] 7.5.1 Review `sr_qa_engineer.py` - verify output follows schema strictly
+  - [ ] 7.5.2 Review `supervisor.py` - verify workflow follows DD rules
+  - [ ] 7.5.3 Review `reviewer.py` - verify validation logic matches FRAMEWORK.md
+  - [ ] 7.5.4 Identify gaps where agents may drift from instructions
+  - [ ] 7.5.5 Add self-validation or hard constraints where needed
+  - [ ] 7.5.6 Document findings and fixes
+  - [ ] 7.5.7 Commit: `refactor: improve agent instruction compliance (Task 7.5)`
+
+  **Done When:**
+  - All 3 agents reviewed for instruction compliance
+  - Gaps identified and addressed
+  - Agents follow directions faithfully without separate review agent overhead
+
+---
+
+- [ ] 8.0 Fix Open Defects [CORE]
+  - [ ] 8.1 Fix DEF-VA-003: Tool input format flexibility
+        - Update tool_03 to accept `name` OR `suggested_name`
+        - Update tool_03 to accept `locator` OR `locator_*` variants
+        - Error if elements_count == 0 after transformation
+  - [ ] 8.2 Fix DEF-VA-004: Metadata passing (enforced by skill checkpoints)
+  - [ ] 8.3 Fix DEF-VA-005: Reviewer completeness checks
+        - Add check_pom_has_locators()
+        - Add check_pom_has_action_methods()
+        - Add check_task_methods_implemented()
+        - Add check_role_methods_implemented()
+  - [ ] 8.4 Fix DEF-VA-006: Visual Logger detailed audit output
+  - [ ] 8.5 Run tests, verify fixes
+  - [ ] 8.6 Commit: `fix: resolve DEF-VA-003 through 006 (Task 8.0)`
+
+  **Done When:**
+  - All 4 defects marked RESOLVED in DEFECT_LOG.md
+  - Tests pass
+  - Reviewer catches skeleton code
+
+---
+
+- [ ] 9.0 Validation Run & Documentation [GLUE]
+  - [ ] 9.1 Create branch `feature/9.0-validation-run`
+  - [ ] 9.2 Execute validation: QA-EASY-001
+  - [ ] 9.3 Fix any issues, re-run until pass
+  - [ ] 9.4 Execute validation: QA-MID-001
+  - [ ] 9.5 Fix any issues, re-run until pass
+  - [ ] 9.6 Execute validation: QA-HARD-001 (expect human input)
+  - [ ] 9.7 Fix any issues, re-run until pass
+  - [ ] 9.8 Generate final validation report
+  - [ ] 9.9 Document results in `docs/projects/qa-validation-agents/validation-results.md`
+  - [ ] 9.10 Update SESSION.md with completion status
+  - [ ] 9.11 Commit: `docs: validation complete (Task 9.0)`
 
   **Done When:**
   - 3/3 scenarios pass validation
@@ -183,17 +253,20 @@
 
 ## Summary
 
-| Task | Type | Dependencies |
-|------|------|--------------|
-| 1.0 Research | CORE | None |
-| 2.0 SR QA Engineer | CORE | 1.0 |
-| 3.0 Reviewer | CORE | 1.0 |
-| 4.0 Supervisor | CORE | 1.0 |
-| 5.0 Scenarios | GLUE | None (can parallel) |
-| 6.0 Integration | CORE | 2.0, 3.0, 4.0, 5.0 |
-| 7.0 Validation | GLUE | 6.0 |
+| Task | Type | Dependencies | Status |
+|------|------|--------------|--------|
+| 1.0 Research | CORE | None | ✓ Complete |
+| 2.0 SR QA Engineer | CORE | 1.0 | ✓ Complete |
+| 3.0 Reviewer | CORE | 1.0 | ✓ Complete |
+| 4.0 Supervisor | CORE | 1.0 | ✓ Complete |
+| 5.0 Scenarios | GLUE | None | ✓ Complete |
+| 6.0 Integration | CORE | 2.0, 3.0, 4.0, 5.0 | ✓ Complete |
+| **7.0 QA Execution Engine** | **CORE** | **6.0** | **← NEXT** |
+| 7.5 Agent Instruction Compliance | CORE | 7.0 | Pending |
+| 8.0 Fix Defects | CORE | 7.0 | Pending |
+| 9.0 Validation | GLUE | 7.5, 8.0 | Pending |
 
-**Critical Path:** 1.0 → 2.0/3.0/4.0 → 6.0 → 7.0
+**Critical Path:** 1.0 → 2.0/3.0/4.0 → 6.0 → **7.0** → 7.5 → 8.0 → 9.0
 
 ---
 
