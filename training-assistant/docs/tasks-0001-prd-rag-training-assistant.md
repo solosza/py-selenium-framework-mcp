@@ -1,0 +1,483 @@
+# Task List: RAG Training Assistant
+
+**PRD:** `0001-prd-rag-training-assistant.md`
+**Created:** 2025-12-13
+**Last Updated:** 2025-12-15
+**Status:** In Progress
+
+---
+
+## Repo Workflow
+
+- **Branch naming:** `feature/<task-id>-short-name`
+- **Commit format:** `feat: description (Task X.0)`
+- **Each parent task = one feature branch**
+- **Commit after all subtasks complete**
+- **Run checks before commit:** `pytest -v`
+
+---
+
+## Relevant Files
+
+### Current Structure (per DD-RAG-009)
+```
+training-assistant/
+├── rag/                    # Source code only
+│   ├── core/               # Shared data structures
+│   │   └── document.py     # Document dataclass
+│   ├── ingestion/          # Load, chunk, embed
+│   │   ├── loader.py
+│   │   ├── chunker.py
+│   │   └── embedder.py
+│   ├── storage/            # Placeholder
+│   ├── retrieval/          # Placeholder
+│   └── generation/         # Placeholder
+│
+└── tests/                  # All tests (separate from source)
+    ├── conftest.py         # Markers + session fixtures
+    ├── _reports/
+    │   └── run_tests.py    # Test runner
+    └── ingestion/
+        ├── test_loader.py  # 15 tests
+        ├── test_chunker.py # 28 tests
+        └── test_embedder.py # 30 tests
+```
+
+### Completed Components
+- `rag/core/document.py` - Document dataclass (Task 1.0)
+- `rag/ingestion/loader.py` - File loading (Task 1.0)
+- `rag/ingestion/chunker.py` - Text chunking (Task 2.0)
+- `rag/ingestion/embedder.py` - Text to vectors (Task 3.0)
+- `tests/conftest.py` - Session-scoped embedder fixture
+- `docs/DESIGN_DECISIONS.md` - DD-RAG-001 through DD-RAG-009
+
+### To Be Created
+- `rag/storage/vector_store.py` - Vector storage
+- `rag/retrieval/searcher.py` - Vector similarity search
+- `rag/generation/prompt.py` - Prompt building logic
+- `rag/generation/generator.py` - LLM integration
+- `app.py` - Streamlit web interface
+- `rag/evaluation/evaluator.py` - Retrieval accuracy metrics
+
+---
+
+## Tasks
+
+### [x] 1.0 Implement Document Loading Component [CORE] - COMPLETE
+
+**Branch:** N/A (already merged)
+**Decision:** DD-RAG-001 (DIY over LangChain/LlamaIndex)
+
+- [x] 1.1 CONCEPT - Understand document loading purpose
+- [x] 1.2 OPTIONS - Compare DIY vs LangChain vs LlamaIndex
+- [x] 1.3 DECISION - Record DD-RAG-001 in DESIGN_DECISIONS.md
+- [x] 1.4 BUILD - Implement document.py and loader.py
+- [x] 1.5 EXPERIMENT - Load corpus with experiment_loader.py
+- [x] 1.6 EVALUATE - Measure results (132 docs, ~298k tokens, 15 tests pass)
+- [ ] 1.7 REFLECT - Document learnings (user to complete)
+
+**Done When:**
+- [x] Documents load from multiple directories
+- [x] Metadata captured (path, type, size, tokens)
+- [x] Encoding errors handled gracefully
+- [x] 15 tests passing
+
+**Results:**
+- Documents loaded: 132
+- Total characters: 1,190,626
+- Estimated tokens: ~298k
+- Tests: 15 passed
+
+---
+
+### [~] 2.0 Implement Chunking Component [CORE] - IN PROGRESS
+
+**Branch:** `feature/2.0-chunking`
+**Decision:** DD-RAG-007 (Fixed-size chunking with overlap)
+
+- [x] 2.1 Create branch `feature/2.0-chunking`
+- [x] 2.2 CONCEPT - Understand why chunking matters for RAG
+  - What happens if chunks are too small?
+  - What happens if chunks are too large?
+  - What is overlap and why use it?
+- [x] 2.3 OPTIONS - Compare chunking strategies
+  - Option A: Fixed-size (simple, predictable)
+  - Option B: Sentence/paragraph-based (preserves meaning)
+  - Option C: Semantic chunking (content-aware, complex)
+- [x] 2.4 DECISION - Choose strategy, record DD-RAG-007
+- [x] 2.5 BUILD - Implement chunker.py
+  - Create Chunk dataclass
+  - Implement chunking function with size/overlap params
+  - Preserve document metadata in chunks
+- [x] 2.6 Write tests (test_chunker.py) - 28 TESTS PASSING
+  - Test chunk size boundaries
+  - Test overlap behavior
+  - Test edge cases (empty doc, single sentence)
+- [~] 2.7 LESSONS - Learn chunking through experiments
+  - [x] Lesson 1: Chunk Size (500/1000/2000/4000 chars)
+  - [x] Lesson 2: Overlap Ratio (0/10/20/30%)
+  - [ ] Lesson 3: Chunk Boundaries & File Types
+- [ ] 2.8 EVALUATE - Assess chunk quality
+  - Do chunks preserve meaningful units?
+  - Are chunks appropriate size for embedding?
+- [ ] 2.9 REFLECT - Document learnings
+- [ ] 2.10 Run checks: `python rag/ingestion/tests/_reports/run_tests.py`
+- [ ] 2.11 Record results in this file
+- [ ] 2.12 Commit: `feat: implement text chunking (Task 2.0)`
+
+**Done When:**
+- [x] Chunker splits documents into configurable pieces
+- [x] Chunk size and overlap are configurable
+- [ ] Chunks preserve meaningful units (fixed-size = hard cuts)
+- [x] Tests pass (28 tests, 100% coverage on chunker.py)
+- [x] DD-RAG-007 recorded
+
+**Test Results:**
+- Tests: 43 passing (15 loader + 28 chunker)
+- Coverage: 99% overall (chunker.py 100%, loader.py 94%)
+- Report: `rag/ingestion/tests/_reports/<timestamp>/report.html`
+
+---
+
+### [x] 3.0 Implement Embedding Component [CORE] - COMPLETE
+
+**Branch:** `feature/2.0-chunking` (completed in same branch)
+**Decision:** DD-RAG-008 (Sentence Transformers, all-MiniLM-L6-v2)
+
+- [x] 3.1 ~~Create branch `feature/3.0-embedding`~~ (done in 2.0-chunking)
+- [x] 3.2 CONCEPT - Understand embeddings
+  - Vector embedding = numerical representation of text meaning
+  - Needed for semantic similarity search
+  - Similar meaning → similar vectors
+- [x] 3.3 OPTIONS - Compared embedding approaches
+  - Option A: Sentence Transformers (local, free) ← CHOSEN
+  - Option B: OpenAI embeddings (quality, cost)
+  - Option C: Other models (BAAI/bge, etc.)
+- [x] 3.4 DECISION - DD-RAG-008 recorded
+- [x] 3.5 BUILD - Implemented embedder.py
+  - Lazy model loading (on first use)
+  - embed_text() for single text
+  - embed_chunks() for batch processing
+  - cosine_similarity() utility
+- [x] 3.6 Write tests (test_embedder.py) - 30 tests passing
+  - 10 test pyramid layers
+  - Semantic correctness (synonyms, unrelated)
+  - Determinism (same input → same output)
+- [x] 3.7 EXPERIMENT - Semantic similarity verified
+- [x] 3.8 EVALUATE - Quality confirmed
+- [x] 3.9 REFLECT - Session fixture improves speed 4x
+- [x] 3.10 Run checks: `python tests/_reports/run_tests.py`
+- [x] 3.11 Results: 73 tests, 98% coverage
+- [ ] 3.12 Commit (pending)
+
+**Done When:**
+- [x] Embedder converts text to vectors
+- [x] Uses Sentence Transformers (all-MiniLM-L6-v2)
+- [x] Batch processing works
+- [x] Tests pass (30 embedder tests)
+- [x] DD-RAG-008 recorded
+
+**Test Results:**
+- Tests: 73 passing (15 loader + 28 chunker + 30 embedder)
+- Coverage: 98% overall
+- Execution: 15s (session-scoped embedder fixture)
+
+**Folder Restructure (DD-RAG-009):**
+- Moved tests from `rag/ingestion/tests/` to `tests/ingestion/`
+- Created `rag/core/` for Document dataclass
+- Created `tests/conftest.py` with markers and fixtures
+- Applied pytest markers to all test classes
+
+---
+
+### [ ] 4.0 Implement Vector Storage Component [CORE]
+
+**Branch:** `feature/4.0-vector-storage`
+**Decision:** TBD (Options: Chroma, FAISS, in-memory)
+
+- [ ] 4.1 Create branch `feature/4.0-vector-storage`
+- [ ] 4.2 CONCEPT - Understand vector databases
+  - Why not just store in a list?
+  - What is approximate nearest neighbor search?
+  - Persistence vs in-memory
+- [ ] 4.3 OPTIONS - Compare vector storage options
+  - Option A: In-memory list (learning only)
+  - Option B: Chroma (local, persistent, easy)
+  - Option C: FAISS (fast, Facebook's library)
+- [ ] 4.4 DECISION - Choose storage, record DD-RAG-009
+- [ ] 4.5 BUILD - Implement vector store integration
+  - Initialize database
+  - Add chunks with embeddings
+  - Query by similarity
+- [ ] 4.6 Write tests
+  - Test add/retrieve
+  - Test persistence (save/load)
+  - Test similarity search returns correct chunks
+- [ ] 4.7 EXPERIMENT - Index corpus, query it
+  - Measure indexing time
+  - Measure query time with different corpus sizes
+- [ ] 4.8 EVALUATE - Assess storage performance
+  - Is persistence working?
+  - Are queries fast enough?
+- [ ] 4.9 REFLECT - Document learnings
+- [ ] 4.10 Run checks
+- [ ] 4.11 Record results
+- [ ] 4.12 Commit: `feat: implement vector storage (Task 4.0)`
+
+**Done When:**
+- [ ] Embeddings stored persistently
+- [ ] Similarity search works
+- [ ] Index survives restart
+- [ ] Tests pass
+- [ ] DD-RAG-009 recorded
+
+---
+
+### [ ] 5.0 Implement Search Component [CORE]
+
+**Branch:** `feature/5.0-search`
+**Decision:** TBD (Options: keyword, semantic, hybrid)
+
+- [ ] 5.1 Create branch `feature/5.0-search`
+- [ ] 5.2 CONCEPT - Understand search in RAG
+  - Keyword vs semantic search
+  - What is top-k retrieval?
+  - What is relevance scoring?
+- [ ] 5.3 OPTIONS - Compare search strategies
+  - Option A: Keyword (BM25/TF-IDF) - exact matches
+  - Option B: Semantic (cosine similarity) - meaning
+  - Option C: Hybrid - both combined
+- [ ] 5.4 DECISION - Choose strategy, record DD-RAG-010
+- [ ] 5.5 BUILD - Implement searcher.py
+  - Create search() function
+  - Return top-k chunks with scores
+  - Include metadata in results
+- [ ] 5.6 Write tests (test_searcher.py)
+  - Test returns correct number of results
+  - Test relevance ordering
+  - Test with known queries
+- [ ] 5.7 EXPERIMENT - Search with sample queries
+  - "What are the 4 layers?"
+  - "How do I add a page object?"
+  - Compare results across search types
+- [ ] 5.8 EVALUATE - Assess search quality
+  - Are relevant chunks returned?
+  - Is ranking sensible?
+- [ ] 5.9 REFLECT - Document learnings
+- [ ] 5.10 Run checks
+- [ ] 5.11 Record results
+- [ ] 5.12 Commit: `feat: implement search (Task 5.0)`
+
+**Done When:**
+- [ ] Search returns top-k relevant chunks
+- [ ] Results include relevance scores
+- [ ] Semantic search finds meaning matches
+- [ ] Tests pass
+- [ ] DD-RAG-010 recorded
+
+---
+
+### [ ] 6.0 Implement Prompt Building Component [CORE]
+
+**Branch:** `feature/6.0-prompt-building`
+**Decision:** TBD
+
+- [ ] 6.1 Create branch `feature/6.0-prompt-building`
+- [ ] 6.2 CONCEPT - Understand prompt engineering for RAG
+  - How to format context for LLM?
+  - What instructions help LLM use context?
+  - How to handle context window limits?
+- [ ] 6.3 OPTIONS - Compare prompt strategies
+  - Option A: Simple concatenation
+  - Option B: Structured format (numbered sources)
+  - Option C: XML-style tags for context
+- [ ] 6.4 DECISION - Choose format, record DD-RAG-011
+- [ ] 6.5 BUILD - Implement prompt.py
+  - Create PromptBuilder class
+  - Format chunks into context string
+  - Add system instructions
+  - Truncate if exceeding limit
+- [ ] 6.6 Write tests (test_prompt.py)
+  - Test context formatting
+  - Test truncation behavior
+  - Test instruction inclusion
+- [ ] 6.7 EXPERIMENT - Build prompts, inspect output
+  - Try different formats
+  - Test with varying chunk counts
+- [ ] 6.8 EVALUATE - Assess prompt quality
+  - Is context clear to LLM?
+  - Are instructions effective?
+- [ ] 6.9 REFLECT - Document learnings
+- [ ] 6.10 Run checks
+- [ ] 6.11 Record results
+- [ ] 6.12 Commit: `feat: implement prompt building (Task 6.0)`
+
+**Done When:**
+- [ ] Prompts format chunks into context
+- [ ] Instructions guide LLM behavior
+- [ ] Context window limits handled
+- [ ] Tests pass
+- [ ] DD-RAG-011 recorded
+
+---
+
+### [ ] 7.0 Implement Generation Component [CORE]
+
+**Branch:** `feature/7.0-generation`
+**Decision:** TBD (Options: Anthropic Claude, OpenAI)
+
+- [ ] 7.1 Create branch `feature/7.0-generation`
+- [ ] 7.2 CONCEPT - Understand LLM generation in RAG
+  - How does LLM use retrieved context?
+  - What is grounding?
+  - How to prevent hallucination?
+- [ ] 7.3 OPTIONS - Compare LLM providers
+  - Option A: Anthropic Claude (already have API)
+  - Option B: OpenAI GPT-4
+  - Option C: Together.ai (course provider)
+- [ ] 7.4 DECISION - Choose provider, record DD-RAG-012
+- [ ] 7.5 BUILD - Implement generator.py
+  - Initialize LLM client
+  - Create generate() function
+  - Include source attribution
+  - Handle no-context case
+- [ ] 7.6 Write tests (test_generator.py)
+  - Test API integration (mock for unit tests)
+  - Test response formatting
+  - Test source attribution
+- [ ] 7.7 EXPERIMENT - Generate answers
+  - Test with real queries
+  - Compare responses with/without context
+- [ ] 7.8 EVALUATE - Assess generation quality
+  - Are answers grounded in context?
+  - Is source attribution accurate?
+- [ ] 7.9 REFLECT - Document learnings
+- [ ] 7.10 Run checks
+- [ ] 7.11 Record results
+- [ ] 7.12 Commit: `feat: implement LLM generation (Task 7.0)`
+
+**Done When:**
+- [ ] LLM generates answers from context
+- [ ] Source attribution included
+- [ ] No-context case handled gracefully
+- [ ] Tests pass
+- [ ] DD-RAG-012 recorded
+
+---
+
+### [ ] 8.0 Implement Streamlit UI [GLUE]
+
+**Branch:** `feature/8.0-streamlit-ui`
+**Decision:** Streamlit (already chosen)
+
+- [ ] 8.1 Create branch `feature/8.0-streamlit-ui`
+- [ ] 8.2 CONCEPT - Understand Streamlit basics
+  - Input components (text_input)
+  - Output components (markdown, expander)
+  - Session state
+- [ ] 8.3 BUILD - Implement app.py
+  - Create text input for question
+  - Add "Ask" button
+  - Display answer with formatting
+  - Show source documents in expander
+- [ ] 8.4 INTEGRATE - Wire up RAG pipeline
+  - Load vector store on startup
+  - Search → Prompt → Generate flow
+  - Display results
+- [ ] 8.5 EXPERIMENT - Test with real queries
+  - Try various framework questions
+  - Check UI responsiveness
+- [ ] 8.6 EVALUATE - Assess user experience
+  - Is it intuitive?
+  - Is response time acceptable?
+- [ ] 8.7 REFLECT - Document learnings
+- [ ] 8.8 Manual testing (no automated tests for UI)
+- [ ] 8.9 Commit: `feat: implement Streamlit UI (Task 8.0)`
+
+**Done When:**
+- [ ] User can enter question
+- [ ] Answer displays with sources
+- [ ] UI is clean and usable
+- [ ] End-to-end flow works
+
+---
+
+### [ ] 9.0 Implement Evaluation Component [CORE]
+
+**Branch:** `feature/9.0-evaluation`
+**Decision:** TBD
+
+- [ ] 9.1 Create branch `feature/9.0-evaluation`
+- [ ] 9.2 CONCEPT - Understand RAG evaluation
+  - What is retrieval accuracy?
+  - How to measure generation quality?
+  - Automated vs human evaluation
+- [ ] 9.3 OPTIONS - Compare evaluation approaches
+  - Option A: Manual review only
+  - Option B: Test query set with expected chunks
+  - Option C: LLM-as-judge
+- [ ] 9.4 DECISION - Choose approach, record DD-RAG-013
+- [ ] 9.5 BUILD - Implement evaluator.py
+  - Create test query set (10-20 queries)
+  - Define expected chunks/answers
+  - Calculate accuracy metrics
+- [ ] 9.6 Write tests (test_evaluator.py)
+  - Test metric calculations
+  - Test result formatting
+- [ ] 9.7 EXPERIMENT - Run evaluation
+  - Measure retrieval accuracy
+  - Identify failure cases
+- [ ] 9.8 EVALUATE - Assess system quality
+  - Does it meet 80% accuracy target?
+  - What needs improvement?
+- [ ] 9.9 REFLECT - Document learnings
+- [ ] 9.10 Run checks
+- [ ] 9.11 Record results
+- [ ] 9.12 Commit: `feat: implement evaluation (Task 9.0)`
+
+**Done When:**
+- [ ] Test query set created
+- [ ] Retrieval accuracy measured
+- [ ] Generation quality assessed
+- [ ] Tests pass
+- [ ] DD-RAG-013 recorded
+
+---
+
+## Summary
+
+| Task | Component | Status | Branch |
+|------|-----------|--------|--------|
+| 1.0 | Document Loading | COMPLETE | - |
+| 2.0 | Chunking | COMPLETE (tests pass) | `feature/2.0-chunking` |
+| 3.0 | Embedding | COMPLETE (73 tests, 98% cov) | `feature/2.0-chunking` |
+| 4.0 | Vector Storage | Pending | `feature/4.0-vector-storage` |
+| 5.0 | Search | Pending | `feature/5.0-search` |
+| 6.0 | Prompt Building | Pending | `feature/6.0-prompt-building` |
+| 7.0 | Generation | Pending | `feature/7.0-generation` |
+| 8.0 | Streamlit UI | Pending | `feature/8.0-streamlit-ui` |
+| 9.0 | Evaluation | Pending | `feature/9.0-evaluation` |
+
+---
+
+## Design Decisions Tracker
+
+| ID | Decision | Task | Status |
+|----|----------|------|--------|
+| DD-RAG-001 | DIY loader | 1.0 | Recorded |
+| DD-RAG-002 | By-layer structure | 1.0 | Recorded |
+| DD-RAG-003 | Per-layer tests | 1.0 | Recorded |
+| DD-RAG-004 | Two corpus sources | 1.0 | Recorded |
+| DD-RAG-005 | Keep __init__.py | 1.0 | Recorded |
+| DD-RAG-006 | Pytest + HTML | 1.0 | Recorded |
+| DD-RAG-007 | Fixed-size chunking with overlap | 2.0 | Recorded |
+| DD-RAG-008 | Embedding model | 3.0 | Pending |
+| DD-RAG-009 | Vector storage | 4.0 | Pending |
+| DD-RAG-010 | Search strategy | 5.0 | Pending |
+| DD-RAG-011 | Prompt format | 6.0 | Pending |
+| DD-RAG-012 | LLM provider | 7.0 | Pending |
+| DD-RAG-013 | Evaluation approach | 9.0 | Pending |
+
+---
+
+*Generated from PRD: 0001-prd-rag-training-assistant.md*
