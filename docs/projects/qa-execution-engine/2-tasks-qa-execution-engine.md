@@ -198,11 +198,13 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 - [ ] 3.3 Create gates directory structure
 - [ ] 3.4 Implement BaseGate class
 - [ ] 3.5 Create shared validation utilities
-- [ ] 3.6 Implement TestStructureValidator (testing skill enforcement)
-  - [ ] 3.6.1 Validate AAA pattern (# Arrange, # Act, # Assert comments)
-  - [ ] 3.6.2 Validate pytest markers (@pytest.mark.unit, etc.)
-  - [ ] 3.6.3 Validate assertion messages (assert x, "message")
-  - [ ] 3.6.4 Validate docstring format (P0/P1/P2 priority)
+- [ ] 3.6 Implement TestStructureValidator (automated pytest plugin - DD-QEE-001)
+  - [ ] 3.6.1 Create pytest plugin in conftest.py (runs on collection)
+  - [ ] 3.6.2 Validate AAA pattern (# Arrange, # Act, # Assert comments)
+  - [ ] 3.6.3 Validate pytest markers (@pytest.mark.unit, etc.)
+  - [ ] 3.6.4 Validate assertion messages (assert x, "message")
+  - [ ] 3.6.5 Validate docstring format (P0/P1/P2 priority)
+  - [ ] 3.6.6 Fail test collection if validation fails (blocks execution)
 - [ ] 3.7 Run tests, verify all pass (23/23)
 - [ ] 3.8 Verify coverage >= 90%
 - [ ] 3.9 Record results

@@ -48,14 +48,16 @@ The generated task list _must_ follow this structure:
   - [ ] 1.2 [Sub-task description - implementation]
   - [ ] 1.3 [Sub-task description - implementation]
   - [ ] 1.N Run checks (lint, type, tests)
-  - [ ] 1.N+1 Record results
-  - [ ] 1.N+2 Commit: `feat: description (Task 1.0)`
+  - [ ] 1.N+1 **Audit: Verify skill conventions followed** (testing skill, etc.)
+  - [ ] 1.N+2 Record results
+  - [ ] 1.N+3 Commit: `feat: description (Task 1.0)`
 - [ ] 2.0 Parent Task Title [CORE/GLUE]
   - [ ] 2.1 Create branch `feature/2.0-short-name`
   - [ ] 2.2 [Sub-task description]
   - [ ] 2.N Run checks
-  - [ ] 2.N+1 Record results
-  - [ ] 2.N+2 Commit: `feat: description (Task 2.0)`
+  - [ ] 2.N+1 **Audit: Verify skill conventions followed**
+  - [ ] 2.N+2 Record results
+  - [ ] 2.N+3 Commit: `feat: description (Task 2.0)`
 ```
 
 ## Interaction Model
