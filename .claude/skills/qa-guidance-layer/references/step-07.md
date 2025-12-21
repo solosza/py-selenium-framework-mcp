@@ -279,4 +279,22 @@ arguments = {
 
 ---
 
+## I. Implementation Clarifications (Gate-Specific)
+
+These clarifications document gate enforcement decisions. If bugs occur, check these for root cause.
+
+| ID | Decision | Rationale | Enforced By |
+|----|----------|-----------|-------------|
+| IC-07-01 | Task generator fallback skeleton code is a FAIL | Generator produces `pass` + `TODO` when POM metadata missing or invalid. Gate must catch this. See DEF-025. | `validate_post()` |
+| IC-07-02 | `return` statements in Task methods is a FAIL | Framework pattern: Tasks return None. Any `return` (except bare `return` or `return None`) violates architecture. | `validate_post()` |
+| IC-07-03 | DD-27 locator detection includes tuple patterns | Check for `By.` imports AND `(By.CSS_SELECTOR, ...)` tuple patterns AND `driver.find_element()` calls. | `validate_post()` |
+| IC-07-04 | `@autologger.automation_logger("Task")` required on each method | Missing decorator = incomplete code. Constructor must NOT have decorator. | `validate_post()` |
+| IC-07-05 | `pom_metadata` in PRE must have `class_name` and `action_methods` | Validates Tool 3 output was passed correctly. Empty `action_methods` may produce skeleton. | `validate_pre()` |
+
+**Date Added:** 2025-12-21
+**Task Reference:** Task 10.0 (qg_task)
+**Related Defect:** DEF-025
+
+---
+
 *Next: Step 8 - Generate Role (Tool 5)*

@@ -1267,6 +1267,42 @@ If ANY locator pattern found → ARCHITECTURE VIOLATION → STOP
 
 ---
 
+### [DEF-025] [TOOL-FIX] Task generator produces skeleton code fallbacks
+**Severity:** MEDIUM
+**Status:** OPEN
+**Layer:** MCP Tool
+**File:** `mcp_server/utils/generators/task_generator.py`
+**Line(s):** 137, 261-279, 398-403
+
+**Rule Violated:**
+- DD-25 (Skeleton Code Quality Gate)
+
+**Description:**
+Task generator has fallback code paths that produce skeleton code with `pass` statements and `TODO` comments:
+
+1. Line 137: `pass  # TODO: Add POM method calls` (when no POM calls generated)
+2. Lines 261-279: `execute_workflow` method with `pass` and `TODO`
+3. Lines 398-403: Fallback template with `pass`
+
+These violate DD-25 and will be caught by qg_task POST validation.
+
+**Additional Issues:**
+- FRAMEWORK.md Section 8.7 uses `check_existing: true` but Tool 4 uses `force_generate: False` (inverse logic)
+- Output field names differ: FRAMEWORK.md says `existing_class`, Tool returns `existing_tasks`
+
+**Fix Required:**
+1. Replace `pass` fallbacks with proper error returns
+2. Align parameter naming between FRAMEWORK.md and tool code
+3. Ensure generator never outputs skeleton code
+
+**Gate Mitigation:**
+qg_task POST validation will catch these patterns. See IC-07-01, IC-07-02 in step-07.md.
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
 ## Summary
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
