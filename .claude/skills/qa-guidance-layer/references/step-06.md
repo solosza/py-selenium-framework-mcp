@@ -288,4 +288,19 @@ elements = [{"name": "X", "type": "Y", "locator": "Z"}]
 
 ---
 
+## I. Implementation Clarifications (Gate-Specific)
+
+These clarifications document gate enforcement decisions. If bugs occur, check these for root cause.
+
+| ID | Decision | Rationale | Enforced By |
+|----|----------|-----------|-------------|
+| IC-06-01 | `state_methods` must match `expected_states` from Step 3 input | DD-09 enforcement - if expected_states was provided in PRE, POST must verify each expected_state has a corresponding state_method in metadata. Strict match, not just presence. | `validate_post()` |
+| IC-06-02 | `NotImplementedError` in code is skeleton code (DD-25 violation) | Generator produces `raise NotImplementedError` for expected_states methods. This is a placeholder that AI must complete. Empty method bodies are not acceptable. | `validate_post()` |
+| IC-06-03 | `action_methods` empty when `locators` exist is a FAIL | If locators were generated (elements had name + locator), but no action_methods exist, the element_type data from Tool 2 is missing/invalid. This is a data quality issue in the Tool 2 → Tool 3 handoff. | `validate_post()` |
+
+**Date Added:** 2025-12-21
+**Task Reference:** Task 9.0 (qg_page_object)
+
+---
+
 *Next: Step 7 - Generate Task (Tool 4)*

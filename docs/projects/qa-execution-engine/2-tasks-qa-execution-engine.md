@@ -588,72 +588,94 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 
 ---
 
-#### 9.0 Page Object Gate - Step 6 [CORE]
+#### 9.0 Page Object Gate - Step 6 [CORE] ✅ COMPLETE
 
-- [ ] 9.1 Create branch `feature/9.0-qg-page-object`
+- [x] 9.1 Create branch `feature/9.0-qg-page-object`
 
-**Unit Tests (TDD) - Test Matrix:**
+**Unit Tests (TDD) - Test Matrix (39 tests):**
 
 | Category | Test | Status |
 |----------|------|--------|
-| PRE-Happy | `test_pre_step_5_complete_passes` | [ ] |
-| PRE-Happy | `test_pre_elements_present` | [ ] |
-| PRE-Happy | `test_pre_expected_states_present` | [ ] |
-| PRE-Negative | `test_pre_step_5_incomplete_fails` | [ ] |
-| PRE-Negative | `test_pre_no_elements_fails` | [ ] |
-| POST-Happy | `test_post_no_skeleton_code_passes` | [ ] |
-| POST-Happy | `test_post_locators_present` | [ ] |
-| POST-Happy | `test_post_atomic_methods_present` | [ ] |
-| POST-Happy | `test_post_state_methods_match_expected` | [ ] |
-| POST-Happy | `test_post_metadata_structure_valid` | [ ] |
-| POST-Negative | `test_post_skeleton_pass_in_body_fails` | [ ] |
-| POST-Negative | `test_post_skeleton_add_comment_fails` | [ ] |
-| POST-Negative | `test_post_missing_locator_fails` | [ ] |
-| POST-Negative | `test_post_missing_state_method_fails` | [ ] |
-| POST-Negative | `test_post_missing_action_methods_fails` | [ ] |
-| Edge | `test_single_locator` | [ ] |
-| Edge | `test_single_state_method` | [ ] |
-| Error | `test_fix_hint_for_skeleton` | [ ] |
-| DD-09 | `test_state_methods_from_expected_states` | [ ] |
-| DD-25 | `test_skeleton_detection_comprehensive` | [ ] |
-| DD-26 | `test_metadata_contract_valid` | [ ] |
-| Integration | `test_blocks_step_7_on_fail` | [ ] |
-| Integration | `test_skeleton_triggers_retry` | [ ] |
+| PRE-Happy | `test_pre_all_valid_passes` | [x] |
+| PRE-Happy | `test_pre_step_5_complete_checked` | [x] |
+| PRE-Happy | `test_pre_expected_states_optional` | [x] |
+| PRE-Neg | `test_pre_step_5_incomplete_fails` | [x] |
+| PRE-Neg | `test_pre_discovered_elements_missing_fails` | [x] |
+| PRE-Neg | `test_pre_discovered_elements_empty_fails` | [x] |
+| PRE-Neg | `test_pre_discovered_elements_not_list_fails` | [x] |
+| PRE-Neg | `test_pre_page_name_missing_fails` | [x] |
+| PRE-Neg | `test_pre_page_name_empty_fails` | [x] |
+| PRE-Neg | `test_pre_page_name_not_pascalcase_fails` | [x] |
+| POST-Happy | `test_post_valid_code_and_metadata_passes` | [x] |
+| POST-Happy | `test_post_state_methods_match_expected_states` | [x] |
+| POST-Skeleton | `test_post_skeleton_pass_statement_fails` | [x] |
+| POST-Skeleton | `test_post_skeleton_add_comment_fails` | [x] |
+| POST-Skeleton | `test_post_skeleton_notimplementederror_fails` | [x] |
+| POST-Skeleton | `test_post_skeleton_todo_comment_fails` | [x] |
+| POST-Metadata | `test_post_code_missing_fails` | [x] |
+| POST-Metadata | `test_post_code_empty_fails` | [x] |
+| POST-Metadata | `test_post_metadata_missing_fails` | [x] |
+| POST-Metadata | `test_post_class_name_missing_fails` | [x] |
+| POST-Metadata | `test_post_import_path_missing_fails` | [x] |
+| POST-Locators | `test_post_locators_missing_fails` | [x] |
+| POST-Locators | `test_post_locators_empty_fails` | [x] |
+| POST-Actions | `test_post_action_methods_missing_fails` | [x] |
+| POST-Actions | `test_post_action_methods_empty_when_locators_exist_fails` | [x] |
+| POST-State | `test_post_state_methods_missing_fails` | [x] |
+| POST-State | `test_post_state_methods_empty_fails` | [x] |
+| POST-State | `test_post_state_methods_not_matching_expected_states_fails` | [x] |
+| POST-State | `test_post_state_methods_without_expected_states_passes` | [x] |
+| Route | `test_validate_routes_to_pre` | [x] |
+| Route | `test_validate_routes_to_post` | [x] |
+| Route | `test_validate_invalid_mode_fails` | [x] |
+| Route | `test_validate_empty_mode_fails` | [x] |
+| Route | `test_validate_missing_mode_fails` | [x] |
+| Edge | `test_pre_multiple_elements_passes` | [x] |
+| Edge | `test_post_multiple_state_methods_match_expected_states` | [x] |
+| Edge | `test_pre_page_name_with_numbers_passes` | [x] |
+| Hints | `test_fix_hint_for_skeleton_code` | [x] |
+| Hints | `test_fix_hint_for_missing_state_method` | [x] |
 
-- [ ] 9.2 Proactive coverage analysis (identify ALL branches before writing tests)
-  - [ ] 9.2.1 Map validate_pre() branches: step check, elements, expected_states
-  - [ ] 9.2.2 Map validate_post() branches: skeleton code, locators, methods, state methods, metadata
-  - [ ] 9.2.3 Map validate() routing: PRE/POST mode, invalid mode, empty mode
-  - [ ] 9.2.4 Plan tests for each branch to hit 90%+ from start
-- [ ] 9.3 Write failing tests (TDD)
-  - [ ] 9.3.1 PRE validation tests (6+ tests)
-  - [ ] 9.3.2 POST validation tests (12+ tests)
-  - [ ] 9.3.3 Edge case tests (3+ tests)
-  - [ ] 9.3.4 Error handling tests (2+ tests)
-  - [ ] 9.3.5 DD enforcement tests (3 tests)
-  - [ ] 9.3.6 Integration tests (2 tests)
-  - [ ] 9.3.7 Mode routing tests (3+ tests)
-- [ ] 9.4 Implement qg_page_object gate
-  - [ ] 9.4.1 Create `mcp_server/tools/gates/qg_page_object.py`
-  - [ ] 9.4.2 PRE: Check is_step_complete(5)
-  - [ ] 9.4.3 PRE: Validate elements present
-  - [ ] 9.4.4 POST: Run detect_skeleton_code (DD-25)
-  - [ ] 9.4.5 POST: Validate locators and methods
-  - [ ] 9.4.6 POST: Validate state methods match expected_states (DD-09)
-  - [ ] 9.4.7 POST: Validate metadata structure (DD-26)
-  - [ ] 9.4.8 validate() routing (PRE/POST mode)
-- [ ] 9.5 Register as MCP tool in server.py (deferred)
-- [ ] 9.6 Run tests, verify all pass (30+)
-- [ ] 9.7 Verify coverage >= 90%
-- [ ] 9.8 Record results
-- [ ] 9.9 Commit: `feat: implement qg_page_object gate (Task 9.0)`
+- [x] 9.2 Proactive coverage analysis (identify ALL branches before writing tests)
+  - [x] 9.2.1 Map validate_pre() branches: step check, elements, page_name, PascalCase
+  - [x] 9.2.2 Map validate_post() branches: skeleton code, locators, methods, state methods, metadata
+  - [x] 9.2.3 Map validate() routing: PRE/POST mode, invalid mode, empty mode
+  - [x] 9.2.4 Plan tests for each branch to hit 90%+ from start
+- [x] 9.3 Write failing tests (TDD)
+  - [x] 9.3.1 PRE validation tests (10 tests)
+  - [x] 9.3.2 POST validation tests (17 tests)
+  - [x] 9.3.3 Edge case tests (3 tests)
+  - [x] 9.3.4 Error handling tests (2 tests)
+  - [x] 9.3.5 DD enforcement tests (IC-06-01, IC-06-02, IC-06-03)
+  - [x] 9.3.6 Integration tests (deferred to Task 15.0)
+  - [x] 9.3.7 Mode routing tests (5 tests)
+- [x] 9.4 Implement qg_page_object gate
+  - [x] 9.4.1 Create `mcp_server/tools/gates/qg_page_object.py`
+  - [x] 9.4.2 PRE: Check is_step_complete(5)
+  - [x] 9.4.3 PRE: Validate elements present and PascalCase page_name
+  - [x] 9.4.4 POST: Run skeleton code detection (DD-25, IC-06-02)
+  - [x] 9.4.5 POST: Validate locators and action_methods (IC-06-03)
+  - [x] 9.4.6 POST: Validate state methods match expected_states (DD-09, IC-06-01)
+  - [x] 9.4.7 POST: Validate metadata structure (DD-26)
+  - [x] 9.4.8 validate() routing (PRE/POST mode)
+- [ ] 9.5 Register as MCP tool in server.py (deferred to integration phase)
+- [x] 9.6 Run tests, verify all pass (39/39)
+- [x] 9.7 Verify coverage >= 90% (96%)
+- [x] 9.8 Record results
+- [x] 9.9 Commit: `feat: implement qg_page_object gate (Task 9.0)`
 
 **Done When:**
-- 30+ unit tests pass (proactive coverage)
-- PRE+POST validation working
-- DD-09, DD-25, DD-26 enforced
-- Skeleton code blocked
-- Registered as MCP tool
+- ~~30+~~ 39 unit tests pass ✅
+- PRE+POST validation working ✅
+- DD-09, DD-25, DD-26 enforced ✅
+- IC-06-01, IC-06-02, IC-06-03 enforced ✅
+- Skeleton code blocked ✅
+- Registered as MCP tool (deferred)
+
+**Results:**
+- Tests: 39 passed
+- Coverage: 96%
+- Implementation Clarifications added to step-06.md (IC-06-01, IC-06-02, IC-06-03)
 
 ---
 
