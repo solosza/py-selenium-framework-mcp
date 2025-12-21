@@ -5,10 +5,11 @@
 
 ---
 
-# Session: 2025-12-21 - Task 7.0 Complete
+# Session: 2025-12-21 - Task 7.0 Complete + Task List Updated
 
 ## Quick Resume
 **Completed:** Task 7.0 Test Scenarios Gate - 30 tests, 99% coverage
+**Also:** Added proactive coverage analysis subtask to Tasks 8.0-13.0
 **Status:** Phase 3 (Operation Gates) - Task 7.0 COMPLETE
 **Next:** Task 8.0 Discovered Elements Gate (Step 5)
 
@@ -23,11 +24,24 @@
 - PRE validation: Step 3 complete, metadata_context present, workflow valid
 - POST validation: test_scenarios structure, BDD format, skeleton detection
 
-### Key Files Created
+### Task List Update - Proactive Coverage Analysis
+Added coverage planning subtask to Tasks 8.0-13.0 to avoid needing extra tests post-implementation:
+
+| Task | Coverage Subtask | Target Tests |
+|------|------------------|--------------|
+| 8.0 | 8.2 Map branches before tests | 25+ |
+| 9.0 | 9.2 Map branches before tests | 30+ |
+| 10.0 | 10.2 Map branches before tests | 28+ |
+| 11.0 | 11.2 Map branches before tests | 24+ |
+| 12.0 | 12.2 Map branches before tests | 32+ |
+| 13.0 | 13.2 Map branches before tests | 27+ |
+
+### Key Files Created/Updated
 | File | Description |
 |------|-------------|
 | `mcp_server/tools/gates/qg_test_scenarios.py` | QGTestScenarios gate class |
 | `mcp_server/_dev_tests/test_gates/test_qg_test_scenarios.py` | 30 unit tests |
+| `docs/projects/qa-execution-engine/2-tasks-qa-execution-engine.md` | Added coverage subtasks |
 
 ### QGTestScenarios Functionality
 - `validate_pre(input_data)` - PRE validation before Tool 1 operation
