@@ -1,0 +1,715 @@
+# Isagawa Corp
+
+**Building Execution Engines for Complex Domains**
+
+## Version
+
+v1.9 — Rebrand + Hybrid Architecture + Smart Distribution
+
+---
+
+## Etymology
+
+**Isagawa** (Filipino/Tagalog)
+
+| Component | Meaning |
+|-----------|---------|
+| **Isa** | One |
+| **Gawa** | Work / Action / Deed / Doing |
+| **Isagawa** (verb) | To carry out, to execute, to implement, to make something happen |
+
+**Composed meaning:** "One way of doing" — a single, correct execution.
+
+*"Isagawa comes from isa (one) and gawa (to do) — one correct way of execution."*
+
+This captures our core value proposition: domain expertise encoded as the one correct way to execute complex workflows.
+
+---
+
+## Company Name Contenders
+
+| Name | Domain Availability | Etymology |
+|------|---------------------|-----------|
+| **Isagawa** | isagawaai.com, isagawa.ai available / isagawa.com NOT available | isa (one) + gawa (to do) = one correct execution |
+| **ProsesoAI** | prosesoai.com available | proseso = process in Tagalog |
+
+---
+
+## Document Status
+
+**Status:** Ready to Ship (Core Product)
+**Stage:** First User Validation
+**Last Updated:** December 2025
+**Product Naming:** [domain]-execution-engine (e.g., qa-execution-engine, product-execution-engine)
+
+---
+
+## 1. Executive Summary
+
+**What we're building:**
+Execution engines that encode expert-level domain standards as executable rules, delivered via `pip install` + hybrid Skills + Validation architecture.
+
+**The value proposition:**
+"Your AI executes workflows that follow professional standards. Consistently. Every time."
+
+**Target market:**
+- **Primary (Revenue):** QA teams who need UI/E2E test automation
+- **Secondary (Lead Gen):** Developers who need testing infrastructure
+- **Future:** Any domain where expertise can be encoded (RAG, API, PM, etc.)
+
+**Distribution:**
+- `pip install isagawa-qa` for execution engine
+- Portable Skills (.md files) for workflow guidance
+- Hybrid architecture: Skills guide + MCP tools validate
+
+**Proof:**
+Working QA execution engine with 22 Design Decisions, 6 MCP tools, full enforcement layer.
+
+---
+
+## 2. Critical Discovery: Hybrid Skills + Validation Architecture
+
+**Issue Identified:** Claude Code does not consistently follow skill instructions alone.
+
+**Solution Discovered:** Skills for guidance + MCP Tools for mandatory validation at each step.
+
+### Hybrid Architecture
+
+| Component | Role | Reliability |
+|-----------|------|-------------|
+| **Skills** | Workflow guidance and step-by-step instruction | Medium - guides behavior |
+| **MCP Tools** | Mandatory validation checkpoints | High - cannot be bypassed |
+| **Framework DDs** | Validation rules embedded in checkpoint logic | High - enforced at every step |
+
+### How It Works
+
+```
+Step 1: Skill guides "Create a POM"
+   |
+MANDATORY CHECKPOINT --> MCP Tool validates against DD-08, DD-12, DD-15
+   |
+Step 2: Skill guides "Create a Task"
+   |
+MANDATORY CHECKPOINT --> MCP Tool validates against DD-03, DD-06, DD-09
+   |
+Continue with validation at each critical step...
+```
+
+### Why This Changes Everything
+
+1. **Skills provide step-by-step workflow guidance** - Clear instructions for each phase
+2. **MCP Tools as mandatory validation checkpoints** - Cannot proceed without passing
+3. **Skills call MCP tools at each critical step** - Built-in checkpoint integration
+4. **Framework DDs embedded in validation logic** - Every DD checked programmatically
+
+Can now sell "Skills + Execution Engine" as complete system that provides both guidance AND guaranteed compliance.
+
+---
+
+## 3. Architectural Options Evaluated
+
+### Option 1: Hybrid Skills + Validation Checkpoints (RECOMMENDED)
+
+**Design:** Skills guide workflow, MCP tools validate at each critical step.
+
+```
+Skill: "Create POM" --> MCP validates --> Skill: "Create Task" --> MCP validates --> Continue
+```
+
+| Criteria | Score |
+|----------|-------|
+| Reliability | 9/10 |
+| Usability | 8/10 |
+| Implementation | 6/10 |
+| Distribution | 7/10 |
+| Scalability | 8/10 |
+| **Total** | **38/50** |
+
+**Pros:** Good UX (guided + transparent), high reliability, educational, recoverable errors, clear evolution path
+
+**Cons:** More complex implementation, slower execution, requires both Skills AND MCP tools
+
+**Best for:** Current stage, MVP, proof of concept
+
+### Option 2: Service Layer Architecture
+
+**Design:** Validation as a service, Skills make API calls to validate.
+
+| Criteria | Score |
+|----------|-------|
+| Reliability | 9/10 |
+| Usability | 6/10 |
+| Implementation | 6/10 |
+| Distribution | 9/10 |
+| Scalability | 10/10 |
+| **Total** | **40/50** |
+
+**Best for:** Scale phase, enterprise customers, SaaS business model
+
+### Option 3: Plugin/Extension Architecture
+
+**Design:** Core validation engine with pluggable workflow modules.
+
+| Criteria | Score |
+|----------|-------|
+| Reliability | 8/10 |
+| Usability | 7/10 |
+| Implementation | 3/10 |
+| Distribution | 9/10 |
+| Scalability | 10/10 |
+| **Total** | **37/50** |
+
+**Best for:** Platform phase, third-party ecosystem, marketplace model
+
+---
+
+## 4. Recommended Evolution Path
+
+```
+Phase 1 (NOW)           Phase 2 (SCALE)           Phase 3 (PLATFORM)
+     |                        |                         |
+     v                        v                         v
++-----------+          +-----------+           +-----------+
+|   HYBRID  |    -->   |  SERVICE  |    -->    |  PLUGIN   |
+| Skills +  |          |   LAYER   |           |ARCHITECTURE|
+| Validation|          |    API    |           | MARKETPLACE|
++-----------+          +-----------+           +-----------+
+     |                        |                         |
+     v                        v                         v
+ Prove model            Extract to API           Enable ecosystem
+ pip + skills           SaaS billing             Third-party skills
+ First users            Enterprise ready         Platform revenue
+```
+
+**Why this path:**
+1. Hybrid validates the concept with minimal infrastructure
+2. Service Layer extracts validation logic for SaaS scale
+3. Plugin Architecture enables ecosystem and platform revenue
+
+---
+
+## 5. Smart Distribution Strategy
+
+**Discovery:** Hybrid approach enables optimal distribution through existing channels.
+
+### Two Distribution Models
+
+**Model A: QA Domain (Full Stack)**
+For domains requiring a runtime framework (e.g., QA with Python/Selenium):
+
+| Component | Distribution | Purpose |
+|-----------|-------------|---------|
+| Framework + MCP Server | `pip install isagawa-qa` | Python/Selenium framework + enforcement tools |
+| Skills, Hooks, Slash Commands | Claude Plugins | Workflow guidance layer |
+
+```bash
+# User installs full stack
+pip install isagawa-qa
+
+# User installs Claude plugin for guidance layer
+/plugin install isagawa-qa
+```
+
+**Model B: Other Domains (Enforcement + Plugins Only)**
+For domains that don't need a runtime framework (e.g., API design, PM):
+
+| Component | Distribution | Purpose |
+|-----------|-------------|---------|
+| MCP Server | `pip install isagawa-[domain]` | Enforcement quality gates only |
+| Skills, Hooks, Slash Commands | Claude Plugins | Workflow guidance layer |
+
+```bash
+# User installs enforcement engine only
+pip install isagawa-api
+
+# User installs Claude plugin for guidance layer
+/plugin install isagawa-api
+```
+
+### Architecture Summary
+
+```
++---------------------------------------------------------------------+
+|                    DISTRIBUTION ARCHITECTURE                          |
++---------------------------------------------------------------------+
+|                                                                      |
+|  QA DOMAIN (Model A - Full Stack)                                    |
+|  +---------------------------------------------------------------+  |
+|  | pip install isagawa-qa                                         |  |
+|  | +-- Python/Selenium Framework (4-layer architecture)           |  |
+|  | +-- MCP Server (6 tools, enforcement)                          |  |
+|  +---------------------------------------------------------------+  |
+|  | Claude Plugin: isagawa-qa                                      |  |
+|  | +-- Skills (.md workflow guidance)                             |  |
+|  | +-- Hooks (automated checkpoints)                              |  |
+|  | +-- Slash Commands (quick actions)                             |  |
+|  +---------------------------------------------------------------+  |
+|                                                                      |
+|  OTHER DOMAINS (Model B - Enforcement + Plugins)                     |
+|  +---------------------------------------------------------------+  |
+|  | pip install isagawa-[domain]                                   |  |
+|  | +-- MCP Server only (enforcement quality gates)                |  |
+|  +---------------------------------------------------------------+  |
+|  | Claude Plugin: isagawa-[domain]                                |  |
+|  | +-- Skills (.md workflow guidance)                             |  |
+|  | +-- Hooks (automated checkpoints)                              |  |
+|  | +-- Slash Commands (quick actions)                             |  |
+|  +---------------------------------------------------------------+  |
+|                                                                      |
++---------------------------------------------------------------------+
+```
+
+### Advantages
+
+- Familiar patterns - Developers know pip install
+- Low friction adoption - Two simple steps
+- Modular packages - Install only needed domains
+- Standard tooling - PyPI + GitHub distribution
+- Independent versioning - Update framework, MCP, and plugins separately
+- Mix and match - Different skills, same enforcement engine
+- Domain-specific - Full stack for runtime needs, lightweight for guidance-only
+
+### Revenue Model
+
+| Component | Model |
+|-----------|-------|
+| MCP packages | Free (drives adoption) or Freemium |
+| Claude Plugins (Skills, Hooks) | Premium (where the value is) |
+| Framework (QA-specific) | Bundled with MCP or separate tier |
+| Support/Enterprise | Custom enforcement rules |
+
+---
+
+## 6. The Category
+
+| Old Framing | New Framing |
+|-------------|-------------|
+| "Enforcement layer for AI" | "Domain expertise as execution engines" |
+| Single product | Multiple domain verticals |
+| Compete on tooling | Compete on expertise |
+
+**The category:** Software that encodes domain expertise as enforceable rules, delivered via AI-assisted workflows.
+
+**No one else is doing this at the domain level. They're all building generic tools.**
+
+---
+
+## 7. The Moat
+
+**The moat is NOT generic tooling. The moat is domain-specific expertise encoded as enforcement.**
+
+| Approach | Moat | Why |
+|----------|------|-----|
+| Generic "pytest + DDs for all devs" | WEAK | Anyone can DIY with AI + good prompts |
+| Domain-specific enforcement | STRONG | Encodes expertise that takes months/years to develop |
+
+### Domain Expertise = Hard to Replicate
+
+| Domain | Expertise Required | Why Enforcement Matters |
+|--------|-------------------|------------------------|
+| **QA/Test Automation** | Test architecture, patterns, coverage | Wrong patterns = flaky, unmaintainable tests |
+| **RAG Development** | Chunking, embedding, retrieval strategies | Wrong choices = bad retrieval, wasted compute |
+| **API Design** | REST conventions, versioning, error handling | Wrong patterns = tech debt, breaking changes |
+| **CI/CD Pipelines** | Gates, approvals, artifact management | Wrong flow = security gaps, failed deployments |
+| **Project Management** | Task breakdown, estimation, dependencies | Wrong structure = missed deadlines, scope creep |
+
+**A generic dev can't DIY domain expertise. They'd need to learn the domain deeply first.**
+
+---
+
+## 8. Product Suite
+
+```
++---------------------------------------------------------------------+
+|                    ISAGAWA EXECUTION ENGINES                         |
++---------------------------------------------------------------------+
+|                                                                      |
+|   +-------------------------------------------------------------+   |
+|   |  CORE: Hybrid Architecture (Skills + Validation)             |   |
+|   +-------------------------------------------------------------+   |
+|                          |                                           |
+|          +---------------+---------------+                           |
+|          |                               |                           |
+|          v                               v                           |
+|   +-----------------+             +-----------------+                |
+|   | DEVELOPER TIER  |             |   QA TIER       |                |
+|   | (Free/Lead Gen) |             |   (Revenue)     |                |
+|   |                 |             |                 |                |
+|   | - pytest + DDs  |             | - py-selenium   |                |
+|   | - Unit/Integ    |             | - MCP tools     |                |
+|   | - Hands-off     |             | - 9-step process|                |
+|   | - Weak moat     |             | - Strong moat   |                |
+|   +-----------------+             +--------+--------+                |
+|                                            |                         |
+|                                            v                         |
+|                                   +-----------------+                |
+|                                   |  RAG ASSISTANT  |                |
+|                                   |  (Support)      |                |
+|                                   +-----------------+                |
+|                                                                      |
++---------------------------------------------------------------------+
+```
+
+---
+
+## 9. The Real Product Flow (9-Step Process)
+
+```
+Developer/QA: "Test my login module"
+        |
+        v
++---------------------------------------------------------------------+
+|                 ISAGAWA QA-EXECUTION-ENGINE (9-Step)                 |
+|                                                                      |
+|   Step 1: User Input (persona + URL)                                 |
+|   Step 2: AI Processing (extract role, BDD, expected_states)         |
+|   Step 3: Tool 1 - generate_tests_from_user_story                    |
+|   Step 4: Tool 2 - discover_page_elements                            |
+|   Step 5: Tool 3 - generate_page_object                              |
+|   Step 6: Tool 4 - generate_task                                     |
+|   Step 7: Tool 5 - generate_role                                     |
+|   Step 8: Tool 6 - generate_test_runner                              |
+|   Step 9: Save files & RUN TEST                                      |
+|                                                                      |
+|   Enforcement: 22 DDs validated at each checkpoint                   |
+|                                                                      |
++---------------------------------------------------------------------+
+        |
+        v
+    TEST RESULT
+        |
+    +---+---+
+    |       |
+  PASS    FAIL
+    |       |
+    v       v
+ Move on  Fix & retry
+```
+
+---
+
+## 10. Business Model
+
+### Per-Domain Pricing
+
+| Domain | Target | What You Get | Model |
+|--------|--------|--------------|-------|
+| **qa-execution-engine** | QA teams, devs needing tests | UI framework, MCP tools, 9-step | Paid |
+| **rag-execution-engine** | RAG developers | Chunking, embedding, retrieval patterns | Paid |
+| **api-execution-engine** | Backend developers | REST patterns, versioning, error handling | Paid (future) |
+| **product-execution-engine** | Project managers | Task structure, estimation patterns | Paid (future) |
+
+### Tier Structure (Per Domain)
+
+| Tier | What You Get |
+|------|--------------|
+| **Standard** | Domain execution engine + framework |
+| **Pro** | Custom enforcement (your team's standards) |
+| **Enterprise** | Organization-wide consistency + support |
+
+**Strategy:** Each domain is a vertical. Start with QA, prove the model, expand.
+
+---
+
+## 11. Current State
+
+| Component | Status |
+|-----------|--------|
+| 4-Layer Architecture | Complete |
+| 22 Design Decisions | Complete |
+| 6 MCP Tools | Complete |
+| Human Escalation Protocol (DD-22) | Complete |
+| Framework Code | Complete |
+| Hybrid Architecture Design | Complete |
+| Distribution Strategy | Defined |
+| RAG Training Assistant | In Progress |
+| External Users | Zero |
+| Revenue | Zero |
+
+---
+
+## 12. Decisions Needed
+
+### Decision 1: Priority - RAG vs QA Framework
+
+| Option | Pros | Cons |
+|--------|------|------|
+| **A: Finish RAG first** | Portfolio piece, proves generalization | Delays QA productization |
+| **B: QA productization** | Complete working system, immediate value | Loses RAG momentum |
+| **C: Perfect hybrid architecture first** | Reusable pattern for all domains, core differentiator | May delay domain implementations |
+
+### Decision 2: RAG Approach
+
+| Option | Description |
+|--------|-------------|
+| **A: Build fast** | Simple implementation, get to market quickly |
+| **B: Learn and build** | Use RAG learning skill, build expertise |
+
+### Decision 3: Distribution Implementation
+
+**Final Distribution Strategy:**
+- **MCP Tools:** `pip install isagawa-[domain]` (standard Python distribution)
+- **Skills:** Portable .md files (GitHub releases, direct download)
+- **Integration:** Skills automatically call pip-installed MCP validation tools
+
+---
+
+## 13. Implementation Questions
+
+1. How do we embed mandatory MCP validation calls within Skills?
+2. Can Skills call pip-installed MCP tools automatically?
+3. What's the optimal checkpoint frequency for each workflow step?
+4. How do we package MCP tools for PyPI distribution?
+5. Can we make Skills discovery seamless (auto-detect installed tools)?
+6. What's the minimum MCP package for basic validation functionality?
+
+---
+
+## 14. AI-First Validation
+
+### Agent Architecture
+
+| Agent | Role | Purpose |
+|-------|------|---------|
+| **Developer Agent** | Simulates hands-off user | Tests if tool works autonomously |
+| **QA Reviewer Agent** | Reviews output against DDs | Quality gate after completion |
+
+### Success Criteria
+
+- Tool completes 9-step without human intervention (simple/medium tests)
+- Generated code follows 22 DDs
+- Tests actually test the right thing
+
+---
+
+## 15. Execution Plan
+
+### Phase 1: AI Validation (Current)
+- [ ] Design agent validation system (in progress)
+- [ ] Build dual-agent validator
+- [ ] Test against sample web apps
+- [ ] Iterate until consistent
+
+### Phase 2: Package for Distribution
+
+| Channel | What It Delivers | User Experience |
+|---------|------------------|-----------------|
+| **pip install** | Framework code, MCP server | `pip install isagawa-qa` |
+| **Skills download** | Workflow guidance | Drop .md into project |
+
+- [ ] pip install packaging (PyPI)
+- [ ] Skills packaging (GitHub releases)
+- [ ] Documentation
+- [ ] Landing page
+
+### Phase 3: First Human Users
+- [ ] QA teams (primary)
+- [ ] Collect feedback
+- [ ] First testimonial
+
+### Phase 4: Revenue
+- [ ] Pricing validation
+- [ ] First paying customer
+
+---
+
+## 16. Risk Assessment
+
+| Risk | Mitigation |
+|------|------------|
+| Developer market weak moat | Use as free lead gen, not revenue target |
+| QA market smaller | Strong moat = willing to pay more |
+| UI testing is flaky | DD-22 escalation, RAG Assistant support |
+| AI improves and doesn't need enforcement | Enforcement is YOUR standards, not AI capability |
+| Skills alone unreliable | Hybrid architecture with mandatory checkpoints |
+
+---
+
+## 17. Summary
+
+| Question | Answer |
+|----------|--------|
+| What is it? | Domain-specific execution engines for AI-assisted development |
+| Who for? | Anyone needing domain expertise they don't have |
+| How delivered? | pip install + Skills + mandatory validation checkpoints |
+| What it does? | Encodes expert-level standards, enforces them at every step |
+| Where's the moat? | Domain expertise encoded as rules (hard to replicate) |
+| What's NOT the moat? | Generic tooling (anyone can DIY with AI) |
+| Ready to ship? | Yes - QA domain complete |
+| Expansion path? | QA --> RAG --> API --> CI/CD --> PM --> more domains |
+
+---
+
+## Appendix A: Document History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| v1.0-1.5 | Nov 2025 | Thesis development |
+| v1.6 | Dec 2025 | Implementation proof |
+| v1.7 | Dec 2025 | Distribution refined, AI-first principle |
+| v1.8 | Dec 2025 | Domain-specific moat clarity, per-domain business model |
+| v1.9 | Dec 2025 | Rebrand to Isagawa Corp, hybrid architecture, smart distribution |
+
+---
+
+## Appendix B: Ideas for Future Exploration
+
+### Idea 1: Agent-Driven Domain Scaling
+
+**Concept:** Use AI agents to CREATE new domain execution engines, not just validate them.
+
+```
++---------------------------------------------------------------------+
+|              AGENT-DRIVEN DOMAIN CREATION                            |
++---------------------------------------------------------------------+
+|                                                                      |
+|  STEP 1: Domain Expert Agent                                         |
+|  +-- Input: Domain name + source materials (books, docs, standards)  |
+|  +-- Process: Extract rules, patterns, best practices                |
+|  +-- Output: Draft enforcement layer (DDs, rules, checkpoints)       |
+|                                                                      |
+|  STEP 2: Validation Agent                                            |
+|  +-- Input: Draft enforcement layer                                  |
+|  +-- Process: Test for gaps, edge cases, contradictions              |
+|  +-- Output: Gap report, suggested fixes                             |
+|                                                                      |
+|  STEP 3: Adversarial Agent                                           |
+|  +-- Input: Enforcement layer                                        |
+|  +-- Process: Try to break rules, find loopholes                     |
+|  +-- Output: Defect list, hardening recommendations                  |
+|                                                                      |
+|  STEP 4: Human Review                                                |
+|  +-- Input: Agent outputs + recommendations                          |
+|  +-- Process: Expert validates, refines                              |
+|  +-- Output: Production-ready execution engine                       |
+|                                                                      |
++---------------------------------------------------------------------+
+```
+
+**Scaling Potential:**
+
+```
+Manual: 1 domain per month = 12 domains/year
+Agent-assisted: 1 domain per week = 52 domains/year
+Agent-driven: Multiple domains per week = 100+ domains/year
+```
+
+**Key Insight:** The QA domain we built manually is the **template**. Once we have one working domain, agents can follow the pattern for new domains.
+
+**Status:** Idea stage - needs POC after QA validation complete
+
+---
+
+### Idea 2: Terminology - "Enforcement" vs "Expertise"
+
+| Context | Use |
+|---------|-----|
+| Customer-facing | "Domain Expertise" |
+| Marketing | "Expert-level standards" |
+| Technical/internal | "Enforcement layer" (accurate) |
+| Product description | "Expertise delivered as execution engines" |
+
+**Status:** Undecided - revisit during marketing/positioning phase
+
+---
+
+### Idea 3: Testing Pyramid Coverage (QA Vertical Expansion)
+
+```
+      /\
+     /  \   UI/E2E Tests (current product)
+    /----\
+   /      \  Integration/API Tests (future)
+  /--------\
+ /          \ Unit Tests (foundation)
+/____________\
+```
+
+**Status:** Explore after QA UI validation complete
+
+---
+
+### Idea 4: Domain Ingestion via Contracts
+
+**Process:**
+```
+Existing Domain (QA)
++-- 22 Design Decisions (contracts)
++-- 4-Layer Architecture (pattern)
++-- MCP Tools (implementation)
++-- Enforcement rules (validation)
+        |
+        v
+New Domain (e.g., API Design)
++-- Extract similar decision points
++-- Apply same contract structure
++-- Generate enforcement rules
++-- Build tools that enforce
+```
+
+**Status:** Idea stage - needs research
+
+---
+
+### Idea 5: Domain Assistants for Every Vertical
+
+| Vertical | Assistant Role |
+|----------|----------------|
+| QA | Test architecture guidance, pattern explanations |
+| RAG | Chunking/embedding strategy guidance |
+| API | REST conventions, versioning guidance |
+| PM | Task breakdown, estimation guidance |
+
+**Status:** Consider as standard feature across all verticals
+
+---
+
+### Idea 6: Commodity Trading Vertical
+
+**Opportunity:** Friend owns a trading company. Potential validation partner.
+
+**Questions:**
+- What workflows in commodity trading need domain expertise?
+- What decisions require expert knowledge?
+- Are there compliance/regulatory patterns that could be enforced?
+
+**Status:** Needs discovery conversation
+
+---
+
+### Idea 7: Friend Network as Validation Strategy
+
+**Strategy:** Start in verticals where friends own companies for early validation.
+
+**Why:** Trusted relationships = honest feedback, low friction first users.
+
+**Status:** Needs network mapping exercise
+
+---
+
+### Idea 8: Sales Contract Enforcement
+
+**Problem:** Manager has specific preferences for contract structure/content. Currently manual review.
+
+**Solution:**
+```
++---------------------------------------------------------------------+
+|              SALES CONTRACT ENFORCEMENT                              |
++---------------------------------------------------------------------+
+|                                                                      |
+|  STEP 1: Ingest gold standard contract from manager                  |
+|  STEP 2: AI extracts structure, sections, formatting, clauses        |
+|  STEP 3: Generate enforcement layer from extracted patterns          |
+|  STEP 4: Manager customizes rules to preferences                     |
+|  STEP 5: New contracts validated before submission                   |
+|                                                                      |
++---------------------------------------------------------------------+
+```
+
+**Potential Vertical:** Document/Contract Compliance
+
+**Status:** Strong use case - needs POC after QA validation
+
+---
+
+*End of document.*

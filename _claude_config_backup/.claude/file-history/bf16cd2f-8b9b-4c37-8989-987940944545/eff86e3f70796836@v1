@@ -1,0 +1,96 @@
+# Session State - 2025-12-15
+
+## Current Phase
+**Phase:** Phase 3 (Deliver) - Task 3.0 Complete, DD-RAG-009 Restructure
+**Status:** Ready to commit restructure, then start Task 4.0
+
+## What We're Working On
+**Active Task:** DD-RAG-009 Folder Restructure (uncommitted)
+**Next Task:** 4.0 Vector Storage
+
+## Progress This Session
+
+### Completed
+- [x] Recovered session state from crash
+- [x] Verified 73 tests pass with new structure
+- [x] Updated PRD v1.2 with:
+  - FR-2 Chunking marked COMPLETE
+  - FR-3 Embedding marked COMPLETE
+  - DD-RAG-008, DD-RAG-009 added to decisions table
+  - Directory structure updated per DD-RAG-009
+  - Test coverage: 73 tests, 98%
+  - Component tracker and pipeline progress updated
+  - Changelog updated
+
+### Pending
+- [ ] Commit DD-RAG-009 restructure
+- [ ] Start Task 4.0 Vector Storage
+
+## Files Changed This Session
+```
+training-assistant/docs/0001-prd-rag-training-assistant.md (UPDATED - v1.2)
+SESSION.md (UPDATED)
+```
+
+## Uncommitted Changes (DD-RAG-009 Restructure)
+```
+Modified:
+- .claude/skills/testing/SKILL.md
+- training-assistant/rag/__init__.py
+- training-assistant/rag/ingestion/__init__.py
+- training-assistant/rag/ingestion/chunker.py
+- training-assistant/rag/ingestion/loader.py
+
+Deleted (moved):
+- training-assistant/rag/ingestion/document.py → rag/core/document.py
+- training-assistant/rag/ingestion/tests/* → tests/ingestion/*
+
+New:
+- training-assistant/rag/core/ (Document dataclass)
+- training-assistant/rag/storage/ (placeholder)
+- training-assistant/tests/ (all tests moved here)
+- .claude/skills/testing/references/test-case-structure.md
+```
+
+## Test Status
+- **73 tests passing** (15 loader + 28 chunker + 30 embedder)
+- **98% code coverage**
+- Run: `python -m pytest training-assistant/tests -v`
+
+## Key Decisions Made
+
+| ID | Decision |
+|----|----------|
+| DD-RAG-007 | Fixed-size chunking with overlap |
+| DD-RAG-008 | Sentence Transformers (all-MiniLM-L6-v2) |
+| DD-RAG-009 | Separate tests folder (supersedes DD-RAG-003) |
+
+## Context for Next Session
+
+**Resume Point:** Commit DD-RAG-009, then start Task 4.0 Vector Storage
+
+**Prompt to use:**
+```
+Commit the DD-RAG-009 restructure, then start Task 4.0 Vector Storage.
+
+Follow the 7-step learning process:
+1. CONCEPT - What is vector storage and why do we need it?
+2. OPTIONS - Compare Chroma, FAISS, in-memory
+3. DECISION - Choose and record DD-RAG-010
+... etc
+```
+
+## Branch Status
+- **Branch:** `feature/2.0-chunking`
+- **Last Commit:** 78df576 (Task 3.0 Embedding)
+- **Uncommitted:** DD-RAG-009 restructure (tests moved, core/ created)
+
+## Important Context
+- PRD and task list now up to date
+- All 3 ingestion components complete: loader, chunker, embedder
+- Next: Vector Storage (Task 4.0) - first storage component
+- Tests separated from source per QA discipline (DD-RAG-009)
+
+---
+
+*Session state updated - 2025-12-15*

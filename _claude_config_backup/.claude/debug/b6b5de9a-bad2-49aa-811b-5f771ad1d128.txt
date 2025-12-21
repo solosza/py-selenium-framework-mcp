@@ -1,0 +1,2692 @@
+[DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_python_projects\zillow_scraping\.claude\settings.local.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Applying permission update: Adding 5 allow rule(s) to destination 'localSettings': ["Bash(python tests/phase1.1/test_checkpoint_manager.py:*)","Bash(python:*)","Bash(npm view:*)","mcp__playwright__browser_navigate","mcp__playwright__browser_wait_for"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Total LSP servers loaded: 0
+[DEBUG] LSP manager initialized with 0 servers
+[DEBUG] LSP server manager initialized successfully
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_python_projects\zillow_scraping\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+[DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1762138946677-7ri0nl.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\b6b5de9a-bad2-49aa-811b-5f771ad1d128-agent-b6b5de9a-bad2-49aa-811b-5f771ad1d128.json.tmp.10220.1762138946696
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\solos\.claude\todos\b6b5de9a-bad2-49aa-811b-5f771ad1d128-agent-b6b5de9a-bad2-49aa-811b-5f771ad1d128.json.tmp.10220.1762138946696 to C:\Users\solos\.claude\todos\b6b5de9a-bad2-49aa-811b-5f771ad1d128-agent-b6b5de9a-bad2-49aa-811b-5f771ad1d128.json
+[DEBUG] File C:\Users\solos\.claude\todos\b6b5de9a-bad2-49aa-811b-5f771ad1d128-agent-b6b5de9a-bad2-49aa-811b-5f771ad1d128.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138948070
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37929 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138948070 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138948186
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37973 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138948186 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138948202
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37973 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138948202 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138948217
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37973 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138948217 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138948321
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37973 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138948321 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "playwright": Starting connection with timeout of 30000ms
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138948799
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37973 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138948799 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138948868
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37973 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138948868 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138948946
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138948946 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "ide": Successfully connected to ws-ide server in 26ms
+[DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.31"}}
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762138950365
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762138950365 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] MCP server "playwright": Successfully connected to stdio server in 5324ms
+[DEBUG] MCP server "playwright": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Playwright","version":"0.0.44"}}
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Added snapshot for 2d525f2c-7544-41e3-a7e1-2c442af9e069, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 100ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at $D (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:5401
+    at Array.map (<anonymous>)
+    at $D (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:5372)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:5288
+    at Array.map (<anonymous>)
+    at $D (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:5277)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:4141
+    at Array.map (<anonymous>)
+    at _F (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:4132)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139002493
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139002493 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139002528
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139002528 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 70ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 5d73008a-bd79-4096-9441-17646b8e0a50
+[DEBUG] FileHistory: Added snapshot for 5d73008a-bd79-4096-9441-17646b8e0a50, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 69ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139064306
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139064306 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139064351
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139064351 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 54ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 13f704ae-1150-4b30-882a-9b8f5f9ebcaa
+[DEBUG] FileHistory: Added snapshot for 13f704ae-1150-4b30-882a-9b8f5f9ebcaa, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 81ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139144542
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139144542 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139144584
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139144584 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 61ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 2510c589-03f0-4dc1-b5e8-6681f4790970
+[DEBUG] FileHistory: Added snapshot for 2510c589-03f0-4dc1-b5e8-6681f4790970, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 66ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139237237
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139237237 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139237274
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139237274 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 59ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 81d51370-4bf4-4cb9-96e9-fa5aeb2bb1ba
+[DEBUG] FileHistory: Added snapshot for 81d51370-4bf4-4cb9-96e9-fa5aeb2bb1ba, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 67ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139394953
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139394953 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762139394996
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762139394996 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 77ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message dbb10a71-b88b-456f-b78a-bac7d40167e5
+[DEBUG] FileHistory: Added snapshot for dbb10a71-b88b-456f-b78a-bac7d40167e5, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 74ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762151581328
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762151581328 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762151581424
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762151581424 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 152ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 730ad593-ebde-4eeb-8a14-a7f9fddc461e
+[DEBUG] FileHistory: Added snapshot for 730ad593-ebde-4eeb-8a14-a7f9fddc461e, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 85ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762170346272
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762170346272 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762170355263
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762170355263 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762170355361
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762170355361 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 95ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message d34a9e38-b176-4a4d-8252-e593d04de547
+[DEBUG] FileHistory: Added snapshot for d34a9e38-b176-4a4d-8252-e593d04de547, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 71ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762170486337
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762170486337 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762170486410
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762170486410 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 127ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message ae12e26f-e6ae-4a4b-ba92-30425b0875b3
+[DEBUG] FileHistory: Added snapshot for ae12e26f-e6ae-4a4b-ba92-30425b0875b3, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 83ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205252095
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205252095 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205255604
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205255604 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205259072
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205259072 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205259117
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205259117 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 77ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 899cff31-c853-4d4b-9842-eaef78f77941
+[DEBUG] FileHistory: Added snapshot for 899cff31-c853-4d4b-9842-eaef78f77941, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 96ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205274222
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205274222 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205274269
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205274269 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 72ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message ea597b54-73e3-4449-97dc-755fc3cdb094
+[DEBUG] FileHistory: Added snapshot for ea597b54-73e3-4449-97dc-755fc3cdb094, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 75ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205349277
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205349277 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205349318
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205349318 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205382220
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205382220 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 64ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 9b89c36b-b185-4082-8a96-074d13073672
+[DEBUG] FileHistory: Added snapshot for 9b89c36b-b185-4082-8a96-074d13073672, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 93ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 134ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (60s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (90s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[ERROR] Error: Error: String not found in file. Failed to apply edit.
+    at cFA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1298:726)
+    at BmA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1298:104)
+    at Object.VVQ [as renderToolUseRejectedMessage] (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1417:5240)
+    at EUQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1562:4051)
+    at kw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:74:19414)
+    at ro (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:42806)
+    at v9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38347)
+    at nc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38275)
+    at cw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38129)
+    at KU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:35208)
+[ERROR] Error: Error: String not found in file. Failed to apply edit.
+    at cFA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1298:726)
+    at BmA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1298:104)
+    at Object.VVQ [as renderToolUseRejectedMessage] (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1417:5240)
+    at EUQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1562:4051)
+    at kw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:74:19414)
+    at ro (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:42806)
+    at v9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38347)
+    at nc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38275)
+    at cw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38129)
+    at KU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:35208)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205569978
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205569978 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 154ms
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 158ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 1m 46s
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205573990
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205573990 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 27ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 7c78f17d-88f1-43e2-a4b5-6784e47b5116
+[DEBUG] FileHistory: Added snapshot for 7c78f17d-88f1-43e2-a4b5-6784e47b5116, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 79ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 79ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 52ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 38s
+[ERROR] kFQ: kFQ: Diagnostics file path mismatch: expected D:\my_python_projects\zillow_scraping\CLAUDE.md, got file://d:\my_python_projects\zillow_scraping\claude.md/)
+    at YO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1404:22059)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1423:624)
+    at async Zb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:70234)
+    at async AA1 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:67291)
+    at async Ib5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:66143)
+    at async Bb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:65626)
+    at async RS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:62220)
+    at async V4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2898:4516)
+    at async YU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2898:5802)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\zillow_scraping\CLAUDE.md
+[DEBUG] Writing to temp file: D:\my_python_projects\zillow_scraping\CLAUDE.md.tmp.10220.1762205739467
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 10321 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\zillow_scraping\CLAUDE.md.tmp.10220.1762205739467 to D:\my_python_projects\zillow_scraping\CLAUDE.md
+[DEBUG] File D:\my_python_projects\zillow_scraping\CLAUDE.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 337ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 107ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205744765
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205744765 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205744808
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205744808 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 60ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 9744e4cb-3872-48a9-acb1-9ba0636f2087
+[DEBUG] FileHistory: Added snapshot for 9744e4cb-3872-48a9-acb1-9ba0636f2087, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 66ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205767716
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205767716 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205767759
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205767759 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 68ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 8c08b981-d36f-48ce-99ff-18b960c44c49
+[DEBUG] FileHistory: Added snapshot for 8c08b981-d36f-48ce-99ff-18b960c44c49, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 97ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205897156
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205897156 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762205897205
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762205897205 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 58ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message ec7c9471-b009-4010-b1eb-af6981316d3d
+[DEBUG] FileHistory: Added snapshot for ec7c9471-b009-4010-b1eb-af6981316d3d, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 68ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (60s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 87ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 48ms
+[ERROR] kFQ: kFQ: Diagnostics file path mismatch: expected D:\my_python_projects\zillow_scraping\CLAUDE.md, got file://d:\my_python_projects\zillow_scraping\claude.md/)
+    at YO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1404:22059)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1423:624)
+    at async Zb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:70234)
+    at async AA1 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:67291)
+    at async Ib5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:66143)
+    at async Bb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:65626)
+    at async RS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:62220)
+    at async V4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2898:4516)
+    at async YU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2898:5802)
+[DEBUG] Writing to temp file: D:\my_python_projects\zillow_scraping\CLAUDE.md.tmp.10220.1762206897251
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 10894 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\zillow_scraping\CLAUDE.md.tmp.10220.1762206897251 to D:\my_python_projects\zillow_scraping\CLAUDE.md
+[DEBUG] File D:\my_python_projects\zillow_scraping\CLAUDE.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 1m 10s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 89ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 104ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762206901940
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762206901940 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762206901983
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762206901983 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 78ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 9c27e762-10bf-42bb-bc9f-27bd28279b88
+[DEBUG] FileHistory: Added snapshot for 9c27e762-10bf-42bb-bc9f-27bd28279b88, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 90ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762208464444
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762208464444 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762208464484
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762208464484 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 91ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message dad0510d-8a4d-4d1f-bf69-406c0b739f46
+[DEBUG] FileHistory: Added snapshot for dad0510d-8a4d-4d1f-bf69-406c0b739f46, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 83ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762208531222
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762208531222 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762208531269
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762208531269 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 68ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 359843a9-ccec-4494-9795-79db445c1b6e
+[DEBUG] FileHistory: Added snapshot for 359843a9-ccec-4494-9795-79db445c1b6e, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 102ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (60s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (90s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (120s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (150s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (180s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (210s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (240s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (270s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (300s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 83ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 44ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 5m 0s
+[ERROR] kFQ: kFQ: Diagnostics file path mismatch: expected D:\my_python_projects\zillow_scraping\CLAUDE.md, got file://d:\my_python_projects\zillow_scraping\claude.md/)
+    at YO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1404:22059)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1423:624)
+    at async Zb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:70234)
+    at async AA1 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:67291)
+    at async Ib5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:66143)
+    at async Bb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:65626)
+    at async RS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:62220)
+    at async V4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2898:4516)
+    at async YU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2898:5802)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Writing to temp file: D:\my_python_projects\zillow_scraping\CLAUDE.md.tmp.10220.1762209422298
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 11317 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\zillow_scraping\CLAUDE.md.tmp.10220.1762209422298 to D:\my_python_projects\zillow_scraping\CLAUDE.md
+[DEBUG] File D:\my_python_projects\zillow_scraping\CLAUDE.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 252ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 74ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762209430043
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762209430043 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762209430081
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762209430081 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 151ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 427f9f8d-fb15-4592-bd91-760b285e73d3
+[DEBUG] FileHistory: Added snapshot for 427f9f8d-fb15-4592-bd91-760b285e73d3, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 114ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 72ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 44ms
+[ERROR] kFQ: kFQ: Diagnostics file path mismatch: expected D:\my_python_projects\zillow_scraping\CLAUDE.md, got file://d:\my_python_projects\zillow_scraping\claude.md/)
+    at YO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1404:22059)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1423:624)
+    at async Zb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:70234)
+    at async AA1 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:67291)
+    at async Ib5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:66143)
+    at async Bb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:65626)
+    at async RS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2743:62220)
+    at async V4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2898:4516)
+    at async YU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2898:5802)
+[DEBUG] Writing to temp file: D:\my_python_projects\zillow_scraping\CLAUDE.md.tmp.10220.1762209555924
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 12715 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\zillow_scraping\CLAUDE.md.tmp.10220.1762209555924 to D:\my_python_projects\zillow_scraping\CLAUDE.md
+[DEBUG] File D:\my_python_projects\zillow_scraping\CLAUDE.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 28s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 98ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 75ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762209560392
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762209560392 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762209560429
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762209560429 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 165ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message aee14534-bd1b-4ff4-8f0c-514b8236daac
+[DEBUG] FileHistory: Added snapshot for aee14534-bd1b-4ff4-8f0c-514b8236daac, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 98ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762209643121
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762209643121 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762209643171
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762209643171 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 239ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 77286b55-26bf-4f21-a5e3-ef11b50a925b
+[DEBUG] FileHistory: Added snapshot for 77286b55-26bf-4f21-a5e3-ef11b50a925b, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 91ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762210629390
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762210629390 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762210629431
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762210629431 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 72ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 839b2cbb-9a68-4910-8296-042329052968
+[DEBUG] FileHistory: Added snapshot for 839b2cbb-9a68-4910-8296-042329052968, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 98ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211222819
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211222819 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211222857
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211222857 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 443ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message b98cf26a-7194-4f34-94e2-21e6a46b2514
+[DEBUG] FileHistory: Added snapshot for b98cf26a-7194-4f34-94e2-21e6a46b2514, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 121ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211437793
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211437793 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211437838
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211437838 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211628880
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211628880 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211648512
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211648512 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at $D (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:5401
+    at Array.map (<anonymous>)
+    at $D (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:5372)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:5288
+    at Array.map (<anonymous>)
+    at $D (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:5277)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:4141
+    at Array.map (<anonymous>)
+    at _F (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1180:4132)
+[ERROR] Error: Error: String not found in file. Failed to apply edit.
+    at cFA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1298:726)
+    at BmA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1298:104)
+    at Object.VVQ [as renderToolUseRejectedMessage] (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1417:5240)
+    at EUQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1562:4051)
+    at kw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:74:19414)
+    at ro (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:42806)
+    at v9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38347)
+    at nc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38275)
+    at cw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:38129)
+    at KU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:76:35208)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211648849
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37898 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211648849 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211648868
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 37898 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211648868 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211648989
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211648989 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 312ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 91c1e147-6d21-468e-9425-4436dac370d6
+[DEBUG] FileHistory: Added snapshot for 91c1e147-6d21-468e-9425-4436dac370d6, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 110ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211712119
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211712119 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762211712160
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762211712160 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762213486971
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762213486971 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 71ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 3e0251c8-7c2f-4209-a8ff-e8aa24a7a71f
+[DEBUG] FileHistory: Added snapshot for 3e0251c8-7c2f-4209-a8ff-e8aa24a7a71f, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 73ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762214477660
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762214477660 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762214477701
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762214477701 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762215282015
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762215282015 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 61ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 9dcb646b-bb99-43a7-bbf7-5e846fd25f36
+[DEBUG] FileHistory: Added snapshot for 9dcb646b-bb99-43a7-bbf7-5e846fd25f36, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 72ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762215606002
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762215606002 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762215606038
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762215606038 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762217081719
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762217081719 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762218881747
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762218881747 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762220681924
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762220681924 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762222482073
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762222482073 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 90ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 44c3db3d-65fb-4f9c-8dcd-598e81814e05
+[DEBUG] FileHistory: Added snapshot for 44c3db3d-65fb-4f9c-8dcd-598e81814e05, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 69ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762222668922
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762222668922 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762222668974
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762222668974 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 60ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 00768f5d-ded5-4b9c-b847-1732465ce0c3
+[DEBUG] FileHistory: Added snapshot for 00768f5d-ded5-4b9c-b847-1732465ce0c3, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 85ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762223244254
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762223244254 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762223244291
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762223244291 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 83ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message b8fbd091-9e44-4249-973d-fe365ead5181
+[DEBUG] FileHistory: Added snapshot for b8fbd091-9e44-4249-973d-fe365ead5181, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 79ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762223755402
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762223755402 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762223755486
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762223755486 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 67ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message e7f04244-c2b0-48f1-85cf-7c4f50b03676
+[DEBUG] FileHistory: Added snapshot for e7f04244-c2b0-48f1-85cf-7c4f50b03676, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 68ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762224082464
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762224082464 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762224082541
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762224082541 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762224282053
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762224282053 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762226081904
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762226081904 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762227882080
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762227882080 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762229681836
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762229681836 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762231482048
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762231482048 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762233281940
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762233281940 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762235081864
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762235081864 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762236881947
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762236881947 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762238682158
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762238682158 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762240481750
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762240481750 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762242282438
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762242282438 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762244082004
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762244082004 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762247686454
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762247686454 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762249481869
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762249481869 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762251281773
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762251281773 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762256684986
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762256684986 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762258481938
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762258481938 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762260282029
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762260282029 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762262081765
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762262081765 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762263882038
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762263882038 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762265681525
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762265681525 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762267482332
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762267482332 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762269282589
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762269282589 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762271082932
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762271082932 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762272882980
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762272882980 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762274682419
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762274682419 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762276482752
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762276482752 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762278282351
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762278282351 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762280082569
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762280082569 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762281882239
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762281882239 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762283682420
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762283682420 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762285482204
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762285482204 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762287282224
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762287282224 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762289082488
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762289082488 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762290882186
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762290882186 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762294484994
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762294484994 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762296282492
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762296282492 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762298083050
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762298083050 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762299890741
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762299890741 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762301683141
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762301683141 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762303481835
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762303481835 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762305282106
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762305282106 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762307081776
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762307081776 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762308881845
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762308881845 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762310682436
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762310682436 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762312482407
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762312482407 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762314282392
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762314282392 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762316082068
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762316082068 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762317882133
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762317882133 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762319683012
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762319683012 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762321483096
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762321483096 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762323282195
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762323282195 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762325082719
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762325082719 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762326882133
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762326882133 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762328682844
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762328682844 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762330482463
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762330482463 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762332282047
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762332282047 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762334081750
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762334081750 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762337684920
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762337684920 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762339482036
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762339482036 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762341281858
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762341281858 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762343081750
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762343081750 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762344881981
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762344881981 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762346682115
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762346682115 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762348482039
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762348482039 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762350281925
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762350281925 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762352082306
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762352082306 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762353882830
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762353882830 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762355682317
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762355682317 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762357481739
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762357481739 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762359282353
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762359282353 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762361081990
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762361081990 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762362882049
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762362882049 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762364682321
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762364682321 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762366482064
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762366482064 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762368282253
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762368282253 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762370082137
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762370082137 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762371882076
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762371882076 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762373682423
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762373682423 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762375482166
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762375482166 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762377285758
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762377285758 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762379083413
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762379083413 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762380883116
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762380883116 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762384486356
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762384486356 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762386283194
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762386283194 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762388083352
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762388083352 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762389882619
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762389882619 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762391683162
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762391683162 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762393483301
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762393483301 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762395283258
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762395283258 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762397083137
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762397083137 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762398883066
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762398883066 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762400683439
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762400683439 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762402482932
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762402482932 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762404283321
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762404283321 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762406083372
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762406083372 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762407883179
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762407883179 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762409683186
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762409683186 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762411483286
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762411483286 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762413283198
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762413283198 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762415083381
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762415083381 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762416883022
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762416883022 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762418683287
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762418683287 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762420483425
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762420483425 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762424086974
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762424086974 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762425882874
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762425882874 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762429486616
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762429486616 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762431282934
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762431282934 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762433083186
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762433083186 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762434883213
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762434883213 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762436683261
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762436683261 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762438483307
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762438483307 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762440283432
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762440283432 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762442083542
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762442083542 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762443883784
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762443883784 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762445683519
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762445683519 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762447483330
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762447483330 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762449283465
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762449283465 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762451083353
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762451083353 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762452883511
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762452883511 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762454683187
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762454683187 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762456483558
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762456483558 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762458283679
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762458283679 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762460083559
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762460083559 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762461883534
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762461883534 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762463688710
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762463688710 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762465483695
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762465483695 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762467283469
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762467283469 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762469083132
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762469083132 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762470883189
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762470883189 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762472683651
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762472683651 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762476286988
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762476286988 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762478083681
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762478083681 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762479883563
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762479883563 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762481683563
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762481683563 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762483483295
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762483483295 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762485283510
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762485283510 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762487083667
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762487083667 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762488883608
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762488883608 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762490683768
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762490683768 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Cleaned up session snapshot: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1762138946677-7ri0nl.sh
+[DEBUG] MCP server "playwright": Sending SIGINT to MCP server process
+[DEBUG] LSP server manager shut down successfully
+[DEBUG] FileHistory: Making snapshot for message cd79f9fb-1432-44cc-a226-a1e593d9dc23
+[DEBUG] FileHistory: Added snapshot for cd79f9fb-1432-44cc-a226-a1e593d9dc23, tracking 1 files
+[DEBUG] Rendering user message with 1 content blocks
+[DEBUG] Block 0: <command-name>/exit</command-name>
+            <command-message>exit</command-message>
+            <...
+[DEBUG] UserCommandMessage rendering: "exit" (args: "none")
+[DEBUG] isSkillFormat: false, prefix: "/"
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762491818362
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38003 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762491818362 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "playwright": MCP server process exited cleanly
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.10220.1762491818388
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 38418 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.10220.1762491818388 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically

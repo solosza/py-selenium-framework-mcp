@@ -1,0 +1,14 @@
+{
+  "mcpServers": 
+  {
+    "qa-automation": {
+    "command": "python",
+    "args": ["server.py"],
+    "cwd": "D:\\my_ai_projects\\py_sel_framework_mcp\\mcp_server"
+    },
+  "playwright": {
+    "command": "npx",
+    "args": ["@playwright/mcp"]
+    }
+  }
+}

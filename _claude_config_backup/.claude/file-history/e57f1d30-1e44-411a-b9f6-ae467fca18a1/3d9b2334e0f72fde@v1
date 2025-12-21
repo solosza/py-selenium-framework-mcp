@@ -1,0 +1,295 @@
+# Research Notes: Claude Agent SDK
+
+**Task:** 1.0 Research & Spike
+**Date:** 2025-12-16
+**Status:** Complete
+
+---
+
+## Summary
+
+The Claude Agent SDK is the official way to build AI agents using Claude Code capabilities. It provides everything we need for the QA validation agent system.
+
+**Key Finding:** We can build all 3 agents (Supervisor, SR QA Engineer, Reviewer) using the Claude Agent SDK with full MCP tool support.
+
+---
+
+## SDK Overview
+
+### What It Is
+
+The Claude Agent SDK gives you the same tools, agent loop, and context management that power Claude Code, programmable in Python and TypeScript.
+
+### Installation
+
+```bash
+pip install claude-agent-sdk
+```
+
+**Requirements:**
+- Python 3.10+
+- Claude Code CLI (bundled with SDK, or install separately)
+- `ANTHROPIC_API_KEY` environment variable
+
+---
+
+## Key Capabilities (Relevant to Our Project)
+
+### 1. Built-in Tools
+
+Same tools as Claude Code, available out of the box:
+
+| Tool | What it does | Our Use Case |
+|------|--------------|--------------|
+| **Read** | Read any file | Reviewer reads generated artifacts |
+| **Write** | Create new files | - |
+| **Edit** | Make precise edits | - |
+| **Bash** | Run terminal commands | Execute tests |
+| **Glob** | Find files by pattern | Find generated files |
+| **Grep** | Search file contents | Search for DD violations |
+| **WebSearch** | Search the web | - |
+| **WebFetch** | Fetch web content | - |
+| **Task** | Spawn subagents | Supervisor delegates to workers |
+
+### 2. MCP Server Support
+
+**Critical for our project:** Can connect to external MCP servers.
+
+```python
+options = ClaudeAgentOptions(
+    mcp_servers={
+        "qa-automation": {
+            "command": "python",
+            "args": ["mcp_server/server.py"]
+        }
+    }
+)
+```
+
+This means the Orchestrator (Claude Code + SDK) can invoke our existing MCP tools (Tool 1-6).
+
+### 3. Subagents (Task Tool)
+
+Enable the `Task` tool to let Claude spawn subagents for complex tasks.
+
+```python
+options = ClaudeAgentOptions(
+    allowed_tools=["Read", "Glob", "Grep", "Task"]
+)
+```
+
+**Our Use Case:** Supervisor can use Task to delegate to SR QA Engineer and Reviewer.
+
+### 4. Custom Tools (In-Process MCP)
+
+Can create custom Python functions as tools:
+
+```python
+from claude_agent_sdk import tool, create_sdk_mcp_server
+
+@tool("validate_dd", "Validate code against Design Decisions", {"code": str, "dd_id": str})
+async def validate_dd(args):
+    # Custom validation logic
+    return {"content": [{"type": "text", "text": f"DD-{args['dd_id']}: PASS"}]}
+
+server = create_sdk_mcp_server(
+    name="reviewer-tools",
+    version="1.0.0",
+    tools=[validate_dd]
+)
+```
+
+**Our Use Case:** Reviewer agent can have custom DD validation tools.
+
+### 5. Hooks
+
+Run custom code at key points in the agent lifecycle:
+
+- `PreToolUse` - Before tool execution
+- `PostToolUse` - After tool execution
+- `Stop` - When agent completes
+- `SessionStart` / `SessionEnd`
+
+**Our Use Case:**
+- Log all tool invocations for audit
+- Block certain operations
+- Inject validation at key points
+
+### 6. Sessions
+
+Maintain context across multiple exchanges:
+
+```python
+# First query - capture session ID
+async for message in query(prompt="Read the authentication module"):
+    if hasattr(message, 'subtype') and message.subtype == 'init':
+        session_id = message.data.get('session_id')
+
+# Resume with context
+async for message in query(prompt="Now validate it", options=ClaudeAgentOptions(resume=session_id)):
+    pass
+```
+
+**Our Use Case:** Maintain context through the 9-step process.
+
+---
+
+## Architecture Decision
+
+### Option A: Single Agent with Subagents (Recommended)
+
+Use the SDK's built-in `Task` tool for subagent delegation:
+
+```
+Supervisor Agent (SDK)
+├── Uses Task tool to spawn SR QA Engineer
+├── Uses Task tool to invoke Orchestrator (Claude Code)
+├── Uses Task tool to spawn Reviewer
+└── Aggregates results
+```
+
+**Pros:**
+- Uses SDK's native subagent pattern
+- Simpler implementation
+- Built-in context management
+
+**Cons:**
+- All agents share same SDK instance
+- Less isolation between agents
+
+### Option B: Separate Agent Processes
+
+Each agent is a separate Python process:
+
+```
+Supervisor (SDK Process 1)
+├── Spawns SR QA Engineer (SDK Process 2)
+├── Invokes Orchestrator (Claude Code CLI)
+├── Spawns Reviewer (SDK Process 3)
+└── Aggregates results via IPC
+```
+
+**Pros:**
+- Full isolation
+- Independent failure handling
+
+**Cons:**
+- More complex
+- IPC overhead
+- Harder to manage context
+
+### Option C: Hybrid (Custom Tools + Subagents)
+
+Supervisor uses custom tools for simple operations, Task for complex:
+
+```python
+# Custom tool for SR QA Engineer (simple, in-process)
+@tool("generate_step1_input", "Generate Step 1 input", {"complexity": str})
+async def generate_step1_input(args):
+    # Generate persona + requirement + URL
+    return {"content": [{"type": "text", "text": json.dumps(input_data)}]}
+
+# Task tool for Orchestrator (complex, needs full Claude Code)
+# Let SDK handle via Task tool
+
+# Custom tool for Reviewer (can be in-process)
+@tool("validate_artifacts", "Validate against DDs", {"artifacts": list})
+async def validate_artifacts(args):
+    # Check against FRAMEWORK.md patterns and 22 DDs
+    return {"content": [{"type": "text", "text": json.dumps(results)}]}
+```
+
+**Pros:**
+- Best of both worlds
+- Simple agents are fast (in-process)
+- Complex tasks use full Claude Code power
+
+**Cons:**
+- Mixed patterns
+- Need to decide what's "simple" vs "complex"
+
+---
+
+## Recommendation
+
+**Option C: Hybrid** - Best fit for our use case.
+
+| Agent | Implementation | Rationale |
+|-------|---------------|-----------|
+| **SR QA Engineer** | Custom Tool (in-process) | Simple: just generates formatted text |
+| **Orchestrator** | Claude Code + MCP | Complex: runs full 9-step with tools |
+| **Reviewer** | Custom Tool (in-process) | Medium: reads files, checks patterns |
+| **Supervisor** | SDK main agent | Coordinates everything |
+
+---
+
+## Prototype Plan
+
+### Minimal Proof of Concept
+
+```python
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions, tool, create_sdk_mcp_server
+
+# Simple custom tool
+@tool("get_scenario", "Get test scenario", {"level": str})
+async def get_scenario(args):
+    scenarios = {
+        "easy": {
+            "persona": "registered user",
+            "requirement": "As a registered user, I want to login with valid credentials",
+            "url": "http://www.automationpractice.pl/index.php?controller=authentication"
+        }
+    }
+    return {"content": [{"type": "text", "text": str(scenarios.get(args["level"], {}))}]}
+
+server = create_sdk_mcp_server(name="qa-validation", version="1.0.0", tools=[get_scenario])
+
+async def main():
+    options = ClaudeAgentOptions(
+        system_prompt="You are a QA validation supervisor.",
+        mcp_servers={"validation": server},
+        allowed_tools=["mcp__validation__get_scenario", "Read", "Glob"]
+    )
+
+    async for message in query(
+        prompt="Get the easy test scenario and describe what it tests",
+        options=options
+    ):
+        print(message)
+
+asyncio.run(main())
+```
+
+---
+
+## Open Questions Resolved
+
+| Question | Answer |
+|----------|--------|
+| Can SDK invoke MCP tools? | **Yes** - via `mcp_servers` option |
+| How to trigger Claude Code? | **SDK wraps Claude Code** - same capabilities |
+| Agent-to-agent communication? | **Task tool** for subagents, or custom tools for simple |
+| Where to store artifacts? | **Working directory** - SDK uses `cwd` option |
+
+---
+
+## Next Steps
+
+1. [x] Research SDK capabilities
+2. [x] Document findings
+3. [ ] Prototype minimal agent with custom tool
+4. [ ] Test MCP server integration
+5. [ ] Choose final architecture (Option C recommended)
+
+---
+
+## Sources
+
+- [GitHub - anthropics/claude-agent-sdk-python](https://github.com/anthropics/claude-agent-sdk-python)
+- [Agent SDK Overview - Claude Docs](https://platform.claude.com/docs/en/api/agent-sdk/overview)
+- [Building Agents with Claude Agent SDK](https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk)
+
+---
+
+*Research completed as part of Task 1.0*

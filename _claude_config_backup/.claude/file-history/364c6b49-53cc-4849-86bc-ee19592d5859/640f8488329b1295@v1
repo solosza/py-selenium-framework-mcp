@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alain Ignacio - SQA Engineer Resume</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --accent: #0066cc;
+            --border: #dee2e6;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent: #4da6ff;
+            --border: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        #darkModeToggle:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .contact {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 15px 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .contact a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .contact a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .about p {
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .job, .project {
+            margin-bottom: 30px;
+        }
+
+        .job-header, .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+        }
+
+        .location-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .tech-stack {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .skills-category {
+            margin-bottom: 15px;
+        }
+
+        .skills-list {
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 767px) {
+            body {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            .contact {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .job-header, .project-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #darkModeToggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+        }
+
+        @media print {
+            #darkModeToggle, footer {
+                display: none;
+            }
+
+            body {
+                background-color: white;
+                color: black;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            section {
+                page-break-inside: avoid;
+            }
+
+            h2 {
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle">🌙 Dark Mode</button>
+
+    <div class="container">
+        <header>
+            <h1>Alain Ignacio</h1>
+            <div class="contact">
+                <span>solosza@yahoo.com</span>
+                <span>808.354.4526</span>
+                <span>Las Vegas, NV</span>
+            </div>
+            <div class="contact">
+                <a href="https://github.com/solosza" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/alain-ignacio" target="_blank">LinkedIn</a>
+                <a href="https://solosza.github.io/resume-ai-pipeline/resumes/arrow-sqa-engineer.html" target="_blank">Web Resume</a>
+            </div>
+        </header>
+
+        <section class="about">
+            <h2>Professional Summary</h2>
+            <p>SQA background spanning healthcare, government ERP, and startup environments with experience developing test plans, executing test scripts, and tracking defects through resolution. Comfortable interfacing with development teams to communicate and resolve issues before product release. Background includes Microsoft stack environments with Visual Studio, Azure, and REST APIs. Experience mentoring junior engineers and leading defect review meetings.</p>
+        </section>
+
+        <section class="experience">
+            <h2>Experience</h2>
+
+            <div class="job">
+                <div class="job-header">
+                    <h3>Helios Digital: Senior QA Engineer</h3>
+                    <span class="location-date">Remote | May 2025 - Present</span>
+                </div>
+                <ul>
+                    <li>Established QA function as founding hire at early stage startup, scaling team to two engineers while developing test plans, defining quality standards, and mentoring junior QA engineer</li>
+                    <li>Built Python/Selenium test framework for web application testing, establishing test methodology and procedures for the development lifecycle</li>
+                    <li>Led defect review meetings with development team and provided input during root cause analysis</li>
+                    <li>Established reporting infrastructure with detailed completion reports and execution metrics for project status</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <h3>Nakupuna Consulting: Senior QA Automation Engineer</h3>
+                    <span class="location-date">Remote | Nov 2022 - May 2025</span>
+                </div>
+                <ul>
+                    <li>Developed and executed test plans and test scripts for PeopleSoft ERP system across deployment, personnel management, leave processing, onboarding, and payroll workflows</li>
+                    <li>Submitted and tracked product issues found during testing using defect management tools, ensuring issues were resolved before release</li>
+                    <li>Interfaced with development team to effectively communicate and resolve reported issues in a timely manner</li>
+                    <li>Mentored junior QA engineers on test methodology and procedures, expanding testing capabilities across the team</li>
+                    <li>Participated in root cause analysis and provided detailed completion reports at the end of each project</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <h3>HMSA: QA Lead</h3>
+                    <span class="location-date">Honolulu, HI | May 2013 - Nov 2022</span>
+                </div>
+                <ul>
+                    <li>Developed and executed test plans for Healthcare Claims Processing, EDI, Membership, Billing, Enrollment, and RESTful services in Microsoft stack environment using Visual Studio and Azure</li>
+                    <li>Led defect scrub meetings and milestone handoffs with development teams in Agile (Kanban) environment</li>
+                    <li>Conducted API testing using Postman for REST API validation including JSON payload validation, schema validation, and status code verification</li>
+                    <li>Submitted and tracked defects using JIRA, ensuring issues were resolved before product release</li>
+                    <li>Developed integration, end to end, and UAT test scripts, providing detailed completion reports and weekly project status updates</li>
+                    <li>Mentored junior QA engineers and trained end users on testing procedures and documentation</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <h3>IBM: Senior Test Analyst</h3>
+                    <span class="location-date">Honolulu, HI | July 2008 - May 2013</span>
+                </div>
+                <ul>
+                    <li>Led QA and testing for Virgin Mobile USA's mission critical billing platform across multiple channels including website, CRM, and charging/rating systems</li>
+                    <li>Developed test plans and executed test scripts for over 15 enterprise level releases</li>
+                    <li>Led defect scrub meetings and interfaced with development to resolve issues before release</li>
+                    <li>Provided detailed completion reports and project status updates to stakeholders</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="projects">
+            <h2>Projects</h2>
+
+            <div class="project">
+                <div class="project-header">
+                    <h3>Python Selenium Test Framework</h3>
+                </div>
+                <p class="tech-stack">Python, Selenium WebDriver, Pytest, Visual Studio Code</p>
+                <ul>
+                    <li>Architected 4 layer test automation framework with clean separation of concerns enabling maintainable and scalable test scripts</li>
+                    <li>Implemented Page Object Model and data driven testing patterns for enhanced test script maintenance</li>
+                    <li>Established test methodology and procedures for efficient testing throughout the product development lifecycle</li>
+                </ul>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h3>Real Estate Automation System</h3>
+                </div>
+                <p class="tech-stack">Python, Selenium WebDriver, Web scraping</p>
+                <ul>
+                    <li>Developed end to end automation system combining web scraping, data processing, and automated workflows</li>
+                    <li>Built custom framework with state management and error handling for reliable execution</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="skills">
+            <h2>Skills</h2>
+
+            <div class="skills-category">
+                <h4>Test Methodology</h4>
+                <p class="skills-list">Test Plan Development, Test Script Execution, Defect Tracking, Root Cause Analysis, Integration Testing, End to End Testing, UAT, Regression Testing</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>Tools and Platforms</h4>
+                <p class="skills-list">Visual Studio, Visual Studio Code, Azure, JIRA, Git/GitHub, Defect Management Tools, Test Management Tools</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>Programming and Scripting</h4>
+                <p class="skills-list">Python, JavaScript, SQL, C++ (exposure)</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>API Testing</h4>
+                <p class="skills-list">REST API, Postman, JSON validation, Web Services</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>Methodologies</h4>
+                <p class="skills-list">Agile (Scrum, Kanban), Software Development Lifecycle, Product Development Lifecycle</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>Generated using my custom <a href="https://github.com/solosza/resume-ai-pipeline" target="_blank">AI Powered Resume Generation System</a> | <a href="https://solosza.github.io/resume-ai-pipeline/resumes/arrow-sqa-engineer.html" target="_blank">Web Resume</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            toggleButton.textContent = '☀️ Light Mode';
+        }
+
+        toggleButton.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                toggleButton.textContent = '🌙 Dark Mode';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                toggleButton.textContent = '☀️ Light Mode';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+2025-11-25T06:35:16.213Z [DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_python_projects\embutido-king\.claude\settings.local.json...
+2025-11-25T06:35:16.243Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2025-11-25T06:35:16.267Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2025-11-25T06:35:16.267Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2025-11-25T06:35:16.267Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2025-11-25T06:35:16.267Z [DEBUG] [LSP SERVER MANAGER] initialize() called
+2025-11-25T06:35:16.267Z [DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+2025-11-25T06:35:16.313Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052516313
+2025-11-25T06:35:16.313Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:16.317Z [DEBUG] Temp file written successfully, size: 47058 bytes
+2025-11-25T06:35:16.317Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:16.317Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052516313 to C:\Users\solos\.claude.json
+2025-11-25T06:35:16.317Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:16.325Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2025-11-25T06:35:16.330Z [DEBUG] Applying permission update: Adding 6 allow rule(s) to destination 'localSettings': ["Bash(git init:*)","Bash(git add:*)","Bash(git commit:*)","Bash(git remote add:*)","Bash(gh --version:*)","WebSearch"]
+2025-11-25T06:35:16.338Z [DEBUG] Total LSP servers loaded: 0
+2025-11-25T06:35:16.350Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2025-11-25T06:35:16.350Z [DEBUG] LSP manager initialized with 0 servers
+2025-11-25T06:35:16.358Z [DEBUG] LSP server manager initialized successfully
+2025-11-25T06:35:16.358Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2025-11-25T06:35:16.370Z [DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_python_projects\embutido-king\.claude\skills
+2025-11-25T06:35:16.370Z [DEBUG] >>>>> getPluginSkills CALLED <<<<<
+2025-11-25T06:35:16.370Z [DEBUG] Passes: Cache stale, returning cached data and refreshing in background
+2025-11-25T06:35:16.444Z [DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+2025-11-25T06:35:16.445Z [DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+2025-11-25T06:35:16.445Z [DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+2025-11-25T06:35:16.445Z [DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+2025-11-25T06:35:16.461Z [DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1764052516445-lqxre9.sh
+2025-11-25T06:35:16.461Z [DEBUG] Shell binary exists: true
+2025-11-25T06:35:16.461Z [DEBUG] Execution timeout: 10000ms
+2025-11-25T06:35:16.466Z [DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\187f5228-c8b0-4259-bd9a-048b56826b2e-agent-187f5228-c8b0-4259-bd9a-048b56826b2e.json.tmp.38720.1764052516466
+2025-11-25T06:35:16.472Z [DEBUG] Temp file written successfully, size: 2 bytes
+2025-11-25T06:35:16.472Z [DEBUG] Renaming C:\Users\solos\.claude\todos\187f5228-c8b0-4259-bd9a-048b56826b2e-agent-187f5228-c8b0-4259-bd9a-048b56826b2e.json.tmp.38720.1764052516466 to C:\Users\solos\.claude\todos\187f5228-c8b0-4259-bd9a-048b56826b2e-agent-187f5228-c8b0-4259-bd9a-048b56826b2e.json
+2025-11-25T06:35:16.472Z [DEBUG] File C:\Users\solos\.claude\todos\187f5228-c8b0-4259-bd9a-048b56826b2e-agent-187f5228-c8b0-4259-bd9a-048b56826b2e.json written atomically
+2025-11-25T06:35:16.479Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052516479
+2025-11-25T06:35:16.479Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:16.482Z [DEBUG] Temp file written successfully, size: 46625 bytes
+2025-11-25T06:35:16.482Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:16.482Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052516479 to C:\Users\solos\.claude.json
+2025-11-25T06:35:16.483Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:16.491Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2025-11-25T06:35:16.491Z [DEBUG] Total plugin skills loaded: 0
+2025-11-25T06:35:16.491Z [DEBUG] Total plugin commands loaded: 0
+2025-11-25T06:35:16.491Z [DEBUG] Registered 0 hooks from 0 plugins
+2025-11-25T06:35:16.819Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+2025-11-25T06:35:16.823Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills
+2025-11-25T06:35:16.823Z [DEBUG] Total plugin agents loaded: 0
+2025-11-25T06:35:16.841Z [DEBUG] Git remote URL: https://github.com/solosza/embutido-king.git
+2025-11-25T06:35:16.841Z [DEBUG] Parsed repository: solosza/embutido-king from https://github.com/solosza/embutido-king.git
+2025-11-25T06:35:16.841Z [DEBUG] Parsed repository: solosza/embutido-king from URL: https://github.com/solosza/embutido-king.git
+2025-11-25T06:35:16.841Z [DEBUG] Path D:\my_python_projects\embutido-king already tracked for repo solosza/embutido-king
+2025-11-25T06:35:16.874Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2025-11-25T06:35:16.943Z [DEBUG] Shell snapshot created successfully (342 bytes)
+2025-11-25T06:35:17.116Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517116
+2025-11-25T06:35:17.116Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.121Z [DEBUG] Temp file written successfully, size: 47611 bytes
+2025-11-25T06:35:17.121Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.121Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517116 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.121Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.202Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517202
+2025-11-25T06:35:17.202Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.205Z [DEBUG] Temp file written successfully, size: 47611 bytes
+2025-11-25T06:35:17.205Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.205Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517202 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.206Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.218Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517218
+2025-11-25T06:35:17.218Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.221Z [DEBUG] Temp file written successfully, size: 47611 bytes
+2025-11-25T06:35:17.221Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.221Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517218 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.222Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.272Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517272
+2025-11-25T06:35:17.272Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.276Z [DEBUG] Temp file written successfully, size: 47611 bytes
+2025-11-25T06:35:17.276Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.276Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517272 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.276Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.276Z [DEBUG] Passes eligibility cached for org 763948d1-d9ac-48f3-84c1-9176f6da2ccf: false
+2025-11-25T06:35:17.572Z [DEBUG] Passes: Using fresh cached eligibility data
+2025-11-25T06:35:17.593Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517593
+2025-11-25T06:35:17.593Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.596Z [DEBUG] Temp file written successfully, size: 47611 bytes
+2025-11-25T06:35:17.596Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.596Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517593 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.596Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.631Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2025-11-25T06:35:17.631Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:17.631Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2025-11-25T06:35:17.677Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517677
+2025-11-25T06:35:17.677Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.685Z [DEBUG] Temp file written successfully, size: 47506 bytes
+2025-11-25T06:35:17.685Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.685Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517677 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.685Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.702Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517702
+2025-11-25T06:35:17.702Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.705Z [DEBUG] Temp file written successfully, size: 47506 bytes
+2025-11-25T06:35:17.705Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.705Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517702 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.705Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.726Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517726
+2025-11-25T06:35:17.726Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.730Z [DEBUG] Temp file written successfully, size: 47693 bytes
+2025-11-25T06:35:17.730Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.730Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517726 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.730Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.746Z [DEBUG] performStartupChecks called
+2025-11-25T06:35:17.747Z [DEBUG] Starting background plugin installations
+2025-11-25T06:35:17.747Z [DEBUG] performBackgroundPluginInstallations called
+2025-11-25T06:35:17.802Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-25T06:35:17.814Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-25T06:35:17.814Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-25T06:35:17.816Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052517816
+2025-11-25T06:35:17.816Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:17.820Z [DEBUG] Temp file written successfully, size: 47693 bytes
+2025-11-25T06:35:17.820Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:17.820Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052517816 to C:\Users\solos\.claude.json
+2025-11-25T06:35:17.820Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:17.845Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2025-11-25T06:35:17.853Z [DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+2025-11-25T06:35:20.789Z [DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+2025-11-25T06:35:20.821Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052520821
+2025-11-25T06:35:20.821Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:20.827Z [DEBUG] Temp file written successfully, size: 47693 bytes
+2025-11-25T06:35:20.827Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:20.827Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052520821 to C:\Users\solos\.claude.json
+2025-11-25T06:35:20.827Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:20.844Z [DEBUG] Getting matching hook commands for SubagentStart with query: Explore
+2025-11-25T06:35:20.844Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:20.844Z [DEBUG] Matched 0 unique hooks for query "Explore" (0 before deduplication)
+2025-11-25T06:35:20.923Z [DEBUG] Getting matching hook commands for SubagentStart with query: Plan
+2025-11-25T06:35:20.923Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:20.923Z [DEBUG] Matched 0 unique hooks for query "Plan" (0 before deduplication)
+2025-11-25T06:35:20.985Z [DEBUG] MCP server "ide": Successfully connected to ws-ide server in 212ms
+2025-11-25T06:35:20.985Z [DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.50"}}
+2025-11-25T06:35:21.021Z [DEBUG] Summarizing all 215 messages (~59957 tokens)
+2025-11-25T06:35:21.084Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052521084
+2025-11-25T06:35:21.084Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:21.087Z [DEBUG] Temp file written successfully, size: 47693 bytes
+2025-11-25T06:35:21.087Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:21.087Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052521084 to C:\Users\solos\.claude.json
+2025-11-25T06:35:21.087Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:21.102Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052521102
+2025-11-25T06:35:21.102Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:35:21.105Z [DEBUG] Temp file written successfully, size: 47693 bytes
+2025-11-25T06:35:21.105Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:35:21.105Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052521102 to C:\Users\solos\.claude.json
+2025-11-25T06:35:21.106Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:35:21.656Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:35:22.205Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:35:23.184Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:35:23.888Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-11-25T06:35:23.888Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:23.888Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-25T06:35:25.736Z [DEBUG] npm view failed with code 1
+2025-11-25T06:35:25.736Z [DEBUG] npm stderr: (empty)
+2025-11-25T06:35:31.526Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-11-25T06:35:31.526Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:31.526Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-25T06:35:35.330Z [DEBUG] [FileIndex] Not in bundled mode, using Fuse.js fallback
+2025-11-25T06:35:35.330Z [DEBUG] [FileIndex] Using Fuse.js fallback for search
+2025-11-25T06:35:38.539Z [DEBUG] [FileIndex] Using Fuse.js fallback for search
+2025-11-25T06:35:38.932Z [DEBUG] [FileIndex] Using Fuse.js fallback for search
+2025-11-25T06:35:40.332Z [DEBUG] [FileIndex] Using Fuse.js fallback for search
+2025-11-25T06:35:41.436Z [DEBUG] [FileIndex] Using Fuse.js fallback for search
+2025-11-25T06:35:44.921Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-25T06:35:44.921Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-25T06:35:44.928Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-25T06:35:44.928Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-25T06:35:45.204Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-25T06:35:45.204Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:45.204Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-25T06:35:45.208Z [DEBUG] FileHistory: Added snapshot for 17e208e9-bc01-4097-825b-e2e9747f697d, tracking 0 files
+2025-11-25T06:35:45.230Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-25T06:35:45.248Z [DEBUG] Total plugin output styles loaded: 0
+2025-11-25T06:35:45.332Z [DEBUG] [FileIndex] Using Fuse.js fallback for search
+2025-11-25T06:35:45.344Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 114ms
+2025-11-25T06:35:46.167Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:35:47.979Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:35:50.307Z [DEBUG] executePreToolHooks called for tool: Bash
+2025-11-25T06:35:50.312Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2025-11-25T06:35:50.312Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:50.312Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-25T06:35:51.121Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:35:51.321Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "npm i:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2025-11-25T06:35:51.345Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2025-11-25T06:35:51.348Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2025-11-25T06:35:51.348Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:51.348Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-25T06:35:52.886Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-25T06:35:52.986Z [DEBUG] Session environment not yet supported on Windows
+2025-11-25T06:35:58.799Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2025-11-25T06:35:58.799Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:35:58.799Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-25T06:35:58.843Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-25T06:35:58.844Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-25T06:35:58.844Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-25T06:35:58.853Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-25T06:35:58.853Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-25T06:35:58.909Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 66ms
+2025-11-25T06:35:59.651Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:36:01.286Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:36:02.606Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-25T06:36:02.606Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:36:02.606Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-25T06:36:02.619Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052562619
+2025-11-25T06:36:02.619Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:36:02.624Z [DEBUG] Temp file written successfully, size: 47735 bytes
+2025-11-25T06:36:02.624Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:36:02.624Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052562619 to C:\Users\solos\.claude.json
+2025-11-25T06:36:02.625Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:36:02.643Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052562643
+2025-11-25T06:36:02.643Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:36:02.646Z [DEBUG] Temp file written successfully, size: 47735 bytes
+2025-11-25T06:36:02.646Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:36:02.646Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052562643 to C:\Users\solos\.claude.json
+2025-11-25T06:36:02.647Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:36:30.727Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-25T06:36:30.728Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-25T06:36:30.728Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-25T06:36:30.735Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-25T06:36:30.735Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-25T06:36:30.792Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 65ms
+2025-11-25T06:36:30.804Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-25T06:36:30.804Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:36:30.804Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-25T06:36:30.806Z [DEBUG] FileHistory: Making snapshot for message 82d4f9eb-4eed-4388-9f50-3f4120a780f2
+2025-11-25T06:36:30.806Z [DEBUG] FileHistory: Added snapshot for 82d4f9eb-4eed-4388-9f50-3f4120a780f2, tracking 0 files
+2025-11-25T06:36:30.825Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-25T06:36:30.937Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 112ms
+2025-11-25T06:36:31.684Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:36:33.390Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:36:48.060Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-25T06:36:48.060Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:36:48.060Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-25T06:36:48.072Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052608072
+2025-11-25T06:36:48.072Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:36:48.077Z [DEBUG] Temp file written successfully, size: 47735 bytes
+2025-11-25T06:36:48.077Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:36:48.077Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052608072 to C:\Users\solos\.claude.json
+2025-11-25T06:36:48.077Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:36:48.095Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052608095
+2025-11-25T06:36:48.095Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:36:48.098Z [DEBUG] Temp file written successfully, size: 47735 bytes
+2025-11-25T06:36:48.098Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:36:48.098Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052608095 to C:\Users\solos\.claude.json
+2025-11-25T06:36:48.098Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:37:48.084Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-25T06:37:48.084Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:37:48.084Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-25T06:38:11.374Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-25T06:38:11.375Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-25T06:38:11.375Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-25T06:38:11.383Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-25T06:38:11.383Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-25T06:38:11.446Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 72ms
+2025-11-25T06:38:11.458Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-25T06:38:11.458Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:38:11.458Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-25T06:38:11.460Z [DEBUG] FileHistory: Making snapshot for message 6d2604bd-beea-4aa5-bfc4-cd1af406afee
+2025-11-25T06:38:11.460Z [DEBUG] FileHistory: Added snapshot for 6d2604bd-beea-4aa5-bfc4-cd1af406afee, tracking 0 files
+2025-11-25T06:38:11.478Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-25T06:38:11.546Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 68ms
+2025-11-25T06:38:13.355Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:38:14.451Z [DEBUG] Stream started - received first chunk
+2025-11-25T06:38:18.131Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-25T06:38:18.131Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:38:18.131Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-25T06:38:18.144Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052698144
+2025-11-25T06:38:18.144Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:38:18.149Z [DEBUG] Temp file written successfully, size: 47735 bytes
+2025-11-25T06:38:18.150Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:38:18.150Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052698144 to C:\Users\solos\.claude.json
+2025-11-25T06:38:18.150Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:38:18.166Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.38720.1764052698166
+2025-11-25T06:38:18.166Z [DEBUG] Preserving file permissions: 100666
+2025-11-25T06:38:18.169Z [DEBUG] Temp file written successfully, size: 47735 bytes
+2025-11-25T06:38:18.170Z [DEBUG] Applied original permissions to temp file
+2025-11-25T06:38:18.170Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.38720.1764052698166 to C:\Users\solos\.claude.json
+2025-11-25T06:38:18.170Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-25T06:39:18.158Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-25T06:39:18.158Z [DEBUG] Found 0 hook matchers in settings
+2025-11-25T06:39:18.158Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-25T10:35:58.150Z [DEBUG] npm view failed with code 1
+2025-11-25T10:35:58.150Z [DEBUG] npm stderr: (empty)
+2025-11-25T15:05:58.027Z [DEBUG] npm view failed with code 1
+2025-11-25T15:05:58.027Z [DEBUG] npm stderr: (empty)

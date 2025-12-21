@@ -1,0 +1,47 @@
+# Session State - 2025-11-28
+
+## Status
+**Ready to Test & Commit**
+
+## Resume Steps
+1. Run tests: `pytest -v tests/auth/ tests/catalog/ --tb=short`
+2. Review: `git status && git diff --stat`
+3. Commit (see message below)
+
+## Uncommitted Changes
+
+**Modified:**
+- `framework/pages/base_page.py` - Removed decorators
+- `framework/pages/catalog/product_list_page.py` - Removed decorators
+- `framework/pages/auth/login_page.py` - Removed decorators
+- `tests/auth/test_logout.py` - Uses Role methods only
+- `mcp_server/utils/code_generator.py` - Added `discover_existing_capabilities()`
+- `mcp_server/tools/tool_03_generate_page_object.py` - Checks existing
+- `mcp_server/tools/tool_04_generate_task.py` - Checks existing
+- `mcp_server/tools/tool_05_generate_role.py` - Checks existing
+- `CLAUDE.md` - No decorators on POMs
+
+**Deleted:**
+- `framework/tasks/auth/` (duplicate)
+- `framework/*/devtest1/`, `devtest2/` (artifacts)
+- `tests/devtest1/`, `devtest2/` (artifacts)
+
+## Commit Message
+```
+refactor: MCP tools check existing modules before generating
+
+- Added discover_existing_capabilities() and can_assemble_workflow()
+- Tools 3/4/5 return existing module info instead of duplicates
+- Removed decorators from POMs (industry standard)
+- Fixed test_logout.py to use Role methods
+- Cleaned up devtest artifacts
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+## Key Decisions
+1. NO decorators on POMs (Task/Role level only)
+2. Test → Role → Task → POM (strict chain)
+3. MCP tools check existing before generating
+4. SRP: ONE business goal per Role method

@@ -1,0 +1,123 @@
+# Session State - 2025-12-13
+
+## Current Phase
+**Phase:** Phase 3 (Deliver) - Task 2.0 Chunking
+**Status:** In Step 6 EXPERIMENT - Ready to run experiments
+
+## What We're Working On
+**Active Task:** 2.7 EXPERIMENT - Chunk corpus with different parameters
+**Task Status:** About to start interactive experiments
+
+## Progress This Session
+
+### Task 2.0 Chunking - Completed Steps
+- [x] 2.1 Create branch `feature/2.0-chunking`
+- [x] 2.2 CONCEPT - Explained chunking fundamentals
+- [x] 2.3 OPTIONS - Compared fixed-size vs sentence vs semantic
+- [x] 2.4 DECISION - Chose fixed-size (DD-RAG-007)
+- [x] 2.5 BUILD - Implemented chunker.py with Chunk dataclass
+- [x] 2.6 TEST - 28 tests (unit + negative + edge + integration)
+- [ ] 2.7 EXPERIMENT - Ready to run (paused here)
+- [ ] 2.8 EVALUATE
+- [ ] 2.9 REFLECT
+
+### Skills Updated
+Major updates to testing skill and rag-learning skill:
+
+**Testing Skill:**
+- Added test coverage framework (6-step process)
+- Added fix options analysis in failure protocol
+- Created `references/test-matrix.md` (types, categories, priority, schedule)
+- Created `references/test-coverage.md` (coverage targets, gap analysis)
+- TODO: Testing pyramid / shift-left decision matrix
+
+**RAG Learning Skill:**
+- Changed from 7-step to 8-step process (added Step 5: Test)
+- Updated Step 6: Experiment with interactive AI-guided flow
+- Created `references/testing.md` (domain-specific test examples)
+
+### Defect Resolved
+- DEF-001: Negative overlap not validated - RESOLVED
+- Fix: Added validation `if overlap < 0: raise ValueError`
+
+### Files Created/Modified
+```
+training-assistant/
+├── rag/ingestion/
+│   ├── chunker.py (NEW)
+│   ├── __init__.py (updated exports)
+│   └── tests/
+│       └── test_chunker.py (NEW - 28 tests)
+├── docs/
+│   └── DEFECT_LOG.md (NEW)
+└── experiment_chunker.py (NEW)
+
+.claude/skills/
+├── testing/
+│   ├── SKILL.md (updated)
+│   └── references/
+│       ├── test-matrix.md (NEW)
+│       └── test-coverage.md (NEW)
+└── rag-learning/
+    ├── SKILL.md (updated - 8 steps)
+    └── references/
+        └── testing.md (NEW)
+```
+
+## Test Results
+- **43 tests passing** (15 loader + 28 chunker)
+- Report: `rag/ingestion/tests/_reports/report.html`
+
+## Experiment Plan (Ready to Execute)
+
+| # | Experiment | What We'll Learn |
+|---|------------|------------------|
+| 1 | Chunk Size Comparison | How size affects chunk count and tokens |
+| 2 | Overlap Ratio Comparison | How overlap affects boundary context |
+| 3 | Chunk Boundary Inspection | Are we cutting mid-sentence/function? |
+| 4 | File Type Comparison | Does code chunk differently than markdown? |
+
+**Corpus:** 30 docs, 258,082 chars, ~64,520 tokens
+
+## Key Decisions Made
+
+| ID | Decision |
+|----|----------|
+| DD-RAG-007 | Fixed-size chunking with overlap (learn fundamentals first) |
+
+## Context for Next Session
+
+**Resume Point:** Run EXPERIMENT phase for chunking
+
+**Prompt to use:**
+```
+Continue with Task 2.7 EXPERIMENT for chunking.
+
+We have 4 experiments planned:
+1. Chunk Size Comparison
+2. Overlap Ratio Comparison
+3. Chunk Boundary Inspection
+4. File Type Comparison
+
+Use the interactive experiment flow from rag-learning skill:
+1. AI EXPLAINS → 2. AI PREDICTS → 3. AI ADJUSTS → 4. AI RUNS →
+5. AI ANALYZES → 6. USER OBSERVES → 7. REPEAT
+
+Run one test at a time, pause for user questions between each.
+```
+
+## Branch Status
+- **Branch:** `feature/2.0-chunking`
+- **Commits:** 1 (initial RAG + skills)
+- **Uncommitted:** chunker.py, tests, experiment script, skill updates
+
+## Important Context
+- User has QA background - testing rigor matters
+- Use framework analogies for RAG concepts
+- Testing skill has comprehensive matrix (types × categories)
+- Experiment phase is interactive, AI-guided
+- Skills follow SRP (separate references for details)
+
+---
+
+*End of session state*

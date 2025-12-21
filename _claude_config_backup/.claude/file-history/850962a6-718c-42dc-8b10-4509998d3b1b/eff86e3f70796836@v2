@@ -1,0 +1,130 @@
+# Session State - 2025-12-14
+
+## Current Phase
+**Phase:** Phase 3 (Deliver) - Task 2.0 Chunking
+**Status:** In Step 6 LESSONS - Lesson 3 pending
+
+## What We're Working On
+**Active Task:** 2.7 LESSONS - Learning chunking through experiments
+**Task Status:** Lessons 1-2 complete, Lesson 3 pending
+
+## Learning Progress
+
+### Chunking Lessons
+
+| Lesson | Topic | Status | Key Takeaway |
+|--------|-------|--------|--------------|
+| 1 | Chunk Size | Complete | Size = precision vs context trade-off |
+| 2 | Overlap Ratio | Complete | Overlap = boundary context, tune per project |
+| 3 | Boundaries & File Types | Pending | How chunks cut, code vs prose |
+
+### Key Insights Learned
+1. RAG components are reusable layers (like test framework architecture)
+2. Parameters (chunk_size, overlap) are tuned per project, not universal
+3. 10-20% overlap is starting point, not rule - test with YOUR data
+4. Diminishing returns: 0→10% overlap = big gain, 20→30% = minimal gain
+
+## Progress This Session
+
+### Task 2.0 Chunking - Completed Steps
+- [x] 2.1 Create branch `feature/2.0-chunking`
+- [x] 2.2 CONCEPT - Explained chunking fundamentals
+- [x] 2.3 OPTIONS - Compared fixed-size vs sentence vs semantic
+- [x] 2.4 DECISION - Chose fixed-size (DD-RAG-007)
+- [x] 2.5 BUILD - Implemented chunker.py with Chunk dataclass
+- [x] 2.6 TEST - 28 tests (unit + negative + edge + integration)
+- [x] 2.7 LESSONS - Lesson 1 (Chunk Size) complete
+- [x] 2.7 LESSONS - Lesson 2 (Overlap Ratio) complete
+- [ ] 2.7 LESSONS - Lesson 3 (Boundaries & File Types) pending
+- [ ] 2.8 EVALUATE
+- [ ] 2.9 REFLECT
+
+### Skills Updated This Session
+**Testing Skill:**
+- Added Test Plan section (12 QA standard sections)
+- Created `references/test-plan-template.md` (full template)
+
+**RAG Learning Skill:**
+- Added "Testing as Part of Learning" section
+- Updated Step 6 to "Lessons & Experiments" with structure
+- Added ASCII visuals guideline
+- Added lesson coverage table per component
+- Created `references/interaction-format.md` (interactive flow)
+
+### Documents Updated
+**Test Plan (`training-assistant/docs/TEST_PLAN.md`):**
+- Full 13-section QA test plan
+- Section 10 now has all 43 test cases listed
+- Removed lessons (moved to SESSION.md)
+
+### Files Created/Modified
+```
+training-assistant/
+├── docs/
+│   └── TEST_PLAN.md (UPDATED - full QA template, 43 test cases, coverage)
+├── rag/ingestion/tests/_reports/
+│   └── run_tests.py (NEW - test runner with timestamped reports)
+
+.claude/skills/
+├── testing/
+│   ├── SKILL.md (UPDATED - Test Plan section)
+│   └── references/
+│       └── test-plan-template.md (NEW)
+└── rag-learning/
+    ├── SKILL.md (UPDATED - lessons structure, testing integration)
+    └── references/
+        └── interaction-format.md (NEW)
+```
+
+## Test Results
+- **43 tests passing** (15 loader + 28 chunker)
+- **99% code coverage** (loader.py 94%, chunker.py 100%, document.py 100%)
+- Run tests: `python rag/ingestion/tests/_reports/run_tests.py`
+- Reports: `rag/ingestion/tests/_reports/<timestamp>/`
+
+## Experiment Results
+
+| Experiment | Result |
+|------------|--------|
+| Chunk Size (500/1000/2000/4000) | 587/302/157/87 chunks |
+| Overlap Ratio (0/10/20/30%) | 274/302/335/374 chunks |
+
+## Key Decisions Made
+
+| ID | Decision |
+|----|----------|
+| DD-RAG-007 | Fixed-size chunking with overlap (learn fundamentals first) |
+
+## Context for Next Session
+
+**Resume Point:** Continue with Lesson 3 (Chunk Boundaries & File Types)
+
+**Prompt to use:**
+```
+Continue with Lesson 3: Chunk Boundaries & File Types
+
+Use the lesson format:
+1. Key Terms
+2. Concepts to Understand
+3. Experiments (with proper flow - don't skip steps)
+4. Key Points to Remember
+
+Follow proper testing procedure - STOP on any errors.
+```
+
+## Branch Status
+- **Branch:** `feature/2.0-chunking`
+- **Commits:** 1 (initial RAG + skills)
+- **Uncommitted:** chunker.py, tests, skill updates, test plan
+
+## Important Context
+- User has QA background - testing rigor matters
+- Lessons tracked in SESSION.md, not Test Plan
+- Test Plan = pure QA document (tests, coverage, defects)
+- RAG components = reusable layers, tune params per project
+- ASCII visuals for teaching concepts
+- Always follow experiment flow - don't skip steps
+
+---
+
+*End of session state*

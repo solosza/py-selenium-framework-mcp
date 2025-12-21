@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Implement Foundation Layer [CORE] (Task 1.0)",
+    "status": "completed",
+    "activeForm": "Implementing Foundation Layer [CORE] (Task 1.0)"
+  },
+  {
+    "content": "Implement Authentication Workflow [GLUE] (Task 2.0)",
+    "status": "in_progress",
+    "activeForm": "Implementing Authentication Workflow [GLUE] (Task 2.0)"
+  },
+  {
+    "content": "Implement Product Catalog Workflow [GLUE] (Task 3.0)",
+    "status": "pending",
+    "activeForm": "Implementing Product Catalog Workflow [GLUE] (Task 3.0)"
+  },
+  {
+    "content": "Implement Shopping Cart Workflow [GLUE] (Task 4.0)",
+    "status": "pending",
+    "activeForm": "Implementing Shopping Cart Workflow [GLUE] (Task 4.0)"
+  },
+  {
+    "content": "Implement Checkout Workflow [GLUE] (Task 5.0)",
+    "status": "pending",
+    "activeForm": "Implementing Checkout Workflow [GLUE] (Task 5.0)"
+  },
+  {
+    "content": "Implement MCP Server Integration (Task 6.0)",
+    "status": "pending",
+    "activeForm": "Implementing MCP Server Integration (Task 6.0)"
+  }
+]

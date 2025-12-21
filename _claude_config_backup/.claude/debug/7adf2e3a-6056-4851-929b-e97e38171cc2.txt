@@ -1,0 +1,2412 @@
+[DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_python_projects\resume-ai-pipeline\.claude\settings.local.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] [LSP MANAGER] initializeLspServerManager() called
+[DEBUG] [LSP MANAGER] Created manager instance, state=pending
+[DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+[DEBUG] [LSP SERVER MANAGER] initialize() called
+[DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+[DEBUG] Applying permission update: Adding 10 allow rule(s) to destination 'localSettings': ["WebFetch(domain:github.com)","Bash(git init:*)","Bash(rename:*)","Bash(git add:*)","Bash(git commit:*)","Bash(gh repo create:*)","Bash(git remote add:*)","Bash(git push:*)","Bash(python -m http.server:*)","WebSearch"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Total LSP servers loaded: 0
+[DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+[DEBUG] LSP manager initialized with 0 servers
+[DEBUG] LSP server manager initialized successfully
+[DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_python_projects\resume-ai-pipeline\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+[DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1762627005011-6x6ech.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\7adf2e3a-6056-4851-929b-e97e38171cc2-agent-7adf2e3a-6056-4851-929b-e97e38171cc2.json.tmp.11432.1762627005029
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\solos\.claude\todos\7adf2e3a-6056-4851-929b-e97e38171cc2-agent-7adf2e3a-6056-4851-929b-e97e38171cc2.json.tmp.11432.1762627005029 to C:\Users\solos\.claude\todos\7adf2e3a-6056-4851-929b-e97e38171cc2-agent-7adf2e3a-6056-4851-929b-e97e38171cc2.json
+[DEBUG] File C:\Users\solos\.claude\todos\7adf2e3a-6056-4851-929b-e97e38171cc2-agent-7adf2e3a-6056-4851-929b-e97e38171cc2.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627005044
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627005044 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627005353
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627005353 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627005368
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627005368 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627005720
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627005720 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627005825
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41769 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627005825 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627005846
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41769 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627005846 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] performStartupChecks called
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627005928
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627005928 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+[DEBUG] Summarizing all 318 messages (~112366 tokens)
+[DEBUG] MCP server "ide": Successfully connected to ws-ide server in 123ms
+[DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.35"}}
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Added snapshot for 2108263c-4df4-44a6-bb28-6a5e83872ce2, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 123ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627068443
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627068443 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627068504
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627068504 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] [FileIndex] Not in bundled mode, using Fuse.js fallback
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 243ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 3a917b4c-5afa-4707-a284-35cb8336572e
+[DEBUG] FileHistory: Added snapshot for 3a917b4c-5afa-4707-a284-35cb8336572e, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 97ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 175ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "python -c:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 63ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "pip install:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627339100
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627339100 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 365ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 887d8482-d1aa-4424-ad68-12b3d23b22d2
+[DEBUG] FileHistory: Added snapshot for 887d8482-d1aa-4424-ad68-12b3d23b22d2, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 102ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 76ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627388149
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627388149 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627388203
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627388203 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 71ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 38804aa0-32a4-4d51-bbd7-4159279f2f7f
+[DEBUG] FileHistory: Added snapshot for 38804aa0-32a4-4d51-bbd7-4159279f2f7f, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 102ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 61ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 67ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 226ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (60s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (90s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (120s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (150s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (180s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (210s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 77ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 44ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 3m 35s
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resume-master.md, got file://d:\my_python_projects\resume-ai-pipeline\resume-master.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\resume-ai-pipeline\resume-master.md
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762627926657
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 13620 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762627926657 to D:\my_python_projects\resume-ai-pipeline\resume-master.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resume-master.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 419ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 166ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 68ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 40ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resume-master.md, got file://d:\my_python_projects\resume-ai-pipeline\resume-master.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762627957036
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 15213 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762627957036 to D:\my_python_projects\resume-ai-pipeline\resume-master.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resume-master.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 4s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 163ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 73ms
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762627957621
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762627957621 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 60ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 34ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resume-master.md, got file://d:\my_python_projects\resume-ai-pipeline\resume-master.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762627993571
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 15718 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762627993571 to D:\my_python_projects\resume-ai-pipeline\resume-master.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resume-master.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 14s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 149ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 87ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 66ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 40ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resume-master.md, got file://d:\my_python_projects\resume-ai-pipeline\resume-master.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762628020234
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 16434 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762628020234 to D:\my_python_projects\resume-ai-pipeline\resume-master.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resume-master.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 8s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 170ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 103ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762628032034
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762628032034 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762628032093
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762628032093 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 149ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message e6d6e547-5fce-4ae7-967b-1b4aa084ced1
+[DEBUG] FileHistory: Added snapshot for e6d6e547-5fce-4ae7-967b-1b4aa084ced1, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 64ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 67ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 41ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 12s
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resume-master.md, got file://d:\my_python_projects\resume-ai-pipeline\resume-master.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+    at async Q4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:5722)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762628313337
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 17587 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762628313337 to D:\my_python_projects\resume-ai-pipeline\resume-master.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resume-master.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 343ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 144ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762628323502
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762628323502 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762628323549
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762628323549 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 161ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 1efadb2d-0d27-4ab1-8796-068b5203b27f
+[DEBUG] FileHistory: Added snapshot for 1efadb2d-0d27-4ab1-8796-068b5203b27f, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 94ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762628415187
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762628415187 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762628415241
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762628415241 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762628440569
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762628440569 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 133ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 646a4b72-0078-46c2-8511-552cdc17be4d
+[DEBUG] FileHistory: Added snapshot for 646a4b72-0078-46c2-8511-552cdc17be4d, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 105ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 273ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (60s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (90s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (120s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (150s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (180s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (210s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (240s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (270s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (300s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (330s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (360s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (390s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (420s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (450s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (480s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (510s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (540s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 85ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 51ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 9m 2s
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html, got file://d:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762629077454
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 18457 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762629077454 to D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 776ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 159ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 212ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629100397
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629100397 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629100456
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629100456 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 199ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message d816eb19-142d-4738-ae5d-4963eb78ca3c
+[DEBUG] FileHistory: Added snapshot for d816eb19-142d-4738-ae5d-4963eb78ca3c, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 87ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 61ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 29ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html, got file://d:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+    at async Q4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:5722)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762629391607
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 19288 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762629391607 to D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 40s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 139ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 93ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 185ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629406523
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629406523 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629406592
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629406592 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 112ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message cb1e59fd-6a0b-42e6-b7ce-2bf98fd557e7
+[DEBUG] FileHistory: Added snapshot for cb1e59fd-6a0b-42e6-b7ce-2bf98fd557e7, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 65ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629499146
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629499146 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 190ms
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 194ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 5s
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 103ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 85c52e54-9b60-47ac-a00e-83b0e3e9a091
+[DEBUG] FileHistory: Added snapshot for 85c52e54-9b60-47ac-a00e-83b0e3e9a091, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 97ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 78ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 8s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 56ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html, got file://d:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+    at async Q4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:5722)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762629596487
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 19852 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762629596487 to D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 344ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 145ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 137ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629609242
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629609242 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629609312
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629609312 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 75ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message c91f83af-9955-40c6-851b-839bfe02790c
+[DEBUG] FileHistory: Added snapshot for c91f83af-9955-40c6-851b-839bfe02790c, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 90ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629705878
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629705878 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762629705949
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762629705949 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 66ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 4e000ea2-75e1-4feb-83d1-f07f765a32c0
+[DEBUG] FileHistory: Added snapshot for 4e000ea2-75e1-4feb-83d1-f07f765a32c0, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 117ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762630196168
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762630196168 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762630196223
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762630196223 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 67ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 31079ee5-12b0-4deb-9f6c-f1ad7d3b9b5f
+[DEBUG] FileHistory: Added snapshot for 31079ee5-12b0-4deb-9f6c-f1ad7d3b9b5f, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 107ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762630279966
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762630279966 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762630280022
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762630280022 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 96ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message e9a1833e-854e-4d02-92c8-b66af436311c
+[DEBUG] FileHistory: Added snapshot for e9a1833e-854e-4d02-92c8-b66af436311c, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 89ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762630649605
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762630649605 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762630649678
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762630649678 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 76ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 101df28d-743f-4262-b567-dd7126185796
+[DEBUG] FileHistory: Added snapshot for 101df28d-743f-4262-b567-dd7126185796, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 90ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (60s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (90s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762630911462
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762630911462 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 214ms
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 218ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 1m 34s
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 110ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 74f83311-457b-45ca-a4f3-79636d15dc8c
+[DEBUG] FileHistory: Added snapshot for 74f83311-457b-45ca-a4f3-79636d15dc8c, tracking 2 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 100ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 55ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 3s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 41ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md, got file://d:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+    at async Q4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:5722)
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md.tmp.11432.1762630959571
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 13064 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md.tmp.11432.1762630959571 to D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 346ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 141ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 1s
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 51ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 42ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md, got file://d:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md.tmp.11432.1762630968386
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 13109 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md.tmp.11432.1762630968386 to D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 332ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 162ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Applying permission update: Setting mode to 'acceptEdits'
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 148ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 7s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 42ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md, got file://d:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md.tmp.11432.1762630981864
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 13124 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md.tmp.11432.1762630981864 to D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\prompts\generate-resume.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 300ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 157ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 15ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html, got file://d:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762630991064
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 19867 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762630991064 to D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 196ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 186ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762631005495
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762631005495 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762631005542
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762631005542 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762631024713
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762631024713 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 111ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 3ff7a772-2f73-4831-9e62-942cbde6f2fe
+[DEBUG] FileHistory: Added snapshot for 3ff7a772-2f73-4831-9e62-942cbde6f2fe, tracking 3 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 102ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 70ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 173ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762631139163
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762631139163 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762631139221
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762631139221 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] [FileIndex] Using Fuse.js fallback for search
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 1s
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message cb86dfc5-99fc-4516-97b8-c2135ce8d51c
+[DEBUG] FileHistory: Added snapshot for cb86dfc5-99fc-4516-97b8-c2135ce8d51c, tracking 3 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 75ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "git checkout:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 72ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762631538894
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762631538894 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762631538951
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762631538951 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 107ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 6b932013-d148-477e-bd66-59c42c1e5421
+[DEBUG] FileHistory: Added snapshot for 6b932013-d148-477e-bd66-59c42c1e5421, tracking 3 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 92ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762632714341
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762632714341 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762632714402
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762632714402 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762632801180
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762632801180 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 77ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message a36aa6c4-87d5-4234-83b0-36df081d6d61
+[DEBUG] FileHistory: Added snapshot for a36aa6c4-87d5-4234-83b0-36df081d6d61, tracking 3 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 87ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762634714762
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762634714762 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762634714822
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762634714822 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 70ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 396f23fe-01ea-40a7-ac36-bf0afb6c3b1e
+[DEBUG] FileHistory: Added snapshot for 396f23fe-01ea-40a7-ac36-bf0afb6c3b1e, tracking 3 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 68ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 61ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 14ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\docs\phase2\design-discussion-phase2-tabled.md, got file://d:\my_python_projects\resume-ai-pipeline\docs\phase2\design-discussion-phase2-tabled.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\resume-ai-pipeline\docs\phase2\design-discussion-phase2-tabled.md
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\docs\phase2\design-discussion-phase2-tabled.md.tmp.11432.1762635171774
+[DEBUG] Temp file written successfully, size: 4872 bytes
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\docs\phase2\design-discussion-phase2-tabled.md.tmp.11432.1762635171774 to D:\my_python_projects\resume-ai-pipeline\docs\phase2\design-discussion-phase2-tabled.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\docs\phase2\design-discussion-phase2-tabled.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 110ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "git checkout:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 122ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 117ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "git rm:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 113ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 109ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "git branch:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 127ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762635328307
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762635328307 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762635328350
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 41874 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762635328350 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 252ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 5c882a12-363b-4392-a864-251ab75bdb64
+[DEBUG] FileHistory: Added snapshot for 5c882a12-363b-4392-a864-251ab75bdb64, tracking 4 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 108ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 177ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 12ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resume-master.md, got file://d:\my_python_projects\resume-ai-pipeline\resume-master.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762672151632
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 19631 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resume-master.md.tmp.11432.1762672151632 to D:\my_python_projects\resume-ai-pipeline\resume-master.md
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resume-master.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 167ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 225ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Edit
+[DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 12ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html, got file://d:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1870:624)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762672181339
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 21290 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html.tmp.11432.1762672181339 to D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html
+[DEBUG] File D:\my_python_projects\resume-ai-pipeline\resumes\ai-residency.html written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 228ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 181ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762672200611
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42330 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762672200611 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.11432.1762672200667
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42330 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.11432.1762672200667 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)

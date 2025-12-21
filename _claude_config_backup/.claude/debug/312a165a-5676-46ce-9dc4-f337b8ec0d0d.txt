@@ -1,0 +1,2695 @@
+[DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_python_projects\zillow_scraping\.claude\settings.local.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Applying permission update: Adding 2 allow rule(s) to destination 'localSettings': ["Bash(python tests/phase1.1/test_checkpoint_manager.py:*)","Bash(python:*)"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] >>>>> getSkillsIfEnabled() CALLED <<<<<
+[DEBUG] ENABLE_SKILLS value: true, type: boolean
+[DEBUG] ENABLE_SKILLS check passed, loading skills...
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_python_projects\zillow_scraping\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+[DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1761622710765-5y75uc.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\312a165a-5676-46ce-9dc4-f337b8ec0d0d-agent-312a165a-5676-46ce-9dc4-f337b8ec0d0d.json.tmp.60040.1761622710785
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\solos\.claude\todos\312a165a-5676-46ce-9dc4-f337b8ec0d0d-agent-312a165a-5676-46ce-9dc4-f337b8ec0d0d.json.tmp.60040.1761622710785 to C:\Users\solos\.claude\todos\312a165a-5676-46ce-9dc4-f337b8ec0d0d-agent-312a165a-5676-46ce-9dc4-f337b8ec0d0d.json
+[DEBUG] File C:\Users\solos\.claude\todos\312a165a-5676-46ce-9dc4-f337b8ec0d0d-agent-312a165a-5676-46ce-9dc4-f337b8ec0d0d.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 skills total (managed: 0, user: 0, project: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[DEBUG] Summarizing all 2 messages (~3426 tokens)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761622711482
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761622711482 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761622711500
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761622711500 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[ERROR] AxiosError: AxiosError: Request failed with status code 401
+    at HR (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:24:1136)
+    at IncomingMessage.<anonymous> (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:29:9841)
+    at IncomingMessage.emit (node:events:531:35)
+    at IncomingMessage.emit (node:domain:489:12)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at M71.request (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:31:2129)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async JHB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1540:25937)
+[DEBUG] Failed to fetch Grove notice config: AxiosError: Request failed with status code 401
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761622711682
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761622711682 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761622711748
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107651 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761622711748 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761622711771
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107651 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761622711771 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761622711862
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761622711862 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761622713592
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761622713592 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "ide": Successfully connected to ws-ide server in 46ms
+[DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.27"}}
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761622713778
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761622713778 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761624525939
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761624525939 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761626318947
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761626318947 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Added snapshot for fb45ad83-2ffd-4cb8-84d0-b5721b0952d3, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 135ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628040942
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628040942 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Read",
+        "ruleContent": "//d/**"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 89ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628061152
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107756 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628061152 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 63ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 93ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 240ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 78ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628097977
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107779 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628097977 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628098022
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 107780 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628098022 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628098047
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108420 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628098047 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628368503
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108420 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628368503 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 106ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 5c547a79-dab8-4d87-9113-0b2989faec8e
+[DEBUG] FileHistory: Added snapshot for 5c547a79-dab8-4d87-9113-0b2989faec8e, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 92ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628371943
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108420 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628371943 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "dir:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 84ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628382603
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108420 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628382603 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 78ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at ZH (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1175:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1175:4141
+    at Array.map (<anonymous>)
+    at MV (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1175:4132)
+    at yTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1798:6323)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628390189
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108421 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628390189 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628390230
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108421 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628390230 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628390248
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108309 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628390248 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 80ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message eefcfcdd-472c-4a85-b07c-2517b6285570
+[DEBUG] FileHistory: Added snapshot for eefcfcdd-472c-4a85-b07c-2517b6285570, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 84ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 74ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628555957
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108309 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628555957 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628556000
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108309 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628556000 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761628556019
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761628556019 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761630185609
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761630185609 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761631987418
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761631987418 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761633785314
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761633785314 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761635585478
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761635585478 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761637385464
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761637385464 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761640990350
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761640990350 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761642786248
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761642786248 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761644586485
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761644586485 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761646386312
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761646386312 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761648185152
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761648185152 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761651788704
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761651788704 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761653585572
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761653585572 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761655386437
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761655386437 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761657185866
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761657185866 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761658985706
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761658985706 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761660786362
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761660786362 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761662585590
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761662585590 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761664385762
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761664385762 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761666185854
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761666185854 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761667987107
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761667987107 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761669787182
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761669787182 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761671587010
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761671587010 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761673387141
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761673387141 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761675186857
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761675186857 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761676985914
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761676985914 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761678787864
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761678787864 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761680588201
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761680588201 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761682386954
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761682386954 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761685989297
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761685989297 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761687787091
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761687787091 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688248080
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688248080 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 153ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 1b7ec287-28d4-49d6-b41d-f99f475f7d0a
+[DEBUG] FileHistory: Added snapshot for 1b7ec287-28d4-49d6-b41d-f99f475f7d0a, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 82ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688258562
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688258562 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688278921
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688278921 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688279056
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108344 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688279056 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688279082
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108345 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688279082 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 62ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message ccf4a09c-7c47-4926-8ece-a4f2ab971e7b
+[DEBUG] FileHistory: Added snapshot for ccf4a09c-7c47-4926-8ece-a4f2ab971e7b, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 82ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "node:*"
+      },
+      {
+        "toolName": "Bash",
+        "ruleContent": "npm --version"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 91ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688362931
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108345 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688362931 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "npx -y @playwright/mcp@latest --version"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688378805
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108345 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688378805 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 80ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Glob
+[DEBUG] Getting matching hook commands for PreToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Glob
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Glob" (0 before deduplication)
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "echo:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 80ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688415471
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108345 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688415471 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "ls:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 63ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688439706
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108345 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688439706 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp add:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 80ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] MaxFileReadTokenExceededError: MaxFileReadTokenExceededError: File content (41055 tokens) exceeds maximum allowed tokens (25000). Please use offset and limit parameters to read specific portions of the file, or use the GrepTool to search for specific content.
+    at OfQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3390:1716)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3399:1001)
+    at async Bw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:725:1185)
+    at async file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1265:1367
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688450900
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108506 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688450900 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Permission suggestions for Read: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Read",
+        "ruleContent": "//c/Users/solos/**"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[ERROR] Error: Error: EISDIR: illegal operation on a directory, read
+    at Module.readSync (node:fs:740:18)
+    at Object.readSync (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:472)
+    at gK (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3570:105)
+    at U$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3572:475)
+    at OS8 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2708:7262)
+    at K (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2708:6474)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2708:6792
+    at UW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:21536)
+    at Az (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:41119)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:39310
+[ERROR] Error: Error: EISDIR: illegal operation on a directory, read
+    at Module.readFileSync (node:fs:441:20)
+    at Object.readFileSync (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:9:299)
+    at U$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3572:490)
+    at OS8 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2708:7262)
+    at K (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2708:6474)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2708:6792
+    at UW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:21536)
+    at Az (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:41119)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:39310
+    at E80 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:69:5026)
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 76ms
+[ERROR] MaxFileReadTokenExceededError: MaxFileReadTokenExceededError: File content (41055 tokens) exceeds maximum allowed tokens (25000). Please use offset and limit parameters to read specific portions of the file, or use the GrepTool to search for specific content.
+    at OfQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3390:1716)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3399:1001)
+    at async FS8 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:65601)
+    at async BNQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:62655)
+    at async file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:61824
+    at async Oh1 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:725:1714)
+    at async IS8 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:61736)
+    at async JS8 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:60724)
+    at async QS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:57752)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 77ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688465826
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108506 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688465826 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 63ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Read",
+        "ruleContent": "//c/Users/solos/**"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 77ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Stream started - received first chunk
+[ERROR] MaxFileReadTokenExceededError: MaxFileReadTokenExceededError: File content (41055 tokens) exceeds maximum allowed tokens (25000). Please use offset and limit parameters to read specific portions of the file, or use the GrepTool to search for specific content.
+    at OfQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3390:1716)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3399:1001)
+    at async Bw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:725:1185)
+    at async file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1265:1367
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688478861
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108506 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688478861 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688483422
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108506 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688483422 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688483460
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108506 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688483460 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688483478
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108590 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688483478 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 65ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 9c464050-621d-4ad6-a7de-d2b17fb79152
+[DEBUG] FileHistory: Added snapshot for 9c464050-621d-4ad6-a7de-d2b17fb79152, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 73ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688613637
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108590 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688613637 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688613679
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108590 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688613679 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688613696
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108556 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688613696 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 93ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message e79496b1-0c42-4f1e-bb7b-76e2308a10e8
+[DEBUG] FileHistory: Added snapshot for e79496b1-0c42-4f1e-bb7b-76e2308a10e8, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 64ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp list:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 87ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688796257
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108556 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688796257 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "npx @playwright/mcp@latest"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 102ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688806901
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108556 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688806901 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 108ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "npm install:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 78ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688828731
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108556 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688828731 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "npx playwright install chromium"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761688839318
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108556 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761688839318 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 100ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 114ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 87ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 75ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 102ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 72ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 76ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 78ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 90ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: BashOutput
+[DEBUG] Getting matching hook commands for PreToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: BashOutput
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "BashOutput" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 73ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp list:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 68ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689030367
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108556 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689030367 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp remove:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 86ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] MaxFileReadTokenExceededError: MaxFileReadTokenExceededError: File content (41014 tokens) exceeds maximum allowed tokens (25000). Please use offset and limit parameters to read specific portions of the file, or use the GrepTool to search for specific content.
+    at OfQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3390:1716)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3399:1001)
+    at async Bw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:725:1185)
+    at async file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1265:1367
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689046925
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108395 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689046925 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "npm view:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Persisting permission update: addRules to source 'localSettings'
+[DEBUG] Persisting 1 allow rule(s) to localSettings
+[DEBUG] Writing to temp file: D:\my_python_projects\zillow_scraping\.claude\settings.local.json.tmp.60040.1761689056039
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 194 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\zillow_scraping\.claude\settings.local.json.tmp.60040.1761689056039 to D:\my_python_projects\zillow_scraping\.claude\settings.local.json
+[DEBUG] File D:\my_python_projects\zillow_scraping\.claude\settings.local.json written atomically
+[DEBUG] Applying permission update: Adding 1 allow rule(s) to destination 'localSettings': ["Bash(npm view:*)"]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 71ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689061819
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108395 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689061819 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp add:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 78ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] MaxFileReadTokenExceededError: MaxFileReadTokenExceededError: File content (41064 tokens) exceeds maximum allowed tokens (25000). Please use offset and limit parameters to read specific portions of the file, or use the GrepTool to search for specific content.
+    at OfQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3390:1716)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3399:1001)
+    at async Bw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:725:1185)
+    at async file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1265:1367
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689151352
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108559 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689151352 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689156085
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108559 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689156085 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689156125
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108559 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689156125 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689156143
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108516 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689156143 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 94ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 89997e6f-3b41-4c34-a92e-4967bd72c183
+[DEBUG] FileHistory: Added snapshot for 89997e6f-3b41-4c34-a92e-4967bd72c183, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 73ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp list:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 70ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689185750
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108516 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689185750 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "npx -y @playwright/mcp@latest"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 67ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689419355
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108516 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689419355 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "where:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 76ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689440975
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108516 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689440975 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp remove:*"
+      },
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp add:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 70ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] MaxFileReadTokenExceededError: MaxFileReadTokenExceededError: File content (41047 tokens) exceeds maximum allowed tokens (25000). Please use offset and limit parameters to read specific portions of the file, or use the GrepTool to search for specific content.
+    at OfQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3390:1716)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3399:1001)
+    at async Bw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:725:1185)
+    at async file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1265:1367
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689458268
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108508 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689458268 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689462750
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108508 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689462750 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689462793
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108508 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689462793 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 68ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message f4485a7e-9858-4341-b176-b12172507f35
+[DEBUG] FileHistory: Added snapshot for f4485a7e-9858-4341-b176-b12172507f35, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 89ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: KillShell
+[DEBUG] Getting matching hook commands for PreToolUse with query: KillShell
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "KillShell" (0 before deduplication)
+[ERROR] Error: Error: Shell 9a2bfd is not running, so cannot be killed (status: completed)
+    at Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2879:1863)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async FS8 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:65601)
+    at async BNQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:62655)
+    at async file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:61824
+    at async Oh1 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:725:1714)
+    at async IS8 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:61736)
+    at async JS8 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:60724)
+    at async QS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2692:57752)
+    at async v7 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2851:4100)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 66ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689484951
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108508 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689484951 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689484991
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108508 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689484991 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689485008
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108486 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689485008 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 71ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message f8f8b950-aed6-45f2-b9d0-93059301debe
+[DEBUG] FileHistory: Added snapshot for f8f8b950-aed6-45f2-b9d0-93059301debe, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 82ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp list:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689524082
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108486 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689524082 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 89ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689537982
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108486 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689537982 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689538035
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108486 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689538035 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689538058
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108490 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689538058 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 78ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 8ac34c48-489b-4860-8a96-3283f427ad0e
+[DEBUG] FileHistory: Added snapshot for 8ac34c48-489b-4860-8a96-3283f427ad0e, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 87ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689614945
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108490 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689614945 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689614998
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108490 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689614998 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689615024
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108434 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689615024 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 64ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 16252438-c5bf-42ce-b936-5904f5d0d2a5
+[DEBUG] FileHistory: Added snapshot for 16252438-c5bf-42ce-b936-5904f5d0d2a5, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 87ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Read
+[DEBUG] Getting matching hook commands for PreToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] Getting matching hook commands for PostToolUse with query: Read
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 176ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at zv (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:3227)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:43595)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at zv (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:3227)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:43595)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at zv (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:3227)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:43595)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+[ERROR] Error: Error: Tool mcp__playwright__navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 132ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "claude mcp tools playwright"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 69ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689779580
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108434 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689779580 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689789883
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108434 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689789883 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689789929
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108434 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689789929 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689789950
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108332 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689789950 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 71ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 2c53547e-b343-4c8d-839a-ef269ee67fa5
+[DEBUG] FileHistory: Added snapshot for 2c53547e-b343-4c8d-839a-ef269ee67fa5, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 78ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: WebFetch
+[DEBUG] Getting matching hook commands for PreToolUse with query: WebFetch
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "WebFetch" (0 before deduplication)
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689899509
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108332 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689899509 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: WebFetch
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "WebFetch" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 79ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at zv (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:3227)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:43595)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at zv (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:3227)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:43595)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at zv (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:3227)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:43595)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+[ERROR] Error: Error: Tool mcp__playwright__browser_navigate not found
+    at qTB (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1597:12537)
+    at Fq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:19414)
+    at dr (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:42814)
+    at b9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38355)
+    at Vc (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38283)
+    at wq (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:38137)
+    at GU (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:35216)
+    at k6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:4841)
+    at d5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:75:32461)
+    at DW (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:73:24919)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 103ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "mcp-server-playwright --help"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 78ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761689926980
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108332 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761689926980 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "mcp-server-playwright:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761690026885
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108332 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761690026885 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761690026913
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108322 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761690026913 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Getting matching hook commands for SessionEnd with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] Cleaned up session snapshot: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1761622710765-5y75uc.sh
+[DEBUG] FileHistory: Making snapshot for message c45ea3c0-d5e6-45c9-9163-403f01492e34
+[DEBUG] FileHistory: Added snapshot for c45ea3c0-d5e6-45c9-9163-403f01492e34, tracking 0 files
+[DEBUG] Rendering user message with 1 content blocks
+[DEBUG] Block 0: <command-name>/exit</command-name>
+            <command-message>exit</command-message>
+            <...
+[DEBUG] UserCommandMessage rendering: "exit" (args: "none")
+[DEBUG] isSkillFormat: false, prefix: "/"
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761690028885
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108322 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761690028885 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761690028909
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108294 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761690028909 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.60040.1761690028935
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108723 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.60040.1761690028935 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically

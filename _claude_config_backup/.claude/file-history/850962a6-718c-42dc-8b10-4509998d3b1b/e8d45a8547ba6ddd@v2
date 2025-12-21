@@ -1,0 +1,86 @@
+"""
+Test runner with organized reports.
+
+Generates reports in: rag/ingestion/tests/_reports/YYYY-MM-DD_HHMMSS/
+  ├── report.html          (pytest results + coverage summary)
+  ├── coverage/            (detailed coverage HTML)
+  └── coverage_summary.txt (terminal output backup)
+
+Usage:
+    python run_tests.py                    # Run all tests
+    python run_tests.py rag/ingestion/tests/test_loader.py  # Run specific test
+"""
+
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+
+def run_tests(test_path: str = "rag/ingestion/tests/", package: str = "rag"):
+    """Run tests with coverage and generate organized reports."""
+
+    # Get script directory (training-assistant/) to use as working directory
+    script_dir = Path(__file__).parent.resolve()
+
+    # Use existing _reports folder in tests directory
+    base_reports = script_dir / "rag" / "ingestion" / "tests" / "_reports"
+
+    # Create timestamped subfolder
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    report_dir = base_reports / timestamp
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"Report directory: {report_dir}")
+    print("=" * 60)
+
+    # Build command
+    cmd = [
+        sys.executable, "-m", "pytest",
+        test_path,
+        "-v",
+        f"--cov={package}",
+        "--cov-report=term-missing",
+        f"--cov-report=html:{report_dir}/coverage",
+        f"--html={report_dir}/report.html",
+        "--self-contained-html",
+    ]
+
+    # Run from script directory so relative paths work
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=script_dir)
+
+    # Print to console
+    print(result.stdout)
+    if result.stderr:
+        print(result.stderr)
+
+    # Save terminal output (includes coverage)
+    with open(report_dir / "coverage_summary.txt", "w") as f:
+        f.write(result.stdout)
+        if result.stderr:
+            f.write("\n--- STDERR ---\n")
+            f.write(result.stderr)
+
+    # Extract coverage percentage and add to report
+    coverage_line = ""
+    for line in result.stdout.split("\n"):
+        if "TOTAL" in line and "%" in line:
+            coverage_line = line.strip()
+            break
+
+    print("=" * 60)
+    print(f"Reports saved to: {report_dir}")
+    print(f"  - Test results: {report_dir}/report.html")
+    print(f"  - Coverage HTML: {report_dir}/coverage/index.html")
+    print(f"  - Coverage text: {report_dir}/coverage_summary.txt")
+    if coverage_line:
+        print(f"\nCoverage: {coverage_line}")
+
+    return result.returncode
+
+
+if __name__ == "__main__":
+    # Allow custom test path from command line
+    test_path = sys.argv[1] if len(sys.argv) > 1 else "rag/ingestion/tests/"
+    exit_code = run_tests(test_path)
+    sys.exit(exit_code)

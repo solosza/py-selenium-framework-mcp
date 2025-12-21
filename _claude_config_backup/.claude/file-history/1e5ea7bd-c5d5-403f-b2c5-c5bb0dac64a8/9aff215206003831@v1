@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alain Ignacio - AI Engineering Internship Resume</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --accent: #0066cc;
+            --border: #dee2e6;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent: #4da6ff;
+            --border: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', 'Segoe UI', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 16px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        #darkModeToggle:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .contact {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .contact a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 8px;
+        }
+
+        .contact a:hover {
+            text-decoration: underline;
+        }
+
+        .links {
+            margin-top: 10px;
+        }
+
+        .links a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 12px;
+            font-size: 0.95rem;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            margin-top: 20px;
+            color: var(--text-primary);
+        }
+
+        .about p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .project, .job {
+            margin-bottom: 30px;
+        }
+
+        .project-header, .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .tech-stack {
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .skills-category {
+            margin-bottom: 16px;
+        }
+
+        .skills-list {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                padding: 30px 16px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .project-header, .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .meta {
+                margin-top: 4px;
+            }
+
+            #darkModeToggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+
+        @media print {
+            #darkModeToggle {
+                display: none;
+            }
+
+            body {
+                background-color: white;
+                color: black;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 20px;
+            }
+
+            section {
+                page-break-inside: avoid;
+            }
+
+            a {
+                color: black;
+                text-decoration: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle">🌙 Dark Mode</button>
+
+    <div class="container">
+        <header>
+            <h1>Alain Ignacio</h1>
+            <div class="contact">
+                <a href="mailto:solosza@yahoo.com">solosza@yahoo.com</a> •
+                <span>808.354.4526</span> •
+                <span>Las Vegas, NV</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/solosza" target="_blank">GitHub</a> •
+                <a href="https://www.linkedin.com/in/alain-ignacio" target="_blank">LinkedIn</a>
+            </div>
+        </header>
+
+        <section class="about">
+            <h2>Professional Summary</h2>
+            <p>
+                AI engineering professional with hands-on experience building LLM-powered applications, multi-agent systems, and AI-assisted development workflows. Proven ability to design and implement practical AI solutions from concept to production, with expertise in prompt engineering, system architecture, and Python automation. Strong foundation in test automation and framework building, now focused on AI/ML engineering and Gen AI applications.
+            </p>
+        </section>
+
+        <section class="projects">
+            <h2>Projects</h2>
+
+            <div class="project">
+                <div class="project-header">
+                    <h3>CLAUDE.md Development Framework</h3>
+                    <span class="meta">January 2025 (7 days)</span>
+                </div>
+                <div class="tech-stack">Claude Code • Markdown • Git/GitHub • Python • Jinja2 • Selenium</div>
+                <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                    Production-grade development framework (CLAUDE.md v1.6.0) serving as a reusable template system for AI-assisted software projects. Combines process engineering, prompt design, and software development best practices into a 6-phase methodology that accelerates project delivery while teaching software engineering principles.
+                </p>
+                <ul>
+                    <li>Designed 6-phase development methodology (Idea Validation → Discovery → Design → Define → Divide → Deliver) with optional modules that activate only when needed, preventing over-engineering while maintaining structure for complex projects</li>
+                    <li>Engineered conversational AI protocols including "Truth Filter" and "Reality Filter" communication frameworks to ensure factual accuracy and first-principles thinking in AI-assisted development workflows</li>
+                    <li>Built comprehensive process documentation system (Phase 0-3) with reusable prompt templates for requirements gathering, task generation, and code execution that shipped 2 production projects in 7 days while simultaneously building the framework</li>
+                    <li>Established quality gates and TDD workflow patterns requiring tests to pass before task completion, with coverage targets (90%+ core logic, 80%+ integration) and dual tracking system (TodoWrite tool + markdown files)</li>
+                </ul>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h3>Multi-Phase AI Agent System</h3>
+                    <span class="meta">2024</span>
+                </div>
+                <div class="tech-stack">Make.com • Relevance AI • OpenAI API • Claude API • Multi-agent communication</div>
+                <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                    Real estate lead automation system using multi-agent architecture with Make.com orchestration and Relevance AI agent implementation.
+                </p>
+                <ul>
+                    <li>Designed and prototyped 6-phase AI agent system using Make.com as orchestration platform and Relevance AI for agent implementation, successfully deploying Phase 1 document analyzer and filter agents with data pipeline integration</li>
+                    <li>Built structured multi-step AI workflows integrating prompt chains, agent-to-agent communication protocols, and contextual decision-making using OpenAI and Claude APIs</li>
+                    <li>Demonstrated practical AI-ops implementation with hands-on experience in agent design, prompt chaining, workflow debugging, and production deployment</li>
+                </ul>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h3>AI-Powered Resume Generation System</h3>
+                    <span class="meta">2025 (Phase 1)</span>
+                </div>
+                <div class="tech-stack">Claude Code • Markdown • HTML/CSS • Git/GitHub • GitHub Pages</div>
+                <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                    AI-powered resume generation system using Claude Code for intelligent job analysis and content optimization. Demonstrates practical AI workflow design and system architecture.
+                </p>
+                <ul>
+                    <li>Designed data-driven AI workflow where Claude Code analyzes job descriptions and generates optimized HTML resumes from structured master data with tag-based filtering</li>
+                    <li>Architected master data structure with tags and metadata enabling AI reasoning to select relevant projects and experience bullets based on role requirements</li>
+                    <li>Demonstrated AI system design through prompt engineering, reusable workflow templates, and reproducible generation process deployed to GitHub Pages</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="experience">
+            <h2>Experience</h2>
+
+            <div class="job">
+                <div class="job-header">
+                    <h3>Helios Digital - Lead QA Engineer</h3>
+                    <span class="meta">May 2025 - Present • Remote</span>
+                </div>
+                <ul>
+                    <li>Established quality assurance function as founding QA hire at early-stage startup prior to development kickoff, building AI-first testing approach from day one using Claude Code and open-source tools to create test automation framework, establish testing processes, and scale team to two engineers while working under startup budget constraints</li>
+                    <li>Integrated AI tools directly into QA workflows from inception using Claude Code and major LLMs (GPT-5, Claude, Gemini, Copilot) to generate test cases from requirements, surface edge cases through conversational analysis, and eliminate manual documentation bottlenecks that would have consumed hours in traditional QA setup</li>
+                    <li>Built custom testing framework with role-task-page architecture and established structured three-phase development process using Claude Code to enforce requirements validation, iterative task approval, and test-driven execution with mandatory quality gates across the testing lifecycle</li>
+                    <li>Used Claude Code in version-controlled repositories to accelerate test script development through automated selector-finding scripts, test code refactoring, and repetitive coding task automation that reduced manual trial-and-error in browser DevTools</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <h3>Nakupuna Consulting - Senior QA Automation Engineer</h3>
+                    <span class="meta">Nov 2022 - May 2025 • Remote (Navy contract)</span>
+                </div>
+                <ul>
+                    <li>Established test automation function from ground zero as founding automation hire after previous efforts failed, navigating strict Navy environment restrictions and lengthy software approval processes to implement Python/Selenium framework for PeopleSoft ERP testing across deployment, muster, leave, onboarding, and military pay workflows where only antiquated legacy tools were previously approved</li>
+                    <li>Built framework architecture that developers adopted for their own unit testing after UI-heavy testing became too tedious with existing tools, providing training and enablement that expanded framework impact beyond QA into development workflows</li>
+                    <li>Designed custom automation framework from scratch implementing Page Object Model and data-driven testing to handle PeopleSoft's UI-only testing constraints with no API layer access, creating modular architecture with supporting utility libraries for data handling and system integration</li>
+                </ul>
+            </div>
+
+            <div class="job">
+                <div class="job-header">
+                    <h3>HMSA (Hawaii Medical Service Association) - QA Lead</h3>
+                    <span class="meta">May 2013 - Nov 2022 • Honolulu, HI</span>
+                </div>
+                <ul>
+                    <li>Established testing standards for Healthcare Claims Processing, EDI, Membership, Billing, Enrollment, HL7-FHIR, and RESTful services in Agile (Kanban) environment</li>
+                    <li>Developed comprehensive automation scripts for HL7-FHIR APIs using Postman for integration, functional, and UAT testing</li>
+                    <li>Developed integration, end-to-end, and UAT scripts in Cypress using JavaScript, implementing Page Object Framework for enhanced test script maintenance</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="skills">
+            <h2>Skills</h2>
+
+            <div class="skills-category">
+                <h4>AI Tools & Platforms</h4>
+                <div class="skills-list">
+                    Claude Code (Anthropic) - AI-assisted development, GPT-5 (OpenAI) - Multi-LLM integration, Claude, Gemini - LLM integration, Prompt Engineering/Context Engineering - Multi-agent workflows, AI-Assisted Development Workflows
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h4>Programming Languages & Tools</h4>
+                <div class="skills-list">
+                    Python - Primary language, JavaScript - UI automation, API testing, SQL - Database testing, queries, Git/GitHub - Version control, CI/CD
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h4>Automation Platforms</h4>
+                <div class="skills-list">
+                    Make.com - Workflow orchestration, Relevance AI - Agent platform, Zapier - Integration automation
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h4>Test Automation & Frameworks</h4>
+                <div class="skills-list">
+                    Selenium WebDriver - UI automation, pytest - Python testing framework, Cypress - JavaScript E2E testing, Custom Framework Architecture - Page Object Model, data-driven design, Page Object Model - Design pattern implementation
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h4>API & Integration</h4>
+                <div class="skills-list">
+                    REST API - Testing and integration, Postman - API development and testing, JSON - Data formats, HL7-FHIR - Healthcare standards, Web scraping - Data extraction
+                </div>
+            </div>
+
+            <div class="skills-category">
+                <h4>Development Methodologies</h4>
+                <div class="skills-list">
+                    Agile - Scrum, Kanban, Test-Driven Development - Red-Green-Refactor cycle, AI-Assisted Development Workflows - PRD → Tasks → Implementation, CI/CD - Azure DevOps, GitHub Actions
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            toggleButton.textContent = '☀️ Light Mode';
+        }
+
+        // Toggle theme
+        toggleButton.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                toggleButton.textContent = '🌙 Dark Mode';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                toggleButton.textContent = '☀️ Light Mode';
+            }
+        });
+    </script>
+</body>
+</html>

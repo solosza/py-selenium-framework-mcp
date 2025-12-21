@@ -1,0 +1,75 @@
+"""
+Pytest conftest.py - Test fixtures for Selenium tests.
+
+Provides fixtures for:
+- WebDriver creation and teardown
+- WebInterface wrapper
+- Configuration loading
+- Test data
+"""
+
+import sys
+import pytest
+import logging
+from pathlib import Path
+
+# Add framework to path
+FRAMEWORK_PATH = Path(__file__).parent.parent / "framework"
+sys.path.insert(0, str(FRAMEWORK_PATH))
+
+from resources.chromedriver.driver import create_driver
+from resources.config import Config
+from interfaces.web_interface import WebInterface
+
+
+def setup_logger(name: str = "test", level: str = "INFO") -> logging.Logger:
+    """Create and configure a logger instance."""
+    logger = logging.getLogger(name)
+    logger.setLevel(getattr(logging, level.upper(), logging.INFO))
+
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+
+    return logger
+
+
+@pytest.fixture(scope="session")
+def config():
+    """Load configuration from environment."""
+    cfg = Config()
+    return cfg.get_all()
+
+
+@pytest.fixture(scope="function")
+def driver(config):
+    """
+    Create browser driver for each test.
+
+    Uses headless=False to show browser window.
+    """
+    browser = config.get('browser', 'chrome')
+    headless = False  # Show browser for visual testing
+    window_size = config.get('window_size', '1920x1080')
+
+    driver = create_driver(
+        headless=headless,
+        window_size=window_size,
+        browser=browser
+    )
+
+    yield driver
+
+    # Teardown
+    driver.quit()
+
+
+@pytest.fixture(scope="function")
+def web_interface(driver, config):
+    """Create WebInterface wrapper around driver."""
+    logger = setup_logger("web_interface", config.get('log_level', 'INFO'))
+    return WebInterface(driver, config, logger)

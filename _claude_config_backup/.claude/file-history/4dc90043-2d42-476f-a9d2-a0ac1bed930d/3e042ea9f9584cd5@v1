@@ -1,0 +1,32 @@
+# Defect Log - RAG Training Assistant
+
+Tracking test failures and resolutions for the RAG Training Assistant project.
+
+---
+
+### DEF-001: Negative overlap not validated in chunker
+
+**Date:** 2025-12-13
+**Test:** `rag/ingestion/tests/test_chunker.py::TestChunkingNegative::test_overlap_negative_raises_error`
+**Component:** Ingestion / Chunker
+
+**Error:**
+```
+Failed: DID NOT RAISE <class 'ValueError'>
+```
+
+**Root Cause:**
+`chunk_document()` validates `overlap >= chunk_size` but does not validate `overlap < 0`. Negative overlap is accepted silently, which could cause unexpected behavior (step size larger than chunk_size).
+
+**Attempted Fixes:**
+1. (pending user decision)
+
+**Solution:**
+(pending)
+
+**Status:** OPEN
+
+**Prevention:**
+Add input validation tests (negative tests) for all numeric parameters when building new functions.
+
+---

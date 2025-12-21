@@ -1,0 +1,555 @@
+"""
+Unit tests for QA Supervisor Agent Tool
+
+Tests the validation orchestration tool that coordinates:
+- SR QA Engineer (scenario provider)
+- Reviewer (DD validation)
+- Sequential execution with fail-fast
+- Report generation
+"""
+
+import pytest
+from agents.tools.supervisor import (
+    _test_run_validation_suite,
+    _test_run_scenario,
+    _reset_supervisor_state,
+    _get_current_report,
+    ScenarioStatus,
+    FailureType,
+)
+
+
+# =============================================================================
+# Test Fixtures - Sample Code for Review
+# =============================================================================
+
+@pytest.fixture
+def good_pom_code():
+    """Valid Page Object following all patterns."""
+    return '''
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+
+class LoginPage:
+    """Page Object for Login page."""
+
+    EMAIL_INPUT = (By.ID, "email")
+    PASSWORD_INPUT = (By.ID, "passwd")
+    SUBMIT_BUTTON = (By.CSS_SELECTOR, "#SubmitLogin")
+    LOGOUT_LINK = (By.CSS_SELECTOR, ".logout")
+    ERROR_MSG = (By.CSS_SELECTOR, ".alert-danger")
+
+    def __init__(self, web: WebInterface):
+        self.web = web
+
+    def enter_email(self, email: str) -> "LoginPage":
+        self.web.type_text(*self.EMAIL_INPUT, text=email)
+        return self
+
+    def enter_password(self, password: str) -> "LoginPage":
+        self.web.type_text(*self.PASSWORD_INPUT, text=password)
+        return self
+
+    def click_submit(self) -> "LoginPage":
+        self.web.click(*self.SUBMIT_BUTTON)
+        return self
+
+    def is_logged_in(self) -> bool:
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+
+    def has_error(self) -> bool:
+        return self.web.is_element_displayed(*self.ERROR_MSG, timeout=3)
+'''
+
+
+@pytest.fixture
+def good_task_code():
+    """Valid Task following all patterns."""
+    return '''
+from interfaces.web_interface import WebInterface
+from pages.auth.login_page import LoginPage
+from resources.utilities import autologger
+
+
+class AuthTasks:
+    """Authentication task module."""
+
+    def __init__(self, web: WebInterface, base_url: str):
+        self.web = web
+        self.base_url = base_url
+        self.login_page = LoginPage(web)
+
+    @autologger.automation_logger("Task")
+    def log_in(self, email: str, password: str):
+        """Log in user. NO return value."""
+        self.web.navigate_to(f"{self.base_url}/login")
+        (self.login_page
+            .enter_email(email)
+            .enter_password(password)
+            .click_submit())
+'''
+
+
+@pytest.fixture
+def good_role_code():
+    """Valid Role following all patterns."""
+    return '''
+from typing import Dict, Any
+from interfaces.web_interface import WebInterface
+from tasks.auth.auth_tasks import AuthTasks
+from resources.utilities import autologger
+
+
+class RegisteredUser:
+    """Registered user role."""
+
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web: WebInterface, user_data: Dict[str, Any], base_url: str):
+        self.web = web
+        self.user_data = user_data
+        self.auth_tasks = AuthTasks(web, base_url)
+
+    @autologger.automation_logger("Role")
+    def login(self):
+        """Login workflow."""
+        self.auth_tasks.log_in(
+            self.user_data.get("email"),
+            self.user_data.get("password")
+        )
+'''
+
+
+@pytest.fixture
+def good_test_code():
+    """Valid Test following all patterns."""
+    return '''
+import pytest
+from roles.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+from resources.utilities import autologger
+
+
+class TestLogin:
+    """Login test suite."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self, web_interface, config, test_data):
+        self.web = web_interface
+        self.login_page = LoginPage(web_interface)
+        self.config = config
+        self.test_data = test_data
+
+    @autologger.automation_logger("Test")
+    def test_valid_login(self):
+        """Test valid login."""
+        user = RegisteredUser(
+            self.web,
+            self.test_data["user"],
+            self.config["url"]
+        )
+
+        user.login()
+
+        assert self.login_page.is_logged_in(), "User should be logged in"
+'''
+
+
+@pytest.fixture
+def bad_task_with_locator():
+    """Task with DD-03 violation (locator in task layer)."""
+    return '''
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+
+class AuthTasks:
+    def __init__(self, web: WebInterface):
+        self.web = web
+
+    def log_in(self, email: str, password: str):
+        self.web.type_text(By.ID, "email", text=email)
+        self.web.click(By.CSS_SELECTOR, "#submit")
+'''
+
+
+@pytest.fixture
+def good_full_artifacts(good_pom_code, good_task_code, good_role_code, good_test_code):
+    """Complete set of good artifacts for QA-EASY-001."""
+    return {
+        "framework/pages/auth/login_page.py": good_pom_code,
+        "framework/tasks/auth/auth_tasks.py": good_task_code,
+        "framework/roles/registered_user.py": good_role_code,
+        "tests/auth/test_valid_login.py": good_test_code
+    }
+
+
+# =============================================================================
+# Test: Supervisor State Management
+# =============================================================================
+
+class TestSupervisorState:
+    """Test supervisor state management."""
+
+    def test_reset_clears_state(self):
+        """Reset should clear current report."""
+        _reset_supervisor_state()
+        assert _get_current_report() is None
+
+
+# =============================================================================
+# Test: Single Scenario Execution
+# =============================================================================
+
+class TestSingleScenarioExecution:
+    """Test single scenario execution."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Reset state before each test."""
+        _reset_supervisor_state()
+
+    @pytest.mark.asyncio
+    async def test_run_valid_scenario_simulation(self):
+        """Valid scenario should pass in simulation mode."""
+        result = await _test_run_scenario("QA-EASY-001")
+
+        assert result["scenario_id"] == "QA-EASY-001"
+        assert result["status"] == ScenarioStatus.PASSED.value
+        assert result["review_status"] == "APPROVE"
+
+    @pytest.mark.asyncio
+    async def test_run_invalid_scenario_fails(self):
+        """Invalid scenario ID should fail."""
+        result = await _test_run_scenario("QA-INVALID-999")
+
+        assert result["status"] == ScenarioStatus.FAILED.value
+        assert result["failure_type"] == FailureType.ORCHESTRATOR_ERROR.value
+        assert "not found" in result["failure_message"]
+
+    @pytest.mark.asyncio
+    async def test_scenario_with_good_content_passes(self, good_full_artifacts):
+        """Scenario with valid content should pass review."""
+        result = await _test_run_scenario("QA-EASY-001", good_full_artifacts)
+
+        assert result["status"] == ScenarioStatus.PASSED.value
+        assert result["review_status"] == "APPROVE"
+        assert result["blocking_violations"] == 0
+
+    @pytest.mark.asyncio
+    async def test_scenario_with_violation_fails(self, bad_task_with_locator):
+        """Scenario with DD violation should fail review."""
+        content_map = {
+            "framework/tasks/auth/auth_tasks.py": bad_task_with_locator
+        }
+
+        result = await _test_run_scenario("QA-EASY-001", content_map)
+
+        assert result["status"] == ScenarioStatus.FAILED.value
+        assert result["review_status"] == "REJECT"
+        assert result["failure_type"] == FailureType.TYPE_1_REVIEW_REJECT.value
+        assert result["blocking_violations"] > 0
+
+
+# =============================================================================
+# Test: Validation Suite Execution
+# =============================================================================
+
+class TestValidationSuite:
+    """Test validation suite execution."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Reset state before each test."""
+        _reset_supervisor_state()
+
+    @pytest.mark.asyncio
+    async def test_run_single_scenario_suite(self):
+        """Single scenario suite should complete."""
+        report = await _test_run_validation_suite(["QA-EASY-001"])
+
+        assert report["total_scenarios"] == 1
+        assert report["overall_status"] == "PASSED"
+        assert report["scenarios_passed"] == 1
+        assert report["scenarios_failed"] == 0
+
+    @pytest.mark.asyncio
+    async def test_run_multiple_scenarios_suite(self):
+        """Multiple scenario suite should complete."""
+        report = await _test_run_validation_suite([
+            "QA-EASY-001",
+            "QA-MID-001"
+        ])
+
+        assert report["total_scenarios"] == 2
+        assert report["overall_status"] == "PASSED"
+        assert report["scenarios_passed"] == 2
+
+    @pytest.mark.asyncio
+    async def test_standard_suite_all_pass(self):
+        """Standard 3-scenario suite should pass in simulation."""
+        report = await _test_run_validation_suite([
+            "QA-EASY-001",
+            "QA-MID-001",
+            "QA-HARD-001"
+        ])
+
+        assert report["total_scenarios"] == 3
+        assert report["overall_status"] == "PASSED"
+        assert report["scenarios_passed"] == 3
+
+    @pytest.mark.asyncio
+    async def test_fail_fast_on_violation(self, bad_task_with_locator):
+        """Suite should stop on first failure and skip remaining."""
+        content_maps = {
+            "QA-EASY-001": {
+                "framework/tasks/auth/auth_tasks.py": bad_task_with_locator
+            }
+        }
+
+        report = await _test_run_validation_suite(
+            ["QA-EASY-001", "QA-MID-001", "QA-HARD-001"],
+            content_maps
+        )
+
+        assert report["overall_status"] == "FAILED"
+        assert report["scenarios_failed"] == 1
+        assert report["scenarios_skipped"] == 2
+
+        # Verify skip status
+        statuses = [r["status"] for r in report["scenario_results"]]
+        assert statuses[0] == ScenarioStatus.FAILED.value
+        assert statuses[1] == ScenarioStatus.SKIPPED.value
+        assert statuses[2] == ScenarioStatus.SKIPPED.value
+
+    @pytest.mark.asyncio
+    async def test_violations_aggregated_in_report(self, bad_task_with_locator):
+        """DD violations should be aggregated in report."""
+        content_maps = {
+            "QA-EASY-001": {
+                "framework/tasks/auth/auth_tasks.py": bad_task_with_locator
+            }
+        }
+
+        report = await _test_run_validation_suite(["QA-EASY-001"], content_maps)
+
+        assert report["total_dd_violations"] > 0
+        assert len(report["violations_by_severity"]) > 0
+
+
+# =============================================================================
+# Test: Report Generation
+# =============================================================================
+
+class TestReportGeneration:
+    """Test validation report generation."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Reset state before each test."""
+        _reset_supervisor_state()
+
+    @pytest.mark.asyncio
+    async def test_report_has_required_fields(self):
+        """Report should have all required fields."""
+        report = await _test_run_validation_suite(["QA-EASY-001"])
+
+        required_fields = [
+            "report_id",
+            "overall_status",
+            "total_scenarios",
+            "scenarios_passed",
+            "scenarios_failed",
+            "scenarios_skipped",
+            "total_dd_violations",
+            "scenario_results",
+            "formatted_report"
+        ]
+
+        for field in required_fields:
+            assert field in report, f"Missing field: {field}"
+
+    @pytest.mark.asyncio
+    async def test_report_id_format(self):
+        """Report ID should have correct format."""
+        report = await _test_run_validation_suite(["QA-EASY-001"])
+
+        assert report["report_id"].startswith("VAL-")
+
+    @pytest.mark.asyncio
+    async def test_formatted_report_includes_summary(self):
+        """Formatted report should include summary."""
+        report = await _test_run_validation_suite(["QA-EASY-001"])
+
+        formatted = report["formatted_report"]
+
+        assert "QA VALIDATION REPORT" in formatted
+        assert "Status:" in formatted
+        assert "Total Scenarios:" in formatted
+        assert "QA-EASY-001" in formatted
+
+    @pytest.mark.asyncio
+    async def test_report_shows_violations_on_failure(self, bad_task_with_locator):
+        """Report should show DD violations on failure."""
+        content_maps = {
+            "QA-EASY-001": {
+                "framework/tasks/auth/auth_tasks.py": bad_task_with_locator
+            }
+        }
+
+        report = await _test_run_validation_suite(["QA-EASY-001"], content_maps)
+
+        formatted = report["formatted_report"]
+
+        assert "[FAIL]" in formatted
+        assert "DD VIOLATIONS" in formatted
+        assert "TYPE_1_REVIEW_REJECT" in formatted
+
+
+# =============================================================================
+# Test: Scenario Result Details
+# =============================================================================
+
+class TestScenarioResultDetails:
+    """Test scenario result structure."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Reset state before each test."""
+        _reset_supervisor_state()
+
+    @pytest.mark.asyncio
+    async def test_result_has_timing_info(self):
+        """Scenario result should include timing."""
+        result = await _test_run_scenario("QA-EASY-001")
+
+        assert result["started_at"] is not None
+        assert result["completed_at"] is not None
+        assert result["duration_seconds"] is not None
+
+    @pytest.mark.asyncio
+    async def test_result_has_artifacts_list(self):
+        """Scenario result should include expected artifacts."""
+        result = await _test_run_scenario("QA-EASY-001")
+
+        assert len(result["generated_artifacts"]) > 0
+        assert any("login" in a.lower() for a in result["generated_artifacts"])
+
+    @pytest.mark.asyncio
+    async def test_failed_result_has_failure_details(self, bad_task_with_locator):
+        """Failed scenario should have failure details."""
+        content_map = {
+            "framework/tasks/auth/auth_tasks.py": bad_task_with_locator
+        }
+
+        result = await _test_run_scenario("QA-EASY-001", content_map)
+
+        assert result["failure_type"] is not None
+        assert result["failure_message"] is not None
+        assert len(result["violations"]) > 0
+
+
+# =============================================================================
+# Test: Overall Status Logic
+# =============================================================================
+
+class TestOverallStatusLogic:
+    """Test overall status determination."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Reset state before each test."""
+        _reset_supervisor_state()
+
+    @pytest.mark.asyncio
+    async def test_all_pass_returns_passed(self):
+        """All passing should return PASSED status."""
+        report = await _test_run_validation_suite(["QA-EASY-001"])
+
+        assert report["overall_status"] == "PASSED"
+
+    @pytest.mark.asyncio
+    async def test_any_failure_returns_failed(self, bad_task_with_locator):
+        """Any failure should return FAILED status."""
+        content_maps = {
+            "QA-EASY-001": {
+                "framework/tasks/auth/auth_tasks.py": bad_task_with_locator
+            }
+        }
+
+        report = await _test_run_validation_suite(["QA-EASY-001"], content_maps)
+
+        assert report["overall_status"] == "FAILED"
+
+
+# =============================================================================
+# Test: Level Resolution
+# =============================================================================
+
+class TestLevelResolution:
+    """Test scenario level to ID resolution."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Reset state before each test."""
+        _reset_supervisor_state()
+
+    @pytest.mark.asyncio
+    async def test_easy_resolves_to_qa_easy_001(self):
+        """Level 'easy' should resolve to QA-EASY-001."""
+        report = await _test_run_validation_suite(["QA-EASY-001"])
+
+        assert report["scenario_results"][0]["scenario_id"] == "QA-EASY-001"
+
+    @pytest.mark.asyncio
+    async def test_mid_scenario_works(self):
+        """Mid complexity scenario should work."""
+        report = await _test_run_validation_suite(["QA-MID-001"])
+
+        assert report["scenario_results"][0]["scenario_id"] == "QA-MID-001"
+        assert report["overall_status"] == "PASSED"
+
+    @pytest.mark.asyncio
+    async def test_hard_scenario_works(self):
+        """Hard complexity scenario should work."""
+        report = await _test_run_validation_suite(["QA-HARD-001"])
+
+        assert report["scenario_results"][0]["scenario_id"] == "QA-HARD-001"
+        assert report["overall_status"] == "PASSED"
+
+
+# =============================================================================
+# Test: Current Report State
+# =============================================================================
+
+class TestCurrentReportState:
+    """Test global report state tracking."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        """Reset state before each test."""
+        _reset_supervisor_state()
+
+    @pytest.mark.asyncio
+    async def test_report_stored_after_run(self):
+        """Running validation should store report in state."""
+        await _test_run_validation_suite(["QA-EASY-001"])
+
+        current = _get_current_report()
+        assert current is not None
+        assert current.report_id.startswith("VAL-")
+
+    @pytest.mark.asyncio
+    async def test_new_run_replaces_report(self):
+        """New validation run should replace previous report."""
+        await _test_run_validation_suite(["QA-EASY-001"])
+        first_report = _get_current_report()
+        first_scenario = first_report.scenario_results[0].scenario_id
+
+        await _test_run_validation_suite(["QA-MID-001"])
+        second_report = _get_current_report()
+        second_scenario = second_report.scenario_results[0].scenario_id
+
+        # Different scenarios means new report was created
+        assert second_scenario != first_scenario
+        assert second_scenario == "QA-MID-001"

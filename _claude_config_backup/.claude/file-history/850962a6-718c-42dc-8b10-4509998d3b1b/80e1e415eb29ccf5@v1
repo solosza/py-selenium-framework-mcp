@@ -1,0 +1,538 @@
+# PRD: RAG Training Assistant
+
+**Version:** 1.1 (Living Document)
+**Status:** In Progress
+**Last Updated:** 2025-12-14
+
+---
+
+## 1. Introduction/Overview
+
+### The Problem
+
+The py-selenium-framework-mcp test automation framework needs onboarding documentation. Manual testers transitioning to automation and new team members need to understand the 4-layer architecture quickly. Documentation exists but isn't searchable or interactive.
+
+### The Solution
+
+A RAG-powered (Retrieval Augmented Generation) training assistant that:
+- Retrieves relevant documentation chunks based on user questions
+- Generates contextual answers grounded in framework documentation
+- Provides a standalone Streamlit interface anyone can use
+
+### Why This Project
+
+| Purpose | Value |
+|---------|-------|
+| **Learning vehicle** | Apply RAG course concepts by building a real system |
+| **Portfolio piece** | Demonstrate RAG + QA skills for job interviews |
+| **Practical tool** | Interactive onboarding for the QA framework |
+
+### Strategic Context
+
+This project is part of a larger vision called **Skillware** (executable workflow enforcement). The RAG Training Assistant is:
+- **Standalone valuable** — Works as a training tool on its own
+- **Potentially foundational** — Could provide the knowledge layer for future Skillware enforcement
+
+The Skillware connection is context, not a requirement. This PRD focuses on RAG.
+
+---
+
+## 2. System Architecture
+
+### High-Level Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           RAG TRAINING ASSISTANT                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  USER INTERFACE (Streamlit)                                                 │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  "How do I add a page object?"                              [Ask]   │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+└───────────────────────────────────┬─────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           QUERY PIPELINE                                    │
+│                                                                             │
+│   ┌──────────────┐    ┌──────────────┐    ┌──────────────────────────┐     │
+│   │   SEARCH     │───▶│   PROMPT     │───▶│      GENERATION          │     │
+│   │              │    │   BUILDING   │    │                          │     │
+│   │ Find top-k   │    │ Format       │    │ LLM generates answer     │     │
+│   │ relevant     │    │ context +    │    │ grounded in retrieved    │     │
+│   │ chunks       │    │ question     │    │ documentation            │     │
+│   └──────────────┘    └──────────────┘    └──────────────────────────┘     │
+│          │                                              │                   │
+│          │ queries                                      │ response          │
+│          ▼                                              ▼                   │
+└───────────────────────────────────┬─────────────────────────────────────────┘
+                                    │
+┌───────────────────────────────────┴─────────────────────────────────────────┐
+│                           VECTOR DATABASE                                   │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │  Embedded Chunks                                                     │  │
+│   │  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐            │  │
+│   │  │ chunk1 │ │ chunk2 │ │ chunk3 │ │ chunk4 │ │ chunk5 │  ...       │  │
+│   │  │ [0.2,  │ │ [0.8,  │ │ [0.1,  │ │ [0.5,  │ │ [0.3,  │            │  │
+│   │  │  0.7,  │ │  0.3,  │ │  0.9,  │ │  0.4,  │ │  0.6,  │            │  │
+│   │  │  ...]  │ │  ...]  │ │  ...]  │ │  ...]  │ │  ...]  │            │  │
+│   │  └────────┘ └────────┘ └────────┘ └────────┘ └────────┘            │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+└───────────────────────────────────▲─────────────────────────────────────────┘
+                                    │
+                                    │ one-time indexing
+                                    │
+┌───────────────────────────────────┴─────────────────────────────────────────┐
+│                           INGESTION PIPELINE                                │
+│                                                                             │
+│   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                 │
+│   │   DOCUMENT   │───▶│   CHUNKING   │───▶│  EMBEDDING   │                 │
+│   │   LOADING    │    │              │    │              │                 │
+│   │              │    │ Split into   │    │ Convert to   │                 │
+│   │ Load .md     │    │ smaller      │    │ vectors      │                 │
+│   │ and .py      │    │ pieces       │    │              │                 │
+│   │ files        │    │              │    │              │                 │
+│   └──────────────┘    └──────────────┘    └──────────────┘                 │
+│         ▲                                                                   │
+│         │                                                                   │
+└─────────┼───────────────────────────────────────────────────────────────────┘
+          │
+┌─────────┴───────────────────────────────────────────────────────────────────┐
+│                           CORPUS (Knowledge Base)                           │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │  py-selenium-framework-mcp/          Nakupuna framework/            │  │
+│   │  ├── framework/                      ├── pages/                     │  │
+│   │  │   ├── pages/                      ├── tasks/                     │  │
+│   │  │   ├── tasks/                      └── ...                        │  │
+│   │  │   ├── roles/                                                     │  │
+│   │  │   └── ...                         ~60k tokens                    │  │
+│   │  ├── CLAUDE.md                                                      │  │
+│   │  └── ...                                                            │  │
+│   │                                                                     │  │
+│   │  ~100k tokens                                                       │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+│   TOTAL: ~160k tokens                                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Component Responsibility Map
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│                        RAG PIPELINE LAYERS                           │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  INGESTION (one-time)                                                │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │ Document    →  Chunking   →  Embedding  →  Vector Storage      │ │
+│  │ Loading                                                         │ │
+│  │                                                                 │ │
+│  │ [DONE]         [NEXT]        [TODO]        [TODO]              │ │
+│  │ loader.py      chunker.py    embedder.py   (Chroma?)           │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  RETRIEVAL (per query)                                               │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │ Search     →  Prompt Building  →  Generation                   │ │
+│  │                                                                 │ │
+│  │ [TODO]        [TODO]              [TODO]                       │ │
+│  │ searcher.py   prompt.py           generator.py                 │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  EVALUATION (ongoing)                                                │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │ Test queries  →  Metrics  →  Improvement                       │ │
+│  │                                                                 │ │
+│  │ [TODO]           [TODO]      [TODO]                            │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### Framework Analogy
+
+```
+QA FRAMEWORK                      RAG SYSTEM
+─────────────────────────────────────────────────────────────────
+WebInterface (Selenium wrapper)   →   Document Loading (file I/O)
+Page Objects (atomic UI actions)  →   Chunking + Embedding
+Tasks (domain operations)         →   Search + Prompt Building
+Roles (business workflows)        →   Generation (complete answer)
+Tests (assertions)                →   Evaluation (accuracy checks)
+```
+
+---
+
+## 3. Goals
+
+| ID | Goal | Metric | Status |
+|----|------|--------|--------|
+| G1 | Learn RAG fundamentals | Can explain each of 8 components and their tradeoffs | In Progress |
+| G2 | Working demo | Streamlit app that answers framework questions accurately | Not Started |
+| G3 | Document decisions | Design decisions recorded as learning progresses | In Progress (6 DDs) |
+| G4 | Portfolio-ready | Clean code, tests, README, demo-able | Not Started |
+
+### Success = Both Learning AND Working Demo
+
+Learning is not enough without a working system.
+A working system is not enough without understanding.
+
+---
+
+## 4. User Stories
+
+### Primary User: Manual Tester Learning Automation
+
+**US-1:** As a manual tester, I want to ask "How do I add a page object?" and get a step-by-step answer with code examples from this framework, so I can learn the framework patterns.
+
+**US-2:** As a new team member, I want to ask "What are the 4 layers?" and understand the architecture quickly, so I can start contributing faster.
+
+**US-3:** As a developer, I want to ask "Where do locators go?" and get the framework's specific convention, so I follow consistent patterns.
+
+### Secondary User: The Learner (You)
+
+**US-4:** As a learner, I want to understand WHY each RAG component works the way it does, not just how to implement it.
+
+**US-5:** As a learner, I want to make my own design decisions and document the tradeoffs I accept.
+
+---
+
+## 5. Functional Requirements
+
+### FR-1: Document Loading [COMPLETE]
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-1.1 | Load markdown and Python files from disk | Done |
+| FR-1.2 | Store documents with metadata (path, type, size, tokens) | Done |
+| FR-1.3 | Handle encoding errors gracefully | Done |
+| FR-1.4 | Support multiple source directories | Done |
+
+**Design Decision:** DD-RAG-001 (DIY loader over LangChain/LlamaIndex)
+
+### FR-2: Chunking [NEXT]
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-2.1 | Split documents into smaller pieces | Pending |
+| FR-2.2 | Configurable chunk size and overlap | Pending |
+| FR-2.3 | Preserve meaningful units (not mid-sentence) | Pending |
+
+**Design Decision:** TBD (Options: fixed-size, sentence-based, semantic)
+
+### FR-3: Embedding
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-3.1 | Convert text chunks to vectors | Pending |
+| FR-3.2 | Support local embedding model | Pending |
+| FR-3.3 | Consistent model between indexing and query | Pending |
+
+**Design Decision:** TBD (Likely: Sentence Transformers for local/free)
+
+### FR-4: Vector Storage
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-4.1 | Store embeddings persistently | Pending |
+| FR-4.2 | Support similarity search | Pending |
+| FR-4.3 | Rebuild index when corpus changes | Pending |
+
+**Design Decision:** TBD (Options: Chroma, FAISS, in-memory)
+
+### FR-5: Search
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-5.1 | Find top-k relevant chunks for a query | Pending |
+| FR-5.2 | Return chunks with relevance scores | Pending |
+| FR-5.3 | Support semantic search (meaning, not just keywords) | Pending |
+
+**Design Decision:** TBD (Options: keyword, semantic, hybrid)
+
+### FR-6: Prompt Building
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-6.1 | Format retrieved chunks into context | Pending |
+| FR-6.2 | Include clear instructions for LLM | Pending |
+| FR-6.3 | Handle context window limits | Pending |
+
+**Design Decision:** TBD
+
+### FR-7: Generation
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-7.1 | Generate answer using LLM with retrieved context | Pending |
+| FR-7.2 | Include source attribution in response | Pending |
+| FR-7.3 | Handle cases with no relevant context | Pending |
+
+**Design Decision:** TBD (LLM provider to be chosen)
+
+### FR-8: Evaluation
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-8.1 | Create test queries with expected results | Pending |
+| FR-8.2 | Measure retrieval accuracy | Pending |
+| FR-8.3 | Assess generation quality | Pending |
+
+**Design Decision:** TBD
+
+### FR-9: User Interface
+
+| ID | Requirement | Status |
+|----|-------------|--------|
+| FR-9.1 | Streamlit web app with text input | Pending |
+| FR-9.2 | Display answer with source documents | Pending |
+| FR-9.3 | Run locally with `streamlit run app.py` | Pending |
+
+**Design Decision:** Streamlit (chosen in planning)
+
+---
+
+## 6. Non-Goals (Out of Scope)
+
+| Non-Goal | Rationale |
+|----------|-----------|
+| Skillware enforcement | Focus on RAG retrieval/generation first |
+| MCP integration | Standalone interface; MCP is optional later |
+| Cloud deployment | Local-only for learning; Streamlit Cloud is future |
+| Multi-user auth | Single-user learning tool |
+| Real-time corpus updates | Rebuild index manually when docs change |
+| PDF/Word support | Corpus is markdown/Python only |
+| Chat history/conversation | Single Q&A per request |
+
+---
+
+## 7. Design Decisions
+
+Decisions are recorded in `training-assistant/docs/DESIGN_DECISIONS.md` using the design-decisions skill.
+
+### Recorded Decisions
+
+| ID | Decision | Component | Date |
+|----|----------|-----------|------|
+| DD-RAG-001 | DIY loader over LangChain/LlamaIndex | Document Loading | 2024-12-13 |
+| DD-RAG-002 | By-layer structure (ingestion/retrieval/generation) | Architecture | 2024-12-13 |
+| DD-RAG-003 | Per-layer tests in tests/ subdirectories | Testing | 2024-12-13 |
+| DD-RAG-004 | Two corpus sources (current project + Nakupuna) | Data | 2024-12-13 |
+| DD-RAG-005 | Keep __init__.py for clean imports | Python Packaging | 2024-12-13 |
+| DD-RAG-006 | Pytest with HTML reporting | Testing | 2024-12-13 |
+
+### Pending Decisions (Per Component)
+
+| Component | Decision Needed | Options |
+|-----------|----------------|---------|
+| Chunking | Split strategy | Fixed-size, sentence-based, semantic |
+| Embedding | Model choice | Sentence Transformers (local), OpenAI |
+| Vector Storage | Database choice | Chroma, FAISS, in-memory |
+| Search | Search type | Keyword, semantic, hybrid |
+| Generation | LLM provider | Anthropic Claude, OpenAI, Together.ai |
+| Evaluation | Metrics | TBD during course Module 5 |
+
+---
+
+## 8. Technical Considerations
+
+### Directory Structure
+
+```
+training-assistant/
+├── docs/
+│   ├── DESIGN_DECISIONS.md           # Recorded decisions
+│   └── 0001-prd-rag-training-assistant.md  # This PRD
+├── rag/
+│   ├── __init__.py
+│   ├── ingestion/                    # Doc Loading, Chunking, Embedding, Storage
+│   │   ├── __init__.py
+│   │   ├── document.py               # Document dataclass [DONE]
+│   │   ├── loader.py                 # File loading [DONE]
+│   │   ├── chunker.py                # [TODO]
+│   │   ├── embedder.py               # [TODO]
+│   │   └── tests/
+│   │       ├── test_loader.py        # [DONE - 15 tests]
+│   │       └── _reports/
+│   ├── retrieval/                    # Search
+│   │   └── __init__.py
+│   └── generation/                   # Prompt Building, Generation
+│       └── __init__.py
+├── app.py                            # Streamlit UI [TODO]
+└── experiment_loader.py              # Learning experiments [DONE]
+```
+
+### Dependencies
+
+```python
+# Installed
+pytest
+pytest-html
+
+# Planned (install as needed)
+streamlit              # UI
+sentence-transformers  # Embeddings (if chosen)
+chromadb               # Vector storage (if chosen)
+anthropic              # LLM (if chosen)
+```
+
+### Corpus Sources
+
+| Source | Path | Est. Tokens |
+|--------|------|-------------|
+| Current project | `D:/my_ai_projects/py_sel_framework_mcp/` | ~100k |
+| Nakupuna framework | `C:/Users/solos/OneDrive/.../nakupuna/v2_04112025/v2/` | ~60k |
+| **Combined** | | **~160k** |
+
+---
+
+## 9. Success Metrics
+
+| Metric | Target | How to Measure |
+|--------|--------|----------------|
+| Learning complete | Explain all 8 RAG components | Self-assessment + documented DDs |
+| Retrieval accuracy | Top-3 chunks contain answer 80%+ | Test query set |
+| Generation quality | Answers are factually correct | Manual review of 10 sample queries |
+| Code quality | Tests pass, clean imports | `pytest` all green |
+| Demo-ready | Show Streamlit app in interview | End-to-end working |
+
+---
+
+## 10. Test Strategy
+
+### Unit Tests (Per Layer)
+- **Location:** `rag/{layer}/tests/`
+- **Framework:** pytest with HTML reports
+- **Decisions:** DD-RAG-003, DD-RAG-006
+
+### Current Test Coverage
+
+| Component | Tests | Status |
+|-----------|-------|--------|
+| Document Loading | 15 tests | PASSING |
+| Chunking | TBD | Not Started |
+| Embedding | TBD | Not Started |
+| Vector Storage | TBD | Not Started |
+| Search | TBD | Not Started |
+| Generation | TBD | Not Started |
+
+### Acceptance Tests (Sample)
+
+```gherkin
+Scenario: Basic retrieval works
+  Given corpus is loaded with framework docs
+  When user asks "What are the 4 layers?"
+  Then retrieved chunks mention "Role", "Task", "Page", "WebInterface"
+
+Scenario: Answer is grounded in context
+  Given retrieved chunks about page objects
+  When LLM generates answer
+  Then answer references information from chunks
+  And answer does not hallucinate patterns not in docs
+
+Scenario: No relevant context
+  Given query about unrelated topic ("recipe for pasta")
+  When system searches corpus
+  Then response indicates no relevant information found
+```
+
+---
+
+## 11. Open Questions
+
+| Question | Status | Notes |
+|----------|--------|-------|
+| Q1: What chunk size works best? | TBD | Experiment in Chunking phase |
+| Q2: Does semantic search beat keyword? | TBD | Compare in Search phase |
+| Q3: How to handle very long documents? | TBD | May need hierarchical chunking |
+| Q4: How to evaluate "good" retrieval? | TBD | Course Module 5 covers this |
+
+---
+
+## 12. Development Process
+
+### 7-Step Learning Process (Per Component)
+
+```
+1. CONCEPT   - What it does, why it matters
+2. OPTIONS   - 2-3 approaches with tradeoffs
+3. DECISION  - Choose and document reasoning (DD-RAG-XXX)
+4. BUILD     - Implement the chosen approach
+5. EXPERIMENT - Modify, break, observe
+6. EVALUATE  - Did it work? Measure it
+7. REFLECT   - Document learnings
+```
+
+### Component Progress Tracker
+
+| Component | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|-----------|---|---|---|---|---|---|---|
+| Document Loading | X | X | X | X | X | X | - |
+| Chunking | | | | | | | |
+| Embedding | | | | | | | |
+| Vector Storage | | | | | | | |
+| Search | | | | | | | |
+| Prompt Building | | | | | | | |
+| Generation | | | | | | | |
+| Evaluation | | | | | | | |
+
+Legend: X = Complete, - = Pending
+
+### RAG Pipeline Progress
+
+```
+INGESTION
+[X] Document Loading → [ ] Chunking → [ ] Embedding → [ ] Vector Storage
+
+QUERY TIME
+[ ] Search → [ ] Prompt Building → [ ] Generation
+
+META
+[ ] Evaluation
+```
+
+---
+
+## 13. Future Direction (Post-PRD Scope)
+
+### Potential Skillware Integration
+
+If RAG Training Assistant evolves toward Skillware:
+- RAG provides the "knowledge layer" (retrieval of rules/patterns)
+- Skillware adds "enforcement layer" (blocks invalid paths)
+- Decision to integrate is FUTURE, not current requirement
+
+### Other Future Enhancements
+
+- MCP tool integration
+- Streamlit Cloud deployment
+- Conversation history
+- External corpus (Selenium docs, pytest docs)
+
+---
+
+## Changelog
+
+| Date | Version | Changes |
+|------|---------|---------|
+| 2025-12-13 | 1.0 | Initial PRD from existing context and 6 design decisions |
+
+---
+
+## PRD Update Cadence
+
+This is a **living document**. Update when:
+- New design decision is made (add to Section 7)
+- Component moves to new step (update Section 12 tracker)
+- Open question is answered (update Section 11)
+- Requirements change
+
+---
+
+*This PRD follows the 4D Framework and aligns with the rag-learning skill 7-step process.*

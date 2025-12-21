@@ -1,0 +1,972 @@
+2025-11-20T06:57:48.065Z [DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_python_projects\resume-ai-pipeline\.claude\settings.local.json...
+2025-11-20T06:57:48.091Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2025-11-20T06:57:48.107Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2025-11-20T06:57:48.108Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2025-11-20T06:57:48.108Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2025-11-20T06:57:48.108Z [DEBUG] [LSP SERVER MANAGER] initialize() called
+2025-11-20T06:57:48.109Z [DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+2025-11-20T06:57:48.129Z [DEBUG] Applying permission update: Adding 10 allow rule(s) to destination 'localSettings': ["WebFetch(domain:github.com)","Bash(git init:*)","Bash(rename:*)","Bash(git add:*)","Bash(git commit:*)","Bash(gh repo create:*)","Bash(git remote add:*)","Bash(git push:*)","Bash(python -m http.server:*)","WebSearch"]
+2025-11-20T06:57:48.131Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2025-11-20T06:57:48.140Z [DEBUG] Total LSP servers loaded: 0
+2025-11-20T06:57:48.154Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2025-11-20T06:57:48.154Z [DEBUG] LSP manager initialized with 0 servers
+2025-11-20T06:57:48.160Z [DEBUG] LSP server manager initialized successfully
+2025-11-20T06:57:48.161Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2025-11-20T06:57:48.174Z [DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_python_projects\resume-ai-pipeline\.claude\skills
+2025-11-20T06:57:48.174Z [DEBUG] >>>>> getPluginSkills CALLED <<<<<
+2025-11-20T06:57:48.175Z [DEBUG] Passes: No cache, fetching eligibility
+2025-11-20T06:57:48.270Z [DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+2025-11-20T06:57:48.270Z [DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+2025-11-20T06:57:48.271Z [DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+2025-11-20T06:57:48.271Z [DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+2025-11-20T06:57:48.283Z [DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1763621868271-er1rq6.sh
+2025-11-20T06:57:48.284Z [DEBUG] Shell binary exists: true
+2025-11-20T06:57:48.284Z [DEBUG] Execution timeout: 10000ms
+2025-11-20T06:57:48.297Z [DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\f0cd2454-5f94-43eb-a0b2-6bbac01d3271-agent-f0cd2454-5f94-43eb-a0b2-6bbac01d3271.json.tmp.22772.1763621868297
+2025-11-20T06:57:48.304Z [DEBUG] Temp file written successfully, size: 2 bytes
+2025-11-20T06:57:48.304Z [DEBUG] Renaming C:\Users\solos\.claude\todos\f0cd2454-5f94-43eb-a0b2-6bbac01d3271-agent-f0cd2454-5f94-43eb-a0b2-6bbac01d3271.json.tmp.22772.1763621868297 to C:\Users\solos\.claude\todos\f0cd2454-5f94-43eb-a0b2-6bbac01d3271-agent-f0cd2454-5f94-43eb-a0b2-6bbac01d3271.json
+2025-11-20T06:57:48.305Z [DEBUG] File C:\Users\solos\.claude\todos\f0cd2454-5f94-43eb-a0b2-6bbac01d3271-agent-f0cd2454-5f94-43eb-a0b2-6bbac01d3271.json written atomically
+2025-11-20T06:57:48.315Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621868315
+2025-11-20T06:57:48.316Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:48.319Z [DEBUG] Temp file written successfully, size: 44662 bytes
+2025-11-20T06:57:48.320Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:48.320Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621868315 to C:\Users\solos\.claude.json
+2025-11-20T06:57:48.320Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:48.329Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2025-11-20T06:57:48.329Z [DEBUG] Total plugin skills loaded: 0
+2025-11-20T06:57:48.329Z [DEBUG] Total plugin commands loaded: 0
+2025-11-20T06:57:48.330Z [DEBUG] Registered 0 hooks from 0 plugins
+2025-11-20T06:57:48.452Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+2025-11-20T06:57:48.456Z [DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+2025-11-20T06:57:48.456Z [DEBUG] Total plugin agents loaded: 0
+2025-11-20T06:57:48.565Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2025-11-20T06:57:48.659Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621868659
+2025-11-20T06:57:48.661Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:48.667Z [DEBUG] Temp file written successfully, size: 45879 bytes
+2025-11-20T06:57:48.667Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:48.667Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621868659 to C:\Users\solos\.claude.json
+2025-11-20T06:57:48.668Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:48.683Z [DEBUG] Shell snapshot created successfully (342 bytes)
+2025-11-20T06:57:48.710Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621868710
+2025-11-20T06:57:48.710Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:48.714Z [DEBUG] Temp file written successfully, size: 45879 bytes
+2025-11-20T06:57:48.714Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:48.714Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621868710 to C:\Users\solos\.claude.json
+2025-11-20T06:57:48.715Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:48.724Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621868724
+2025-11-20T06:57:48.725Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:48.728Z [DEBUG] Temp file written successfully, size: 45879 bytes
+2025-11-20T06:57:48.728Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:48.728Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621868724 to C:\Users\solos\.claude.json
+2025-11-20T06:57:48.729Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:48.918Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621868918
+2025-11-20T06:57:48.918Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:48.922Z [DEBUG] Temp file written successfully, size: 46061 bytes
+2025-11-20T06:57:48.922Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:48.922Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621868918 to C:\Users\solos\.claude.json
+2025-11-20T06:57:48.923Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:48.923Z [DEBUG] Passes eligibility cached for org 763948d1-d9ac-48f3-84c1-9176f6da2ccf: false
+2025-11-20T06:57:49.275Z [DEBUG] Passes: Using fresh cached eligibility data
+2025-11-20T06:57:49.285Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621869285
+2025-11-20T06:57:49.285Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:49.289Z [DEBUG] Temp file written successfully, size: 46061 bytes
+2025-11-20T06:57:49.289Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:49.290Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621869285 to C:\Users\solos\.claude.json
+2025-11-20T06:57:49.290Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:49.327Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2025-11-20T06:57:49.327Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:57:49.327Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2025-11-20T06:57:49.373Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621869373
+2025-11-20T06:57:49.373Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:49.380Z [DEBUG] Temp file written successfully, size: 45956 bytes
+2025-11-20T06:57:49.381Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:49.381Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621869373 to C:\Users\solos\.claude.json
+2025-11-20T06:57:49.381Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:49.397Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621869397
+2025-11-20T06:57:49.398Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:49.401Z [DEBUG] Temp file written successfully, size: 45956 bytes
+2025-11-20T06:57:49.401Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:49.401Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621869397 to C:\Users\solos\.claude.json
+2025-11-20T06:57:49.402Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:49.416Z [DEBUG] performStartupChecks called
+2025-11-20T06:57:49.417Z [DEBUG] Starting background plugin installations
+2025-11-20T06:57:49.417Z [DEBUG] performBackgroundPluginInstallations called
+2025-11-20T06:57:49.462Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-20T06:57:49.470Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T06:57:49.471Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T06:57:49.474Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621869474
+2025-11-20T06:57:49.474Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:49.478Z [DEBUG] Temp file written successfully, size: 46061 bytes
+2025-11-20T06:57:49.479Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:49.479Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621869474 to C:\Users\solos\.claude.json
+2025-11-20T06:57:49.480Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:49.500Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2025-11-20T06:57:51.242Z [DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+2025-11-20T06:57:51.303Z [DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+2025-11-20T06:57:51.329Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621871329
+2025-11-20T06:57:51.329Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:51.334Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-20T06:57:51.335Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:51.335Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621871329 to C:\Users\solos\.claude.json
+2025-11-20T06:57:51.336Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:51.351Z [DEBUG] Getting matching hook commands for SubagentStart with query: Plan
+2025-11-20T06:57:51.352Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:57:51.352Z [DEBUG] Matched 0 unique hooks for query "Plan" (0 before deduplication)
+2025-11-20T06:57:51.398Z [DEBUG] Getting matching hook commands for SubagentStart with query: Explore
+2025-11-20T06:57:51.398Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:57:51.398Z [DEBUG] Matched 0 unique hooks for query "Explore" (0 before deduplication)
+2025-11-20T06:57:51.471Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621871471
+2025-11-20T06:57:51.472Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:51.477Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-20T06:57:51.477Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:51.477Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621871471 to C:\Users\solos\.claude.json
+2025-11-20T06:57:51.478Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:51.484Z [DEBUG] MCP server "ide": Successfully connected to ws-ide server in 198ms
+2025-11-20T06:57:51.485Z [DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.42"}}
+2025-11-20T06:57:51.675Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763621871675
+2025-11-20T06:57:51.675Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T06:57:51.678Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-20T06:57:51.679Z [DEBUG] Applied original permissions to temp file
+2025-11-20T06:57:51.679Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763621871675 to C:\Users\solos\.claude.json
+2025-11-20T06:57:51.680Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T06:57:52.335Z [DEBUG] Stream started - received first chunk
+2025-11-20T06:57:54.344Z [DEBUG] Stream started - received first chunk
+2025-11-20T06:57:56.038Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-11-20T06:57:56.038Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:57:56.038Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-20T06:57:56.143Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-11-20T06:57:56.143Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:57:56.144Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-20T06:57:59.189Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T06:57:59.190Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T06:57:59.215Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T06:57:59.215Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T06:57:59.607Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-20T06:57:59.608Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:57:59.608Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-20T06:57:59.611Z [DEBUG] FileHistory: Added snapshot for 2dc72925-2e85-4f8c-9aa9-df03b8c3033b, tracking 0 files
+2025-11-20T06:57:59.670Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-20T06:57:59.766Z [DEBUG] Total plugin output styles loaded: 0
+2025-11-20T06:57:59.803Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 133ms
+2025-11-20T06:57:59.824Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T06:57:59.825Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T06:58:01.333Z [DEBUG] Stream started - received first chunk
+2025-11-20T06:58:03.237Z [DEBUG] Stream started - received first chunk
+2025-11-20T06:58:11.446Z [DEBUG] executePreToolHooks called for tool: Read
+2025-11-20T06:58:11.452Z [DEBUG] executePreToolHooks called for tool: Read
+2025-11-20T06:58:11.460Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-11-20T06:58:11.460Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:58:11.460Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-11-20T06:58:11.461Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-11-20T06:58:11.461Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:58:11.461Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-11-20T06:58:13.196Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-11-20T06:58:13.196Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:58:13.196Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-11-20T06:58:14.080Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-11-20T06:58:14.080Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:58:14.081Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-11-20T06:58:14.129Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T06:58:14.130Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T06:58:14.130Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T06:58:14.141Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T06:58:14.141Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T06:58:14.401Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 272ms
+2025-11-20T06:58:14.421Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T06:58:14.421Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T06:58:16.646Z [DEBUG] Stream started - received first chunk
+2025-11-20T06:59:58.867Z [DEBUG] executePreToolHooks called for tool: Write
+2025-11-20T06:59:58.878Z [DEBUG] Getting matching hook commands for PreToolUse with query: Write
+2025-11-20T06:59:58.878Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:59:58.879Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2025-11-20T06:59:59.492Z [DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2025-11-20T06:59:59.616Z [DEBUG] MCP server "ide": Calling MCP tool: openDiff
+2025-11-20T06:59:59.720Z [DEBUG] executePermissionRequestHooks called for tool: Write
+2025-11-20T06:59:59.823Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Write
+2025-11-20T06:59:59.824Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T06:59:59.824Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2025-11-20T07:00:05.633Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2025-11-20T07:00:05.634Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:00:05.634Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2025-11-20T07:00:29.623Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+2025-11-20T07:00:46.531Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-20T07:00:46.556Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-20T07:00:46.561Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T07:00:46.620Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 89ms
+2025-11-20T07:00:46.621Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 60ms
+2025-11-20T07:00:46.632Z [DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 47s
+2025-11-20T07:00:46.652Z [ERROR] sQ2: sQ2: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\resumes\xpansiv-qa-engineer.html, got file://d:\my_python_projects\resume-ai-pipeline\resumes\xpansiv-qa-engineer.html/)
+    at _T.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1805:2049)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1854:1253)
+    at async Fc5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2140:49869)
+2025-11-20T07:00:46.652Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-20T07:00:46.656Z [DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\resume-ai-pipeline\resumes\xpansiv-qa-engineer.html
+2025-11-20T07:00:46.670Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 18ms
+2025-11-20T07:00:47.431Z [DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\resumes\xpansiv-qa-engineer.html.tmp.22772.1763622047431
+2025-11-20T07:00:47.457Z [DEBUG] Temp file written successfully, size: 17689 bytes
+2025-11-20T07:00:47.458Z [DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\resumes\xpansiv-qa-engineer.html.tmp.22772.1763622047431 to D:\my_python_projects\resume-ai-pipeline\resumes\xpansiv-qa-engineer.html
+2025-11-20T07:00:47.458Z [DEBUG] File D:\my_python_projects\resume-ai-pipeline\resumes\xpansiv-qa-engineer.html written atomically
+2025-11-20T07:00:47.474Z [DEBUG] Getting matching hook commands for PostToolUse with query: Write
+2025-11-20T07:00:47.474Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:00:47.475Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2025-11-20T07:00:47.545Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T07:00:47.546Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T07:00:47.546Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T07:00:47.555Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T07:00:47.556Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T07:00:47.667Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 122ms
+2025-11-20T07:00:47.691Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T07:00:47.691Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T07:00:49.845Z [DEBUG] Stream started - received first chunk
+2025-11-20T07:00:52.290Z [DEBUG] executePreToolHooks called for tool: Bash
+2025-11-20T07:00:52.296Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2025-11-20T07:00:52.297Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:00:52.297Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T07:00:52.407Z [DEBUG] Session environment not yet supported on Windows
+2025-11-20T07:00:52.832Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2025-11-20T07:00:52.832Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:00:52.832Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T07:00:52.897Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T07:00:52.898Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T07:00:52.898Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T07:00:52.908Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T07:00:52.909Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T07:00:53.031Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 134ms
+2025-11-20T07:00:53.076Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T07:00:53.077Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T07:00:53.502Z [DEBUG] Stream started - received first chunk
+2025-11-20T07:00:54.733Z [DEBUG] Stream started - received first chunk
+2025-11-20T07:00:58.336Z [DEBUG] executePreToolHooks called for tool: Bash
+2025-11-20T07:00:58.343Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2025-11-20T07:00:58.343Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:00:58.343Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T07:00:58.454Z [DEBUG] Session environment not yet supported on Windows
+2025-11-20T07:00:59.006Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2025-11-20T07:00:59.007Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:00:59.007Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T07:00:59.088Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T07:00:59.089Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T07:00:59.089Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T07:00:59.100Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T07:00:59.100Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T07:00:59.208Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 120ms
+2025-11-20T07:00:59.227Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T07:00:59.227Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T07:01:00.004Z [DEBUG] Stream started - received first chunk
+2025-11-20T07:01:01.003Z [DEBUG] Stream started - received first chunk
+2025-11-20T07:01:02.581Z [DEBUG] executePreToolHooks called for tool: Bash
+2025-11-20T07:01:02.587Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2025-11-20T07:01:02.587Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:01:02.587Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T07:01:02.690Z [DEBUG] Session environment not yet supported on Windows
+2025-11-20T07:01:04.524Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2025-11-20T07:01:04.524Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:01:04.524Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T07:01:04.595Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T07:01:04.596Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T07:01:04.596Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T07:01:04.608Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T07:01:04.608Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T07:01:04.707Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 112ms
+2025-11-20T07:01:04.728Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T07:01:04.728Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T07:01:05.111Z [DEBUG] Stream started - received first chunk
+2025-11-20T07:01:06.734Z [DEBUG] Stream started - received first chunk
+2025-11-20T07:01:19.844Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-20T07:01:19.845Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:01:19.845Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-20T07:01:19.868Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763622079868
+2025-11-20T07:01:19.868Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T07:01:19.872Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-20T07:01:19.872Z [DEBUG] Applied original permissions to temp file
+2025-11-20T07:01:19.872Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763622079868 to C:\Users\solos\.claude.json
+2025-11-20T07:01:19.873Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T07:01:19.888Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763622079888
+2025-11-20T07:01:19.889Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T07:01:19.892Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-20T07:01:19.893Z [DEBUG] Applied original permissions to temp file
+2025-11-20T07:01:19.893Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763622079888 to C:\Users\solos\.claude.json
+2025-11-20T07:01:19.893Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T07:02:19.864Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-20T07:02:19.865Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T07:02:19.865Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-20T10:00:51.726Z [DEBUG] npm view failed with code 1
+2025-11-20T10:00:51.729Z [DEBUG] npm stderr: (empty)
+2025-11-20T10:22:54.285Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T10:22:54.300Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T10:22:54.301Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T10:22:54.310Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T10:22:54.310Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T10:22:54.431Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 146ms
+2025-11-20T10:22:54.451Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-20T10:22:54.451Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:22:54.452Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-20T10:22:54.459Z [DEBUG] FileHistory: Making snapshot for message 6ce68694-a5f7-4d2a-96b7-f3f6963a7c6c
+2025-11-20T10:22:54.510Z [DEBUG] FileHistory: Added snapshot for 6ce68694-a5f7-4d2a-96b7-f3f6963a7c6c, tracking 1 files
+2025-11-20T10:22:54.538Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-20T10:22:54.646Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 108ms
+2025-11-20T10:22:54.675Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T10:22:54.676Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T10:22:55.396Z [DEBUG] Stream started - received first chunk
+2025-11-20T10:22:58.084Z [DEBUG] Stream started - received first chunk
+2025-11-20T10:23:08.273Z [DEBUG] executePreToolHooks called for tool: Bash
+2025-11-20T10:23:08.280Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2025-11-20T10:23:08.280Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:23:08.280Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T10:23:09.833Z [DEBUG] Stream started - received first chunk
+2025-11-20T10:23:10.339Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "mkdir:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2025-11-20T10:23:10.365Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2025-11-20T10:23:10.369Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2025-11-20T10:23:10.370Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:23:10.370Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T10:23:16.364Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2025-11-20T10:23:16.364Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:23:16.364Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2025-11-20T10:23:32.979Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-20T10:23:33.068Z [DEBUG] Session environment not yet supported on Windows
+2025-11-20T10:23:33.554Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2025-11-20T10:23:33.554Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:23:33.554Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T10:23:33.638Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T10:23:33.640Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T10:23:33.640Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T10:23:33.651Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T10:23:33.651Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T10:23:33.771Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 133ms
+2025-11-20T10:23:33.794Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T10:23:33.794Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T10:23:34.617Z [DEBUG] Stream started - received first chunk
+2025-11-20T10:23:36.944Z [DEBUG] Stream started - received first chunk
+2025-11-20T10:24:00.204Z [DEBUG] executePreToolHooks called for tool: Write
+2025-11-20T10:24:00.211Z [DEBUG] Getting matching hook commands for PreToolUse with query: Write
+2025-11-20T10:24:00.211Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:24:00.211Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2025-11-20T10:24:00.841Z [DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2025-11-20T10:24:00.938Z [DEBUG] MCP server "ide": Calling MCP tool: openDiff
+2025-11-20T10:24:01.039Z [DEBUG] executePermissionRequestHooks called for tool: Write
+2025-11-20T10:24:01.146Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Write
+2025-11-20T10:24:01.146Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:24:01.146Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2025-11-20T10:24:04.016Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-20T10:24:04.034Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-20T10:24:04.038Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T10:24:04.068Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 52ms
+2025-11-20T10:24:04.069Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 31ms
+2025-11-20T10:24:04.081Z [ERROR] sQ2: sQ2: Diagnostics file path mismatch: expected D:\my_python_projects\resume-ai-pipeline\cover-letters\xpansiv-qa-engineer.txt, got file://d:\my_python_projects\resume-ai-pipeline\cover-letters\xpansiv-qa-engineer.txt/)
+    at _T.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1805:2049)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1854:1253)
+    at async Fc5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2140:49869)
+2025-11-20T10:24:04.083Z [DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\resume-ai-pipeline\cover-letters\xpansiv-qa-engineer.txt
+2025-11-20T10:24:04.089Z [DEBUG] Writing to temp file: D:\my_python_projects\resume-ai-pipeline\cover-letters\xpansiv-qa-engineer.txt.tmp.22772.1763634244089
+2025-11-20T10:24:04.118Z [DEBUG] Temp file written successfully, size: 3988 bytes
+2025-11-20T10:24:04.118Z [DEBUG] Renaming D:\my_python_projects\resume-ai-pipeline\cover-letters\xpansiv-qa-engineer.txt.tmp.22772.1763634244089 to D:\my_python_projects\resume-ai-pipeline\cover-letters\xpansiv-qa-engineer.txt
+2025-11-20T10:24:04.118Z [DEBUG] File D:\my_python_projects\resume-ai-pipeline\cover-letters\xpansiv-qa-engineer.txt written atomically
+2025-11-20T10:24:04.133Z [DEBUG] Getting matching hook commands for PostToolUse with query: Write
+2025-11-20T10:24:04.134Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:24:04.134Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2025-11-20T10:24:04.222Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T10:24:04.223Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T10:24:04.224Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T10:24:04.235Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T10:24:04.235Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T10:24:04.391Z [DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 3s
+2025-11-20T10:24:04.392Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 170ms
+2025-11-20T10:24:04.400Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-20T10:24:04.453Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T10:24:04.453Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T10:24:04.499Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 99ms
+2025-11-20T10:24:07.043Z [DEBUG] Stream started - received first chunk
+2025-11-20T10:24:09.024Z [DEBUG] executePreToolHooks called for tool: Bash
+2025-11-20T10:24:09.030Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2025-11-20T10:24:09.030Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:24:09.030Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T10:24:09.149Z [DEBUG] Session environment not yet supported on Windows
+2025-11-20T10:24:11.330Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2025-11-20T10:24:11.330Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:24:11.330Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2025-11-20T10:24:11.436Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-20T10:24:11.437Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-20T10:24:11.437Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-20T10:24:11.447Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-20T10:24:11.447Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-20T10:24:11.618Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 182ms
+2025-11-20T10:24:11.646Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-20T10:24:11.647Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-20T10:24:11.990Z [DEBUG] Stream started - received first chunk
+2025-11-20T10:24:14.330Z [DEBUG] Stream started - received first chunk
+2025-11-20T10:24:22.606Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-20T10:24:22.606Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:24:22.606Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-20T10:24:22.625Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763634262625
+2025-11-20T10:24:22.625Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T10:24:22.628Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-20T10:24:22.629Z [DEBUG] Applied original permissions to temp file
+2025-11-20T10:24:22.629Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763634262625 to C:\Users\solos\.claude.json
+2025-11-20T10:24:22.629Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T10:24:22.644Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763634262644
+2025-11-20T10:24:22.645Z [DEBUG] Preserving file permissions: 100666
+2025-11-20T10:24:22.648Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-20T10:24:22.648Z [DEBUG] Applied original permissions to temp file
+2025-11-20T10:24:22.648Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763634262644 to C:\Users\solos\.claude.json
+2025-11-20T10:24:22.649Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-20T10:25:22.630Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-20T10:25:22.631Z [DEBUG] Found 0 hook matchers in settings
+2025-11-20T10:25:22.631Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-20T12:24:09.140Z [DEBUG] npm view failed with code 1
+2025-11-20T12:24:09.140Z [DEBUG] npm stderr: (empty)
+2025-11-20T21:24:09.370Z [DEBUG] npm view failed with code 1
+2025-11-20T21:24:09.370Z [DEBUG] npm stderr: (empty)
+2025-11-21T00:24:09.435Z [DEBUG] npm view failed with code 1
+2025-11-21T00:24:09.438Z [DEBUG] npm stderr: (empty)
+2025-11-21T01:54:05.242Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T01:54:05.243Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T01:54:08.394Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763690048394
+2025-11-21T01:54:08.394Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T01:54:08.398Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T01:54:08.399Z [DEBUG] Applied original permissions to temp file
+2025-11-21T01:54:08.399Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763690048394 to C:\Users\solos\.claude.json
+2025-11-21T01:54:08.400Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T02:24:05.162Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T02:24:05.163Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T02:24:08.312Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763691848312
+2025-11-21T02:24:08.312Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T02:24:08.316Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T02:24:08.316Z [DEBUG] Applied original permissions to temp file
+2025-11-21T02:24:08.316Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763691848312 to C:\Users\solos\.claude.json
+2025-11-21T02:24:08.317Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T02:54:05.202Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T02:54:05.202Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T02:54:08.577Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763693648577
+2025-11-21T02:54:08.577Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T02:54:08.581Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T02:54:08.581Z [DEBUG] Applied original permissions to temp file
+2025-11-21T02:54:08.582Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763693648577 to C:\Users\solos\.claude.json
+2025-11-21T02:54:08.582Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T03:24:05.252Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T03:24:05.252Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T03:24:08.406Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763695448406
+2025-11-21T03:24:08.406Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T03:24:08.410Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T03:24:08.410Z [DEBUG] Applied original permissions to temp file
+2025-11-21T03:24:08.410Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763695448406 to C:\Users\solos\.claude.json
+2025-11-21T03:24:08.411Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T03:54:05.297Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T03:54:05.297Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T03:54:08.371Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763697248371
+2025-11-21T03:54:08.372Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T03:54:08.375Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T03:54:08.375Z [DEBUG] Applied original permissions to temp file
+2025-11-21T03:54:08.376Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763697248371 to C:\Users\solos\.claude.json
+2025-11-21T03:54:08.376Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T04:24:05.210Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T04:24:05.210Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T04:24:08.476Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763699048476
+2025-11-21T04:24:08.476Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T04:24:08.479Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T04:24:08.480Z [DEBUG] Applied original permissions to temp file
+2025-11-21T04:24:08.480Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763699048476 to C:\Users\solos\.claude.json
+2025-11-21T04:24:08.480Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T04:54:05.203Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T04:54:05.203Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T04:54:08.195Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763700848195
+2025-11-21T04:54:08.195Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T04:54:08.198Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T04:54:08.199Z [DEBUG] Applied original permissions to temp file
+2025-11-21T04:54:08.199Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763700848195 to C:\Users\solos\.claude.json
+2025-11-21T04:54:08.199Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T05:24:05.216Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T05:24:05.216Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T05:24:08.311Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763702648311
+2025-11-21T05:24:08.311Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T05:24:08.314Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T05:24:08.315Z [DEBUG] Applied original permissions to temp file
+2025-11-21T05:24:08.315Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763702648311 to C:\Users\solos\.claude.json
+2025-11-21T05:24:08.315Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T05:54:05.205Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T05:54:05.205Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T05:54:08.514Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763704448514
+2025-11-21T05:54:08.515Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T05:54:08.518Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T05:54:08.518Z [DEBUG] Applied original permissions to temp file
+2025-11-21T05:54:08.519Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763704448514 to C:\Users\solos\.claude.json
+2025-11-21T05:54:08.519Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T06:24:05.410Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T06:24:05.411Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T06:24:08.609Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763706248609
+2025-11-21T06:24:08.609Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T06:24:08.613Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T06:24:08.613Z [DEBUG] Applied original permissions to temp file
+2025-11-21T06:24:08.613Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763706248609 to C:\Users\solos\.claude.json
+2025-11-21T06:24:08.614Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T06:54:05.297Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T06:54:05.297Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T06:54:08.188Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763708048188
+2025-11-21T06:54:08.189Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T06:54:08.192Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T06:54:08.192Z [DEBUG] Applied original permissions to temp file
+2025-11-21T06:54:08.193Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763708048188 to C:\Users\solos\.claude.json
+2025-11-21T06:54:08.193Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T07:24:05.289Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T07:24:05.290Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T07:24:08.437Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763709848437
+2025-11-21T07:24:08.438Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T07:24:08.442Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T07:24:08.442Z [DEBUG] Applied original permissions to temp file
+2025-11-21T07:24:08.442Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763709848437 to C:\Users\solos\.claude.json
+2025-11-21T07:24:08.443Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T07:54:05.240Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T07:54:05.240Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T07:54:08.664Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763711648664
+2025-11-21T07:54:08.664Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T07:54:08.667Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T07:54:08.668Z [DEBUG] Applied original permissions to temp file
+2025-11-21T07:54:08.668Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763711648664 to C:\Users\solos\.claude.json
+2025-11-21T07:54:08.669Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T08:24:05.332Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T08:24:05.333Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T08:24:08.427Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763713448427
+2025-11-21T08:24:08.427Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T08:24:08.431Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T08:24:08.431Z [DEBUG] Applied original permissions to temp file
+2025-11-21T08:24:08.431Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763713448427 to C:\Users\solos\.claude.json
+2025-11-21T08:24:08.432Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T08:54:05.278Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T08:54:05.278Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T08:54:08.118Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763715248118
+2025-11-21T08:54:08.118Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T08:54:08.122Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T08:54:08.122Z [DEBUG] Applied original permissions to temp file
+2025-11-21T08:54:08.122Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763715248118 to C:\Users\solos\.claude.json
+2025-11-21T08:54:08.123Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T09:24:05.621Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T09:24:05.622Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T09:24:08.930Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763717048930
+2025-11-21T09:24:08.930Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T09:24:08.933Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T09:24:08.934Z [DEBUG] Applied original permissions to temp file
+2025-11-21T09:24:08.934Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763717048930 to C:\Users\solos\.claude.json
+2025-11-21T09:24:08.934Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T09:54:09.684Z [DEBUG] npm view failed with code 1
+2025-11-21T09:54:09.685Z [DEBUG] npm stderr: (empty)
+2025-11-21T10:24:05.455Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T10:24:05.456Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T10:24:08.376Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763720648376
+2025-11-21T10:24:08.376Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T10:24:08.379Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T10:24:08.380Z [DEBUG] Applied original permissions to temp file
+2025-11-21T10:24:08.380Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763720648376 to C:\Users\solos\.claude.json
+2025-11-21T10:24:08.380Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T10:54:05.551Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T10:54:05.551Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T10:54:08.546Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763722448546
+2025-11-21T10:54:08.547Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T10:54:08.550Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T10:54:08.550Z [DEBUG] Applied original permissions to temp file
+2025-11-21T10:54:08.551Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763722448546 to C:\Users\solos\.claude.json
+2025-11-21T10:54:08.551Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T11:24:05.327Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T11:24:05.327Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T11:24:08.320Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763724248320
+2025-11-21T11:24:08.320Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T11:24:08.323Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T11:24:08.324Z [DEBUG] Applied original permissions to temp file
+2025-11-21T11:24:08.324Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763724248320 to C:\Users\solos\.claude.json
+2025-11-21T11:24:08.324Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T11:54:05.318Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T11:54:05.318Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T11:54:08.236Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763726048236
+2025-11-21T11:54:08.237Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T11:54:08.240Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T11:54:08.240Z [DEBUG] Applied original permissions to temp file
+2025-11-21T11:54:08.241Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763726048236 to C:\Users\solos\.claude.json
+2025-11-21T11:54:08.241Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T12:24:05.392Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T12:24:05.392Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T12:24:08.338Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763727848338
+2025-11-21T12:24:08.338Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T12:24:08.342Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T12:24:08.342Z [DEBUG] Applied original permissions to temp file
+2025-11-21T12:24:08.342Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763727848338 to C:\Users\solos\.claude.json
+2025-11-21T12:24:08.343Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T12:54:05.442Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T12:54:05.442Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T12:54:08.322Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763729648322
+2025-11-21T12:54:08.322Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T12:54:08.326Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T12:54:08.326Z [DEBUG] Applied original permissions to temp file
+2025-11-21T12:54:08.326Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763729648322 to C:\Users\solos\.claude.json
+2025-11-21T12:54:08.327Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T13:24:09.772Z [DEBUG] npm view failed with code 1
+2025-11-21T13:24:09.772Z [DEBUG] npm stderr: (empty)
+2025-11-21T13:54:05.428Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T13:54:05.428Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T13:54:08.326Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763733248326
+2025-11-21T13:54:08.326Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T13:54:08.329Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T13:54:08.330Z [DEBUG] Applied original permissions to temp file
+2025-11-21T13:54:08.330Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763733248326 to C:\Users\solos\.claude.json
+2025-11-21T13:54:08.330Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T14:24:05.504Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T14:24:05.504Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T14:24:08.413Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763735048413
+2025-11-21T14:24:08.413Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T14:24:08.417Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T14:24:08.417Z [DEBUG] Applied original permissions to temp file
+2025-11-21T14:24:08.417Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763735048413 to C:\Users\solos\.claude.json
+2025-11-21T14:24:08.417Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T14:54:05.459Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T14:54:05.459Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T14:54:08.488Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763736848488
+2025-11-21T14:54:08.488Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T14:54:08.492Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T14:54:08.492Z [DEBUG] Applied original permissions to temp file
+2025-11-21T14:54:08.492Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763736848488 to C:\Users\solos\.claude.json
+2025-11-21T14:54:08.493Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T15:24:05.552Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T15:24:05.553Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T15:24:08.609Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763738648609
+2025-11-21T15:24:08.610Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T15:24:08.613Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T15:24:08.613Z [DEBUG] Applied original permissions to temp file
+2025-11-21T15:24:08.614Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763738648609 to C:\Users\solos\.claude.json
+2025-11-21T15:24:08.614Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T15:54:05.562Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T15:54:05.562Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T15:54:08.658Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763740448658
+2025-11-21T15:54:08.659Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T15:54:08.664Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T15:54:08.664Z [DEBUG] Applied original permissions to temp file
+2025-11-21T15:54:08.664Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763740448658 to C:\Users\solos\.claude.json
+2025-11-21T15:54:08.665Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T16:24:05.499Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T16:24:05.500Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T16:24:08.525Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763742248525
+2025-11-21T16:24:08.526Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T16:24:08.529Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T16:24:08.530Z [DEBUG] Applied original permissions to temp file
+2025-11-21T16:24:08.530Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763742248525 to C:\Users\solos\.claude.json
+2025-11-21T16:24:08.530Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T16:54:05.606Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T16:54:05.606Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T16:54:08.674Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763744048674
+2025-11-21T16:54:08.674Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T16:54:08.678Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T16:54:08.678Z [DEBUG] Applied original permissions to temp file
+2025-11-21T16:54:08.678Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763744048674 to C:\Users\solos\.claude.json
+2025-11-21T16:54:08.679Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T17:24:05.684Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T17:24:05.685Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T17:24:08.735Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763745848735
+2025-11-21T17:24:08.735Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T17:24:08.739Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T17:24:08.739Z [DEBUG] Applied original permissions to temp file
+2025-11-21T17:24:08.739Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763745848735 to C:\Users\solos\.claude.json
+2025-11-21T17:24:08.740Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T17:54:05.588Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T17:54:05.588Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T17:54:08.736Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763747648736
+2025-11-21T17:54:08.736Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T17:54:08.739Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T17:54:08.740Z [DEBUG] Applied original permissions to temp file
+2025-11-21T17:54:08.740Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763747648736 to C:\Users\solos\.claude.json
+2025-11-21T17:54:08.740Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T18:24:05.615Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T18:24:05.616Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T18:24:08.681Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763749448681
+2025-11-21T18:24:08.681Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T18:24:08.684Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T18:24:08.684Z [DEBUG] Applied original permissions to temp file
+2025-11-21T18:24:08.685Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763749448681 to C:\Users\solos\.claude.json
+2025-11-21T18:24:08.685Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T18:54:05.648Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T18:54:05.648Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T18:54:08.706Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763751248706
+2025-11-21T18:54:08.706Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T18:54:08.710Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T18:54:08.710Z [DEBUG] Applied original permissions to temp file
+2025-11-21T18:54:08.710Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763751248706 to C:\Users\solos\.claude.json
+2025-11-21T18:54:08.711Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T19:24:05.591Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T19:24:05.591Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T19:24:08.659Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763753048659
+2025-11-21T19:24:08.659Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T19:24:08.662Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T19:24:08.663Z [DEBUG] Applied original permissions to temp file
+2025-11-21T19:24:08.663Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763753048659 to C:\Users\solos\.claude.json
+2025-11-21T19:24:08.663Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T19:54:05.833Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T19:54:05.833Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T19:54:09.150Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763754849150
+2025-11-21T19:54:09.150Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T19:54:09.154Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T19:54:09.154Z [DEBUG] Applied original permissions to temp file
+2025-11-21T19:54:09.155Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763754849150 to C:\Users\solos\.claude.json
+2025-11-21T19:54:09.155Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T20:24:05.687Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T20:24:05.688Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T20:24:09.819Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763756649819
+2025-11-21T20:24:09.819Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T20:24:09.823Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T20:24:09.823Z [DEBUG] Applied original permissions to temp file
+2025-11-21T20:24:09.824Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763756649819 to C:\Users\solos\.claude.json
+2025-11-21T20:24:09.824Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T20:54:05.719Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T20:54:05.720Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T20:54:08.809Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763758448809
+2025-11-21T20:54:08.809Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T20:54:08.812Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T20:54:08.812Z [DEBUG] Applied original permissions to temp file
+2025-11-21T20:54:08.813Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763758448809 to C:\Users\solos\.claude.json
+2025-11-21T20:54:08.813Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T21:24:10.018Z [DEBUG] npm view failed with code 1
+2025-11-21T21:24:10.018Z [DEBUG] npm stderr: (empty)
+2025-11-21T21:54:05.843Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T21:54:05.843Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T21:54:08.940Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763762048940
+2025-11-21T21:54:08.940Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T21:54:08.944Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T21:54:08.944Z [DEBUG] Applied original permissions to temp file
+2025-11-21T21:54:08.944Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763762048940 to C:\Users\solos\.claude.json
+2025-11-21T21:54:08.945Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T22:24:05.757Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T22:24:05.758Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T22:24:08.998Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763763848998
+2025-11-21T22:24:08.999Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T22:24:09.002Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T22:24:09.002Z [DEBUG] Applied original permissions to temp file
+2025-11-21T22:24:09.003Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763763848998 to C:\Users\solos\.claude.json
+2025-11-21T22:24:09.003Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T22:54:05.808Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T22:54:05.808Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T22:54:08.756Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763765648756
+2025-11-21T22:54:08.757Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T22:54:08.760Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T22:54:08.760Z [DEBUG] Applied original permissions to temp file
+2025-11-21T22:54:08.760Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763765648756 to C:\Users\solos\.claude.json
+2025-11-21T22:54:08.761Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T23:24:05.888Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T23:24:05.888Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T23:24:11.852Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763767451852
+2025-11-21T23:24:11.853Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T23:24:11.856Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T23:24:11.857Z [DEBUG] Applied original permissions to temp file
+2025-11-21T23:24:11.857Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763767451852 to C:\Users\solos\.claude.json
+2025-11-21T23:24:11.857Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-21T23:54:05.818Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-21T23:54:05.818Z [DEBUG] AutoUpdater: Using global update method
+2025-11-21T23:54:08.338Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763769248338
+2025-11-21T23:54:08.338Z [DEBUG] Preserving file permissions: 100666
+2025-11-21T23:54:08.344Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-21T23:54:08.345Z [DEBUG] Applied original permissions to temp file
+2025-11-21T23:54:08.345Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763769248338 to C:\Users\solos\.claude.json
+2025-11-21T23:54:08.345Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T00:24:05.821Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T00:24:05.821Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T00:24:08.289Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763771048289
+2025-11-22T00:24:08.289Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T00:24:08.293Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-22T00:24:08.293Z [DEBUG] Applied original permissions to temp file
+2025-11-22T00:24:08.293Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763771048289 to C:\Users\solos\.claude.json
+2025-11-22T00:24:08.294Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T00:54:06.432Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T00:54:06.432Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T00:54:09.761Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22772.1763772849761
+2025-11-22T00:54:09.762Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T00:54:09.765Z [DEBUG] Temp file written successfully, size: 46090 bytes
+2025-11-22T00:54:09.765Z [DEBUG] Applied original permissions to temp file
+2025-11-22T00:54:09.765Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22772.1763772849761 to C:\Users\solos\.claude.json
+2025-11-22T00:54:09.766Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:24:10.126Z [DEBUG] npm view failed with code 1
+2025-11-22T01:24:10.126Z [DEBUG] npm stderr: (empty)
+2025-11-22T01:54:05.861Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T01:54:05.862Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T02:04:06.285Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T02:24:05.898Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T02:24:05.898Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T02:34:06.287Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T02:54:05.890Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T02:54:05.890Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T03:04:06.296Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T03:24:05.952Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T03:24:05.953Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T03:34:06.362Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T03:54:07.689Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T03:54:07.690Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T04:04:08.075Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T04:24:05.975Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T04:24:05.975Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T04:34:06.349Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T04:54:05.859Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T04:54:05.860Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T05:04:06.254Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T05:24:05.926Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T05:24:05.926Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T05:34:06.307Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T05:54:05.851Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T05:54:05.851Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T06:04:06.244Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T06:24:05.855Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T06:24:05.855Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T06:34:06.256Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T06:54:05.949Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T06:54:05.950Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T07:04:06.342Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T07:24:05.939Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T07:24:05.940Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T07:34:06.318Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T07:54:05.915Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T07:54:05.915Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T08:04:06.308Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T08:24:05.979Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T08:24:05.979Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T08:34:06.386Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T08:54:05.926Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T08:54:05.926Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T09:04:06.346Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T09:24:06.174Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T09:24:06.175Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T09:34:06.601Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T09:54:06.062Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T09:54:06.062Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T10:04:06.484Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T10:24:06.065Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T10:24:06.065Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T10:34:06.477Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T10:54:06.008Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T10:54:06.009Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T10:54:07.530Z [ERROR] x41: x41: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-22T10_54_06_765Z-debug-0.log
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T11:24:06.099Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T11:24:06.099Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T11:24:07.771Z [ERROR] x41: x41: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-22T11_24_06_873Z-debug-0.log
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T11:54:05.983Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T11:54:05.983Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T12:04:06.401Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T12:24:06.012Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T12:24:06.012Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T12:34:06.400Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T12:54:06.084Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T12:54:06.084Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T13:04:06.502Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T13:24:06.055Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T13:24:06.055Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T13:34:06.462Z [ERROR] x41: x41: Failed to install new version of claude:  
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T13:54:06.094Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T13:54:06.094Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T13:54:10.787Z [ERROR] x41: x41: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-22T13_54_06_807Z-debug-0.log
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)
+2025-11-22T14:24:06.147Z [DEBUG] AutoUpdater: Detected installation type: npm-global
+2025-11-22T14:24:06.147Z [DEBUG] AutoUpdater: Using global update method
+2025-11-22T14:24:07.816Z [ERROR] x41: x41: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-22T14_24_06_837Z-debug-0.log
+    at uMA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2512:456)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2514:9642)

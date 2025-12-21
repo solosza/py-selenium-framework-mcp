@@ -1,0 +1,131 @@
+[DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] >>>>> getSkillsIfEnabled() CALLED <<<<<
+[DEBUG] ENABLE_SKILLS value: true, type: boolean
+[DEBUG] ENABLE_SKILLS check passed, loading skills...
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_python_projects\zillow_scraping\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+[DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1760950986704-brpoeh.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\005a1f77-fe4c-48c5-ba10-efb62c26f630-agent-005a1f77-fe4c-48c5-ba10-efb62c26f630.json.tmp.14368.1760950986718
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\solos\.claude\todos\005a1f77-fe4c-48c5-ba10-efb62c26f630-agent-005a1f77-fe4c-48c5-ba10-efb62c26f630.json.tmp.14368.1760950986718 to C:\Users\solos\.claude\todos\005a1f77-fe4c-48c5-ba10-efb62c26f630-agent-005a1f77-fe4c-48c5-ba10-efb62c26f630.json
+[DEBUG] File C:\Users\solos\.claude\todos\005a1f77-fe4c-48c5-ba10-efb62c26f630-agent-005a1f77-fe4c-48c5-ba10-efb62c26f630.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 skills total (managed: 0, user: 0, project: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760950986967
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 73045 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760950986967 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760950986985
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 73045 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760950986985 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760950987064
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 73045 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760950987064 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760950987248
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 73046 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760950987248 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760950987301
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 72941 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760950987301 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760950987318
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 72941 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760950987318 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] performStartupChecks called
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760950987354
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 73046 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760950987354 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] Stream started - received first chunk
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global, using native: false
+[DEBUG] Getting matching hook commands for SessionStart with query: resume
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "resume" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\005a1f77-fe4c-48c5-ba10-efb62c26f630-agent-005a1f77-fe4c-48c5-ba10-efb62c26f630.json.tmp.14368.1760951007958
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 4952 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude\todos\005a1f77-fe4c-48c5-ba10-efb62c26f630-agent-005a1f77-fe4c-48c5-ba10-efb62c26f630.json.tmp.14368.1760951007958 to C:\Users\solos\.claude\todos\005a1f77-fe4c-48c5-ba10-efb62c26f630-agent-005a1f77-fe4c-48c5-ba10-efb62c26f630.json
+[DEBUG] File C:\Users\solos\.claude\todos\005a1f77-fe4c-48c5-ba10-efb62c26f630-agent-005a1f77-fe4c-48c5-ba10-efb62c26f630.json written atomically
+[DEBUG] FileHistory: Copied backup 982946c3280c6b0d@v1 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 982946c3280c6b0d@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8f405692b2b6c4ae@v1 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8f405692b2b6c4ae@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 982946c3280c6b0d@v3 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 0c577e6761ce191c@v1 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8f405692b2b6c4ae@v3 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 0c577e6761ce191c@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 69ef48a7842ecad5@v1 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 69ef48a7842ecad5@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8f405692b2b6c4ae@v4 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8f405692b2b6c4ae@v5 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8a14bbf6bc553378@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8f405692b2b6c4ae@v6 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 4892fd5b09f57da3@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup f37889868bff5d5e@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 4d5373af297454f1@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 3f91b946c112cffd@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 9c535f03b40db122@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 982946c3280c6b0d@v4 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8f405692b2b6c4ae@v7 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 3e65f08e2923a86d@v2 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] FileHistory: Copied backup 8f405692b2b6c4ae@v8 from session 27a9ccb4-93a8-4124-b7b9-83c2f66b6ef8 to 005a1f77-fe4c-48c5-ba10-efb62c26f630
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760951008005
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 72941 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760951008005 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.14368.1760951008020
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 72941 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.14368.1760951008020 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically

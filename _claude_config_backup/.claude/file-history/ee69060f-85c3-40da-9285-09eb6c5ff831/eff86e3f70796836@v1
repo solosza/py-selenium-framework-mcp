@@ -1,0 +1,89 @@
+# Session State - 2025-12-09
+
+## Current Phase
+**Phase:** Phase B - MCP Tool Chain Refactor
+**Status:** Troubleshooting MCP Server Connection
+**Resume Word:** MCP-FULLPATH
+
+## What We're Working On
+**Active Task:** Fix MCP server connection issue
+**Task Status:** Config updated, needs Claude Code restart
+
+## Problem Summary
+MCP server `qa-automation` fails to connect with "Failed to reconnect" error.
+
+## Troubleshooting Done This Session
+
+### 1. Verified Server Works Manually
+```bash
+# Server imports work
+python -c "import sys; sys.path.insert(0, r'D:\my_ai_projects\py_sel_framework_mcp\mcp_server'); import server"
+
+# Server responds to MCP protocol correctly
+echo '{"jsonrpc":"2.0","method":"initialize",...}' | python server.py
+# Returns valid JSON-RPC response with protocolVersion, capabilities, serverInfo
+```
+
+### 2. Identified Issues
+- Two duplicate MCP configs existed (`.mcp.json` AND `.claude/mcp.json`)
+- `python` command might resolve to different Python without `mcp` package
+- Virtualenv `tau-intro-selenium-py-keK32-FE` is auto-activated in shell but may not be inherited by Claude Code subprocess
+
+### 3. Fixes Applied
+1. **Deleted duplicate config:** `rm .claude/mcp.json`
+2. **Updated `.mcp.json` with full Python path:**
+   ```json
+   {
+     "mcpServers": {
+       "qa-automation": {
+         "command": "C:\\Users\\solos\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+         "args": ["server.py"],
+         "cwd": "D:\\my_ai_projects\\py_sel_framework_mcp\\mcp_server"
+       },
+       "playwright": {
+         "command": "cmd",
+         "args": ["/c", "npx", "-y", "@playwright/mcp"]
+       }
+     }
+   }
+   ```
+
+### 4. Verified Python Has MCP Package
+```bash
+"C:\Users\solos\AppData\Local\Programs\Python\Python311\python.exe" -c "import mcp; print('mcp installed')"
+# Output: mcp installed
+```
+
+## Resume Instructions
+
+**Resume Word:** MCP-FULLPATH
+
+**After Claude Code restart:**
+
+1. Run `/mcp` to check if `qa-automation` server connects
+2. If connected, you should see tools like:
+   - `mcp__qa-automation__generate_tests_from_user_story`
+   - `mcp__qa-automation__discover_page_elements`
+   - etc.
+
+3. If still failing, check Claude Code logs for detailed error
+
+4. Once MCP works, continue with B.7 (Medium E2E test - guest browses T-shirts)
+
+## B.7 Test Definition (Next Task After MCP Fixed)
+- **Persona:** "As a guest user..."
+- **Intent:** Browse T-shirts category
+- **URL:** http://automationpractice.pl/index.php
+- **Expected:** Products displayed
+- **Output folder:** `tests/test2/`
+
+## Files Changed This Session
+- `.mcp.json` - Updated with full Python path
+- `.claude/mcp.json` - DELETED (duplicate)
+
+## Git State
+- Branch: `main`
+- Uncommitted: `.mcp.json` changes
+
+---
+**Last Updated:** 2025-12-09 16:50

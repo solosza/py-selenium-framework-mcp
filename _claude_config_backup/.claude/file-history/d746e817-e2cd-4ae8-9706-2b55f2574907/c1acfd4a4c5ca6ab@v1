@@ -1,0 +1,74 @@
+"""
+NewUser - Role for new user registration workflows.
+
+Represents a new visitor who wants to create an account.
+Orchestrates complete registration workflow using AuthTasks.
+"""
+
+from typing import Dict, Any
+from interfaces.web_interface import WebInterface
+from tasks.auth.auth_tasks import AuthTasks
+from resources.utilities import autologger
+
+
+class NewUser:
+    """
+    NewUser - orchestrates registration workflow.
+
+    - @autologger("Role") on workflow methods
+    - @autologger("Role Constructor") on __init__
+    - Composes Task modules
+    - Workflow methods call MULTIPLE tasks
+    - NO return values
+    - NO locators
+    """
+
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any], base_url: str):
+        """
+        Initialize with user data and compose Task modules.
+
+        Args:
+            web_interface: WebInterface instance
+            user_data: User data dict with email, firstname, lastname, password
+            base_url: Application base URL
+        """
+        self.web = web_interface
+        self.base_url = base_url
+        self.user_data = user_data
+
+        # Extract user details
+        self.email = user_data.get('email')
+        self.firstname = user_data.get('firstname')
+        self.lastname = user_data.get('lastname')
+        self.password = user_data.get('password')
+
+        # Validate required fields
+        if not all([self.email, self.firstname, self.lastname, self.password]):
+            raise ValueError("NewUser requires email, firstname, lastname, and password in user_data")
+
+        # Compose Task modules
+        self.auth_tasks = AuthTasks(web_interface, base_url)
+
+    # ==================== WORKFLOW METHODS ====================
+
+    @autologger.automation_logger("Role")
+    def register(self) -> None:
+        """
+        Complete registration workflow.
+
+        Orchestrates the full account creation process:
+        1. Navigate to authentication page
+        2. Enter email and initiate registration
+        3. Fill registration form
+        4. Submit and create account
+
+        NO return value - test asserts via RegistrationPage.is_account_created()
+        """
+        self.auth_tasks.register_new_account(
+            email=self.email,
+            firstname=self.firstname,
+            lastname=self.lastname,
+            password=self.password
+        )
+        # NO return - test asserts via POM

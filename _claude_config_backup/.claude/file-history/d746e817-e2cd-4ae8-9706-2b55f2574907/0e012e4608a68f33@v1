@@ -1,0 +1,119 @@
+"""
+RegistrationPage - Page Object Model for account registration.
+
+Represents the authentication/registration page flow:
+1. Enter email to create account
+2. Fill registration form (name, password)
+3. Submit to create account
+"""
+
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+
+class RegistrationPage:
+    """
+    Page Object for Registration Page.
+
+    - NO decorators
+    - Locators as class constants
+    - Atomic methods (one UI action)
+    - Return self for chaining
+    - State-check methods for assertions
+    """
+
+    def __init__(self, web: WebInterface):
+        """Compose WebInterface - NO inheritance."""
+        self.web = web
+
+    # ==================== LOCATORS (Class Constants) ====================
+
+    # Initial page - create account section
+    EMAIL_CREATE = (By.CSS_SELECTOR, "#email_create")
+    SUBMIT_CREATE = (By.CSS_SELECTOR, "#SubmitCreate")
+
+    # Registration form
+    CUSTOMER_FIRSTNAME = (By.CSS_SELECTOR, "#customer_firstname")
+    CUSTOMER_LASTNAME = (By.CSS_SELECTOR, "#customer_lastname")
+    PASSWD = (By.CSS_SELECTOR, "#passwd")
+    SUBMIT_ACCOUNT = (By.CSS_SELECTOR, "#submitAccount")
+
+    # Success indicators
+    ACCOUNT_INFO = (By.CSS_SELECTOR, ".info-account")
+    LOGOUT_LINK = (By.CSS_SELECTOR, "a.logout")
+    MY_ACCOUNT_HEADING = (By.CSS_SELECTOR, "h1.page-heading")
+
+    # Error indicators
+    CREATE_ACCOUNT_ERROR = (By.CSS_SELECTOR, "#create_account_error")
+    ALERT_DANGER = (By.CSS_SELECTOR, ".alert-danger")
+
+    # ==================== ATOMIC METHODS (One UI Action) ====================
+
+    def enter_email_create(self, email: str) -> "RegistrationPage":
+        """Enter email to start account creation."""
+        self.web.type_text(*self.EMAIL_CREATE, text=email)
+        return self
+
+    def click_submit_create(self) -> "RegistrationPage":
+        """Click 'Create an account' button."""
+        self.web.click(*self.SUBMIT_CREATE)
+        return self
+
+    def enter_firstname(self, firstname: str) -> "RegistrationPage":
+        """Enter first name in registration form."""
+        self.web.type_text(*self.CUSTOMER_FIRSTNAME, text=firstname)
+        return self
+
+    def enter_lastname(self, lastname: str) -> "RegistrationPage":
+        """Enter last name in registration form."""
+        self.web.type_text(*self.CUSTOMER_LASTNAME, text=lastname)
+        return self
+
+    def enter_password(self, password: str) -> "RegistrationPage":
+        """Enter password in registration form."""
+        self.web.type_text(*self.PASSWD, text=password)
+        return self
+
+    def click_register(self) -> "RegistrationPage":
+        """Click 'Register' button to submit registration."""
+        self.web.click(*self.SUBMIT_ACCOUNT)
+        return self
+
+    def click_logout(self) -> "RegistrationPage":
+        """Click logout link."""
+        self.web.click(*self.LOGOUT_LINK)
+        return self
+
+    # ==================== STATE-CHECK METHODS (For Assertions) ====================
+
+    def is_registration_form_displayed(self) -> bool:
+        """Check if registration form is displayed (after clicking create account)."""
+        return self.web.is_element_displayed(*self.CUSTOMER_FIRSTNAME, timeout=10)
+
+    def is_account_created(self) -> bool:
+        """
+        Check if account was successfully created.
+
+        Verifies user is logged in by checking for logout link.
+        """
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=10)
+
+    def is_on_my_account_page(self) -> bool:
+        """Check if user is on My Account page after registration."""
+        return self.web.is_element_displayed(*self.MY_ACCOUNT_HEADING, timeout=5)
+
+    def has_create_account_error(self) -> bool:
+        """Check if there's an error creating account (e.g., email already exists)."""
+        return self.web.is_element_displayed(*self.CREATE_ACCOUNT_ERROR, timeout=3)
+
+    def has_registration_error(self) -> bool:
+        """Check if there's a registration form error."""
+        return self.web.is_element_displayed(*self.ALERT_DANGER, timeout=3)
+
+    def get_error_message(self) -> str:
+        """Get error message text if displayed."""
+        if self.has_registration_error():
+            return self.web.get_text(*self.ALERT_DANGER)
+        if self.has_create_account_error():
+            return self.web.get_text(*self.CREATE_ACCOUNT_ERROR)
+        return ""

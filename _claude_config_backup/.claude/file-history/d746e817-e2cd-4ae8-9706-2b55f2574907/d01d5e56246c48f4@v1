@@ -1,0 +1,210 @@
+# Tasks: QA Vertical Validation Agents
+
+**PRD:** `1-prd-qa-validation-agents.md`
+**Created:** 2025-12-16
+
+---
+
+## Relevant Files
+
+### Agent Tools (Actual Implementation)
+- `agents/tools/sr_qa_engineer.py` - SR QA Engineer tools (get_scenario, list_scenarios, get_site_knowledge)
+- `agents/tools/reviewer.py` - Reviewer tools (validate_artifacts)
+- `agents/tools/supervisor.py` - Supervisor tools (run_validation, run_standard_validation, get_validation_report)
+- `agents/tools/__init__.py` - Tool exports
+
+### Tests
+- `agents/tests/test_sr_qa_engineer.py` - SR QA Engineer tests (21 tests)
+- `agents/tests/test_reviewer.py` - Reviewer tests (24 tests)
+- `agents/tests/test_supervisor.py` - Supervisor tests (24 tests)
+- `agents/tests/_reports/` - HTML test reports
+
+### Integration Tests (Task 6.0)
+- `agents/tests/test_integration.py` - End-to-end workflow tests
+
+### Notes
+
+- **Decision:** Custom tools pattern chosen over Agent SDK (simpler, more testable)
+- **Scenarios:** 6 pre-defined scenarios hardcoded in sr_qa_engineer.py (2 easy, 2 mid, 2 hard)
+- Run tests with `python -m pytest agents/tests/ -v`
+- FRAMEWORK.md Section 4 patterns used by Reviewer agent
+- Total: 69 tests, 85% coverage
+
+---
+
+## Tasks
+
+- [ ] 1.0 Research & Spike: Claude Agent SDK [CORE]
+  - [ ] 1.1 Create branch `feature/1.0-agent-sdk-research`
+  - [ ] 1.2 Research Claude Agent SDK documentation and capabilities
+  - [ ] 1.3 Determine if SDK can invoke MCP tools directly
+  - [ ] 1.4 Identify how to programmatically trigger Claude Code (CLI, API, or SDK)
+  - [ ] 1.5 Prototype minimal agent that calls an MCP tool
+  - [ ] 1.6 Document findings in `docs/projects/qa-validation-agents/research-notes.md`
+  - [ ] 1.7 Decision: Choose agent framework approach
+  - [ ] 1.8 Update PRD Open Questions with answers
+  - [ ] 1.9 Commit: `research: Claude Agent SDK findings (Task 1.0)`
+
+  **Done When:**
+  - SDK capabilities documented
+  - Approach chosen and justified
+  - Prototype proves feasibility
+
+---
+
+- [ ] 2.0 Build SR QA Engineer Agent [CORE]
+  - [ ] 2.1 Create branch `feature/2.0-sr-qa-engineer-agent`
+  - [ ] 2.2 Create `agents/` directory structure
+  - [ ] 2.3 Implement SR QA Engineer agent (generates Step 1 input)
+  - [ ] 2.4 Agent outputs: persona + requirement + URL format
+  - [ ] 2.5 Agent accepts complexity level parameter (easy/mid/hard)
+  - [ ] 2.6 Agent knows automationpractice.pl site structure
+  - [ ] 2.7 Write unit tests `tests/agents/test_sr_qa_engineer.py`
+  - [ ] 2.8 Run checks (lint, type, tests)
+  - [ ] 2.9 Record results
+  - [ ] 2.10 Commit: `feat: SR QA Engineer agent (Task 2.0)`
+
+  **Done When:**
+  - Agent generates valid Step 1 input
+  - Output format matches 9-step process requirements
+  - Unit tests pass
+
+---
+
+- [ ] 3.0 Build Reviewer Agent [CORE]
+  - [ ] 3.1 Create branch `feature/3.0-reviewer-agent`
+  - [ ] 3.2 Implement Reviewer agent base structure
+  - [ ] 3.3 Load FRAMEWORK.md Section 4 patterns as reference
+  - [ ] 3.4 Implement DD checklist (all 22 DDs with severity)
+  - [ ] 3.5 Implement artifact comparison logic (POM, Task, Role, Test)
+  - [ ] 3.6 Implement violation detection and categorization
+  - [ ] 3.7 Output: APPROVE/REJECT with violation list
+  - [ ] 3.8 Write unit tests `tests/agents/test_reviewer.py`
+  - [ ] 3.9 Test with known good/bad code samples
+  - [ ] 3.10 Run checks (lint, type, tests)
+  - [ ] 3.11 Record results
+  - [ ] 3.12 Commit: `feat: Reviewer agent (Task 3.0)`
+
+  **Done When:**
+  - Agent correctly validates against FRAMEWORK.md patterns
+  - Agent checks all 22 DDs
+  - Agent catches known violations in test samples
+  - Unit tests pass
+
+---
+
+- [ ] 4.0 Build Supervisor Agent [CORE]
+  - [ ] 4.1 Create branch `feature/4.0-supervisor-agent`
+  - [ ] 4.2 Implement Supervisor agent base structure
+  - [ ] 4.3 Implement scenario loading from YAML files
+  - [ ] 4.4 Implement workflow coordination (SR QA → Orchestrator → Reviewer → Execute)
+  - [ ] 4.5 Implement handoff logic between agents
+  - [ ] 4.6 Implement stop-on-failure behavior
+  - [ ] 4.7 Implement human escalation trigger (DD-21/DD-22)
+  - [ ] 4.8 Implement validation report generation
+  - [ ] 4.9 Write unit tests `tests/agents/test_supervisor.py`
+  - [ ] 4.10 Run checks (lint, type, tests)
+  - [ ] 4.11 Record results
+  - [ ] 4.12 Commit: `feat: Supervisor agent (Task 4.0)`
+
+  **Done When:**
+  - Agent loads and executes scenarios sequentially
+  - Agent coordinates handoffs correctly
+  - Agent stops on failure
+  - Agent generates report
+  - Unit tests pass
+
+---
+
+- [ ] 5.0 Define Pre-defined Scenarios [GLUE]
+  - [ ] 5.1 Create branch `feature/5.0-predefined-scenarios`
+  - [ ] 5.2 Create `agents/scenarios/` directory
+  - [ ] 5.3 Define scenario YAML schema
+  - [ ] 5.4 Create QA-EASY-001: Valid login scenario
+        - Persona: registered user
+        - Requirement: login with valid credentials
+        - URL: authentication page
+        - Expected artifacts: LoginPage, AuthTasks (existing), RegisteredUser (existing), test file
+  - [ ] 5.5 Create QA-MID-001: Browse products scenario
+        - Persona: guest user
+        - Requirement: browse products by category
+        - URL: catalog page
+        - Expected artifacts: CatalogPage, CatalogTasks, GuestUser, test file
+  - [ ] 5.6 Create QA-HARD-001: Add to cart scenario
+        - Persona: guest user
+        - Requirement: add product to cart (dynamic modal)
+        - URL: product page
+        - Expected artifacts: ProductPage, CartModal, CartTasks, test file
+        - Note: Likely triggers DD-21 (dynamic elements)
+  - [ ] 5.7 Document expected artifacts per scenario
+  - [ ] 5.8 Commit: `feat: pre-defined validation scenarios (Task 5.0)`
+
+  **Done When:**
+  - 3 scenarios defined in YAML format
+  - Each scenario has complete input + expected artifacts
+  - Scenarios cover easy/mid/hard complexity
+
+---
+
+- [ ] 6.0 Integration & End-to-End Testing [CORE]
+  - [ ] 6.1 Create branch `feature/6.0-integration-testing`
+  - [ ] 6.2 Connect SR QA Engineer → Supervisor handoff
+  - [ ] 6.3 Connect Supervisor → Claude Code + MCP invocation
+  - [ ] 6.4 Connect Orchestrator output → Reviewer handoff
+  - [ ] 6.5 Connect Reviewer verdict → Supervisor (continue/stop)
+  - [ ] 6.6 Test easy scenario end-to-end
+  - [ ] 6.7 Test Reviewer rejection flow (intentional bad code)
+  - [ ] 6.8 Test human escalation trigger
+  - [ ] 6.9 Fix integration issues found
+  - [ ] 6.10 Write integration tests
+  - [ ] 6.11 Run checks (lint, type, tests)
+  - [ ] 6.12 Record results
+  - [ ] 6.13 Commit: `feat: agent integration (Task 6.0)`
+
+  **Done When:**
+  - All agents communicate correctly
+  - Easy scenario runs end-to-end
+  - Rejection flow works
+  - Human escalation works
+  - Integration tests pass
+
+---
+
+- [ ] 7.0 Validation Run & Documentation [GLUE]
+  - [ ] 7.1 Create branch `feature/7.0-validation-run`
+  - [ ] 7.2 Execute validation: QA-EASY-001
+  - [ ] 7.3 Fix any issues, re-run until pass
+  - [ ] 7.4 Execute validation: QA-MID-001
+  - [ ] 7.5 Fix any issues, re-run until pass
+  - [ ] 7.6 Execute validation: QA-HARD-001 (expect human input)
+  - [ ] 7.7 Fix any issues, re-run until pass
+  - [ ] 7.8 Generate final validation report
+  - [ ] 7.9 Document results in `docs/projects/qa-validation-agents/validation-results.md`
+  - [ ] 7.10 Update SESSION.md with completion status
+  - [ ] 7.11 Commit: `docs: validation complete (Task 7.0)`
+
+  **Done When:**
+  - 3/3 scenarios pass validation
+  - 0 DD violations in generated code
+  - Final report generated
+  - Results documented
+
+---
+
+## Summary
+
+| Task | Type | Dependencies |
+|------|------|--------------|
+| 1.0 Research | CORE | None |
+| 2.0 SR QA Engineer | CORE | 1.0 |
+| 3.0 Reviewer | CORE | 1.0 |
+| 4.0 Supervisor | CORE | 1.0 |
+| 5.0 Scenarios | GLUE | None (can parallel) |
+| 6.0 Integration | CORE | 2.0, 3.0, 4.0, 5.0 |
+| 7.0 Validation | GLUE | 6.0 |
+
+**Critical Path:** 1.0 → 2.0/3.0/4.0 → 6.0 → 7.0
+
+---
+
+*Tasks generated from PRD as part of 4D Framework Phase 2*

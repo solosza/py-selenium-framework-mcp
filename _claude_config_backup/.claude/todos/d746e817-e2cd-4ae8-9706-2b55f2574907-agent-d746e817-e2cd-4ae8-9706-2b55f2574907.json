@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Update PRD for enforcement skill requirement",
+    "status": "completed",
+    "activeForm": "Updating PRD"
+  },
+  {
+    "content": "Update task list with skill creation tasks",
+    "status": "completed",
+    "activeForm": "Updating task list"
+  },
+  {
+    "content": "Task 7.0: Create qa-enforcement skill",
+    "status": "pending",
+    "activeForm": "Creating qa-enforcement skill"
+  },
+  {
+    "content": "Task 8.0: Fix open defects (DEF-VA-003-006)",
+    "status": "pending",
+    "activeForm": "Fixing defects"
+  },
+  {
+    "content": "Task 9.0: Validation run with enforcement",
+    "status": "pending",
+    "activeForm": "Running validation"
+  }
+]

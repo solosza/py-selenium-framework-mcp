@@ -5,6 +5,485 @@
 
 ---
 
+# Session: 2025-12-20 21:15 - Phase 2 Task Generation
+
+## Quick Resume
+**Completed:** Design validated, PRD created, project renamed to qa-execution-engine
+**Status:** Phase 2 (Divide) - Parent tasks defined, awaiting "Go" for sub-tasks
+**Next:** User says "Go" to generate sub-tasks for 15 parent tasks
+
+---
+
+## What Was Done This Session
+
+### 1. Renamed Project (Terminology Fix)
+- **Old:** qa-guidance-layer (wrong - that's the skill name)
+- **New:** qa-execution-engine (correct - the implementation)
+- Deleted old folder: `docs/projects/qa-guidance-layer/`
+- Created: `docs/projects/qa-execution-engine/`
+
+### 2. Project Files Created
+```
+docs/projects/qa-execution-engine/
+├── 0-design-qa-execution-engine.md   <- Design doc (complete)
+└── 1-prd-qa-execution-engine.md      <- PRD (25 FRs, 6 ATs)
+```
+
+### 3. Terminology Clarified
+| Term | Meaning |
+|------|---------|
+| QA Guidance Layer | Skill that guides AI (`.claude/skills/qa-guidance-layer/`) |
+| QA Execution Engine | Implementation (quality gates, state manager) - THIS PROJECT |
+
+### 4. Parent Tasks Defined (15 Total)
+
+| Task | Name | Type |
+|------|------|------|
+| 1.0 | Step Definition Validation | GLUE |
+| 2.0 | State Manager | CORE |
+| 3.0 | Gate Infrastructure | CORE |
+| 4.0 | Preflight Gate (Step 1) | CORE |
+| 5.0 | User Input Gate (Step 2) | CORE |
+| 6.0 | AI Processing Gate (Step 3) | CORE |
+| 7.0 | Test Scenarios Gate (Step 4) | CORE |
+| 8.0 | Discovered Elements Gate (Step 5) | CORE |
+| 9.0 | Page Object Gate (Step 6) | CORE |
+| 10.0 | Task Gate (Step 7) | CORE |
+| 11.0 | Role Gate (Step 8) | CORE |
+| 12.0 | Test Runner Gate (Step 9) | CORE |
+| 13.0 | Save Run Gate (Step 10) | CORE |
+| 14.0 | Skill Update | GLUE |
+| 15.0 | Integration Testing | GLUE |
+
+---
+
+## 4 Components to Implement
+
+```
+SKILL (qa-guidance-layer)         <- Step definitions exist, SKILL.md needs update
+    │
+    ▼
+QUALITY GATES (qg_*)              <- NEW (Tasks 4-13)
+    │
+    ▼
+OPERATION TOOLS (Tool 1-6)        <- Already exist
+    │
+    ▼
+STATE MANAGER                     <- NEW (Task 2)
+```
+
+---
+
+## Context for Next Session
+
+**Resume Point:** User says "Go" to generate sub-tasks
+
+**Key References:**
+- PRD: `docs/projects/qa-execution-engine/1-prd-qa-execution-engine.md`
+- Design: `docs/projects/qa-execution-engine/0-design-qa-execution-engine.md`
+- Step defs: `.claude/skills/qa-guidance-layer/references/step-*.md`
+- Task template: `docs/2-dev-generate-tasks-v2.md`
+- Output: `docs/projects/qa-execution-engine/2-tasks-qa-execution-engine.md`
+
+**Key Design Details:**
+- Gate return format: `{"status": "pass"}` or `{"status": "fail", "error": "...", "fix_hint": "..."}`
+- State save rules: Gates save (Steps 1-3), Operations save (Steps 4-9)
+- 20 DDs enforced across 10 steps
+
+---
+
+# Session: 2025-12-20 - Steps 1-4 Complete + Step 5 Design Discussion
+
+## Quick Resume
+**Completed:** Steps 1-4 fully designed with visual flows in FRAMEWORK.md + skill references
+**Status:** Paused at Step 5 design - discussing credential handling logic
+**Next:** Resolve Step 5 credential question, then complete Step 5-10
+
+---
+
+## What Was Done This Session
+
+### 1. Skill Instruction Pattern Established
+
+All steps now have SKILL INSTRUCTION with flexible structure:
+```
+PRE-CHECK:  - What must exist before this step
+ACTION:     - What AI does
+VALIDATE:   - Which qg_* to call
+[OPTIONAL]: - PREPARE, RETRY, etc. as needed
+```
+
+### 2. Two Step Patterns Identified
+
+```
+STEPS 1-3 (No operation tool):     STEPS 4-9 (Has operation tool):
+  AI does work                       qg_* PRE-VALIDATE
+      │                                  │
+      ▼                                  ▼
+  qg_* validates                     operation tool
+      │                                  │
+      ▼                                  ▼
+  State saved                        qg_* POST-VALIDATE
+                                         │
+                                         ▼
+                                     State saved
+```
+
+### 3. Steps Completed with Full Visual Flows
+
+| Step | FRAMEWORK.md | Skill Reference | Status |
+|------|--------------|-----------------|--------|
+| 1 | ✓ Section 9.1 + visual | ✓ step-01.md | COMPLETE |
+| 2 | ✓ Section 9.2 + visual | ✓ step-02.md | COMPLETE |
+| 3 | ✓ Section 9.3 + visual | ✓ step-03.md | COMPLETE |
+| 4 | ✓ Section 9.4 + visual | ✓ step-04.md | COMPLETE |
+| 5-10 | Pending | Pending | PENDING |
+
+### 4. Step 5 Discussion (Unresolved)
+
+**Question raised:** How should credential handling work?
+
+Current design flaw identified:
+- Step 1 asks credential_strategy (including "none needed")
+- Step 5 was going to have AI INFER if login needed
+
+Simpler approach proposed:
+- User already tells us in Step 1 (none = no login, others = login needed)
+- Step 5 just applies what user said, no AI inference
+
+**Open question:** Is "none needed" option in Step 1 sufficient, or need separate yes/no question?
+
+---
+
+## Files Updated This Session
+
+| File | What Changed |
+|------|--------------|
+| `FRAMEWORK.md` Section 9.1 | Added visual flow with SKILL INSTRUCTION |
+| `FRAMEWORK.md` Section 9.2 | Added visual flow with SKILL INSTRUCTION |
+| `FRAMEWORK.md` Section 9.3 | Added visual flow with SKILL INSTRUCTION |
+| `FRAMEWORK.md` Section 9.4 | Added visual flow + fixed qg separation |
+| `qa-guidance-layer/references/step-01.md` | Added SKILL INSTRUCTION box |
+| `qa-guidance-layer/references/step-02.md` | Created with full flow |
+| `qa-guidance-layer/references/step-03.md` | Created with full flow |
+| `qa-guidance-layer/references/step-04.md` | Created with qg pre/post pattern |
+
+---
+
+## Key Design Decisions This Session
+
+| Decision | Description |
+|----------|-------------|
+| Visual flows in FRAMEWORK.md | FRAMEWORK.md is source of truth, must have complete visuals |
+| SKILL INSTRUCTION pattern | PRE-CHECK / ACTION / VALIDATE (flexible per step) |
+| Operation + Gate separation | Steps 4-9 have qg_* pre-validate → operation → qg_* post-validate |
+| Steps 1-3 pattern | AI does work → qg_* validates (no operation tool) |
+
+---
+
+## Resume Point
+
+**Next Action:** Resolve Step 5 credential handling question
+
+**Question to answer:**
+```
+Is "none needed" in Step 1 sufficient?
+OR
+Do we need separate "Does this test require authentication? (yes/no)"
+before asking which strategy?
+```
+
+After resolving: Complete Step 5 visual flow, then Steps 6-10.
+
+---
+
+# Session: 2025-12-19 - Step 1 Complete + Skill Renames
+
+## Quick Resume
+**Completed:** Step 1 fully designed, skills renamed for clarity
+**Status:** Ready for Step 2 design
+**Next:** Design Step 2 (User Input) with same pattern
+
+---
+
+## What Was Done This Session
+
+### 1. Skill Architecture Finalized
+
+```
+design-execution-engine/     ← META (design patterns for any vertical)
+│
+qa-guidance-layer/           ← QA SKILL (guides AI through 10 steps)
+├── SKILL.md
+└── references/
+    └── step-01.md           ✓ COMPLETE
+```
+
+### 2. Renames Applied
+
+| Old Name | New Name | Reason |
+|----------|----------|--------|
+| `design-quality-gates` | `design-execution-engine` | Describes whole system, not just gates |
+| `qa-execution-engine` | `qa-guidance-layer` | Skill is guidance layer, not whole engine |
+
+### 3. Step 1 Complete
+
+Step 1 (Pre-flight Configuration) fully documented with:
+- Visual flow diagram
+- Quality gate definition
+- State saved schema
+- Error message templates
+- AI instructions
+
+---
+
+## Files Updated This Session
+
+| File | Line/Section | What Changed |
+|------|--------------|--------------|
+| `FRAMEWORK.md` | Section 9, Step Template (~2107) | Added Skill Reference, State Saved fields |
+| `FRAMEWORK.md` | Section 9.1 (~2203) | Step 1 updated with new fields |
+| `CLAUDE.md` | MCP Tool Usage (~112) | Added QA Guidance Layer section |
+| `.claude/skills/design-execution-engine/SKILL.md` | Title, line 1 | Renamed from "Design Quality Gates" |
+| `.claude/skills/design-execution-engine/SKILL.md` | Three-layer arch (~78) | Changed to "guidance-layer" |
+| `.claude/skills/qa-guidance-layer/SKILL.md` | Title, line 1 | Renamed from "QA Execution Engine" |
+| `.claude/skills/qa-guidance-layer/SKILL.md` | Related docs (~137) | Updated reference |
+| `.claude/skills/qa-guidance-layer/references/step-01.md` | Skill Reference (~86) | Updated path |
+
+---
+
+## Pending Updates Per Step
+
+Each step needs updates in these files:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FILES TO UPDATE PER STEP                                  │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+For Step N, update:
+
+1. FRAMEWORK.md Section 9.N
+   └── Full step definition with all template fields
+
+2. .claude/skills/qa-guidance-layer/references/step-0N.md
+   └── Visual flow + AI instructions + error templates
+
+3. (Optional) CLAUDE.md
+   └── Only if new DDs or quick reference changes needed
+```
+
+### Step Completion Status
+
+| Step | FRAMEWORK.md | Skill Reference | Status |
+|------|--------------|-----------------|--------|
+| 1 | ✓ Section 9.1 | ✓ step-01.md | COMPLETE |
+| 2 | Exists (needs update) | step-02.md | PENDING |
+| 3 | Exists (needs update) | step-03.md | PENDING |
+| 4 | Exists (needs update) | step-04.md | PENDING |
+| 5 | Exists (needs update) | step-05.md | PENDING |
+| 6 | Exists (needs update) | step-06.md | PENDING |
+| 7 | Exists (needs update) | step-07.md | PENDING |
+| 8 | Exists (needs update) | step-08.md | PENDING |
+| 9 | Exists (needs update) | step-09.md | PENDING |
+| 10 | Exists (needs update) | step-10.md | PENDING |
+
+---
+
+## Architecture Diagram (Updated Names)
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    QA EXECUTION ENGINE                               │
+│                    (conceptual name for whole system)                │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │                     │                     │
+        ▼                     ▼                     ▼
+  ┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+  │ GUIDANCE      │    │ MCP TOOLS     │    │ STATE         │
+  │ LAYER         │    │               │    │               │
+  │               │    │ gates/        │    │ workflow_     │
+  │ qa-guidance-  │    │ operations/   │    │ state.json    │
+  │ layer/        │    │               │    │               │
+  │ (skill)       │    │ (mcp_server/) │    │ (mcp_server/) │
+  └───────────────┘    └───────────────┘    └───────────────┘
+```
+
+---
+
+## Resume Point
+
+**Next Action:** Design Step 2 (User Input)
+
+**Pattern to follow:**
+1. Create `qa-guidance-layer/references/step-02.md` with visual flow
+2. Update `FRAMEWORK.md` Section 9.2 with all template fields
+3. Mark step complete in this table
+
+---
+
+# Session: 2025-12-19 - Quality Gate Design (Final Approach)
+
+## Quick Resume
+**Completed:** Finalized architecture approach - build on Section 9, add skill + state manager
+**Status:** Ready to design Steps 1-10 with all components
+**Next:** Start with Step 1, design complete flow with skill + gate + operation + state
+
+---
+
+## Core Principle
+
+```
+NEVER TRUST AI - That's the entire product
+```
+
+---
+
+## Final Architecture (Simple, SRP-Compliant)
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         SKILL LAYER                                 │
+│                   (qa-execution-engine)                             │
+│                                                                     │
+│  Guides AI: "Step N: call qg_X to validate, then call op_X"         │
+└───────────────────────────────┬─────────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                    AI (follows skill guidance)                      │
+│                    (passes accumulated_data between tools)          │
+└───────────────────────────────┬─────────────────────────────────────┘
+                                │
+            ┌───────────────────┼───────────────────┐
+            │                   │                   │
+            ▼                   ▼                   ▼
+    ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+    │   gates/    │     │ operations/ │     │   state/    │
+    │   (qg_*)    │     │             │     │             │
+    │             │     │  (saves     │     │  workflow_  │
+    │  VALIDATE   │     │   state     │     │  state.json │
+    │             │     │  internally)│     │             │
+    └─────────────┘     └─────────────┘     └─────────────┘
+      MCP tools           MCP tools          File storage
+```
+
+---
+
+## Components (SRP)
+
+| Component | Responsibility | Trust Level |
+|-----------|----------------|-------------|
+| Skill | Guide AI through steps | Guidance only |
+| Quality Gates (qg_*) | Validate inputs/outputs | Enforced |
+| Operations | Do the work | Enforced |
+| State Manager | Save/load workflow state | Internal to tools |
+| State JSON | Persist accumulated_data | File storage |
+
+---
+
+## Key Decisions
+
+### 1. Build on Section 9 (Don't Reinvent)
+- Steps 1-5 already defined in FRAMEWORK.md Section 9
+- Add skill layer + state control to existing design
+
+### 2. Tools Save State Internally
+- Can't trust AI to call save_state()
+- Each operation tool delegates to state_manager on success
+- SRP maintained (tool delegates, doesn't implement save logic)
+
+```python
+def generate_page_object(workflow_id, elements, page_name):
+    # DO ITS JOB
+    code = create_pom(elements, page_name)
+
+    # DELEGATE state save (not its responsibility)
+    state_manager.save(workflow_id, step=6, data=code)
+
+    return {"code": code}
+```
+
+### 3. AI Passes Metadata (Current Design Works)
+- AI already carries accumulated_data between tool calls
+- State manager just adds persistence for resume
+
+### 4. Discarded Overengineered Design
+- Workflow Controller approach was overkill
+- Saved to: `docs/SESSION_BACKUP_2025-12-19_overengineered.md`
+
+---
+
+## File Structure
+
+```
+mcp_server/
+├── tools/
+│   ├── operations/        ← existing 6 tools
+│   │   └── (each saves state internally)
+│   │
+│   └── gates/             ← qg_* tools (to build)
+│       ├── qg_preflight.py
+│       ├── qg_user_input.py
+│       └── ...
+│
+├── state/                 ← ADD
+│   └── workflow_state.json
+│
+└── utils/                 ← ADD
+    └── state_manager.py   ← save/load logic
+```
+
+---
+
+## Steps 1-5 Summary (From Section 9)
+
+| Step | Operation | Quality Gate | Output |
+|------|-----------|--------------|--------|
+| 1 | - | qg_preflight | credential_strategy, test_data_location |
+| 2 | - | qg_user_input | persona, URL, role_name, domain |
+| 3 | - | qg_ai_processing | bdd_scenarios, expected_states, intent |
+| 4 | generate_tests | qg_test_scenarios | test_scenarios |
+| 5 | discover_elements | qg_discovered_elements | discovered_elements |
+
+Steps 6-10: To be documented
+
+---
+
+## Next Session Tasks
+
+1. **Start with Step 1** - Design complete flow:
+   - Skill instruction
+   - Gate validation
+   - Operation (if any)
+   - State save
+
+2. **Design all 10 steps** with all components
+
+3. **Update FRAMEWORK.md Section 9** with complete design
+
+---
+
+## Context for Resume
+
+**Key Files:**
+- `FRAMEWORK.md` Section 9 - existing step definitions
+- `docs/SESSION_BACKUP_2025-12-19_overengineered.md` - discarded design (reference only)
+
+**Remember:**
+- Quality gates thinking first
+- Never trust AI
+- Tools save state internally (can't be skipped)
+- SRP maintained throughout
+
+---
+
+# Previous Sessions (Archived Below)
+
+---
+
 # Session: 2025-12-18 (Part 2) - Defect Log Review
 
 ## Quick Resume
@@ -38,351 +517,12 @@ Multiple defects share same root cause:
 - AI doesn't consistently follow them
 - Problem is ENFORCEMENT, not documentation
 
-### Fix Options Evaluated
-
-| Option | Cost | Performance | Enforcement |
-|--------|------|-------------|-------------|
-| SDK orchestration | $$$ (API) | Fast | ✓ Guaranteed |
-| Quality gate MCP tools | Free | Medium | ✓ Guaranteed |
-| Pre-tool checkpoints | Free | Fast | ✗ AI can skip |
-
-**Decision:** SDK later (when paying customers), MCP quality gates now (free).
-
-### Defect Status Summary
-
-| Status | Count | Defects |
-|--------|-------|---------|
-| RESOLVED | 4 | DEF-021, 022, 023, 024 |
-| IN_PROGRESS | 2 | DEF-B04, DEF-B05 (enforcement gap) |
-| OPEN (code deleted) | 2 | DEF-019, DEF-020 |
-| OPEN (not reviewed) | 5 | DEF-B06, B07, B08, B09, B10 |
-
-### Files Modified
-- `docs/DEFECT_LOG.md` - Updated statuses, corrected root causes
-
-## Architecture Decision
-
-```
-PHASE 1 (Now - Portfolio)     PHASE 2 (Later - Customers)
-├── MCP + Skills              ├── SDK Orchestration
-├── Quality gate MCP tools    ├── Code enforces flow
-├── Free (Pro plan)           ├── API costs covered by revenue
-└── Good for demos            └── Production-grade reliability
-```
-
-## Next Steps
-1. Review remaining OPEN defects (DEF-B06 through B10) - same pattern likely
-2. Design quality gate MCP tools for enforcement
-3. Or resume Test 2 workflow
-
 ---
 
 # Session: 2025-12-18 - FRAMEWORK.md DD Update
 
 ## Quick Resume
 **Completed:** Updated FRAMEWORK.md with all Design Decisions (DD-01 through DD-28)
-**Status:** Complete - awaiting next task
+**Status:** Complete
 
 ---
-
-## What Was Done This Session
-
-### FRAMEWORK.md Updated (v1.0 → v1.1)
-
-| Change | Details |
-|--------|---------|
-| Version | 1.0 → 1.1 |
-| Last Updated | 2025-11-29 → 2025-12-18 |
-| TOC | Added Section 8 (21 subsections) |
-| Section 8.11 | Added DD-23 through DD-28 to table |
-
-### New Detailed Sections Created
-
-| Section | DD | Topic |
-|---------|-----|-------|
-| 8.16 | DD-23 | BDD Format Required for Tool 1 |
-| 8.17 | DD-24 | Test Credential Strategies |
-| 8.18 | DD-25 | Skeleton Code Quality Gate |
-| 8.19 | DD-26 | Tool Chain Data Contracts |
-| 8.20 | DD-27 | Task Code Quality Gate (No Locators) |
-| 8.21 | DD-28 | Test Data Organization (Hybrid Model) |
-
-All sections include ASCII box diagrams for visual clarity.
-
-### Files Modified
-- `FRAMEWORK.md` - Main source of truth, now contains DD-01 through DD-28
-
-### Context from Previous Session (Summarized)
-- Test 1 (Registration) passed in Run 2025-12-17-R2
-- Test 2 (Login + Cart) was in progress, encountered:
-  - DEF-B09: Tool 4 skeleton tasks (missing pom_metadata)
-  - DEF-B10: AI Task code had locators (architecture violation)
-- User requested cleanup of all test modules
-- User chose hybrid data model for DD-28
-
-## Framework Code Status
-
-Existing production code (preserved):
-- `framework/roles/new_user.py` - NewUser role with register() workflow
-- `framework/pages/auth/registration_page.py` - RegistrationPage POM
-- `framework/tasks/auth/` - AuthTasks (to be created)
-- `tests/auth/test_registration.py` - Registration test
-
-Deleted (for clean slate):
-- `tests/test1/` folder
-- Generated POMs for catalog, cart
-- Generated Tasks with architecture violations
-
-## Next Steps (When Ready)
-1. Resume Test 2 (Login + Cart) workflow from Step 1
-2. Or continue with qa-execution-engine skill design (tabled topic below)
-
----
----
-
-# ARCHIVED SESSION: 2025-12-17 (Late Night Update)
-
-## Quick Resume
-**You were exploring:** Whether to use SDK orchestration vs current MCP tools approach
-**You're confused about:** The difference between MCP tools (what you have) and SDK orchestration (what we discussed)
-**Key insight:** Your agents are TOOLS Claude calls, not code that calls Claude
-**Next step:** Decide if you need SDK or can improve current MCP approach
-
----
-
-## Current Phase
-**Phase:** Phase 0 (Design Discussion) for Task 7.0
-**Status:** In Progress - TABLED pending architecture decision
-
-## What We're Working On
-**Active Task:** 7.0 - Build QA Execution Engine Skill
-**Task Status:** Phase 0 Design - ~60% complete
-
-## Progress This Session
-
-### Completed
-- [x] Identified root cause: DDs are passive, AI forgets mid-workflow
-- [x] Updated PRD Section 13 with enforcement skill requirement
-- [x] Renumbered task list: 7.0 (Skill) → 8.0 (Defects) → 9.0 (Validation)
-- [x] Changed product language: "enforcement" → "execution"
-- [x] Created `dialogue-engine` skill (global interaction protocol)
-  - SKILL.md (main orchestrator)
-  - references/response-protocol.md
-  - references/question-format.md
-  - references/checkpoint-triggers.md
-  - references/topic-queue.md
-  - references/task-execution.md
-- [x] Started Phase 0 design for `qa-execution-engine`
-  - Confirmed: Option B (Modular References)
-  - Confirmed: All 22 DDs relevant
-  - Confirmed: Checkpoint every tool call
-  - Confirmed: Stop → Options → User chooses (DD-22 style)
-  - Confirmed: In-memory metadata (current approach)
-  - Confirmed: Skill name = `qa-execution-engine`
-
-### In Progress
-- [ ] Complete Phase 0 design for qa-execution-engine
-  - Next: Present reference file structures one at a time
-
-## Files Changed
-- `docs/projects/qa-validation-agents/1-prd-qa-validation-agents.md` - Added Section 13
-- `docs/projects/qa-validation-agents/2-tasks-qa-validation-agents.md` - Renumbered tasks
-- `.claude/skills/dialogue-engine/` - NEW skill created (6 files)
-
-## Key Decisions Made
-
-### Product Language
-- "Enforcement" → "Execution" across all verticals
-- qa-execution-engine, api-execution-engine, pm-execution-engine, etc.
-
-### Skill Architecture (Option B - Modular References)
-```
-.claude/skills/<skill-name>/
-├── SKILL.md                 # Light orchestrator
-└── references/
-    ├── reference-1.md
-    ├── reference-2.md
-    └── ...
-```
-
-### Dialogue Engine Rules
-1. One topic at a time
-2. Numbered options (user types number to respond)
-3. Stop after each task, await confirmation
-4. Propose new reference categories with rationale, await approval
-
-## Open Defects
-| ID | Status | Description |
-|----|--------|-------------|
-| DEF-VA-001 | RESOLVED | Missing AI Orchestrator Integration |
-| DEF-VA-002 | RESOLVED | No Visual Feedback |
-| DEF-VA-003 | OPEN | Tool 3 silently ignores wrong field names |
-| DEF-VA-004 | OPEN | Metadata not passed between tools |
-| DEF-VA-005 | OPEN | Reviewer no completeness checks |
-| DEF-VA-006 | OPEN | Visual Logger no detailed audit |
-
-## Context for Next Session
-
-**Resume Point:** Continue Phase 0 design for `qa-execution-engine` skill
-
-**Next Steps:**
-1. Present reference file structures for qa-execution-engine (one at a time)
-2. Complete Phase 0 → Get approval
-3. Phase 1: Create PRD for skill
-4. Phase 2: Generate tasks
-5. Phase 3: Build skill
-
-**Important Context:**
-- `dialogue-engine` skill is now active - follow its rules
-- qa-execution-engine replaces execute-from-step1 (keep old for reference)
-- All DDs move from FRAMEWORK.md into skill during creation
-
-## Accomplishments Today
-
-1. **Root cause identified** - DDs passive → skill needed
-2. **PRD updated** - Section 13 documents the why
-3. **Task list fixed** - Clean 7→8→9 flow
-4. **Product pivot** - "Execution" language
-5. **dialogue-engine created** - Controls ALL future interactions (6 files)
-6. **qa-execution-engine designed** - 60% of Phase 0 complete
-
-## Key Files
-- `agents/docs/DEFECT_LOG.md` - DEF-VA-001 to 006
-- `.claude/skills/dialogue-engine/` - New interaction protocol
-- `docs/projects/qa-validation-agents/1-prd-qa-validation-agents.md` - Section 13
-- `docs/projects/qa-validation-agents/2-tasks-qa-validation-agents.md` - Updated tasks
-
----
-
-## TABLED TOPIC: SDK Orchestrator for Execution Layer
-
-**Status:** Tabled for later. Resume when ready.
-
-### The Question
-"Am I designing my execution layer wrong? I'm using skills for everything."
-
-### Key Insight
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Skills = Contextual guidance (AI decides when to apply)        │
-│  SDK    = Programmatic control (Code controls step order)       │
-│                                                                 │
-│  Problem: Skills for deterministic 9-step workflow is wrong     │
-│  Solution: SDK orchestrates steps, Skills provide DD context    │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Root Cause Identified
-- DDs are passive - AI forgets mid-workflow
-- Skills help but don't guarantee enforcement
-- User observed: "AI is not calling the DDs all the time"
-
-### Decided Approach
-**Option 2: Iterate from simple**
-- Start with SDK + Skills
-- Test against real scenarios
-- Add programmatic validation only for DDs that AI consistently misses
-- Avoids over-engineering upfront
-
-### Architecture Model
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  Layer         │ Who Controls │ What Happens                    │
-├─────────────────────────────────────────────────────────────────┤
-│  Orchestration │ Your code    │ Step order, flow, no skipping   │
-│  Execution     │ AI           │ Generate code, analyze, write   │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Current Assets Inventory
-
-**MCP Tools (6) - Ready to Use:**
-| Tool | Purpose |
-|------|---------|
-| Tool 1 | generate_tests_from_user_story |
-| Tool 2 | discover_page_elements |
-| Tool 3 | generate_page_object |
-| Tool 4 | generate_task |
-| Tool 5 | generate_role |
-| Tool 6 | generate_test_runner |
-
-**Design Decisions (22) - In FRAMEWORK.md:**
-| Group | DDs | Purpose |
-|-------|-----|---------|
-| Input/Processing | DD-01 to DD-11 | User input, AI processing rules |
-| Generation | DD-12 to DD-15 | Check existing, use metadata |
-| Post-Processing | DD-16 to DD-19 | AI overrides paths, values, imports |
-| Dynamic Elements | DD-20 to DD-21 | Page state prep, AI-SDET collab |
-| Error Handling | DD-22 | Stop-and-discuss protocol |
-
-**Skills (7) - Existing:**
-| Skill | Reusable? |
-|-------|-----------|
-| `execute-from-step1` | Port to SDK orchestrator |
-| `dialogue-engine` | Keep (interaction protocol) |
-| `design-decisions` | Maybe merge into SDK |
-| `testing` | Keep |
-| `rag-learning` | Keep (different vertical) |
-| `documentation` | Keep |
-| `create-vertical-validation-agents` | Keep |
-
-### What Needs Building
-
-| Component | Effort | Description |
-|-----------|--------|-------------|
-| SDK Orchestrator | Main work | Python function runs steps 1→9 in order |
-| Step wrappers | Medium | Each step loads DDs, calls tool, validates |
-| Metadata passing | Small | Pass context between steps (already designed) |
-| Basic validation | Small | Check tool success, non-empty output |
-
-### Distribution Channels (from business doc)
-- `pip install` - Framework code, MCP server
-- Claude plugin - Skills, slash commands, hooks (enforcement without setup)
-
-### IMPORTANT CLARIFICATION (Added Before Bed)
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  YOUR CURRENT SETUP (MCP Tools)                                 │
-│                                                                 │
-│  Claude Code ──────► MCP Server ──────► Your Python Tools       │
-│  (conversation)      (broker)           (local code)            │
-│                                                                 │
-│  Claude CALLS your tools. Your tools DON'T call Claude.         │
-│  No API key needed - Claude Code handles everything.            │
-└─────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────┐
-│  SDK ORCHESTRATION (what we discussed for execution layer)      │
-│                                                                 │
-│  Your Python ──────► Claude API ──────► Response                │
-│  (orchestrator)      (external)         (back to you)           │
-│                                                                 │
-│  Your code CALLS Claude. You control the flow.                  │
-│  API key required. Separate from Claude Code conversation.      │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-| Aspect | Your Current Agents | SDK Orchestration |
-|--------|---------------------|-------------------|
-| Who calls who | Claude calls your tools | Your code calls Claude |
-| Where AI runs | In Claude Code conversation | Via API calls |
-| API key needed | No | Yes |
-| Control flow | Claude decides | Your code decides |
-
-**Your agents (`sr_qa_engineer.py`, `supervisor.py`) are MCP TOOLS, not SDK orchestrators.**
-They use `@tool` decorator to expose functions that Claude Code can call.
-
-### Open Question
-Do you NEED SDK orchestration, or can MCP tools + skills achieve your goals?
-This needs exploration when you resume.
-
-### Next Step When Resumed
-1. Clarify: Do you need to switch to SDK, or improve current MCP approach?
-2. If SDK: Show pseudocode for orchestrator
-3. If MCP: Focus on making skills/DDs more reliable
-
-### Reference Files
-- `.business/daas_business_project_v1.8.md` - Business context
-- `FRAMEWORK.md` Section 8 - 22 DDs documented
-- `.claude/skills/execute-from-step1/SKILL.md` - Current 9-step workflow

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "qa-automation": {
+      "command": "C:/Users/solos/AppData/Local/Programs/Python/Python311/python.exe",
+      "args": ["D:/my_ai_projects/py_sel_framework_mcp/mcp_server/server.py"],
+      "cwd": "D:/my_ai_projects/py_sel_framework_mcp/mcp_server"
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp"]
+    }
+  }
+}

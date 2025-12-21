@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Update extract_listed_by() with agent/brokerage keywords",
+    "status": "completed",
+    "activeForm": "Updated extraction method"
+  },
+  {
+    "content": "Verify rental scraper script exports to Excel",
+    "status": "completed",
+    "activeForm": "Verified Excel export"
+  },
+  {
+    "content": "Test updated solution with rental scraper",
+    "status": "completed",
+    "activeForm": "Tested on 4 rental listings"
+  },
+  {
+    "content": "Verify Excel output has correct Listed By values",
+    "status": "completed",
+    "activeForm": "Verified: 2 Owner, 2 Management - working perfectly!"
+  },
+  {
+    "content": "Update project handoff document with current status",
+    "status": "completed",
+    "activeForm": "Updated handoff document"
+  },
+  {
+    "content": "Commit Task 5.0 solution to git",
+    "status": "pending",
+    "activeForm": "Committing changes"
+  }
+]

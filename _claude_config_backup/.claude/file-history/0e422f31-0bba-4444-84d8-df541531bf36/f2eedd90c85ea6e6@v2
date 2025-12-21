@@ -1,0 +1,18 @@
+{
+    "_schema": {
+        "description": "Static test credentials for login tests (DD-24)",
+        "strategies": {
+            "static": "Pre-existing accounts loaded via conftest test_users fixture",
+            "dynamic": "Fresh registration, saved via utility (not conftest)",
+            "self_contained": "Register and use within same test"
+        },
+        "user_format": {
+            "email": "string",
+            "password": "string",
+            "firstname": "string (optional)",
+            "lastname": "string (optional)"
+        }
+    },
+    "registered_user": null,
+    "admin_user": null
+}

@@ -1,0 +1,105 @@
+"""
+CatalogPage - Page Object Model
+
+Page Object representing a single page in the application.
+Provides atomic UI interactions via WebInterface composition.
+"""
+
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+
+class CatalogPage:
+    """
+    Page Object for Catalog Page.
+
+    - NO decorators
+    - Locators as class constants
+    - Atomic methods (one UI action)
+    - Return self for chaining
+    - State-check methods for assertions
+    """
+
+    def __init__(self, web: WebInterface):
+        """Compose WebInterface - NO inheritance."""
+        self.web = web
+
+    # ==================== LOCATORS (Class Constants) ====================
+    PRODUCT_NAME_LINK = (By.CSS_SELECTOR, "a.product-name")
+    PRODUCT_IMG_LINK = (By.CSS_SELECTOR, "a.product_img_link")
+    ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, "a.ajax_add_to_cart_button")
+    SUBCATEGORY_LINK = (By.CSS_SELECTOR, "a.subcategory-name")
+    SEARCH_INPUT = (By.CSS_SELECTOR, "#search_query_top")
+    VIEW_CART_LINK = (By.CSS_SELECTOR, "a[title='View my shopping cart']")
+    CONTINUE_SHOPPING_BUTTON = (By.CSS_SELECTOR, "span.continue")
+    PROCEED_TO_CHECKOUT_BUTTON = (By.CSS_SELECTOR, "a[title='Proceed to checkout']")
+
+    # ==================== ATOMIC METHODS (One UI Action) ====================
+
+    def click_product_name_link(self) -> "CatalogPage":
+        """Click product name link link."""
+        self.web.click(*self.PRODUCT_NAME_LINK)
+        return self
+
+    def click_product_img_link(self) -> "CatalogPage":
+        """Click product img link link."""
+        self.web.click(*self.PRODUCT_IMG_LINK)
+        return self
+
+    def click_add_to_cart_button(self) -> "CatalogPage":
+        """Click add to cart button link."""
+        self.web.click(*self.ADD_TO_CART_BUTTON)
+        return self
+
+    def click_subcategory_link(self) -> "CatalogPage":
+        """Click subcategory link link."""
+        self.web.click(*self.SUBCATEGORY_LINK)
+        return self
+
+    def enter_search_input(self, text: str) -> "CatalogPage":
+        """Enter search input."""
+        self.web.type_text(*self.SEARCH_INPUT, text=text)
+        return self  # Fluent API
+
+    def click_view_cart_link(self) -> "CatalogPage":
+        """Click view cart link link."""
+        self.web.click(*self.VIEW_CART_LINK)
+        return self
+
+    def click_continue_shopping_button(self) -> "CatalogPage":
+        """Click continue shopping button button."""
+        self.web.click(*self.CONTINUE_SHOPPING_BUTTON)
+        return self
+
+    def click_proceed_to_checkout_button(self) -> "CatalogPage":
+        """Click proceed to checkout button link."""
+        self.web.click(*self.PROCEED_TO_CHECKOUT_BUTTON)
+        return self
+
+    # ==================== STATE-CHECK METHODS (For Assertions) ====================
+
+    def is_page_loaded(self) -> bool:
+        """Check if product list page is loaded."""
+        product_list_locator = (By.CSS_SELECTOR, "ul.product_list")
+        return self.web.is_element_displayed(*product_list_locator, timeout=10)
+
+    def has_products(self) -> bool:
+        """Check if any products are displayed."""
+        return self.get_product_count() > 0
+
+    def get_product_count(self) -> int:
+        """Get number of products displayed."""
+        product_items_locator = (By.CSS_SELECTOR, "ul.product_list li.ajax_block_product")
+        products = self.web.find_elements(*product_items_locator)
+        return len(products)
+
+    def get_product_names(self) -> list:
+        """Get all product names on the page."""
+        product_items_locator = (By.CSS_SELECTOR, "ul.product_list li.ajax_block_product")
+        product_name_locator = (By.CSS_SELECTOR, ".product-name")
+        products = self.web.find_elements(*product_items_locator)
+        names = []
+        for product in products:
+            name_elem = product.find_element(*product_name_locator)
+            names.append(name_elem.text.strip())
+        return names

@@ -1,0 +1,374 @@
+# PRD: Framework Audit & MCP Alignment
+
+**Version:** 1.0
+**Status:** Draft
+**Date:** 2025-11-29
+
+---
+
+## 1. Introduction / Overview
+
+This PRD defines the scope and requirements for auditing the py_sel_framework_mcp test automation framework against validated 4-layer architecture patterns, fixing identified defects, and subsequently updating MCP code generation tools.
+
+**Problem Statement:**
+- Framework modules may have inconsistent implementations (e.g., locators in Tasks)
+- MCP tools may generate code that doesn't match production patterns
+- No formal defect tracking exists for the project
+- Architecture patterns need validation against industry standards
+
+**Goal:**
+Ensure all framework code follows validated OOP patterns, then update MCP tools to generate correct, consistent code.
+
+---
+
+## 2. Goals
+
+1. **Audit all framework modules** against validated 4-layer architecture rules
+2. **Create permanent defect tracking** via `docs/DEFECT_LOG.md`
+3. **Fix CRITICAL/HIGH defects** first
+4. **Fix MEDIUM/LOW defects** after critical fixes
+5. **Run all tests** to verify fixes don't break functionality
+6. **Update documentation** (CLAUDE.md, README.md) with finalized patterns
+
+---
+
+## 3. User Stories
+
+| As a... | I want to... | So that... |
+|---------|--------------|------------|
+| Developer | Have consistent patterns across all layers | Code is maintainable and predictable |
+| AI Assistant | Generate code that matches production patterns | MCP-generated code requires no manual fixes |
+| Interviewer | See clean, industry-standard architecture | Portfolio demonstrates QA Lead competency |
+| Learner | Understand OOP principles via framework examples | Framework serves as teaching material |
+
+---
+
+## 4. Functional Requirements
+
+### 4.1 Audit Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-01 | Audit all Page Object modules against validated rules |
+| FR-02 | Audit all Task modules against validated rules |
+| FR-03 | Audit all Role modules against validated rules |
+| FR-04 | Audit all Test files against validated rules |
+| FR-05 | Log all defects in `docs/DEFECT_LOG.md` with severity |
+
+### 4.2 Defect Fix Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-06 | Fix all CRITICAL defects (architecture violations) |
+| FR-07 | Fix all HIGH defects (wrong layer responsibility) |
+| FR-08 | Fix all MEDIUM defects (missing decorators, wrong returns) |
+| FR-09 | Fix all LOW defects (naming, style issues) |
+
+### 4.3 Verification Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-10 | Run all tests after fixes to verify functionality |
+
+### 4.4 Documentation Requirements
+
+| ID | Requirement |
+|----|-------------|
+| FR-11 | Create `FRAMEWORK.md` with complete architecture reference and code samples |
+| FR-12 | Update `CLAUDE.md` with layer rules summary and quick reference |
+| FR-13 | Update `README.md` with high-level architecture overview |
+
+---
+
+## 5. Non-Goals (Out of Scope - Phase A)
+
+- MCP tool refactoring (Phase B)
+- Adding new framework features
+- Changing the 4-layer architecture itself
+- Adding new test scenarios
+- Refactoring WebInterface layer
+- Teaching documentation (Phase C)
+
+---
+
+## 6. Technical Context
+
+### 6.1 Validated 4-Layer Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ TEST                                                     │
+│ - @autologger("Test") decorator                          │
+│ - Load data from JSON                                    │
+│ - Call ONE workflow method per Role                      │
+│ - Assert via Page Object directly                        │
+└─────────────────────────────────────────────────────────┘
+                          │ uses
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│ ROLE                                                     │
+│ - @autologger("Role") on workflow methods                │
+│ - No constructor decorator                               │
+│ - Instantiates Task modules                              │
+│ - Workflow methods call multiple Tasks, no return        │
+└─────────────────────────────────────────────────────────┘
+                          │ composes
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│ TASK                                                     │
+│ - @autologger("Task") on methods                         │
+│ - No constructor decorator                               │
+│ - Instantiates Page Objects                              │
+│ - One domain operation per method, no return             │
+│ - Uses fluent POM API                                    │
+└─────────────────────────────────────────────────────────┘
+                          │ composes
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│ PAGE OBJECT                                              │
+│ - No decorators                                          │
+│ - Locators as class constants                            │
+│ - Atomic methods (one UI action)                         │
+│ - Return self (Fluent API)                               │
+│ - State-check methods for assertions                     │
+└─────────────────────────────────────────────────────────┘
+                          │ uses
+                          ▼
+┌─────────────────────────────────────────────────────────┐
+│ WEB INTERFACE                                            │
+│ - Wraps Selenium WebDriver                               │
+│ - Built-in wait/retry logic                              │
+│ - No decorators                                          │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 6.2 OOP Principles Implemented
+
+| Principle | Implementation |
+|-----------|----------------|
+| **Encapsulation** | Each layer hides its internals. Pages hide locators, Tasks hide page orchestration, Roles hide task sequences. |
+| **Composition** | Roles COMPOSE Tasks. Tasks COMPOSE Page Objects. No inheritance hierarchy. |
+| **Single Responsibility (SRP)** | Each layer has ONE job. Pages = UI actions. Tasks = domain operations. Roles = workflows. Tests = assertions. |
+| **Separation of Concerns** | Locators ONLY in POMs. Orchestration ONLY in Roles. Assertions ONLY in Tests. |
+| **Abstraction** | Higher layers don't know lower-layer details. Role doesn't know locators. Test doesn't know page structure. |
+
+### 6.3 Layer Rules Summary
+
+| Layer | Decorator | Return Value | Composes | Fluent API |
+|-------|-----------|--------------|----------|------------|
+| **Page Object** | None | `self` | WebInterface | Yes |
+| **Task** | `@autologger("Task")` | None | Page Objects | No |
+| **Role** | `@autologger("Role")` | None | Tasks | No |
+| **Test** | `@autologger("Test")` | N/A | Roles + POMs (assert) | No |
+
+### 6.4 Defect Severity Definitions
+
+| Severity | Definition | Examples |
+|----------|------------|----------|
+| **CRITICAL** | Breaks 4-layer architecture | Locators in Task/Role, Test orchestrating multiple Role calls |
+| **HIGH** | Wrong layer responsibility | Task doing Role's job, Page doing Task's job |
+| **MEDIUM** | Missing required elements | Missing decorator, wrong return type |
+| **LOW** | Style/naming issues | Inconsistent naming, missing docstrings |
+
+### 6.5 Terminology
+
+| Term | Definition |
+|------|------------|
+| **Encapsulation** | Each layer hides its internals from other layers |
+| **Composition** | Objects contain/instantiate other objects |
+| **SRP** | Single Responsibility Principle - each layer has ONE job |
+| **Fluent API** | Methods return `self` to enable chaining (Page Objects only) |
+| **Decorator** | Python annotation that wraps a method to add behavior |
+| **Constructor** | `__init__` method that initializes class, instantiates dependencies |
+| **Load** | Read data from JSON file |
+| **Instantiate / Compose** | Create instances of lower-layer modules in constructor |
+| **Call** | Invoke methods on composed modules |
+| **Workflow method** | Role method that calls multiple Task methods |
+| **Domain operation** | Task method that performs one business operation |
+| **Atomic method** | Page Object method that performs one UI action |
+| **State-check method** | Page Object method that returns state for assertions |
+
+### 6.6 Directory Structure
+
+```
+framework/
+├── interfaces/
+│   └── web_interface.py
+├── pages/
+│   ├── common/           # Shared pages (login, home)
+│   ├── catalog/          # Catalog domain
+│   ├── checkout/         # Checkout domain
+│   └── auth/             # Authentication pages
+├── tasks/
+│   ├── common/           # Shared tasks (login/logout)
+│   └── catalog/          # Catalog domain tasks
+├── roles/
+│   └── auth/             # User personas
+└── resources/
+    └── utilities/        # Helpers, autologger
+
+tests/
+├── auth/
+│   └── data/             # JSON test data
+├── catalog/
+│   └── data/
+└── conftest.py           # Fixtures
+```
+
+### 6.7 Naming Conventions
+
+| Element | Convention | Example |
+|---------|------------|---------|
+| Page Object class | `<Name>Page` | `LoginPage`, `ProductListPage` |
+| Task class | `<Domain>Tasks` | `CommonTasks`, `CatalogTasks` |
+| Role class | `<Persona>` | `RegisteredUser`, `GuestUser` |
+| Test function | `test_<action>` | `test_user_can_login` |
+| File names | `snake_case.py` | `login_page.py`, `common_tasks.py` |
+| Locator constants | `UPPER_SNAKE` | `EMAIL_INPUT`, `SUBMIT_BTN` |
+
+### 6.8 Documentation Structure
+
+Reference implementation patterns and code samples will be documented in:
+
+| File | Purpose | Contents |
+|------|---------|----------|
+| `FRAMEWORK.md` (NEW) | Complete framework reference | Architecture diagrams, OOP principles, code samples for all layers, terminology |
+| `CLAUDE.md` | AI/Developer instructions | Layer rules summary, quick reference, development commands |
+| `README.md` | Project overview | High-level architecture, getting started, project purpose |
+
+---
+
+## 7. Success Metrics
+
+| Metric | Target |
+|--------|--------|
+| All CRITICAL defects fixed | 100% |
+| All HIGH defects fixed | 100% |
+| All MEDIUM defects fixed | 100% |
+| All LOW defects fixed | 100% |
+| Tests pass after fixes | 100% |
+| FRAMEWORK.md created | Complete |
+| CLAUDE.md updated | Complete |
+| README.md updated | Complete |
+
+---
+
+## 8. Project Phases
+
+### Phase A: Framework Audit (This PRD)
+
+| Step | Description |
+|------|-------------|
+| A.1 | Audit all framework modules against validated rules |
+| A.2 | Log all defects in `docs/DEFECT_LOG.md` |
+| A.3 | Fix CRITICAL and HIGH defects |
+| A.4 | Fix MEDIUM and LOW defects |
+| A.5 | Run all tests to verify fixes |
+| A.6 | Create `FRAMEWORK.md` with complete architecture reference and code samples |
+| A.7 | Update `CLAUDE.md` with layer rules summary |
+| A.8 | Update `README.md` with high-level architecture |
+
+### Phase B: MCP Tool Refactor (Future PRD)
+
+| Step | Description |
+|------|-------------|
+| B.1 | Audit MCP tools 3-6 against validated patterns |
+| B.2 | Refactor Tool 3 (Page Object generator) |
+| B.3 | Refactor Tool 4 (Task generator) |
+| B.4 | Refactor Tool 5 (Role generator) |
+| B.5 | Refactor Tool 6 (Test generator) |
+| B.6 | Validate generated code matches framework patterns |
+
+**Note:** Phase B will have its own PRD based on Phase A findings.
+
+### Phase C: Teaching Documentation (Future)
+
+| Deliverable | Description |
+|-------------|-------------|
+| Architecture Guide | Deep-dive into 4-layer architecture with examples |
+| OOP Principles Tutorial | How the framework implements OOP concepts |
+| Pattern Catalog | Code templates for each layer |
+| Anti-Pattern Guide | Common mistakes and how to avoid them |
+
+**Note:** Phase C documented for future planning only. No timeline.
+
+---
+
+## 9. Open Questions
+
+None - all questions resolved during Phase 0 design discussion.
+
+---
+
+## 10. Acceptance Tests
+
+### AT-01: Page Object Compliance
+```
+GIVEN a Page Object module
+WHEN audited against validated rules
+THEN it has locators as class constants
+AND methods are atomic (one UI action)
+AND methods return self
+AND no decorators on methods
+```
+
+### AT-02: Task Compliance
+```
+GIVEN a Task module
+WHEN audited against validated rules
+THEN it has @autologger("Task") on methods
+AND no constructor decorator
+AND no locators
+AND one domain operation per method
+AND no return values
+```
+
+### AT-03: Role Compliance
+```
+GIVEN a Role module
+WHEN audited against validated rules
+THEN it has @autologger("Role") on workflow methods
+AND no constructor decorator
+AND instantiates Task modules
+AND workflow methods call multiple Tasks
+AND no return values
+```
+
+### AT-04: Test Compliance
+```
+GIVEN a Test file
+WHEN audited against validated rules
+THEN it has @autologger("Test") decorator
+AND loads data from JSON file
+AND calls ONE workflow method per Role
+AND asserts via Page Object directly
+```
+
+### AT-05: All Tests Pass
+```
+GIVEN all defects are fixed
+WHEN running pytest
+THEN all tests pass
+```
+
+---
+
+## 11. Relevant Files
+
+### Framework Modules to Audit
+- `framework/pages/**/*.py` - Page Objects
+- `framework/tasks/**/*.py` - Task modules
+- `framework/roles/**/*.py` - Role modules
+- `tests/**/*.py` - Test files
+
+### Documentation to Update
+- `CLAUDE.md` - Layer rules summary, quick reference
+- `README.md` - High-level architecture overview
+
+### New Files to Create
+- `FRAMEWORK.md` - Complete framework reference with code samples
+- `docs/DEFECT_LOG.md` - Permanent defect tracker
+
+---
+
+**PRD Status:** Ready for Task Generation (Phase 2)

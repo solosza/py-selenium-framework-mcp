@@ -1,0 +1,352 @@
+2025-12-19T01:22:47.601Z [DEBUG] Watching for changes in setting files C:\Users\solos\.claude, D:\my_ai_projects\py_sel_framework_mcp\.claude...
+2025-12-19T01:22:47.632Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2025-12-19T01:22:47.669Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2025-12-19T01:22:47.669Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2025-12-19T01:22:47.669Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2025-12-19T01:22:47.672Z [DEBUG] Applying permission update: Adding 44 allow rule(s) to destination 'localSettings': ["WebFetch(domain:www.automationpractice.pl)","Bash(git commit:*)","Bash(git rm:*)","Bash(git add:*)","Bash(git push:*)","Bash(git checkout:*)","WebFetch(domain:automationpractice.pl)","WebSearch","WebFetch(domain:github.com)","WebFetch(domain:raw.githubusercontent.com)","Bash(dir:*)","Bash(python execute_auth_tests.py:*)","Bash(nul)","Bash(python investigate_catalog_page.py:*)","Bash(python -u:*)","WebFetch(domain:www.udemy.com)","WebFetch(domain:www.pulsemcp.com)","Bash(del \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\\\\framework\\\\tasks\\\\auth\\\\auth_tasks.py\")","Bash(git ls-tree:*)","Bash(cat:*)","Bash(git merge:*)","Bash(git branch:*)","Bash(del \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\\\\framework\\\\roles\\\\base\\\\role.py\")","Bash(gh pr create:*)","Bash(python:*)","Bash(pip show:*)","Bash(\"C:\\\\Users\\\\solos\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\" -c \"import sys; sys.path.insert\\(0, r''D:\\\\my_ai_projects\\\\py_sel_framework_mcp\\\\mcp_server''\\); import server; print\\(''Server imports OK''\\)\")","mcp__playwright__browser_fill_form","mcp__playwright__browser_click","mcp__playwright__browser_snapshot","mcp__playwright__browser_navigate","mcp__qa-automation__generate_page_object","mcp__qa-automation__generate_task","Bash(wc:*)","Bash(pip install:*)","Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" status)","Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" log --oneline -3)","Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" status training-assistant/docs/TEST_PLAN.md)","Bash(copy \"rag\\\\ingestion\\\\document.py\" \"rag\\\\core\\\\document.py\")","Bash(copy \"rag\\\\ingestion\\\\tests\\\\_reports\\\\run_tests.py\" \"tests\\\\_reports\\\\run_tests.py\")","Bash(copy \"rag\\\\ingestion\\\\tests\\\\test_loader.py\" \"tests\\\\ingestion\\\\test_loader.py\")","Bash(copy \"rag\\\\ingestion\\\\tests\\\\test_chunker.py\" \"tests\\\\ingestion\\\\test_chunker.py\")","Bash(copy \"rag\\\\ingestion\\\\tests\\\\test_embedder.py\" \"tests\\\\ingestion\\\\test_embedder.py\")","Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add -A)"]
+2025-12-19T01:22:47.677Z [DEBUG] LSP server manager initialized successfully
+2025-12-19T01:22:47.677Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2025-12-19T01:22:47.678Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2025-12-19T01:22:47.682Z [DEBUG] Stats cache is up to date
+2025-12-19T01:22:47.688Z [DEBUG] Loading skills from: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=[D:\my_ai_projects\py_sel_framework_mcp\.claude\skills]
+2025-12-19T01:22:47.694Z [DEBUG] Passes: Using fresh cached eligibility data
+2025-12-19T01:22:47.703Z [DEBUG] Loaded 0 installed plugins from C:\Users\solos\.claude\plugins\installed_plugins.json
+2025-12-19T01:22:47.833Z [DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+2025-12-19T01:22:47.834Z [DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+2025-12-19T01:22:47.834Z [DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+2025-12-19T01:22:47.834Z [DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+2025-12-19T01:22:47.844Z [DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1766107367834-e0503t.sh
+2025-12-19T01:22:47.844Z [DEBUG] Shell binary exists: true
+2025-12-19T01:22:47.844Z [DEBUG] Execution timeout: 10000ms
+2025-12-19T01:22:47.850Z [DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\a5d60465-abd0-45f4-9c48-8b7eb03d9635-agent-a5d60465-abd0-45f4-9c48-8b7eb03d9635.json.tmp.20688.1766107367850
+2025-12-19T01:22:47.860Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (9.6ms)
+2025-12-19T01:22:47.860Z [DEBUG] Temp file written successfully, size: 2 bytes
+2025-12-19T01:22:47.860Z [DEBUG] Renaming C:\Users\solos\.claude\todos\a5d60465-abd0-45f4-9c48-8b7eb03d9635-agent-a5d60465-abd0-45f4-9c48-8b7eb03d9635.json.tmp.20688.1766107367850 to C:\Users\solos\.claude\todos\a5d60465-abd0-45f4-9c48-8b7eb03d9635-agent-a5d60465-abd0-45f4-9c48-8b7eb03d9635.json
+2025-12-19T01:22:47.861Z [DEBUG] File C:\Users\solos\.claude\todos\a5d60465-abd0-45f4-9c48-8b7eb03d9635-agent-a5d60465-abd0-45f4-9c48-8b7eb03d9635.json written atomically
+2025-12-19T01:22:47.871Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2025-12-19T01:22:47.871Z [DEBUG] Total plugin skills loaded: 0
+2025-12-19T01:22:47.871Z [DEBUG] Total plugin commands loaded: 0
+2025-12-19T01:22:47.872Z [DEBUG] Registered 0 hooks from 0 plugins
+2025-12-19T01:22:47.903Z [DEBUG] Total plugin agents loaded: 0
+2025-12-19T01:22:47.904Z [DEBUG] Loaded 7 unique skills (managed: 0, user: 0, project: 7, legacy commands: 0)
+2025-12-19T01:22:47.904Z [DEBUG] getSkills returning: 7 skill dir commands, 0 plugin skills
+2025-12-19T01:22:47.917Z [DEBUG] Git remote URL: https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-19T01:22:47.917Z [DEBUG] Parsed repository: solosza/py-selenium-framework-mcp from https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-19T01:22:47.917Z [DEBUG] Parsed repository: solosza/py-selenium-framework-mcp from URL: https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-19T01:22:47.917Z [DEBUG] Path D:\my_ai_projects\py_sel_framework_mcp already tracked for repo solosza/py-selenium-framework-mcp
+2025-12-19T01:22:47.945Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2025-12-19T01:22:48.096Z [DEBUG] Shell snapshot created successfully (342 bytes)
+2025-12-19T01:22:48.187Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.20688.1766107368187
+2025-12-19T01:22:48.187Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:22:48.192Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (5.0ms)
+2025-12-19T01:22:48.192Z [DEBUG] Temp file written successfully, size: 64377 bytes
+2025-12-19T01:22:48.192Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:22:48.192Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.20688.1766107368187 to C:\Users\solos\.claude.json
+2025-12-19T01:22:48.193Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:22:48.202Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (7.6ms)
+2025-12-19T01:22:48.421Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (7.6ms)
+2025-12-19T01:22:48.421Z [DEBUG] Successfully refreshed marketplace: claude-plugins-official
+2025-12-19T01:22:48.421Z [DEBUG] Plugin autoupdate: checking installed plugins
+2025-12-19T01:22:48.456Z [DEBUG] Passes: Using fresh cached eligibility data
+2025-12-19T01:22:48.494Z [DEBUG] MCP server "qa-automation": Starting connection with timeout of 30000ms
+2025-12-19T01:22:48.505Z [DEBUG] MCP server "playwright": Starting connection with timeout of 30000ms
+2025-12-19T01:22:48.547Z [DEBUG] Initialized versioned plugins system with 0 plugins
+2025-12-19T01:22:48.549Z [DEBUG] [ColorDiff] Not in bundled mode, using JS fallback
+2025-12-19T01:22:48.554Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.20688.1766107368554
+2025-12-19T01:22:48.554Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:22:48.560Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (6.0ms)
+2025-12-19T01:22:48.560Z [DEBUG] Temp file written successfully, size: 64377 bytes
+2025-12-19T01:22:48.560Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:22:48.560Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.20688.1766107368554 to C:\Users\solos\.claude.json
+2025-12-19T01:22:48.561Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:22:48.576Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (9.4ms)
+2025-12-19T01:22:48.587Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2025-12-19T01:22:48.587Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:22:48.587Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2025-12-19T01:22:48.701Z [DEBUG] Getting matching hook commands for SubagentStart with query: Explore
+2025-12-19T01:22:48.702Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:22:48.702Z [DEBUG] Matched 0 unique hooks for query "Explore" (0 before deduplication)
+2025-12-19T01:22:48.721Z [DEBUG] Getting matching hook commands for SubagentStart with query: Plan
+2025-12-19T01:22:48.721Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:22:48.721Z [DEBUG] Matched 0 unique hooks for query "Plan" (0 before deduplication)
+2025-12-19T01:22:48.783Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.20688.1766107368783
+2025-12-19T01:22:48.783Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:22:48.786Z [DEBUG] Temp file written successfully, size: 64304 bytes
+2025-12-19T01:22:48.786Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:22:48.786Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.20688.1766107368783 to C:\Users\solos\.claude.json
+2025-12-19T01:22:48.786Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:22:48.799Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (12.4ms)
+2025-12-19T01:22:48.806Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2025-12-19T01:22:48.806Z [DEBUG] performStartupChecks called
+2025-12-19T01:22:48.807Z [DEBUG] Starting background plugin installations
+2025-12-19T01:22:48.807Z [DEBUG] performBackgroundPluginInstallations called
+2025-12-19T01:22:48.816Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-12-19T01:22:48.821Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.20688.1766107368821
+2025-12-19T01:22:48.821Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:22:48.825Z [DEBUG] Temp file written successfully, size: 64377 bytes
+2025-12-19T01:22:48.825Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:22:48.825Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.20688.1766107368821 to C:\Users\solos\.claude.json
+2025-12-19T01:22:48.825Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:22:48.838Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (12.9ms)
+2025-12-19T01:22:48.841Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2025-12-19T01:22:48.849Z [DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+2025-12-19T01:22:48.870Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (9.1ms)
+2025-12-19T01:22:48.897Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.20688.1766107368897
+2025-12-19T01:22:48.897Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:22:48.900Z [DEBUG] Temp file written successfully, size: 64377 bytes
+2025-12-19T01:22:48.900Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:22:48.900Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.20688.1766107368897 to C:\Users\solos\.claude.json
+2025-12-19T01:22:48.901Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:22:48.910Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (8.8ms)
+2025-12-19T01:22:49.694Z [DEBUG] MCP server "qa-automation": Successfully connected to undefined server in 1204ms
+2025-12-19T01:22:49.694Z [DEBUG] MCP server "qa-automation": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"qa-automation-framework","version":"1.23.2"}}
+2025-12-19T01:22:49.846Z [DEBUG] MCP server "playwright": Successfully connected to undefined server in 1342ms
+2025-12-19T01:22:49.846Z [DEBUG] MCP server "playwright": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Playwright","version":"0.0.44"}}
+2025-12-19T01:22:50.057Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:22:50.662Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:22:50.806Z [DEBUG] Skills and commands included in Skill tool: dialogue-engine, execute-from-step1, rag-learning
+2025-12-19T01:22:51.534Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:22:51.534Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:22:51.534Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:22:54.337Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:22:54.338Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:22:54.338Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:22:54.338Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:22:54.355Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:22:54.355Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:22:54.355Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:22:54.554Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:22:54.554Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:22:54.554Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:22:54.556Z [DEBUG] FileHistory: Added snapshot for 4cc0cc4f-b1ea-4b92-8c9e-d221191a2c8f, tracking 0 files
+2025-12-19T01:22:54.628Z [DEBUG] Total plugin output styles loaded: 0
+2025-12-19T01:22:55.529Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:22:57.626Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:22:58.746Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:22:58.753Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:22:58.753Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:22:58.753Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:22:59.514Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:22:59.514Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:22:59.514Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:22:59.533Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:22:59.533Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:22:59.533Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:22:59.533Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:23:02.039Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:23:14.033Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-12-19T01:23:14.033Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:23:14.033Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:23:14.084Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.20688.1766107394084
+2025-12-19T01:23:14.084Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:23:14.087Z [DEBUG] Temp file written successfully, size: 64377 bytes
+2025-12-19T01:23:14.087Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:23:14.087Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.20688.1766107394084 to C:\Users\solos\.claude.json
+2025-12-19T01:23:14.088Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:23:14.095Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (6.9ms)
+2025-12-19T01:23:14.101Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.20688.1766107394101
+2025-12-19T01:23:14.101Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:23:14.104Z [DEBUG] Temp file written successfully, size: 64377 bytes
+2025-12-19T01:23:14.104Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:23:14.104Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.20688.1766107394101 to C:\Users\solos\.claude.json
+2025-12-19T01:23:14.104Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:23:14.112Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (6.8ms)
+2025-12-19T01:23:15.599Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:23:19.648Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:23:19.648Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:23:19.648Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:23:39.213Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:23:39.213Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:23:39.213Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:23:39.213Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:23:39.280Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:23:39.280Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:23:39.280Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:23:39.281Z [DEBUG] FileHistory: Making snapshot for message 956b2a49-0077-48a1-925a-26c6f74c9623
+2025-12-19T01:23:39.281Z [DEBUG] FileHistory: Added snapshot for 956b2a49-0077-48a1-925a-26c6f74c9623, tracking 0 files
+2025-12-19T01:23:40.004Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:23:42.159Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:23:46.068Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-12-19T01:23:46.068Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:23:46.068Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:23:48.238Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:23:54.463Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:23:54.463Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:23:54.463Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:00.450Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:24:00.450Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:24:00.450Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:24:00.450Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:24:00.548Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:24:00.548Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:00.548Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:00.548Z [DEBUG] FileHistory: Making snapshot for message 2b3f9e85-9826-4afe-a9d9-ccb9ea6e4b39
+2025-12-19T01:24:00.549Z [DEBUG] FileHistory: Added snapshot for 2b3f9e85-9826-4afe-a9d9-ccb9ea6e4b39, tracking 0 files
+2025-12-19T01:24:01.469Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:02.151Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:02.384Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.20688.1766107442384
+2025-12-19T01:24:02.384Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:24:02.389Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (5.3ms)
+2025-12-19T01:24:02.389Z [DEBUG] Temp file written successfully, size: 64377 bytes
+2025-12-19T01:24:02.389Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:24:02.389Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.20688.1766107442384 to C:\Users\solos\.claude.json
+2025-12-19T01:24:02.390Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:24:02.401Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (11.0ms)
+2025-12-19T01:24:09.039Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-12-19T01:24:09.039Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:09.039Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:09.126Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:24:09.126Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:24:09.126Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:24:09.126Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:24:09.198Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:24:09.198Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:09.198Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:09.204Z [DEBUG] FileHistory: Making snapshot for message fd1f2489-2ab1-4d70-84b7-eb28fa1c65a3
+2025-12-19T01:24:09.204Z [DEBUG] FileHistory: Added snapshot for fd1f2489-2ab1-4d70-84b7-eb28fa1c65a3, tracking 0 files
+2025-12-19T01:24:10.238Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:10.887Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:10.889Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:15.481Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-12-19T01:24:15.481Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:15.481Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:17.572Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:19.290Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:24:19.290Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:19.290Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:23.012Z [DEBUG] Streaming aborted by user: Request was aborted.
+2025-12-19T01:24:23.012Z [ERROR] Error in non-streaming fallback: Request was aborted.
+2025-12-19T01:24:23.012Z [ERROR] Error: Error: Request was aborted.
+    at u0A._createMessage (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:503:3157)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-12-19T01:24:24.524Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:24:24.524Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:24:24.524Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:24:24.524Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:24:24.585Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:24:24.585Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:24.585Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:24.586Z [DEBUG] FileHistory: Making snapshot for message c94276d4-4546-403f-9628-b8e05098c5f2
+2025-12-19T01:24:24.586Z [DEBUG] FileHistory: Added snapshot for c94276d4-4546-403f-9628-b8e05098c5f2, tracking 0 files
+2025-12-19T01:24:25.685Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:26.240Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:29.081Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-12-19T01:24:29.081Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:29.081Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:30.717Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:34.657Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:24:34.657Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:34.657Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:47.642Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:24:47.642Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:24:47.642Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:24:47.642Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:24:47.704Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:24:47.704Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:47.704Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:47.705Z [DEBUG] FileHistory: Making snapshot for message 5a263913-ecb2-4754-b892-f275e29aeb13
+2025-12-19T01:24:47.705Z [DEBUG] FileHistory: Added snapshot for 5a263913-ecb2-4754-b892-f275e29aeb13, tracking 0 files
+2025-12-19T01:24:48.274Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:50.404Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:52.750Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-12-19T01:24:52.750Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:24:52.750Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:24:54.382Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:24:58.252Z [DEBUG] Streaming aborted by user: Request was aborted.
+2025-12-19T01:24:58.252Z [ERROR] Error in non-streaming fallback: Request was aborted.
+2025-12-19T01:24:58.252Z [ERROR] Error: Error: Request was aborted.
+    at u0A._createMessage (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:503:3157)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-12-19T01:25:02.353Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:25:02.353Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:25:02.353Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:25:02.353Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:25:02.420Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:25:02.420Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:25:02.420Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:25:02.420Z [DEBUG] FileHistory: Making snapshot for message b21e556e-8e4e-4b64-a191-bf531eb1cf59
+2025-12-19T01:25:02.420Z [DEBUG] FileHistory: Added snapshot for b21e556e-8e4e-4b64-a191-bf531eb1cf59, tracking 0 files
+2025-12-19T01:25:03.280Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:25:04.320Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:25:06.099Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:25:06.104Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:25:06.104Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:25:06.104Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:25:07.068Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:25:07.068Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:25:07.068Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:25:07.083Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:25:07.083Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:25:07.083Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:25:07.083Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:25:09.205Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:25:27.027Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-12-19T01:25:27.027Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:25:27.027Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:25:29.198Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:25:37.522Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:25:37.522Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:25:37.522Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:25:49.909Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:25:49.909Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:25:49.909Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:25:49.909Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:25:49.960Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:25:49.960Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:25:49.960Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:25:49.961Z [DEBUG] FileHistory: Making snapshot for message 584e35c5-9f75-48ae-bd95-d10bacb291b3
+2025-12-19T01:25:49.962Z [DEBUG] FileHistory: Added snapshot for 584e35c5-9f75-48ae-bd95-d10bacb291b3, tracking 0 files
+2025-12-19T01:25:50.787Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:25:52.046Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:25:54.206Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:25:54.210Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:25:54.210Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:25:54.210Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:25:54.941Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:25:54.941Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:25:54.941Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:25:54.954Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:25:54.955Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:25:54.955Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:25:54.955Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:25:56.943Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:26:03.901Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:26:03.907Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:26:03.907Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:26:03.907Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:26:04.641Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:26:04.641Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:26:04.641Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:26:04.655Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:26:04.655Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:26:04.655Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:26:04.655Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:26:11.134Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:26:24.138Z [DEBUG] executePreToolHooks called for tool: TodoWrite
+2025-12-19T01:26:24.151Z [DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+2025-12-19T01:26:24.151Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:26:24.151Z [DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+2025-12-19T01:26:24.187Z [DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\a5d60465-abd0-45f4-9c48-8b7eb03d9635-agent-a5d60465-abd0-45f4-9c48-8b7eb03d9635.json.tmp.20688.1766107584187
+2025-12-19T01:26:24.187Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:26:24.190Z [DEBUG] Temp file written successfully, size: 427 bytes
+2025-12-19T01:26:24.190Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:26:24.190Z [DEBUG] Renaming C:\Users\solos\.claude\todos\a5d60465-abd0-45f4-9c48-8b7eb03d9635-agent-a5d60465-abd0-45f4-9c48-8b7eb03d9635.json.tmp.20688.1766107584187 to C:\Users\solos\.claude\todos\a5d60465-abd0-45f4-9c48-8b7eb03d9635-agent-a5d60465-abd0-45f4-9c48-8b7eb03d9635.json
+2025-12-19T01:26:24.191Z [DEBUG] File C:\Users\solos\.claude\todos\a5d60465-abd0-45f4-9c48-8b7eb03d9635-agent-a5d60465-abd0-45f4-9c48-8b7eb03d9635.json written atomically
+2025-12-19T01:26:24.203Z [DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+2025-12-19T01:26:24.203Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:26:24.203Z [DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+2025-12-19T01:26:24.218Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:26:24.218Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:26:24.218Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:26:24.218Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:26:25.988Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:26:30.753Z [DEBUG] Streaming aborted by user: Request was aborted.
+2025-12-19T01:26:30.753Z [ERROR] Error in non-streaming fallback: Request was aborted.
+2025-12-19T01:26:30.754Z [ERROR] Error: Error: Request was aborted.
+    at u0A._createMessage (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:503:3157)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at process.processTimers (node:internal/timers:520:9)
+2025-12-19T01:26:55.629Z [DEBUG] Getting matching hook commands for SessionEnd with query: prompt_input_exit
+2025-12-19T01:26:55.629Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:26:55.629Z [DEBUG] Matched 0 unique hooks for query "prompt_input_exit" (0 before deduplication)

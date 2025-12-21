@@ -1,0 +1,114 @@
+# Session State - 2025-12-08
+
+## Current Phase
+**Phase:** Phase B - MCP Tool Chain Refactor
+**Status:** B.7 In Progress - Setting up MCP Protocol Mode
+**Resume Word:** MCP-CONNECT
+
+## What We're Working On
+**Active Task:** B.7 - Medium E2E Test (guest user browses T-shirts)
+**Task Status:** Blocked - Need MCP server connection
+
+## Critical Discovery This Session
+
+**WE WERE TESTING WRONG!**
+
+Previous approach (WRONG):
+- Dev test scripts in `mcp_server/_dev_tests/` calling tools directly via Python
+- AI not orchestrating - scripts hardcoded the workflow
+
+Correct approach (MCP Protocol Mode):
+- MCP server connected to Claude Code
+- AI calls tools via MCP protocol: `mcp__qa-automation__generate_tests_from_user_story`
+- AI orchestrates the 9-step workflow conversationally
+- This is how FRAMEWORK.md Section 8 was designed
+
+## What Was Done This Session
+
+1. **Updated skill** `.claude/skills/execute-from-step1.md`:
+   - Added DevTest vs Production folder distinction
+   - All roles go in `framework/roles/auth/` folder
+
+2. **Deleted `framework/roles/guest/`** folder:
+   - Testing if MCP tools create GuestUser in correct `auth/` location
+   - This validates DD-12 (check-existing) behavior
+
+3. **Created MCP config** `.claude/mcp.json`:
+   ```json
+   {
+     "mcpServers": {
+       "qa-automation": {
+         "command": "python",
+         "args": ["mcp_server/server.py"],
+         "cwd": "D:\\my_ai_projects\\py_sel_framework_mcp"
+       }
+     }
+   }
+   ```
+
+4. **B.7 Test Definition:**
+   - Persona: "As a guest user..."
+   - Intent: Browse T-shirts category
+   - URL: http://automationpractice.pl/index.php
+   - Expected: Products displayed
+   - Output folder: `tests/test2/` (medium, multi-domain test)
+
+## Resume Instructions
+
+**Resume Word:** MCP-CONNECT
+
+**After Claude Code restart:**
+
+1. Run `/mcp` to verify MCP server connected
+2. Should see tools like:
+   - `mcp__qa-automation__generate_tests_from_user_story`
+   - `mcp__qa-automation__discover_page_elements`
+   - `mcp__qa-automation__generate_page_object`
+   - `mcp__qa-automation__generate_task`
+   - `mcp__qa-automation__generate_role`
+   - `mcp__qa-automation__generate_test_runner`
+
+3. If connected, execute B.7 using 9-step workflow:
+   - Step 1: ✓ User Input (guest user, T-shirts, products displayed)
+   - Step 2: ✓ AI Processing (GuestUser, catalog domain, expected_states)
+   - Step 3: Call `mcp__qa-automation__generate_tests_from_user_story`
+   - Step 4: Call `mcp__qa-automation__discover_page_elements`
+   - Step 5: Call `mcp__qa-automation__generate_page_object`
+   - Step 6: Call `mcp__qa-automation__generate_task`
+   - Step 7: Call `mcp__qa-automation__generate_role`
+   - Step 8: Call `mcp__qa-automation__generate_test_runner`
+   - Step 9: Save files, run pytest with visible browser
+
+4. Validate:
+   - GuestUser created in `framework/roles/auth/` (not `guest/`)
+   - Test runs with visible browser
+   - HTML report generated
+
+## If MCP Server Doesn't Connect
+
+Check:
+1. `.claude/mcp.json` exists in project root
+2. Python path is correct
+3. `mcp_server/server.py` has no import errors
+4. Run `/doctor` for diagnostics
+
+May need to use `claude mcp add` command instead.
+
+## Files Changed This Session
+- `.claude/skills/execute-from-step1.md` - Added DevTest vs Production folders
+- `.claude/mcp.json` - NEW - MCP server configuration
+- `framework/roles/guest/` - DELETED - Testing tool creates in correct location
+
+## Git State
+- Branch: `feature/7.0-create-framework-md`
+- Uncommitted changes: `.claude/mcp.json`, skill update, deleted guest folder
+
+## Task List Summary
+| Task | Type | Description | Status |
+|------|------|-------------|--------|
+| B.1-B.6 | CORE/GLUE | Previous tasks | DONE |
+| B.7 | GLUE | Medium E2E (T-shirts, MCP protocol) | IN PROGRESS |
+| B.8 | GLUE | Cleanup + merge to main | Pending |
+
+---
+**Last Updated:** 2025-12-08

@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Task 2.7: EXPERIMENT - Chunk corpus with different parameters",
+    "status": "in_progress",
+    "activeForm": "Running chunking experiments"
+  },
+  {
+    "content": "Task 2.8: EVALUATE - Assess chunk quality",
+    "status": "pending",
+    "activeForm": "Evaluating chunk quality"
+  },
+  {
+    "content": "Task 2.9-2.12: Reflect, run checks, record, commit",
+    "status": "pending",
+    "activeForm": "Finalizing chunking task"
+  }
+]

@@ -1,0 +1,377 @@
+"""
+E2E Test 1: Login Flow (Easy)
+
+Full MCP tool chain test:
+- Tool 1: Parse user story
+- Tool 2: Discover page elements (browser visible)
+- Tool 3: Generate page object
+- Tool 4: Generate task
+- Tool 5: Generate role
+- Tool 6: Generate test
+- Run pytest with visible browser
+- Generate HTML report
+
+Output folder: devtest1/
+
+Usage:
+    cd mcp_server/_dev_tests
+    python e2e_test1_login.py
+"""
+
+import asyncio
+import json
+import sys
+import subprocess
+import os
+from pathlib import Path
+from datetime import datetime
+
+# Setup paths
+SCRIPT_DIR = Path(__file__).parent
+MCP_DIR = SCRIPT_DIR.parent
+PROJECT_ROOT = MCP_DIR.parent
+FRAMEWORK_DIR = PROJECT_ROOT / "framework"
+TESTS_DIR = PROJECT_ROOT / "tests"
+
+# Add paths for imports
+sys.path.insert(0, str(MCP_DIR))
+sys.path.insert(0, str(MCP_DIR / "tools"))
+sys.path.insert(0, str(FRAMEWORK_DIR))
+
+# Output folder name
+DEV_TEST_FOLDER = "devtest1"
+
+# Test configuration
+USER_STORY = """
+As a registered user, I want to log in to my account
+
+Acceptance Criteria:
+- User can enter email and password
+- User can click sign in button
+- User is redirected to account page on success
+
+Scenario: Valid login with correct credentials
+Given user has valid registered credentials
+When user enters email and password and clicks Sign In
+Then user is logged into their account successfully
+"""
+
+WORKFLOW = "auth"
+LOGIN_PAGE_URL = "http://www.automationpractice.pl/index.php?controller=authentication"
+
+
+def print_section(title):
+    """Print section header."""
+    print("\n" + "=" * 70)
+    print(f"  {title}")
+    print("=" * 70)
+
+
+def print_file_contents(file_path, code):
+    """Print file contents with header."""
+    print(f"\n{'-' * 70}")
+    print(f"FILE: {file_path}")
+    print(f"{'-' * 70}")
+    print(code)
+    print(f"{'-' * 70}")
+
+
+def create_devtest_folders():
+    """Create devtest1 folders in framework structure."""
+    folders = [
+        FRAMEWORK_DIR / "pages" / DEV_TEST_FOLDER,
+        FRAMEWORK_DIR / "tasks" / DEV_TEST_FOLDER,
+        FRAMEWORK_DIR / "roles" / DEV_TEST_FOLDER,
+        TESTS_DIR / DEV_TEST_FOLDER,
+        TESTS_DIR / "_reports",
+    ]
+
+    for folder in folders:
+        folder.mkdir(parents=True, exist_ok=True)
+        print(f"  Created: {folder.relative_to(PROJECT_ROOT)}")
+
+    # Create __init__.py files for Python imports
+    for folder in folders[:-1]:  # Exclude _reports
+        init_file = folder / "__init__.py"
+        if not init_file.exists():
+            init_file.write_text("")
+
+    return folders
+
+
+def save_file(file_path: Path, content: str):
+    """Save content to file."""
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    file_path.write_text(content)
+    print(f"  Saved: {file_path.relative_to(PROJECT_ROOT)}")
+
+
+async def run_e2e_test():
+    """Run the full E2E MCP test."""
+
+    print_section("E2E TEST 1: LOGIN FLOW")
+    print(f"\nProject root: {PROJECT_ROOT}")
+    print(f"Output folder: {DEV_TEST_FOLDER}/")
+    print(f"Workflow: {WORKFLOW}")
+
+    # Step 0: Create folders
+    print_section("STEP 0: Create devtest1 folders")
+    create_devtest_folders()
+
+    # ========== TOOL 1: Parse User Story ==========
+    print_section("STEP 1: Parse User Story (Tool 1)")
+
+    from tools.tool_01_generate_tests_from_user_story import generate_tests_from_user_story
+
+    result1 = await generate_tests_from_user_story({
+        "user_story": USER_STORY,
+        "workflow": WORKFLOW
+    })
+
+    parsed = json.loads(result1)
+    if parsed.get("status") != "success":
+        print(f"ERROR: {parsed.get('error')}")
+        return False
+
+    print(f"  Title: {parsed.get('user_story_title')}")
+    print(f"  Scenarios found: {parsed.get('scenarios_count')}")
+
+    scenario = parsed.get("scenarios", [])[0]
+    print(f"  Test name: {scenario.get('name')}")
+    print(f"  Given: {scenario.get('given')}")
+    print(f"  When: {scenario.get('when')}")
+    print(f"  Then: {scenario.get('then')}")
+
+    # ========== TOOL 2: Discover Elements ==========
+    print_section("STEP 2: Discover Page Elements (Tool 2)")
+    print(f"  URL: {LOGIN_PAGE_URL}")
+    print(f"  Browser: VISIBLE (headless=False)")
+    print("\n  >>> Browser will open now... <<<\n")
+
+    from tools.tool_02_discover_page_elements import discover_elements
+
+    result2 = await discover_elements({
+        "url": LOGIN_PAGE_URL,
+        "headless": False  # User can see the browser
+    })
+
+    discovered = json.loads(result2)
+    if discovered.get("status") != "success":
+        print(f"ERROR: {discovered.get('error')}")
+        return False
+
+    print(f"  Total elements found: {discovered.get('total_elements')}")
+    print(f"  By type: {json.dumps(discovered.get('elements_by_type'), indent=4)}")
+
+    elements = discovered.get("elements", [])
+
+    # Filter to login-related elements only
+    login_elements = [e for e in elements if any(k in e.get("suggested_name", "").lower()
+                     for k in ["email", "passwd", "password", "submit", "login", "signin"])]
+
+    print(f"\n  Login-related elements ({len(login_elements)}):")
+    for elem in login_elements:
+        print(f"    - {elem.get('suggested_name')}: {elem.get('locator_id') or elem.get('locator_css')}")
+
+    # ========== TOOL 3: Generate Page Object ==========
+    print_section("STEP 3: Generate Page Object (Tool 3)")
+
+    from tools.tool_03_generate_page_object import generate_page_object
+
+    # Use login elements for POM
+    result3 = await generate_page_object({
+        "page_name": "DevLoginPage",
+        "elements": login_elements,
+        "workflow": DEV_TEST_FOLDER
+    })
+
+    pom_result = json.loads(result3)
+    if pom_result.get("status") != "success":
+        print(f"ERROR: {pom_result.get('error')}")
+        return False
+
+    pom_code = pom_result.get("code")
+    pom_file = FRAMEWORK_DIR / "pages" / DEV_TEST_FOLDER / "dev_login_page.py"
+
+    save_file(pom_file, pom_code)
+    print_file_contents(pom_file.relative_to(PROJECT_ROOT), pom_code)
+
+    # ========== TOOL 4: Generate Task ==========
+    print_section("STEP 4: Generate Task (Tool 4)")
+
+    from tools.tool_04_generate_task import generate_task
+
+    result4 = await generate_task({
+        "task_name": "DevAuthTasks",
+        "workflow_description": "Authentication workflows for login testing",
+        "page_objects": [{
+            "name": "DevLoginPage",
+            "file_path": f"pages/{DEV_TEST_FOLDER}/dev_login_page.py",
+            "code": pom_code
+        }]
+    })
+
+    task_result = json.loads(result4)
+    if task_result.get("status") != "success":
+        print(f"ERROR: {task_result.get('error')}")
+        return False
+
+    task_code = task_result.get("code")
+    task_file = FRAMEWORK_DIR / "tasks" / DEV_TEST_FOLDER / "dev_auth_tasks.py"
+
+    save_file(task_file, task_code)
+    print_file_contents(task_file.relative_to(PROJECT_ROOT), task_code)
+
+    # ========== TOOL 5: Generate Role ==========
+    print_section("STEP 5: Generate Role (Tool 5)")
+
+    from tools.tool_05_generate_role import generate_role
+
+    result5 = await generate_role({
+        "role_name": "DevRegisteredUser",
+        "capabilities": ["can_login", "can_logout"],
+        "credentials": {
+            "email": "test@example.com",
+            "password": "Test123!"
+        }
+    })
+
+    role_result = json.loads(result5)
+    if role_result.get("status") != "success":
+        print(f"ERROR: {role_result.get('error')}")
+        return False
+
+    role_code = role_result.get("code")
+    role_file = FRAMEWORK_DIR / "roles" / DEV_TEST_FOLDER / "dev_registered_user.py"
+
+    save_file(role_file, role_code)
+    print_file_contents(role_file.relative_to(PROJECT_ROOT), role_code)
+
+    # ========== TOOL 6: Generate Test ==========
+    print_section("STEP 6: Generate Test (Tool 6)")
+
+    from tools.tool_06_generate_test_template import generate_test_template
+
+    result6 = await generate_test_template({
+        "test_name": scenario.get("name"),
+        "workflow": DEV_TEST_FOLDER,
+        "role": "DevRegisteredUser",
+        "scenario": scenario
+    })
+
+    test_result = json.loads(result6)
+    if test_result.get("status") != "success":
+        print(f"ERROR: {test_result.get('error')}")
+        return False
+
+    test_code = test_result.get("code")
+
+    # Fix imports for devtest1 folder structure
+    test_code = test_code.replace(
+        f"from roles.auth.dev_registered_user import DevRegisteredUser",
+        f"from roles.{DEV_TEST_FOLDER}.dev_registered_user import DevRegisteredUser"
+    )
+
+    test_file = TESTS_DIR / DEV_TEST_FOLDER / f"{scenario.get('name')}.py"
+
+    save_file(test_file, test_code)
+    print_file_contents(test_file.relative_to(PROJECT_ROOT), test_code)
+
+    # ========== Create conftest.py for devtest1 ==========
+    print_section("STEP 6b: Create conftest.py")
+
+    conftest_code = '''"""
+Pytest configuration for devtest1.
+"""
+
+import pytest
+import sys
+from pathlib import Path
+
+# Add framework to path
+FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
+sys.path.insert(0, FRAMEWORK_PATH)
+
+from interfaces.web_interface import WebInterface
+
+
+@pytest.fixture(scope="function")
+def web_interface():
+    """Create WebInterface instance for each test."""
+    web = WebInterface(headless=False)  # Visible browser
+    yield web
+    web.quit()
+
+
+@pytest.fixture(scope="session")
+def config():
+    """Test configuration."""
+    return {
+        "url": "http://www.automationpractice.pl/index.php"
+    }
+'''
+
+    conftest_file = TESTS_DIR / DEV_TEST_FOLDER / "conftest.py"
+    save_file(conftest_file, conftest_code)
+    print_file_contents(conftest_file.relative_to(PROJECT_ROOT), conftest_code)
+
+    # ========== RUN PYTEST ==========
+    print_section("STEP 7: Run pytest with visible browser")
+
+    report_name = f"devtest1_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
+    report_path = TESTS_DIR / "_reports" / report_name
+
+    cmd = [
+        sys.executable, "-m", "pytest",
+        str(test_file),
+        "-v",
+        f"--html={report_path}",
+        "--self-contained-html"
+    ]
+
+    print(f"  Command: {' '.join(cmd)}")
+    print(f"\n  >>> Browser will open for test execution... <<<\n")
+
+    result = subprocess.run(
+        cmd,
+        cwd=str(TESTS_DIR),
+        capture_output=True,
+        text=True
+    )
+
+    print("\n  PYTEST OUTPUT:")
+    print("  " + result.stdout.replace("\n", "\n  "))
+
+    if result.stderr:
+        print("\n  STDERR:")
+        print("  " + result.stderr.replace("\n", "\n  "))
+
+    # ========== SUMMARY ==========
+    print_section("E2E TEST SUMMARY")
+
+    print("\n  FILES GENERATED:")
+    print(f"    1. framework/pages/{DEV_TEST_FOLDER}/dev_login_page.py")
+    print(f"    2. framework/tasks/{DEV_TEST_FOLDER}/dev_auth_tasks.py")
+    print(f"    3. framework/roles/{DEV_TEST_FOLDER}/dev_registered_user.py")
+    print(f"    4. tests/{DEV_TEST_FOLDER}/{scenario.get('name')}.py")
+    print(f"    5. tests/{DEV_TEST_FOLDER}/conftest.py")
+
+    print(f"\n  HTML REPORT: tests/_reports/{report_name}")
+
+    if report_path.exists():
+        print(f"  Report size: {report_path.stat().st_size} bytes")
+        print(f"\n  Open report: file:///{report_path}")
+
+    print(f"\n  PYTEST EXIT CODE: {result.returncode}")
+
+    if result.returncode == 0:
+        print("\n  STATUS: PASSED")
+    else:
+        print("\n  STATUS: FAILED (check output above for details)")
+
+    return result.returncode == 0
+
+
+if __name__ == "__main__":
+    success = asyncio.run(run_e2e_test())
+    sys.exit(0 if success else 1)

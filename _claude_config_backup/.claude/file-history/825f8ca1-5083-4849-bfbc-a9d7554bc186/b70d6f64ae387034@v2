@@ -1,0 +1,699 @@
+# ARCHITECTURE.md - Framework Design Reference
+
+**Version:** 1.0
+**Status:** Public Reference
+
+---
+
+## Table of Contents
+
+1. [4-Layer Architecture](#1-4-layer-architecture)
+2. [OOP Principles](#2-oop-principles)
+3. [Layer Rules Summary](#3-layer-rules-summary)
+4. [Code Samples](#4-code-samples)
+   - [4.1 Page Object Layer](#41-page-object-layer)
+   - [4.2 Task Layer](#42-task-layer)
+   - [4.3 Role Layer](#43-role-layer)
+   - [4.4 Test Layer](#44-test-layer)
+   - [4.5 conftest.py Pattern](#45-conftestpy-pattern)
+   - [4.6 JSON Test Data Structure](#46-json-test-data-structure)
+5. [Terminology](#5-terminology)
+6. [Directory Structure](#6-directory-structure)
+7. [Naming Conventions](#7-naming-conventions)
+8. [MCP Integration](#8-mcp-integration)
+
+---
+
+## 1. 4-Layer Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ TEST                                                                 │
+│ - @autologger("Test") decorator                                      │
+│ - Load data from JSON                                                │
+│ - Call ONE workflow method per Role                                  │
+│ - Assert via Page Object state-check methods directly                │
+│ - NO orchestration (don't call multiple Role/Task methods)           │
+└─────────────────────────────────────────────────────────────────────┘
+                              │ uses
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ ROLE                                                                 │
+│ - @autologger("Role") on workflow methods                            │
+│ - @autologger("Role Constructor") on __init__                        │
+│ - Composes Task modules (instantiates in constructor)                │
+│ - Workflow methods call MULTIPLE Tasks in sequence                   │
+│ - NO return values (returns None)                                    │
+│ - NO locators                                                        │
+└─────────────────────────────────────────────────────────────────────┘
+                              │ composes
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ TASK                                                                 │
+│ - @autologger("Task") on all methods                                 │
+│ - NO decorator on constructor                                        │
+│ - Composes Page Objects (instantiates in constructor)                │
+│ - One domain operation per method (SRP)                              │
+│ - NO return values (returns None)                                    │
+│ - NO locators (only in POMs)                                         │
+│ - Uses fluent POM API (method chaining)                              │
+└─────────────────────────────────────────────────────────────────────┘
+                              │ composes
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ PAGE OBJECT                                                          │
+│ - NO decorators on any methods                                       │
+│ - Locators as class constants (UPPER_SNAKE_CASE)                     │
+│ - Atomic methods (one UI action per method)                          │
+│ - Return self for fluent chaining                                    │
+│ - State-check methods for test assertions (return bool/value)        │
+│ - Composes WebInterface                                              │
+└─────────────────────────────────────────────────────────────────────┘
+                              │ uses
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ WEB INTERFACE                                                        │
+│ - Wraps Selenium WebDriver                                           │
+│ - Built-in wait/retry logic                                          │
+│ - NO decorators                                                      │
+│ - Provides: click, type_text, find_element, wait methods, etc.       │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow
+
+```
+Test Data (JSON) ──► Test ──► Role ──► Task ──► Page Object ──► WebInterface ──► Browser
+                       │                                              │
+                       └──────── Assertions via POM state-checks ◄────┘
+```
+
+### Key Architecture Rules
+
+1. **No Inheritance** - Use composition, no base classes
+2. **Locators ONLY in Page Objects** - Never in Tasks, Roles, or Tests
+3. **Assertions via Page Objects** - Tests use POM state-check methods, not return values
+4. **Single Responsibility** - Each layer has ONE job
+5. **Exceptions Bubble Up** - Errors propagate from POM → Task → Role → Test
+
+---
+
+## 2. OOP Principles
+
+| Principle | Implementation |
+|-----------|----------------|
+| **Encapsulation** | Each layer hides its internals. Pages hide locators, Tasks hide page orchestration, Roles hide task sequences. |
+| **Composition** | Roles COMPOSE Tasks. Tasks COMPOSE Page Objects. No inheritance hierarchy. |
+| **Single Responsibility (SRP)** | Each layer has ONE job. Pages = UI actions. Tasks = domain operations. Roles = workflows. Tests = assertions. |
+| **Separation of Concerns** | Locators ONLY in POMs. Orchestration ONLY in Roles. Assertions ONLY in Tests. |
+| **Abstraction** | Higher layers don't know lower-layer details. Role doesn't know locators. Test doesn't know page structure. |
+
+---
+
+## 3. Layer Rules Summary
+
+| Layer | Decorator | Return Value | Composes | Fluent API |
+|-------|-----------|--------------|----------|------------|
+| **Page Object** | None | `self` | WebInterface | Yes |
+| **Task** | `@autologger("Task")` | None | Page Objects | No (uses POM fluent API) |
+| **Role** | `@autologger("Role")` | None | Tasks | No |
+| **Test** | `@autologger("Test")` | N/A | Roles + POMs (assert) | No |
+
+### Critical Rules
+
+- **Tasks return None** - NOT bool. Tests assert via POM state-check methods.
+- **Roles return None** - NOT bool. Tests assert via POM state-check methods.
+- **Page Objects return self** - Enables fluent chaining for Tasks.
+- **State-check methods return bool/value** - These are for test assertions.
+
+---
+
+## 4. Code Samples
+
+### 4.1 Page Object Layer
+
+```python
+"""
+Example Page Object - Generic login page pattern.
+
+Replace locators and URLs with your application's specifics.
+"""
+
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+
+class LoginPage:
+    """
+    Page Object for Login/Authentication page.
+
+    - NO decorators
+    - Locators as class constants
+    - Atomic methods (one UI action)
+    - Return self for chaining
+    - State-check methods for assertions
+    """
+
+    def __init__(self, web: WebInterface):
+        """Compose WebInterface - NO inheritance."""
+        self.web = web
+
+    # ==================== LOCATORS (Class Constants) ====================
+    # Replace these with your application's locators
+
+    EMAIL_INPUT = (By.ID, "email")
+    PASSWORD_INPUT = (By.ID, "password")
+    SUBMIT_BUTTON = (By.ID, "submit-login")
+    ERROR_MESSAGE = (By.CSS_SELECTOR, ".error-message")
+    LOGOUT_LINK = (By.CSS_SELECTOR, ".logout")
+    SIGN_IN_LINK = (By.CSS_SELECTOR, ".login")
+
+    # ==================== ATOMIC METHODS (One UI Action) ====================
+
+    def enter_email(self, email: str) -> "LoginPage":
+        """Enter email address."""
+        self.web.type_text(*self.EMAIL_INPUT, text=email)
+        return self  # Fluent API
+
+    def enter_password(self, password: str) -> "LoginPage":
+        """Enter password."""
+        self.web.type_text(*self.PASSWORD_INPUT, text=password)
+        return self
+
+    def click_submit(self) -> "LoginPage":
+        """Click sign in button."""
+        self.web.click(*self.SUBMIT_BUTTON)
+        return self
+
+    # ==================== STATE-CHECK METHODS (For Assertions) ====================
+
+    def is_logged_in(self) -> bool:
+        """Check if user is logged in (logout link visible)."""
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+
+    def is_logged_out(self) -> bool:
+        """Check if user is logged out (sign in link visible)."""
+        return self.web.is_element_displayed(*self.SIGN_IN_LINK, timeout=5)
+
+    def has_error_message(self) -> bool:
+        """Check if error message is displayed."""
+        return self.web.is_element_displayed(*self.ERROR_MESSAGE, timeout=3)
+
+    def get_error_message(self) -> str:
+        """Get error message text."""
+        if not self.has_error_message():
+            return ""
+        return self.web.get_text(*self.ERROR_MESSAGE)
+
+    def is_page_loaded(self) -> bool:
+        """Check if login page is loaded."""
+        return self.web.is_element_displayed(*self.SUBMIT_BUTTON, timeout=5)
+```
+
+### 4.2 Task Layer
+
+```python
+"""
+Example Task Module - Generic authentication tasks pattern.
+
+Replace URLs and page objects with your application's specifics.
+"""
+
+from interfaces.web_interface import WebInterface
+from pages.auth.login_page import LoginPage
+from resources.utilities import autologger
+
+
+class AuthTasks:
+    """
+    Task module for authentication operations.
+
+    - @autologger("Task") on all methods
+    - NO decorator on constructor
+    - Composes Page Objects
+    - One domain operation per method
+    - NO return values
+    - Uses fluent POM API
+    """
+
+    def __init__(self, web: WebInterface, base_url: str):
+        """Compose Page Objects - NO decorator on constructor."""
+        self.web = web
+        self.base_url = base_url
+        self.login_page = LoginPage(web)
+
+    @autologger.automation_logger("Task")
+    def log_in(self, email: str, password: str):
+        """
+        Complete login operation.
+
+        Single domain operation: authenticate user.
+        NO return value - test asserts via POM.
+        """
+        # Navigate to login page (replace URL pattern for your app)
+        self.web.navigate_to(f"{self.base_url}/login")
+
+        # Use fluent POM API (method chaining)
+        (self.login_page
+            .enter_email(email)
+            .enter_password(password)
+            .click_submit())
+
+        # NO return - test will assert via login_page.is_logged_in()
+
+    @autologger.automation_logger("Task")
+    def log_out(self):
+        """
+        Complete logout operation.
+
+        NO return value.
+        """
+        self.login_page.click_logout()
+        # NO return - test will assert via login_page.is_logged_out()
+
+    @autologger.automation_logger("Task")
+    def navigate_to_login_page(self):
+        """Navigate to authentication page."""
+        self.web.navigate_to(f"{self.base_url}/login")
+        # NO return
+```
+
+### 4.3 Role Layer
+
+```python
+"""
+Example Role - Generic authenticated user pattern.
+
+Roles represent user personas (e.g., Admin, Customer, Guest).
+Replace task modules and workflows with your application's specifics.
+"""
+
+from typing import Dict, Any
+from interfaces.web_interface import WebInterface
+from tasks.auth_tasks import AuthTasks
+from tasks.order_tasks import OrderTasks
+from resources.utilities import autologger
+
+
+class AuthenticatedUser:
+    """
+    Authenticated User role - orchestrates complete business workflows.
+
+    - @autologger("Role") on workflow methods
+    - @autologger("Role Constructor") on __init__
+    - Composes Task modules
+    - Workflow methods call MULTIPLE tasks
+    - NO return values
+    - NO locators
+    """
+
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any], base_url: str):
+        """
+        Initialize with credentials and compose Task modules.
+        """
+        self.web = web_interface
+        self.user_data = user_data
+        self.email = user_data.get('email')
+        self.password = user_data.get('password')
+        self.base_url = base_url
+
+        # Validate required credentials
+        if not self.email or not self.password:
+            raise ValueError("AuthenticatedUser requires email and password")
+
+        # Compose Task modules (add your application's task modules)
+        self.auth_tasks = AuthTasks(web_interface, base_url)
+        self.order_tasks = OrderTasks(web_interface, base_url)
+
+    @autologger.automation_logger("Role")
+    def login(self):
+        """
+        Login workflow.
+
+        Orchestrates: navigate + enter credentials + submit
+        NO return value - test asserts via POM.
+        """
+        self.auth_tasks.log_in(self.email, self.password)
+        # NO return
+
+    @autologger.automation_logger("Role")
+    def logout(self):
+        """
+        Logout workflow.
+
+        NO return value.
+        """
+        self.auth_tasks.log_out()
+        # NO return
+
+    @autologger.automation_logger("Role")
+    def complete_purchase(self, product_data: Dict[str, Any]):
+        """
+        Complete purchase workflow.
+
+        Orchestrates MULTIPLE task calls - this is what makes
+        Role different from Task. A Role method is a complete
+        user journey/story.
+
+        NO return value - test asserts via POM.
+        """
+        self.order_tasks.add_to_cart(product_data)
+        self.order_tasks.proceed_to_checkout()
+        self.order_tasks.complete_payment()
+        # NO return - test asserts via POM state-check methods
+```
+
+### 4.4 Test Layer
+
+```python
+"""
+Example Test - Generic test pattern.
+
+Replace role and page imports with your application's specifics.
+"""
+
+import pytest
+from roles.authenticated_user import AuthenticatedUser
+from pages.auth.login_page import LoginPage
+from resources.utilities import autologger
+
+
+class TestLogin:
+    """
+    Login test suite.
+
+    - @autologger("Test") decorator
+    - Load data from JSON (via fixture)
+    - Call ONE workflow method per Role
+    - Assert via Page Object state-check methods
+    - NO orchestration (don't call multiple Role methods)
+    """
+
+    @pytest.fixture(autouse=True)
+    def setup(self, web_interface, config, test_data):
+        """Setup test fixtures."""
+        self.web = web_interface
+        self.config = config
+        self.test_data = test_data
+        self.login_page = LoginPage(web_interface)
+
+    @autologger.automation_logger("Test")
+    def test_valid_login(self):
+        """
+        Test that user can login with valid credentials.
+
+        AAA Pattern:
+        1. Arrange - Create role with test data
+        2. Act - Call ONE workflow method (no return value)
+        3. Assert - Use POM state-check method
+        """
+        # Arrange
+        user = AuthenticatedUser(
+            self.web,
+            self.test_data["valid_user"],
+            self.config["base_url"]
+        )
+
+        # Act - ONE workflow call, NO return value
+        user.login()
+
+        # Assert - Via Page Object state-check method (NOT return value)
+        assert self.login_page.is_logged_in(), "User should be logged in"
+
+    @autologger.automation_logger("Test")
+    def test_invalid_login(self):
+        """Test that invalid credentials show error."""
+        # Arrange
+        user = AuthenticatedUser(
+            self.web,
+            self.test_data["invalid_user"],
+            self.config["base_url"]
+        )
+
+        # Act - Role method returns nothing
+        user.login()
+
+        # Assert via POM state-check methods
+        assert self.login_page.has_error_message(), "Error should be displayed"
+```
+
+### 4.5 conftest.py Pattern
+
+```python
+"""
+Pytest fixtures for test automation framework.
+"""
+
+import pytest
+import json
+from pathlib import Path
+from interfaces.web_interface import WebInterface
+
+
+@pytest.fixture(scope="session")
+def config():
+    """Load configuration from JSON."""
+    config_path = Path(__file__).parent / "config.json"
+    with open(config_path) as f:
+        return json.load(f)
+
+
+@pytest.fixture(scope="function")
+def web_interface(config):
+    """
+    Create WebInterface instance for each test.
+
+    Handles browser setup and teardown.
+    """
+    web = WebInterface(
+        browser=config.get("browser", "chrome"),
+        headless=config.get("headless", False)
+    )
+    yield web
+    web.quit()
+
+
+@pytest.fixture(scope="function")
+def test_data(request):
+    """
+    Load test data from JSON file in test's data/ directory.
+
+    Expects: tests/<domain>/data/<test_name>.json
+    """
+    test_dir = Path(request.fspath).parent
+    data_file = test_dir / "data" / f"{request.node.name}.json"
+
+    if data_file.exists():
+        with open(data_file) as f:
+            return json.load(f)
+
+    # Fallback to default data file
+    default_file = test_dir / "data" / "default.json"
+    if default_file.exists():
+        with open(default_file) as f:
+            return json.load(f)
+
+    return {}
+```
+
+### 4.6 JSON Test Data Structure
+
+```json
+{
+  "valid_user": {
+    "email": "testuser@example.com",
+    "password": "SecurePass123",
+    "first_name": "Test",
+    "last_name": "User"
+  },
+  "invalid_user": {
+    "email": "invalid@example.com",
+    "password": "wrongpassword"
+  },
+  "new_user": {
+    "email": "newuser@example.com",
+    "password": "NewPass123",
+    "first_name": "New",
+    "last_name": "User",
+    "profile": {
+      "address": "123 Test Street",
+      "city": "Test City",
+      "state": "Test State",
+      "zipcode": "12345",
+      "phone": "555-000-0000"
+    }
+  },
+  "product": {
+    "name": "Test Product",
+    "quantity": 1
+  }
+}
+```
+
+**Note:** Structure your JSON to match your application's data requirements.
+The fixture in conftest.py loads this data and passes it to tests.
+
+---
+
+## 5. Terminology
+
+### OOP & Architecture Terms
+
+| Term | Definition |
+|------|------------|
+| **Encapsulation** | Each layer hides its internals from other layers |
+| **Composition** | Objects contain/instantiate other objects (preferred over inheritance) |
+| **SRP** | Single Responsibility Principle - each layer has ONE job |
+| **Separation of Concerns** | Specific responsibilities stay in specific layers |
+| **Abstraction** | Higher layers don't know lower-layer implementation details |
+| **No Inheritance** | Design decision - use composition, no base classes |
+
+### Layer-Specific Terms
+
+| Term | Definition |
+|------|------------|
+| **WebInterface** | Foundation layer that wraps Selenium WebDriver with wait/retry logic |
+| **Atomic method** | Page Object method that performs ONE UI action |
+| **State-check method** | Page Object method that returns bool/value for test assertions |
+| **Fluent API** | Methods return `self` to enable chaining (Page Objects only) |
+| **Class Constants** | Locators defined at class level using UPPER_SNAKE_CASE naming |
+| **Domain operation** | Task method that performs one business operation |
+| **Orchestration** | Role coordinates multiple Task calls in sequence |
+| **Workflow method** | Role method that calls multiple Task methods to complete a business flow |
+| **Credentials** | User authentication data (email, password) passed to Role |
+
+### Code Pattern Terms
+
+| Term | Definition |
+|------|------------|
+| **Decorator** | Python annotation (e.g., `@autologger`) that wraps a method |
+| **Constructor** | `__init__` method that initializes class and composes dependencies |
+| **Compose** | Create instances of lower-layer modules in constructor |
+| **AAA Pattern** | Arrange, Act, Assert - standard test structure |
+| **Data-driven** | Test data loaded from external JSON files, not hardcoded |
+| **Fixtures** | Pytest setup/teardown mechanism defined in conftest.py |
+| **Exceptions bubble up** | Errors propagate from POM → Task → Role → Test |
+
+---
+
+## 6. Directory Structure
+
+```
+framework/
+├── interfaces/
+│   └── web_interface.py      # Selenium wrapper
+├── pages/
+│   ├── <domain>/              # Group pages by domain
+│   │   ├── <name>_page.py
+│   │   └── <name>_modal.py
+│   └── common/                # Shared pages (login, home, etc.)
+│       └── home_page.py
+├── tasks/
+│   ├── <domain>/              # Group tasks by domain
+│   │   └── <domain>_tasks.py
+│   └── common/                # Shared tasks
+│       └── common_tasks.py
+├── roles/
+│   └── <persona>.py           # User personas (admin, customer, guest)
+└── resources/
+    └── utilities/             # Helpers
+        └── autologger.py
+
+tests/
+├── <domain>/
+│   ├── data/                  # JSON test data
+│   │   └── <test_name>.json
+│   └── test_<feature>.py
+└── conftest.py                # Pytest fixtures
+```
+
+**Example for an e-commerce application:**
+```
+framework/
+├── pages/
+│   ├── auth/
+│   │   ├── login_page.py
+│   │   └── registration_page.py
+│   ├── catalog/
+│   │   ├── product_list_page.py
+│   │   └── product_detail_page.py
+│   └── checkout/
+│       ├── cart_page.py
+│       └── payment_page.py
+├── tasks/
+│   ├── auth_tasks.py
+│   ├── catalog_tasks.py
+│   └── checkout_tasks.py
+└── roles/
+    ├── customer.py
+    ├── guest.py
+    └── admin.py
+```
+
+---
+
+## 7. Naming Conventions
+
+| Element | Convention | Example |
+|---------|------------|---------|
+| Page Object class | `<Name>Page` or `<Name>Modal` | `LoginPage`, `QuickViewModal` |
+| Task class | `<Domain>Tasks` | `CommonTasks`, `CatalogTasks` |
+| Role class | `<Persona>` (no suffix) | `RegisteredUser`, `GuestUser` |
+| Test class | `Test<Feature>` | `TestUserLogin`, `TestCatalog` |
+| Test function | `test_<action>` | `test_valid_login`, `test_filter_products` |
+| File names | `snake_case.py` | `login_page.py`, `common_tasks.py` |
+| Locator constants | `UPPER_SNAKE_CASE` | `EMAIL_INPUT`, `SUBMIT_BUTTON` |
+| Directories | `snake_case` | `common_tasks/`, `test_data/` |
+
+---
+
+## Quick Reference Card
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                    LAYER QUICK REFERENCE                        │
+├──────────┬─────────────────┬────────────┬──────────────────────┤
+│ Layer    │ Decorator       │ Returns    │ Key Rule             │
+├──────────┼─────────────────┼────────────┼──────────────────────┤
+│ Page     │ None            │ self       │ Atomic methods only  │
+│ Task     │ @auto..("Task") │ None       │ One domain operation │
+│ Role     │ @auto..("Role") │ None       │ Orchestrate tasks    │
+│ Test     │ @auto..("Test") │ N/A        │ Assert via POM       │
+└──────────┴─────────────────┴────────────┴──────────────────────┘
+
+GOLDEN RULES:
+1. Locators ONLY in Page Objects
+2. Tasks/Roles return NOTHING (None)
+3. Tests assert via POM state-check methods
+4. No inheritance - composition only
+5. One responsibility per layer
+```
+
+---
+
+## 8. MCP Integration
+
+This framework includes an MCP (Model Context Protocol) server that enables AI-assisted coding specifically for this framework. The MCP server understands the 4-layer architecture and generates code that adheres to all framework conventions.
+
+### Capabilities
+
+- Generate framework-compliant Page Objects, Tasks, Roles, and Tests
+- Discover page elements and create proper locator constants
+- Convert user stories to BDD scenarios and executable tests
+- Run tests and analyze failures
+- Track test coverage
+
+### Why Framework-Specific MCP?
+
+Generic AI code generation often produces code that doesn't follow project conventions. This MCP server is trained on the framework's architecture patterns, ensuring generated code:
+- Uses correct layer separation
+- Applies proper decorators
+- Implements state-check methods for assertions
+- Returns appropriate values (self for POMs, None for Tasks/Roles)
+
+For detailed MCP workflow documentation, contact the repository maintainer.
+
+---
+
+**Document Status:** Public architecture reference.

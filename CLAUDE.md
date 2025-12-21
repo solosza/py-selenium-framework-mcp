@@ -88,11 +88,46 @@ pytest -v --html=_reports/report.html --self-contained-html
 
 ## MCP Tool Usage (MANDATORY - NO EXCEPTIONS)
 
-**CRITICAL: Before calling ANY MCP tool (Tools 1-6), you MUST read and follow FRAMEWORK.md Section 8.**
+**CRITICAL: Before calling ANY MCP tool (Tools 1-6), you MUST read and follow FRAMEWORK.md Section 9.**
 
-### Quick Start: Use the Skill
+### 10-Step Workflow (v2) - Quick Reference
 
-For full 9-step workflow with autonomous troubleshooting:
+```
+Step 1:  Pre-flight Configuration  → credential_strategy, test_data_location
+Step 2:  User Input                → persona, URL
+Step 3:  AI Processing             → metadata_context
+Step 4:  Tool 1                    → test_scenarios
+Step 5:  Tool 2                    → discovered_elements
+Step 6:  Tool 3                    → pom_metadata
+Step 7:  Tool 4                    → task_metadata
+Step 8:  Tool 5                    → role_metadata
+Step 9:  Tool 6                    → test_code
+Step 10: Save & Run                → files saved, test executed
+```
+
+**Gate Enforcement:** Cannot proceed to Step N+1 until Step N quality gate passes.
+
+**Full Details:** FRAMEWORK.md Section 9
+
+### QA Guidance Layer (Skill)
+
+For guided 10-step workflow with quality gates:
+```
+.claude/skills/qa-guidance-layer/
+├── SKILL.md              ← Overview and rules
+└── references/
+    ├── step-01.md        ← Per-step guidance
+    ├── step-02.md
+    └── ...
+```
+
+**Usage:** Read relevant step reference before executing each step.
+
+**Meta Skill:** See `design-execution-engine/` for patterns applicable to any vertical.
+
+### Legacy Skill (Deprecated - Use Section 9 Instead)
+
+For old 9-step workflow:
 ```
 /skill execute-from-step1
 ```

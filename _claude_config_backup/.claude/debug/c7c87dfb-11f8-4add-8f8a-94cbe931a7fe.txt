@@ -1,0 +1,1560 @@
+[DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_python_projects\new_project\.claude\settings.local.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] [LSP MANAGER] initializeLspServerManager() called
+[DEBUG] [LSP MANAGER] Created manager instance, state=pending
+[DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+[DEBUG] [LSP SERVER MANAGER] initialize() called
+[DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+[DEBUG] Applying permission update: Adding 3 allow rule(s) to destination 'localSettings': ["Bash(ls:*)","WebSearch","WebFetch(domain:github.com)"]
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Total LSP servers loaded: 0
+[DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+[DEBUG] LSP manager initialized with 0 servers
+[DEBUG] LSP server manager initialized successfully
+[DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+[DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_python_projects\new_project\.claude\skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+[DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+[DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+[DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1762806783259-v2rkzl.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\c7c87dfb-11f8-4add-8f8a-94cbe931a7fe-agent-c7c87dfb-11f8-4add-8f8a-94cbe931a7fe.json.tmp.22588.1762806783275
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming C:\Users\solos\.claude\todos\c7c87dfb-11f8-4add-8f8a-94cbe931a7fe-agent-c7c87dfb-11f8-4add-8f8a-94cbe931a7fe.json.tmp.22588.1762806783275 to C:\Users\solos\.claude\todos\c7c87dfb-11f8-4add-8f8a-94cbe931a7fe-agent-c7c87dfb-11f8-4add-8f8a-94cbe931a7fe.json
+[DEBUG] File C:\Users\solos\.claude\todos\c7c87dfb-11f8-4add-8f8a-94cbe931a7fe-agent-c7c87dfb-11f8-4add-8f8a-94cbe931a7fe.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+[DEBUG] Shell snapshot created successfully (342 bytes)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762806783538
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42869 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762806783538 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762806783551
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42869 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762806783551 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762806783943
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42869 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762806783943 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Getting matching hook commands for SessionStart with query: startup
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762806784030
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42764 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762806784030 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762806784048
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42764 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762806784048 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] performStartupChecks called
+[DEBUG] Starting background plugin installations
+[DEBUG] performBackgroundPluginInstallations called
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762806784115
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42869 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762806784115 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+[DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+[DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+[DEBUG] MCP server "ide": Successfully connected to ws-ide server in 176ms
+[DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.35"}}
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] FileHistory: Added snapshot for a5826d8a-252d-41df-8017-67c5dfdfb5e2, tracking 0 files
+[DEBUG] Rendering user message with 1 content blocks
+[DEBUG] Block 0: <command-name>/mcp</command-name>
+            <command-message>mcp</command-message>
+            <co...
+[DEBUG] UserCommandMessage rendering: "mcp" (args: "none")
+[DEBUG] isSkillFormat: false, prefix: "/"
+[DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 9510ca3d-405a-4c37-92e2-22b15d7f31a2
+[DEBUG] FileHistory: Added snapshot for 9510ca3d-405a-4c37-92e2-22b15d7f31a2, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 53ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 116ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 9cf6f1c0-ec4f-46fb-8afb-861c0d56dc28
+[DEBUG] FileHistory: Added snapshot for 9cf6f1c0-ec4f-46fb-8afb-861c0d56dc28, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 82ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 80ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 9deda54b-7adb-40cf-8610-2d6bb4de4a77
+[DEBUG] FileHistory: Added snapshot for 9deda54b-7adb-40cf-8610-2d6bb4de4a77, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 114ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 109ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 70c487bd-7b5d-4fd3-9514-912d0d93647d
+[DEBUG] FileHistory: Added snapshot for 70c487bd-7b5d-4fd3-9514-912d0d93647d, tracking 0 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 104ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 90ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 67ms
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 3s
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\new_project\index.html, got file://d:\my_python_projects\new_project\index.html/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+    at async Q4 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:5722)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\new_project\index.html
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 191ms
+[DEBUG] Writing to temp file: D:\my_python_projects\new_project\index.html.tmp.22588.1762812475352
+[DEBUG] Temp file written successfully, size: 10094 bytes
+[DEBUG] Renaming D:\my_python_projects\new_project\index.html.tmp.22588.1762812475352 to D:\my_python_projects\new_project\index.html
+[DEBUG] File D:\my_python_projects\new_project\index.html written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 109ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] npm view failed with code 1
+[DEBUG] npm stderr: (empty)
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "python -m http.server:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 112ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 153ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 3b447eec-407d-431d-8b88-4f73514ca8a9
+[DEBUG] FileHistory: Added snapshot for 3b447eec-407d-431d-8b88-4f73514ca8a9, tracking 1 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 93ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "mkdir:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 121ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "D:\\my_python_projects\\embutido-king"
+    ],
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 74ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 45ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\index.html, got file://d:\my_python_projects\embutido-king\index.html/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\embutido-king\index.html
+[DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\index.html.tmp.22588.1762812711669
+[DEBUG] Temp file written successfully, size: 10094 bytes
+[DEBUG] Renaming D:\my_python_projects\embutido-king\index.html.tmp.22588.1762812711669 to D:\my_python_projects\embutido-king\index.html
+[DEBUG] File D:\my_python_projects\embutido-king\index.html written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 4s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 156ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 81ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "D:\\my_python_projects\\embutido-king"
+    ],
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+[DEBUG] MCP server "ide": Tool 'openDiff' still running (60s elapsed)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 85ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 51ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\README.md, got file://d:\my_python_projects\embutido-king\readme.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\embutido-king\README.md
+[DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\README.md.tmp.22588.1762812787122
+[DEBUG] Temp file written successfully, size: 1166 bytes
+[DEBUG] Renaming D:\my_python_projects\embutido-king\README.md.tmp.22588.1762812787122 to D:\my_python_projects\embutido-king\README.md
+[DEBUG] File D:\my_python_projects\embutido-king\README.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 1m 3s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 192ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 77ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: KillShell
+[DEBUG] Getting matching hook commands for PreToolUse with query: KillShell
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "KillShell" (0 before deduplication)
+[DEBUG] BackgroundShell a537b5 kill requested
+[DEBUG] Getting matching hook commands for PostToolUse with query: KillShell
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "KillShell" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 201ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "git init:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 181ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 196ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 203ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Read",
+        "ruleContent": "//d/my_python_projects//**"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "session"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 185ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 6869cec6-6c2a-4c80-8d5b-ace8cf9c30fc
+[DEBUG] FileHistory: Added snapshot for 6869cec6-6c2a-4c80-8d5b-ace8cf9c30fc, tracking 3 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 78ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 177ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message 36a81bb3-29b0-429c-a48f-5260bdf82bb3
+[DEBUG] FileHistory: Added snapshot for 36a81bb3-29b0-429c-a48f-5260bdf82bb3, tracking 3 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 100ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addDirectories",
+    "directories": [
+      "D:\\my_python_projects\\embutido-king"
+    ],
+    "destination": "session"
+  },
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 173ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762813084620
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42764 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762813084620 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762813084641
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42764 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762813084641 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762813084657
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42869 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762813084657 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "D:\\my_python_projects\\embutido-king"
+    ],
+    "destination": "session"
+  }
+]
+[DEBUG] Rendering user message with 1 content blocks
+[DEBUG] Block 0: <command-name>/mcp</command-name>
+            <command-message>mcp</command-message>
+            <co...
+[DEBUG] UserCommandMessage rendering: "mcp" (args: "none")
+[DEBUG] isSkillFormat: false, prefix: "/"
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[ERROR] Error: Error: Language not supported while highlighting code, falling back to markdown: 
+    at SD (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4413)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4141
+    at Array.map (<anonymous>)
+    at gC (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1054:4132)
+    at TSQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1752:6597)
+    at rw (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:19414)
+    at xt (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:42806)
+    at x9 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38347)
+    at Mp (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38275)
+    at J$ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:38129)
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762813111046
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42764 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762813111046 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762813111066
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42764 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762813111066 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[ERROR] Error: Error: String not found in file. Failed to apply edit.
+    at JEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1736:726)
+    at o35 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:7818)
+    at V (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:6729)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:7047
+    at vJ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:21528)
+    at TE (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:41111)
+    at Sz (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:35147)
+    at IQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:4840)
+    at Q.batchedUpdates (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:51104)
+    at Dh.Y (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:479)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762813111090
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 42869 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762813111090 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[ERROR] Error: Error: String not found in file. Failed to apply edit.
+    at JEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1736:726)
+    at o35 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:7818)
+    at V (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:6729)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:7047
+    at vJ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:21528)
+    at TE (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:41111)
+    at Sz (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:35147)
+    at IQ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:98:4840)
+    at Q.batchedUpdates (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:51104)
+    at Dh.Y (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:221:479)
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 596ms
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 71ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 37ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\index.html, got file://d:\my_python_projects\embutido-king\index.html/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async P6 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2361:4415)
+[DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\index.html.tmp.22588.1762813119478
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 10094 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\embutido-king\index.html.tmp.22588.1762813119478 to D:\my_python_projects\embutido-king\index.html
+[DEBUG] File D:\my_python_projects\embutido-king\index.html written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 208ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "D:\\my_python_projects\\embutido-king"
+    ],
+    "destination": "session"
+  }
+]
+[ERROR] Error: Error: String not found in file. Failed to apply edit.
+    at JEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1736:726)
+    at o35 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:7818)
+    at V (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:6729)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:7047
+    at vJ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:21528)
+    at TE (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:41111)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:39302
+    at x71 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:94:5038)
+    at Immediate.T71 [as _onImmediate] (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:94:5457)
+    at process.processImmediate (node:internal/timers:485:21)
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[ERROR] Error: Error: String not found in file. Failed to apply edit.
+    at JEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1736:726)
+    at o35 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:7818)
+    at V (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:6729)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2065:7047
+    at vJ (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:21528)
+    at TE (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:41111)
+    at file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:100:39302
+    at x71 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:94:5038)
+    at Immediate.T71 [as _onImmediate] (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:94:5457)
+    at process.processImmediate (node:internal/timers:485:21)
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 65ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 57ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 27ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\README.md, got file://d:\my_python_projects\embutido-king\readme.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\README.md.tmp.22588.1762813134185
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 1166 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming D:\my_python_projects\embutido-king\README.md.tmp.22588.1762813134185 to D:\my_python_projects\embutido-king\README.md
+[DEBUG] File D:\my_python_projects\embutido-king\README.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 207ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "D:\\my_python_projects\\embutido-king"
+    ],
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 51ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 32ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\CLAUDE.md, got file://d:\my_python_projects\embutido-king\claude.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\embutido-king\CLAUDE.md
+[DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\CLAUDE.md.tmp.22588.1762813180077
+[DEBUG] Temp file written successfully, size: 6631 bytes
+[DEBUG] Renaming D:\my_python_projects\embutido-king\CLAUDE.md.tmp.22588.1762813180077 to D:\my_python_projects\embutido-king\CLAUDE.md
+[DEBUG] File D:\my_python_projects\embutido-king\CLAUDE.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 3s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 239ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 87ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Write
+[DEBUG] Getting matching hook commands for PreToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] Permission suggestions for Write: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  },
+  {
+    "type": "addDirectories",
+    "directories": [
+      "D:\\my_python_projects\\embutido-king"
+    ],
+    "destination": "session"
+  }
+]
+[DEBUG] MCP server "ide": Calling MCP tool: openDiff
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 52ms
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 32ms
+[ERROR] mjQ: mjQ: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\SESSION.md, got file://d:\my_python_projects\embutido-king\session.md/)
+    at yO.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1722:1701)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1873:2527)
+    at async QI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:28755)
+    at async _rA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:25508)
+    at async AI5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:24182)
+    at async t55 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:23665)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:19848)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+    at async HS (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2028:21344)
+[DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\embutido-king\SESSION.md
+[DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\SESSION.md.tmp.22588.1762813210444
+[DEBUG] Temp file written successfully, size: 3980 bytes
+[DEBUG] Renaming D:\my_python_projects\embutido-king\SESSION.md.tmp.22588.1762813210444 to D:\my_python_projects\embutido-king\SESSION.md
+[DEBUG] File D:\my_python_projects\embutido-king\SESSION.md written atomically
+[DEBUG] Getting matching hook commands for PostToolUse with query: Write
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 2s
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 282ms
+[DEBUG] MCP server "ide": Calling MCP tool: close_tab
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 88ms
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 260ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 254ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Stream started - received first chunk
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "rm:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 263ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addDirectories",
+    "directories": [
+      "D:\\my_python_projects\\new_project\\Dmy_python_projectsembutido-king"
+    ],
+    "destination": "session"
+  },
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 277ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 257ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Read",
+        "ruleContent": "//d/my_python_projects/embutido-king//**"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "session"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 262ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Session environment not yet supported on Windows
+[DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 254ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] Getting matching hook commands for Stop with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+[DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+[DEBUG] LSP Diagnostics: Checking registry - 0 pending
+[DEBUG] LSP Diagnostics: Returning 0 diagnostic set(s) for delivery
+[DEBUG] Hooks: getAsyncHookResponseAttachments called
+[DEBUG] Hooks: checkForNewResponses called
+[DEBUG] Hooks: Found 0 total hooks in registry
+[DEBUG] Hooks: checkForNewResponses returning 0 responses
+[DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 273ms
+[DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+[DEBUG] FileHistory: Making snapshot for message ec87c1f8-34a7-46d8-b9fa-dba56c496fce
+[DEBUG] FileHistory: Missing tracked file: index.html
+[DEBUG] FileHistory: Added snapshot for ec87c1f8-34a7-46d8-b9fa-dba56c496fce, tracking 5 files
+[DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+[DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 72ms
+[DEBUG] Skills and commands included in Skill tool:
+[DEBUG] Slash commands included in SlashCommand tool:
+[DEBUG] Stream started - received first chunk
+[DEBUG] Stream started - received first chunk
+[DEBUG] executePreToolHooks called for tool: Bash
+[DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+[DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Read",
+        "ruleContent": "//d/my_python_projects/embutido-king/**"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "session"
+  }
+]
+[DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+[DEBUG] Found 0 hook matchers in settings
+[DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+[DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762821098416
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 43327 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762821098416 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T00_54_32_170Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T01_24_32_375Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T01_54_32_223Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.22588.1762828299255
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 43327 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.22588.1762828299255 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T02_54_33_071Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T03_24_32_188Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T03_54_32_243Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T04_24_33_757Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T04_54_33_605Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T05_24_32_833Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T05_54_32_188Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-cpp.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T06_24_32_224Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T06_54_32_263Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T07_24_32_376Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T07_54_32_323Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T08_24_32_240Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\sharp-win32-x64.node
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\sharp-win32-x64.node
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\sharp-win32-x64.node' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\sharp-win32-x64.node'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T08_54_32_337Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T09_24_32_409Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T09_54_32_421Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\libvips-42.dll'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T10_24_33_644Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)
+[DEBUG] AutoUpdater: Detected installation type: npm-global
+[DEBUG] AutoUpdater: Using global update method
+[ERROR] qaA: qaA: Failed to install new version of claude:  npm ERR! code EBUSY
+npm ERR! syscall copyfile
+npm ERR! path C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\sharp-win32-x64.node
+npm ERR! dest C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\sharp-win32-x64.node
+npm ERR! errno -4082
+npm ERR! EBUSY: resource busy or locked, copyfile 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\node_modules\@img\sharp-win32-x64\lib\sharp-win32-x64.node' -> 'C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\.claude-code-fWq7z9Bt\node_modules\@img\sharp-win32-x64\lib\sharp-win32-x64.node'
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-11-11T10_54_33_544Z-debug-0.log
+    at NEA (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1837:389)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2230:31075)

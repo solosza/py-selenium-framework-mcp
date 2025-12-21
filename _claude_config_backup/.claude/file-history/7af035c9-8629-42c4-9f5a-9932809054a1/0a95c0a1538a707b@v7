@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embutido-King - Authentic Filipino Catering</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #FAF3E0;
+            color: #3E2723;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            color: #DAA520;
+            font-weight: 300;
+        }
+
+        .cta {
+            background-color: #DAA520;
+            color: #3E2723;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .cta h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .phone {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #8B0000;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.1em;
+            color: #5D4037;
+        }
+
+        .info-box {
+            background: linear-gradient(to right, #FFF9E6, #FAF3E0);
+            border: 2px solid #DAA520;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .info-box h3 {
+            color: #8B0000;
+            font-size: 1.3em;
+            margin-bottom: 12px;
+        }
+
+        .info-box p {
+            font-size: 1.05em;
+            line-height: 1.8;
+            margin-bottom: 8px;
+        }
+
+        .info-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .menu-section {
+            margin-bottom: 40px;
+        }
+
+        .category {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 5px solid #8B0000;
+        }
+
+        .category h3 {
+            color: #8B0000;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-size: 1.1em;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .item-prices {
+            display: flex;
+            gap: 20px;
+            font-weight: bold;
+            color: #8B0000;
+        }
+
+        .price-label {
+            font-size: 0.85em;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .special-note {
+            background: #FFF9E6;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.95em;
+            color: #5D4037;
+            border-left: 3px solid #DAA520;
+        }
+
+        footer {
+            background-color: #3E2723;
+            color: #FAF3E0;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .delivery-info {
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .footer-contact {
+            font-size: 1.3em;
+            color: #DAA520;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .phone {
+                font-size: 1.8em;
+            }
+
+            .item-prices {
+                flex-direction: column;
+                gap: 5px;
+                align-items: flex-end;
+            }
+
+            .menu-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Embutido-King</h1>
+        <p class="tagline">Authentic Filipino Catering</p>
+    </header>
+
+    <div class="container">
+        <div class="cta">
+            <h2>Order Now</h2>
+            <a href="tel:7029001348" class="phone">702.900.1348</a>
+            <p class="cta-subtitle">Call or Text to Place Your Order</p>
+        </div>
+
+        <div class="info-box">
+            <h3>🍽️ Perfect for Family Dinners or Big Events!</h3>
+            <p><strong>Same-day orders welcome!</strong> Please call at least <strong>4 hours in advance</strong> to check availability.</p>
+            <p>💡 <em>Half platters feed 4-6 people - perfect for tonight's dinner!</em></p>
+        </div>
+
+        <div class="menu-section">
+            <!-- Specialty -->
+            <div class="category">
+                <h3>⭐ Specialty</h3>
+                <div class="menu-item">
+                    <span class="item-name">Embutido</span>
+                    <div class="item-prices">
+                        <span>$12 each</span>
+                    </div>
+                </div>
+                <div class="special-note">
+                    💰 Special Price: Order 4 or more for $10 each!
+                </div>
+            </div>
+
+            <!-- BBQ & Roasts -->
+            <div class="category">
+                <h3>🔥 BBQ & Roasts</h3>
+                <div class="menu-item">
+                    <span class="item-name">Prime Rib</span>
+                    <div class="item-prices">
+                        <span>Call for pricing</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Pot Roast</span>
+                    <div class="item-prices">
+                        <span>Call for pricing</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Pork Roast</span>
+                    <div class="item-prices">
+                        <span>Call for pricing</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Roast Turkey Breast</span>
+                    <div class="item-prices">
+                        <span>Call for pricing</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Pork Ribs</span>
+                    <div class="item-prices">
+                        <span>Call for pricing</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Beef Ribs</span>
+                    <div class="item-prices">
+                        <span>Call for pricing</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">BBQ Chicken</span>
+                    <div class="item-prices">
+                        <span>Call for pricing</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Noodles -->
+            <div class="category">
+                <h3>🍜 Noodles</h3>
+                <div class="menu-item">
+                    <span class="item-name">Pancit Palabok</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Full tray:</span> $100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pork -->
+            <div class="category">
+                <h3>🥓 Pork</h3>
+                <div class="menu-item">
+                    <span class="item-name">Dinuguan</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $50</span>
+                        <span><span class="price-label">Full:</span> $95</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Pork Adobo</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $50</span>
+                        <span><span class="price-label">Full:</span> $95</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chicken -->
+            <div class="category">
+                <h3>🍗 Chicken</h3>
+                <div class="menu-item">
+                    <span class="item-name">Chicken Adobo</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $50</span>
+                        <span><span class="price-label">Full:</span> $95</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Chicken Afritada</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $50</span>
+                        <span><span class="price-label">Full:</span> $95</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Chicken Curry</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $50</span>
+                        <span><span class="price-label">Full:</span> $95</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Chicken Tinola</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $50</span>
+                        <span><span class="price-label">Full:</span> $95</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Beef -->
+            <div class="category">
+                <h3>🥩 Beef</h3>
+                <div class="menu-item">
+                    <span class="item-name">Beef Kare Kare</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $65</span>
+                        <span><span class="price-label">Full:</span> $130</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Beef Mechado</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $65</span>
+                        <span><span class="price-label">Full:</span> $130</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Bolognese (Spaghetti)</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $65</span>
+                        <span><span class="price-label">Full:</span> $130</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goat -->
+            <div class="category">
+                <h3>🐐 Goat</h3>
+                <div class="menu-item">
+                    <span class="item-name">Kalderetang Goat</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $65</span>
+                        <span><span class="price-label">Full:</span> $130</span>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <span class="item-name">Goat Curry (Indian Style)</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $65</span>
+                        <span><span class="price-label">Full:</span> $130</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vegetables -->
+            <div class="category">
+                <h3>🥬 Vegetables</h3>
+                <div class="menu-item">
+                    <span class="item-name">Pinakbet</span>
+                    <div class="item-prices">
+                        <span><span class="price-label">Half:</span> $50</span>
+                        <span><span class="price-label">Full:</span> $95</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="delivery-info">
+            <p><strong>⏰ Same-day orders welcome!</strong> Call 4 hours in advance to check availability</p>
+            <p><strong>📍 Pickup Preferred:</strong> Southern Highlands Area</p>
+            <p><strong>🚗 Delivery Available:</strong> Fee depends on location</p>
+        </div>
+        <div class="footer-contact">
+            <p>Call or Text: <strong>702.900.1348</strong></p>
+        </div>
+    </footer>
+</body>
+</html>

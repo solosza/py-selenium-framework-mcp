@@ -1,0 +1,52 @@
+[
+  {
+    "content": "Research and join 5-6 Facebook Groups",
+    "status": "completed",
+    "activeForm": "Researching Facebook Groups"
+  },
+  {
+    "content": "Post 'Quick Market Check' to 3 Facebook Groups (ghost lead strategy)",
+    "status": "completed",
+    "activeForm": "Posting Quick Market Check to Facebook Groups"
+  },
+  {
+    "content": "Post Facebook Marketplace listing for rent-to-own services",
+    "status": "completed",
+    "activeForm": "Posting Facebook Marketplace listing"
+  },
+  {
+    "content": "Establish 15-min daily routine: scan FTHB group for credit-related posts and reply to 2-3",
+    "status": "in_progress",
+    "activeForm": "Establishing daily Facebook engagement routine"
+  },
+  {
+    "content": "Monitor and respond to Facebook Group comments/DMs from today's posts",
+    "status": "pending",
+    "activeForm": "Monitoring Facebook Group engagement"
+  },
+  {
+    "content": "Write Craigslist response template",
+    "status": "pending",
+    "activeForm": "Writing Craigslist response template"
+  },
+  {
+    "content": "Save Craigslist template in docs/phase.1.3/craigslist-response-template.md",
+    "status": "pending",
+    "activeForm": "Saving Craigslist template"
+  },
+  {
+    "content": "Create manual tracking spreadsheet in Google Sheets (Grassroots Tracking tab)",
+    "status": "pending",
+    "activeForm": "Creating Grassroots Tracking spreadsheet"
+  },
+  {
+    "content": "Document tracking sheet structure in docs/phase.1.3/traffic-tracking-sheet.md",
+    "status": "pending",
+    "activeForm": "Documenting tracking sheet structure"
+  },
+  {
+    "content": "Check GA4 for Facebook traffic and form submissions (end of day)",
+    "status": "pending",
+    "activeForm": "Checking GA4 analytics"
+  }
+]

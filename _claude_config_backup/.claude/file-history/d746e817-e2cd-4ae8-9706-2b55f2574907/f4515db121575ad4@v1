@@ -1,0 +1,218 @@
+# QA Validation Agents - Design Decisions
+
+**Project:** QA Validation Agents
+**Prefix:** DD-VA-XX (Validation Agents)
+
+---
+
+## Overview
+
+These Design Decisions govern the QA Validation Agents system. They complement the framework's 22 DDs (DD-01 to DD-22) with agent-specific rules.
+
+---
+
+## Agent Architecture Decisions
+
+### DD-VA-01: Four-Component Architecture (CRITICAL)
+
+**Decision:** The validation system MUST have exactly 4 components:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  1. SUPERVISOR AGENT                                                        │
+│     - Triggers/coordinates other agents                                     │
+│     - "Now you, now you" orchestration only                                │
+│     - Does NOT do actual work                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  2. SQA AGENT (Simulates SDET user)                                         │
+│     - Provides test requirements/scenarios                                  │
+│     - Invokes the testing skill                                             │
+│     - Acts like a human SDET using Claude Code                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  3. AI ORCHESTRATOR (Claude Code + MCP)                                     │
+│     - Invokes MCP Tools 1-6                                                 │
+│     - Passes metadata along the 9-step workflow                            │
+│     - Follows ALL 22 DDs                                                    │
+│     - Generates artifacts (POM, Task, Role, Test)                          │
+│     - THIS IS THE SYSTEM UNDER TEST                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+          │
+          ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  4. REVIEWER AGENT                                                          │
+│     - Validates artifacts against 22 DDs                                   │
+│     - Returns APPROVE or REJECT                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Rationale:** DEF-VA-001 showed that missing the AI Orchestrator component broke the entire flow.
+
+**Severity:** CRITICAL
+
+---
+
+### DD-VA-02: SQA Agent Invokes Skill (CRITICAL)
+
+**Decision:** The SQA Agent MUST invoke the `/skill execute-from-step1` skill to trigger the AI Orchestrator. It is NOT enough to just provide requirements.
+
+**Wrong:**
+```
+SQA Agent → Provides requirements → ???
+```
+
+**Right:**
+```
+SQA Agent → Provides requirements → Invokes skill → AI Orchestrator executes
+```
+
+**Rationale:** Without skill invocation, there's no mechanism to trigger the 9-step MCP workflow.
+
+**Severity:** CRITICAL
+
+---
+
+### DD-VA-03: Supervisor Does NOT Execute (HIGH)
+
+**Decision:** The Supervisor agent MUST only coordinate/trigger other agents. It should NOT:
+- Generate artifacts itself
+- Invoke MCP tools directly
+- Execute the 9-step workflow
+
+**Rationale:** Separation of concerns. Supervisor orchestrates, others execute.
+
+**Severity:** HIGH
+
+---
+
+## Logging & Visibility Decisions
+
+### DD-VA-04: Visual Workflow Logging Required (HIGH)
+
+**Decision:** Every validation run MUST use the Visual Workflow Logger to show:
+- Current step number and total
+- Which agent is active
+- Input/output at each handoff
+- Status (SUCCESS/FAILED/RUNNING/SKIPPED)
+- Exact failure point with error message
+
+**Rationale:** DEF-VA-002 showed that without visual feedback, debugging failures is nearly impossible.
+
+**Implementation:** `agents/tools/workflow_logger.py`
+
+**Severity:** HIGH
+
+---
+
+### DD-VA-05: Sub-Step Logging for AI Orchestrator (MEDIUM)
+
+**Decision:** When AI Orchestrator executes, it MUST log each MCP tool invocation as a sub-step:
+
+```
+[2/5] SQA → AI_ORCHESTRATOR                    🔄 RUNNING
+      ✅ Step 1-2: Process requirements
+      ✅ Step 3: Tool 1 - generate_tests
+      🔄 Step 4: Tool 2 - discover_elements
+      ...
+```
+
+**Rationale:** The 9-step workflow has many sub-steps; failures can occur at any point.
+
+**Severity:** MEDIUM
+
+---
+
+## Failure Handling Decisions
+
+### DD-VA-06: Fail-Fast on Any Step Failure (HIGH)
+
+**Decision:** If any step fails, the workflow MUST:
+1. Stop immediately
+2. Mark remaining steps as SKIPPED
+3. Generate failure report with exact failure point
+
+**Rationale:** Consistent with DD-22 (stop-and-discuss). No point continuing after failure.
+
+**Severity:** HIGH
+
+---
+
+### DD-VA-07: Defect Log Required for Failures (HIGH)
+
+**Decision:** Every validation failure MUST be logged in `agents/docs/DEFECT_LOG.md` with:
+- What went wrong
+- Expected vs actual behavior
+- Root cause
+- Fix required
+- Related DDs (new or existing)
+
+**Rationale:** Ensures we learn from failures and update DDs to prevent recurrence.
+
+**Severity:** HIGH
+
+---
+
+## Testing Decisions
+
+### DD-VA-08: Integration Tests Must Use Real Flow (HIGH)
+
+**Decision:** Integration tests MUST NOT hide gaps by providing mock data where real execution should occur.
+
+**Wrong:**
+```python
+# This hides the orchestrator gap
+result = await _run_scenario("QA-EASY-001", content_map={"path": "mock_content"})
+```
+
+**Right:**
+```python
+# This tests the real flow
+result = await _run_scenario("QA-EASY-001")  # Must actually generate artifacts
+```
+
+**Rationale:** DEF-VA-001 passed integration tests because they provided mock content_map, hiding the missing orchestrator.
+
+**Severity:** HIGH
+
+---
+
+### DD-VA-09: Test Scenarios Must Be Executable (MEDIUM)
+
+**Decision:** Pre-defined test scenarios (QA-EASY-001, etc.) MUST:
+- Have valid URLs that exist
+- Have realistic user personas
+- Be executable against the live target application
+- Not require credentials that don't exist
+
+**Rationale:** QA-EASY-001 originally required "registered user" login, but no registered user credentials existed.
+
+**Severity:** MEDIUM
+
+---
+
+## Quick Reference Table
+
+| ID | Decision | Severity |
+|----|----------|----------|
+| DD-VA-01 | Four-component architecture (Supervisor, SQA, AI Orchestrator, Reviewer) | CRITICAL |
+| DD-VA-02 | SQA Agent must invoke skill to trigger AI Orchestrator | CRITICAL |
+| DD-VA-03 | Supervisor only coordinates, does not execute | HIGH |
+| DD-VA-04 | Visual workflow logging required for all validation runs | HIGH |
+| DD-VA-05 | Sub-step logging for AI Orchestrator tool invocations | MEDIUM |
+| DD-VA-06 | Fail-fast on any step failure | HIGH |
+| DD-VA-07 | Defect log required for all failures | HIGH |
+| DD-VA-08 | Integration tests must use real flow, not mock data | HIGH |
+| DD-VA-09 | Test scenarios must be executable against live app | MEDIUM |
+
+---
+
+## Revision History
+
+| Date | Change | Author |
+|------|--------|--------|
+| 2024-12-17 | Initial creation from DEF-VA-001, DEF-VA-002 lessons | Claude |

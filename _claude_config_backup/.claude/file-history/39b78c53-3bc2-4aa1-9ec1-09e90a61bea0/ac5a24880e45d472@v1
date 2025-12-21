@@ -1,0 +1,341 @@
+# How to Create Agents with Claude Agent SDK
+
+A step-by-step flow from setup to running your first agent.
+
+---
+
+## Step 1: Install Claude Code (The Runtime)
+
+Claude Code is the engine that powers the SDK. Install it first.
+
+**Choose one method:**
+
+```bash
+# Option A: Direct install (macOS/Linux/WSL)
+curl -fsSL https://claude.ai/install.sh | bash
+
+# Option B: Homebrew
+brew install --cask claude-code
+
+# Option C: npm
+npm install -g @anthropic-ai/claude-code
+```
+
+**Then authenticate:**
+```bash
+claude
+# Follow the prompts to log in
+```
+
+---
+
+## Step 2: Install the Agent SDK
+
+**For Python:**
+```bash
+# With pip
+pip install claude-agent-sdk
+
+# Or with uv (faster)
+uv add claude-agent-sdk
+```
+
+**For TypeScript:**
+```bash
+npm install @anthropic-ai/claude-agent-sdk
+```
+
+---
+
+## Step 3: Set Up Your API Key
+
+**Option A:** If you authenticated Claude Code in Step 1, you're done - it uses that automatically.
+
+**Option B:** Manual setup:
+1. Go to https://console.anthropic.com/
+2. Create an API key
+3. Create a `.env` file:
+   ```
+   ANTHROPIC_API_KEY=your-api-key-here
+   ```
+
+---
+
+## Step 4: Write Your First Agent
+
+The `query()` function is the main entry point.
+
+**Python:**
+```python
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions
+
+async def main():
+    async for message in query(
+        prompt="What files are in this directory?",
+        options=ClaudeAgentOptions(
+            allowed_tools=["Bash", "Glob"]
+        )
+    ):
+        print(message)
+
+asyncio.run(main())
+```
+
+**TypeScript:**
+```typescript
+import { query } from "@anthropic-ai/claude-agent-sdk";
+
+for await (const message of query({
+  prompt: "What files are in this directory?",
+  options: { allowedTools: ["Bash", "Glob"] }
+})) {
+  console.log(message);
+}
+```
+
+---
+
+## Step 5: Configure Tools (What the Agent Can Do)
+
+Tools give your agent capabilities. Pick the ones you need:
+
+| Tool | What It Does |
+|------|--------------|
+| `Read` | Read files (code, images, PDFs) |
+| `Write` | Create new files |
+| `Edit` | Modify existing files |
+| `Bash` | Run terminal commands |
+| `Glob` | Find files by pattern (e.g., `*.py`) |
+| `Grep` | Search inside files |
+| `WebSearch` | Search the internet |
+| `WebFetch` | Fetch content from URLs |
+| `Task` | Delegate work to sub-agents |
+
+**Example - Code Review Agent:**
+```python
+options = ClaudeAgentOptions(
+    allowed_tools=["Read", "Edit", "Glob", "Grep", "Bash"]
+)
+```
+
+---
+
+## Step 6: Set Permission Mode
+
+Control how much freedom the agent has:
+
+| Mode | What Happens |
+|------|--------------|
+| `default` | Asks permission for each action |
+| `acceptEdits` | Auto-approves file changes |
+| `bypassPermissions` | Auto-approves everything (use for CI/CD) |
+| `plan` | Read-only mode for planning |
+
+**Example:**
+```python
+options = ClaudeAgentOptions(
+    allowed_tools=["Read", "Edit"],
+    permission_mode="acceptEdits"  # Auto-approve file edits
+)
+```
+
+---
+
+## Step 7: Handle Agent Responses
+
+The agent streams messages back. Handle them in a loop:
+
+**Python:**
+```python
+from claude_agent_sdk import query, AssistantMessage, ResultMessage, TextBlock
+
+async for message in query(prompt="Fix bugs in app.py", options=options):
+
+    # Claude's thinking and responses
+    if isinstance(message, AssistantMessage):
+        for block in message.content:
+            if isinstance(block, TextBlock):
+                print(f"Claude says: {block.text}")
+
+    # Final result
+    if isinstance(message, ResultMessage):
+        if message.subtype == 'success':
+            print(f"Done! Cost: ${message.total_cost_usd}")
+        else:
+            print(f"Error: {message.subtype}")
+```
+
+---
+
+## Step 8: Add Custom System Instructions (Optional)
+
+Tell the agent how to behave:
+
+```python
+options = ClaudeAgentOptions(
+    allowed_tools=["Read", "Edit"],
+    system_prompt="You are a senior Python developer. Always add type hints and docstrings."
+)
+```
+
+---
+
+## Step 9: Resume Conversations (Optional)
+
+Keep context across multiple interactions:
+
+```python
+# First query - capture session ID
+session_id = None
+async for message in query(prompt="Read auth.py", options=options):
+    if hasattr(message, 'subtype') and message.subtype == 'init':
+        session_id = message.data.get('session_id')
+
+# Second query - Claude remembers the first one
+async for message in query(
+    prompt="Now add rate limiting to it",  # Claude knows "it" = auth.py
+    options=ClaudeAgentOptions(
+        resume=session_id,  # Continue same conversation
+        allowed_tools=["Read", "Edit"]
+    )
+):
+    print(message)
+```
+
+---
+
+## Step 10: Create Custom Tools with MCP (Optional)
+
+Add your own tools using MCP servers:
+
+**Python:**
+```python
+from claude_agent_sdk import tool, create_sdk_mcp_server, query, ClaudeAgentOptions
+
+# Define your custom tool
+@tool("get_weather", "Get temperature for a city", {"city": str})
+async def get_weather(args):
+    # Your logic here
+    return {
+        "content": [{"type": "text", "text": f"Temperature in {args['city']}: 72F"}]
+    }
+
+# Create the server
+my_server = create_sdk_mcp_server(
+    name="my-tools",
+    version="1.0.0",
+    tools=[get_weather]
+)
+
+# Use it
+async for message in query(
+    prompt="What's the weather in Seattle?",
+    options=ClaudeAgentOptions(
+        mcp_servers={"my-tools": my_server},
+        allowed_tools=["mcp__my-tools__get_weather"]
+    )
+):
+    print(message)
+```
+
+---
+
+## Complete Example: Bug-Fixing Agent
+
+Putting it all together:
+
+```python
+import asyncio
+from claude_agent_sdk import query, ClaudeAgentOptions, AssistantMessage, ResultMessage, TextBlock
+
+async def main():
+    print("Bug-Fixing Agent Starting...\n")
+
+    options = ClaudeAgentOptions(
+        allowed_tools=["Read", "Edit", "Glob", "Bash", "Grep"],
+        permission_mode="acceptEdits",
+        system_prompt="You are an expert Python developer.",
+        max_turns=10
+    )
+
+    async for message in query(
+        prompt="Find and fix all bugs in utils.py",
+        options=options
+    ):
+        if isinstance(message, AssistantMessage):
+            for block in message.content:
+                if isinstance(block, TextBlock):
+                    print(f"Claude: {block.text}\n")
+
+        elif isinstance(message, ResultMessage):
+            if message.subtype == 'success':
+                print(f"Done! Cost: ${message.total_cost_usd}")
+
+asyncio.run(main())
+```
+
+---
+
+## Quick Reference: Common Options
+
+| Option | Type | What It Does |
+|--------|------|--------------|
+| `allowed_tools` | list | Which tools agent can use |
+| `permission_mode` | string | How permissions work |
+| `system_prompt` | string | Custom instructions |
+| `max_turns` | int | Limit conversation length |
+| `resume` | string | Session ID to continue |
+| `cwd` | string | Working directory |
+| `model` | string | Which Claude model to use |
+
+---
+
+## The Flow at a Glance
+
+```
+1. Install Claude Code (runtime)
+         |
+         v
+2. Install SDK (Python or TypeScript)
+         |
+         v
+3. Set up API key
+         |
+         v
+4. Write agent with query()
+         |
+         v
+5. Configure tools (what it can do)
+         |
+         v
+6. Set permissions (how much freedom)
+         |
+         v
+7. Handle responses (process results)
+         |
+         v
+8. [Optional] Add custom instructions
+         |
+         v
+9. [Optional] Resume conversations
+         |
+         v
+10. [Optional] Create custom tools
+```
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| `CLINotFoundError` | Install Claude Code first |
+| Agent can't find files | Check `cwd` option points to right directory |
+| Permission denied | Use `permission_mode="acceptEdits"` |
+| Agent runs too long | Set `max_turns` to limit iterations |
+| Need to stop agent | Use `client.interrupt()` with ClaudeSDKClient |
+
+---
+
+*Source: Claude Agent SDK Documentation*

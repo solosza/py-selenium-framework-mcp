@@ -43,6 +43,17 @@
    - [8.19 DD-26: Tool Chain Data Contracts](#819-dd-26-tool-chain-data-contracts)
    - [8.20 DD-27: Task Code Quality Gate](#820-dd-27-task-code-quality-gate-no-locators)
    - [8.21 DD-28: Test Data Organization](#821-dd-28-test-data-organization)
+9. [10-Step Workflow with Quality Gates (v2)](#9-10-step-workflow-with-quality-gates-v2)
+   - [9.1 Step 1: Pre-flight Configuration](#91-step-1-pre-flight-configuration)
+   - [9.2 Step 2: User Input](#92-step-2-user-input)
+   - [9.3 Step 3: AI Processing](#93-step-3-ai-processing)
+   - [9.4 Step 4: Tool 1](#94-step-4-tool-1)
+   - [9.5 Step 5: Tool 2](#95-step-5-tool-2)
+   - [9.6 Step 6: Tool 3](#96-step-6-tool-3)
+   - [9.7 Step 7: Tool 4](#97-step-7-tool-4)
+   - [9.8 Step 8: Tool 5](#98-step-8-tool-5)
+   - [9.9 Step 9: Tool 6](#99-step-9-tool-6)
+   - [9.10 Step 10: Save & Run](#910-step-10-save--run)
 
 ---
 
@@ -2031,6 +2042,884 @@ Test data can be shared or workflow-specific. AI must ask which strategy.
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## 9. 10-Step Workflow with Quality Gates (v2)
+
+> **Note:** This section documents the updated workflow with explicit quality gates. Section 8 is preserved for reference during transition.
+
+### Overview
+
+The v2 workflow adds:
+- Step 1: Pre-flight Configuration (new)
+- Explicit quality gates at each step
+- Gate enforcement: Cannot proceed until checks pass
+- Four-layer architecture: Skill → Gates → Operations → State
+
+> **Template Reference:** See `.claude/skills/design-execution-engine/SKILL.md` for the complete step template that applies to all verticals.
+
+### Four-Layer Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ SKILL (guidance-layer)                                               │
+│ - Guides AI through workflow                                         │
+│ - .claude/skills/qa-guidance-layer/                                  │
+└─────────────────────────────────────────────────────────────────────┘
+      │
+      ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ QUALITY GATES (qg_*)                                                 │
+│ - Validates input/output at each step                               │
+│ - mcp_server/tools/gates/                                           │
+└─────────────────────────────────────────────────────────────────────┘
+      │
+      ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ OPERATION TOOLS                                                      │
+│ - Does the actual work                                               │
+│ - mcp_server/tools/operations/                                       │
+└─────────────────────────────────────────────────────────────────────┘
+      │
+      ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ STATE MANAGER                                                        │
+│ - Persists workflow state after each step                           │
+│ - mcp_server/utils/state_manager.py                                 │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### File Structure
+
+```
+mcp_server/
+├── tools/
+│   ├── operations/          ← Do the work
+│   │   ├── generate_tests_from_user_story.py
+│   │   ├── discover_page_elements.py
+│   │   └── ...
+│   │
+│   └── gates/               ← Validate only (qg_* prefix)
+│       ├── qg_preflight.py
+│       ├── qg_user_input.py
+│       └── ...
+│
+├── state/                   ← Workflow state persistence
+│   └── workflow_state.json
+│
+└── utils/
+    └── state_manager.py     ← Save/load state logic
+```
+
+### State Save Rules
+
+| Step Type | Who Saves State |
+|-----------|-----------------|
+| Steps 1-3 (no operation tool) | Quality gate saves on PASS |
+| Steps 4-9 (has operation tool) | Operation tool saves on SUCCESS |
+| AI | NEVER calls state_manager directly |
+
+### Tool Mapping
+
+```
+Step │ Operation Tool                  │ Quality Gate Tool
+─────┼─────────────────────────────────┼─────────────────────────────
+  1  │ -                               │ qg_preflight
+  2  │ -                               │ qg_user_input
+  3  │ -                               │ qg_ai_processing
+  4  │ generate_tests_from_user_story  │ qg_test_scenarios
+  5  │ discover_page_elements          │ qg_discovered_elements
+  6  │ generate_page_object            │ qg_page_object
+  7  │ generate_task                   │ qg_task
+  8  │ generate_role                   │ qg_role
+  9  │ generate_test_runner            │ qg_test_runner
+ 10  │ -                               │ qg_save_run
+```
+
+### Workflow Per Step
+
+```
+AI prepares → qg_* validates input → Operation executes → qg_* validates output → Next step
+```
+
+### Step Template
+
+> **Complete Template:** See `.claude/skills/design-execution-engine/SKILL.md` for the full 7-section template.
+
+Each step definition must include these sections:
+
+| Section | Contents |
+|---------|----------|
+| **A. Identity & Flow** | Step, Dependencies, Input, Output |
+| **B. Persona Map** | User Actions, AI Actions, Tool Actions |
+| **C. Skill Instruction** | PRE-CHECK, ACTION, VALIDATE, RETRY |
+| **D. Tools** | Operation Tool, Quality Gate, Gate Mode |
+| **E. State Management** | State Saved, Who Saves, When Saved, State Schema |
+| **F. Enforcement** | Rules That Apply, Validation Checks, Gate Enforcement |
+| **G. Error Handling** | Failure Behavior, Error Message Templates, Known Defects |
+
+**Skill Reference:** Each step has a corresponding file in `.claude/skills/qa-guidance-layer/references/step-NN.md`
+
+---
+
+### Tool Failure Handling Flow (CRITICAL)
+
+This flow applies to ALL tool steps (Steps 4-9). When any tool validation fails:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    MCP TOOL FAILURE HANDLING                         │
+└─────────────────────────────────────────────────────────────────────┘
+
+  AI calls MCP Tool
+      │
+      ▼
+┌─────────────────┐
+│ Tool validates  │
+│ input           │
+└─────────────────┘
+      │
+      ├── PASS ──► Tool executes ──► SUCCESS ──► Next step
+      │
+      └── FAIL ──► Tool returns error:
+                   {
+                     "status": "error",
+                     "error_type": "[what failed]",
+                     "message": "[description]",
+                     "fix_hint": "[how to fix]",
+                     "example": "[correct format]"
+                   }
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ AI RECEIVES ERROR                                                    │
+│                                                                      │
+│ AI does NOT retry automatically                                      │
+│ AI does NOT guess/assume                                             │
+│                                                                      │
+│ AI MUST:                                                             │
+│ 1. STOP execution                                                    │
+│ 2. REPORT to user (show error + hint)                                │
+│ 3. ASK user for missing info                                         │
+│ 4. WAIT for user response                                            │
+│ 5. RETRY tool with corrected input                                   │
+└─────────────────────────────────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│ AI TO USER:                                                          │
+│                                                                      │
+│ "Tool validation failed:                                             │
+│  - Missing: [field]                                                  │
+│  - Fix: [hint]                                                       │
+│  - Example: [example]                                                │
+│                                                                      │
+│  Please provide [what's needed]."                                    │
+└─────────────────────────────────────────────────────────────────────┘
+                         │
+                         ▼
+              User provides info
+                         │
+                         ▼
+              AI retries tool with corrected input
+                         │
+                         ▼
+              Loop until SUCCESS or USER CANCELS
+```
+
+**Key Principle: Tool Errors = User Collaboration (DD-22)**
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  NEVER: AI guesses, assumes, or auto-fixes validation errors        │
+│  ALWAYS: AI stops, reports, asks user, waits                        │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 9.1 Step 1: Pre-flight Configuration
+
+| Aspect | Details |
+|--------|---------|
+| **Step** | 1 - Pre-flight Configuration |
+| **Skill Reference** | `qa-guidance-layer/references/step-01.md` |
+| **Operation Tool** | - (none, AI asks user) |
+| **Quality Gate** | `qg_preflight` |
+| **Input** | None (first step) |
+| **Output** | `credential_strategy`, `test_data_location` |
+| **State Saved** | `{ step: 1, status: "complete", credential_strategy, test_data_location }` |
+| **Dependencies** | None |
+| **Who Executes** | AI asks → User answers → Gate validates |
+| **DDs That Apply** | DD-24 (credential strategy), DD-28 (test data location) |
+
+#### Visual Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 1: PRE-FLIGHT                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SKILL INSTRUCTION                                                           │
+│                                                                              │
+│  PRE-CHECK:                                                                  │
+│  - None (first step)                                                        │
+│                                                                              │
+│  ACTION:                                                                     │
+│  - ASK user Question 1 (DD-24: credential strategy)                         │
+│  - WAIT for answer                                                          │
+│  - ASK user Question 2 (DD-28: test data location)                          │
+│  - WAIT for answer                                                          │
+│                                                                              │
+│  VALIDATE:                                                                   │
+│  - Call qg_preflight with both answers                                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  AI ASKS USER                                                                │
+│                                                                              │
+│  Question 1 (DD-24):                                                         │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ "Which credential approach for this test?"                             │ │
+│  │  1. Static        - Use existing account from test_users.json          │ │
+│  │  2. Dynamic       - Register fresh user, save for later tests          │ │
+│  │  3. Self-contained - Register and use within same test                 │ │
+│  │  4. None needed   - Test doesn't require credentials                   │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  Question 2 (DD-28):                                                         │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ "Where should test data live?"                                         │ │
+│  │  1. Shared            - tests/data/ (cross-workflow)                   │ │
+│  │  2. Workflow-specific - tests/{workflow}/data/                         │ │
+│  │  3. Both              - Shared credentials + workflow-specific data    │ │
+│  │  4. None needed       - Test doesn't require external data             │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  QUALITY GATE: qg_preflight                                                  │
+│                                                                              │
+│  Validates:                                                                  │
+│  ┌──────────────────────────┬──────────────────────────────────────────────┐│
+│  │ Field                    │ Valid Values                                 ││
+│  ├──────────────────────────┼──────────────────────────────────────────────┤│
+│  │ credential_strategy      │ static | dynamic | self-contained | none    ││
+│  │ test_data_location       │ shared | workflow | both | none             ││
+│  └──────────────────────────┴──────────────────────────────────────────────┘│
+│                                                                              │
+│  Gate Enforcement: BLOCKED until both fields valid                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                          ┌───────────┴───────────┐
+                          ▼                       ▼
+                    ┌──────────┐            ┌──────────┐
+                    │  PASS    │            │  FAIL    │
+                    └────┬─────┘            └────┬─────┘
+                         │                       │
+                         ▼                       ▼
+              ┌─────────────────────┐  ┌─────────────────────┐
+              │  STATE SAVED        │  │  RE-ASK USER        │
+              │                     │  │                     │
+              │  {                  │  │  Show which field   │
+              │    step: 1,         │  │  is missing/invalid │
+              │    credential_      │  │                     │
+              │      strategy: "x", │  │  Provide valid      │
+              │    test_data_       │  │  options again      │
+              │      location: "y"  │  │                     │
+              │  }                  │  │                     │
+              └─────────────────────┘  └─────────────────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │  PROCEED TO STEP 2  │
+              └─────────────────────┘
+```
+
+#### Quality Gate
+
+| Check | Rule |
+|-------|------|
+| Credential strategy answered | Must be one of: Static / Dynamic / Self-contained / None needed |
+| Test data location answered | Must be one of: Shared / Workflow-specific / Both / None needed |
+| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 2 until both answers provided** |
+
+#### Known Defects
+
+None - this is a new step.
+
+#### Failure Behavior
+
+| Issue | Behavior |
+|-------|----------|
+| User skips question | RE-ASK with clarification |
+| Invalid answer | RE-ASK with valid options |
+
+#### Error Message Templates
+
+```
+Credential strategy:
+"Which credential approach for this test?
+1. Static - Use existing account from test_users.json
+2. Dynamic - Register fresh user, save for later tests
+3. Self-contained - Register and use within same test
+4. None needed - Test doesn't require credentials"
+
+Test data location:
+"Where should test data live?
+1. Shared - tests/data/ (cross-workflow)
+2. Workflow-specific - tests/{workflow}/data/
+3. Both - shared credentials + workflow-specific data
+4. None needed - Test doesn't require external data"
+```
+
+#### Enforcement Location
+
+TBD (decide after all steps analyzed)
+
+---
+
+### 9.2 Step 2: User Input
+
+| Aspect | Details |
+|--------|---------|
+| **Step** | 2 - User Input |
+| **Skill Reference** | `qa-guidance-layer/references/step-02.md` |
+| **Operation Tool** | - (none, AI extracts from user input) |
+| **Quality Gate** | `qg_user_input` |
+| **Input** | User's natural language requirement |
+| **Output** | Validated: `persona`, `URL`, `role_name`, `domain` |
+| **State Saved** | `{ step: 2, status: "complete", persona, URL, role_name, domain }` |
+| **Dependencies** | Step 1 complete (credential_strategy, test_data_location) |
+| **Who Executes** | User provides → AI extracts → Gate validates |
+| **DDs That Apply** | DD-01 (persona required), DD-02 (URL required) |
+
+#### Visual Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 2: USER INPUT                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SKILL INSTRUCTION                                                           │
+│                                                                              │
+│  PRE-CHECK:                                                                  │
+│  - Verify Step 1 complete (credential_strategy, test_data_location exist)   │
+│                                                                              │
+│  ACTION:                                                                     │
+│  - IF user hasn't provided requirement: ASK for it                          │
+│    "What test do you want to create?                                        │
+│     Format: 'As a [role], I want to [action]...'                            │
+│     URL: [target page]"                                                     │
+│  - IF user provided requirement: EXTRACT persona, URL, role_name, domain    │
+│                                                                              │
+│  VALIDATE:                                                                   │
+│  - Call qg_user_input with extracted fields                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  RECEIVE USER REQUIREMENT                                                    │
+│                                                                              │
+│  Expected format:                                                            │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ "As a [persona], I want to [action]..."                                │ │
+│  │ URL: [target page URL]                                                 │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  AI EXTRACTS                                                                 │
+│                                                                              │
+│  ┌──────────────────────────┬──────────────────────────────────────────────┐│
+│  │ Field                    │ Extracted From                               ││
+│  ├──────────────────────────┼──────────────────────────────────────────────┤│
+│  │ persona                  │ "As a [X]" → "registered user"              ││
+│  │ URL                      │ Provided URL                                 ││
+│  │ role_name                │ Derived → "RegisteredUser"                   ││
+│  │ domain                   │ Inferred from intent → "authentication"      ││
+│  └──────────────────────────┴──────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  QUALITY GATE: qg_user_input                                                 │
+│                                                                              │
+│  Validates:                                                                  │
+│  ┌──────────────────────────┬──────────────────────────────────────────────┐│
+│  │ Check                    │ Rule                                         ││
+│  ├──────────────────────────┼──────────────────────────────────────────────┤│
+│  │ persona                  │ Must be present (DD-01)                      ││
+│  │ URL                      │ Must be valid URL (DD-02)                    ││
+│  │ role_name                │ Must be derivable from persona               ││
+│  │ domain                   │ Must be determinable from intent             ││
+│  └──────────────────────────┴──────────────────────────────────────────────┘│
+│                                                                              │
+│  Gate Enforcement: BLOCKED until all fields valid                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                          ┌───────────┴───────────┐
+                          ▼                       ▼
+                    ┌──────────┐            ┌──────────┐
+                    │  PASS    │            │  FAIL    │
+                    └────┬─────┘            └────┬─────┘
+                         │                       │
+                         ▼                       ▼
+              ┌─────────────────────┐  ┌─────────────────────┐
+              │  STATE SAVED        │  │  ASK USER           │
+              │                     │  │                     │
+              │  {                  │  │  Show what's        │
+              │    step: 2,         │  │  missing with       │
+              │    persona,         │  │  example format     │
+              │    URL,             │  │                     │
+              │    role_name,       │  │                     │
+              │    domain           │  │                     │
+              │  }                  │  │                     │
+              └─────────────────────┘  └─────────────────────┘
+                         │
+                         ▼
+              ┌─────────────────────┐
+              │  PROCEED TO STEP 3  │
+              └─────────────────────┘
+```
+
+**Example Input:**
+```
+"As a registered user, I want to login with email and password"
+URL: http://automationpractice.pl/index.php?controller=authentication
+```
+
+**Example Output:**
+```
+persona: "registered user"
+URL: "http://automationpractice.pl/index.php?controller=authentication"
+role_name: "RegisteredUser"
+domain: "authentication"
+```
+
+#### Quality Gate
+
+| Check | Rule |
+|-------|------|
+| Persona present | Must contain "As a [role]..." |
+| URL present | Must have target page URL |
+| Role extractable | AI can determine role from persona |
+| Domain determinable | AI can determine domain from intent |
+| Requirement specific | Clear enough to create BDD in Step 3 |
+| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 3 until all checks pass** |
+
+#### Known Defects
+
+| Defect | Issue |
+|--------|-------|
+| Enforcement gap | AI sometimes forgets to ask for missing info |
+
+#### Failure Behavior
+
+| Issue | Behavior |
+|-------|----------|
+| Persona missing | ASK USER: "Please specify persona. Example: 'As a customer, I want to...'" |
+| URL missing | ASK USER: "Which page? Example: 'http://yoursite.com/login'" |
+| Cannot determine role | ASK USER: "What type of user? Example: 'customer', 'admin', 'visitor'" |
+| Cannot determine domain | ASK USER: "What workflow area? Example: 'authentication', 'product browsing', 'checkout'" |
+| Requirement vague | ASK USER: "Please be more specific. Example: 'I want to add a blue t-shirt size M to cart'" |
+
+#### Enforcement Location
+
+TBD
+
+---
+
+### 9.3 Step 3: AI Processing
+
+| Aspect | Details |
+|--------|---------|
+| **Step** | 3 - AI Processing |
+| **Skill Reference** | `qa-guidance-layer/references/step-03.md` |
+| **Operation Tool** | - (none, AI processes) |
+| **Quality Gate** | `qg_ai_processing` |
+| **Input** | Step 2 output: `persona`, `URL`, `role_name`, `domain` + original requirement |
+| **Output** | `metadata_context`: `bdd_scenarios`, `expected_states`, `intent` |
+| **State Saved** | `{ step: 3, bdd_scenarios, expected_states, intent }` |
+| **Dependencies** | Step 2 complete (validated inputs) |
+| **Who Executes** | AI creates → Gate validates |
+| **DDs That Apply** | DD-03 (metadata context), DD-09 (expected_states from "Then" clause) |
+
+#### Visual Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         STEP 3: AI PROCESSING                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SKILL INSTRUCTION                                                           │
+│                                                                              │
+│  PRE-CHECK:                                                                  │
+│  - Verify Step 2 complete (persona, URL, role_name, domain exist)           │
+│                                                                              │
+│  ACTION:                                                                     │
+│  - CREATE BDD scenario from requirement (Given/When/Then)                   │
+│  - EXTRACT expected_states from "Then" clause (DD-09)                       │
+│  - DETERMINE intent (action verb from requirement)                          │
+│                                                                              │
+│  VALIDATE:                                                                   │
+│  - Call qg_ai_processing with metadata                                      │
+│                                                                              │
+│  RETRY (if validation fails):                                               │
+│  - Max 3 attempts                                                           │
+│  - After 3: STOP → REPORT → USER DECIDES                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  AI CREATES METADATA                                                         │
+│                                                                              │
+│  From requirement: "As a registered user, I want to login..."               │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ BDD Scenario:                                                          │ │
+│  │   Given I am on the login page                                        │ │
+│  │   When I enter valid email and password                               │ │
+│  │   And I click the login button                                        │ │
+│  │   Then I should see my account dashboard                              │ │
+│  │   And I should see a logout link                                      │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+│                                                                              │
+│  ┌──────────────────────────┬──────────────────────────────────────────────┐│
+│  │ Field                    │ Extracted Value                              ││
+│  ├──────────────────────────┼──────────────────────────────────────────────┤│
+│  │ expected_states          │ ["is_on_dashboard", "is_logout_visible"]    ││
+│  │ intent                   │ "login"                                      ││
+│  └──────────────────────────┴──────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  QUALITY GATE: qg_ai_processing                                              │
+│                                                                              │
+│  Validates:                                                                  │
+│  ┌──────────────────────────┬──────────────────────────────────────────────┐│
+│  │ Check                    │ Rule                                         ││
+│  ├──────────────────────────┼──────────────────────────────────────────────┤│
+│  │ bdd_scenarios            │ Must have valid Given/When/Then structure   ││
+│  │ expected_states          │ At least one state from "Then" clause       ││
+│  │ intent                   │ Action verb extracted from requirement       ││
+│  └──────────────────────────┴──────────────────────────────────────────────┘│
+│                                                                              │
+│  Gate Enforcement: BLOCKED until all fields valid                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                          ┌───────────┴───────────┐
+                          ▼                       ▼
+                    ┌──────────┐            ┌──────────┐
+                    │  PASS    │            │  FAIL    │
+                    └────┬─────┘            └────┬─────┘
+                         │                       │
+                         ▼                       ▼
+              ┌─────────────────────┐  ┌─────────────────────┐
+              │  STATE SAVED        │  │  RETRY (max 3)      │
+              │                     │  │                     │
+              │  {                  │  │  After 3 failures:  │
+              │    step: 3,         │  │  STOP → REPORT →    │
+              │    bdd_scenarios,   │  │  USER DECIDES       │
+              │    expected_states, │  │                     │
+              │    intent           │  │  Options:           │
+              │  }                  │  │  1. Go to Step 2    │
+              └─────────────────────┘  │  2. Abort workflow  │
+                         │             └─────────────────────┘
+                         ▼
+              ┌─────────────────────┐
+              │  PROCEED TO STEP 4  │
+              └─────────────────────┘
+```
+
+#### Quality Gate
+
+| Check | Rule |
+|-------|------|
+| BDD created | Must have valid given/when/then structure |
+| expected_states extracted | At least one state from "then" clause |
+| intent determined | Action verb extracted from requirement |
+| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 4 until metadata complete** |
+
+#### Failure Behavior (Universal Retry Policy)
+
+**Retry Limit:** 3 attempts
+
+| Attempt | Behavior |
+|---------|----------|
+| 1-3 | Tool rejects → AI retries processing |
+| After 3 | STOP → REPORT → USER DECIDES |
+
+**Resolution Options (Step 3):**
+
+```
+"I've attempted 3 times and cannot produce valid metadata.
+
+Here's what I'm generating:
+[show failing output]
+
+Tool rejection reason:
+[show error from tool]
+
+How should we proceed?
+1. Clarify requirement - Go back to Step 2
+2. Abort workflow - Stop and log issue internally"
+```
+
+**Note:** No "proceed with incomplete" option. Incomplete data never propagates.
+
+---
+
+### 9.4 Step 4: Tool 1 - generate_tests_from_user_story
+
+| Aspect | Details |
+|--------|---------|
+| **Step** | 4 - Tool 1 |
+| **Skill Reference** | `qa-guidance-layer/references/step-04.md` |
+| **Operation Tool** | `generate_tests_from_user_story` |
+| **Quality Gate** | `qg_test_scenarios` (pre + post validation) |
+| **Input** | `metadata_context` from Step 3 |
+| **Output** | `test_scenarios`: array of given/when/then objects |
+| **State Saved** | `{ step: 4, test_scenarios }` |
+| **Dependencies** | Step 3 complete (valid metadata) |
+| **Who Executes** | AI prepares → Tool validates + generates |
+| **DDs That Apply** | DD-23 (BDD format required) |
+
+#### Visual Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    STEP 4: TOOL 1 - GENERATE TESTS                           │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  SKILL INSTRUCTION                                                           │
+│                                                                              │
+│  PRE-CHECK:                                                                  │
+│  - Verify Step 3 complete (bdd_scenarios, expected_states, intent exist)    │
+│                                                                              │
+│  ACTION:                                                                     │
+│  - PREPARE input: user_story, workflow                                      │
+│  - CALL qg_test_scenarios (pre-validate input)                              │
+│  - CALL generate_tests_from_user_story (operation)                          │
+│  - CALL qg_test_scenarios (post-validate output)                            │
+│                                                                              │
+│  RETRY (if validation fails):                                               │
+│  - Max 3 attempts (AI fixes, NOT user)                                      │
+│  - After 3: STOP → REPORT → USER DECIDES                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  QUALITY GATE: qg_test_scenarios (PRE-VALIDATE)                              │
+│                                                                              │
+│  Validates input before operation:                                          │
+│  ┌──────────────────────────┬──────────────────────────────────────────────┐│
+│  │ Check                    │ Rule                                         ││
+│  ├──────────────────────────┼──────────────────────────────────────────────┤│
+│  │ bdd_scenarios            │ Present + valid Given/When/Then              ││
+│  │ expected_states          │ Present + at least one state                 ││
+│  │ workflow                 │ One of: auth, catalog, cart, checkout       ││
+│  └──────────────────────────┴──────────────────────────────────────────────┘│
+│                                                                              │
+│  PASS → Continue to operation | FAIL → Retry (max 3)                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  OPERATION: generate_tests_from_user_story                                   │
+│                                                                              │
+│  Generates test_scenarios array:                                            │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ test_scenarios: [                                                      │ │
+│  │   { "name": "test_X", "given": "...", "when": [...], "then": [...] }  │ │
+│  │ ]                                                                      │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  QUALITY GATE: qg_test_scenarios (POST-VALIDATE)                             │
+│                                                                              │
+│  Validates output after operation:                                          │
+│  ┌──────────────────────────┬──────────────────────────────────────────────┐│
+│  │ Check                    │ Rule                                         ││
+│  ├──────────────────────────┼──────────────────────────────────────────────┤│
+│  │ test_scenarios           │ Present + at least one scenario              ││
+│  │ Each scenario            │ Has name, given, when, then                  ││
+│  └──────────────────────────┴──────────────────────────────────────────────┘│
+│                                                                              │
+│  PASS → State saved | FAIL → Retry (max 3), then USER DECIDES               │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+              ┌─────────────────────────────────────────────┐
+              │  STATE SAVED → PROCEED TO STEP 5            │
+              │  { step: 4, test_scenarios }                │
+              └─────────────────────────────────────────────┘
+```
+
+#### Quality Gate
+
+| Check | Rule |
+|-------|------|
+| `bdd_scenarios` | Present + valid given/when/then structure |
+| `expected_states` | Present + array with at least one state string |
+| `intent` | Present + valid action verb (non-empty) |
+| `role_name` | Present + non-empty string |
+| `domain` | Present + non-empty string |
+| `workflow` | Present + recognized workflow type |
+| Output scenarios | At least one valid scenario object generated |
+| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 5 until all checks pass** |
+
+#### Failure Behavior
+
+**Retry Limit:** 3 attempts
+
+| Rejection | Behavior |
+|-----------|----------|
+| Invalid metadata | AI retries Step 3 processing (not user) |
+| After 3 retries | STOP → REPORT → USER DECIDES |
+
+**Resolution Options (Step 4):**
+1. Clarify requirement - Go back to Step 2
+2. Abort workflow - Stop and log issue internally
+
+**Note:** Tool rejection = AI's problem. User only involved after retries exhausted.
+
+---
+
+### 9.5 Step 5: Discover Elements (Tool 2)
+
+> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-05.md`
+
+| Field | Value |
+|-------|-------|
+| **Operation Tool** | `discover_page_elements` |
+| **Quality Gate** | `qg_discovered_elements` |
+| **Gate Mode** | PRE+POST |
+| **Who Saves** | Operation tool |
+| **Key Rules** | DD-20 (dynamic element prep), DD-24 (credential strategy) |
+
+**Credential Handling:**
+- Reads `credential_strategy` from Step 1
+- If not "none": AI logs in before discovering elements
+- Prepares page state to reveal dynamic elements
+
+---
+
+### 9.6 Step 6: Generate POM (Tool 3)
+
+> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-06.md`
+
+| Field | Value |
+|-------|-------|
+| **Operation Tool** | `generate_page_object` |
+| **Quality Gate** | `qg_page_object` |
+| **Gate Mode** | PRE+POST |
+| **Who Saves** | Operation tool |
+| **Key Rules** | DD-25 (no skeleton code), DD-09 (state methods from expected_states) |
+
+**DD-25 Enforcement:**
+- No empty methods with `pass`
+- All locators as class constants
+- State-check methods for each expected_state
+
+---
+
+### 9.7 Step 7: Generate Task (Tool 4)
+
+> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-07.md`
+
+| Field | Value |
+|-------|-------|
+| **Operation Tool** | `generate_task` |
+| **Quality Gate** | `qg_task` |
+| **Gate Mode** | PRE+POST |
+| **Who Saves** | Operation tool |
+| **Key Rules** | DD-12 (check existing), DD-25 (no skeleton), NO return values |
+
+**DD-12 Enforcement:**
+- Check if Task class already exists for domain
+- If exists: Extend with new methods
+- If not exists: Generate new class
+
+---
+
+### 9.8 Step 8: Generate Role (Tool 5)
+
+> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-08.md`
+
+| Field | Value |
+|-------|-------|
+| **Operation Tool** | `generate_role` |
+| **Quality Gate** | `qg_role` |
+| **Gate Mode** | PRE+POST |
+| **Who Saves** | Operation tool |
+| **Key Rules** | DD-12 (check existing), DD-25 (no skeleton), NO return values, orchestrates MULTIPLE tasks |
+
+**Role vs Task:**
+- Task = single domain operation
+- Role = complete workflow (calls MULTIPLE task methods)
+
+---
+
+### 9.9 Step 9: Generate Test Runner (Tool 6)
+
+> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-09.md`
+
+| Field | Value |
+|-------|-------|
+| **Operation Tool** | `generate_test_runner` |
+| **Quality Gate** | `qg_test_runner` |
+| **Gate Mode** | PRE+POST |
+| **Who Saves** | Operation tool |
+| **Key Rules** | DD-15 (POM assertions), DD-16 (file paths), DD-17 (parameter injection), DD-18 (imports) |
+
+**AI Post-Processing Required:**
+- DD-16: Override file paths to `tests/{workflow}/`
+- DD-17: Inject actual parameter values (no placeholders)
+- DD-18: Validate all imports resolve
+- DD-15: Assertions use POM state methods, not return values
+
+---
+
+### 9.10 Step 10: Save & Run
+
+> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-10.md`
+
+| Field | Value |
+|-------|-------|
+| **Operation Tool** | File I/O, `run_test` |
+| **Quality Gate** | `qg_save_run` |
+| **Gate Mode** | PRE-only |
+| **Who Saves** | AI (after file writes) |
+| **Key Rules** | DD-22 (stop-and-discuss on failure) |
+
+**File Save Locations:**
+```
+framework/pages/{domain}/{page_name}.py
+framework/tasks/{domain}/{task_name}.py
+framework/roles/{role_name}.py
+tests/{domain}/test_{intent}.py
+```
+
+**On Test Failure (DD-22):**
+- STOP → REPORT → DISCUSS with user
+- NEVER attempt fixes without user consultation
+- User decides: investigate, restart, manual fix, or abort
 
 ---
 

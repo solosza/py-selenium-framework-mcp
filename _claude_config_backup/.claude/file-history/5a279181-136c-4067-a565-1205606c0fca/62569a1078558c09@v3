@@ -1,0 +1,70 @@
+import os
+import sys
+import pytest
+from pathlib import Path
+
+PYTHON_PATH = f"{str(Path(__file__).parent.parent)}\\framework"
+sys.path.append(PYTHON_PATH)
+
+from resources.chromedriver.driver import create_driver
+from interfaces.web_interface import WebInterface
+from resources.utilities.logger import setup_logger
+
+
+# ------------------------------------------------------------------------------
+# Command line options
+# ------------------------------------------------------------------------------
+
+def pytest_addoption(parser):
+    """
+    Configure custom command line options for running tests.
+    """
+    parser.addoption("--env", action="store", default="DEFAULT")
+    parser.addoption("--headless", action="store", default="false")
+
+
+# ------------------------------------------------------------------------------
+# Fixtures
+# ------------------------------------------------------------------------------
+
+@pytest.fixture()
+def driver(request):
+    """
+    Defines function-scoped driver setup and teardown procedures for each test.
+    """
+    headless_str = request.config.getoption("--headless")
+    headless_bool = str(headless_str).strip().lower() == "true"
+    chromedriver = create_driver(headless=headless_bool)
+    yield chromedriver
+    chromedriver.quit()
+
+
+@pytest.fixture(scope="session")
+def config(request):
+    """
+    Load environment configuration.
+    """
+    import json
+    env_id = request.config.getoption("--env")
+    config_path = PYTHON_PATH + "/resources/config/environment_config.json"
+
+    with open(config_path, 'r') as f:
+        environments = json.load(f)
+
+    try:
+        env_config = environments[env_id]
+        # Add base_url alias for compatibility
+        if 'url' in env_config and 'base_url' not in env_config:
+            env_config['base_url'] = env_config['url']
+        yield env_config
+    except KeyError:
+        raise Exception(f"No environment match found for environment ID: {env_id}")
+
+
+@pytest.fixture()
+def web_interface(driver, config):
+    """
+    Wraps the driver object and config into a WebInterface object.
+    """
+    logger = setup_logger("web_interface")
+    yield WebInterface(driver, config, logger)

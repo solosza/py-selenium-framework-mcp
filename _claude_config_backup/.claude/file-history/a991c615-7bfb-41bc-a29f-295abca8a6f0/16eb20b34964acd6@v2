@@ -1,0 +1,358 @@
+"""
+Tests for text chunker.
+
+Run with:
+    cd training-assistant
+    python tests/_reports/run_tests.py test_chunker.py
+"""
+
+import pytest
+
+from rag.core import Document
+from rag.ingestion import Chunk, chunk_document, chunk_documents, load_documents
+
+
+@pytest.mark.chunker
+@pytest.mark.unit
+class TestChunk:
+    """Tests for Chunk data structure."""
+
+    def test_chunk_creation(self):
+        """Chunk can be created with text and metadata."""
+        chunk = Chunk(
+            text="Hello world",
+            metadata={"source": "test.md", "chunk_index": 0}
+        )
+        assert chunk.text == "Hello world"
+        assert chunk.metadata["source"] == "test.md"
+        assert chunk.metadata["chunk_index"] == 0
+
+    def test_chunk_length(self):
+        """Chunk length returns character count."""
+        chunk = Chunk(text="12345", metadata={})
+        assert len(chunk) == 5
+
+    def test_chunk_token_estimate(self):
+        """Token estimate is chars / 4."""
+        chunk = Chunk(text="a" * 400, metadata={})
+        assert chunk.token_estimate == 100
+
+    def test_chunk_repr(self):
+        """Chunk repr shows index, total, and preview."""
+        chunk = Chunk(
+            text="This is test content for the chunk",
+            metadata={"chunk_index": 2, "chunk_total": 5}
+        )
+        repr_str = repr(chunk)
+        assert "2/5" in repr_str
+        assert "This is test" in repr_str
+
+
+@pytest.mark.chunker
+@pytest.mark.unit
+class TestChunkDocument:
+    """Test single document chunking."""
+
+    def test_small_document_single_chunk(self):
+        """Document smaller than chunk_size becomes one chunk."""
+        doc = Document(text="Short text", metadata={"source": "test.md"})
+        chunks = chunk_document(doc, chunk_size=100, overlap=10)
+
+        assert len(chunks) == 1
+        assert chunks[0].text == "Short text"
+        assert chunks[0].metadata["source"] == "test.md"
+        assert chunks[0].metadata["chunk_index"] == 0
+        assert chunks[0].metadata["chunk_total"] == 1
+
+    def test_empty_document(self):
+        """Empty document produces single empty chunk."""
+        doc = Document(text="", metadata={"source": "empty.md"})
+        chunks = chunk_document(doc, chunk_size=100, overlap=10)
+
+        assert len(chunks) == 1
+        assert chunks[0].text == ""
+
+    def test_exact_chunk_size(self):
+        """Document exactly chunk_size becomes one chunk."""
+        doc = Document(text="a" * 100, metadata={})
+        chunks = chunk_document(doc, chunk_size=100, overlap=10)
+
+        assert len(chunks) == 1
+        assert len(chunks[0].text) == 100
+
+    def test_multiple_chunks_created(self):
+        """Large document is split into multiple chunks."""
+        # 250 chars with chunk_size=100, overlap=20 → step=80
+        # Positions: 0-100, 80-180, 160-250 → 3 chunks
+        doc = Document(text="a" * 250, metadata={"source": "big.md"})
+        chunks = chunk_document(doc, chunk_size=100, overlap=20)
+
+        assert len(chunks) >= 2
+        for chunk in chunks:
+            assert chunk.metadata["source"] == "big.md"
+            assert chunk.metadata["chunk_total"] == len(chunks)
+
+    def test_overlap_present(self):
+        """Adjacent chunks share overlapping text."""
+        text = "AAAA_BBBB_CCCC_DDDD"  # 19 chars
+        doc = Document(text=text, metadata={})
+        chunks = chunk_document(doc, chunk_size=10, overlap=4)
+
+        # With size=10, overlap=4, step=6
+        # Chunk 0: chars 0-10 = "AAAA_BBBB_"
+        # Chunk 1: chars 6-16 = "BBB_CCCC_D"
+        assert len(chunks) >= 2
+
+        # Verify overlap: end of chunk 0 should appear in start of chunk 1
+        chunk0_end = chunks[0].text[-4:]  # Last 4 chars (overlap size)
+        chunk1_start = chunks[1].text[:4]  # First 4 chars
+        assert chunk0_end == chunk1_start
+
+    def test_metadata_preserved(self):
+        """Original document metadata is preserved in chunks."""
+        doc = Document(
+            text="a" * 200,
+            metadata={
+                "source": "test.py",
+                "file_type": "python",
+                "custom_field": "custom_value"
+            }
+        )
+        chunks = chunk_document(doc, chunk_size=100, overlap=10)
+
+        for chunk in chunks:
+            assert chunk.metadata["source"] == "test.py"
+            assert chunk.metadata["file_type"] == "python"
+            assert chunk.metadata["custom_field"] == "custom_value"
+
+    def test_chunk_metadata_added(self):
+        """Chunks get chunk-specific metadata."""
+        doc = Document(text="a" * 200, metadata={"source": "test.md"})
+        chunks = chunk_document(doc, chunk_size=100, overlap=10)
+
+        for i, chunk in enumerate(chunks):
+            assert chunk.metadata["chunk_index"] == i
+            assert "chunk_total" in chunk.metadata
+            assert "start_char" in chunk.metadata
+            assert "end_char" in chunk.metadata
+
+    def test_start_end_char_positions(self):
+        """Chunk start/end positions are correct."""
+        doc = Document(text="0123456789" * 10, metadata={})  # 100 chars
+        chunks = chunk_document(doc, chunk_size=40, overlap=10)
+
+        for chunk in chunks:
+            start = chunk.metadata["start_char"]
+            end = chunk.metadata["end_char"]
+            # Verify the text matches the position in original
+            assert chunk.text == doc.text[start:end]
+
+    def test_invalid_overlap_raises_error(self):
+        """Overlap >= chunk_size raises ValueError."""
+        doc = Document(text="test", metadata={})
+
+        with pytest.raises(ValueError):
+            chunk_document(doc, chunk_size=100, overlap=100)
+
+        with pytest.raises(ValueError):
+            chunk_document(doc, chunk_size=100, overlap=150)
+
+
+@pytest.mark.chunker
+@pytest.mark.unit
+class TestChunkDocuments:
+    """Test batch document chunking."""
+
+    def test_multiple_documents(self):
+        """Multiple documents are all chunked."""
+        docs = [
+            Document(text="a" * 50, metadata={"source": "doc1.md"}),
+            Document(text="b" * 50, metadata={"source": "doc2.md"}),
+            Document(text="c" * 50, metadata={"source": "doc3.md"}),
+        ]
+        chunks = chunk_documents(docs, chunk_size=100, overlap=10)
+
+        # Each doc is < chunk_size, so 3 chunks total
+        assert len(chunks) == 3
+        sources = [c.metadata["source"] for c in chunks]
+        assert "doc1.md" in sources
+        assert "doc2.md" in sources
+        assert "doc3.md" in sources
+
+    def test_empty_list(self):
+        """Empty document list returns empty chunk list."""
+        chunks = chunk_documents([], chunk_size=100, overlap=10)
+        assert chunks == []
+
+    def test_mixed_sizes(self):
+        """Documents of different sizes are handled."""
+        docs = [
+            Document(text="small", metadata={"source": "small.md"}),
+            Document(text="x" * 500, metadata={"source": "large.md"}),
+        ]
+        chunks = chunk_documents(docs, chunk_size=100, overlap=10)
+
+        # Small doc = 1 chunk, large doc = multiple chunks
+        assert len(chunks) > 2
+        # First chunk should be from small doc
+        assert chunks[0].metadata["source"] == "small.md"
+
+
+@pytest.mark.chunker
+@pytest.mark.unit
+class TestChunkingNegative:
+    """Negative tests - invalid inputs and error conditions."""
+
+    def test_chunk_size_zero_raises_error(self):
+        """chunk_size=0 raises ValueError."""
+        doc = Document(text="test content", metadata={})
+
+        with pytest.raises(ValueError):
+            chunk_document(doc, chunk_size=0, overlap=0)
+
+    def test_chunk_size_negative_raises_error(self):
+        """Negative chunk_size raises ValueError."""
+        doc = Document(text="test content", metadata={})
+
+        with pytest.raises(ValueError):
+            chunk_document(doc, chunk_size=-100, overlap=10)
+
+    def test_overlap_negative_raises_error(self):
+        """Negative overlap raises ValueError."""
+        doc = Document(text="test content", metadata={})
+
+        with pytest.raises(ValueError):
+            chunk_document(doc, chunk_size=100, overlap=-10)
+
+    def test_none_in_document_list_raises_error(self):
+        """None in document list raises TypeError."""
+        docs = [
+            Document(text="valid", metadata={}),
+            None,
+            Document(text="also valid", metadata={}),
+        ]
+
+        with pytest.raises((TypeError, AttributeError)):
+            chunk_documents(docs, chunk_size=100, overlap=10)
+
+
+@pytest.mark.chunker
+@pytest.mark.unit
+class TestChunkingEdgeCases:
+    """Test edge cases and boundary conditions."""
+
+    def test_whitespace_only(self):
+        """Whitespace-only document is chunked normally."""
+        doc = Document(text="   \n\n   ", metadata={})
+        chunks = chunk_document(doc, chunk_size=100, overlap=10)
+
+        assert len(chunks) == 1
+        assert chunks[0].text == "   \n\n   "
+
+    def test_single_character(self):
+        """Single character document works."""
+        doc = Document(text="X", metadata={})
+        chunks = chunk_document(doc, chunk_size=100, overlap=10)
+
+        assert len(chunks) == 1
+        assert chunks[0].text == "X"
+
+    def test_unicode_content(self):
+        """Unicode characters are handled correctly."""
+        doc = Document(text="Hello 世界 🌍" * 20, metadata={})
+        chunks = chunk_document(doc, chunk_size=50, overlap=10)
+
+        # Verify no encoding errors
+        assert len(chunks) >= 1
+        for chunk in chunks:
+            assert isinstance(chunk.text, str)
+
+    def test_code_content(self):
+        """Code with special characters is preserved."""
+        code = '''def hello():
+    """Docstring"""
+    return "world"
+''' * 10
+        doc = Document(text=code, metadata={"file_type": "python"})
+        chunks = chunk_document(doc, chunk_size=100, overlap=20)
+
+        # Verify code structure preserved in chunks
+        combined = "".join(c.text for c in chunks)
+        # Note: with overlap, combined will have duplicates
+        assert "def hello():" in combined
+        assert '"""Docstring"""' in combined
+
+
+@pytest.mark.chunker
+@pytest.mark.integration
+class TestLoaderChunkerIntegration:
+    """Integration tests: loader + chunker working together."""
+
+    def test_load_and_chunk_single_file(self, tmp_path):
+        """Load a file and chunk it end-to-end."""
+        # Create test file
+        test_file = tmp_path / "test.md"
+        test_file.write_text("# Header\n\nParagraph one.\n\nParagraph two.\n" * 20)
+
+        # Load
+        docs = load_documents([test_file])
+        assert len(docs) == 1
+
+        # Chunk
+        chunks = chunk_documents(docs, chunk_size=100, overlap=20)
+
+        # Verify pipeline
+        assert len(chunks) > 1
+        assert all(c.metadata["source"] == str(test_file) for c in chunks)
+        assert all("chunk_index" in c.metadata for c in chunks)
+
+    def test_load_and_chunk_directory(self, tmp_path):
+        """Load multiple files from directory and chunk all."""
+        # Create test files
+        (tmp_path / "file1.md").write_text("Content one " * 50)
+        (tmp_path / "file2.py").write_text("# Python code\n" * 50)
+        (tmp_path / "file3.md").write_text("Content three " * 50)
+
+        # Load all
+        docs = load_documents([tmp_path])
+        assert len(docs) == 3
+
+        # Chunk all
+        chunks = chunk_documents(docs, chunk_size=100, overlap=20)
+
+        # Verify chunks from all sources
+        sources = set(c.metadata["source"] for c in chunks)
+        assert len(sources) == 3
+
+    def test_metadata_flows_through_pipeline(self, tmp_path):
+        """Metadata from loader preserved through chunker."""
+        test_file = tmp_path / "test.py"
+        test_file.write_text("def func():\n    pass\n" * 30)
+
+        # Load - adds source, file_type, etc.
+        docs = load_documents([test_file])
+        original_metadata_keys = set(docs[0].metadata.keys())
+
+        # Chunk - should preserve all + add chunk-specific
+        chunks = chunk_documents(docs, chunk_size=100, overlap=20)
+
+        for chunk in chunks:
+            # Original metadata preserved
+            for key in original_metadata_keys:
+                assert key in chunk.metadata
+            # Chunk metadata added
+            assert "chunk_index" in chunk.metadata
+            assert "chunk_total" in chunk.metadata
+            assert "start_char" in chunk.metadata
+            assert "end_char" in chunk.metadata
+
+    def test_empty_file_through_pipeline(self, tmp_path):
+        """Empty file flows through without error."""
+        test_file = tmp_path / "empty.md"
+        test_file.write_text("")
+
+        docs = load_documents([test_file])
+        chunks = chunk_documents(docs, chunk_size=100, overlap=20)
+
+        assert len(chunks) == 1
+        assert chunks[0].text == ""

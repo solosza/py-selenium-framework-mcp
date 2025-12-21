@@ -1,0 +1,229 @@
+"""
+Tests for document loader.
+
+Framework analogy:
+    Like test_login.py tests AuthTasks.log_in()
+    This tests load_file() and load_documents()
+
+Run with:
+    cd training-assistant
+    python -m pytest rag/ingestion/tests/test_loader.py -v
+"""
+
+import sys
+from pathlib import Path
+
+# Add training-assistant to path for imports
+training_assistant_path = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(training_assistant_path))
+
+from rag.ingestion import Document, load_file, load_documents, get_loader_stats
+
+
+class TestDocument:
+    """Test the Document data structure."""
+
+    def test_document_creation(self):
+        """Document can be created with text and metadata."""
+        doc = Document(
+            text="Hello world",
+            metadata={"source": "test.md"}
+        )
+        assert doc.text == "Hello world"
+        assert doc.metadata["source"] == "test.md"
+
+    def test_document_length(self):
+        """Document length returns character count."""
+        doc = Document(text="12345", metadata={})
+        assert len(doc) == 5
+
+    def test_document_repr(self):
+        """Document repr shows source and preview."""
+        doc = Document(
+            text="This is a test document with some content",
+            metadata={"source": "test.md"}
+        )
+        repr_str = repr(doc)
+        assert "test.md" in repr_str
+        assert "This is a test" in repr_str
+
+
+class TestLoadFile:
+    """Test single file loading."""
+
+    def test_load_markdown_file(self, tmp_path):
+        """Load a markdown file with title extraction."""
+        # Arrange
+        md_file = tmp_path / "test.md"
+        md_file.write_text("# My Title\n\nSome content here.")
+
+        # Act
+        doc = load_file(md_file)
+
+        # Assert
+        assert doc.text == "# My Title\n\nSome content here."
+        assert doc.metadata["filename"] == "test.md"
+        assert doc.metadata["extension"] == ".md"
+        assert doc.metadata["file_type"] == "markdown"
+        assert doc.metadata["title"] == "My Title"
+
+    def test_load_python_file(self, tmp_path):
+        """Load a Python file with module name extraction."""
+        # Arrange
+        py_file = tmp_path / "my_module.py"
+        py_file.write_text("def hello():\n    print('Hello')")
+
+        # Act
+        doc = load_file(py_file)
+
+        # Assert
+        assert "def hello():" in doc.text
+        assert doc.metadata["file_type"] == "python"
+        assert doc.metadata["module_name"] == "my_module"
+
+    def test_load_file_preserves_source_path(self, tmp_path):
+        """Source path is preserved in metadata for citations."""
+        # Arrange
+        txt_file = tmp_path / "notes.txt"
+        txt_file.write_text("Some notes")
+
+        # Act
+        doc = load_file(txt_file)
+
+        # Assert
+        assert str(tmp_path) in doc.metadata["source"]
+        assert "notes.txt" in doc.metadata["source"]
+
+
+class TestLoadDocuments:
+    """Test batch document loading."""
+
+    def test_load_single_file_path(self, tmp_path):
+        """Load documents from a single file path."""
+        # Arrange
+        md_file = tmp_path / "doc.md"
+        md_file.write_text("# Document\n\nContent")
+
+        # Act
+        docs = load_documents([md_file])
+
+        # Assert
+        assert len(docs) == 1
+        assert docs[0].metadata["filename"] == "doc.md"
+
+    def test_load_directory(self, tmp_path):
+        """Load all documents from a directory recursively."""
+        # Arrange
+        (tmp_path / "subdir").mkdir()
+        (tmp_path / "doc1.md").write_text("Doc 1")
+        (tmp_path / "subdir" / "doc2.md").write_text("Doc 2")
+        (tmp_path / "subdir" / "code.py").write_text("# Python")
+
+        # Act
+        docs = load_documents([tmp_path])
+
+        # Assert
+        assert len(docs) == 3
+        filenames = [d.metadata["filename"] for d in docs]
+        assert "doc1.md" in filenames
+        assert "doc2.md" in filenames
+        assert "code.py" in filenames
+
+    def test_skip_unsupported_extensions(self, tmp_path):
+        """Files with unsupported extensions are skipped."""
+        # Arrange
+        (tmp_path / "doc.md").write_text("Markdown")
+        (tmp_path / "image.png").write_bytes(b"fake image")
+        (tmp_path / "data.json").write_text('{"key": "value"}')
+
+        # Act
+        docs = load_documents([tmp_path])
+
+        # Assert
+        assert len(docs) == 1
+        assert docs[0].metadata["extension"] == ".md"
+
+    def test_skip_pycache(self, tmp_path):
+        """__pycache__ directories are skipped."""
+        # Arrange
+        (tmp_path / "__pycache__").mkdir()
+        (tmp_path / "good.py").write_text("# Good")
+        (tmp_path / "__pycache__" / "bad.py").write_text("# Bad")
+
+        # Act
+        docs = load_documents([tmp_path])
+
+        # Assert
+        assert len(docs) == 1
+        assert docs[0].metadata["filename"] == "good.py"
+
+    def test_no_duplicate_files(self, tmp_path):
+        """Same file included twice doesn't create duplicates."""
+        # Arrange
+        md_file = tmp_path / "doc.md"
+        md_file.write_text("Content")
+
+        # Act - include same file twice
+        docs = load_documents([md_file, md_file])
+
+        # Assert
+        assert len(docs) == 1
+
+    def test_mixed_files_and_directories(self, tmp_path):
+        """Can load from mix of files and directories."""
+        # Arrange
+        (tmp_path / "subdir").mkdir()
+        single_file = tmp_path / "single.md"
+        single_file.write_text("Single")
+        (tmp_path / "subdir" / "nested.md").write_text("Nested")
+
+        # Act
+        docs = load_documents([single_file, tmp_path / "subdir"])
+
+        # Assert
+        assert len(docs) == 2
+
+
+class TestGetLoaderStats:
+    """
+    Test loader statistics (state verification).
+
+    Framework analogy:
+        Like is_logged_in() verifies auth state
+        get_loader_stats() verifies loading state
+    """
+
+    def test_empty_documents(self):
+        """Stats for empty document list."""
+        stats = get_loader_stats([])
+        assert stats["total_docs"] == 0
+
+    def test_stats_counts(self, tmp_path):
+        """Stats include counts and token estimates."""
+        # Arrange
+        (tmp_path / "doc.md").write_text("Hello world")  # 11 chars
+        docs = load_documents([tmp_path])
+
+        # Act
+        stats = get_loader_stats(docs)
+
+        # Assert
+        assert stats["total_docs"] == 1
+        assert stats["total_chars"] == 11
+        assert stats["estimated_tokens"] == 2  # 11 // 4
+        assert stats["by_file_type"]["markdown"] == 1
+
+    def test_stats_by_file_type(self, tmp_path):
+        """Stats grouped by file type."""
+        # Arrange
+        (tmp_path / "a.md").write_text("Markdown")
+        (tmp_path / "b.md").write_text("Markdown")
+        (tmp_path / "c.py").write_text("Python")
+        docs = load_documents([tmp_path])
+
+        # Act
+        stats = get_loader_stats(docs)
+
+        # Assert
+        assert stats["by_file_type"]["markdown"] == 2
+        assert stats["by_file_type"]["python"] == 1

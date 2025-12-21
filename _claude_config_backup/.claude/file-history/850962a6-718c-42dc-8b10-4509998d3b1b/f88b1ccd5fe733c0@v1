@@ -1,0 +1,38 @@
+"""
+Pytest configuration for RAG ingestion tests.
+
+Adds coverage summary to pytest-html report header.
+"""
+
+import pytest
+
+
+def pytest_configure(config):
+    """Add coverage metadata marker."""
+    config._coverage_data = {}
+
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    """Capture coverage summary from terminal output."""
+    yield
+    # Coverage data is captured by pytest-cov and shown in terminal
+    # We store key metrics for the HTML report
+    if hasattr(config, "_cov"):
+        cov = config._cov
+        if hasattr(cov, "get_data"):
+            config._coverage_data["collected"] = True
+
+
+def pytest_html_report_title(report):
+    """Set custom report title."""
+    report.title = "RAG System Test Report"
+
+
+def pytest_html_results_summary(prefix, summary, postfix):
+    """Add coverage info to HTML report summary section."""
+    prefix.extend([
+        "<h3>Coverage Information</h3>",
+        "<p>See <code>coverage/index.html</code> in the same folder for detailed coverage.</p>",
+        "<p>Coverage terminal output saved to <code>coverage_summary.txt</code></p>",
+    ])

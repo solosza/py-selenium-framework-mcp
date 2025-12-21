@@ -1,0 +1,302 @@
+2025-12-19T01:12:18.286Z [DEBUG] Watching for changes in setting files C:\Users\solos\.claude, D:\my_ai_projects\py_sel_framework_mcp\.claude...
+2025-12-19T01:12:18.314Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2025-12-19T01:12:18.348Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2025-12-19T01:12:18.348Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2025-12-19T01:12:18.348Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2025-12-19T01:12:18.351Z [DEBUG] Applying permission update: Adding 44 allow rule(s) to destination 'localSettings': ["WebFetch(domain:www.automationpractice.pl)","Bash(git commit:*)","Bash(git rm:*)","Bash(git add:*)","Bash(git push:*)","Bash(git checkout:*)","WebFetch(domain:automationpractice.pl)","WebSearch","WebFetch(domain:github.com)","WebFetch(domain:raw.githubusercontent.com)","Bash(dir:*)","Bash(python execute_auth_tests.py:*)","Bash(nul)","Bash(python investigate_catalog_page.py:*)","Bash(python -u:*)","WebFetch(domain:www.udemy.com)","WebFetch(domain:www.pulsemcp.com)","Bash(del \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\\\\framework\\\\tasks\\\\auth\\\\auth_tasks.py\")","Bash(git ls-tree:*)","Bash(cat:*)","Bash(git merge:*)","Bash(git branch:*)","Bash(del \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\\\\framework\\\\roles\\\\base\\\\role.py\")","Bash(gh pr create:*)","Bash(python:*)","Bash(pip show:*)","Bash(\"C:\\\\Users\\\\solos\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python311\\\\python.exe\" -c \"import sys; sys.path.insert\\(0, r''D:\\\\my_ai_projects\\\\py_sel_framework_mcp\\\\mcp_server''\\); import server; print\\(''Server imports OK''\\)\")","mcp__playwright__browser_fill_form","mcp__playwright__browser_click","mcp__playwright__browser_snapshot","mcp__playwright__browser_navigate","mcp__qa-automation__generate_page_object","mcp__qa-automation__generate_task","Bash(wc:*)","Bash(pip install:*)","Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" status)","Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" log --oneline -3)","Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" status training-assistant/docs/TEST_PLAN.md)","Bash(copy \"rag\\\\ingestion\\\\document.py\" \"rag\\\\core\\\\document.py\")","Bash(copy \"rag\\\\ingestion\\\\tests\\\\_reports\\\\run_tests.py\" \"tests\\\\_reports\\\\run_tests.py\")","Bash(copy \"rag\\\\ingestion\\\\tests\\\\test_loader.py\" \"tests\\\\ingestion\\\\test_loader.py\")","Bash(copy \"rag\\\\ingestion\\\\tests\\\\test_chunker.py\" \"tests\\\\ingestion\\\\test_chunker.py\")","Bash(copy \"rag\\\\ingestion\\\\tests\\\\test_embedder.py\" \"tests\\\\ingestion\\\\test_embedder.py\")","Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add -A)"]
+2025-12-19T01:12:18.355Z [DEBUG] LSP server manager initialized successfully
+2025-12-19T01:12:18.355Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2025-12-19T01:12:18.356Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2025-12-19T01:12:18.360Z [DEBUG] Stats cache is up to date
+2025-12-19T01:12:18.366Z [DEBUG] Loading skills from: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=[D:\my_ai_projects\py_sel_framework_mcp\.claude\skills]
+2025-12-19T01:12:18.371Z [DEBUG] Passes: Using fresh cached eligibility data
+2025-12-19T01:12:18.380Z [DEBUG] Loaded 0 installed plugins from C:\Users\solos\.claude\plugins\installed_plugins.json
+2025-12-19T01:12:18.510Z [DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+2025-12-19T01:12:18.510Z [DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+2025-12-19T01:12:18.510Z [DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+2025-12-19T01:12:18.510Z [DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+2025-12-19T01:12:18.520Z [DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1766106738510-s4uax4.sh
+2025-12-19T01:12:18.520Z [DEBUG] Shell binary exists: true
+2025-12-19T01:12:18.520Z [DEBUG] Execution timeout: 10000ms
+2025-12-19T01:12:18.524Z [DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\75d1684f-2c68-4081-a25e-c32f74822e81-agent-75d1684f-2c68-4081-a25e-c32f74822e81.json.tmp.4448.1766106738524
+2025-12-19T01:12:18.532Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (8.1ms)
+2025-12-19T01:12:18.532Z [DEBUG] Temp file written successfully, size: 2 bytes
+2025-12-19T01:12:18.532Z [DEBUG] Renaming C:\Users\solos\.claude\todos\75d1684f-2c68-4081-a25e-c32f74822e81-agent-75d1684f-2c68-4081-a25e-c32f74822e81.json.tmp.4448.1766106738524 to C:\Users\solos\.claude\todos\75d1684f-2c68-4081-a25e-c32f74822e81-agent-75d1684f-2c68-4081-a25e-c32f74822e81.json
+2025-12-19T01:12:18.533Z [DEBUG] File C:\Users\solos\.claude\todos\75d1684f-2c68-4081-a25e-c32f74822e81-agent-75d1684f-2c68-4081-a25e-c32f74822e81.json written atomically
+2025-12-19T01:12:18.565Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2025-12-19T01:12:18.565Z [DEBUG] Total plugin skills loaded: 0
+2025-12-19T01:12:18.565Z [DEBUG] Total plugin commands loaded: 0
+2025-12-19T01:12:18.565Z [DEBUG] Registered 0 hooks from 0 plugins
+2025-12-19T01:12:18.593Z [DEBUG] Loaded 7 unique skills (managed: 0, user: 0, project: 7, legacy commands: 0)
+2025-12-19T01:12:18.593Z [DEBUG] getSkills returning: 7 skill dir commands, 0 plugin skills
+2025-12-19T01:12:18.599Z [DEBUG] Git remote URL: https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-19T01:12:18.599Z [DEBUG] Parsed repository: solosza/py-selenium-framework-mcp from https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-19T01:12:18.599Z [DEBUG] Parsed repository: solosza/py-selenium-framework-mcp from URL: https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-19T01:12:18.599Z [DEBUG] Path D:\my_ai_projects\py_sel_framework_mcp already tracked for repo solosza/py-selenium-framework-mcp
+2025-12-19T01:12:18.821Z [DEBUG] Total plugin agents loaded: 0
+2025-12-19T01:12:18.837Z [DEBUG] Shell snapshot created successfully (342 bytes)
+2025-12-19T01:12:18.837Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2025-12-19T01:12:18.968Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106738968
+2025-12-19T01:12:18.968Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:18.973Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (5.3ms)
+2025-12-19T01:12:18.973Z [DEBUG] Temp file written successfully, size: 64380 bytes
+2025-12-19T01:12:18.973Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:18.973Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106738968 to C:\Users\solos\.claude.json
+2025-12-19T01:12:18.974Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:18.982Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (6.7ms)
+2025-12-19T01:12:19.058Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106739058
+2025-12-19T01:12:19.058Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:19.061Z [DEBUG] Temp file written successfully, size: 64380 bytes
+2025-12-19T01:12:19.062Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:19.062Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106739058 to C:\Users\solos\.claude.json
+2025-12-19T01:12:19.062Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:19.136Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (6.2ms)
+2025-12-19T01:12:19.136Z [DEBUG] Successfully refreshed marketplace: claude-plugins-official
+2025-12-19T01:12:19.136Z [DEBUG] Plugin autoupdate: checking installed plugins
+2025-12-19T01:12:19.368Z [DEBUG] Passes: Using fresh cached eligibility data
+2025-12-19T01:12:19.402Z [DEBUG] MCP server "qa-automation": Starting connection with timeout of 30000ms
+2025-12-19T01:12:19.408Z [DEBUG] MCP server "playwright": Starting connection with timeout of 30000ms
+2025-12-19T01:12:19.458Z [DEBUG] Initialized versioned plugins system with 0 plugins
+2025-12-19T01:12:19.460Z [DEBUG] [ColorDiff] Not in bundled mode, using JS fallback
+2025-12-19T01:12:19.464Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106739464
+2025-12-19T01:12:19.464Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:19.468Z [DEBUG] Temp file written successfully, size: 64380 bytes
+2025-12-19T01:12:19.468Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:19.468Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106739464 to C:\Users\solos\.claude.json
+2025-12-19T01:12:19.468Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:19.488Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2025-12-19T01:12:19.488Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:19.488Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2025-12-19T01:12:19.553Z [DEBUG] Getting matching hook commands for SubagentStart with query: Explore
+2025-12-19T01:12:19.553Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:19.553Z [DEBUG] Matched 0 unique hooks for query "Explore" (0 before deduplication)
+2025-12-19T01:12:19.572Z [DEBUG] Getting matching hook commands for SubagentStart with query: Plan
+2025-12-19T01:12:19.572Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:19.572Z [DEBUG] Matched 0 unique hooks for query "Plan" (0 before deduplication)
+2025-12-19T01:12:19.636Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106739636
+2025-12-19T01:12:19.636Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:19.643Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (7.2ms)
+2025-12-19T01:12:19.643Z [DEBUG] Temp file written successfully, size: 64307 bytes
+2025-12-19T01:12:19.643Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:19.643Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106739636 to C:\Users\solos\.claude.json
+2025-12-19T01:12:19.644Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:19.659Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (14.5ms)
+2025-12-19T01:12:19.661Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106739661
+2025-12-19T01:12:19.661Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:19.665Z [DEBUG] Temp file written successfully, size: 64307 bytes
+2025-12-19T01:12:19.665Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:19.665Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106739661 to C:\Users\solos\.claude.json
+2025-12-19T01:12:19.665Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:19.674Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (6.4ms)
+2025-12-19T01:12:19.678Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2025-12-19T01:12:19.678Z [DEBUG] performStartupChecks called
+2025-12-19T01:12:19.679Z [DEBUG] Starting background plugin installations
+2025-12-19T01:12:19.679Z [DEBUG] performBackgroundPluginInstallations called
+2025-12-19T01:12:19.708Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-12-19T01:12:19.712Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106739712
+2025-12-19T01:12:19.712Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:19.716Z [DEBUG] Temp file written successfully, size: 64380 bytes
+2025-12-19T01:12:19.716Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:19.716Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106739712 to C:\Users\solos\.claude.json
+2025-12-19T01:12:19.716Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:19.725Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (8.8ms)
+2025-12-19T01:12:19.728Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2025-12-19T01:12:19.738Z [DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+2025-12-19T01:12:20.208Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (469.2ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=22056\").Pare
+2025-12-19T01:12:20.599Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (391.3ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=23868\").Pare
+2025-12-19T01:12:21.016Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (414.9ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=22056\").Pare
+2025-12-19T01:12:21.392Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (376.8ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=23868\").Pare
+2025-12-19T01:12:21.737Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (344.2ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=22056\").Pare
+2025-12-19T01:12:22.120Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (383.3ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=23868\").Pare
+2025-12-19T01:12:22.433Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (312.2ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=22056\").Pare
+2025-12-19T01:12:22.795Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (362.2ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=23868\").Pare
+2025-12-19T01:12:22.809Z [DEBUG] MCP server "qa-automation": Successfully connected to undefined server in 3411ms
+2025-12-19T01:12:22.809Z [DEBUG] MCP server "qa-automation": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"qa-automation-framework","version":"1.23.2"}}
+2025-12-19T01:12:22.818Z [DEBUG] MCP server "playwright": Successfully connected to undefined server in 3411ms
+2025-12-19T01:12:22.818Z [DEBUG] MCP server "playwright": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Playwright","version":"0.0.44"}}
+2025-12-19T01:12:22.872Z [DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+2025-12-19T01:12:22.883Z [DEBUG] Summarizing all 39 messages (~33162 tokens)
+2025-12-19T01:12:22.976Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106742976
+2025-12-19T01:12:22.976Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:22.981Z [DEBUG] Temp file written successfully, size: 64380 bytes
+2025-12-19T01:12:22.981Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:22.981Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106742976 to C:\Users\solos\.claude.json
+2025-12-19T01:12:22.981Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:23.211Z [DEBUG] MCP server "ide": Successfully connected to ws-ide server in 341ms
+2025-12-19T01:12:23.211Z [DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.62"}}
+2025-12-19T01:12:23.582Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (323.2ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=22056\").Pare
+2025-12-19T01:12:23.923Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (340.2ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=23868\").Pare
+2025-12-19T01:12:24.253Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (330.4ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=22056\").Pare
+2025-12-19T01:12:24.550Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (296.6ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=23868\").Pare
+2025-12-19T01:12:24.888Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (338.1ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=22056\").Pare
+2025-12-19T01:12:25.244Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (355.7ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=23868\").Pare
+2025-12-19T01:12:25.564Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (320.0ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=22056\").Pare
+2025-12-19T01:12:25.898Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (333.4ms): powershell.exe -NoProfile -Command "(Get-CimInstance Win32_Process -Filter \"ProcessId=23868\").Pare
+2025-12-19T01:12:25.934Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:12:25.949Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106745949
+2025-12-19T01:12:25.949Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:25.952Z [DEBUG] Temp file written successfully, size: 64380 bytes
+2025-12-19T01:12:25.952Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:25.952Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106745949 to C:\Users\solos\.claude.json
+2025-12-19T01:12:25.952Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:25.958Z [DEBUG] Summarizing all 238 messages (~77883 tokens)
+2025-12-19T01:12:25.964Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (5.3ms)
+2025-12-19T01:12:26.212Z [DEBUG] Skills and commands included in Skill tool: dialogue-engine, execute-from-step1, rag-learning
+2025-12-19T01:12:27.066Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:12:27.122Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:12:27.289Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:12:28.139Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:12:28.139Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:12:28.139Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:12:28.139Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:12:28.343Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-12-19T01:12:28.343Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:28.343Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:12:28.345Z [DEBUG] FileHistory: Added snapshot for 23bfe597-84df-486b-b0f0-13a7cb75a36f, tracking 0 files
+2025-12-19T01:12:28.362Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-12-19T01:12:28.423Z [DEBUG] Total plugin output styles loaded: 0
+2025-12-19T01:12:28.442Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 80ms
+2025-12-19T01:12:29.557Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:12:30.534Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:12:30.534Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:30.534Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:12:31.362Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:12:33.537Z [DEBUG] executePreToolHooks called for tool: Skill
+2025-12-19T01:12:33.542Z [DEBUG] Getting matching hook commands for PreToolUse with query: Skill
+2025-12-19T01:12:33.542Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:33.542Z [DEBUG] Matched 0 unique hooks for query "Skill" (0 before deduplication)
+2025-12-19T01:12:33.556Z [DEBUG] Permission suggestions for Skill: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Skill",
+        "ruleContent": "dialogue-engine"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  },
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Skill",
+        "ruleContent": "dialogue-engine:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2025-12-19T01:12:33.574Z [DEBUG] executePermissionRequestHooks called for tool: Skill
+2025-12-19T01:12:33.581Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Skill
+2025-12-19T01:12:33.581Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:33.581Z [DEBUG] Matched 0 unique hooks for query "Skill" (0 before deduplication)
+2025-12-19T01:12:34.295Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-12-19T01:12:34.302Z [DEBUG] Metadata string for dialogue-engine:
+2025-12-19T01:12:34.302Z [DEBUG] <command-message>dialogue-engine</command-message>
+<command-name>/dialogue-engine</command-name>
+2025-12-19T01:12:34.302Z [DEBUG] command-message tags in metadata: 1
+2025-12-19T01:12:34.313Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-12-19T01:12:34.313Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:12:34.313Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:12:34.313Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:12:34.313Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:12:34.316Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 3ms
+2025-12-19T01:12:34.369Z [DEBUG] processPromptSlashCommand creating 3 messages for dialogue-engine
+2025-12-19T01:12:34.369Z [DEBUG] Message 1: <command-message>dialogue-engine</command-message>
+<command-name>/dialogue-engine</command-name>
+2025-12-19T01:12:34.369Z [DEBUG] Message 2 [META]: [{"type":"text","text":"Base directory for this skill: D:\\my_ai_projects\\py_sel_framework_mcp\\.claude\\skills\\dialogue-engine\n\n# Dialogue Engine\r\n\r\n**Purpose:** Enforce consistent, user-cont
+2025-12-19T01:12:34.369Z [DEBUG] Message 3: [ATTACHMENT]
+2025-12-19T01:12:34.369Z [DEBUG] SkillTool returning 2 newMessages for skill dialogue-engine
+2025-12-19T01:12:34.369Z [DEBUG] newMessage 1: [{"type":"text","text":"Base directory for this skill: D:\\my_ai_projects\\py_sel_framework_mcp\\.claude\\skills\\dialogue-engine\n\n# Dialogue Engine...
+2025-12-19T01:12:34.394Z [DEBUG] Getting matching hook commands for PostToolUse with query: Skill
+2025-12-19T01:12:34.394Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:34.394Z [DEBUG] Matched 0 unique hooks for query "Skill" (0 before deduplication)
+2025-12-19T01:12:34.409Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-12-19T01:12:34.409Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:12:34.409Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:12:34.409Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:12:34.409Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:12:34.451Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 42ms
+2025-12-19T01:12:37.211Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:12:39.173Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:12:39.173Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:39.174Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:12:42.828Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:12:42.828Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:12:42.829Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:12:42.830Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:12:42.830Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:12:42.830Z [DEBUG] executePreToolHooks called for tool: Read
+2025-12-19T01:12:42.837Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:12:42.837Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:42.837Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:42.837Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:12:42.837Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:42.837Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:42.837Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:12:42.837Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:42.837Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:42.837Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:12:42.837Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:42.837Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:42.837Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:12:42.837Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:42.837Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:42.837Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-12-19T01:12:42.837Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:42.837Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:45.312Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (31.4ms)
+2025-12-19T01:12:45.328Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (15.7ms)
+2025-12-19T01:12:45.338Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (9.6ms)
+2025-12-19T01:12:45.349Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (10.1ms)
+2025-12-19T01:12:45.659Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:12:45.659Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:45.659Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:45.659Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:12:45.659Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:45.659Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:45.659Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:12:45.659Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:45.659Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:45.659Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:12:45.659Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:45.659Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:45.659Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:12:45.659Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:45.659Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:45.659Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-12-19T01:12:45.659Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:45.659Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-12-19T01:12:45.684Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-12-19T01:12:45.684Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-12-19T01:12:45.684Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-12-19T01:12:45.684Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-12-19T01:12:45.684Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-12-19T01:12:45.730Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 46ms
+2025-12-19T01:12:48.622Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:12:57.516Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2025-12-19T01:12:57.567Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-12-19T01:12:57.567Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:12:57.567Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-19T01:12:57.624Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106777624
+2025-12-19T01:12:57.624Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:57.629Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (5.1ms)
+2025-12-19T01:12:57.629Z [DEBUG] Temp file written successfully, size: 64380 bytes
+2025-12-19T01:12:57.629Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:57.629Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106777624 to C:\Users\solos\.claude.json
+2025-12-19T01:12:57.629Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:57.637Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (7.7ms)
+2025-12-19T01:12:57.643Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.4448.1766106777642
+2025-12-19T01:12:57.643Z [DEBUG] Preserving file permissions: 100666
+2025-12-19T01:12:57.646Z [DEBUG] Temp file written successfully, size: 64380 bytes
+2025-12-19T01:12:57.646Z [DEBUG] Applied original permissions to temp file
+2025-12-19T01:12:57.646Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.4448.1766106777642 to C:\Users\solos\.claude.json
+2025-12-19T01:12:57.646Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-19T01:12:57.653Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (6.8ms)
+2025-12-19T01:13:00.162Z [DEBUG] Stream started - received first chunk
+2025-12-19T01:13:07.583Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-19T01:13:07.583Z [DEBUG] Found 0 hook matchers in settings
+2025-12-19T01:13:07.583Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)

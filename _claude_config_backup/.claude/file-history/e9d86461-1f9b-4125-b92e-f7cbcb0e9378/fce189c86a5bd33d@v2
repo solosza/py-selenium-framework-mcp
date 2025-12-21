@@ -1,0 +1,40 @@
+# Python Selenium Test Automation Framework with MCP Integration
+# Install all dependencies: pip install -r requirements.txt
+
+# =============================================================================
+# FRAMEWORK DEPENDENCIES
+# =============================================================================
+
+# Selenium WebDriver
+selenium>=4.0.0
+
+# WebDriver Manager (automatic driver management)
+webdriver-manager>=4.0.0
+
+# Test Data Generation
+faker>=18.0.0
+
+# Environment Configuration
+python-dotenv>=1.0.0
+
+# =============================================================================
+# TEST RUNNER
+# =============================================================================
+
+# Pytest and Reporting
+pytest>=8.0.0
+pytest-html>=4.0.0
+
+# =============================================================================
+# MCP SERVER DEPENDENCIES
+# =============================================================================
+
+# MCP SDK
+mcp>=1.0.0
+
+# Web Scraping / Element Discovery
+beautifulsoup4>=4.12.0
+lxml>=5.0.0
+
+# JSON Schema Validation
+jsonschema>=4.0.0

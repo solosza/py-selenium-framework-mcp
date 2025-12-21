@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Update Tool 6: Add method generation to POM (input methods, button methods, select methods)",
+    "status": "completed",
+    "activeForm": "Updated Tool 6: Added method generation to POM"
+  },
+  {
+    "content": "Update code_generator.py: Add generate_pom_methods() helper",
+    "status": "completed",
+    "activeForm": "Updated code_generator.py: Added generate_pom_methods() helper"
+  },
+  {
+    "content": "Update Tool 4: Add workflow generation using POM methods",
+    "status": "in_progress",
+    "activeForm": "Updating Tool 4: Adding workflow generation using POM methods"
+  },
+  {
+    "content": "Update code_generator.py: Add workflow templates for auth/catalog/cart",
+    "status": "pending",
+    "activeForm": "Updating code_generator.py: Adding workflow templates"
+  },
+  {
+    "content": "Update Tool 2: Add test logic generation using scenario + task methods",
+    "status": "pending",
+    "activeForm": "Updating Tool 2: Adding test logic generation"
+  },
+  {
+    "content": "Test complete workflow with full code generation",
+    "status": "pending",
+    "activeForm": "Testing complete workflow with full code generation"
+  }
+]

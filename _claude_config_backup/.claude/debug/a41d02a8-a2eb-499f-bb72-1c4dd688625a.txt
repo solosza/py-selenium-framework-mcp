@@ -1,0 +1,17 @@
+[DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_python_projects\zillow_scraping\.claude\settings.local.json...
+[DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] MCP server "playwright": Starting connection with timeout of 30000ms
+[DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.28044.1761689028302
+[DEBUG] Preserving file permissions: 100666
+[DEBUG] Temp file written successfully, size: 108556 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming C:\Users\solos\.claude.json.tmp.28044.1761689028302 to C:\Users\solos\.claude.json
+[DEBUG] File C:\Users\solos\.claude.json written atomically
+[ERROR] MCP server "playwright" Server stderr: npm
+[ERROR] MCP server "playwright" Server stderr: ERR! code EINVALIDPACKAGENAME
+npm ERR! Invalid package name "@playwright\mcp" of package "@playwright\mcp@latest": name can only contain URL-friendly characters.
+[ERROR] MCP server "playwright" Server stderr: npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\solos\AppData\Local\npm-cache\_logs\2025-10-28T22_03_48_366Z-debug-0.log
+[DEBUG] MCP server "playwright": Connection failed after 543ms: MCP error -32000: Connection closed
+[ERROR] MCP server "playwright" Connection failed: MCP error -32000: Connection closed

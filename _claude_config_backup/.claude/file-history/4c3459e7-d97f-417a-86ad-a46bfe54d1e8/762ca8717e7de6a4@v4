@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alain Ignacio - QA Manager/Lead Resume</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --accent: #0066cc;
+            --border: #dee2e6;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent: #4da6ff;
+            --border: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', 'Segoe UI', Roboto, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        #darkModeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        #darkModeToggle:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .contact-info {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .contact-info span {
+            margin: 0 8px;
+        }
+
+        .links {
+            margin-top: 12px;
+        }
+
+        .links a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 12px;
+            font-size: 0.95rem;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            margin-bottom: 35px;
+        }
+
+        section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .about p {
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .leadership-statement {
+            margin-bottom: 35px;
+        }
+
+        .leadership-statement h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .leadership-statement p {
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .experience-item, .project-item {
+            margin-bottom: 28px;
+        }
+
+        .experience-item h3, .project-item h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .experience-meta, .project-meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .tech-stack {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        ul li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .skills-category {
+            margin-bottom: 18px;
+        }
+
+        .skills-category h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .skills-category p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .contact-info span {
+                display: block;
+                margin: 4px 0;
+            }
+
+            #darkModeToggle {
+                top: 10px;
+                right: 10px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            section h2 {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media print {
+            #darkModeToggle {
+                display: none !important;
+            }
+
+            footer {
+                display: none !important;
+            }
+
+            body {
+                background-color: white !important;
+                color: #212529 !important;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            header {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+
+            section {
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
+
+            a {
+                color: #212529 !important;
+                text-decoration: none !important;
+            }
+
+            section h2 {
+                border-bottom-color: #212529 !important;
+            }
+
+            ul li::before {
+                color: #212529 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle">Dark Mode</button>
+
+    <div class="container">
+        <header>
+            <h1>Alain Ignacio</h1>
+            <div class="contact-info">
+                <span>solosza@yahoo.com</span>
+                <span>808.354.4526</span>
+                <span>Las Vegas, NV</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/solosza" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/alain-ignacio" target="_blank">LinkedIn</a>
+                <a href="https://solosza.github.io/resume-ai-pipeline/resumes/fsi-qa-manager-lead.html" target="_blank">Web Resume</a>
+            </div>
+        </header>
+
+        <section class="about">
+            <h2>Professional Summary</h2>
+            <p>Senior QA Engineer and Quality Platform Builder with deep experience designing and operating test automation systems that enforce standards, scale senior-level judgment, and reduce dependency on manual review. Proven track record building automation frameworks from zero in regulated and startup environments, integrating AI-assisted workflows to accelerate onboarding, improve correctness, and operationalize quality at scale. Specialized in Python, Selenium, pytest, and AI-guided test automation.</p>
+        </section>
+
+        <section class="leadership-statement">
+            <h2>Quality Engineering Leadership</h2>
+            <p>Designed and operated internal QA Center of Excellence practices by encoding standards, workflows, and escalation rules directly into automation frameworks, reducing onboarding time and automation drift.</p>
+        </section>
+
+        <section class="experience">
+            <h2>Experience</h2>
+
+            <div class="experience-item">
+                <h3>QA Lead | Helios Digital</h3>
+                <div class="experience-meta">Remote | May 2025 - Present</div>
+                <ul>
+                    <li>Built and operated an internal QA automation platform enforcing standardized test design, execution order, and validation gates</li>
+                    <li>Designed role-task-page architecture to encode quality standards directly into automation workflows, preventing invalid or low-quality tests from entering the suite</li>
+                    <li>Integrated AI-assisted workflows to accelerate test scaffolding, scenario discovery, and failure analysis while enforcing mandatory human review before execution</li>
+                    <li>Established automation function as founding QA hire at early-stage startup, building framework from zero while integrating Claude Code into daily workflows</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>Senior QA Automation Engineer | Nakupuna Consulting</h3>
+                <div class="experience-meta">Remote (Navy Contract) | Nov 2022 - May 2025</div>
+                <ul>
+                    <li>Scaled automation team from zero to four engineers within six months while operating under Navy procurement and security restrictions, establishing coding standards, peer review processes, and structured onboarding that maintained quality despite limited tool options</li>
+                    <li>Built framework architecture that developers adopted for their own unit testing, providing training and enablement that expanded framework impact beyond QA into development workflows</li>
+                    <li>Navigated Navy bureaucracy and technical restrictions to deliver functional automation infrastructure supporting critical ERP deployment across deployment, muster, leave, onboarding, and military pay workflows</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>QA Lead | HMSA (Hawaii Medical Service Association)</h3>
+                <div class="experience-meta">Honolulu, HI | May 2013 - Nov 2022</div>
+                <ul>
+                    <li>Led multiple projects in test automation and manual testing, developing test strategies, cases, and scenarios for complex healthcare systems</li>
+                    <li>Established testing standards for Healthcare Claims Processing, EDI, Membership, Billing, Enrollment, HL7-FHIR, and RESTful services across multiple development teams in Agile environment</li>
+                    <li>Developed comprehensive automation scripts for HL7-FHIR APIs using Postman for integration, functional, and UAT testing</li>
+                    <li>Conducted database testing on SQL and Oracle with SQL queries, providing pre- and post-deployment support</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>Senior Test Analyst | IBM</h3>
+                <div class="experience-meta">Honolulu, HI | July 2008 - May 2013</div>
+                <ul>
+                    <li>Managed 18-member team of onshore and offshore resources on Sprint/Nextel Pre-Paid account</li>
+                    <li>Defined UAT test approach and framework, developed test plans, managed test case execution, and tracked defects in defect management tools</li>
+                    <li>Oversaw UAT, black box (functional), and end-to-end testing for multiple releases</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="projects">
+            <h2>Projects</h2>
+
+            <div class="project-item">
+                <h3>Quality Automation Platform with AI-Guided Enforcement</h3>
+                <div class="tech-stack">Python, Selenium WebDriver, Pytest, Model Context Protocol (MCP), pytest-html</div>
+                <ul>
+                    <li>Designed an AI-guided quality enforcement layer that encodes test automation best practices as executable workflows, enforcing correctness, escalation, and human-in-the-loop decision points across Selenium-based automation</li>
+                    <li>Architected 4-layer test automation framework (Tests to Roles to Tasks to Pages to WebInterface) using pure composition over inheritance, enabling clean separation where each layer has a single responsibility</li>
+                    <li>Built MCP server with 6-tool pipeline enabling AI agents to generate framework-compliant test code from plain English user stories through bottom-up code generation (discover elements to generate POM to Task to Role to Test)</li>
+                    <li>Designed prompt-driven AI orchestration where the coding agent follows defined rules to control the tool chain, accumulate metadata context through each step, and decide on code reuse vs generation while tools remain stateless</li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <h3>AI-Powered Resume Generation System</h3>
+                <div class="tech-stack">Claude Code, Prompt Engineering, Markdown, HTML/CSS, GitHub Pages</div>
+                <ul>
+                    <li>Designed data-driven AI workflow where Claude Code analyzes job descriptions and generates optimized outputs from structured master data with tag-based filtering</li>
+                    <li>Architected master data structure with tags and metadata enabling intelligent content selection based on role requirements</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="skills">
+            <h2>Skills</h2>
+
+            <div class="skills-category">
+                <h4>Quality Engineering</h4>
+                <p>Test Strategy, QA Standards, Automation Governance, Process Enforcement, Team Onboarding, Quality Culture Development</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>Test Automation</h4>
+                <p>Selenium WebDriver, pytest, Cypress, Page Object Model, 4-Layer Architecture, Custom Framework Design</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>AI-Assisted Development</h4>
+                <p>Claude Code, Model Context Protocol (MCP), AI-Driven Testing Strategies, Prompt Engineering, Human-in-the-Loop Workflows</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>Technical Foundation</h4>
+                <p>Python, JavaScript, SQL, Git/GitHub, REST APIs, Postman, Azure DevOps</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>Domains</h4>
+                <p>Healthcare Systems (Claims, EDI, HL7-FHIR, Enrollment, Billing), Government/DoD ERP, Financial Technology</p>
+            </div>
+
+            <div class="skills-category">
+                <h4>Methodologies</h4>
+                <p>Agile (Scrum, Kanban), Test-Driven Development, Continuous Improvement</p>
+            </div>
+        </section>
+
+        <footer>
+            <p>Generated using <a href="https://github.com/solosza/resume-ai-pipeline" target="_blank">AI-Powered Resume Generation System</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            toggleButton.textContent = 'Light Mode';
+        }
+
+        toggleButton.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                toggleButton.textContent = 'Dark Mode';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                toggleButton.textContent = 'Light Mode';
+            }
+        });
+    </script>
+</body>
+</html>

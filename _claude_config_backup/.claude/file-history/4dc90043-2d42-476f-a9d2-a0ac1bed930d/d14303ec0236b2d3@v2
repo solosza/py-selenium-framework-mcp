@@ -1,0 +1,155 @@
+"""
+Chunker: Splits documents into smaller pieces for embedding.
+
+Framework analogy:
+    Like splitting a large Page Object into focused methods.
+    Each chunk is a self-contained unit that can be retrieved independently.
+
+Design Decision: DD-RAG-007
+    Fixed-size chunking with overlap.
+    Simple approach to learn fundamentals before semantic chunking.
+"""
+
+from dataclasses import dataclass, field
+from typing import Dict, Any, List
+from .document import Document
+
+
+@dataclass
+class Chunk:
+    """
+    A piece of a document, ready for embedding.
+
+    Attributes:
+        text: The chunk content
+        metadata: Inherited from parent document + chunk-specific info
+
+    Chunk-specific metadata:
+        - chunk_index: Position in the original document (0, 1, 2...)
+        - chunk_total: Total chunks from this document
+        - start_char: Character offset in original document
+        - end_char: End character offset
+    """
+    text: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def __len__(self) -> int:
+        """Return character count of chunk text."""
+        return len(self.text)
+
+    @property
+    def token_estimate(self) -> int:
+        """Rough token count (chars / 4)."""
+        return len(self.text) // 4
+
+    def __repr__(self) -> str:
+        """Short representation for debugging."""
+        source = self.metadata.get("source", "unknown")
+        idx = self.metadata.get("chunk_index", "?")
+        total = self.metadata.get("chunk_total", "?")
+        preview = self.text[:40].replace("\n", " ")
+        return f"Chunk({idx}/{total}, tokens~{self.token_estimate}, '{preview}...')"
+
+
+def chunk_document(
+    document: Document,
+    chunk_size: int = 2000,
+    overlap: int = 200
+) -> List[Chunk]:
+    """
+    Split a document into fixed-size chunks with overlap.
+
+    Args:
+        document: The document to chunk
+        chunk_size: Target size in characters (default 2000 ~ 500 tokens)
+        overlap: Characters to repeat between chunks (default 200 ~ 50 tokens)
+
+    Returns:
+        List of Chunk objects with inherited metadata
+
+    Why characters not tokens?
+        - Tokenization requires a specific model
+        - Characters are model-agnostic
+        - Rule of thumb: 1 token ~ 4 characters
+
+    Why overlap?
+        - Prevents cutting context at boundaries
+        - If a concept spans two chunks, overlap catches it
+    """
+    # Validate parameters upfront
+    if overlap >= chunk_size:
+        raise ValueError(f"Overlap ({overlap}) must be less than chunk_size ({chunk_size})")
+
+    text = document.text
+    chunks = []
+
+    # Handle empty or small documents
+    if not text or len(text) <= chunk_size:
+        chunk = Chunk(
+            text=text,
+            metadata={
+                **document.metadata,
+                "chunk_index": 0,
+                "chunk_total": 1,
+                "start_char": 0,
+                "end_char": len(text)
+            }
+        )
+        return [chunk]
+
+    # Calculate step size (how far to move for each chunk)
+    step = chunk_size - overlap
+
+    # Generate chunks
+    start = 0
+    while start < len(text):
+        end = min(start + chunk_size, len(text))
+        chunk_text = text[start:end]
+
+        chunk = Chunk(
+            text=chunk_text,
+            metadata={
+                **document.metadata,
+                "chunk_index": len(chunks),
+                "start_char": start,
+                "end_char": end
+            }
+        )
+        chunks.append(chunk)
+
+        # Move to next chunk position
+        start += step
+
+        # Avoid creating tiny final chunks
+        if len(text) - start < overlap and start < len(text):
+            # Extend the last chunk instead
+            break
+
+    # Update chunk_total now that we know it
+    for chunk in chunks:
+        chunk.metadata["chunk_total"] = len(chunks)
+
+    return chunks
+
+
+def chunk_documents(
+    documents: List[Document],
+    chunk_size: int = 2000,
+    overlap: int = 200
+) -> List[Chunk]:
+    """
+    Chunk multiple documents.
+
+    Args:
+        documents: List of documents to chunk
+        chunk_size: Target size in characters
+        overlap: Characters to repeat between chunks
+
+    Returns:
+        Flat list of all chunks from all documents
+    """
+    all_chunks = []
+    for doc in documents:
+        chunks = chunk_document(doc, chunk_size, overlap)
+        all_chunks.extend(chunks)
+    return all_chunks

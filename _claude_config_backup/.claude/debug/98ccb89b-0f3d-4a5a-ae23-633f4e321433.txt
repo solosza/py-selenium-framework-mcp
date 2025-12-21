@@ -1,0 +1,523 @@
+2025-11-22T01:00:18.057Z [DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_python_projects\embutido-king\.claude\settings.local.json...
+2025-11-22T01:00:18.112Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2025-11-22T01:00:18.138Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2025-11-22T01:00:18.139Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2025-11-22T01:00:18.139Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2025-11-22T01:00:18.139Z [DEBUG] [LSP SERVER MANAGER] initialize() called
+2025-11-22T01:00:18.140Z [DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+2025-11-22T01:00:18.155Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2025-11-22T01:00:18.164Z [DEBUG] Applying permission update: Adding 5 allow rule(s) to destination 'localSettings': ["Bash(git init:*)","Bash(git add:*)","Bash(git commit:*)","Bash(git remote add:*)","Bash(gh --version:*)"]
+2025-11-22T01:00:18.171Z [DEBUG] Total LSP servers loaded: 0
+2025-11-22T01:00:18.229Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2025-11-22T01:00:18.230Z [DEBUG] LSP manager initialized with 0 servers
+2025-11-22T01:00:18.238Z [DEBUG] LSP server manager initialized successfully
+2025-11-22T01:00:18.239Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2025-11-22T01:00:18.249Z [DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_python_projects\embutido-king\.claude\skills
+2025-11-22T01:00:18.250Z [DEBUG] >>>>> getPluginSkills CALLED <<<<<
+2025-11-22T01:00:18.250Z [DEBUG] Passes: Cache stale, returning cached data and refreshing in background
+2025-11-22T01:00:18.443Z [DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+2025-11-22T01:00:18.443Z [DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+2025-11-22T01:00:18.444Z [DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+2025-11-22T01:00:18.444Z [DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+2025-11-22T01:00:18.456Z [DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1763773218444-so3jt1.sh
+2025-11-22T01:00:18.456Z [DEBUG] Shell binary exists: true
+2025-11-22T01:00:18.457Z [DEBUG] Execution timeout: 10000ms
+2025-11-22T01:00:18.462Z [DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\98ccb89b-0f3d-4a5a-ae23-633f4e321433-agent-98ccb89b-0f3d-4a5a-ae23-633f4e321433.json.tmp.9336.1763773218462
+2025-11-22T01:00:18.469Z [DEBUG] Temp file written successfully, size: 2 bytes
+2025-11-22T01:00:18.469Z [DEBUG] Renaming C:\Users\solos\.claude\todos\98ccb89b-0f3d-4a5a-ae23-633f4e321433-agent-98ccb89b-0f3d-4a5a-ae23-633f4e321433.json.tmp.9336.1763773218462 to C:\Users\solos\.claude\todos\98ccb89b-0f3d-4a5a-ae23-633f4e321433-agent-98ccb89b-0f3d-4a5a-ae23-633f4e321433.json
+2025-11-22T01:00:18.470Z [DEBUG] File C:\Users\solos\.claude\todos\98ccb89b-0f3d-4a5a-ae23-633f4e321433-agent-98ccb89b-0f3d-4a5a-ae23-633f4e321433.json written atomically
+2025-11-22T01:00:18.475Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2025-11-22T01:00:18.475Z [DEBUG] Total plugin skills loaded: 0
+2025-11-22T01:00:18.475Z [DEBUG] Total plugin commands loaded: 0
+2025-11-22T01:00:18.476Z [DEBUG] Registered 0 hooks from 0 plugins
+2025-11-22T01:00:18.593Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+2025-11-22T01:00:18.597Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills
+2025-11-22T01:00:18.597Z [DEBUG] Total plugin agents loaded: 0
+2025-11-22T01:00:18.697Z [DEBUG] Git remote URL: https://github.com/solosza/embutido-king.git
+2025-11-22T01:00:18.698Z [DEBUG] Parsed repository: solosza/embutido-king from https://github.com/solosza/embutido-king.git
+2025-11-22T01:00:18.698Z [DEBUG] Parsed repository: solosza/embutido-king from URL: https://github.com/solosza/embutido-king.git
+2025-11-22T01:00:18.703Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773218703
+2025-11-22T01:00:18.704Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:18.709Z [DEBUG] Temp file written successfully, size: 46201 bytes
+2025-11-22T01:00:18.709Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:18.709Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773218703 to C:\Users\solos\.claude.json
+2025-11-22T01:00:18.710Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:18.711Z [DEBUG] Added D:\my_python_projects\embutido-king to tracked paths for repo solosza/embutido-king
+2025-11-22T01:00:19.236Z [ERROR] AxiosError: AxiosError: Request failed with status code 401
+    at zj (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:24:1137)
+    at IncomingMessage.<anonymous> (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:29:9828)
+    at IncomingMessage.emit (node:events:531:35)
+    at IncomingMessage.emit (node:domain:489:12)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at _FA.request (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:31:2130)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async XR2 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2081:5282)
+2025-11-22T01:00:19.239Z [DEBUG] Failed to fetch Grove notice config: AxiosError: Request failed with status code 401
+2025-11-22T01:00:19.242Z [DEBUG] Passes: Cache stale, returning cached data and refreshing in background
+2025-11-22T01:00:19.242Z [DEBUG] Passes: Reusing in-flight eligibility fetch
+2025-11-22T01:00:19.261Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773219261
+2025-11-22T01:00:19.261Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:19.265Z [DEBUG] Temp file written successfully, size: 46201 bytes
+2025-11-22T01:00:19.265Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:19.266Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773219261 to C:\Users\solos\.claude.json
+2025-11-22T01:00:19.266Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:19.308Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2025-11-22T01:00:19.308Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:00:19.308Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2025-11-22T01:00:19.520Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773219520
+2025-11-22T01:00:19.521Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:19.524Z [DEBUG] Temp file written successfully, size: 46096 bytes
+2025-11-22T01:00:19.525Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:19.525Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773219520 to C:\Users\solos\.claude.json
+2025-11-22T01:00:19.525Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:19.540Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773219540
+2025-11-22T01:00:19.540Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:19.544Z [DEBUG] Temp file written successfully, size: 46096 bytes
+2025-11-22T01:00:19.544Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:19.545Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773219540 to C:\Users\solos\.claude.json
+2025-11-22T01:00:19.546Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:19.561Z [DEBUG] performStartupChecks called
+2025-11-22T01:00:19.561Z [DEBUG] Starting background plugin installations
+2025-11-22T01:00:19.562Z [DEBUG] performBackgroundPluginInstallations called
+2025-11-22T01:00:19.606Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-22T01:00:19.622Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2025-11-22T01:00:19.634Z [DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+2025-11-22T01:00:23.258Z [DEBUG] Failed to fetch and cache passes eligibility
+2025-11-22T01:00:23.259Z [ERROR] AxiosError: AxiosError: Request failed with status code 401
+    at zj (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:24:1137)
+    at IncomingMessage.<anonymous> (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:29:9828)
+    at IncomingMessage.emit (node:events:531:35)
+    at IncomingMessage.emit (node:domain:489:12)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at _FA.request (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:31:2130)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async QM3 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3375:2192)
+    at async file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:3375:2742
+2025-11-22T01:00:23.291Z [DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+2025-11-22T01:00:23.327Z [DEBUG] Getting matching hook commands for SubagentStart with query: Explore
+2025-11-22T01:00:23.327Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:00:23.327Z [DEBUG] Matched 0 unique hooks for query "Explore" (0 before deduplication)
+2025-11-22T01:00:23.332Z [DEBUG] Getting matching hook commands for SubagentStart with query: Plan
+2025-11-22T01:00:23.332Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:00:23.332Z [DEBUG] Matched 0 unique hooks for query "Plan" (0 before deduplication)
+2025-11-22T01:00:23.334Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2025-11-22T01:00:23.355Z [DEBUG] Skills and commands included in Skill tool:
+2025-11-22T01:00:23.355Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-11-22T01:00:23.357Z [DEBUG] Shell snapshot created successfully (342 bytes)
+2025-11-22T01:00:23.374Z [DEBUG] Summarizing all 146 messages (~23758 tokens)
+2025-11-22T01:00:23.388Z [DEBUG] MCP server "ide": Successfully connected to ws-ide server in 117ms
+2025-11-22T01:00:23.389Z [DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.47"}}
+2025-11-22T01:00:23.412Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773223412
+2025-11-22T01:00:23.412Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:23.418Z [DEBUG] Temp file written successfully, size: 46096 bytes
+2025-11-22T01:00:23.418Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:23.418Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773223412 to C:\Users\solos\.claude.json
+2025-11-22T01:00:23.419Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:23.433Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773223433
+2025-11-22T01:00:23.433Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:23.436Z [DEBUG] Temp file written successfully, size: 46096 bytes
+2025-11-22T01:00:23.437Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:23.437Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773223433 to C:\Users\solos\.claude.json
+2025-11-22T01:00:23.438Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:23.497Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773223497
+2025-11-22T01:00:23.498Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:23.502Z [DEBUG] Temp file written successfully, size: 46201 bytes
+2025-11-22T01:00:23.502Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:23.502Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773223497 to C:\Users\solos\.claude.json
+2025-11-22T01:00:23.503Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:23.912Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773223912
+2025-11-22T01:00:23.912Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:23.916Z [DEBUG] Temp file written successfully, size: 46201 bytes
+2025-11-22T01:00:23.917Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:23.917Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773223912 to C:\Users\solos\.claude.json
+2025-11-22T01:00:23.918Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:23.972Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773223972
+2025-11-22T01:00:23.973Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:23.977Z [DEBUG] Temp file written successfully, size: 46551 bytes
+2025-11-22T01:00:23.977Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:23.978Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773223972 to C:\Users\solos\.claude.json
+2025-11-22T01:00:23.978Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:23.991Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773223991
+2025-11-22T01:00:23.991Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:23.995Z [DEBUG] Temp file written successfully, size: 46551 bytes
+2025-11-22T01:00:23.995Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:23.996Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773223991 to C:\Users\solos\.claude.json
+2025-11-22T01:00:23.997Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:24.924Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773224924
+2025-11-22T01:00:24.924Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:24.929Z [DEBUG] Temp file written successfully, size: 46551 bytes
+2025-11-22T01:00:24.930Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:24.930Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773224924 to C:\Users\solos\.claude.json
+2025-11-22T01:00:24.930Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:25.737Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:00:26.421Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:00:26.835Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:00:28.733Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-11-22T01:00:28.733Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:00:28.734Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:00:35.958Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-11-22T01:00:35.958Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:00:35.959Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:00:41.821Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T01:00:41.821Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T01:00:41.832Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T01:00:41.832Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T01:00:41.995Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.9336.1763773241995
+2025-11-22T01:00:41.995Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T01:00:41.999Z [DEBUG] Temp file written successfully, size: 46551 bytes
+2025-11-22T01:00:41.999Z [DEBUG] Applied original permissions to temp file
+2025-11-22T01:00:41.999Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.9336.1763773241995 to C:\Users\solos\.claude.json
+2025-11-22T01:00:42.000Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-11-22T01:00:42.037Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-22T01:00:42.037Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:00:42.038Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:00:42.047Z [DEBUG] FileHistory: Added snapshot for 077c10ec-e88b-4f6a-bcb9-0bec901e1b06, tracking 0 files
+2025-11-22T01:00:42.080Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-22T01:00:42.113Z [DEBUG] Total plugin output styles loaded: 0
+2025-11-22T01:00:42.137Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 56ms
+2025-11-22T01:00:44.234Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:00:56.379Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2025-11-22T01:00:56.429Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-22T01:00:56.429Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:00:56.429Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:02:50.577Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T01:02:50.578Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T01:02:50.578Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T01:02:50.587Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T01:02:50.588Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T01:02:50.649Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 72ms
+2025-11-22T01:02:50.667Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-22T01:02:50.667Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:02:50.667Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:02:50.668Z [DEBUG] FileHistory: Making snapshot for message 9b3dac61-1d08-4da7-8b45-0b461870c69b
+2025-11-22T01:02:50.669Z [DEBUG] FileHistory: Added snapshot for 9b3dac61-1d08-4da7-8b45-0b461870c69b, tracking 0 files
+2025-11-22T01:02:50.696Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-22T01:02:50.784Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 88ms
+2025-11-22T01:02:51.591Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:02:52.231Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:03:05.483Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2025-11-22T01:03:05.485Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2025-11-22T01:03:05.528Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-22T01:03:05.529Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:03:05.529Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:04:05.563Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-22T01:04:05.563Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:04:05.564Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-22T01:10:41.865Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T01:10:41.867Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T01:10:41.867Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T01:10:41.876Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T01:10:41.876Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T01:10:41.940Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 75ms
+2025-11-22T01:10:41.955Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-22T01:10:41.955Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:10:41.955Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:10:41.956Z [DEBUG] FileHistory: Making snapshot for message a97a65d4-e3cd-427e-a99f-241f4f2bab71
+2025-11-22T01:10:41.957Z [DEBUG] FileHistory: Added snapshot for a97a65d4-e3cd-427e-a99f-241f4f2bab71, tracking 0 files
+2025-11-22T01:10:41.984Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-22T01:10:42.057Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 73ms
+2025-11-22T01:10:42.937Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:10:44.084Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:10:48.573Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2025-11-22T01:10:48.610Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-22T01:10:48.610Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:10:48.610Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:11:48.641Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-22T01:11:48.641Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:11:48.641Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-22T01:36:06.506Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T01:36:06.520Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T01:36:06.520Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T01:36:06.529Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T01:36:06.529Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T01:36:06.607Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 101ms
+2025-11-22T01:36:06.623Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-22T01:36:06.623Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:36:06.623Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T01:36:06.624Z [DEBUG] FileHistory: Making snapshot for message 4c1522a1-bb08-440f-80f6-4da577259aa9
+2025-11-22T01:36:06.625Z [DEBUG] FileHistory: Added snapshot for 4c1522a1-bb08-440f-80f6-4da577259aa9, tracking 0 files
+2025-11-22T01:36:06.651Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-22T01:36:06.751Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 99ms
+2025-11-22T01:36:07.439Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:36:09.084Z [DEBUG] Stream started - received first chunk
+2025-11-22T01:36:18.732Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-22T01:36:18.732Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T01:36:18.732Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:14:17.830Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:14:17.832Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T08:14:17.833Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T08:14:17.841Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T08:14:17.842Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T08:14:17.911Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 81ms
+2025-11-22T08:14:17.941Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-22T08:14:17.942Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:14:17.942Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:14:17.943Z [DEBUG] FileHistory: Making snapshot for message b2f96fbb-576a-4da3-8292-cfbbd103b909
+2025-11-22T08:14:17.944Z [DEBUG] FileHistory: Added snapshot for b2f96fbb-576a-4da3-8292-cfbbd103b909, tracking 0 files
+2025-11-22T08:14:17.971Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-22T08:14:18.056Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 85ms
+2025-11-22T08:14:18.805Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:14:20.145Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:14:33.598Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-22T08:14:33.598Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:14:33.598Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:15:33.622Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-22T08:15:33.622Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:15:33.622Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-22T08:18:02.825Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:18:02.826Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T08:18:02.828Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T08:18:02.836Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T08:18:02.837Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T08:18:02.900Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 75ms
+2025-11-22T08:18:02.916Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-22T08:18:02.917Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:18:02.917Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:18:02.918Z [DEBUG] FileHistory: Making snapshot for message ab610fed-0796-45a7-ad30-284a99ceee44
+2025-11-22T08:18:02.919Z [DEBUG] FileHistory: Added snapshot for ab610fed-0796-45a7-ad30-284a99ceee44, tracking 0 files
+2025-11-22T08:18:02.954Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-22T08:18:03.021Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 67ms
+2025-11-22T08:18:04.099Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:18:05.048Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:18:17.137Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-22T08:18:17.137Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:18:17.137Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:19:17.171Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-22T08:19:17.171Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:19:17.171Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-22T08:19:56.897Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:19:56.898Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T08:19:56.899Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T08:19:56.909Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T08:19:56.909Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T08:19:56.971Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 74ms
+2025-11-22T08:19:56.988Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-22T08:19:56.989Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:19:56.989Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:19:56.990Z [DEBUG] FileHistory: Making snapshot for message ef6cef4c-249b-4a76-856d-0f31c7df4eb9
+2025-11-22T08:19:56.990Z [DEBUG] FileHistory: Added snapshot for ef6cef4c-249b-4a76-856d-0f31c7df4eb9, tracking 0 files
+2025-11-22T08:19:57.019Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-22T08:19:57.118Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 99ms
+2025-11-22T08:19:57.853Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:19:58.980Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:20:06.089Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-22T08:20:06.089Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:20:06.090Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:21:06.123Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-22T08:21:06.123Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:21:06.124Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-22T08:28:18.189Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:28:18.190Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T08:28:18.190Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T08:28:18.199Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T08:28:18.199Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T08:28:18.264Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 75ms
+2025-11-22T08:28:18.283Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2025-11-22T08:28:18.283Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:28:18.283Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:28:18.291Z [DEBUG] FileHistory: Making snapshot for message 5625a8cb-c4ea-4c6d-93b8-7b1e39995bcf
+2025-11-22T08:28:18.291Z [DEBUG] FileHistory: Added snapshot for 5625a8cb-c4ea-4c6d-93b8-7b1e39995bcf, tracking 0 files
+2025-11-22T08:28:18.330Z [DEBUG] MCP server "ide": Calling MCP tool: closeAllDiffTabs
+2025-11-22T08:28:18.398Z [DEBUG] MCP server "ide": Tool 'closeAllDiffTabs' completed successfully in 68ms
+2025-11-22T08:28:19.058Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:28:20.362Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:28:24.153Z [DEBUG] executePreToolHooks called for tool: Read
+2025-11-22T08:28:24.159Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2025-11-22T08:28:24.159Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:28:24.160Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-11-22T08:28:25.100Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2025-11-22T08:28:25.100Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:28:25.100Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2025-11-22T08:28:25.170Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:28:25.171Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T08:28:25.171Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T08:28:25.182Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T08:28:25.182Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T08:28:25.293Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 123ms
+2025-11-22T08:28:28.428Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:28:39.105Z [DEBUG] executePreToolHooks called for tool: Edit
+2025-11-22T08:28:39.114Z [DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+2025-11-22T08:28:39.115Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:28:39.115Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:28:39.875Z [DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2025-11-22T08:28:40.008Z [DEBUG] MCP server "ide": Calling MCP tool: openDiff
+2025-11-22T08:28:40.149Z [DEBUG] executePermissionRequestHooks called for tool: Edit
+2025-11-22T08:28:40.277Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Edit
+2025-11-22T08:28:40.277Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:28:40.278Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:28:46.014Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2025-11-22T08:28:46.014Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:28:46.014Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2025-11-22T08:29:10.025Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (30s elapsed)
+2025-11-22T08:29:40.036Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (60s elapsed)
+2025-11-22T08:30:10.038Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (90s elapsed)
+2025-11-22T08:30:40.053Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (120s elapsed)
+2025-11-22T08:31:10.059Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (150s elapsed)
+2025-11-22T08:31:40.068Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (180s elapsed)
+2025-11-22T08:32:10.082Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (210s elapsed)
+2025-11-22T08:32:40.084Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (240s elapsed)
+2025-11-22T08:33:10.087Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (270s elapsed)
+2025-11-22T08:33:40.102Z [DEBUG] MCP server "ide": Tool 'openDiff' still running (300s elapsed)
+2025-11-22T08:33:50.337Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-22T08:33:50.369Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-22T08:33:50.374Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:33:50.429Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 92ms
+2025-11-22T08:33:50.430Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 56ms
+2025-11-22T08:33:50.441Z [DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 5m 10s
+2025-11-22T08:33:50.453Z [ERROR] a52: a52: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\CLAUDE.md, got file://d:\my_python_projects\embutido-king\claude.md/)
+    at uT.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1657:2052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2106:624)
+    at async pb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2204:26123)
+2025-11-22T08:33:50.453Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-22T08:33:50.470Z [DEBUG] FileHistory: Tracked file modification for D:\my_python_projects\embutido-king\CLAUDE.md
+2025-11-22T08:33:50.478Z [DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\CLAUDE.md.tmp.9336.1763800430478
+2025-11-22T08:33:50.478Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T08:33:50.549Z [DEBUG] Temp file written successfully, size: 6610 bytes
+2025-11-22T08:33:50.549Z [DEBUG] Applied original permissions to temp file
+2025-11-22T08:33:50.549Z [DEBUG] Renaming D:\my_python_projects\embutido-king\CLAUDE.md.tmp.9336.1763800430478 to D:\my_python_projects\embutido-king\CLAUDE.md
+2025-11-22T08:33:50.553Z [DEBUG] File D:\my_python_projects\embutido-king\CLAUDE.md written atomically
+2025-11-22T08:33:50.569Z [DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+2025-11-22T08:33:50.569Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:33:50.569Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:33:50.773Z [DEBUG] executePreToolHooks called for tool: Edit
+2025-11-22T08:33:50.781Z [DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+2025-11-22T08:33:50.782Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:33:50.782Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:33:51.424Z [DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2025-11-22T08:33:51.525Z [DEBUG] MCP server "ide": Calling MCP tool: openDiff
+2025-11-22T08:33:51.629Z [DEBUG] executePermissionRequestHooks called for tool: Edit
+2025-11-22T08:33:51.726Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Edit
+2025-11-22T08:33:51.726Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:33:51.726Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:33:51.850Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 1s
+2025-11-22T08:34:03.546Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2025-11-22T08:34:03.546Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:03.547Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2025-11-22T08:34:07.936Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-22T08:34:08.048Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-22T08:34:08.054Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:34:08.095Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 159ms
+2025-11-22T08:34:08.096Z [DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 16s
+2025-11-22T08:34:08.106Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 52ms
+2025-11-22T08:34:08.117Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-22T08:34:08.128Z [ERROR] a52: a52: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\CLAUDE.md, got file://d:\my_python_projects\embutido-king\claude.md/)
+    at uT.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1657:2052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2106:624)
+    at async pb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2204:26123)
+2025-11-22T08:34:08.137Z [DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\CLAUDE.md.tmp.9336.1763800448137
+2025-11-22T08:34:08.138Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T08:34:08.189Z [DEBUG] Temp file written successfully, size: 6666 bytes
+2025-11-22T08:34:08.189Z [DEBUG] Applied original permissions to temp file
+2025-11-22T08:34:08.189Z [DEBUG] Renaming D:\my_python_projects\embutido-king\CLAUDE.md.tmp.9336.1763800448137 to D:\my_python_projects\embutido-king\CLAUDE.md
+2025-11-22T08:34:08.190Z [DEBUG] File D:\my_python_projects\embutido-king\CLAUDE.md written atomically
+2025-11-22T08:34:08.207Z [DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+2025-11-22T08:34:08.208Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:08.208Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:34:08.535Z [DEBUG] executePreToolHooks called for tool: Edit
+2025-11-22T08:34:08.546Z [DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+2025-11-22T08:34:08.546Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:08.547Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:34:09.211Z [DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2025-11-22T08:34:09.328Z [DEBUG] MCP server "ide": Calling MCP tool: openDiff
+2025-11-22T08:34:09.435Z [DEBUG] executePermissionRequestHooks called for tool: Edit
+2025-11-22T08:34:09.540Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Edit
+2025-11-22T08:34:09.540Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:09.540Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:34:09.711Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 1s
+2025-11-22T08:34:18.653Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-22T08:34:18.998Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-22T08:34:19.009Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:34:19.096Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 443ms
+2025-11-22T08:34:19.097Z [DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 9s
+2025-11-22T08:34:19.107Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 98ms
+2025-11-22T08:34:19.119Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-22T08:34:19.131Z [ERROR] a52: a52: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\CLAUDE.md, got file://d:\my_python_projects\embutido-king\claude.md/)
+    at uT.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1657:2052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2106:624)
+    at async pb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2204:26123)
+2025-11-22T08:34:19.145Z [DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\CLAUDE.md.tmp.9336.1763800459145
+2025-11-22T08:34:19.145Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T08:34:19.180Z [DEBUG] Temp file written successfully, size: 6661 bytes
+2025-11-22T08:34:19.180Z [DEBUG] Applied original permissions to temp file
+2025-11-22T08:34:19.181Z [DEBUG] Renaming D:\my_python_projects\embutido-king\CLAUDE.md.tmp.9336.1763800459145 to D:\my_python_projects\embutido-king\CLAUDE.md
+2025-11-22T08:34:19.181Z [DEBUG] File D:\my_python_projects\embutido-king\CLAUDE.md written atomically
+2025-11-22T08:34:19.214Z [DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+2025-11-22T08:34:19.215Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:19.215Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:34:19.850Z [DEBUG] executePreToolHooks called for tool: Edit
+2025-11-22T08:34:19.863Z [DEBUG] Getting matching hook commands for PreToolUse with query: Edit
+2025-11-22T08:34:19.863Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:19.863Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:34:20.898Z [DEBUG] Permission suggestions for Edit: [
+  {
+    "type": "setMode",
+    "mode": "acceptEdits",
+    "destination": "session"
+  }
+]
+2025-11-22T08:34:21.055Z [DEBUG] MCP server "ide": Calling MCP tool: openDiff
+2025-11-22T08:34:21.178Z [DEBUG] executePermissionRequestHooks called for tool: Edit
+2025-11-22T08:34:21.291Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Edit
+2025-11-22T08:34:21.291Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:21.291Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:34:21.571Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 2s
+2025-11-22T08:34:23.753Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-22T08:34:24.037Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-11-22T08:34:24.046Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:34:24.114Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 361ms
+2025-11-22T08:34:24.115Z [DEBUG] MCP server "ide": Tool 'openDiff' completed successfully in 3s
+2025-11-22T08:34:24.126Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 80ms
+2025-11-22T08:34:24.138Z [DEBUG] MCP server "ide": Calling MCP tool: close_tab
+2025-11-22T08:34:24.150Z [ERROR] a52: a52: Diagnostics file path mismatch: expected D:\my_python_projects\embutido-king\CLAUDE.md, got file://d:\my_python_projects\embutido-king\claude.md/)
+    at uT.beforeFileEdited (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:1657:2052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.call (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2106:624)
+    at async pb5 (file:///C:/Users/solos/AppData/Roaming/npm/node_modules/@anthropic-ai/claude-code/cli.js:2204:26123)
+2025-11-22T08:34:24.162Z [DEBUG] Writing to temp file: D:\my_python_projects\embutido-king\CLAUDE.md.tmp.9336.1763800464162
+2025-11-22T08:34:24.163Z [DEBUG] Preserving file permissions: 100666
+2025-11-22T08:34:24.204Z [DEBUG] Temp file written successfully, size: 6660 bytes
+2025-11-22T08:34:24.205Z [DEBUG] Applied original permissions to temp file
+2025-11-22T08:34:24.205Z [DEBUG] Renaming D:\my_python_projects\embutido-king\CLAUDE.md.tmp.9336.1763800464162 to D:\my_python_projects\embutido-king\CLAUDE.md
+2025-11-22T08:34:24.206Z [DEBUG] File D:\my_python_projects\embutido-king\CLAUDE.md written atomically
+2025-11-22T08:34:24.235Z [DEBUG] Getting matching hook commands for PostToolUse with query: Edit
+2025-11-22T08:34:24.236Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:24.236Z [DEBUG] Matched 0 unique hooks for query "Edit" (0 before deduplication)
+2025-11-22T08:34:24.706Z [DEBUG] MCP server "ide": Calling MCP tool: getDiagnostics
+2025-11-22T08:34:24.707Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2025-11-22T08:34:24.707Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2025-11-22T08:34:24.717Z [DEBUG] Hooks: Found 0 total hooks in registry
+2025-11-22T08:34:24.717Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2025-11-22T08:34:24.794Z [DEBUG] MCP server "ide": Tool 'close_tab' completed successfully in 656ms
+2025-11-22T08:34:24.795Z [DEBUG] MCP server "ide": Tool 'getDiagnostics' completed successfully in 89ms
+2025-11-22T08:34:27.830Z [DEBUG] Stream started - received first chunk
+2025-11-22T08:34:33.808Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2025-11-22T08:34:33.808Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:34:33.809Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-11-22T08:35:33.845Z [DEBUG] Getting matching hook commands for Notification with query: idle_prompt
+2025-11-22T08:35:33.846Z [DEBUG] Found 0 hook matchers in settings
+2025-11-22T08:35:33.846Z [DEBUG] Matched 0 unique hooks for query "idle_prompt" (0 before deduplication)
+2025-11-22T11:34:29.207Z [DEBUG] npm view failed with code 1
+2025-11-22T11:34:29.208Z [DEBUG] npm stderr: (empty)

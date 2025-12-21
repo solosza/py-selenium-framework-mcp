@@ -1,0 +1,515 @@
+# RAG System Test Plan
+
+**Version:** 1.0
+**Status:** Living Document
+**Last Updated:** 2024-12-13
+
+---
+
+## 1. Overview
+
+### 1.1 Project Summary
+Training Assistant RAG System - A retrieval-augmented generation system built for learning purposes. Each component is built from scratch to understand fundamentals before using frameworks.
+
+### 1.2 Test Objectives
+- Verify each RAG component functions correctly in isolation
+- Validate component integrations work together
+- Ensure retrieval quality meets thresholds
+- Learn testing practices alongside RAG concepts
+
+### 1.3 Document History
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0 | 2024-12-13 | AI/User | Initial version with Loading + Chunking |
+| 1.1 | 2024-12-14 | AI/User | Added Embedding component (30 tests) |
+
+---
+
+## 2. Scope
+
+### 2.1 In Scope
+
+| Component | Description | Priority |
+|-----------|-------------|----------|
+| Document Loading | Load .py, .md, .txt files with metadata | P0 |
+| Chunking | Split documents into embeddable pieces | P0 |
+| Embedding | Convert text to vectors | P0 |
+| Vector Store | Store and index embeddings | P0 |
+| Search | Retrieve relevant chunks | P0 |
+| Prompt Building | Construct prompts with context | P1 |
+| Generation | LLM response generation | P1 |
+| Evaluation | Measure retrieval/generation quality | P1 |
+
+### 2.2 Out of Scope
+- Production deployment
+- Multi-user support
+- Authentication/authorization
+- Real-time streaming (for now)
+
+### 2.3 Assumptions
+- Local development environment
+- Python 3.11+ available
+- OpenAI API key for embedding/generation (later phases)
+
+### 2.4 Dependencies
+- pytest for test execution
+- Sample corpus (project files)
+
+---
+
+## 3. Test Strategy
+
+### 3.1 RAG Test Pyramid
+
+```
+┌─────────────────────────────────────────────────────┐
+│               RAG COMPONENT TEST PYRAMID            │
+├─────────────────────────────────────────────────────┤
+│  1. DATA STRUCTURE    - Does the class work?        │
+│  2. CORE LOGIC        - Does the algorithm work?    │
+│  3. BATCH OPERATIONS  - Does it scale to N inputs?  │
+│  4. EDGE CASES        - Does it handle weird input? │
+│  5. ERROR HANDLING    - Does it fail gracefully?    │
+│  6. INTEGRATION       - Does it connect to next?    │
+└─────────────────────────────────────────────────────┘
+```
+
+### 3.2 Test Levels
+
+| Level | Scope | Owner | Tools |
+|-------|-------|-------|-------|
+| Unit | Individual functions | Learner | pytest |
+| Integration | Component interactions | Learner | pytest |
+| System | Full RAG pipeline | Learner | pytest + manual |
+
+### 3.3 Test Categories
+
+| Category | Purpose | Example |
+|----------|---------|---------|
+| Happy Path | Normal expected behavior | Valid doc → correct chunks |
+| Negative | Invalid input, error conditions | overlap >= chunk_size → ValueError |
+| Edge Cases | Unusual but valid inputs | Empty doc, unicode, special chars |
+| Boundary | At limits, exact boundaries | Exact chunk_size, single char |
+| Parametric | Multiple parameter combinations | Size × overlap matrix |
+
+### 3.4 Approach by Component
+
+| Component | Test Approach | Coverage Target |
+|-----------|---------------|-----------------|
+| Loading | Unit + Integration | 90% |
+| Chunking | Unit + Parametric | 90% |
+| Embedding | Unit + Integration | 85% |
+| Vector Store | Unit + Integration | 85% |
+| Search | Unit + Integration + Quality | 85% |
+| Prompt | Unit | 80% |
+| Generation | Integration + Quality | 80% |
+| Evaluation | Unit + Integration | 85% |
+
+---
+
+## 4. Test Environment
+
+### 4.1 Hardware Requirements
+- Standard development machine
+- No special requirements for learning phase
+
+### 4.2 Software Requirements
+
+| Software | Version | Purpose |
+|----------|---------|---------|
+| Python | 3.11+ | Runtime |
+| pytest | 7.x | Test runner |
+| pytest-html | Latest | HTML reports |
+
+### 4.3 Test Data
+- Source: Project files (framework/, docs/, etc.)
+- Corpus: 30 docs, ~258K chars, ~64K tokens
+- No sensitive data in learning corpus
+
+### 4.4 Environment Setup
+```bash
+cd training-assistant
+pip install pytest pytest-html
+pytest --collect-only  # Verify tests discovered
+```
+
+---
+
+## 5. Entry/Exit Criteria
+
+### 5.1 Entry Criteria (Start Testing When)
+- [ ] Component code complete
+- [ ] Code runs without syntax errors
+- [ ] Test file created
+
+### 5.2 Exit Criteria (Stop Testing When)
+- [ ] All test categories covered (happy, negative, edge)
+- [ ] All tests passing
+- [ ] Coverage >= 85%
+- [ ] Lessons completed for component
+
+### 5.3 Suspension Criteria (Pause Testing If)
+- Blocker defect requires design change
+- Concept needs clarification before proceeding
+
+---
+
+## 6. Test Schedule
+
+### 6.1 Milestones
+
+| Milestone | Status | Criteria |
+|-----------|--------|----------|
+| Loading complete | Done | 15 tests passing |
+| Chunking complete | In Progress | 28 tests, lessons 2-3 remaining |
+| Embedding complete | Not Started | Tests + lessons |
+| Vector Store complete | Not Started | Tests + lessons |
+| Search complete | Not Started | Tests + lessons |
+| Full pipeline | Not Started | E2E test passing |
+
+### 6.2 Test Execution
+
+| Trigger | Tests | Command |
+|---------|-------|---------|
+| Component complete | Component tests | `pytest rag/ingestion/tests/test_[component].py -v` |
+| Lesson complete | Related tests | Same as above |
+| Integration | Multiple components | `pytest rag/ -v` |
+
+---
+
+## 7. Resources
+
+### 7.1 Team
+
+| Role | Name | Responsibilities |
+|------|------|------------------|
+| Learner | User | Write tests, execute, analyze |
+| Guide | AI | Teach concepts, review, assist |
+
+### 7.2 Tools
+
+| Tool | Purpose |
+|------|---------|
+| pytest | Test execution |
+| pytest-html | HTML reports |
+| VS Code | IDE |
+
+---
+
+## 8. Risk Analysis
+
+### 8.1 Risks
+
+| ID | Risk | Probability | Impact | Mitigation |
+|----|------|-------------|--------|------------|
+| R1 | Concept confusion blocks progress | Medium | Medium | AI explains, user asks questions |
+| R2 | Test doesn't catch real bug | Low | High | Review test categories, add cases |
+| R3 | API costs for embedding/generation | Medium | Low | Use small test corpus, cache results |
+
+---
+
+## 9. Test Matrix
+
+### 9.1 Component Status
+
+| Component | Status | Unit | Integration | Coverage |
+|-----------|--------|------|-------------|----------|
+| Loading | Done | 15 | 2 | 100% |
+| Chunking | Done | 28 | 1 | 100% |
+| Embedding | Not Started | - | - | - |
+| Vector Store | Not Started | - | - | - |
+| Search | Not Started | - | - | - |
+| Prompt | Not Started | - | - | - |
+| Generation | Not Started | - | - | - |
+| Evaluation | Not Started | - | - | - |
+
+### 9.2 Test Categories per Component
+
+| Component | Happy Path | Negative | Edge | Boundary | Parametric |
+|-----------|------------|----------|------|----------|------------|
+| Loading | 5 | 4 | 4 | 2 | - |
+| Chunking | 6 | 4 | 8 | 2 | 8 |
+| Embedding | - | - | - | - | - |
+| Vector Store | - | - | - | - | - |
+| Search | - | - | - | - | - |
+| Prompt | - | - | - | - | - |
+| Generation | - | - | - | - | - |
+| Evaluation | - | - | - | - | - |
+
+### 9.3 Priority Definitions
+
+| Priority | Definition | Response |
+|----------|------------|----------|
+| P0 | Core functionality | Must fix before proceeding |
+| P1 | Important quality | Fix before component complete |
+| P2 | Nice to have | Fix if time permits |
+
+---
+
+## 10. Test Cases
+
+### 10.1 Test File Locations
+
+| Component | Test File | Count |
+|-----------|-----------|-------|
+| Loading | `rag/ingestion/tests/test_loader.py` | 15 |
+| Chunking | `rag/ingestion/tests/test_chunker.py` | 28 |
+| Embedding | `rag/ingestion/tests/test_embedder.py` | - |
+| Vector Store | `rag/storage/tests/test_vector_store.py` | - |
+| Search | `rag/retrieval/tests/test_search.py` | - |
+
+---
+
+### 10.2 Loading Coverage
+
+#### 1. Document Data Structure
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | Create with text + metadata | Done |
+| Happy | Length returns char count | Done |
+| Happy | Repr is readable | Done |
+| Negative | Create with None text? | Missing |
+| Edge | Empty text | Missing |
+
+#### 2. Single File Loading (load_file)
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | Load .md file with metadata | Done |
+| Happy | Load .py file with metadata | Done |
+| Happy | Source path preserved | Done |
+| Negative | File not found? | Missing |
+| Negative | Permission denied? | Missing |
+| Edge | Empty file | Done |
+
+#### 3. Batch Loading (load_documents)
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | Load single file path | Done |
+| Happy | Load directory | Done |
+| Happy | Mixed files and directories | Done |
+| Negative | Skip unsupported extensions | Done |
+| Negative | Skip __pycache__ | Done |
+| Edge | No duplicate files | Done |
+
+#### 4. Statistics (get_loader_stats)
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | Stats counts correct | Done |
+| Happy | Stats by file type | Done |
+| Edge | Empty document list? | Missing |
+
+---
+
+### 10.3 Chunking Coverage
+
+#### 1. Chunk Data Structure
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | Create with text + metadata | Done |
+| Happy | Length returns char count | Done |
+| Happy | Token estimate = chars/4 | Done |
+| Happy | Repr is readable | Done |
+| Negative | Create with None text? | Missing |
+| Edge | Empty text | Missing |
+
+#### 2. Single Document Chunking (chunk_document)
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | Large doc splits correctly | Done |
+| Happy | Overlap present between chunks | Done |
+| Happy | Metadata preserved | Done |
+| Happy | Chunk metadata added | Done |
+| Happy | Start/end positions accurate | Done |
+| Negative | overlap >= chunk_size → error | Done |
+| Negative | chunk_size = 0 → error | Done |
+| Negative | chunk_size < 0 → error | Done |
+| Negative | overlap < 0 → error | Done |
+| Edge | Empty document | Done |
+| Edge | Doc smaller than chunk_size | Done |
+| Edge | Doc exactly chunk_size | Done |
+| Edge | Single character | Done |
+| Edge | Whitespace only | Done |
+| Edge | Unicode/emoji | Done |
+| Edge | Code content | Done |
+
+#### 3. Batch Processing (chunk_documents)
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | Multiple docs all chunked | Done |
+| Happy | Mixed sizes handled | Done |
+| Negative | None in list → error | Done |
+| Edge | Empty list | Done |
+
+#### 4. Integration (Loader → Chunker)
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | Load and chunk single file | Done |
+| Happy | Load and chunk directory | Done |
+| Happy | Metadata flows through pipeline | Done |
+| Edge | Empty file through pipeline | Done |
+
+---
+
+### 10.4 Test Categories Reference
+
+| Category | Definition | Example |
+|----------|------------|---------|
+| Happy | Normal expected behavior | Valid doc → correct chunks |
+| Negative | Invalid input, error conditions | overlap >= chunk_size → ValueError |
+| Edge | Unusual but valid inputs | Empty, unicode, single char |
+| Boundary | At exact limits | Doc exactly chunk_size |
+| Parametric | Multiple combinations | Size × overlap matrix |
+| Integration | Components together | Loader → Chunker pipeline |
+
+---
+
+## 11. Defect Management
+
+### 11.1 Severity Definitions
+
+| Severity | Definition | Example |
+|----------|------------|---------|
+| Critical | Component unusable | Crash, data corruption |
+| High | Major feature broken | Cannot chunk documents |
+| Medium | Feature impaired | Wrong metadata preserved |
+| Low | Minor issue | Cosmetic, logging |
+
+### 11.2 Defect Lifecycle
+
+```
+FOUND → LOGGED → ANALYZED → FIXED → VERIFIED → CLOSED
+```
+
+### 11.3 Active Defects
+
+| ID | Severity | Component | Description | Status |
+|----|----------|-----------|-------------|--------|
+| - | - | - | No open defects | - |
+
+### 11.4 Resolved Defects
+
+| ID | Severity | Component | Description | Resolution |
+|----|----------|-----------|-------------|------------|
+| DEF-001 | Medium | Chunking | Negative overlap not validated | Added validation |
+
+See `docs/DEFECT_LOG.md` for full details.
+
+---
+
+## 12. Metrics & Reporting
+
+### 12.1 Key Metrics
+
+| Metric | Target | Current |
+|--------|--------|---------|
+| Total tests | Growing | 43 |
+| Pass rate | 100% | 100% |
+| Code coverage | 85% | **99%** |
+| Components tested | 8 | 2 |
+| Open defects | 0 | 0 |
+
+### 12.2 Code Coverage by File
+
+*Last updated: 2024-12-14*
+
+| File | Stmts | Miss | Cover | Missing Lines |
+|------|-------|------|-------|---------------|
+| chunker.py | 49 | 0 | **100%** | - |
+| document.py | 12 | 0 | **100%** | - |
+| loader.py | 50 | 3 | **94%** | 45-47, 108 |
+| **TOTAL** | **111** | **3** | **99%** | |
+
+**Missing coverage in loader.py:**
+- Lines 45-47: File read error handling
+- Line 108: Edge case in stats
+
+### 12.3 Test Commands
+
+```bash
+# Run all tests with coverage (recommended)
+python rag/ingestion/tests/_reports/run_tests.py
+
+# Run specific test file
+python rag/ingestion/tests/_reports/run_tests.py test_loader.py
+
+# Run specific test class
+python rag/ingestion/tests/_reports/run_tests.py test_chunker.py::TestChunk
+
+# Manual pytest (without organized reports)
+cd training-assistant
+pytest rag/ingestion/tests/ -v --cov=rag --cov-report=term-missing
+```
+
+### 12.4 Report Locations
+
+Reports are generated in timestamped folders:
+
+```
+rag/ingestion/tests/_reports/
+├── run_tests.py              <- Test runner script
+└── YYYY-MM-DD_HHMMSS/        <- Timestamped folder per run
+    ├── report.html           <- Test results
+    ├── coverage_summary.txt  <- Terminal output
+    └── coverage/             <- Detailed coverage HTML
+        └── index.html
+```
+
+| Report | Location |
+|--------|----------|
+| Test runner | `rag/ingestion/tests/_reports/run_tests.py` |
+| Test results | `rag/ingestion/tests/_reports/<timestamp>/report.html` |
+| Coverage HTML | `rag/ingestion/tests/_reports/<timestamp>/coverage/index.html` |
+| Coverage text | `rag/ingestion/tests/_reports/<timestamp>/coverage_summary.txt` |
+
+---
+
+## 13. Lessons Learned
+
+### 13.1 By Component
+
+**Loading:**
+1. Metadata extraction is crucial for debugging retrieval
+2. Binary file detection prevents garbage in corpus
+3. File type affects how content should be chunked later
+
+**Chunking:**
+1. Chunk size is a trade-off: precision vs context
+2. Overlap prevents hard cuts at boundaries
+3. Different use cases need different sizes
+4. (More after remaining lessons)
+
+### 13.2 Testing Insights
+1. Parametric tests cover more with less code
+2. Edge cases reveal assumptions in code
+3. Test data should match production characteristics
+
+---
+
+## Appendix
+
+### A. Glossary
+
+| Term | Definition |
+|------|------------|
+| Chunk | A piece of a document, sized for embedding |
+| Embedding | Vector representation of text |
+| RAG | Retrieval-Augmented Generation |
+| Corpus | Collection of documents to search |
+
+### B. References
+- RAG Learning Skill: `.claude/skills/rag-learning/SKILL.md`
+- Testing Skill: `.claude/skills/testing/SKILL.md`
+- Defect Log: `docs/DEFECT_LOG.md`
+
+---
+
+*Living document - updated after each component lesson*

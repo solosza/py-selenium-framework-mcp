@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Step 1: User Input - Confirm persona, intent, URL, expected outcome",
+    "status": "completed",
+    "activeForm": "Confirming user input"
+  },
+  {
+    "content": "Step 2: AI Processing - Extract role, domain, BDD, expected_states",
+    "status": "completed",
+    "activeForm": "Processing user input into metadata"
+  },
+  {
+    "content": "Step 3: Tool 1 - generate_tests_from_user_story",
+    "status": "completed",
+    "activeForm": "Generating test scenarios from BDD"
+  },
+  {
+    "content": "Step 4: Tool 2 - discover_page_elements (DYNAMIC - hover required)",
+    "status": "in_progress",
+    "activeForm": "Discovering page elements"
+  },
+  {
+    "content": "Step 5: Tool 3 - generate_page_object",
+    "status": "pending",
+    "activeForm": "Generating Page Object Model"
+  },
+  {
+    "content": "Step 6: Tool 4 - generate_task",
+    "status": "pending",
+    "activeForm": "Generating Task class"
+  },
+  {
+    "content": "Step 7: Tool 5 - generate_role",
+    "status": "pending",
+    "activeForm": "Generating Role class"
+  },
+  {
+    "content": "Step 8: Tool 6 - generate_test_runner",
+    "status": "pending",
+    "activeForm": "Generating pytest test file"
+  },
+  {
+    "content": "Step 9: Save files and run test",
+    "status": "pending",
+    "activeForm": "Saving and executing test"
+  }
+]

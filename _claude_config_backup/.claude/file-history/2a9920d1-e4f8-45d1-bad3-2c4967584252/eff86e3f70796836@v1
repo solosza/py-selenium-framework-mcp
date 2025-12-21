@@ -1,0 +1,111 @@
+# Session State - 2025-12-10 11:10 PM
+
+## Current Phase
+**Phase:** Phase 0 (Design Discussion) - RAG Training Assistant
+**Status:** On Track - Skills installed, ready to begin RAG learning
+
+## What We're Working On
+**Active Task:** Setting up RAG Training Assistant project
+**Task Status:** Infrastructure complete, ready to start learning
+
+## Progress This Session
+
+### Completed
+- [x] Discussed Claude Code Skills ("Build Skills, Not Agents" philosophy)
+- [x] Created `docs/PROJECT_CONTEXT_SKILLS.md` for future Skills refactoring
+- [x] Fixed `execute-from-step1` skill structure (was single file, now proper folder with YAML frontmatter)
+- [x] Installed `rag-learning` skill from curriculum
+- [x] Verified both skills have correct structure for auto-triggering
+
+### Skills Now Available
+```
+.claude/skills/
+├── execute-from-step1/     # 9-step MCP tool chain for test generation
+│   └── SKILL.md
+└── rag-learning/           # RAG learning curriculum (7-step process)
+    ├── SKILL.md
+    └── references/
+        ├── components.md   # Deep dive on each RAG component
+        └── experiments.md  # Hands-on experiments
+```
+
+## Key Decisions Made
+
+### RAG Training Assistant Project
+1. **Scope:** Install rag-learning Skill + build Training Assistant as the project
+2. **Learning approach:** Parallel - learn concepts via curriculum, apply to QA framework corpus
+3. **Corpus strategy:** Start minimal (5-10 docs), expand as learning each component
+4. **Tech stack:**
+   - Embedding: Local (Sentence Transformers) - free iteration during learning
+   - Vector DB: Chroma (local, persistent)
+   - LLM: Anthropic API (Claude) - use what you know
+5. **Workflow:** Learn → Make design decisions → Update PRD → Build → Repeat
+
+### Skills Philosophy
+- Skills = prompts packaged as files (not complex agent orchestration)
+- Auto-trigger based on description field keywords
+- Token-efficient via progressive disclosure
+- Correct structure: folder with SKILL.md + YAML frontmatter
+
+## Files Changed
+- `D:\my_ai_projects\py_sel_framework_mcp\.claude\skills\execute-from-step1\SKILL.md` - Restructured with YAML frontmatter
+- `D:\my_ai_projects\py_sel_framework_mcp\.claude\skills\rag-learning\` - New skill installed
+- `D:\my_ai_projects\py_sel_framework_mcp\docs\PROJECT_CONTEXT_SKILLS.md` - Created for future refactoring
+
+## RAG Learning Curriculum Location
+Extracted to: `C:\Users\solos\Documents\rag_course_notes\rag-learning-curriculum\extracted\`
+
+Key files read:
+- README.md - Overview of 7-step learning process
+- LEARNING_FLOW.md - Detailed guide to each step
+- skill/rag-learning/SKILL.md - Instructions for Claude
+- skill/rag-learning/references/components.md - Deep dive on 8 RAG components
+- skill/rag-learning/references/experiments.md - Hands-on experiments
+
+## RAG Pipeline Components (from curriculum)
+```
+INGESTION (one-time)
+Document Loading → Chunking → Embedding → Vector Storage
+
+QUERY TIME (per request)
+Search → Prompt Building → Generation
+
+META (ongoing)
+Evaluation
+```
+
+## 7-Step Learning Process Per Component
+1. CONCEPT - What it does, why it matters
+2. OPTIONS - 2-3 approaches with tradeoffs
+3. DECISION - You choose and explain why
+4. BUILD - Implement it
+5. EXPERIMENT - Modify, break, observe
+6. EVALUATE - Did it work? Measure it
+7. REFLECT - Document learnings
+
+## Context for Next Session
+
+**Resume Point:** Start RAG learning with Document Loading component
+
+**To begin, say:**
+> "I'm learning RAG. My corpus will be my QA automation framework documentation. Let's start with document loading."
+
+**Important Context:**
+- User wants to understand RAG as deeply as QA automation (knows *why*, not just *how*)
+- QA framework documentation is the corpus - reinforces QA knowledge while learning RAG
+- PRD will be created/updated incrementally as design decisions are made
+- DeepLearning.ai RAG course modules align with curriculum components
+- User prefers local tools for learning (skill transfers to cloud equivalents)
+
+## Existing Project Context
+- `training-assistant/QA_Framework_Training_Assistant_-_Project_Context.md` - Original planning doc (will be superseded by PRD)
+- Framework has 4-layer architecture: Role → Task → Page → WebInterface
+- MCP server with 6 tools for test generation
+
+## Token Usage
+- This session: 70% used (141k/200k)
+- Recommend starting fresh session for RAG learning to maximize context
+
+---
+
+*End of session state*

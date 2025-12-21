@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "smoke: Quick smoke tests for critical functionality (run first)",
+    "regression: Full regression test suite",
+    "auth: Authentication and authorization tests",
+    "catalog: Product catalog and search tests",
+    "cart: Shopping cart functionality tests",
+    "checkout: Checkout and payment flow tests",
+    "slow: Tests that take longer than 30 seconds",
+    "skip_ci: Tests to skip in CI environment",
+]
+addopts = "-v --tb=long"

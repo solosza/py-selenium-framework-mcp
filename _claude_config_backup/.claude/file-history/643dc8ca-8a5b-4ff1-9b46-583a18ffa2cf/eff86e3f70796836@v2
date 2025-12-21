@@ -1,0 +1,246 @@
+# Session State - 2025-12-17 (Late Night Update)
+
+## Quick Resume
+**You were exploring:** Whether to use SDK orchestration vs current MCP tools approach
+**You're confused about:** The difference between MCP tools (what you have) and SDK orchestration (what we discussed)
+**Key insight:** Your agents are TOOLS Claude calls, not code that calls Claude
+**Next step:** Decide if you need SDK or can improve current MCP approach
+
+---
+
+## Current Phase
+**Phase:** Phase 0 (Design Discussion) for Task 7.0
+**Status:** In Progress - TABLED pending architecture decision
+
+## What We're Working On
+**Active Task:** 7.0 - Build QA Execution Engine Skill
+**Task Status:** Phase 0 Design - ~60% complete
+
+## Progress This Session
+
+### Completed
+- [x] Identified root cause: DDs are passive, AI forgets mid-workflow
+- [x] Updated PRD Section 13 with enforcement skill requirement
+- [x] Renumbered task list: 7.0 (Skill) → 8.0 (Defects) → 9.0 (Validation)
+- [x] Changed product language: "enforcement" → "execution"
+- [x] Created `dialogue-engine` skill (global interaction protocol)
+  - SKILL.md (main orchestrator)
+  - references/response-protocol.md
+  - references/question-format.md
+  - references/checkpoint-triggers.md
+  - references/topic-queue.md
+  - references/task-execution.md
+- [x] Started Phase 0 design for `qa-execution-engine`
+  - Confirmed: Option B (Modular References)
+  - Confirmed: All 22 DDs relevant
+  - Confirmed: Checkpoint every tool call
+  - Confirmed: Stop → Options → User chooses (DD-22 style)
+  - Confirmed: In-memory metadata (current approach)
+  - Confirmed: Skill name = `qa-execution-engine`
+
+### In Progress
+- [ ] Complete Phase 0 design for qa-execution-engine
+  - Next: Present reference file structures one at a time
+
+## Files Changed
+- `docs/projects/qa-validation-agents/1-prd-qa-validation-agents.md` - Added Section 13
+- `docs/projects/qa-validation-agents/2-tasks-qa-validation-agents.md` - Renumbered tasks
+- `.claude/skills/dialogue-engine/` - NEW skill created (6 files)
+
+## Key Decisions Made
+
+### Product Language
+- "Enforcement" → "Execution" across all verticals
+- qa-execution-engine, api-execution-engine, pm-execution-engine, etc.
+
+### Skill Architecture (Option B - Modular References)
+```
+.claude/skills/<skill-name>/
+├── SKILL.md                 # Light orchestrator
+└── references/
+    ├── reference-1.md
+    ├── reference-2.md
+    └── ...
+```
+
+### Dialogue Engine Rules
+1. One topic at a time
+2. Numbered options (user types number to respond)
+3. Stop after each task, await confirmation
+4. Propose new reference categories with rationale, await approval
+
+## Open Defects
+| ID | Status | Description |
+|----|--------|-------------|
+| DEF-VA-001 | RESOLVED | Missing AI Orchestrator Integration |
+| DEF-VA-002 | RESOLVED | No Visual Feedback |
+| DEF-VA-003 | OPEN | Tool 3 silently ignores wrong field names |
+| DEF-VA-004 | OPEN | Metadata not passed between tools |
+| DEF-VA-005 | OPEN | Reviewer no completeness checks |
+| DEF-VA-006 | OPEN | Visual Logger no detailed audit |
+
+## Context for Next Session
+
+**Resume Point:** Continue Phase 0 design for `qa-execution-engine` skill
+
+**Next Steps:**
+1. Present reference file structures for qa-execution-engine (one at a time)
+2. Complete Phase 0 → Get approval
+3. Phase 1: Create PRD for skill
+4. Phase 2: Generate tasks
+5. Phase 3: Build skill
+
+**Important Context:**
+- `dialogue-engine` skill is now active - follow its rules
+- qa-execution-engine replaces execute-from-step1 (keep old for reference)
+- All DDs move from FRAMEWORK.md into skill during creation
+
+## Accomplishments Today
+
+1. **Root cause identified** - DDs passive → skill needed
+2. **PRD updated** - Section 13 documents the why
+3. **Task list fixed** - Clean 7→8→9 flow
+4. **Product pivot** - "Execution" language
+5. **dialogue-engine created** - Controls ALL future interactions (6 files)
+6. **qa-execution-engine designed** - 60% of Phase 0 complete
+
+## Key Files
+- `agents/docs/DEFECT_LOG.md` - DEF-VA-001 to 006
+- `.claude/skills/dialogue-engine/` - New interaction protocol
+- `docs/projects/qa-validation-agents/1-prd-qa-validation-agents.md` - Section 13
+- `docs/projects/qa-validation-agents/2-tasks-qa-validation-agents.md` - Updated tasks
+
+---
+
+## TABLED TOPIC: SDK Orchestrator for Execution Layer
+
+**Status:** Tabled for later. Resume when ready.
+
+### The Question
+"Am I designing my execution layer wrong? I'm using skills for everything."
+
+### Key Insight
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Skills = Contextual guidance (AI decides when to apply)        │
+│  SDK    = Programmatic control (Code controls step order)       │
+│                                                                 │
+│  Problem: Skills for deterministic 9-step workflow is wrong     │
+│  Solution: SDK orchestrates steps, Skills provide DD context    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Root Cause Identified
+- DDs are passive - AI forgets mid-workflow
+- Skills help but don't guarantee enforcement
+- User observed: "AI is not calling the DDs all the time"
+
+### Decided Approach
+**Option 2: Iterate from simple**
+- Start with SDK + Skills
+- Test against real scenarios
+- Add programmatic validation only for DDs that AI consistently misses
+- Avoids over-engineering upfront
+
+### Architecture Model
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Layer         │ Who Controls │ What Happens                    │
+├─────────────────────────────────────────────────────────────────┤
+│  Orchestration │ Your code    │ Step order, flow, no skipping   │
+│  Execution     │ AI           │ Generate code, analyze, write   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Current Assets Inventory
+
+**MCP Tools (6) - Ready to Use:**
+| Tool | Purpose |
+|------|---------|
+| Tool 1 | generate_tests_from_user_story |
+| Tool 2 | discover_page_elements |
+| Tool 3 | generate_page_object |
+| Tool 4 | generate_task |
+| Tool 5 | generate_role |
+| Tool 6 | generate_test_runner |
+
+**Design Decisions (22) - In FRAMEWORK.md:**
+| Group | DDs | Purpose |
+|-------|-----|---------|
+| Input/Processing | DD-01 to DD-11 | User input, AI processing rules |
+| Generation | DD-12 to DD-15 | Check existing, use metadata |
+| Post-Processing | DD-16 to DD-19 | AI overrides paths, values, imports |
+| Dynamic Elements | DD-20 to DD-21 | Page state prep, AI-SDET collab |
+| Error Handling | DD-22 | Stop-and-discuss protocol |
+
+**Skills (7) - Existing:**
+| Skill | Reusable? |
+|-------|-----------|
+| `execute-from-step1` | Port to SDK orchestrator |
+| `dialogue-engine` | Keep (interaction protocol) |
+| `design-decisions` | Maybe merge into SDK |
+| `testing` | Keep |
+| `rag-learning` | Keep (different vertical) |
+| `documentation` | Keep |
+| `create-vertical-validation-agents` | Keep |
+
+### What Needs Building
+
+| Component | Effort | Description |
+|-----------|--------|-------------|
+| SDK Orchestrator | Main work | Python function runs steps 1→9 in order |
+| Step wrappers | Medium | Each step loads DDs, calls tool, validates |
+| Metadata passing | Small | Pass context between steps (already designed) |
+| Basic validation | Small | Check tool success, non-empty output |
+
+### Distribution Channels (from business doc)
+- `pip install` - Framework code, MCP server
+- Claude plugin - Skills, slash commands, hooks (enforcement without setup)
+
+### IMPORTANT CLARIFICATION (Added Before Bed)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  YOUR CURRENT SETUP (MCP Tools)                                 │
+│                                                                 │
+│  Claude Code ──────► MCP Server ──────► Your Python Tools       │
+│  (conversation)      (broker)           (local code)            │
+│                                                                 │
+│  Claude CALLS your tools. Your tools DON'T call Claude.         │
+│  No API key needed - Claude Code handles everything.            │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  SDK ORCHESTRATION (what we discussed for execution layer)      │
+│                                                                 │
+│  Your Python ──────► Claude API ──────► Response                │
+│  (orchestrator)      (external)         (back to you)           │
+│                                                                 │
+│  Your code CALLS Claude. You control the flow.                  │
+│  API key required. Separate from Claude Code conversation.      │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+| Aspect | Your Current Agents | SDK Orchestration |
+|--------|---------------------|-------------------|
+| Who calls who | Claude calls your tools | Your code calls Claude |
+| Where AI runs | In Claude Code conversation | Via API calls |
+| API key needed | No | Yes |
+| Control flow | Claude decides | Your code decides |
+
+**Your agents (`sr_qa_engineer.py`, `supervisor.py`) are MCP TOOLS, not SDK orchestrators.**
+They use `@tool` decorator to expose functions that Claude Code can call.
+
+### Open Question
+Do you NEED SDK orchestration, or can MCP tools + skills achieve your goals?
+This needs exploration when you resume.
+
+### Next Step When Resumed
+1. Clarify: Do you need to switch to SDK, or improve current MCP approach?
+2. If SDK: Show pseudocode for orchestrator
+3. If MCP: Focus on making skills/DDs more reliable
+
+### Reference Files
+- `.business/daas_business_project_v1.8.md` - Business context
+- `FRAMEWORK.md` Section 8 - 22 DDs documented
+- `.claude/skills/execute-from-step1/SKILL.md` - Current 9-step workflow

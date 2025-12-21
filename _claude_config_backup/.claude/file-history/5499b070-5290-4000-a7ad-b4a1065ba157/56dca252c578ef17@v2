@@ -1,0 +1,458 @@
+# Isagawa Marketing Brief
+
+**For:** Head of Marketing
+**Purpose:** Understand the market, product positioning, and develop marketing strategy
+**Version:** 1.0 | December 2025
+
+---
+
+## Executive Summary (30-Second Pitch)
+
+**What we sell:** Software that makes AI do complex work the right way, every time.
+
+**The problem:** AI tools are powerful but inconsistent. They improvise, skip steps, and produce unpredictable results. Companies can't trust AI with critical workflows.
+
+**Our solution:** Isagawa is an "execution engine" — software that encodes expert knowledge into rules that AI must follow. No improvisation. No skipped steps. Consistent, correct outcomes.
+
+**Think of it as:** Autopilot for AI. Not suggestions. Not recommendations. Actual enforcement.
+
+---
+
+## The One-Liner (Pick Based on Audience)
+
+| Audience | Message |
+|----------|---------|
+| **Technical buyers** | Isagawa enforces the correct way for AI agents to perform complex workflows. |
+| **Business buyers** | Isagawa ensures critical workflows are executed the right way, every time — without human enforcement. |
+| **General (best overall)** | Isagawa encodes expert workflows into an execution engine so AI agents execute the right way by default. |
+
+---
+
+## The Problem We Solve
+
+### The AI Trust Gap
+
+```
++------------------------------------------------------------------+
+|                     THE AI TRUST GAP                              |
++------------------------------------------------------------------+
+|                                                                   |
+|   WHAT COMPANIES WANT              WHAT AI ACTUALLY DOES          |
+|   +-----------------------+        +-----------------------+      |
+|   | Consistent results    |   vs   | Different every time  |      |
+|   | Follow our standards  |        | Makes up its own      |      |
+|   | No skipped steps      |        | Cuts corners          |      |
+|   | Expert-level quality  |        | "Good enough" output  |      |
+|   +-----------------------+        +-----------------------+      |
+|                                                                   |
+|   Result: Companies don't trust AI with important work            |
+|                                                                   |
++------------------------------------------------------------------+
+```
+
+### Why This Matters Now
+
+1. **AI adoption is exploding** — Everyone wants to use AI for productivity
+2. **But AI is unreliable** — It hallucinates, improvises, skips steps
+3. **Critical work still needs humans** — Because no one trusts AI to do it right
+4. **The gap:** No one is solving AI reliability at the workflow level
+
+**Our opportunity:** Be the company that makes AI trustworthy for complex work.
+
+---
+
+## Who We Sell To
+
+### Primary Target: QA Teams (Quality Assurance / Software Testing)
+
+**Why QA first:**
+- Clear, measurable outcomes (tests pass or fail)
+- High pain point (test automation is tedious, error-prone)
+- Technical buyers who understand the value immediately
+- Strong word-of-mouth in developer communities
+
+**The persona:**
+- QA Engineers, QA Leads, SDETs (Software Development Engineers in Test)
+- Work at mid-size to enterprise companies
+- Frustrated with flaky tests, inconsistent automation
+- Want to adopt AI but worried about quality
+
+**Their pain:**
+- "AI-generated tests don't follow our patterns"
+- "Every developer writes tests differently"
+- "We spend more time fixing AI output than writing it ourselves"
+
+**Our promise:**
+- "AI that writes tests your way, every time"
+- "Your standards, enforced automatically"
+
+### Secondary Target: Developers (Lead Generation)
+
+**Why developers:**
+- Large market, drives awareness
+- Easy entry point (free/freemium tier)
+- Converts to QA team sales when they recommend to their org
+
+### Future Targets (Expansion)
+
+| Domain | Who Buys | The Promise |
+|--------|----------|-------------|
+| **RAG/AI Development** | AI Engineers | "Build retrieval systems the right way" |
+| **API Design** | Backend Teams | "APIs that follow standards automatically" |
+| **Compliance/Regulated** | Enterprise | "Critical processes executed correctly, auditably" |
+
+---
+
+## The Competitive Landscape
+
+### How to Think About Competition
+
+```
++------------------------------------------------------------------+
+|                   COMPETITIVE LANDSCAPE                           |
++------------------------------------------------------------------+
+|                                                                   |
+|                        HIGH ENFORCEMENT                           |
+|                              ^                                    |
+|                              |                                    |
+|                              |     * ISAGAWA                      |
+|                              |       (execution engines)          |
+|                              |                                    |
+|    GENERIC <-----------------.-----------------> DOMAIN-SPECIFIC  |
+|                              |                                    |
+|    * Copilot                 |                                    |
+|    * ChatGPT                 |     * Cursor                       |
+|    * Generic AI tools        |     * Specialized AI tools         |
+|                              |                                    |
+|                              v                                    |
+|                        LOW ENFORCEMENT                            |
+|                       (suggestions only)                          |
+|                                                                   |
++------------------------------------------------------------------+
+```
+
+### Competitor Categories
+
+| Category | Examples | What They Do | Our Differentiation |
+|----------|----------|--------------|---------------------|
+| **Generic AI Assistants** | ChatGPT, Claude, Copilot | Suggest code, answer questions | We don't suggest — we enforce |
+| **AI Coding Tools** | Cursor, Windsurf, Cody | AI-assisted development | They help you write code; we ensure it's correct |
+| **Test Automation Platforms** | Selenium, Playwright, Cypress | Tools to write tests | They're tools; we're the expert using the tools |
+| **No-Code Test Tools** | Testim, Mabl, Katalon | Record-and-play testing | We generate production-grade code, not recordings |
+
+### Our Unique Position
+
+**We're not competing with AI tools. We're competing with "doing it manually."**
+
+The real alternative to Isagawa is:
+- Hiring expensive QA experts
+- Writing lengthy style guides no one follows
+- Manual code review for every AI output
+- Accepting inconsistent quality
+
+---
+
+## Key Concepts & Terminology
+
+### Glossary for Marketing
+
+| Term | Simple Explanation | Marketing Usage |
+|------|-------------------|-----------------|
+| **Execution Engine** | Software that enforces rules during a process | "Isagawa is an execution engine for AI workflows" |
+| **Domain Expertise** | Deep knowledge of a specific field (QA, API design, etc.) | "We encode domain expertise into software" |
+| **Enforcement Layer** | The part that prevents AI from deviating | "Built-in enforcement — not suggestions" |
+| **Design Decisions (DDs)** | The specific rules that define "correct" | "22 design decisions define professional QA standards" |
+| **MCP (Model Context Protocol)** | How AI tools communicate with our engine | Don't use in marketing — too technical |
+| **Workflow** | A multi-step process to complete a task | "Complex workflows executed correctly" |
+| **Guardrails** | Boundaries that keep AI on track | "Guardrails for AI workflows" |
+| **Human Escalation** | When AI stops and asks a human | "Knows when to ask for help" |
+
+### Phrases to Use
+
+**DO use:**
+- "Execution engine" (our category)
+- "Expert workflows"
+- "The right way, every time"
+- "Enforced, not suggested"
+- "Consistent outcomes"
+- "AI you can trust with critical work"
+
+**DON'T use:**
+- "AI assistant" (sounds like ChatGPT)
+- "Copilot" (sounds like GitHub Copilot)
+- "Automation tool" (sounds like Zapier)
+- "No-code" (we're for technical users)
+
+---
+
+## The Value Proposition Framework
+
+### For Different Stakeholders
+
+```
++------------------------------------------------------------------+
+|                   VALUE BY STAKEHOLDER                            |
++------------------------------------------------------------------+
+|                                                                   |
+|   INDIVIDUAL CONTRIBUTOR (QA Engineer)                            |
+|   +-------------------------------------------------------------+ |
+|   | "I can trust AI to write tests that follow our patterns.    | |
+|   |  No more cleaning up AI output. No more inconsistency."     | |
+|   +-------------------------------------------------------------+ |
+|                                                                   |
+|   TEAM LEAD (QA Lead / Engineering Manager)                       |
+|   +-------------------------------------------------------------+ |
+|   | "My team's output is consistent regardless of who writes it.| |
+|   |  New hires produce senior-level work from day one."         | |
+|   +-------------------------------------------------------------+ |
+|                                                                   |
+|   EXECUTIVE (VP Engineering / CTO)                                |
+|   +-------------------------------------------------------------+ |
+|   | "We can scale QA without scaling headcount.                 | |
+|   |  Our standards are enforced automatically, not by process." | |
+|   +-------------------------------------------------------------+ |
+|                                                                   |
++------------------------------------------------------------------+
+```
+
+### The Before/After Story
+
+| Before Isagawa | After Isagawa |
+|----------------|---------------|
+| AI generates inconsistent tests | AI generates tests your way |
+| Every developer has different patterns | One correct pattern, always |
+| Senior engineers review all AI output | Standards enforced automatically |
+| "AI-assisted" means "needs cleanup" | "AI-assisted" means "done right" |
+| Can't trust AI with critical work | AI handles complex workflows reliably |
+
+---
+
+## Market Sizing (Directional)
+
+### QA/Test Automation Market
+
+| Metric | Estimate | Source Direction |
+|--------|----------|------------------|
+| Global test automation market | $20-40B by 2027 | Gartner, Forrester |
+| AI in software testing market | $1-2B and growing fast | Emerging category |
+| Companies using AI for coding | 70%+ of developers | GitHub, Stack Overflow surveys |
+
+### Our Addressable Market
+
+```
++------------------------------------------------------------------+
+|                    MARKET FUNNEL                                  |
++------------------------------------------------------------------+
+|                                                                   |
+|   +-----------------------------------------------------------+  |
+|   |  Total: All companies doing software development          |  |
+|   |  (Millions of companies globally)                         |  |
+|   +-----------------------------------------------------------+  |
+|                          |                                        |
+|                          v                                        |
+|   +-----------------------------------------------------------+  |
+|   |  Addressable: Companies doing test automation             |  |
+|   |  (Hundreds of thousands)                                  |  |
+|   +-----------------------------------------------------------+  |
+|                          |                                        |
+|                          v                                        |
+|   +-----------------------------------------------------------+  |
+|   |  Target: Teams frustrated with AI consistency             |  |
+|   |  (Tens of thousands — early adopters)                     |  |
+|   +-----------------------------------------------------------+  |
+|                          |                                        |
+|                          v                                        |
+|   +-----------------------------------------------------------+  |
+|   |  Initial: QA teams at mid-size tech companies             |  |
+|   |  (Our beachhead — hundreds to low thousands)              |  |
+|   +-----------------------------------------------------------+  |
+|                                                                   |
++------------------------------------------------------------------+
+```
+
+---
+
+## Messaging Framework
+
+### Core Narrative
+
+**The world runs on AI now. But AI improvises.**
+
+Every company is adopting AI to move faster. But there's a problem: AI tools suggest, they don't enforce. They generate output, but can't guarantee quality. They help, but can't be trusted with critical work.
+
+**Isagawa changes that.**
+
+We build execution engines — software that encodes expert-level knowledge into rules AI must follow. Not suggestions. Not recommendations. Actual enforcement.
+
+The result? AI that executes complex workflows the right way, every time. Without tribal knowledge. Without manual enforcement. Without constant human oversight.
+
+**This is what "AI you can trust" actually looks like.**
+
+### Headlines to Test
+
+| Headline | Angle |
+|----------|-------|
+| "AI that follows your rules" | Control/ownership |
+| "Expert workflows, executed automatically" | Expertise/quality |
+| "The right way, every time" | Consistency/reliability |
+| "Stop cleaning up after AI" | Pain point/frustration |
+| "AI you can trust with critical work" | Trust/risk reduction |
+| "Your standards, enforced by default" | Standards/compliance |
+
+### Proof Points
+
+- **22 Design Decisions** — "We've encoded 22 expert-level decisions into our QA engine"
+- **4-Layer Architecture** — "Production-grade patterns, not toy code"
+- **Human Escalation** — "Smart enough to know when to ask for help"
+- **Working Product** — "Not vaporware — we have a working QA execution engine today"
+
+---
+
+## Go-to-Market Channels
+
+### Recommended Channels for QA/Developer Audience
+
+| Channel | Priority | Why |
+|---------|----------|-----|
+| **Developer communities** (Reddit, HN, Discord) | HIGH | Where our buyers learn and discuss |
+| **Technical content marketing** (blog, tutorials) | HIGH | Demonstrates expertise, builds trust |
+| **Conference talks** (testing conferences) | MEDIUM | Credibility, direct access to buyers |
+| **YouTube/video content** | MEDIUM | Show don't tell — demos are powerful |
+| **LinkedIn (organic + ads)** | MEDIUM | Reach QA leads and managers |
+| **Product Hunt launch** | MEDIUM | One-time boost, good for awareness |
+| **Paid search** | LOW (initially) | Expensive, wait until positioning proven |
+| **Traditional PR** | LOW | Not relevant for early stage |
+
+### Content Ideas
+
+**Educational content (top of funnel):**
+- "Why AI-generated tests are inconsistent (and how to fix it)"
+- "The hidden cost of AI code cleanup"
+- "What 'production-grade' AI output actually looks like"
+
+**Product content (middle of funnel):**
+- Demo videos showing before/after
+- Case studies (once we have customers)
+- Comparison guides (Isagawa vs. doing it manually)
+
+**Technical content (bottom of funnel):**
+- How our 22 Design Decisions work
+- Architecture deep-dives
+- Integration guides
+
+---
+
+## Research Recommendations
+
+### To Understand the Market
+
+| Research Area | What to Learn | Where to Look |
+|---------------|---------------|---------------|
+| **QA pain points** | What frustrates QA teams most? | Reddit r/QualityAssurance, r/softwaretesting |
+| **AI adoption barriers** | Why don't teams trust AI for critical work? | Developer surveys, Hacker News discussions |
+| **Competitor positioning** | How do Cursor, Copilot, test tools position? | Their websites, G2/Capterra reviews |
+| **Buyer journey** | How do QA teams evaluate tools? | Interview QA leads if possible |
+| **Pricing expectations** | What do teams pay for similar tools? | Competitor pricing pages, G2 |
+
+### To Understand the Audience
+
+| Question | Why It Matters |
+|----------|----------------|
+| Where do QA engineers hang out online? | Channel selection |
+| What newsletters/podcasts do they follow? | Partnership opportunities |
+| What conferences do they attend? | Speaking/sponsorship opportunities |
+| What's their typical buying process? | Sales motion design |
+| Who influences their tool decisions? | Targeting and messaging |
+
+### Suggested Resources
+
+- **Ministry of Testing** — Largest QA community
+- **Reddit r/QualityAssurance** — Active discussions
+- **Test Automation University** — Free courses, shows what's trending
+- **Selenium/Playwright communities** — Our technical users
+- **State of Testing Report** — Annual survey data
+- **Stack Overflow Developer Survey** — AI adoption data
+
+---
+
+## Expansion Vision
+
+### The Bigger Picture
+
+Isagawa isn't just a QA tool. It's a new category: **execution engines for AI**.
+
+```
++------------------------------------------------------------------+
+|                   EXPANSION ROADMAP                               |
++------------------------------------------------------------------+
+|                                                                   |
+|   NOW                    NEXT                    FUTURE           |
+|   +----------------+     +----------------+     +----------------+ |
+|   |      QA        |     |      RAG       |     |   Compliance   | |
+|   | Test Automation| --> | AI Development | --> | Regulated Work | |
+|   +----------------+     +----------------+     +----------------+ |
+|                                                                   |
+|   Same engine. Different domain rules.                            |
+|                                                                   |
+|   "The one correct way to [domain]"                               |
+|                                                                   |
++------------------------------------------------------------------+
+```
+
+### Why This Scales
+
+| Domain | The Promise |
+|--------|-------------|
+| **QA** | "The one correct way to write and execute tests" |
+| **RAG** | "The one correct way to build retrieval systems" |
+| **API Design** | "The one correct way to design APIs" |
+| **Compliance** | "The one correct way to execute regulated processes" |
+
+**Each domain = new vertical = new revenue stream**
+
+The moat isn't the software. It's the **domain expertise encoded into rules**. That's hard to replicate.
+
+---
+
+## Quick Reference Card
+
+### The Elevator Pitch (15 seconds)
+
+> "Isagawa makes AI do complex work the right way, every time. We're starting with QA — AI that writes tests following your exact standards, automatically enforced. No cleanup. No inconsistency."
+
+### The Differentiator (One sentence)
+
+> "Other AI tools suggest. Isagawa enforces."
+
+### The Category
+
+> "Execution engines for AI workflows"
+
+### The Tagline Options
+
+- "The right way, every time"
+- "AI that follows your rules"
+- "Expert workflows, executed automatically"
+
+---
+
+## Next Steps for Marketing
+
+1. **Validate messaging** — Test headlines with target audience
+2. **Build content engine** — Start with 2-3 educational pieces
+3. **Establish community presence** — Engage in QA communities
+4. **Create demo video** — Show don't tell
+5. **Develop case study template** — Ready for first customers
+6. **Map competitor positioning** — Detailed competitive analysis
+
+---
+
+## Questions?
+
+This document is designed to give you the foundation to understand Isagawa's market and positioning. For technical details, refer to the full thesis document.
+
+**Key contact for questions:** [Founder/Product]
+
+---
+
+*Last updated: December 2025*

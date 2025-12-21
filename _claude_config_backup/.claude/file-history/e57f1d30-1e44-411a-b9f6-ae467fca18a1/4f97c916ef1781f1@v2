@@ -1,0 +1,90 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+tests/**/_reports/
+tests/**/screenshots/
+screenshots/
+logs/
+*.html
+*.png
+error_log*.txt
+
+# Training Assistant IP (PRD, tasks, design docs, planning)
+training-assistant/docs/
+training-assistant/*_Context.md
+
+# Business IP (strategy, planning, market analysis)
+# .business/  # Repo is private - tracking IP docs
+
+# MCP local config
+.mcp.json
+
+# Artifact files
+=1.0.0
+
+# Workflow-specific files (not useful for clones)
+SESSION.md
+PROJECT_CONTEXT.md
+# CLAUDE.md  # Repo is private - tracking IP docs
+# FRAMEWORK.md  # Repo is private - tracking IP docs
+# docs/  # Repo is private - tracking IP docs
+
+# Debug artifacts
+stderr.txt
+stdout.txt
+nul
+
+# MCP dev test generated output
+mcp_server/_dev_tests/output/
+
+# docs/ now tracked for portfolio visibility and cross-workstation continuity
+
+# Environment
+.env
+*.json.local
+config_local.py
+
+# Temporary
+*.tmp
+*.bak

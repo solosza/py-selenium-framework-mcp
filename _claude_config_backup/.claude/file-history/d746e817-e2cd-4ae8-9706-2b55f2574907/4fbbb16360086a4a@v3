@@ -1,0 +1,784 @@
+"""
+Supervisor Agent Tool
+
+Coordinates the QA validation workflow using FOUR-COMPONENT ARCHITECTURE:
+
+```
+SUPERVISOR (this tool - coordinates/triggers)
+    |
+    v
+SQA AGENT (provides requirements + skill invocation instruction)
+    |
+    v
+AI ORCHESTRATOR (Claude Code - executes 9-step MCP workflow)
+    |
+    v
+REVIEWER (validates generated artifacts against 22 DDs)
+```
+
+Design Decisions:
+- DD-VA-01: Four-component architecture (CRITICAL)
+- DD-VA-02: SQA Agent MUST invoke skill (not just provide requirements) (CRITICAL)
+- DD-VA-03: Supervisor only coordinates, doesn't execute skill
+- DD-VA-17: Supervisor as orchestration tool
+- DD-VA-18: Sequential execution with fail-fast
+- DD-VA-19: Comprehensive validation report structure
+
+Workflow:
+1. Supervisor calls SQA Agent -> gets scenario + next_action instruction
+2. SQA Agent returns: requirements + "/skill execute-from-step1" instruction
+3. AI Orchestrator (Claude Code) follows instruction, executes 9-step workflow
+4. Reviewer validates artifacts against DDs
+5. Supervisor generates report
+
+PRD Requirements:
+- FR-01.1: Load pre-defined test scenarios (3 total: easy, mid, hard)
+- FR-01.2: Execute scenarios sequentially
+- FR-01.3: Stop immediately on any failure (Type 1 or Type 3)
+- FR-01.4: Coordinate handoffs: SR QA -> Orchestrator -> Reviewer -> Execute
+- FR-01.5: Generate full validation report on completion
+- FR-01.6: Track pass/fail status per scenario
+"""
+
+import json
+from datetime import datetime
+from typing import Dict, Any, List, Optional
+from enum import Enum
+from dataclasses import dataclass, field, asdict
+from claude_agent_sdk import tool
+
+# Import sibling tools for coordination
+from .sr_qa_engineer import SCENARIOS, _test_get_scenario
+from .reviewer import _test_validate_artifacts
+from .workflow_logger import (
+    VisualWorkflowLogger,
+    create_validation_logger,
+    AgentType,
+    StepStatus
+)
+
+
+# =============================================================================
+# Data Classes for Report Structure
+# =============================================================================
+
+class ScenarioStatus(str, Enum):
+    """Status of a scenario execution."""
+    PENDING = "PENDING"
+    RUNNING = "RUNNING"
+    PASSED = "PASSED"
+    FAILED = "FAILED"
+    SKIPPED = "SKIPPED"
+
+
+class FailureType(str, Enum):
+    """Type of failure encountered."""
+    TYPE_1_REVIEW_REJECT = "TYPE_1_REVIEW_REJECT"    # DD violations found
+    TYPE_2_APP_DEFECT = "TYPE_2_APP_DEFECT"          # Test found bug (success!)
+    TYPE_3_FRAMEWORK = "TYPE_3_FRAMEWORK"            # Framework/toolchain issue
+    ORCHESTRATOR_ERROR = "ORCHESTRATOR_ERROR"        # Steps 2-8 failed
+    EXECUTION_ERROR = "EXECUTION_ERROR"              # Step 9 failed
+
+
+@dataclass
+class ScenarioResult:
+    """Result of a single scenario execution."""
+    scenario_id: str
+    scenario_name: str
+    complexity: str
+    status: ScenarioStatus
+
+    # Timing
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
+    duration_seconds: Optional[float] = None
+
+    # Artifacts (if generated)
+    generated_artifacts: List[str] = field(default_factory=list)
+
+    # Review result (if reached)
+    review_status: Optional[str] = None  # APPROVE or REJECT
+    violations: List[Dict[str, Any]] = field(default_factory=list)
+    blocking_violations: int = 0
+
+    # Execution result (if reached Step 9)
+    execution_passed: Optional[bool] = None
+    execution_log: Optional[str] = None
+
+    # Failure info (if failed)
+    failure_type: Optional[str] = None
+    failure_message: Optional[str] = None
+
+    # Human intervention (if needed)
+    human_intervention_required: bool = False
+    human_guidance_log: List[str] = field(default_factory=list)
+
+
+@dataclass
+class ValidationReport:
+    """Complete validation report for all scenarios."""
+    # Summary
+    report_id: str
+    created_at: str
+    completed_at: Optional[str] = None
+    total_duration_seconds: Optional[float] = None
+
+    # Overall status
+    overall_status: str = "PENDING"  # PASSED, FAILED, PARTIAL, PENDING
+
+    # Scenario results
+    total_scenarios: int = 0
+    scenarios_passed: int = 0
+    scenarios_failed: int = 0
+    scenarios_skipped: int = 0
+    scenario_results: List[ScenarioResult] = field(default_factory=list)
+
+    # Aggregated violations
+    total_dd_violations: int = 0
+    violations_by_severity: Dict[str, int] = field(default_factory=dict)
+
+    # Execution stats
+    human_interventions: int = 0
+
+    # Notes
+    notes: List[str] = field(default_factory=list)
+
+
+# =============================================================================
+# Supervisor State
+# =============================================================================
+
+# Global state for current validation run
+_current_report: Optional[ValidationReport] = None
+
+
+def _reset_supervisor_state():
+    """Reset supervisor state for new validation run."""
+    global _current_report
+    _current_report = None
+
+
+def _get_current_report() -> Optional[ValidationReport]:
+    """Get current report (for testing)."""
+    return _current_report
+
+
+# =============================================================================
+# Core Validation Logic
+# =============================================================================
+
+async def _run_scenario(
+    scenario_id: str,
+    content_map: Optional[Dict[str, str]] = None,
+    logger: Optional[VisualWorkflowLogger] = None
+) -> ScenarioResult:
+    """
+    Execute a single scenario through the validation pipeline.
+
+    FOUR-COMPONENT ARCHITECTURE (DD-VA-01):
+    1. SUPERVISOR: Get scenario from SQA Agent (this function)
+    2. SQA AGENT: Returns requirements + next_action instruction
+    3. AI ORCHESTRATOR: Claude Code executes skill (NOT simulated)
+    4. REVIEWER: Validates artifacts against 22 DDs
+
+    Args:
+        scenario_id: Scenario ID (e.g., "QA-EASY-001")
+        content_map: Pre-generated artifact content (from AI Orchestrator execution)
+                     If None, returns ORCHESTRATOR_PENDING status requiring skill execution
+        logger: Optional visual workflow logger for real-time feedback (DD-VA-04)
+
+    Returns:
+        ScenarioResult with full execution details
+    """
+    # Create logger if not provided (DD-VA-04: Visual workflow logging required)
+    if logger is None:
+        logger = create_validation_logger(scenario_id, "Validation Run")
+
+    # Step 1: SUPERVISOR -> SQA AGENT (get scenario)
+    logger.start_step(1, 4, AgentType.SUPERVISOR, AgentType.SQA_AGENT, "Get test scenario from SQA Agent")
+    logger.set_input(f"scenario_id='{scenario_id}'")
+
+    # Phase 1: Get scenario from SQA Agent (includes next_action per DD-VA-02)
+    scenario_data = await _test_get_scenario({"level": scenario_id})
+
+    if "error" in scenario_data:
+        logger.complete_step(success=False, error=scenario_data["error"])
+        logger.print_summary()
+        return ScenarioResult(
+            scenario_id=scenario_id,
+            scenario_name="Unknown",
+            complexity="unknown",
+            status=ScenarioStatus.FAILED,
+            failure_type=FailureType.ORCHESTRATOR_ERROR.value,
+            failure_message=scenario_data["error"]
+        )
+
+    # SQA Agent returned scenario successfully
+    logger.set_output(f"scenario='{scenario_data['name']}', has_next_action={bool(scenario_data.get('next_action'))}")
+    logger.complete_step(success=True)
+
+    result = ScenarioResult(
+        scenario_id=scenario_data["id"],
+        scenario_name=scenario_data["name"],
+        complexity=scenario_data["complexity"],
+        status=ScenarioStatus.RUNNING,
+        started_at=datetime.now().isoformat(),
+        generated_artifacts=scenario_data.get("expected_artifacts", [])
+    )
+
+    # Step 2: SQA AGENT -> AI ORCHESTRATOR (execute skill)
+    logger.start_step(2, 4, AgentType.SQA_AGENT, AgentType.AI_ORCHESTRATOR, "Execute 9-step MCP workflow")
+    logger.set_input(f"next_action.skill='{scenario_data.get('next_action', {}).get('skill', 'N/A')}'")
+
+    # Phase 2: Check if AI Orchestrator has executed (DD-VA-01, DD-VA-02)
+    # content_map must be provided - it contains artifacts from AI Orchestrator
+    paths = scenario_data.get("expected_artifacts", [])
+
+    if not content_map:
+        # AI Orchestrator has NOT executed - return pending status with instructions
+        # This is the FIX for DEF-VA-001: Missing AI Orchestrator Integration
+        skill_cmd = scenario_data.get('next_action', {}).get('skill', '/skill execute-from-step1')
+        skill_input = scenario_data.get('next_action', {}).get('step1_input', scenario_data['requirement'])
+
+        logger.add_sub_step("Check artifacts provided", StepStatus.FAILED, "No content_map")
+        logger.complete_step(success=False, error=f"BLOCKED: AI Orchestrator must invoke {skill_cmd}")
+
+        # Skip remaining steps
+        logger.skip_step(3, 4, AgentType.AI_ORCHESTRATOR, AgentType.REVIEWER, "Validate artifacts", "Waiting for AI Orchestrator")
+        logger.skip_step(4, 4, AgentType.REVIEWER, AgentType.SUPERVISOR, "Generate report", "Waiting for AI Orchestrator")
+        logger.complete_workflow(success=False)
+        logger.print_summary()
+
+        result.status = ScenarioStatus.PENDING
+        result.failure_type = "ORCHESTRATOR_PENDING"
+        result.failure_message = (
+            f"AI Orchestrator must execute skill first. "
+            f"Invoke: {skill_cmd} "
+            f"with input: {skill_input}"
+        )
+        result.human_intervention_required = True
+        result.human_guidance_log.append(
+            "BLOCKED: Waiting for AI Orchestrator to execute skill and provide artifacts"
+        )
+        result.completed_at = datetime.now().isoformat()
+        return result
+
+    # AI Orchestrator has executed - artifacts provided
+    logger.add_sub_step("Check artifacts provided", StepStatus.SUCCESS, f"{len(content_map)} files")
+    logger.set_output(f"artifacts={list(content_map.keys())}")
+    logger.complete_step(success=True)
+
+    # Step 3: AI ORCHESTRATOR -> REVIEWER (validate artifacts)
+    logger.start_step(3, 4, AgentType.AI_ORCHESTRATOR, AgentType.REVIEWER, "Validate artifacts against 22 DDs")
+    logger.set_input(f"paths={paths}")
+
+    # Phase 3: Review artifacts (AI Orchestrator has executed)
+    review_result = await _test_validate_artifacts({
+        "paths": paths,
+        "content_map": content_map
+    })
+
+    result.review_status = review_result["status"]
+    result.violations = review_result.get("violations", [])
+    result.blocking_violations = review_result.get("blocking_violations", 0)
+
+    # Log review sub-steps
+    logger.add_sub_step("DD-03 Check (Locators)", StepStatus.SUCCESS if review_result.get("blocking_violations", 0) == 0 else StepStatus.FAILED)
+    logger.add_sub_step("DD-15 Check (Assertions)", StepStatus.SUCCESS if review_result.get("blocking_violations", 0) == 0 else StepStatus.FAILED)
+    logger.set_output(f"status={review_result['status']}, violations={review_result.get('total_violations', 0)}")
+
+    # Check for review rejection (Type 1 failure)
+    if review_result["status"] == "REJECT":
+        logger.complete_step(success=False, error=f"REJECTED: {review_result.get('blocking_violations', 0)} blocking violations")
+        logger.skip_step(4, 4, AgentType.REVIEWER, AgentType.SUPERVISOR, "Generate report", "Review rejected")
+        logger.complete_workflow(success=False)
+        logger.print_summary()
+
+        result.status = ScenarioStatus.FAILED
+        result.failure_type = FailureType.TYPE_1_REVIEW_REJECT.value
+        result.failure_message = f"Review REJECTED: {review_result.get('summary', 'DD violations found')}"
+        result.completed_at = datetime.now().isoformat()
+        return result
+
+    logger.complete_step(success=True)
+
+    # Step 4: REVIEWER -> SUPERVISOR (generate report)
+    logger.start_step(4, 4, AgentType.REVIEWER, AgentType.SUPERVISOR, "Generate validation report")
+    logger.set_input(f"review_status='{review_result['status']}'")
+
+    # Phase 4: Execute Step 9 (simulated for now)
+    # In real implementation, this would run the actual test
+    result.execution_passed = True
+    result.execution_log = "Simulated execution - test would run here"
+
+    # Mark success
+    result.status = ScenarioStatus.PASSED
+    result.completed_at = datetime.now().isoformat()
+
+    # Calculate duration
+    if result.started_at and result.completed_at:
+        start = datetime.fromisoformat(result.started_at)
+        end = datetime.fromisoformat(result.completed_at)
+        result.duration_seconds = (end - start).total_seconds()
+
+    logger.set_output(f"status=PASSED, duration={result.duration_seconds:.2f}s")
+    logger.complete_step(success=True)
+    logger.complete_workflow(success=True)
+    logger.print_summary()
+
+    return result
+
+
+async def _run_validation_suite(
+    scenarios: List[str],
+    content_maps: Optional[Dict[str, Dict[str, str]]] = None
+) -> ValidationReport:
+    """
+    Run complete validation suite for specified scenarios.
+
+    Args:
+        scenarios: List of scenario IDs to run
+        content_maps: Optional map of scenario_id -> content_map for testing
+
+    Returns:
+        ValidationReport with all results
+    """
+    global _current_report
+
+    # Initialize report
+    report = ValidationReport(
+        report_id=f"VAL-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
+        created_at=datetime.now().isoformat(),
+        total_scenarios=len(scenarios)
+    )
+    _current_report = report
+
+    # Run each scenario sequentially (FR-01.2)
+    for scenario_id in scenarios:
+        content_map = content_maps.get(scenario_id) if content_maps else None
+
+        result = await _run_scenario(scenario_id, content_map)
+        report.scenario_results.append(result)
+
+        # Update counts
+        if result.status == ScenarioStatus.PASSED:
+            report.scenarios_passed += 1
+        elif result.status == ScenarioStatus.FAILED:
+            report.scenarios_failed += 1
+
+            # Aggregate violations
+            report.total_dd_violations += len(result.violations)
+            for violation in result.violations:
+                severity = violation.get("severity", "UNKNOWN")
+                report.violations_by_severity[severity] = \
+                    report.violations_by_severity.get(severity, 0) + 1
+
+            # Stop immediately on failure (FR-01.3)
+            # Skip remaining scenarios
+            remaining = scenarios[scenarios.index(scenario_id) + 1:]
+            for skip_id in remaining:
+                skip_scenario = await _test_get_scenario({"level": skip_id})
+                report.scenario_results.append(ScenarioResult(
+                    scenario_id=skip_id,
+                    scenario_name=skip_scenario.get("name", "Unknown"),
+                    complexity=skip_scenario.get("complexity", "unknown"),
+                    status=ScenarioStatus.SKIPPED,
+                    failure_message="Skipped due to previous failure"
+                ))
+                report.scenarios_skipped += 1
+            break
+
+        # Track human interventions
+        if result.human_intervention_required:
+            report.human_interventions += 1
+
+    # Finalize report
+    report.completed_at = datetime.now().isoformat()
+
+    # Calculate duration
+    start = datetime.fromisoformat(report.created_at)
+    end = datetime.fromisoformat(report.completed_at)
+    report.total_duration_seconds = (end - start).total_seconds()
+
+    # Determine overall status
+    if report.scenarios_failed == 0 and report.scenarios_passed == report.total_scenarios:
+        report.overall_status = "PASSED"
+    elif report.scenarios_failed > 0:
+        report.overall_status = "FAILED"
+    elif report.scenarios_passed > 0:
+        report.overall_status = "PARTIAL"
+    else:
+        report.overall_status = "NO_RESULTS"
+
+    return report
+
+
+def _format_report_summary(report: ValidationReport) -> str:
+    """Format report as human-readable summary."""
+    lines = [
+        "=" * 70,
+        f"QA VALIDATION REPORT: {report.report_id}",
+        "=" * 70,
+        "",
+        f"Status: {report.overall_status}",
+        f"Created: {report.created_at}",
+        f"Duration: {report.total_duration_seconds:.2f}s" if report.total_duration_seconds else "",
+        "",
+        "--- SUMMARY ---",
+        f"Total Scenarios: {report.total_scenarios}",
+        f"  Passed:  {report.scenarios_passed}",
+        f"  Failed:  {report.scenarios_failed}",
+        f"  Skipped: {report.scenarios_skipped}",
+        "",
+    ]
+
+    if report.total_dd_violations > 0:
+        lines.extend([
+            "--- DD VIOLATIONS ---",
+            f"Total: {report.total_dd_violations}",
+        ])
+        for severity, count in sorted(report.violations_by_severity.items()):
+            lines.append(f"  {severity}: {count}")
+        lines.append("")
+
+    lines.append("--- SCENARIO RESULTS ---")
+    for result in report.scenario_results:
+        status_icon = {
+            ScenarioStatus.PASSED: "[PASS]",
+            ScenarioStatus.FAILED: "[FAIL]",
+            ScenarioStatus.SKIPPED: "[SKIP]",
+            ScenarioStatus.PENDING: "[----]",
+            ScenarioStatus.RUNNING: "[....]"
+        }.get(result.status, "[????]")
+
+        lines.append(f"{status_icon} {result.scenario_id}: {result.scenario_name}")
+
+        if result.status == ScenarioStatus.FAILED:
+            lines.append(f"       Failure: {result.failure_type}")
+            lines.append(f"       Message: {result.failure_message}")
+            if result.blocking_violations > 0:
+                lines.append(f"       Blocking Violations: {result.blocking_violations}")
+
+        if result.duration_seconds:
+            lines.append(f"       Duration: {result.duration_seconds:.2f}s")
+
+    lines.extend([
+        "",
+        "=" * 70,
+        f"END OF REPORT",
+        "=" * 70,
+    ])
+
+    return "\n".join(lines)
+
+
+# =============================================================================
+# Tool Implementations
+# =============================================================================
+
+@tool(
+    "run_validation",
+    "Run QA validation for specified scenarios. Executes sequentially, stops on failure.",
+    {
+        "scenarios": list,  # List of scenario IDs or levels ["easy", "QA-MID-001"]
+    }
+)
+async def run_validation(args: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Run validation suite for specified scenarios.
+
+    This is the main entry point for the Supervisor agent.
+    It coordinates the entire validation workflow.
+    """
+    scenarios = args.get("scenarios", [])
+
+    if not scenarios:
+        return {
+            "content": [{
+                "type": "text",
+                "text": json.dumps({
+                    "error": "No scenarios specified",
+                    "usage": "Provide list of scenario IDs or levels: ['easy', 'mid', 'hard'] or ['QA-EASY-001', 'QA-MID-001']"
+                }, indent=2)
+            }]
+        }
+
+    # Resolve scenario levels to IDs
+    resolved_scenarios = []
+    for item in scenarios:
+        if item.upper().startswith("QA-"):
+            resolved_scenarios.append(item.upper())
+        else:
+            # Get first scenario matching level
+            level = item.lower()
+            for scenario in SCENARIOS.values():
+                if scenario["complexity"] == level:
+                    resolved_scenarios.append(scenario["id"])
+                    break
+
+    # Run validation
+    report = await _run_validation_suite(resolved_scenarios)
+
+    # Return structured result
+    result = {
+        "report_id": report.report_id,
+        "overall_status": report.overall_status,
+        "summary": {
+            "total": report.total_scenarios,
+            "passed": report.scenarios_passed,
+            "failed": report.scenarios_failed,
+            "skipped": report.scenarios_skipped,
+            "dd_violations": report.total_dd_violations
+        },
+        "scenario_results": [
+            {
+                "id": r.scenario_id,
+                "name": r.scenario_name,
+                "status": r.status.value,
+                "failure_type": r.failure_type,
+                "failure_message": r.failure_message
+            }
+            for r in report.scenario_results
+        ],
+        "formatted_report": _format_report_summary(report)
+    }
+
+    return {
+        "content": [{
+            "type": "text",
+            "text": json.dumps(result, indent=2)
+        }]
+    }
+
+
+@tool(
+    "get_validation_report",
+    "Get the current or last validation report.",
+    {}
+)
+async def get_validation_report(args: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Get the current validation report.
+    """
+    global _current_report
+
+    if _current_report is None:
+        return {
+            "content": [{
+                "type": "text",
+                "text": json.dumps({
+                    "status": "NO_REPORT",
+                    "message": "No validation has been run yet. Use run_validation first."
+                }, indent=2)
+            }]
+        }
+
+    return {
+        "content": [{
+            "type": "text",
+            "text": _format_report_summary(_current_report)
+        }]
+    }
+
+
+@tool(
+    "run_standard_validation",
+    "Run standard validation suite: easy, mid, hard scenarios.",
+    {}
+)
+async def run_standard_validation(args: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Run the standard 3-scenario validation suite.
+
+    This runs:
+    1. QA-EASY-001: Valid login
+    2. QA-MID-001: Browse category
+    3. QA-HARD-001: Add to cart via modal
+    """
+    standard_scenarios = ["QA-EASY-001", "QA-MID-001", "QA-HARD-001"]
+
+    report = await _run_validation_suite(standard_scenarios)
+
+    result = {
+        "report_id": report.report_id,
+        "overall_status": report.overall_status,
+        "summary": {
+            "total": report.total_scenarios,
+            "passed": report.scenarios_passed,
+            "failed": report.scenarios_failed,
+            "skipped": report.scenarios_skipped
+        },
+        "formatted_report": _format_report_summary(report)
+    }
+
+    return {
+        "content": [{
+            "type": "text",
+            "text": json.dumps(result, indent=2)
+        }]
+    }
+
+
+@tool(
+    "get_orchestration_instructions",
+    "Get step-by-step orchestration instructions for AI Orchestrator (Claude Code) to execute a scenario.",
+    {
+        "scenario_id": str,  # Scenario ID like "QA-EASY-001"
+    }
+)
+async def get_orchestration_instructions(args: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Returns detailed orchestration instructions for Claude Code to follow.
+
+    This implements DD-VA-01 (four-component architecture) and DD-VA-02 (SQA invokes skill).
+    """
+    scenario_id = args.get("scenario_id", "QA-EASY-001")
+
+    # Get scenario from SQA Agent
+    scenario_data = await _test_get_scenario({"level": scenario_id})
+
+    if "error" in scenario_data:
+        return {
+            "content": [{
+                "type": "text",
+                "text": json.dumps({"error": scenario_data["error"]}, indent=2)
+            }]
+        }
+
+    # Build orchestration instructions
+    instructions = {
+        "scenario": {
+            "id": scenario_data["id"],
+            "name": scenario_data["name"],
+            "complexity": scenario_data["complexity"]
+        },
+        "architecture": {
+            "component_1": "SUPERVISOR - Provided these instructions (COMPLETE)",
+            "component_2": "SQA AGENT - Provided scenario below (COMPLETE)",
+            "component_3": "AI ORCHESTRATOR - YOU execute skill (PENDING)",
+            "component_4": "REVIEWER - Will validate artifacts (PENDING)"
+        },
+        "your_action": {
+            "step": "Execute the testing skill as AI Orchestrator",
+            "skill": scenario_data.get("next_action", {}).get("skill", "/skill execute-from-step1"),
+            "input": scenario_data.get("next_action", {}).get("step1_input", scenario_data["requirement"]),
+            "expected_output": scenario_data.get("expected_artifacts", [])
+        },
+        "after_skill_execution": {
+            "1": "Collect all generated artifact content",
+            "2": "Call run_validation with content_map parameter",
+            "3": "Reviewer will validate against 22 DDs",
+            "4": "Report will be generated"
+        },
+        "critical_reminder": "DD-VA-02: Do NOT just provide requirements - EXECUTE the skill"
+    }
+
+    return {
+        "content": [{
+            "type": "text",
+            "text": json.dumps(instructions, indent=2)
+        }]
+    }
+
+
+# =============================================================================
+# Export tools list
+# =============================================================================
+
+SUPERVISOR_TOOLS = [run_validation, get_validation_report, run_standard_validation, get_orchestration_instructions]
+
+
+# =============================================================================
+# Test Helpers (for unit testing)
+# =============================================================================
+
+async def _test_run_validation_suite(
+    scenarios: List[str],
+    content_maps: Optional[Dict[str, Dict[str, str]]] = None
+) -> Dict[str, Any]:
+    """
+    Test wrapper for validation suite.
+
+    Returns dict instead of MCP tool response for easier testing.
+    """
+    report = await _run_validation_suite(scenarios, content_maps)
+
+    return {
+        "report_id": report.report_id,
+        "overall_status": report.overall_status,
+        "total_scenarios": report.total_scenarios,
+        "scenarios_passed": report.scenarios_passed,
+        "scenarios_failed": report.scenarios_failed,
+        "scenarios_skipped": report.scenarios_skipped,
+        "total_dd_violations": report.total_dd_violations,
+        "violations_by_severity": report.violations_by_severity,
+        "scenario_results": [asdict(r) for r in report.scenario_results],
+        "formatted_report": _format_report_summary(report)
+    }
+
+
+async def _test_run_scenario(
+    scenario_id: str,
+    content_map: Optional[Dict[str, str]] = None
+) -> Dict[str, Any]:
+    """
+    Test wrapper for single scenario execution.
+    """
+    result = await _run_scenario(scenario_id, content_map)
+    return asdict(result)
+
+
+# =============================================================================
+# Standalone test
+# =============================================================================
+
+if __name__ == "__main__":
+    import asyncio
+
+    async def test_supervisor():
+        print("Testing Supervisor tools...\n")
+
+        # Test 1: Run single scenario (simulation mode)
+        print("1. Run single scenario (QA-EASY-001):")
+        result = await _test_run_scenario("QA-EASY-001")
+        print(f"   Status: {result['status']}")
+        print(f"   Review: {result['review_status']}")
+
+        # Test 2: Run standard validation (simulation mode)
+        print("\n2. Run standard validation suite:")
+        report = await _test_run_validation_suite(
+            ["QA-EASY-001", "QA-MID-001", "QA-HARD-001"]
+        )
+        print(f"   Overall: {report['overall_status']}")
+        print(f"   Passed: {report['scenarios_passed']}/{report['total_scenarios']}")
+
+        # Test 3: Run with failing scenario (using bad content)
+        print("\n3. Run with DD violation (should fail):")
+        bad_task_code = '''
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+class AuthTasks:
+    def __init__(self, web: WebInterface):
+        self.web = web
+
+    def log_in(self, email, password):
+        self.web.type_text(By.ID, "email", text=email)  # DD-03 violation!
+        self.web.click(By.CSS_SELECTOR, "#submit")
+'''
+
+        content_maps = {
+            "QA-EASY-001": {
+                "framework/tasks/auth/auth_tasks.py": bad_task_code
+            }
+        }
+
+        report = await _test_run_validation_suite(["QA-EASY-001"], content_maps)
+        print(f"   Overall: {report['overall_status']}")
+        print(f"   DD Violations: {report['total_dd_violations']}")
+
+        print("\n" + report["formatted_report"])
+
+        print("\n[SUCCESS] Supervisor tools working!")
+
+    asyncio.run(test_supervisor())

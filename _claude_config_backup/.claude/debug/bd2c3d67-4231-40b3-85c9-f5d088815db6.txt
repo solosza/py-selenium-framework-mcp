@@ -1,0 +1,137 @@
+2025-12-09T03:35:24.531Z [DEBUG] Watching for changes in setting files C:\Users\solos\.claude\settings.json, D:\my_ai_projects\py_sel_framework_mcp\.claude\settings.local.json...
+2025-12-09T03:35:24.560Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2025-12-09T03:35:24.585Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2025-12-09T03:35:24.585Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2025-12-09T03:35:24.585Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2025-12-09T03:35:24.585Z [DEBUG] [LSP SERVER MANAGER] initialize() called
+2025-12-09T03:35:24.585Z [DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+2025-12-09T03:35:24.592Z [DEBUG] Applying permission update: Adding 24 allow rule(s) to destination 'localSettings': ["WebFetch(domain:www.automationpractice.pl)","Bash(git commit:*)","Bash(git rm:*)","Bash(git add:*)","Bash(git push:*)","Bash(git checkout:*)","WebFetch(domain:automationpractice.pl)","WebSearch","WebFetch(domain:github.com)","WebFetch(domain:raw.githubusercontent.com)","Bash(dir:*)","Bash(python execute_auth_tests.py:*)","Bash(nul)","Bash(python investigate_catalog_page.py:*)","Bash(python -u:*)","WebFetch(domain:www.udemy.com)","WebFetch(domain:www.pulsemcp.com)","Bash(del \"D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py\")","Bash(git ls-tree:*)","Bash(cat:*)","Bash(git merge:*)","Bash(git branch:*)","Bash(del \"D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\base\\role.py\")","Bash(gh pr create:*)"]
+2025-12-09T03:35:24.602Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2025-12-09T03:35:24.603Z [DEBUG] Total LSP servers loaded: 0
+2025-12-09T03:35:24.603Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2025-12-09T03:35:24.603Z [DEBUG] LSP manager initialized with 0 servers
+2025-12-09T03:35:24.604Z [DEBUG] LSP server manager initialized successfully
+2025-12-09T03:35:24.604Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2025-12-09T03:35:24.612Z [DEBUG] Loading skills from directories: managed=C:\ProgramData\ClaudeCode\.claude\skills, user=C:\Users\solos\.claude\skills, project=D:\my_ai_projects\py_sel_framework_mcp\.claude\skills
+2025-12-09T03:35:24.612Z [DEBUG] >>>>> getPluginSkills CALLED <<<<<
+2025-12-09T03:35:24.613Z [DEBUG] Passes: Using fresh cached eligibility data
+2025-12-09T03:35:24.625Z [DEBUG] Loaded 0 installed plugins from C:\Users\solos\.claude\plugins\installed_plugins.json (schema version 1)
+2025-12-09T03:35:24.671Z [DEBUG] Creating shell snapshot for bash (C:\Program Files\Git\bin\bash.exe)
+2025-12-09T03:35:24.671Z [DEBUG] Looking for shell config file: C:\Users\solos\.bashrc
+2025-12-09T03:35:24.671Z [DEBUG] Shell config file not found: C:\Users\solos\.bashrc, creating snapshot with Claude Code defaults only
+2025-12-09T03:35:24.672Z [DEBUG] Snapshots directory: C:\Users\solos\.claude\shell-snapshots
+2025-12-09T03:35:24.682Z [DEBUG] Creating snapshot at: C:\Users\solos\.claude\shell-snapshots\snapshot-bash-1765251324671-3lqd40.sh
+2025-12-09T03:35:24.682Z [DEBUG] Shell binary exists: true
+2025-12-09T03:35:24.682Z [DEBUG] Execution timeout: 10000ms
+2025-12-09T03:35:24.686Z [DEBUG] Writing to temp file: C:\Users\solos\.claude\todos\bd2c3d67-4231-40b3-85c9-f5d088815db6-agent-bd2c3d67-4231-40b3-85c9-f5d088815db6.json.tmp.33452.1765251324686
+2025-12-09T03:35:24.692Z [DEBUG] Temp file written successfully, size: 2 bytes
+2025-12-09T03:35:24.692Z [DEBUG] Renaming C:\Users\solos\.claude\todos\bd2c3d67-4231-40b3-85c9-f5d088815db6-agent-bd2c3d67-4231-40b3-85c9-f5d088815db6.json.tmp.33452.1765251324686 to C:\Users\solos\.claude\todos\bd2c3d67-4231-40b3-85c9-f5d088815db6-agent-bd2c3d67-4231-40b3-85c9-f5d088815db6.json
+2025-12-09T03:35:24.692Z [DEBUG] File C:\Users\solos\.claude\todos\bd2c3d67-4231-40b3-85c9-f5d088815db6-agent-bd2c3d67-4231-40b3-85c9-f5d088815db6.json written atomically
+2025-12-09T03:35:24.706Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251324706
+2025-12-09T03:35:24.706Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:24.709Z [DEBUG] Temp file written successfully, size: 50958 bytes
+2025-12-09T03:35:24.710Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:24.710Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251324706 to C:\Users\solos\.claude.json
+2025-12-09T03:35:24.710Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:24.718Z [DEBUG] getPluginSkills: Processing 0 enabled plugins
+2025-12-09T03:35:24.718Z [DEBUG] Total plugin skills loaded: 0
+2025-12-09T03:35:24.718Z [DEBUG] Total plugin commands loaded: 0
+2025-12-09T03:35:24.719Z [DEBUG] Registered 0 hooks from 0 plugins
+2025-12-09T03:35:24.734Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+2025-12-09T03:35:24.739Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills
+2025-12-09T03:35:24.741Z [DEBUG] Total plugin agents loaded: 0
+2025-12-09T03:35:24.757Z [DEBUG] Git remote URL: https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-09T03:35:24.757Z [DEBUG] Parsed repository: solosza/py-selenium-framework-mcp from https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-09T03:35:24.757Z [DEBUG] Parsed repository: solosza/py-selenium-framework-mcp from URL: https://github.com/solosza/py-selenium-framework-mcp.git
+2025-12-09T03:35:24.757Z [DEBUG] Path D:\my_ai_projects\py_sel_framework_mcp already tracked for repo solosza/py-selenium-framework-mcp
+2025-12-09T03:35:24.788Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=C:\Users\solos\AppData\Roaming\npm\node_modules\@anthropic-ai\claude-code\vendor\ripgrep\x64-win32\rg.exe)
+2025-12-09T03:35:24.922Z [DEBUG] Shell snapshot created successfully (342 bytes)
+2025-12-09T03:35:25.004Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251325004
+2025-12-09T03:35:25.004Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:25.009Z [DEBUG] Temp file written successfully, size: 50958 bytes
+2025-12-09T03:35:25.009Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:25.009Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251325004 to C:\Users\solos\.claude.json
+2025-12-09T03:35:25.010Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:25.018Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251325018
+2025-12-09T03:35:25.018Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:25.022Z [DEBUG] Temp file written successfully, size: 50958 bytes
+2025-12-09T03:35:25.022Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:25.022Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251325018 to C:\Users\solos\.claude.json
+2025-12-09T03:35:25.022Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:25.031Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251325031
+2025-12-09T03:35:25.031Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:25.034Z [DEBUG] Temp file written successfully, size: 50958 bytes
+2025-12-09T03:35:25.034Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:25.035Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251325031 to C:\Users\solos\.claude.json
+2025-12-09T03:35:25.035Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:25.044Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251325044
+2025-12-09T03:35:25.044Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:25.047Z [DEBUG] Temp file written successfully, size: 50958 bytes
+2025-12-09T03:35:25.047Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:25.047Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251325044 to C:\Users\solos\.claude.json
+2025-12-09T03:35:25.047Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:25.397Z [DEBUG] Passes: Using fresh cached eligibility data
+2025-12-09T03:35:25.440Z [DEBUG] Loaded 0 installed plugins from V2 file at C:\Users\solos\.claude\plugins\installed_plugins_v2.json
+2025-12-09T03:35:25.440Z [DEBUG] Initialized versioned plugins system with 0 plugins
+2025-12-09T03:35:25.446Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251325446
+2025-12-09T03:35:25.446Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:25.451Z [DEBUG] Temp file written successfully, size: 50958 bytes
+2025-12-09T03:35:25.451Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:25.451Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251325446 to C:\Users\solos\.claude.json
+2025-12-09T03:35:25.451Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:25.462Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2025-12-09T03:35:25.462Z [DEBUG] Found 0 hook matchers in settings
+2025-12-09T03:35:25.462Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2025-12-09T03:35:25.476Z [DEBUG] Skills and commands included in Skill tool:
+2025-12-09T03:35:25.476Z [DEBUG] Slash commands included in SlashCommand tool:
+2025-12-09T03:35:25.526Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251325526
+2025-12-09T03:35:25.526Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:25.530Z [DEBUG] Temp file written successfully, size: 50853 bytes
+2025-12-09T03:35:25.530Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:25.530Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251325526 to C:\Users\solos\.claude.json
+2025-12-09T03:35:25.530Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:25.545Z [DEBUG] performStartupChecks called
+2025-12-09T03:35:25.546Z [DEBUG] Starting background plugin installations
+2025-12-09T03:35:25.546Z [DEBUG] performBackgroundPluginInstallations called
+2025-12-09T03:35:25.573Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-12-09T03:35:25.576Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251325576
+2025-12-09T03:35:25.576Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:25.579Z [DEBUG] Temp file written successfully, size: 50958 bytes
+2025-12-09T03:35:25.579Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:25.580Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251325576 to C:\Users\solos\.claude.json
+2025-12-09T03:35:25.581Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:25.582Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2025-12-09T03:35:25.582Z [DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+2025-12-09T03:35:27.600Z [DEBUG] Writing to temp file: C:\Users\solos\.claude.json.tmp.33452.1765251327600
+2025-12-09T03:35:27.600Z [DEBUG] Preserving file permissions: 100666
+2025-12-09T03:35:27.605Z [DEBUG] Temp file written successfully, size: 50958 bytes
+2025-12-09T03:35:27.605Z [DEBUG] Applied original permissions to temp file
+2025-12-09T03:35:27.605Z [DEBUG] Renaming C:\Users\solos\.claude.json.tmp.33452.1765251327600 to C:\Users\solos\.claude.json
+2025-12-09T03:35:27.606Z [DEBUG] File C:\Users\solos\.claude.json written atomically
+2025-12-09T03:35:27.618Z [DEBUG] Getting matching hook commands for SubagentStart with query: Explore
+2025-12-09T03:35:27.618Z [DEBUG] Found 0 hook matchers in settings
+2025-12-09T03:35:27.618Z [DEBUG] Matched 0 unique hooks for query "Explore" (0 before deduplication)
+2025-12-09T03:35:27.667Z [DEBUG] Getting matching hook commands for SubagentStart with query: Plan
+2025-12-09T03:35:27.667Z [DEBUG] Found 0 hook matchers in settings
+2025-12-09T03:35:27.667Z [DEBUG] Matched 0 unique hooks for query "Plan" (0 before deduplication)
+2025-12-09T03:35:27.770Z [DEBUG] MCP server "ide": Starting connection with timeout of 30000ms
+2025-12-09T03:35:27.807Z [DEBUG] Summarizing all 44 messages (~12620 tokens)
+2025-12-09T03:35:27.845Z [DEBUG] MCP server "ide": Successfully connected to ws-ide server in 93ms
+2025-12-09T03:35:27.845Z [DEBUG] MCP server "ide": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"Claude Code VSCode MCP","version":"2.0.58"}}
+2025-12-09T03:35:30.012Z [DEBUG] Stream started - received first chunk
+2025-12-09T03:35:30.132Z [DEBUG] Stream started - received first chunk
+2025-12-09T03:35:30.552Z [DEBUG] Stream started - received first chunk
+2025-12-09T03:35:30.649Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-12-09T03:35:30.664Z [DEBUG] FileHistory: Added snapshot for 6df04101-cd2c-44c4-a7c2-80968de06963, tracking 0 files
+2025-12-09T03:35:30.686Z [DEBUG] UserCommandMessage rendering: "mcp" (args: "none")
+2025-12-09T03:35:30.686Z [DEBUG] isSkillFormat: false, prefix: "/"
+2025-12-09T03:35:30.702Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2025-12-09T03:35:30.728Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-09T03:35:30.728Z [DEBUG] Found 0 hook matchers in settings
+2025-12-09T03:35:30.728Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-09T03:35:32.128Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2025-12-09T03:35:32.128Z [DEBUG] Found 0 hook matchers in settings
+2025-12-09T03:35:32.128Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2025-12-09T03:35:50.517Z [DEBUG] Getting matching hook commands for SessionEnd with query: prompt_input_exit
+2025-12-09T03:35:50.517Z [DEBUG] Found 0 hook matchers in settings
+2025-12-09T03:35:50.517Z [DEBUG] Matched 0 unique hooks for query "prompt_input_exit" (0 before deduplication)

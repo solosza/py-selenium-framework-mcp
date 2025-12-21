@@ -1,0 +1,135 @@
+# Session State - 2025-11-28 ~3:00 AM
+
+## Current Phase
+**Phase:** Framework Polish & MCP Tool Fixes
+**Status:** On Track - Ready to Test & Commit
+
+---
+
+## What We Completed This Session
+
+### 1. SRP Review (Resolved)
+- **Confirmed** existing workflow methods ARE SRP-compliant
+- Each method = ONE business goal (navigation is prerequisite, not separate goal)
+- `login_then_logout()` was correctly removed (TWO goals = violation)
+
+### 2. Decorator Pattern Fix (Industry Standard)
+- **Removed** `@autologger` decorators from all POMs:
+  - `base_page.py` (15+ methods)
+  - `product_list_page.py` (20+ methods)
+  - `login_page.py` (3 methods)
+- **Updated** CLAUDE.md: "NO decorators on POMs (logging at Task/Role level only)"
+- **Rationale:** Industry standard - POMs are implementation details, Tasks tell the business story
+
+### 3. Test Architecture Fix
+- **Fixed** `test_logout.py` to use Role methods properly
+- **Removed** direct POM usage (`HomePage`) and `web_interface` calls from tests
+- **Pattern enforced:** Test → Role → Task → POM → WebInterface
+
+### 4. MCP Tool Logic Fix (THE BIG ONE)
+Added capability discovery to prevent duplicate module creation:
+
+**New Functions in `code_generator.py`:**
+```python
+discover_existing_capabilities()  # Scans Pages, Tasks, Roles + their methods
+can_assemble_workflow()           # Checks if workflow pieces exist
+```
+
+**Updated Tools to Check Existing First:**
+- **Tool 3** (generate_page_object): Checks if page exists → USE_EXISTING
+- **Tool 4** (generate_task): Checks if task exists → USE_EXISTING
+- **Tool 5** (generate_role): Checks if role has workflow method → USE_EXISTING
+
+**Test Results:**
+```
+Tool 3: LoginPage + auth   → Found existing LoginPage
+Tool 4: AuthTasks + auth   → Found existing CommonTasks
+Tool 5: LoginUser + login  → Found existing RegisteredUser
+```
+
+### 5. Cleanup
+- **Deleted** all devtest folders (MCP test artifacts)
+- **Deleted** `auth_tasks.py` (duplicate of CommonTasks)
+- **Fixed** `get_file_path_for_component()` to use proper workflow subfolders
+
+---
+
+## Files Changed This Session
+```
+framework/pages/base_page.py                    - Removed decorators
+framework/pages/catalog/product_list_page.py   - Removed decorators
+framework/pages/auth/login_page.py             - Removed decorators
+tests/auth/test_logout.py                      - Fixed to use Role methods
+mcp_server/utils/code_generator.py             - Added discover_existing_capabilities()
+mcp_server/tools/tool_03_generate_page_object.py - Checks existing before generating
+mcp_server/tools/tool_04_generate_task.py      - Checks existing before generating
+mcp_server/tools/tool_05_generate_role.py      - Checks existing before generating
+CLAUDE.md                                       - Updated POM pattern (no decorators)
+```
+
+## Files/Folders Deleted This Session
+```
+framework/tasks/auth/auth_tasks.py
+framework/pages/devtest1/, devtest2/
+framework/roles/devtest1/, devtest2/
+framework/tasks/devtest1/, devtest2/
+tests/devtest1/, devtest2/
+```
+
+---
+
+## Test Status
+- MCP capability discovery: PASSING
+- Tool 3/4/5 existing checks: PASSING
+- Framework tests: **NOT RUN YET** (run before commit)
+
+---
+
+## What To Do Next Session
+
+### Step 1: Run Tests
+```bash
+cd D:\my_ai_projects\py_sel_framework_mcp\tests
+pytest -v auth/ catalog/ --tb=short
+```
+
+### Step 2: Review Changes
+```bash
+git status
+git diff --stat
+```
+
+### Step 3: Commit
+```bash
+git add -A
+git commit -m "refactor: MCP tools check existing modules before generating
+
+- Added discover_existing_capabilities() and can_assemble_workflow()
+- Updated Tools 3/4/5 to return existing module info instead of duplicates
+- Removed decorators from POMs (industry standard)
+- Fixed test_logout.py to use Role methods
+- Cleaned up devtest artifacts and duplicate auth_tasks.py
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>"
+```
+
+---
+
+## Key Design Decisions Made
+
+1. **NO decorators on POMs** - industry standard, logging at Task/Role level
+2. **Tests → Roles → Tasks → POMs** - strict chain, no skipping layers
+3. **MCP tools check existing** - `discover_existing_capabilities()` prevents duplicates
+4. **Workflow folders** - organize modules by domain (auth/, catalog/, etc.)
+5. **SRP for Role methods** - ONE business goal per method (navigation is prerequisite)
+
+---
+
+## Resume Command
+```
+Run framework tests, review git diff, then commit with the message above.
+```
+
+---
+**Last Updated:** 2025-11-28 ~3:00 AM

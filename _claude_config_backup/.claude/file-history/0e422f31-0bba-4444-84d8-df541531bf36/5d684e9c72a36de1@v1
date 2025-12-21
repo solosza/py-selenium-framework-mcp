@@ -1,0 +1,71 @@
+"""
+CartPage - Page Object Model
+
+Page Object representing a single page in the application.
+Provides atomic UI interactions via WebInterface composition.
+"""
+
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+
+class CartPage:
+    """
+    Page Object for Cart Page.
+
+    - NO decorators
+    - Locators as class constants
+    - Atomic methods (one UI action)
+    - Return self for chaining
+    - State-check methods for assertions
+    """
+
+    def __init__(self, web: WebInterface):
+        """Compose WebInterface - NO inheritance."""
+        self.web = web
+
+    # ==================== LOCATORS (Class Constants) ====================
+    CART_SUMMARY_TABLE = (By.CSS_SELECTOR, "#cart_summary")
+    CART_QUANTITY_INPUT = (By.CSS_SELECTOR, "input.cart_quantity_input")
+    DELETE_ITEM_LINK = (By.CSS_SELECTOR, "a.cart_quantity_delete")
+    PROCEED_TO_CHECKOUT_BUTTON = (By.CSS_SELECTOR, "a.standard-checkout")
+    TOTAL_PRICE = (By.CSS_SELECTOR, "#total_price")
+    EMPTY_CART_WARNING = (By.CSS_SELECTOR, "p.alert-warning")
+
+    # ==================== ATOMIC METHODS (One UI Action) ====================
+
+    def enter_cart_quantity_input(self, text: str) -> "CartPage":
+        """Enter cart quantity input."""
+        self.web.type_text(*self.CART_QUANTITY_INPUT, text=text)
+        return self  # Fluent API
+
+    def click_delete_item_link(self) -> "CartPage":
+        """Click delete item link link."""
+        self.web.click(*self.DELETE_ITEM_LINK)
+        return self
+
+    def click_proceed_to_checkout_button(self) -> "CartPage":
+        """Click proceed to checkout button link."""
+        self.web.click(*self.PROCEED_TO_CHECKOUT_BUTTON)
+        return self
+
+    # ==================== STATE-CHECK METHODS (For Assertions) ====================
+
+    def is_page_loaded(self) -> bool:
+        """Check if cart page is loaded."""
+        cart_summary_locator = (By.CSS_SELECTOR, "#cart_summary")
+        return self.web.is_element_displayed(*cart_summary_locator, timeout=10)
+
+    def has_items(self) -> bool:
+        """Check if cart has items."""
+        return self.get_item_count() > 0
+
+    def get_item_count(self) -> int:
+        """Get number of items in cart."""
+        cart_items_locator = (By.CSS_SELECTOR, "#cart_summary tbody tr")
+        items = self.web.find_elements(*cart_items_locator)
+        return len(items)
+
+    def is_cart_empty(self) -> bool:
+        """Check if cart is empty."""
+        return self.get_item_count() == 0

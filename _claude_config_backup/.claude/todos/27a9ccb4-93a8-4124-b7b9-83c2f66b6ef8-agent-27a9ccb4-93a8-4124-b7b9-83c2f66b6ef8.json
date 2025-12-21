@@ -1,0 +1,167 @@
+[
+  {
+    "content": "Task 0.0: Setup Git Repository and Feature Branch",
+    "status": "completed",
+    "activeForm": "Setting up git branch"
+  },
+  {
+    "content": "Task 1.0: Setup Configuration, Selectors, and Templates",
+    "status": "completed",
+    "activeForm": "Setting up config and templates"
+  },
+  {
+    "content": "Task 2.0: Implement Core Framework - Send Tracker (TDD)",
+    "status": "pending",
+    "activeForm": "Implementing send tracker"
+  },
+  {
+    "content": "T-2.1: Create tests/phase1.2/test_send_tracker.py (RED phase)",
+    "status": "pending",
+    "activeForm": "Writing send_tracker tests"
+  },
+  {
+    "content": "T-2.2: Create framework/send_tracker.py (GREEN phase)",
+    "status": "pending",
+    "activeForm": "Implementing send_tracker"
+  },
+  {
+    "content": "T-2.3-2.4: Run tests and verify coverage >=80%",
+    "status": "pending",
+    "activeForm": "Testing send_tracker"
+  },
+  {
+    "content": "Task 3.0: Implement Core Framework - Message Renderer (TDD)",
+    "status": "pending",
+    "activeForm": "Implementing message renderer"
+  },
+  {
+    "content": "T-3.1: Create tests/phase1.2/test_message_renderer.py (RED phase)",
+    "status": "pending",
+    "activeForm": "Writing message_renderer tests"
+  },
+  {
+    "content": "T-3.2: Create framework/message_renderer.py (GREEN phase)",
+    "status": "pending",
+    "activeForm": "Implementing message_renderer"
+  },
+  {
+    "content": "T-3.3-3.4: Run tests and verify coverage >=80%",
+    "status": "pending",
+    "activeForm": "Testing message_renderer"
+  },
+  {
+    "content": "Task 4.0: Implement Page Object Model for Ask Question Modal",
+    "status": "pending",
+    "activeForm": "Implementing modal POM"
+  },
+  {
+    "content": "T-4.1: Modify listing_page.py - Add open_ask_modal() method",
+    "status": "pending",
+    "activeForm": "Modifying listing_page.py"
+  },
+  {
+    "content": "T-4.2: Create ask_question_modal.py with fill/submit/captcha methods",
+    "status": "pending",
+    "activeForm": "Creating ask_question_modal.py"
+  },
+  {
+    "content": "T-4.3-4.5: Create and run unit tests with mocks",
+    "status": "pending",
+    "activeForm": "Testing modal POM"
+  },
+  {
+    "content": "Task 5.0: Implement CLI Interface (TDD)",
+    "status": "pending",
+    "activeForm": "Implementing CLI"
+  },
+  {
+    "content": "T-5.1: Create tests/phase1.2/test_ask_question_cli.py (RED phase)",
+    "status": "pending",
+    "activeForm": "Writing CLI tests"
+  },
+  {
+    "content": "T-5.2: Create scraper/ask_question_cli.py (GREEN phase)",
+    "status": "pending",
+    "activeForm": "Implementing CLI"
+  },
+  {
+    "content": "T-5.3-5.5: Run tests, verify coverage, manual CLI test",
+    "status": "pending",
+    "activeForm": "Testing CLI"
+  },
+  {
+    "content": "Task 6.0: Implement Main Workflow Orchestrator (Test-After)",
+    "status": "pending",
+    "activeForm": "Implementing orchestrator"
+  },
+  {
+    "content": "T-6.1-6.2: Create zillow_ask_question.py and main workflow loop",
+    "status": "pending",
+    "activeForm": "Creating orchestrator"
+  },
+  {
+    "content": "T-6.3: Implement error handling with try/except",
+    "status": "pending",
+    "activeForm": "Implementing error handling"
+  },
+  {
+    "content": "T-6.4-6.7: Create integration tests and test with small batch",
+    "status": "pending",
+    "activeForm": "Testing orchestrator"
+  },
+  {
+    "content": "Task 7.0: Implement Logging, State Management & Reporting",
+    "status": "pending",
+    "activeForm": "Implementing logging and reporting"
+  },
+  {
+    "content": "T-7.1-7.3: Implement JSONL logging, state updates, summary reports",
+    "status": "pending",
+    "activeForm": "Implementing logging"
+  },
+  {
+    "content": "T-7.4-7.7: Create tests, manual verification, final commit",
+    "status": "pending",
+    "activeForm": "Testing logging"
+  },
+  {
+    "content": "Task 8.0: Acceptance Testing and Final Validation",
+    "status": "pending",
+    "activeForm": "Running acceptance tests"
+  },
+  {
+    "content": "T-8.1: Acceptance Test 1 - Dry Run Mode",
+    "status": "pending",
+    "activeForm": "Testing dry run"
+  },
+  {
+    "content": "T-8.2: Acceptance Test 2 - Live Mode with Quota",
+    "status": "pending",
+    "activeForm": "Testing live mode"
+  },
+  {
+    "content": "T-8.3: Acceptance Test 3 - Deduplication",
+    "status": "pending",
+    "activeForm": "Testing deduplication"
+  },
+  {
+    "content": "T-8.4: Acceptance Test 4 - CAPTCHA Detection and Halt",
+    "status": "pending",
+    "activeForm": "Testing CAPTCHA halt"
+  },
+  {
+    "content": "T-8.5: Acceptance Test 5 - Config Delays Applied",
+    "status": "pending",
+    "activeForm": "Testing delays"
+  },
+  {
+    "content": "T-8.6: Acceptance Test 6 - Report & Artifacts",
+    "status": "pending",
+    "activeForm": "Testing artifacts"
+  },
+  {
+    "content": "T-8.7-8.12: Final tests, coverage check, acceptance summary",
+    "status": "pending",
+    "activeForm": "Final validation"
+  }
+]

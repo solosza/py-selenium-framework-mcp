@@ -1,0 +1,47 @@
+[
+  {
+    "content": "Complete Phase 0 Design Discussion (Sections 2-7)",
+    "status": "in_progress",
+    "activeForm": "Completing Phase 0 Design Discussion (Sections 2-7)"
+  },
+  {
+    "content": "Track QA-specific adaptations as we work",
+    "status": "in_progress",
+    "activeForm": "Tracking QA-specific adaptations as we work"
+  },
+  {
+    "content": "Set up GitHub repository",
+    "status": "completed",
+    "activeForm": "Setting up GitHub repository"
+  },
+  {
+    "content": "Create QA 4D Framework docs after Phase 0",
+    "status": "pending",
+    "activeForm": "Creating QA 4D Framework docs after Phase 0"
+  },
+  {
+    "content": "Complete Phase 1 (Test Plan generation)",
+    "status": "pending",
+    "activeForm": "Completing Phase 1 (Test Plan generation)"
+  },
+  {
+    "content": "Complete Phase 2 (Task generation)",
+    "status": "pending",
+    "activeForm": "Completing Phase 2 (Task generation)"
+  },
+  {
+    "content": "Complete Phase 3 (Test implementation)",
+    "status": "pending",
+    "activeForm": "Completing Phase 3 (Test implementation)"
+  },
+  {
+    "content": "Document QA 4D Framework based on learnings",
+    "status": "pending",
+    "activeForm": "Documenting QA 4D Framework based on learnings"
+  },
+  {
+    "content": "Add py_sel_framework_mcp to validation case studies",
+    "status": "pending",
+    "activeForm": "Adding py_sel_framework_mcp to validation case studies"
+  }
+]

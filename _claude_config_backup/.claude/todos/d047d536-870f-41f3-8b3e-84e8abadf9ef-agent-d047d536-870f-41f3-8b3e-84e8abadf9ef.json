@@ -1,0 +1,37 @@
+[
+  {
+    "content": "Update skill with DevTest vs Production folders",
+    "status": "completed",
+    "activeForm": "Updating skill with DevTest vs Production folders"
+  },
+  {
+    "content": "B.7 Step 1-2: Gather requirements and AI processing",
+    "status": "completed",
+    "activeForm": "Gathering B.7 requirements and processing"
+  },
+  {
+    "content": "B.7 Step 3: Tool 1 - Generate test scenarios",
+    "status": "in_progress",
+    "activeForm": "Generating test scenarios"
+  },
+  {
+    "content": "B.7 Step 4: Tool 2 - Discover page elements",
+    "status": "pending",
+    "activeForm": "Discovering page elements"
+  },
+  {
+    "content": "B.7 Step 5-7: Tools 3-5 - Generate POM/Task/Role",
+    "status": "pending",
+    "activeForm": "Generating POM, Task, and Role"
+  },
+  {
+    "content": "B.7 Step 8: Tool 6 - Generate test runner",
+    "status": "pending",
+    "activeForm": "Generating test runner"
+  },
+  {
+    "content": "B.7 Step 9: Save files and run test",
+    "status": "pending",
+    "activeForm": "Saving files and running test"
+  }
+]

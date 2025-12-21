@@ -1,0 +1,158 @@
+# QA Validation Agents - Defect Log
+
+**Project:** QA Validation Agents
+**Location:** `agents/`
+
+---
+
+## DEF-VA-001: Missing AI Orchestrator Integration
+
+**Date:** 2024-12-17
+**Severity:** CRITICAL
+**Status:** FIX_PENDING_TEST
+**Found In:** Task 7.0 - Real Validation Run
+
+### Description
+
+The Supervisor agent has no mechanism to invoke the AI Orchestrator (Claude Code + MCP tools). The `_run_scenario()` function in `supervisor.py` lines 195-204 only simulates artifact generation - it never actually triggers the 9-step MCP workflow.
+
+### Expected Behavior
+
+```
+Supervisor → SQA Agent → AI Orchestrator → Reviewer → Report
+                              │
+                              └─→ Invokes MCP Tools 1-6
+                                  Passes metadata
+                                  Generates artifacts
+```
+
+### Actual Behavior
+
+```
+Supervisor → (simulated) → Reviewer → Report
+                │
+                └─→ No actual artifact generation
+                    Just returns "Simulated review"
+```
+
+### Root Cause
+
+1. Architecture had 3 components but needed 4:
+   - Supervisor (triggers agents)
+   - SQA Agent (simulates SDET user)
+   - **AI Orchestrator (Claude Code + MCP)** ← MISSING
+   - Reviewer (validates artifacts)
+
+2. SQA Agent was only providing requirements, not invoking the skill
+
+3. The "Orchestrator" was marked as "(Simulated)" in code comments but never implemented
+
+### Evidence
+
+`supervisor.py` lines 195-204:
+```python
+if content_map:
+    # Testing mode: validate provided content
+    review_result = await _test_validate_artifacts({...})
+else:
+    # SIMULATION MODE - JUST SKIPS EVERYTHING!
+    review_result = {
+        "status": "APPROVE",
+        "summary": "Simulated review - no artifacts provided",
+    }
+```
+
+### Impact
+
+- Task 7.0 validation run could not execute properly
+- Integration tests passed because they provided mock `content_map`, hiding the gap
+- Real validation flow was broken
+
+### Fix Required
+
+1. Add AI Orchestrator as explicit component in architecture
+2. SQA Agent must invoke `/skill execute-from-step1` to trigger AI Orchestrator
+3. Add visual workflow logger to track flow and catch failures early
+4. Add new DDs to prevent recurrence
+
+### Related DDs
+
+- New DD-VA-23: Agent hierarchy must include AI Orchestrator
+- New DD-VA-24: Visual workflow logging required
+- New DD-VA-25: SQA Agent must invoke skill (not just provide requirements)
+
+---
+
+## DEF-VA-002: No Visual Feedback During Validation Flow
+
+**Date:** 2024-12-17
+**Severity:** HIGH
+**Status:** OPEN
+**Found In:** Task 7.0 - Real Validation Run
+
+### Description
+
+During validation run, there was no visual indication of:
+- Which step was executing
+- Which agent was active
+- Where the flow failed
+- What the handoff status was
+
+This made debugging extremely difficult.
+
+### Expected Behavior
+
+Real-time visual log showing:
+```
+[1/5] SUPERVISOR → SQA AGENT          ✅ SUCCESS
+[2/5] SQA → AI ORCHESTRATOR           🔄 RUNNING
+      Step 3: Tool 1 invoked...
+      Step 4: Tool 2 invoked...
+[2/5] SQA → AI ORCHESTRATOR           ❌ FAILED
+      Error: Element not found
+```
+
+### Actual Behavior
+
+No visual feedback. Had to manually trace through conversation to find failure point.
+
+### Root Cause
+
+Visual workflow logger was never built. No logging infrastructure for agent handoffs.
+
+### Fix Required
+
+1. Build `agents/tools/workflow_logger.py`
+2. Integrate into Supervisor flow
+3. Show real-time status at each step
+
+---
+
+## Defect Template
+
+```markdown
+## DEF-VA-XXX: [Brief Description]
+
+**Date:** YYYY-MM-DD
+**Severity:** CRITICAL | HIGH | MEDIUM | LOW
+**Status:** OPEN | IN_PROGRESS | RESOLVED
+**Found In:** [Task/Context]
+
+### Description
+[What went wrong]
+
+### Expected Behavior
+[What should happen]
+
+### Actual Behavior
+[What actually happened]
+
+### Root Cause
+[Why it happened]
+
+### Fix Required
+[What needs to be done]
+
+### Related DDs
+[Any new or existing DDs]
+```

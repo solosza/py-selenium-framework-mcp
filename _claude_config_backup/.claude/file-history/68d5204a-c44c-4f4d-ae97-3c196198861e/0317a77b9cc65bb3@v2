@@ -1,0 +1,44 @@
+"""
+Devtest1 Tests - Valid Login With Correct Credentials.
+
+Test generated from user story scenario.
+"""
+
+import pytest
+from pathlib import Path
+import sys
+
+# Add framework to path
+FRAMEWORK_PATH = str(Path(__file__).parent.parent.parent / "framework")
+sys.path.insert(0, FRAMEWORK_PATH)
+
+from roles.devtest1.dev_registered_user import DevRegisteredUser
+from resources.utilities import autologger
+
+
+@pytest.mark.devtest1
+@autologger.automation_logger("Test")
+def test_valid_login_with_correct_credentials(web_interface, config):
+    """
+    Verify user enters email and password and clicks Sign In
+
+    Scenario:
+        Given: user has valid registered credentials
+        When: user enters email and password and clicks Sign In
+        Then: user is logged into their account successfully
+    """
+    # Arrange
+    base_url = config["url"]
+
+    # Test user credentials
+    user_data = {
+        "email": "test@example.com",
+        "password": "Test123!"
+    }
+    dev_registered_user = DevRegisteredUser(web_interface, user_data, base_url)
+
+    # Act - Call login workflow
+    result = dev_registered_user.login()
+
+    # Assert - Verify login succeeded
+    assert result is True, "Login should succeed with valid credentials"

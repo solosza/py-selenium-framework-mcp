@@ -1,0 +1,181 @@
+"""
+MCP End-to-End Test
+
+Tests the full MCP tool chain:
+1. Parse user story (Tool 1)
+2. Generate test template (Tool 6)
+3. Save generated test
+4. Run pytest with browser
+5. Verify HTML report generated
+
+Usage:
+    cd mcp_server/_dev_tests
+    python test_mcp_e2e.py
+"""
+
+import asyncio
+import json
+import sys
+import subprocess
+import os
+from pathlib import Path
+from datetime import datetime
+
+# Add paths for imports
+mcp_dir = Path(__file__).parent.parent
+sys.path.insert(0, str(mcp_dir))
+sys.path.insert(0, str(mcp_dir / "tools"))
+
+from tools.tool_01_generate_tests_from_user_story import generate_tests_from_user_story
+from tools.tool_06_generate_test_template import generate_test_template
+
+
+# Test configuration
+USER_STORY = """
+As a registered user, I want to browse the product catalog
+So that I can find products to purchase
+
+Acceptance Criteria:
+- User can navigate to the Women category
+- Products are displayed in the catalog
+- Product count is visible
+
+Scenario: Browse Women category
+Given user is on the home page
+When user clicks Women category link
+Then products are displayed in the catalog
+And product count is greater than 0
+"""
+
+WORKFLOW = "catalog"
+
+
+async def run_mcp_pipeline():
+    """Run the MCP tool chain end-to-end."""
+
+    print("=" * 60)
+    print("MCP END-TO-END TEST")
+    print("=" * 60)
+
+    # Step 1: Parse user story
+    print("\n[STEP 1] Parsing user story with Tool 1...")
+    result1 = await generate_tests_from_user_story({
+        "user_story": USER_STORY,
+        "workflow": WORKFLOW
+    })
+
+    parsed = json.loads(result1)
+    if parsed.get("status") != "success":
+        print(f"ERROR: Tool 1 failed - {parsed.get('error')}")
+        return False
+
+    print(f"  Title: {parsed.get('user_story_title')}")
+    print(f"  Scenarios found: {parsed.get('scenarios_count')}")
+
+    scenarios = parsed.get("scenarios", [])
+    if not scenarios:
+        print("ERROR: No scenarios parsed")
+        return False
+
+    scenario = scenarios[0]
+    print(f"  Test name: {scenario.get('name')}")
+    print(f"  Given: {scenario.get('given')}")
+    print(f"  When: {scenario.get('when')}")
+    print(f"  Then: {scenario.get('then')}")
+
+    # Step 2: Generate test template
+    print("\n[STEP 2] Generating test code with Tool 6...")
+    result2 = await generate_test_template({
+        "test_name": scenario.get("name"),
+        "workflow": WORKFLOW,
+        "role": "RegisteredUser",
+        "scenario": scenario
+    })
+
+    gen_result = json.loads(result2)
+    if gen_result.get("status") != "success":
+        print(f"ERROR: Tool 6 failed - {gen_result.get('error')}")
+        return False
+
+    test_code = gen_result.get("code")
+    file_path = gen_result.get("file_path")
+    print(f"  Generated test: {gen_result.get('test_name')}")
+    print(f"  Suggested path: {file_path}")
+    print(f"  Architecture: {gen_result.get('architecture')}")
+
+    # Step 3: Save test to framework
+    print("\n[STEP 3] Saving generated test...")
+
+    # Create test file in tests/catalog/
+    framework_root = mcp_dir.parent
+    test_dir = framework_root / "tests" / WORKFLOW
+    test_dir.mkdir(parents=True, exist_ok=True)
+
+    # Use unique name with timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    test_file = test_dir / f"test_mcp_generated_{timestamp}.py"
+
+    with open(test_file, "w") as f:
+        f.write(test_code)
+
+    print(f"  Saved to: {test_file}")
+
+    # Step 4: Run pytest with browser
+    print("\n[STEP 4] Running pytest with browser...")
+
+    report_name = f"mcp_e2e_report_{timestamp}.html"
+    report_path = framework_root / "tests" / "_reports" / report_name
+
+    # Run pytest
+    cmd = [
+        sys.executable, "-m", "pytest",
+        str(test_file),
+        "-v",
+        f"--html={report_path}",
+        "--self-contained-html"
+    ]
+
+    print(f"  Command: {' '.join(cmd)}")
+
+    result = subprocess.run(
+        cmd,
+        cwd=str(framework_root / "tests"),
+        capture_output=True,
+        text=True
+    )
+
+    print("\n  STDOUT:")
+    print("  " + result.stdout.replace("\n", "\n  "))
+
+    if result.stderr:
+        print("\n  STDERR:")
+        print("  " + result.stderr.replace("\n", "\n  "))
+
+    # Step 5: Verify report
+    print("\n[STEP 5] Verifying HTML report...")
+    if report_path.exists():
+        print(f"  Report generated: {report_path}")
+        print(f"  Report size: {report_path.stat().st_size} bytes")
+        print("  SUCCESS: HTML report created!")
+    else:
+        print(f"  ERROR: Report not found at {report_path}")
+
+    # Summary
+    print("\n" + "=" * 60)
+    print("MCP E2E TEST SUMMARY")
+    print("=" * 60)
+    print(f"  Tool 1 (Parse User Story): SUCCESS")
+    print(f"  Tool 6 (Generate Test):    SUCCESS")
+    print(f"  Test File Created:         {test_file.name}")
+    print(f"  HTML Report:               {report_name}")
+    print(f"  Pytest Exit Code:          {result.returncode}")
+
+    # Cleanup - remove generated test (optional)
+    # test_file.unlink()
+
+    return result.returncode == 0
+
+
+if __name__ == "__main__":
+    success = asyncio.run(run_mcp_pipeline())
+    sys.exit(0 if success else 1)

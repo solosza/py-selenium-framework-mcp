@@ -1,0 +1,112 @@
+# RAG Testing Reference
+
+Domain-specific test coverage for each RAG component. Use with the generalized testing skill.
+
+---
+
+## Document Loading
+
+| Type | Test Examples |
+|------|---------------|
+| **Happy** | Load valid .md file, load valid .py file, metadata preserved |
+| **Negative** | File not found, permission denied, unsupported encoding |
+| **Edge** | Empty file, single character, very large file, unicode filename |
+
+---
+
+## Chunking
+
+| Type | Test Examples |
+|------|---------------|
+| **Happy** | Large doc splits correctly, overlap present, metadata preserved |
+| **Negative** | chunk_size=0, negative overlap, overlap >= chunk_size, None document |
+| **Edge** | Empty doc, doc < chunk_size, doc = chunk_size exactly, single char, whitespace only, unicode, code content |
+
+---
+
+## Embedding
+
+| Type | Test Examples |
+|------|---------------|
+| **Happy** | Text → vector of correct dimension, batch embedding works, similar text → similar vectors |
+| **Negative** | Empty text, None input, text exceeds model token limit |
+| **Edge** | Single word, max length text, unicode/emoji, code snippets |
+
+---
+
+## Vector Storage
+
+| Type | Test Examples |
+|------|---------------|
+| **Happy** | Add vectors, retrieve by ID, similarity search returns ranked results |
+| **Negative** | Duplicate ID handling, query non-existent ID, mismatched dimensions |
+| **Edge** | Empty store, single vector, persistence save/load, query immediately after add |
+
+---
+
+## Search
+
+| Type | Test Examples |
+|------|---------------|
+| **Happy** | Query returns top-k results, results ordered by relevance score |
+| **Negative** | Empty query, k=0, k > total chunks |
+| **Edge** | Query matches nothing, query matches everything, k=1, exact match vs semantic match |
+
+---
+
+## Prompt Building
+
+| Type | Test Examples |
+|------|---------------|
+| **Happy** | Chunks formatted into context string, instructions included, query incorporated |
+| **Negative** | Empty chunks list, None query |
+| **Edge** | Single chunk, chunks exceed context limit (truncation), special characters in context |
+
+---
+
+## Generation
+
+| Type | Test Examples |
+|------|---------------|
+| **Happy** | LLM returns answer grounded in context, sources attributed |
+| **Negative** | API error handling, timeout, invalid API key, rate limit |
+| **Edge** | Empty context (no retrieval), very long context, context with conflicting info |
+
+---
+
+## Evaluation
+
+| Type | Test Examples |
+|------|---------------|
+| **Happy** | Accuracy metrics calculated correctly, results formatted |
+| **Negative** | Empty test set, missing expected values |
+| **Edge** | Single test case, 100% pass, 100% fail, partial/fuzzy matches |
+
+---
+
+## Common Patterns by Input Type
+
+### Numeric Parameters
+- Zero
+- Negative
+- At boundary (limit, limit-1, limit+1)
+
+### Text Input
+- Empty string
+- Whitespace only
+- Unicode/emoji
+- Very long
+- Special characters (quotes, newlines, code)
+
+### Collections
+- Empty list
+- Single item
+- None in list
+- Duplicates
+
+### External Dependencies (APIs, files, DBs)
+- Connection failure
+- Timeout
+- Invalid credentials
+- Rate limiting
+- Resource not found

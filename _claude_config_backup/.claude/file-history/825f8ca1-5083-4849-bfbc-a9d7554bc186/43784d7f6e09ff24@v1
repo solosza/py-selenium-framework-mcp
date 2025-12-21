@@ -1,0 +1,69 @@
+"""Debug script to test login flow."""
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+# Setup driver
+options = webdriver.ChromeOptions()
+options.add_argument("--start-maximized")
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options=options)
+
+try:
+    # Navigate to auth page
+    print("Navigating to authentication page...")
+    driver.get("http://www.automationpractice.pl/index.php?controller=authentication")
+    time.sleep(3)
+
+    print(f"Current URL: {driver.current_url}")
+
+    # Check for login form
+    email_field = driver.find_element(By.ID, "email")
+    print(f"Found email field: {email_field.is_displayed()}")
+
+    # Enter credentials
+    email_field.send_keys("testuser.qa2024@gmail.com")
+
+    passwd_field = driver.find_element(By.ID, "passwd")
+    passwd_field.send_keys("TestPass123!")
+
+    # Click sign in
+    submit_btn = driver.find_element(By.ID, "SubmitLogin")
+    submit_btn.click()
+
+    # Wait for page transition
+    print("Waiting for login to complete...")
+    time.sleep(5)
+
+    print(f"Current URL after login: {driver.current_url}")
+
+    # Check for logout link
+    try:
+        logout_link = driver.find_element(By.CSS_SELECTOR, ".header_user_info .logout")
+        print(f"Found logout link: {logout_link.is_displayed()}")
+        print(f"Logout text: {logout_link.text}")
+    except Exception as e:
+        print(f"Logout link NOT found: {e}")
+
+    # Check for login link (should not be there if logged in)
+    try:
+        login_link = driver.find_element(By.CSS_SELECTOR, ".header_user_info .login")
+        print(f"Login link still visible: {login_link.is_displayed()}")
+    except Exception as e:
+        print(f"Login link not found (expected if logged in): {e}")
+
+    # Print page source snippet
+    print("\nHeader user info HTML:")
+    try:
+        header_user = driver.find_element(By.CSS_SELECTOR, ".header_user_info")
+        print(header_user.get_attribute('outerHTML'))
+    except Exception as e:
+        print(f"Could not find .header_user_info: {e}")
+
+finally:
+    input("Press Enter to close browser...")
+    driver.quit()

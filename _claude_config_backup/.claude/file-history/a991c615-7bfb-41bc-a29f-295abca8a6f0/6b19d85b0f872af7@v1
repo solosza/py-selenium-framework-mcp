@@ -1,0 +1,273 @@
+# Testing Skill
+
+Define and enforce a consistent testing process. Project-agnostic.
+
+## Purpose
+
+This skill defines the testing **process**:
+- When to run tests
+- Command format and required flags
+- Visual feedback requirements
+- Failure handling protocol
+
+For project-specific conventions (folder structures, report locations), see `references/conventions.md`.
+
+## Core Principles
+
+1. **Tests are mandatory** — No code complete without tests
+2. **Visual progress required** — User sees real-time feedback
+3. **Persistent reports required** — HTML report every run
+4. **Failures require discussion** — Never auto-fix
+5. **Defects are tracked** — Failures logged systematically
+6. **Fix options analyzed** — Consider alternatives before fixing
+
+## Test Plan (Living Document)
+
+Every project should have a `docs/TEST_PLAN.md` — a living document.
+
+**Standard QA Test Plan Sections:**
+
+| Section | Purpose |
+|---------|---------|
+| 1. Overview | Project summary, objectives, document history |
+| 2. Scope | In-scope, out-of-scope, assumptions |
+| 3. Test Strategy | Test types, levels, approach per component |
+| 4. Test Environment | Hardware, software, data requirements |
+| 5. Entry/Exit Criteria | When to start, when to stop testing |
+| 6. Test Schedule | Timeline, milestones, phases |
+| 7. Resources | Team roles, responsibilities, tools |
+| 8. Risk Analysis | Risks, impact, mitigation strategies |
+| 9. Test Matrix | Components × test categories grid |
+| 10. Test Cases | Detailed cases or reference to test files |
+| 11. Defect Management | Tracking process, severity definitions |
+| 12. Metrics & Reporting | KPIs, report frequency, dashboards |
+
+**Living Document Updates:**
+
+| Trigger | Update |
+|---------|--------|
+| Component built | Add to test matrix, update status |
+| Tests executed | Update metrics, last run date |
+| Defect found | Add to defect section |
+| Risk identified | Add to risk analysis |
+| Scope change | Update scope section |
+
+**Template:** `references/test-plan-template.md`
+
+## Testing Strategy Framework
+
+### Test Pyramid (Dynamically Generated)
+
+**CRITICAL: Generate a UNIQUE test pyramid for each component by analyzing what it does. Never reuse layers from other components without analysis.**
+
+**Layer Discovery Process:**
+
+```
+ANALYZE THE COMPONENT
+=====================
+
+Ask these questions about YOUR specific component:
+
+1. What does this component DO?
+   → Core functionality layer(s)
+
+2. What data does it handle?
+   → Data structure / validation layer(s)
+
+3. Does it depend on external systems?
+   → Dependency / integration layer(s)
+
+4. What makes THIS component different from others?
+   → Domain-specific layer(s)  ← THIS IS THE KEY QUESTION
+
+5. What can go wrong?
+   → Error handling / edge case layer(s)
+
+6. Are there non-functional requirements?
+   → Performance / security / reliability layer(s)
+```
+
+**Question 4 is critical.** Every component has unique characteristics that require unique test layers. If your pyramid could be copy-pasted to another component, you missed something.
+
+**Layer Discovery Examples (how to think, not what to copy):**
+
+| If component... | Then consider testing... |
+|-----------------|-------------------------|
+| Has external dependencies | Dependency loading, connection handling |
+| Produces output that must be consistent | Determinism, reproducibility |
+| Deals with meaning/semantics | Correctness of interpretation |
+| Has security implications | Authorization, input sanitization |
+| Has time-based behavior | Timing, expiration, sequencing |
+| Maintains state | State transitions, persistence |
+| Processes in batches | Batch efficiency, partial failures |
+
+**Output format:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│            [COMPONENT NAME] TEST PYRAMID                    │
+├─────────────────────────────────────────────────────────────┤
+│  1. [LAYER]    - [What question does this answer?]          │
+│  2. [LAYER]    - [What question does this answer?]          │
+│  ...                                                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Validate before proceeding:**
+
+| Check | If No, Then... |
+|-------|----------------|
+| Did I answer all 6 discovery questions? | Go back and analyze |
+| Is each layer answering a distinct question? | Merge or clarify |
+| Would this pyramid be WRONG for a different component? | Good - it's specific |
+| Did I identify what's UNIQUE about this component? | Re-analyze question 4 |
+
+### Test Coverage Matrix
+
+For each functional area, apply these test categories:
+
+| Category | Purpose | Example |
+|----------|---------|---------|
+| **Happy Path** | Normal expected behavior | Valid input → correct output |
+| **Negative** | Invalid input, error conditions | Bad input → graceful error |
+| **Edge Cases** | Unusual but valid inputs | Empty, unicode, special chars |
+| **Boundary** | At limits, exact boundaries | Min, max, exact size |
+| **Parametric** | Multiple parameter combinations | Size × overlap matrix |
+| **Concurrency** | Race conditions, parallel safety | Thread-safe operations |
+| **State** | State transitions | Before/after state correct |
+
+### Test Case Organization
+
+Group tests by functional area with status tracking:
+
+```
+## [Functional Area Name]
+
+| Type | Test | Status |
+|------|------|--------|
+| Happy | [description] | Done |
+| Happy | [description] | Done |
+| Negative | [description] | Missing |
+| Edge | [description] | Done |
+```
+
+**Status values:** Done | Missing | Failing
+
+## Test Coverage Process
+
+```
+1. PYRAMID    → Define test layers for this domain
+2. LIST       → What functional areas need coverage?
+3. MATRIX     → For each area: happy + negative + edge + boundary
+4. PRIORITIZE → P0 (must) | P1 (should) | P2 (nice to have)
+5. CREATE     → Write tests, track status
+6. GATE       → All P0/P1 done before moving on
+```
+
+**Quality gates:**
+- Function complete → Unit tests pass
+- Component complete → Integration tests pass
+- Release ready → Full suite passes
+
+For full test matrix templates, see `references/test-matrix.md`.
+For domain-specific examples, see project-level testing references.
+
+## When to Run Tests
+
+| Trigger | Description |
+|---------|-------------|
+| Component complete | After finishing a feature/component |
+| Manual request | User asks to run tests |
+| Before commit | Recommended |
+
+**Agent prompts:** "Should I run tests for this component?"
+
+## Test Command Format
+
+```bash
+pytest {test_path} -v --html={report_path} --self-contained-html
+```
+
+| Placeholder | Resolved By |
+|-------------|-------------|
+| `{test_path}` | Project convention |
+| `{report_path}` | Project convention |
+
+**Required flags:**
+
+| Flag | Purpose |
+|------|---------|
+| `-v` | Verbose (real-time test names + status) |
+| `--html` | Generate HTML report |
+| `--self-contained-html` | Single-file report |
+
+**Optional flags:**
+
+| Flag | Purpose |
+|------|---------|
+| `-s` | Show print output |
+| `-x` | Stop on first failure |
+| `--tb=short` | Shorter tracebacks |
+
+## Visual Feedback Requirements
+
+**During execution, user sees:**
+- Test names as they run
+- PASSED/FAILED per test
+- Progress (percentage)
+
+**After execution, user sees:**
+- Summary (X passed, Y failed)
+- Report file path
+- Clear verdict
+
+## Failure Protocol
+
+**On ANY test failure, follow this sequence:**
+
+| Step | Action |
+|------|--------|
+| 1. STOP | Halt work, do not auto-fix |
+| 2. REPORT | Show: test name, error, location |
+| 3. ANALYZE | Explain: expected vs actual, likely cause |
+| 4. DISCUSS DEFECT | Ask user: "Create defect entry?" |
+| 5. FIX OPTIONS | Present 2-3 fix approaches with tradeoffs |
+| 6. DISCUSS FIX | Ask user: "Which fix approach? Proceed?" |
+| 7. FIX | Implement approved fix only |
+| 8. RE-TEST | Run same tests again |
+| 9. RESOLVE | Update defect status if tracked |
+
+**Step 5 (Fix Options) format:**
+
+```
+| Option | Approach | Tradeoff |
+|--------|----------|----------|
+| A | [approach] | [pro/con] |
+| B | [approach] | [pro/con] |
+
+Recommendation: [option] because [reason]
+```
+
+Never implement the first solution that comes to mind. Analyze alternatives.
+
+For detailed failure handling and defect format, see `references/failure-handling.md`.
+
+## Anti-Patterns
+
+| Wrong | Right |
+|-------|-------|
+| Skip tests | Run tests before marking complete |
+| Silent failures | STOP and REPORT every failure |
+| No HTML report | Generate report every run |
+| Auto-fix without asking | Discuss with user first |
+| First solution bias | Analyze 2-3 fix options |
+| Untracked failures | Create defect entry |
+| Fix without re-testing | Re-run after every fix |
+
+## References
+
+- `references/test-plan-template.md` — Full QA test plan template (12 sections)
+- `references/test-matrix.md` — Test types, categories, matrix template, process flow
+- `references/test-coverage.md` — Coverage targets, gap analysis, reporting
+- `references/conventions.md` — Folder structures, report locations by project type
+- `references/failure-handling.md` — Detailed failure protocol, defect format, RCA template

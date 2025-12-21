@@ -1,0 +1,42 @@
+[
+  {
+    "content": "Create Google Analytics 4 property for alabuyshomes.com",
+    "status": "completed",
+    "activeForm": "Creating Google Analytics 4 property"
+  },
+  {
+    "content": "Add GA4 tracking code to GoDaddy Website Builder",
+    "status": "completed",
+    "activeForm": "Adding GA4 tracking code"
+  },
+  {
+    "content": "Configure GA4 custom events: calculator_interaction, form_start, form_submit",
+    "status": "completed",
+    "activeForm": "Configuring GA4 custom events"
+  },
+  {
+    "content": "Enable debug_mode in GA4 config for DebugView testing",
+    "status": "pending",
+    "activeForm": "Enabling debug mode for DebugView"
+  },
+  {
+    "content": "Test GA4 events using GA4 DebugView",
+    "status": "pending",
+    "activeForm": "Testing GA4 events using DebugView"
+  },
+  {
+    "content": "Set up UTM parameters for traffic source tracking",
+    "status": "pending",
+    "activeForm": "Setting up UTM parameters"
+  },
+  {
+    "content": "Create Google Analytics dashboard for key metrics",
+    "status": "pending",
+    "activeForm": "Creating Google Analytics dashboard"
+  },
+  {
+    "content": "Git commit analytics setup",
+    "status": "pending",
+    "activeForm": "Committing analytics setup to git"
+  }
+]

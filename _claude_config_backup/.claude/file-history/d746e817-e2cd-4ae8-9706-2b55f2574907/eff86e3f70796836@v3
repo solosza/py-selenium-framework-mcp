@@ -1,0 +1,103 @@
+# Session State - 2025-12-17
+
+## Current Phase
+**Phase:** Phase 0 (Design Discussion) for Task 7.0
+**Status:** In Progress
+
+## What We're Working On
+**Active Task:** 7.0 - Build QA Execution Engine Skill
+**Task Status:** Phase 0 Design - ~60% complete
+
+## Progress This Session
+
+### Completed
+- [x] Identified root cause: DDs are passive, AI forgets mid-workflow
+- [x] Updated PRD Section 13 with enforcement skill requirement
+- [x] Renumbered task list: 7.0 (Skill) → 8.0 (Defects) → 9.0 (Validation)
+- [x] Changed product language: "enforcement" → "execution"
+- [x] Created `dialogue-engine` skill (global interaction protocol)
+  - SKILL.md (main orchestrator)
+  - references/response-protocol.md
+  - references/question-format.md
+  - references/checkpoint-triggers.md
+  - references/topic-queue.md
+  - references/task-execution.md
+- [x] Started Phase 0 design for `qa-execution-engine`
+  - Confirmed: Option B (Modular References)
+  - Confirmed: All 22 DDs relevant
+  - Confirmed: Checkpoint every tool call
+  - Confirmed: Stop → Options → User chooses (DD-22 style)
+  - Confirmed: In-memory metadata (current approach)
+  - Confirmed: Skill name = `qa-execution-engine`
+
+### In Progress
+- [ ] Complete Phase 0 design for qa-execution-engine
+  - Next: Present reference file structures one at a time
+
+## Files Changed
+- `docs/projects/qa-validation-agents/1-prd-qa-validation-agents.md` - Added Section 13
+- `docs/projects/qa-validation-agents/2-tasks-qa-validation-agents.md` - Renumbered tasks
+- `.claude/skills/dialogue-engine/` - NEW skill created (6 files)
+
+## Key Decisions Made
+
+### Product Language
+- "Enforcement" → "Execution" across all verticals
+- qa-execution-engine, api-execution-engine, pm-execution-engine, etc.
+
+### Skill Architecture (Option B - Modular References)
+```
+.claude/skills/<skill-name>/
+├── SKILL.md                 # Light orchestrator
+└── references/
+    ├── reference-1.md
+    ├── reference-2.md
+    └── ...
+```
+
+### Dialogue Engine Rules
+1. One topic at a time
+2. Numbered options (user types number to respond)
+3. Stop after each task, await confirmation
+4. Propose new reference categories with rationale, await approval
+
+## Open Defects
+| ID | Status | Description |
+|----|--------|-------------|
+| DEF-VA-001 | RESOLVED | Missing AI Orchestrator Integration |
+| DEF-VA-002 | RESOLVED | No Visual Feedback |
+| DEF-VA-003 | OPEN | Tool 3 silently ignores wrong field names |
+| DEF-VA-004 | OPEN | Metadata not passed between tools |
+| DEF-VA-005 | OPEN | Reviewer no completeness checks |
+| DEF-VA-006 | OPEN | Visual Logger no detailed audit |
+
+## Context for Next Session
+
+**Resume Point:** Continue Phase 0 design for `qa-execution-engine` skill
+
+**Next Steps:**
+1. Present reference file structures for qa-execution-engine (one at a time)
+2. Complete Phase 0 → Get approval
+3. Phase 1: Create PRD for skill
+4. Phase 2: Generate tasks
+5. Phase 3: Build skill
+
+**Important Context:**
+- `dialogue-engine` skill is now active - follow its rules
+- qa-execution-engine replaces execute-from-step1 (keep old for reference)
+- All DDs move from FRAMEWORK.md into skill during creation
+
+## Accomplishments Today
+
+1. **Root cause identified** - DDs passive → skill needed
+2. **PRD updated** - Section 13 documents the why
+3. **Task list fixed** - Clean 7→8→9 flow
+4. **Product pivot** - "Execution" language
+5. **dialogue-engine created** - Controls ALL future interactions (6 files)
+6. **qa-execution-engine designed** - 60% of Phase 0 complete
+
+## Key Files
+- `agents/docs/DEFECT_LOG.md` - DEF-VA-001 to 006
+- `.claude/skills/dialogue-engine/` - New interaction protocol
+- `docs/projects/qa-validation-agents/1-prd-qa-validation-agents.md` - Section 13
+- `docs/projects/qa-validation-agents/2-tasks-qa-validation-agents.md` - Updated tasks

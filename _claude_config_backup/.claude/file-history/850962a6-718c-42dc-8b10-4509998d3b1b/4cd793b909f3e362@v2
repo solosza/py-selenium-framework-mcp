@@ -1,0 +1,359 @@
+# RAG System Test Plan
+
+**Version:** 1.0
+**Status:** Living Document
+**Last Updated:** 2024-12-13
+
+---
+
+## 1. Overview
+
+### 1.1 Project Summary
+Training Assistant RAG System - A retrieval-augmented generation system built for learning purposes. Each component is built from scratch to understand fundamentals before using frameworks.
+
+### 1.2 Test Objectives
+- Verify each RAG component functions correctly in isolation
+- Validate component integrations work together
+- Ensure retrieval quality meets thresholds
+- Learn testing practices alongside RAG concepts
+
+### 1.3 Document History
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0 | 2024-12-13 | AI/User | Initial version with Loading + Chunking |
+
+---
+
+## 2. Scope
+
+### 2.1 In Scope
+
+| Component | Description | Priority |
+|-----------|-------------|----------|
+| Document Loading | Load .py, .md, .txt files with metadata | P0 |
+| Chunking | Split documents into embeddable pieces | P0 |
+| Embedding | Convert text to vectors | P0 |
+| Vector Store | Store and index embeddings | P0 |
+| Search | Retrieve relevant chunks | P0 |
+| Prompt Building | Construct prompts with context | P1 |
+| Generation | LLM response generation | P1 |
+| Evaluation | Measure retrieval/generation quality | P1 |
+
+### 2.2 Out of Scope
+- Production deployment
+- Multi-user support
+- Authentication/authorization
+- Real-time streaming (for now)
+
+### 2.3 Assumptions
+- Local development environment
+- Python 3.11+ available
+- OpenAI API key for embedding/generation (later phases)
+
+### 2.4 Dependencies
+- pytest for test execution
+- Sample corpus (project files)
+
+---
+
+## 3. Test Strategy
+
+### 3.1 Test Levels
+
+| Level | Scope | Owner | Tools |
+|-------|-------|-------|-------|
+| Unit | Individual functions | Learner | pytest |
+| Integration | Component interactions | Learner | pytest |
+| System | Full RAG pipeline | Learner | pytest + manual |
+
+### 3.2 Test Types
+
+| Type | Purpose | When Run |
+|------|---------|----------|
+| Functional | Verify features work | After each component |
+| Negative | Handle bad inputs gracefully | With functional |
+| Edge Case | Boundary conditions | With functional |
+| Integration | Components work together | After component pairs |
+
+### 3.3 Approach by Component
+
+| Component | Test Approach | Coverage Target |
+|-----------|---------------|-----------------|
+| Loading | Unit + Integration | 90% |
+| Chunking | Unit + Parametric | 90% |
+| Embedding | Unit + Integration | 85% |
+| Vector Store | Unit + Integration | 85% |
+| Search | Unit + Integration + Quality | 85% |
+| Prompt | Unit | 80% |
+| Generation | Integration + Quality | 80% |
+| Evaluation | Unit + Integration | 85% |
+
+---
+
+## 4. Test Environment
+
+### 4.1 Hardware Requirements
+- Standard development machine
+- No special requirements for learning phase
+
+### 4.2 Software Requirements
+
+| Software | Version | Purpose |
+|----------|---------|---------|
+| Python | 3.11+ | Runtime |
+| pytest | 7.x | Test runner |
+| pytest-html | Latest | HTML reports |
+
+### 4.3 Test Data
+- Source: Project files (framework/, docs/, etc.)
+- Corpus: 30 docs, ~258K chars, ~64K tokens
+- No sensitive data in learning corpus
+
+### 4.4 Environment Setup
+```bash
+cd training-assistant
+pip install pytest pytest-html
+pytest --collect-only  # Verify tests discovered
+```
+
+---
+
+## 5. Entry/Exit Criteria
+
+### 5.1 Entry Criteria (Start Testing When)
+- [ ] Component code complete
+- [ ] Code runs without syntax errors
+- [ ] Test file created
+
+### 5.2 Exit Criteria (Stop Testing When)
+- [ ] All test categories covered (happy, negative, edge)
+- [ ] All tests passing
+- [ ] Coverage >= 85%
+- [ ] Lessons completed for component
+
+### 5.3 Suspension Criteria (Pause Testing If)
+- Blocker defect requires design change
+- Concept needs clarification before proceeding
+
+---
+
+## 6. Test Schedule
+
+### 6.1 Milestones
+
+| Milestone | Status | Criteria |
+|-----------|--------|----------|
+| Loading complete | Done | 15 tests passing |
+| Chunking complete | In Progress | 28 tests, lessons 2-3 remaining |
+| Embedding complete | Not Started | Tests + lessons |
+| Vector Store complete | Not Started | Tests + lessons |
+| Search complete | Not Started | Tests + lessons |
+| Full pipeline | Not Started | E2E test passing |
+
+### 6.2 Test Execution
+
+| Trigger | Tests | Command |
+|---------|-------|---------|
+| Component complete | Component tests | `pytest rag/ingestion/tests/test_[component].py -v` |
+| Lesson complete | Related tests | Same as above |
+| Integration | Multiple components | `pytest rag/ -v` |
+
+---
+
+## 7. Resources
+
+### 7.1 Team
+
+| Role | Name | Responsibilities |
+|------|------|------------------|
+| Learner | User | Write tests, execute, analyze |
+| Guide | AI | Teach concepts, review, assist |
+
+### 7.2 Tools
+
+| Tool | Purpose |
+|------|---------|
+| pytest | Test execution |
+| pytest-html | HTML reports |
+| VS Code | IDE |
+
+---
+
+## 8. Risk Analysis
+
+### 8.1 Risks
+
+| ID | Risk | Probability | Impact | Mitigation |
+|----|------|-------------|--------|------------|
+| R1 | Concept confusion blocks progress | Medium | Medium | AI explains, user asks questions |
+| R2 | Test doesn't catch real bug | Low | High | Review test categories, add cases |
+| R3 | API costs for embedding/generation | Medium | Low | Use small test corpus, cache results |
+
+---
+
+## 9. Test Matrix
+
+### 9.1 Component Status
+
+| Component | Status | Unit | Integration | Lessons | Coverage |
+|-----------|--------|------|-------------|---------|----------|
+| Loading | Done | 15 | 2 | 2/2 | 100% |
+| Chunking | In Progress | 28 | 1 | 1/3 | 100% |
+| Embedding | Not Started | - | - | 0/3 | - |
+| Vector Store | Not Started | - | - | 0/2 | - |
+| Search | Not Started | - | - | 0/3 | - |
+| Prompt | Not Started | - | - | 0/2 | - |
+| Generation | Not Started | - | - | 0/2 | - |
+| Evaluation | Not Started | - | - | 0/2 | - |
+
+### 9.2 Test Categories per Component
+
+| Component | Happy Path | Negative | Edge | Boundary | Parametric |
+|-----------|------------|----------|------|----------|------------|
+| Loading | 5 | 4 | 4 | 2 | - |
+| Chunking | 6 | 4 | 8 | 2 | 8 |
+| Embedding | - | - | - | - | - |
+| Vector Store | - | - | - | - | - |
+| Search | - | - | - | - | - |
+| Prompt | - | - | - | - | - |
+| Generation | - | - | - | - | - |
+| Evaluation | - | - | - | - | - |
+
+### 9.3 Priority Definitions
+
+| Priority | Definition | Response |
+|----------|------------|----------|
+| P0 | Core functionality | Must fix before proceeding |
+| P1 | Important quality | Fix before component complete |
+| P2 | Nice to have | Fix if time permits |
+
+---
+
+## 10. Test Cases
+
+### 10.1 Test File Locations
+
+| Component | Test File | Count |
+|-----------|-----------|-------|
+| Loading | `rag/ingestion/tests/test_loader.py` | 15 |
+| Chunking | `rag/ingestion/tests/test_chunker.py` | 28 |
+| Embedding | `rag/ingestion/tests/test_embedder.py` | - |
+| Vector Store | `rag/storage/tests/test_vector_store.py` | - |
+| Search | `rag/retrieval/tests/test_search.py` | - |
+
+### 10.2 Test Categories Reference
+
+**Happy Path:** Normal expected usage
+**Negative:** Invalid inputs, error handling
+**Edge:** Unusual but valid inputs (empty, unicode, very large)
+**Boundary:** At limits (max size, zero, one)
+**Parametric:** Multiple parameter combinations
+
+---
+
+## 11. Defect Management
+
+### 11.1 Severity Definitions
+
+| Severity | Definition | Example |
+|----------|------------|---------|
+| Critical | Component unusable | Crash, data corruption |
+| High | Major feature broken | Cannot chunk documents |
+| Medium | Feature impaired | Wrong metadata preserved |
+| Low | Minor issue | Cosmetic, logging |
+
+### 11.2 Defect Lifecycle
+
+```
+FOUND → LOGGED → ANALYZED → FIXED → VERIFIED → CLOSED
+```
+
+### 11.3 Active Defects
+
+| ID | Severity | Component | Description | Status |
+|----|----------|-----------|-------------|--------|
+| - | - | - | No open defects | - |
+
+### 11.4 Resolved Defects
+
+| ID | Severity | Component | Description | Resolution |
+|----|----------|-----------|-------------|------------|
+| DEF-001 | Medium | Chunking | Negative overlap not validated | Added validation |
+
+See `docs/DEFECT_LOG.md` for full details.
+
+---
+
+## 12. Metrics & Reporting
+
+### 12.1 Key Metrics
+
+| Metric | Target | Current |
+|--------|--------|---------|
+| Total tests | Growing | 43 |
+| Pass rate | 100% | 100% |
+| Components tested | 8 | 2 |
+| Lessons completed | 19 | 3 |
+
+### 12.2 Test Commands
+
+```bash
+# Run all tests with report
+cd training-assistant
+pytest rag/ingestion/tests/ -v --html=rag/ingestion/tests/_reports/report.html --self-contained-html
+
+# Run specific component
+pytest rag/ingestion/tests/test_chunker.py -v
+
+# Run with coverage
+pytest rag/ingestion/tests/ --cov=rag --cov-report=html
+```
+
+### 12.3 Report Location
+- HTML Report: `rag/ingestion/tests/_reports/report.html`
+- Coverage: `rag/ingestion/tests/_reports/coverage/`
+
+---
+
+## 13. Lessons Learned
+
+### 13.1 By Component
+
+**Loading:**
+1. Metadata extraction is crucial for debugging retrieval
+2. Binary file detection prevents garbage in corpus
+3. File type affects how content should be chunked later
+
+**Chunking:**
+1. Chunk size is a trade-off: precision vs context
+2. Overlap prevents hard cuts at boundaries
+3. Different use cases need different sizes
+4. (More after remaining lessons)
+
+### 13.2 Testing Insights
+1. Parametric tests cover more with less code
+2. Edge cases reveal assumptions in code
+3. Test data should match production characteristics
+
+---
+
+## Appendix
+
+### A. Glossary
+
+| Term | Definition |
+|------|------------|
+| Chunk | A piece of a document, sized for embedding |
+| Embedding | Vector representation of text |
+| RAG | Retrieval-Augmented Generation |
+| Corpus | Collection of documents to search |
+
+### B. References
+- RAG Learning Skill: `.claude/skills/rag-learning/SKILL.md`
+- Testing Skill: `.claude/skills/testing/SKILL.md`
+- Defect Log: `docs/DEFECT_LOG.md`
+
+---
+
+*Living document - updated after each component lesson*

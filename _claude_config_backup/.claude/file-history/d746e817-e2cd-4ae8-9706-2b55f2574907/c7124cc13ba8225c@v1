@@ -1,0 +1,81 @@
+"""
+AuthTasks - Authentication task module.
+
+Provides high-level task methods for authentication operations:
+- Account registration
+- Login (future)
+- Logout (future)
+
+Each method orchestrates page objects to accomplish a single domain operation.
+NO return values - tests assert via POM state methods.
+"""
+
+from interfaces.web_interface import WebInterface
+from pages.auth.registration_page import RegistrationPage
+from resources.utilities import autologger
+
+
+class AuthTasks:
+    """
+    Task module for Authentication operations.
+
+    - @autologger("Task") on all methods
+    - NO decorator on constructor
+    - Composes Page Objects
+    - One domain operation per method
+    - NO return values
+    - Uses fluent POM API
+    """
+
+    def __init__(self, web: WebInterface, base_url: str):
+        """
+        Compose Page Objects - NO decorator on constructor.
+
+        Args:
+            web: WebInterface instance
+            base_url: Application base URL
+        """
+        self.web = web
+        self.base_url = base_url
+        self.registration_page = RegistrationPage(web)
+
+    # ==================== TASK METHODS ====================
+
+    @autologger.automation_logger("Task")
+    def register_new_account(self, email: str, firstname: str, lastname: str, password: str) -> None:
+        """
+        Register a new user account.
+
+        Complete registration flow:
+        1. Navigate to authentication page
+        2. Enter email and click create account
+        3. Wait for registration form
+        4. Fill in personal details
+        5. Submit registration
+
+        NO return value - test asserts via registration_page.is_account_created()
+
+        Args:
+            email: Email address for new account (must be unique)
+            firstname: User's first name
+            lastname: User's last name
+            password: Account password (min 5 characters)
+        """
+        # Navigate to authentication page
+        auth_url = f"{self.base_url}/index.php?controller=authentication"
+        self.web.navigate_to(auth_url)
+
+        # Step 1: Enter email and initiate account creation
+        (self.registration_page
+            .enter_email_create(email)
+            .click_submit_create())
+
+        # Step 2: Wait for registration form and fill details
+        # The form appears after clicking create account
+        (self.registration_page
+            .enter_firstname(firstname)
+            .enter_lastname(lastname)
+            .enter_password(password)
+            .click_register())
+
+        # NO return - test asserts via registration_page.is_account_created()

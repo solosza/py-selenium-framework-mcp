@@ -1,0 +1,4 @@
+"""Catalog pages package."""
+from .catalog_page import CatalogPage
+
+__all__ = ["CatalogPage"]

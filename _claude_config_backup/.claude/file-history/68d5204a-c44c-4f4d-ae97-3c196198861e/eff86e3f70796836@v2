@@ -1,0 +1,184 @@
+# Session State - 2025-11-25 (Session 5: E2E Validation with devtest1/)
+
+## Current Phase
+**Phase:** Phase 3 - Deliver (E2E MCP Tool Chain Validation)
+**Overall Status:** Waiting for User Validation of Test 1
+
+## What We're Working On
+**Active Task:** Test 1 (Easy) - Full E2E MCP test for Login Flow
+**Task Status:** Code Generation COMPLETE (100%), Test Execution FAILED (expected - fake credentials)
+
+## Session Summary
+Created comprehensive E2E test (`e2e_test1_login.py`) that runs all 6 MCP tools in sequence with visible browser. Major code generator improvements for CommonTasks delegation pattern and elimination of placeholder code. All modules generated correctly to devtest1/ folders.
+
+**Major Accomplishments This Session:**
+
+1. **Full E2E Test Script Created**
+   - `mcp_server/_dev_tests/e2e_test1_login.py`
+   - Runs all 6 tools in sequence
+   - Browser visible throughout
+   - Files saved to devtest1/ folders for easy cleanup
+
+2. **Code Generator - CommonTasks Delegation**
+   - Added `_detect_workflow_type()` - detects auth/catalog/cart/checkout from scenario text
+   - Added `COMMON_TASK_WORKFLOWS` dictionary - delegation config
+   - Auth workflows now delegate to CommonTasks (composition pattern)
+   - No more placeholder/TODO code
+
+3. **Tool Updates**
+   - Tool 5: Added `task_class` and `task_import` parameters
+   - Tool 6: Added `role_import` parameter
+
+4. **Generated Files (Test 1)**
+   - `framework/pages/devtest1/dev_login_page.py` - Page Object with real locators
+   - `framework/tasks/devtest1/dev_auth_tasks.py` - Task delegating to CommonTasks
+   - `framework/roles/devtest1/dev_registered_user.py` - Role using DevAuthTasks
+   - `tests/devtest1/test_valid_login_with_correct_credentials.py` - Test with real code
+
+## Progress This Session
+
+### Completed
+- [x] Created full E2E test script (e2e_test1_login.py)
+- [x] Fixed code generator for workflow detection
+- [x] Implemented CommonTasks delegation pattern
+- [x] Added task_class/task_import to Tool 5
+- [x] Added role_import to Tool 6
+- [x] Generated all 4 modules with real code (no placeholders)
+- [x] Ran pytest with visible browser
+- [x] HTML report generated
+
+### In Progress
+- [ ] Test 1 validation - Awaiting user decision
+
+### Pending
+- [ ] Test 2 (Medium): Browse & Filter Products - BLOCKED until Test 1 validated
+
+## Files Changed This Session
+
+### Code Generator (Major Changes)
+`mcp_server/utils/code_generator.py`:
+- Added `_detect_workflow_type()` function
+- Added `COMMON_TASK_WORKFLOWS` dictionary
+- Split `generate_task_template()` into `_generate_delegating_task()` and `_generate_domain_task()`
+- Updated `generate_role_template()` with task_class/task_import params
+- Updated `generate_test_template()` with role_import and workflow detection
+
+### Tool Updates
+- `mcp_server/tools/tool_05_generate_role.py` - task_class/task_import parameters
+- `mcp_server/tools/tool_06_generate_test_template.py` - role_import parameter
+
+### E2E Test Script
+- `mcp_server/_dev_tests/e2e_test1_login.py` - Full chain test (NEW)
+
+### Generated Files
+- `framework/pages/devtest1/dev_login_page.py`
+- `framework/tasks/devtest1/dev_auth_tasks.py`
+- `framework/roles/devtest1/dev_registered_user.py`
+- `tests/devtest1/test_valid_login_with_correct_credentials.py`
+
+## Test Status
+- **Code Generation:** PASSING - All modules generated correctly
+- **Test Execution:** FAILED - Expected (fake credentials: test@example.com / Test123!)
+- **HTML Report:** Generated at `tests/_reports/devtest1_report_*.html`
+
+## Resolved Issues This Session
+
+### 1. Unicode Encoding Error
+- **Error:** `'charmap' codec can't encode character '\u2500'`
+- **Fix:** Replaced box-drawing chars with ASCII dashes in print_file_contents()
+
+### 2. WebInterface Fixture Error
+- **Error:** `unexpected keyword argument 'headless'`
+- **Fix:** Removed devtest1/conftest.py, use parent tests/conftest.py
+
+### 3. Empty user_data in Generated Test
+- **Error:** ValueError requiring email/password
+- **Fix:** Updated code generator to detect auth workflow and generate real code
+
+### 4. Role Using CommonTasks Directly
+- **Issue:** Role should use generated Task, not CommonTasks directly
+- **Fix:** Added task_class/task_import parameters to role generator
+
+## Active Blockers/Issues
+**None currently** - waiting for user decision on Test 1 validation
+
+## Key Architecture Decisions Made
+
+### 1. CommonTasks Delegation Pattern
+Auth workflows delegate to CommonTasks (composition, not inheritance):
+```python
+# In generated Task:
+from tasks.common.common_tasks import CommonTasks
+
+class DevAuthTasks:
+    def __init__(self, web_interface, base_url):
+        self.common_tasks = CommonTasks(web_interface, base_url)
+
+    def login(self, email: str, password: str) -> bool:
+        return self.common_tasks.log_in(email, password)
+```
+
+### 2. Workflow Detection from Content
+Workflow type detected from scenario text, NOT folder name:
+```python
+def _detect_workflow_type(task_name: str, workflow_description: str = "") -> str:
+    combined = f"{task_name} {workflow_description}".lower()
+    if any(kw in combined for kw in ["auth", "login", "logout", "register"]):
+        return "auth"
+    # ... catalog, cart, checkout detection
+```
+
+### 3. No Placeholders Rule
+User requirement: "our code generator should not be creating any placeholder modules. never"
+- All generated code must be executable
+- No TODO comments or placeholder methods
+
+### 4. devtest1/ Folder Structure
+User requirement: Generated files go to devtest1/ for easy cleanup:
+- `framework/pages/devtest1/`
+- `framework/tasks/devtest1/`
+- `framework/roles/devtest1/`
+- `tests/devtest1/`
+
+## Context for Next Session
+
+**Resume Point:** User needs to validate Test 1 results before proceeding to Test 2
+
+**Decision Needed:**
+1. Mark Test 1 as validated (code generation correct, fake creds expected to fail)
+2. Use real credentials from `test_users.json` to make test actually pass
+3. Other adjustments
+
+**To Run Test 1 Again:**
+```bash
+cd mcp_server/_dev_tests
+python e2e_test1_login.py
+```
+
+**Test 2 (Medium) Scope:**
+- Browse & Filter Products scenario
+- Will need real user for authenticated browsing
+- User mentioned: "yes this will do however, we need to create a real user for test2"
+
+## Todo List State
+```json
+[
+  {"content": "Test 1 (Easy): Full E2E MCP test - Login Flow", "status": "in_progress", "activeForm": "Building and running full E2E MCP test for login"},
+  {"content": "Test 2 (Medium): Browse & Filter Products", "status": "pending", "activeForm": "Testing browse and filter scenario"}
+]
+```
+
+## Important User Requirements
+1. Generated files go to `devtest1/` folders (easy cleanup, separate from prod)
+2. Code generator must NEVER create placeholder/TODO code
+3. Auth workflows delegate to CommonTasks (composition pattern)
+4. All modules still created for each test, Tasks call CommonTasks for shared functionality
+5. Do NOT proceed to Test 2 until Test 1 validated
+
+## Background Process
+- **Bash bd208f** running: `cd /d/my_ai_projects/py_sel_framework_mcp/tests/auth && python execute_auth_tests.py`
+- Status: Running (may need to check or kill)
+
+---
+**Last Updated:** 2025-11-25
+**Status:** Awaiting user validation of Test 1 before proceeding to Test 2

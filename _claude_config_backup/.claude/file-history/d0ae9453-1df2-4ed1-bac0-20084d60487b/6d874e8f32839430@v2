@@ -1,0 +1,155 @@
+# Design Decisions - RAG Learning Project
+
+This document records architectural decisions made while building the RAG system.
+
+Format: Each DD includes context, decision, rationale, and alternatives considered.
+
+---
+
+## DD-RAG-001: Document Loading Approach
+
+**Date:** 2024-12-13
+**Component:** Ingestion / Document Loading
+
+**Context:**
+Need to load markdown and Python files into structured Document objects. Three options available: DIY (simple file reader), LangChain, or LlamaIndex.
+
+**Decision:**
+Use **Option A: Simple File Reader (DIY)** with Python's built-in `pathlib` and `open()`.
+
+**Rationale:**
+- Learn fundamentals before frameworks
+- Understand every line of code (no magic)
+- Files are markdown/Python only (no PDF parsing needed)
+- Easy to extend as we learn
+- Fewer dependencies
+
+**Alternatives Considered:**
+- LangChain DocumentLoaders: Battle-tested but heavy dependency, abstracts away details
+- LlamaIndex SimpleDirectoryReader: Simple API but another ecosystem to learn
+
+**Tradeoffs Accepted:**
+- Must handle encoding/errors ourselves
+- No built-in PDF/Word support (not needed for this corpus)
+
+---
+
+## DD-RAG-002: RAG Project Structure
+
+**Date:** 2024-12-13
+**Component:** Architecture
+
+**Context:**
+Need folder structure for RAG pipeline components. Three options: single file, by component, or by layer.
+
+**Decision:**
+Use **Option C: By layer** structure.
+
+```
+training-assistant/
+  rag/
+    ingestion/     # Load, chunk, embed, store
+    retrieval/     # Search, rerank
+    generation/    # Prompt building, LLM
+```
+
+**Rationale:**
+- Matches user's existing framework architecture (pages/, tasks/, roles/)
+- Clear separation of concerns
+- Each layer owns its responsibility
+- Scales well for larger systems
+
+**Alternatives Considered:**
+- Single file: Too messy as code grows
+- By component: Less clear layer boundaries
+
+**Framework Analogy:**
+- `ingestion/` ≈ `pages/` (data layer)
+- `retrieval/` ≈ `tasks/` (orchestration)
+- `generation/` ≈ `roles/` (business logic)
+
+---
+
+## DD-RAG-003: Test File Location
+
+**Date:** 2024-12-13
+**Component:** Testing
+
+**Context:**
+Where to put test files? Options: sibling tests/ folder, inside rag/, or per-layer.
+
+**Decision:**
+Use **Option C: Per-layer tests**.
+
+```
+rag/
+  ingestion/
+    tests/
+      test_loader.py
+  retrieval/
+    tests/
+  generation/
+    tests/
+```
+
+**Rationale:**
+- Locality: Test is right next to what it tests
+- Modularity: Delete a layer, delete its tests
+- Ownership: Each layer maintains its own tests
+- Scales better: No 500-file tests/ folder
+
+**Alternatives Considered:**
+- Sibling tests/: Common in Python but less modular
+- Inside rag/tests/: Middle ground but still centralized
+
+**Industry Context:**
+- Go uses tests next to code (foo.go + foo_test.go)
+- JavaScript Jest uses __tests__/ folders per module
+- Microservices use tests per service
+
+---
+
+## DD-RAG-004: Document Corpus Sources
+
+**Date:** 2024-12-13
+**Component:** Ingestion / Data
+
+**Context:**
+What documents to load for learning RAG? Need enough to make retrieval meaningful.
+
+**Decision:**
+Use **two source locations**:
+1. `D:/my_ai_projects/py_sel_framework_mcp/` - Current project docs (~100k tokens)
+2. `C:/Users/solos/OneDrive/Documents/nakupuna/v2_04112025/v2/` - Production framework (~60k tokens)
+
+**Rationale:**
+- Combined ~160k tokens approaches 200k context limit
+- Two real codebases provide variety for testing search
+- Cross-framework queries possible ("how does login work in each?")
+- Real content better than lorem ipsum
+
+**Tradeoffs Accepted:**
+- Still under 200k (RAG not strictly necessary but good for learning)
+- Network drive for Nakupuna source (OneDrive)
+
+---
+
+## DD-RAG-005: Use of __init__.py Files
+
+**Date:** 2024-12-13
+**Component:** Architecture / Python Packaging
+
+**Context:**
+Modern Python (3.3+) doesn't require __init__.py for packages. Should we use them?
+
+**Decision:**
+**Keep __init__.py files** for clean imports.
+
+**Rationale:**
+- Enables `from rag.ingestion import Document` vs `from rag.ingestion.document import Document`
+- Explicit public API control
+- Tool/IDE compatibility
+- Small overhead for cleaner usage
+
+**Alternative Considered:**
+- Skip them (namespace packages): Works but messier imports

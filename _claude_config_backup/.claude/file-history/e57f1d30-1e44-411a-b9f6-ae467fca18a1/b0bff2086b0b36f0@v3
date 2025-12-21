@@ -1,0 +1,28 @@
+[pytest]
+# Pytest configuration for test automation framework
+
+# Marker definitions
+markers =
+    smoke: Quick smoke tests for critical functionality (run first)
+    regression: Full regression test suite
+    auth: Authentication and authorization tests
+    catalog: Product catalog and search tests
+    cart: Shopping cart functionality tests
+    checkout: Checkout and payment flow tests
+    slow: Tests that take longer than 30 seconds
+    skip_ci: Tests to skip in CI environment
+
+# Test discovery patterns
+python_files = test_*.py
+python_classes = Test*
+python_functions = test_*
+
+# Console output
+console_output_style = progress
+addopts = -v --tb=long
+
+# Ignore directories
+norecursedirs = .git __pycache__ _reports data
+
+# Minimum Python version
+minversion = 3.8

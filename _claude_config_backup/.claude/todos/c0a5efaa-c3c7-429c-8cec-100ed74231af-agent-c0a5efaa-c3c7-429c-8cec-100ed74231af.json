@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Setup GitHub Repository and Version Control",
+    "status": "in_progress",
+    "activeForm": "Setting up GitHub Repository and Version Control"
+  },
+  {
+    "content": "Create Master Resume Data Structure",
+    "status": "pending",
+    "activeForm": "Creating Master Resume Data Structure"
+  },
+  {
+    "content": "Create Prompt Template System",
+    "status": "pending",
+    "activeForm": "Creating Prompt Template System"
+  },
+  {
+    "content": "Generate AI Residency Resume",
+    "status": "pending",
+    "activeForm": "Generating AI Residency Resume"
+  },
+  {
+    "content": "Create Project Documentation",
+    "status": "pending",
+    "activeForm": "Creating Project Documentation"
+  },
+  {
+    "content": "Deploy to GitHub Pages",
+    "status": "pending",
+    "activeForm": "Deploying to GitHub Pages"
+  }
+]

@@ -1,0 +1,68 @@
+"""
+Test runner with organized reports.
+
+Generates:
+- _reports/YYYY-MM-DD_HHMMSS/
+  ├── report.html          (pytest results)
+  ├── coverage/            (coverage HTML)
+  └── coverage_summary.txt (terminal output)
+"""
+
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+
+def run_tests(test_path: str = "rag/ingestion/tests/", package: str = "rag"):
+    """Run tests with coverage and generate organized reports."""
+
+    # Create timestamped folder
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    report_dir = Path(f"_reports/{timestamp}")
+    report_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"Report directory: {report_dir}")
+    print("=" * 60)
+
+    # Build command
+    cmd = [
+        sys.executable, "-m", "pytest",
+        test_path,
+        "-v",
+        f"--cov={package}",
+        "--cov-report=term-missing",
+        f"--cov-report=html:{report_dir}/coverage",
+        f"--html={report_dir}/report.html",
+        "--self-contained-html",
+    ]
+
+    # Run and capture output
+    result = subprocess.run(cmd, capture_output=True, text=True)
+
+    # Print to console
+    print(result.stdout)
+    if result.stderr:
+        print(result.stderr)
+
+    # Save terminal output
+    with open(report_dir / "coverage_summary.txt", "w") as f:
+        f.write(result.stdout)
+        if result.stderr:
+            f.write("\n--- STDERR ---\n")
+            f.write(result.stderr)
+
+    print("=" * 60)
+    print(f"Reports saved to: {report_dir}")
+    print(f"  - Test results: {report_dir}/report.html")
+    print(f"  - Coverage HTML: {report_dir}/coverage/index.html")
+    print(f"  - Coverage text: {report_dir}/coverage_summary.txt")
+
+    return result.returncode
+
+
+if __name__ == "__main__":
+    # Allow custom test path from command line
+    test_path = sys.argv[1] if len(sys.argv) > 1 else "rag/ingestion/tests/"
+    exit_code = run_tests(test_path)
+    sys.exit(exit_code)

@@ -1,0 +1,158 @@
+# Session State - 2025-11-26 01:15 AM
+
+## Current Phase
+**Phase:** 3 (Deliver)
+**Status:** PAUSED - SRP Review Required
+
+---
+
+## CRITICAL: SRP REVIEW NEEDED BEFORE CONTINUING
+
+### Issue Raised
+User caught that `login_then_logout()` violates Single Responsibility Principle:
+- It combines two unrelated operations
+- NOT a real business workflow
+- **REMOVED** from `RegisteredUser` and code generator
+
+### Question to Answer Next Session
+**Do our other workflow methods follow SRP?**
+
+| Method | Location | Concern |
+|--------|----------|---------|
+| `browse_and_count_products()` | GuestUser, code_generator | Is "browse + count" ONE goal? |
+| `filter_products_in_category()` | GuestUser, code_generator | Is "navigate + filter" ONE goal? |
+| `sort_products_in_category()` | GuestUser, code_generator | Is "navigate + sort" ONE goal? |
+| `view_product_quick_view()` | GuestUser | Is "navigate + open modal" ONE goal? |
+
+### SRP Guidelines Established
+**Valid workflow orchestration:**
+- ONE business goal requiring multiple steps
+- Example: `register()` - become a registered user (multi-step, ONE goal)
+- Example: `purchase_product()` - complete a purchase (multi-step, ONE goal)
+
+**Invalid (violates SRP):**
+- Chaining unrelated operations with no unified business purpose
+- Example: `login_then_logout()` - two separate actions, no business goal
+
+**Key Question:** "Is this ONE business/test goal?"
+- YES → orchestrate multiple tasks
+- NO → keep as separate methods
+
+### Design Decision Needed
+**Option A:** Role methods do navigation + action (current pattern)
+```python
+def filter_products_in_category(self, category_name, size=None):
+    # Navigates to category THEN filters
+    return self.catalog_tasks.filter_products(category_name, size=size)
+```
+
+**Option B:** Role methods assume preconditions met
+```python
+def filter_products(self, size=None):
+    # Assumes already on category page
+    return self.catalog_tasks.filter_products(size=size)
+```
+
+---
+
+## What We Accomplished This Session
+
+### Completed Tasks
+1. **Documented 4-Layer Framework Architecture in CLAUDE.md**
+   - Layer patterns (Page → Task → Role → Test)
+   - Code examples for each layer
+   - Anti-patterns to AVOID
+
+2. **Updated Production Roles**
+   - `RegisteredUser` - Added `register()` workflow method
+   - Created `GuestUser` role for catalog browsing (NEW file)
+   - REMOVED `login_then_logout()` (SRP violation)
+
+3. **Updated Production Tests to Use Role Pattern**
+   - `tests/auth/test_registration.py` - Uses `RegisteredUser.register()`
+   - `tests/catalog/test_browse_category.py` - Uses `GuestUser`
+   - `tests/catalog/test_filter_products.py` - Uses `GuestUser`
+   - `tests/catalog/test_sort_by_price.py` - Uses `GuestUser`
+   - `tests/catalog/test_quick_view.py` - Uses `GuestUser`
+
+4. **Updated Code Generators**
+   - Role generator: Fixed GuestUser constructor (no `user_data` param for non-auth roles)
+   - Role generator: Added workflow orchestration methods
+   - Test generator: Tests call ONE role method
+   - REMOVED `login_then_logout()` generation (SRP violation)
+
+5. **E2E Test 2 (Catalog) PASSED**
+
+---
+
+## Files Changed This Session
+
+### Production Code
+- `framework/roles/auth/registered_user.py` - Added `register()`, removed `login_then_logout()`
+- `framework/roles/guest/guest_user.py` - **NEW FILE**
+- `framework/roles/guest/__init__.py` - **NEW FILE**
+
+### Production Tests (Updated to Use Roles)
+- `tests/auth/test_registration.py`
+- `tests/catalog/test_browse_category.py`
+- `tests/catalog/test_filter_products.py`
+- `tests/catalog/test_sort_by_price.py`
+- `tests/catalog/test_quick_view.py`
+
+### Code Generators
+- `mcp_server/utils/code_generator.py` - Major updates
+
+### Documentation
+- `CLAUDE.md` - Added 4-Layer Framework Architecture section
+
+---
+
+## Test Status
+- E2E Test 2 (Catalog): **PASSED**
+- Production tests: **NOT RUN** (run after SRP review)
+
+---
+
+## Next Session Action Items
+
+### Priority 1: SRP Review
+1. Decide on design pattern (Option A or B above)
+2. Review each workflow method for SRP compliance
+3. Update production code if needed
+4. Update code generators if needed
+
+### Priority 2: After SRP Decision
+- Run full production test suite
+- Commit changes with proper message
+
+---
+
+## The tempduty Reference Pattern
+From user's example framework:
+```python
+def initiate_temporary_duty(self, data):
+    self.common_tasks.log_in(self.user_id, self.password)
+    self.temporary_duty_tasks.navigate_to_temporary_duty_page()
+    self.temporary_duty_tasks.initiate_temporary_duty(data)
+    self.temporary_duty_tasks.submit_order_details(data)
+```
+This IS valid SRP because "initiate temporary duty" is ONE business goal.
+
+---
+
+## Git Status
+- Branch: main
+- Many uncommitted changes
+- Commit AFTER SRP review complete
+
+---
+
+## Resume Command
+```
+Review our Role methods for SRP compliance. Check: browse_and_count_products(),
+filter_products_in_category(), sort_products_in_category(), view_product_quick_view().
+Decide if they represent ONE business goal or are improperly combining operations.
+```
+
+---
+**Last Updated:** 2025-11-26 01:15 AM
