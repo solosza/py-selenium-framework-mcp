@@ -79,66 +79,79 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 
 ---
 
-#### 1.0 Step Definition Validation [GLUE]
+#### 1.0 Step Definition Validation [GLUE] ✅ COMPLETE
 
-- [ ] 1.1 Read all 10 step definition files (step-01.md through step-10.md)
-- [ ] 1.2 Verify each has sections A through G (A-H for tool steps 4-9)
-- [ ] 1.3 Verify DD coverage matches design doc (20/20 DDs)
-- [ ] 1.4 Verify state schema defined for each step
-- [ ] 1.5 Verify gate mode documented (POST-only, PRE+POST, PRE-only)
-- [ ] 1.6 Create validation checklist document
-- [ ] 1.7 Record results
+- [x] 1.1 Read all 10 step definition files (step-01.md through step-10.md)
+- [x] 1.2 Verify each has sections A through G (A-H for tool steps 4-9)
+- [x] 1.3 Verify DD coverage matches design doc (20/20 DDs)
+- [x] 1.4 Verify state schema defined for each step
+- [x] 1.5 Verify gate mode documented (POST-only, PRE+POST, PRE-only)
+- [x] 1.6 Create validation checklist document
+- [x] 1.7 Record results
 
 **Done When:**
-- All 10 step files validated
-- All sections present
-- DD coverage confirmed at 20/20
+- All 10 step files validated ✅
+- All sections present ✅
+- DD coverage confirmed at 20/20 ✅
+
+**Results:** See `validation-step-definitions.md`
 
 ---
 
-#### 2.0 State Manager [CORE]
+#### 2.0 State Manager [CORE] ✅ COMPLETE
 
-- [ ] 2.1 Create branch `feature/2.0-state-manager`
+- [x] 2.1 Create branch `feature/2.0-state-manager`
 
 **Unit Tests (TDD) - Test Matrix:**
 
 | Category | Test | Status |
 |----------|------|--------|
-| Happy | `test_save_creates_state_file` | [ ] |
-| Happy | `test_load_returns_state` | [ ] |
-| Happy | `test_get_step_returns_data` | [ ] |
-| Happy | `test_is_step_complete_returns_true` | [ ] |
-| Negative | `test_load_missing_file_returns_empty` | [ ] |
-| Negative | `test_get_step_not_found_returns_none` | [ ] |
-| Negative | `test_is_step_complete_returns_false` | [ ] |
-| Edge | `test_save_empty_data` | [ ] |
-| Edge | `test_get_step_zero` | [ ] |
-| Edge | `test_get_step_boundary_ten` | [ ] |
-| Error | `test_atomic_write_no_corruption` | [ ] |
-| Error | `test_invalid_json_handled` | [ ] |
+| Happy | `test_save_creates_state_file` | [x] |
+| Happy | `test_load_returns_state` | [x] |
+| Happy | `test_get_step_returns_data` | [x] |
+| Happy | `test_is_step_complete_returns_true` | [x] |
+| Negative | `test_load_missing_file_returns_empty` | [x] |
+| Negative | `test_get_step_not_found_returns_none` | [x] |
+| Negative | `test_is_step_complete_returns_false` | [x] |
+| Edge | `test_save_empty_data` | [x] |
+| Edge | `test_get_step_zero` | [x] |
+| Edge | `test_get_step_boundary_ten` | [x] |
+| Error | `test_atomic_write_no_corruption` | [x] |
+| Error | `test_invalid_json_handled` | [x] |
+| Clear | `test_clear_removes_state` | [x] |
+| Default | `test_default_state_file_path` | [x] |
+| WriteErr | `test_save_to_readonly_location_raises` | [x] |
+| WriteErr | `test_save_cleans_up_temp_file_on_rename_failure` | [x] |
 
-- [ ] 2.2 Write failing tests (TDD)
-  - [ ] 2.2.1 Happy path tests (4 tests)
-  - [ ] 2.2.2 Negative tests (3 tests)
-  - [ ] 2.2.3 Edge case tests (3 tests)
-  - [ ] 2.2.4 Error handling tests (2 tests)
-- [ ] 2.3 Implement StateManager class
-  - [ ] 2.3.1 Create `mcp_server/utils/state_manager.py`
-  - [ ] 2.3.2 Implement save(step: int, data: dict)
-  - [ ] 2.3.3 Implement load() -> dict
-  - [ ] 2.3.4 Implement get_step(step: int) -> dict | None
-  - [ ] 2.3.5 Implement is_step_complete(step: int) -> bool
-  - [ ] 2.3.6 Implement clear() for testing
-- [ ] 2.4 Create state directory and gitignore entry
-- [ ] 2.5 Run tests, verify all pass (12/12)
-- [ ] 2.6 Verify coverage >= 95%
-- [ ] 2.7 Record results
-- [ ] 2.8 Commit: `feat: implement StateManager (Task 2.0)`
+- [x] 2.2 Write failing tests (TDD)
+  - [x] 2.2.1 Happy path tests (4 tests)
+  - [x] 2.2.2 Negative tests (3 tests)
+  - [x] 2.2.3 Edge case tests (3 tests)
+  - [x] 2.2.4 Error handling tests (2 tests)
+  - [x] 2.2.5 Additional tests (4 tests - clear, default path, write errors)
+- [x] 2.3 Implement StateManager class
+  - [x] 2.3.1 Create `mcp_server/utils/state_manager.py`
+  - [x] 2.3.2 Implement save(step: int, data: dict)
+  - [x] 2.3.3 Implement load() -> dict
+  - [x] 2.3.4 Implement get_step(step: int) -> dict | None
+  - [x] 2.3.5 Implement is_step_complete(step: int) -> bool
+  - [x] 2.3.6 Implement clear() for testing
+- [x] 2.4 Create state directory and gitignore entry
+- [x] 2.5 Run tests, verify all pass (16/16)
+- [x] 2.6 Verify coverage = 100%
+- [x] 2.7 Record results
+- [x] 2.8 Commit: `feat: implement StateManager (Task 2.0)`
 
 **Done When:**
-- 12 unit tests pass
-- Coverage >= 95%
-- Atomic writes verified
+- ~~12~~ 16 unit tests pass ✅
+- Coverage ~~>= 95%~~ = 100% ✅
+- Atomic writes verified ✅
+
+**Results:**
+- Tests: 16 passed, 0 warnings
+- Coverage: 100%
+- All tests follow testing skill conventions (AAA, markers, assertions)
+- conftest.py created with marker registration
 
 ---
 
@@ -167,6 +180,12 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 | DD-27 | `test_locator_detection_by_css_selector` | [ ] |
 | DD-15 | `test_pom_assertion_pattern_valid` | [ ] |
 | DD-15 | `test_pom_assertion_pattern_invalid` | [ ] |
+| TestGate | `test_validates_aaa_pattern` | [ ] |
+| TestGate | `test_validates_pytest_markers` | [ ] |
+| TestGate | `test_validates_assertion_messages` | [ ] |
+| TestGate | `test_validates_docstring_priority` | [ ] |
+| TestGate | `test_rejects_missing_aaa_comments` | [ ] |
+| TestGate | `test_rejects_missing_markers` | [ ] |
 
 - [ ] 3.2 Write failing tests (TDD)
   - [ ] 3.2.1 Happy path tests (5 tests)
@@ -175,18 +194,25 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
   - [ ] 3.2.4 DD-25 skeleton pattern tests (3 tests)
   - [ ] 3.2.5 DD-27 locator detection tests (2 tests)
   - [ ] 3.2.6 DD-15 assertion pattern tests (2 tests)
+  - [ ] 3.2.7 Test structure validation tests (6 tests)
 - [ ] 3.3 Create gates directory structure
 - [ ] 3.4 Implement BaseGate class
 - [ ] 3.5 Create shared validation utilities
-- [ ] 3.6 Run tests, verify all pass (17/17)
-- [ ] 3.7 Verify coverage >= 90%
-- [ ] 3.8 Record results
-- [ ] 3.9 Commit: `feat: implement gate infrastructure (Task 3.0)`
+- [ ] 3.6 Implement TestStructureValidator (testing skill enforcement)
+  - [ ] 3.6.1 Validate AAA pattern (# Arrange, # Act, # Assert comments)
+  - [ ] 3.6.2 Validate pytest markers (@pytest.mark.unit, etc.)
+  - [ ] 3.6.3 Validate assertion messages (assert x, "message")
+  - [ ] 3.6.4 Validate docstring format (P0/P1/P2 priority)
+- [ ] 3.7 Run tests, verify all pass (23/23)
+- [ ] 3.8 Verify coverage >= 90%
+- [ ] 3.9 Record results
+- [ ] 3.10 Commit: `feat: implement gate infrastructure (Task 3.0)`
 
 **Done When:**
-- 17 unit tests pass
+- 23 unit tests pass
 - Coverage >= 90%
 - DD validation utilities working
+- Test structure validation enforces testing skill conventions
 
 ---
 
