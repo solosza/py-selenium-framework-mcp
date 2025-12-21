@@ -139,6 +139,65 @@ All cross-cutting process decisions live in `docs/PROCESS_DECISIONS.md` (this fi
 
 ---
 
+## PD-005: The AI-Assisted Solopreneur Operating Model
+
+**Date:** 2025-12-20
+**Scope:** Foundational philosophy
+
+**Context:**
+Building vertical engines with AI sub-agents revealed a paradox: solopreneurs typically skip process (no one to enforce it), but AI-assisted solopreneurs NEED process (AI won't self-enforce).
+
+**Decision:**
+Adopt the **AI-Assisted Solopreneur Operating Model** as the foundational philosophy:
+
+> "Process isn't overhead when your workers are AI. Process is the management layer that makes AI workers reliable."
+
+**The Model:**
+
+| Traditional Role | AI-Assisted Equivalent |
+|------------------|------------------------|
+| Job descriptions | Skills (documented conventions) |
+| Performance management | Quality Gates (automated enforcement) |
+| Training materials | Step definitions, references |
+| Institutional memory | Decision docs (PD, DD) |
+| HR policies | Process decisions |
+| Quality assurance | Validators, gates |
+
+**The Insight:**
+You're not a solo developer. You're a **manager of digital workers** who need:
+- Explicit rules (they can't infer intent)
+- Enforcement (they won't self-police)
+- Audit trails (they don't remember across sessions)
+
+**Why This Isn't Over-Engineering:**
+- Traditional solopreneur: "I'll just remember" → Works (human memory)
+- AI-assisted solopreneur: "I'll just document" → Fails (AI skips docs)
+- AI-assisted solopreneur: "I'll enforce with gates" → Works (can't bypass)
+
+**The Minimum Viable Management Layer:**
+```
+Skills (what to do)
+    ↓
+Quality Gates (enforcement)
+    ↓
+Decision Docs (why we do it)
+    ↓
+Audit Steps (verify compliance)
+```
+
+This is the operating system for AI-assisted work.
+
+**Rationale:**
+- AI agents are powerful but unreliable without guardrails
+- Documentation without enforcement = ignored
+- Process IS the product when orchestrating AI
+- Scales to multiple vertical engines
+
+**Product Potential:**
+This model could be packaged as a framework/product for other solopreneurs building with AI agents.
+
+---
+
 ## Index
 
 | PD | Title | Scope |
@@ -147,3 +206,4 @@ All cross-cutting process decisions live in `docs/PROCESS_DECISIONS.md` (this fi
 | PD-002 | Audit Subtask in Every Parent Task | Task generation |
 | PD-003 | TestStructureValidator Runs Automatically | Testing process |
 | PD-004 | Process Decisions Are Portable | Meta |
+| PD-005 | AI-Assisted Solopreneur Operating Model | Foundational philosophy |
