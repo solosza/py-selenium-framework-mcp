@@ -230,57 +230,63 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 
 ---
 
-#### 4.0 Preflight Gate - Step 1 [CORE]
+#### 4.0 Preflight Gate - Step 1 [CORE] ✅ COMPLETE
 
-- [ ] 4.1 Create branch `feature/4.0-qg-preflight`
+- [x] 4.1 Create branch `feature/4.0-qg-preflight`
 
 **Unit Tests (TDD) - Test Matrix:**
 
 | Category | Test | Status |
 |----------|------|--------|
-| Happy | `test_valid_credential_strategy_static` | [ ] |
-| Happy | `test_valid_credential_strategy_dynamic` | [ ] |
-| Happy | `test_valid_credential_strategy_self_contained` | [ ] |
-| Happy | `test_valid_credential_strategy_none` | [ ] |
-| Happy | `test_valid_test_data_location_shared` | [ ] |
-| Happy | `test_valid_test_data_location_workflow` | [ ] |
-| Happy | `test_valid_test_data_location_both` | [ ] |
-| Happy | `test_valid_test_data_location_none` | [ ] |
-| Happy | `test_both_fields_valid_passes` | [ ] |
-| Happy | `test_state_saved_on_pass` | [ ] |
-| Negative | `test_invalid_credential_strategy_fails` | [ ] |
-| Negative | `test_invalid_test_data_location_fails` | [ ] |
-| Negative | `test_missing_credential_strategy_fails` | [ ] |
-| Negative | `test_missing_test_data_location_fails` | [ ] |
-| Negative | `test_both_invalid_fails` | [ ] |
-| Negative | `test_no_state_saved_on_fail` | [ ] |
-| Edge | `test_empty_string_credential_strategy` | [ ] |
-| Edge | `test_null_value_handled` | [ ] |
-| Edge | `test_case_sensitivity` | [ ] |
-| Error | `test_fix_hint_provided_on_fail` | [ ] |
+| Happy | `test_valid_credential_strategy_static` | [x] |
+| Happy | `test_valid_credential_strategy_dynamic` | [x] |
+| Happy | `test_valid_credential_strategy_self_contained` | [x] |
+| Happy | `test_valid_credential_strategy_none` | [x] |
+| Happy | `test_valid_test_data_location_shared` | [x] |
+| Happy | `test_valid_test_data_location_workflow` | [x] |
+| Happy | `test_valid_test_data_location_both` | [x] |
+| Happy | `test_valid_test_data_location_none` | [x] |
+| Happy | `test_both_fields_valid_passes` | [x] |
+| Happy | `test_state_saved_on_pass` | [x] |
+| Negative | `test_invalid_credential_strategy_fails` | [x] |
+| Negative | `test_invalid_test_data_location_fails` | [x] |
+| Negative | `test_missing_credential_strategy_fails` | [x] |
+| Negative | `test_missing_test_data_location_fails` | [x] |
+| Negative | `test_both_invalid_fails` | [x] |
+| Negative | `test_no_state_saved_on_fail` | [x] |
+| Edge | `test_empty_string_credential_strategy` | [x] |
+| Edge | `test_null_value_handled` | [x] |
+| Edge | `test_case_sensitivity` | [x] |
+| Error | `test_fix_hint_provided_on_fail` | [x] |
 
-- [ ] 4.2 Write failing tests (TDD)
-  - [ ] 4.2.1 Happy path tests (10 tests)
-  - [ ] 4.2.2 Negative tests (6 tests)
-  - [ ] 4.2.3 Edge case tests (3 tests)
-  - [ ] 4.2.4 Error handling tests (1 test)
-- [ ] 4.3 Implement qg_preflight gate
-  - [ ] 4.3.1 Create `mcp_server/tools/gates/qg_preflight.py`
-  - [ ] 4.3.2 Validate credential_strategy (DD-24)
-  - [ ] 4.3.3 Validate test_data_location (DD-28)
-  - [ ] 4.3.4 Call state_manager.save() on pass
-  - [ ] 4.3.5 Return error with fix_hint on fail
-- [ ] 4.4 Register as MCP tool in server.py
-- [ ] 4.5 Run tests, verify all pass (20/20)
-- [ ] 4.6 Verify coverage >= 90%
-- [ ] 4.7 Record results
-- [ ] 4.8 Commit: `feat: implement qg_preflight gate (Task 4.0)`
+- [x] 4.2 Write failing tests (TDD)
+  - [x] 4.2.1 Happy path tests (10 tests)
+  - [x] 4.2.2 Negative tests (6 tests)
+  - [x] 4.2.3 Edge case tests (3 tests)
+  - [x] 4.2.4 Error handling tests (1 test)
+- [x] 4.3 Implement qg_preflight gate
+  - [x] 4.3.1 Create `mcp_server/tools/gates/qg_preflight.py`
+  - [x] 4.3.2 Validate credential_strategy (DD-24)
+  - [x] 4.3.3 Validate test_data_location (DD-28)
+  - [x] 4.3.4 Call state_manager.save() on pass
+  - [x] 4.3.5 Return error with fix_hint on fail
+- [ ] 4.4 Register as MCP tool in server.py (deferred to integration phase)
+- [x] 4.5 Run tests, verify all pass (20/20)
+- [x] 4.6 Verify coverage >= 90% (98%)
+- [x] 4.7 Record results
+- [x] 4.8 Commit: `feat: implement qg_preflight gate (Task 4.0)`
 
 **Done When:**
-- 20 unit tests pass
-- DD-24 and DD-28 enforced
-- State saved on pass
-- Registered as MCP tool
+- 20 unit tests pass ✅
+- DD-24 and DD-28 enforced ✅
+- State saved on pass ✅
+- Registered as MCP tool (deferred)
+
+**Results:**
+- Tests: 20 passed
+- Coverage: 98%
+- DD-24 (credential_strategy): static, dynamic, self-contained, none
+- DD-28 (test_data_location): shared, workflow, both, none
 
 ---
 
