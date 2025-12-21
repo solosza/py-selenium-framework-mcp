@@ -29,3 +29,4 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "qg_preflight: Step 1 preflight gate tests")
     config.addinivalue_line("markers", "qg_user_input: Step 2 user input gate tests")
     config.addinivalue_line("markers", "qg_ai_processing: Step 3 AI processing gate tests")
+    config.addinivalue_line("markers", "qg_test_scenarios: Step 4 test scenarios gate tests")
