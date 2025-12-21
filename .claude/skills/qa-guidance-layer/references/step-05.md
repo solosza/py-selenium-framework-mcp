@@ -345,4 +345,19 @@ arguments = {
 
 ---
 
+## I. Implementation Clarifications (Gate-Specific)
+
+These clarifications document gate enforcement decisions. If bugs occur, check these for root cause.
+
+| ID | Decision | Rationale | Enforced By |
+|----|----------|-----------|-------------|
+| IC-05-01 | `credential_strategy` must be passed in PRE input_data (not read from state) | Explicit contract - AI passes what it read from Step 1 state. Maintains separation between state reading (AI) and validation (gate). | `validate_pre()` |
+| IC-05-02 | `page_name` PascalCase pattern: `^[A-Z][a-zA-Z0-9]*$` | Flexible enough for `LoginPage`, `CartModal`, `CheckoutForm`. Allows digits for edge cases like `OAuth2Page`. | `validate_post()` |
+| IC-05-03 | At least one locator (`locator_id`, `locator_css`, `locator_xpath`) must be non-empty string | Empty string locators are useless for POM generation. Element must have at least one usable locator. | `validate_post()` |
+
+**Date Added:** 2025-12-21
+**Task Reference:** Task 8.0 (qg_discovered_elements)
+
+---
+
 *Next: Step 6 - Generate POM (Tool 3)*
