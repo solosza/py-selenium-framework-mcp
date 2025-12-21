@@ -54,13 +54,131 @@ Treat AI agents as **digital employees** who need management infrastructure:
 ## The Minimum Viable Management Layer
 
 ```
-Skills (what to do)
-    ↓
-Quality Gates (enforcement - can't bypass)
-    ↓
-Decision Docs (why we do it - institutional memory)
-    ↓
-Audit Steps (verify compliance)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         AI-ASSISTED SOLOPRENEUR                             │
+│                           OPERATING MODEL                                   │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  LAYER 1: SKILLS                                                    │   │
+│   │  ════════════════                                                   │   │
+│   │  "What to do" - The rulebook for AI workers                         │   │
+│   │                                                                     │   │
+│   │  • Documented conventions and patterns                              │   │
+│   │  • Step-by-step procedures                                          │   │
+│   │  • Domain-specific knowledge                                        │   │
+│   │  • Examples and templates                                           │   │
+│   │                                                                     │   │
+│   │  📁 Location: .claude/skills/{domain}/                              │   │
+│   │  📄 Format: SKILL.md + references/                                  │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  LAYER 2: QUALITY GATES                                             │   │
+│   │  ══════════════════════                                             │   │
+│   │  "Enforcement" - AI CANNOT bypass these                             │   │
+│   │                                                                     │   │
+│   │  • Automated validation (runs without asking)                       │   │
+│   │  • Blocks progress if rules violated                                │   │
+│   │  • Returns pass/fail with fix hints                                 │   │
+│   │  • No manual intervention needed                                    │   │
+│   │                                                                     │   │
+│   │  📁 Location: tools/gates/, pytest plugins                          │   │
+│   │  🔧 Types: PRE-gates (before), POST-gates (after)                   │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  LAYER 3: DECISION DOCS                                             │   │
+│   │  ══════════════════════                                             │   │
+│   │  "Why we do it" - Institutional memory                              │   │
+│   │                                                                     │   │
+│   │  • Process Decisions (PD-XXX) - Portable workflow rules             │   │
+│   │  • Design Decisions (DD-XXX) - Project-specific architecture        │   │
+│   │  • Context for future sessions (AI has no memory)                   │   │
+│   │  • Prevents rediscovering past lessons                              │   │
+│   │                                                                     │   │
+│   │  📁 Location: docs/PROCESS_DECISIONS.md                             │   │
+│   │  📁 Location: docs/projects/{name}/DESIGN_DECISIONS.md              │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  LAYER 4: AUDIT STEPS                                               │   │
+│   │  ════════════════════                                               │   │
+│   │  "Verify compliance" - Checkpoints in workflow                      │   │
+│   │                                                                     │   │
+│   │  • Explicit checkpoints in task lists                               │   │
+│   │  • Visible (can't be ignored)                                       │   │
+│   │  • Belt + suspenders with automated gates                           │   │
+│   │  • Human review points when needed                                  │   │
+│   │                                                                     │   │
+│   │  📄 Format: "- [ ] Audit: Verify skill conventions followed"        │   │
+│   │  📍 When: Before commit, after implementation                       │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Layer Details
+
+| Layer | Purpose | Key Question | Failure Mode Without It |
+|-------|---------|--------------|-------------------------|
+| **Skills** | Define the rules | "What should AI do?" | AI invents its own patterns |
+| **Quality Gates** | Enforce the rules | "Did AI follow rules?" | AI ignores documentation |
+| **Decision Docs** | Remember the why | "Why do we do it this way?" | Re-learn lessons each session |
+| **Audit Steps** | Verify compliance | "Was everything checked?" | Slip through the cracks |
+
+### Information Flow
+
+```
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│   YOU (Human)    │     │   AI WORKER      │     │   OUTPUT         │
+│   ─────────────  │     │   ──────────     │     │   ──────         │
+│                  │     │                  │     │                  │
+│  • Set goals     │────▶│  • Read Skills   │────▶│  • Code          │
+│  • Define skills │     │  • Execute task  │     │  • Docs          │
+│  • Review audits │     │  • Pass gates    │     │  • Tests         │
+│                  │     │  • Follow DDs    │     │                  │
+└──────────────────┘     └────────┬─────────┘     └──────────────────┘
+                                  │
+                         ┌────────▼─────────┐
+                         │  QUALITY GATES   │
+                         │  ─────────────   │
+                         │                  │
+                         │  ✓ Pass → Save   │
+                         │  ✗ Fail → Block  │
+                         │                  │
+                         └──────────────────┘
+```
+
+### The Enforcement Stack
+
+```
+                    ┌─────────────────────────────────┐
+                    │        TASK EXECUTION           │
+                    └─────────────┬───────────────────┘
+                                  │
+        ┌─────────────────────────┼─────────────────────────┐
+        │                         │                         │
+        ▼                         ▼                         ▼
+┌───────────────┐         ┌───────────────┐         ┌───────────────┐
+│  BEFORE TASK  │         │  DURING TASK  │         │  AFTER TASK   │
+│  ───────────  │         │  ───────────  │         │  ──────────   │
+│               │         │               │         │               │
+│ PRE-GATE      │         │ Read Skill    │         │ POST-GATE     │
+│ "Can I start?"│         │ Follow refs   │         │ "Is it valid?"│
+│               │         │ Use patterns  │         │               │
+│ ✓ Yes → Go    │         │               │         │ ✓ Yes → Save  │
+│ ✗ No → Block  │         │               │         │ ✗ No → Reject │
+└───────────────┘         └───────────────┘         └───────────────┘
+                                  │
+                                  ▼
+                    ┌─────────────────────────────────┐
+                    │        AUDIT CHECKPOINT         │
+                    │  "Verify skill conventions      │
+                    │   followed before commit"       │
+                    └─────────────────────────────────┘
 ```
 
 **This is the operating system for AI-assisted work.**
