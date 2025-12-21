@@ -108,18 +108,35 @@ Implement the QA Execution Engine - quality gates and state management that enfo
 
 ### Architecture (4-Layer)
 
+All four layers together form the **QA Execution Engine**:
+
 ```
-SKILL (qa-guidance-layer)
-    │
-    ▼
-QUALITY GATES (qg_*)          ← QA EXECUTION ENGINE
-    │
-    ▼
-OPERATION TOOLS (Tool 1-6)
-    │
-    ▼
-STATE MANAGER                 ← QA EXECUTION ENGINE
+┌─────────────────────────────────────────────────────────────────────┐
+│                      QA EXECUTION ENGINE                             │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   SKILL (qa-guidance-layer)        ← Guides AI through workflow     │
+│       │                                                             │
+│       ▼                                                             │
+│   QUALITY GATES (qg_*)             ← Validates at step boundaries   │
+│       │                                                             │
+│       ▼                                                             │
+│   OPERATION TOOLS (Tool 1-6)       ← Generates code artifacts       │
+│       │                                                             │
+│       ▼                                                             │
+│   STATE MANAGER                    ← Persists workflow state        │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
 ```
+
+**Component Responsibilities:**
+
+| Component | Purpose | Who Calls |
+|-----------|---------|-----------|
+| Skill | Step-by-step workflow guidance | AI reads, follows instructions |
+| Quality Gates | Validate before/after operations | AI calls qg_* tools |
+| Operation Tools | Generate code (POM, Task, Role, Test) | AI calls Tool 1-6 |
+| State Manager | Persist state, enable resume | Gates/Operations call internally |
 
 ### File Structure
 
@@ -194,28 +211,224 @@ mcp_server/
 
 ## 9. Test Strategy
 
-### Unit Tests (pytest)
+**Reference:** Uses `.claude/skills/testing/` framework for comprehensive coverage.
 
-| Test | Purpose |
-|------|---------|
-| `test_qg_preflight.py` | Valid/invalid credential_strategy, test_data_location |
-| `test_qg_user_input.py` | Missing persona, invalid URL, etc. |
-| `test_qg_*.py` | Each gate has dedicated test file |
-| `test_state_manager.py` | Save, load, get_step, is_step_complete |
+### 9.1 Test Pyramid (Domain-Specific)
 
-### Integration Tests
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    QA EXECUTION ENGINE TEST PYRAMID                  │
+├─────────────────────────────────────────────────────────────────────┤
+│  1. DATA STRUCTURE    - Does state schema work?                      │
+│  2. VALIDATION LOGIC  - Does gate validation work?                   │
+│  3. STATE OPERATIONS  - Does persistence work?                       │
+│  4. EDGE CASES        - Does it handle weird input?                  │
+│  5. ERROR HANDLING    - Does it fail gracefully with fix_hint?       │
+│  6. INTEGRATION       - Do gates block correctly?                    │
+│  7. E2E               - Does full workflow complete?                 │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-| Test | Purpose |
-|------|---------|
-| `test_step_1_to_2.py` | Step 1 gate → Step 2 blocked until pass |
-| `test_skeleton_blocked.py` | Skeleton code at Step 6 blocks Step 7 |
-| `test_full_workflow.py` | End-to-end with all gates |
+### 9.2 Test Matrix by Component
 
-### Manual Validation
+#### State Manager Tests
 
-- Run actual workflow with live MCP tools
-- Verify gates block on intentionally bad input
-- Verify state persists and resumes correctly
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | save/load works | invalid path | empty state | P0 |
+| Unit | get_step returns data | step not found | step 0 | P0 |
+| Unit | is_step_complete | incomplete step | boundary step | P0 |
+| Unit | atomic write | write failure | concurrent writes | P1 |
+| Integration | gate saves state | - | resume after interrupt | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_state_manager.py`
+
+#### Step 1 Gate (qg_preflight)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | valid credential_strategy | invalid value | empty string | P0 |
+| Unit | valid test_data_location | missing field | null value | P0 |
+| Unit | both fields valid | both invalid | one valid/one invalid | P0 |
+| Unit | state saved on pass | no save on fail | - | P0 |
+| Integration | blocks Step 2 on fail | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_preflight.py`
+
+#### Step 2 Gate (qg_user_input)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | valid persona | missing "As a" | empty persona | P0 |
+| Unit | valid URL | invalid URL format | localhost URL | P0 |
+| Unit | role_name extracted | cannot extract role | multiple roles | P1 |
+| Unit | domain detected | unknown domain | - | P1 |
+| Integration | blocks Step 3 on fail | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_user_input.py`
+
+#### Step 3 Gate (qg_ai_processing)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | valid bdd_scenarios | missing given/when/then | empty scenarios | P0 |
+| Unit | valid expected_states | empty array | single state | P0 |
+| Unit | valid intent | empty intent | very long intent | P1 |
+| Unit | metadata_context built | - | - | P0 |
+| Integration | blocks Step 4 on fail | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_ai_processing.py`
+
+#### Step 4 Gate (qg_test_scenarios)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | PRE: Step 3 complete | Step 3 incomplete | - | P0 |
+| Unit | POST: valid scenarios | skeleton scenarios | single scenario | P0 |
+| Unit | POST: BDD format (DD-23) | missing then | - | P0 |
+| Unit | POST: tool import (DD-19) | wrong import path | - | P1 |
+| Integration | blocks Step 5 on fail | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_test_scenarios.py`
+
+#### Step 5 Gate (qg_discovered_elements)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | PRE: Step 4 complete | Step 4 incomplete | - | P0 |
+| Unit | PRE: credential_strategy applied | - | strategy=none | P1 |
+| Unit | POST: elements not empty | empty elements | single element | P0 |
+| Unit | POST: element structure | missing locator | multiple locator types | P0 |
+| Unit | POST: page_name PascalCase | lowercase name | - | P1 |
+| Integration | blocks Step 6 on fail | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_discovered_elements.py`
+
+#### Step 6 Gate (qg_page_object)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | PRE: Step 5 complete | Step 5 incomplete | - | P0 |
+| Unit | PRE: elements present | no elements | - | P0 |
+| Unit | POST: no skeleton (DD-25) | pass in body | # Add comment | P0 |
+| Unit | POST: locators present | missing locator | - | P0 |
+| Unit | POST: state methods match expected_states | missing state method | - | P0 |
+| Unit | POST: metadata structure (DD-26) | missing action_methods | - | P0 |
+| Integration | blocks Step 7 on fail | - | skeleton triggers retry | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_page_object.py`
+
+#### Step 7 Gate (qg_task)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | PRE: Step 6 complete | Step 6 incomplete | - | P0 |
+| Unit | PRE: pom_metadata present | no metadata | - | P0 |
+| Unit | POST: no skeleton (DD-25) | empty body | placeholder | P0 |
+| Unit | POST: no locators (DD-27) | By. import | By.CSS_SELECTOR | P0 |
+| Unit | POST: check-existing (DD-12) | - | existing task found | P1 |
+| Unit | POST: metadata structure (DD-26) | missing task_methods | - | P0 |
+| Integration | blocks Step 8 on fail | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_task.py`
+
+#### Step 8 Gate (qg_role)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | PRE: Step 7 complete | Step 7 incomplete | - | P0 |
+| Unit | PRE: task_metadata present | no metadata | - | P0 |
+| Unit | POST: no skeleton (DD-25) | pass in body | - | P0 |
+| Unit | POST: check-existing (DD-12) | - | existing role found | P1 |
+| Unit | POST: metadata structure (DD-26) | missing workflow_methods | - | P0 |
+| Integration | blocks Step 9 on fail | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_role.py`
+
+#### Step 9 Gate (qg_test_runner)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | PRE: Step 8 complete | Step 8 incomplete | - | P0 |
+| Unit | PRE: role + pom metadata | missing pom_metadata | - | P0 |
+| Unit | POST: no skeleton (DD-25) | pass in test | - | P0 |
+| Unit | POST: POM state assertions (DD-15) | assert result==True | - | P0 |
+| Unit | POST: import paths (DD-18) | wrong import | - | P0 |
+| Unit | POST: parameter values (DD-17) | placeholder values | - | P1 |
+| Integration | blocks Step 10 on fail | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_test_runner.py`
+
+#### Step 10 Gate (qg_save_run)
+
+| Type | Happy | Negative | Edge | Priority |
+|------|-------|----------|------|----------|
+| Unit | PRE: Step 9 complete | Step 9 incomplete | - | P0 |
+| Unit | PRE: all code present | missing POM | missing Role | P0 |
+| Unit | PRE: no skeleton anywhere | skeleton in any layer | - | P0 |
+| Unit | PRE: DD-22 documented | - | - | P1 |
+| Integration | final sweep catches skeleton | - | - | P0 |
+
+**Test File:** `mcp_server/_dev_tests/test_gates/test_qg_save_run.py`
+
+### 9.3 Integration Tests
+
+| Test | Purpose | Priority |
+|------|---------|----------|
+| `test_step_blocking.py` | Step N blocks Step N+1 until pass | P0 |
+| `test_skeleton_blocked.py` | Skeleton code at any step blocks progression | P0 |
+| `test_state_persistence.py` | State persists across gate calls | P0 |
+| `test_workflow_resume.py` | Resume from any step after interruption | P0 |
+| `test_retry_policy.py` | 3 retries then STOP → REPORT → USER DECIDES | P1 |
+| `test_full_workflow.py` | End-to-end with all gates | P0 |
+
+**Test Directory:** `mcp_server/_dev_tests/test_integration/`
+
+### 9.4 E2E Tests
+
+| Test | Purpose | Priority |
+|------|---------|----------|
+| `test_e2e_auth_workflow.py` | Full auth workflow (login) with all gates | P0 |
+| `test_e2e_catalog_workflow.py` | Full catalog workflow with all gates | P1 |
+| `test_e2e_skeleton_rejection.py` | Intentionally bad tool output blocked | P0 |
+
+**Test Directory:** `mcp_server/_dev_tests/test_e2e/`
+
+### 9.5 Manual Validation
+
+- [ ] Run actual workflow with live MCP tools
+- [ ] Verify gates block on intentionally bad input
+- [ ] Verify state persists and resumes correctly
+- [ ] Verify error messages include actionable fix_hint
+
+### 9.6 Test Commands
+
+```bash
+# Run all unit tests
+pytest mcp_server/_dev_tests/test_*.py -v
+
+# Run gate tests only
+pytest mcp_server/_dev_tests/test_gates/ -v
+
+# Run integration tests
+pytest mcp_server/_dev_tests/test_integration/ -v
+
+# Run with coverage
+pytest mcp_server/_dev_tests/ --cov=mcp_server --cov-report=term-missing
+
+# Run specific gate test
+pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
+```
+
+### 9.7 Coverage Targets
+
+| Component | Target | Rationale |
+|-----------|--------|-----------|
+| State Manager | 95% | Core infrastructure, must be reliable |
+| Gate Base | 90% | Shared logic, high reuse |
+| Individual Gates | 90% | Enforcement logic, critical |
+| Integration | 85% | Component interactions |
+| E2E | 80% | Full workflows |
 
 ---
 
