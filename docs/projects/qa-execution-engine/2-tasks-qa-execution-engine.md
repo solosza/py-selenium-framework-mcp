@@ -534,28 +534,35 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 | DD-24 | `test_credential_strategy_from_step_1` | [ ] |
 | Integration | `test_blocks_step_6_on_fail` | [ ] |
 
-- [ ] 8.2 Write failing tests (TDD)
-  - [ ] 8.2.1 PRE validation tests (3 tests)
-  - [ ] 8.2.2 POST validation tests (6 tests)
-  - [ ] 8.2.3 Edge case tests (3 tests)
-  - [ ] 8.2.4 Error handling tests (1 test)
-  - [ ] 8.2.5 DD enforcement tests (3 tests)
-  - [ ] 8.2.6 Integration tests (1 test)
-- [ ] 8.3 Implement qg_discovered_elements gate
-  - [ ] 8.3.1 Create `mcp_server/tools/gates/qg_discovered_elements.py`
-  - [ ] 8.3.2 PRE: Check is_step_complete(4)
-  - [ ] 8.3.3 PRE: Apply credential_strategy from Step 1
-  - [ ] 8.3.4 POST: Validate elements array
-  - [ ] 8.3.5 POST: Validate element structure
-  - [ ] 8.3.6 POST: Validate page_name PascalCase
-- [ ] 8.4 Register as MCP tool in server.py
-- [ ] 8.5 Run tests, verify all pass (17/17)
-- [ ] 8.6 Verify coverage >= 90%
-- [ ] 8.7 Record results
-- [ ] 8.8 Commit: `feat: implement qg_discovered_elements gate (Task 8.0)`
+- [ ] 8.2 Proactive coverage analysis (identify ALL branches before writing tests)
+  - [ ] 8.2.1 Map validate_pre() branches: step check, URL, page_name, credential_strategy
+  - [ ] 8.2.2 Map validate_post() branches: elements array, element structure, empty/invalid types
+  - [ ] 8.2.3 Map validate() routing: PRE/POST mode, invalid mode, empty mode
+  - [ ] 8.2.4 Plan tests for each branch to hit 90%+ from start
+- [ ] 8.3 Write failing tests (TDD)
+  - [ ] 8.3.1 PRE validation tests (5+ tests)
+  - [ ] 8.3.2 POST validation tests (8+ tests)
+  - [ ] 8.3.3 Edge case tests (4+ tests)
+  - [ ] 8.3.4 Error handling tests (2+ tests)
+  - [ ] 8.3.5 DD enforcement tests (3 tests)
+  - [ ] 8.3.6 Integration tests (1 test)
+  - [ ] 8.3.7 Mode routing tests (3+ tests)
+- [ ] 8.4 Implement qg_discovered_elements gate
+  - [ ] 8.4.1 Create `mcp_server/tools/gates/qg_discovered_elements.py`
+  - [ ] 8.4.2 PRE: Check is_step_complete(4)
+  - [ ] 8.4.3 PRE: Apply credential_strategy from Step 1
+  - [ ] 8.4.4 POST: Validate elements array
+  - [ ] 8.4.5 POST: Validate element structure
+  - [ ] 8.4.6 POST: Validate page_name PascalCase
+  - [ ] 8.4.7 validate() routing (PRE/POST mode)
+- [ ] 8.5 Register as MCP tool in server.py (deferred)
+- [ ] 8.6 Run tests, verify all pass (25+)
+- [ ] 8.7 Verify coverage >= 90%
+- [ ] 8.8 Record results
+- [ ] 8.9 Commit: `feat: implement qg_discovered_elements gate (Task 8.0)`
 
 **Done When:**
-- 17 unit tests pass
+- 25+ unit tests pass (proactive coverage)
 - PRE+POST validation working
 - DD-20, DD-21, DD-24 enforced
 - Registered as MCP tool
@@ -594,29 +601,36 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 | Integration | `test_blocks_step_7_on_fail` | [ ] |
 | Integration | `test_skeleton_triggers_retry` | [ ] |
 
-- [ ] 9.2 Write failing tests (TDD)
-  - [ ] 9.2.1 PRE validation tests (5 tests)
-  - [ ] 9.2.2 POST validation tests (10 tests)
-  - [ ] 9.2.3 Edge case tests (2 tests)
-  - [ ] 9.2.4 Error handling tests (1 test)
-  - [ ] 9.2.5 DD enforcement tests (3 tests)
-  - [ ] 9.2.6 Integration tests (2 tests)
-- [ ] 9.3 Implement qg_page_object gate
-  - [ ] 9.3.1 Create `mcp_server/tools/gates/qg_page_object.py`
-  - [ ] 9.3.2 PRE: Check is_step_complete(5)
-  - [ ] 9.3.3 PRE: Validate elements present
-  - [ ] 9.3.4 POST: Run detect_skeleton_code (DD-25)
-  - [ ] 9.3.5 POST: Validate locators and methods
-  - [ ] 9.3.6 POST: Validate state methods match expected_states (DD-09)
-  - [ ] 9.3.7 POST: Validate metadata structure (DD-26)
-- [ ] 9.4 Register as MCP tool in server.py
-- [ ] 9.5 Run tests, verify all pass (23/23)
-- [ ] 9.6 Verify coverage >= 90%
-- [ ] 9.7 Record results
-- [ ] 9.8 Commit: `feat: implement qg_page_object gate (Task 9.0)`
+- [ ] 9.2 Proactive coverage analysis (identify ALL branches before writing tests)
+  - [ ] 9.2.1 Map validate_pre() branches: step check, elements, expected_states
+  - [ ] 9.2.2 Map validate_post() branches: skeleton code, locators, methods, state methods, metadata
+  - [ ] 9.2.3 Map validate() routing: PRE/POST mode, invalid mode, empty mode
+  - [ ] 9.2.4 Plan tests for each branch to hit 90%+ from start
+- [ ] 9.3 Write failing tests (TDD)
+  - [ ] 9.3.1 PRE validation tests (6+ tests)
+  - [ ] 9.3.2 POST validation tests (12+ tests)
+  - [ ] 9.3.3 Edge case tests (3+ tests)
+  - [ ] 9.3.4 Error handling tests (2+ tests)
+  - [ ] 9.3.5 DD enforcement tests (3 tests)
+  - [ ] 9.3.6 Integration tests (2 tests)
+  - [ ] 9.3.7 Mode routing tests (3+ tests)
+- [ ] 9.4 Implement qg_page_object gate
+  - [ ] 9.4.1 Create `mcp_server/tools/gates/qg_page_object.py`
+  - [ ] 9.4.2 PRE: Check is_step_complete(5)
+  - [ ] 9.4.3 PRE: Validate elements present
+  - [ ] 9.4.4 POST: Run detect_skeleton_code (DD-25)
+  - [ ] 9.4.5 POST: Validate locators and methods
+  - [ ] 9.4.6 POST: Validate state methods match expected_states (DD-09)
+  - [ ] 9.4.7 POST: Validate metadata structure (DD-26)
+  - [ ] 9.4.8 validate() routing (PRE/POST mode)
+- [ ] 9.5 Register as MCP tool in server.py (deferred)
+- [ ] 9.6 Run tests, verify all pass (30+)
+- [ ] 9.7 Verify coverage >= 90%
+- [ ] 9.8 Record results
+- [ ] 9.9 Commit: `feat: implement qg_page_object gate (Task 9.0)`
 
 **Done When:**
-- 23 unit tests pass
+- 30+ unit tests pass (proactive coverage)
 - PRE+POST validation working
 - DD-09, DD-25, DD-26 enforced
 - Skeleton code blocked
@@ -653,29 +667,36 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 | DD-27 | `test_no_locators_in_task` | [ ] |
 | Integration | `test_blocks_step_8_on_fail` | [ ] |
 
-- [ ] 10.2 Write failing tests (TDD)
-  - [ ] 10.2.1 PRE validation tests (4 tests)
-  - [ ] 10.2.2 POST validation tests (8 tests)
-  - [ ] 10.2.3 Edge case tests (2 tests)
-  - [ ] 10.2.4 Error handling tests (1 test)
-  - [ ] 10.2.5 DD enforcement tests (4 tests)
-  - [ ] 10.2.6 Integration tests (1 test)
-- [ ] 10.3 Implement qg_task gate
-  - [ ] 10.3.1 Create `mcp_server/tools/gates/qg_task.py`
-  - [ ] 10.3.2 PRE: Check is_step_complete(6)
-  - [ ] 10.3.3 PRE: Validate pom_metadata present
-  - [ ] 10.3.4 POST: Run detect_skeleton_code (DD-25)
-  - [ ] 10.3.5 POST: Check for By. imports (DD-27)
-  - [ ] 10.3.6 POST: Check existing (DD-12)
-  - [ ] 10.3.7 POST: Validate metadata structure (DD-26)
-- [ ] 10.4 Register as MCP tool in server.py
-- [ ] 10.5 Run tests, verify all pass (20/20)
-- [ ] 10.6 Verify coverage >= 90%
-- [ ] 10.7 Record results
-- [ ] 10.8 Commit: `feat: implement qg_task gate (Task 10.0)`
+- [ ] 10.2 Proactive coverage analysis (identify ALL branches before writing tests)
+  - [ ] 10.2.1 Map validate_pre() branches: step check, pom_metadata
+  - [ ] 10.2.2 Map validate_post() branches: skeleton, locators, task methods, metadata
+  - [ ] 10.2.3 Map validate() routing: PRE/POST mode, invalid mode, empty mode
+  - [ ] 10.2.4 Plan tests for each branch to hit 90%+ from start
+- [ ] 10.3 Write failing tests (TDD)
+  - [ ] 10.3.1 PRE validation tests (5+ tests)
+  - [ ] 10.3.2 POST validation tests (10+ tests)
+  - [ ] 10.3.3 Edge case tests (3+ tests)
+  - [ ] 10.3.4 Error handling tests (2+ tests)
+  - [ ] 10.3.5 DD enforcement tests (4 tests)
+  - [ ] 10.3.6 Integration tests (1 test)
+  - [ ] 10.3.7 Mode routing tests (3+ tests)
+- [ ] 10.4 Implement qg_task gate
+  - [ ] 10.4.1 Create `mcp_server/tools/gates/qg_task.py`
+  - [ ] 10.4.2 PRE: Check is_step_complete(6)
+  - [ ] 10.4.3 PRE: Validate pom_metadata present
+  - [ ] 10.4.4 POST: Run detect_skeleton_code (DD-25)
+  - [ ] 10.4.5 POST: Check for By. imports (DD-27)
+  - [ ] 10.4.6 POST: Check existing (DD-12)
+  - [ ] 10.4.7 POST: Validate metadata structure (DD-26)
+  - [ ] 10.4.8 validate() routing (PRE/POST mode)
+- [ ] 10.5 Register as MCP tool in server.py (deferred)
+- [ ] 10.6 Run tests, verify all pass (28+)
+- [ ] 10.7 Verify coverage >= 90%
+- [ ] 10.8 Record results
+- [ ] 10.9 Commit: `feat: implement qg_task gate (Task 10.0)`
 
 **Done When:**
-- 20 unit tests pass
+- 28+ unit tests pass (proactive coverage)
 - PRE+POST validation working
 - DD-12, DD-25, DD-26, DD-27 enforced
 - Locators in Task blocked
@@ -708,28 +729,35 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 | DD-26 | `test_metadata_contract_valid` | [ ] |
 | Integration | `test_blocks_step_9_on_fail` | [ ] |
 
-- [ ] 11.2 Write failing tests (TDD)
-  - [ ] 11.2.1 PRE validation tests (4 tests)
-  - [ ] 11.2.2 POST validation tests (5 tests)
-  - [ ] 11.2.3 Edge case tests (2 tests)
-  - [ ] 11.2.4 Error handling tests (1 test)
-  - [ ] 11.2.5 DD enforcement tests (3 tests)
-  - [ ] 11.2.6 Integration tests (1 test)
-- [ ] 11.3 Implement qg_role gate
-  - [ ] 11.3.1 Create `mcp_server/tools/gates/qg_role.py`
-  - [ ] 11.3.2 PRE: Check is_step_complete(7)
-  - [ ] 11.3.3 PRE: Validate task_metadata present
-  - [ ] 11.3.4 POST: Run detect_skeleton_code (DD-25)
-  - [ ] 11.3.5 POST: Check existing (DD-12)
-  - [ ] 11.3.6 POST: Validate metadata structure (DD-26)
-- [ ] 11.4 Register as MCP tool in server.py
-- [ ] 11.5 Run tests, verify all pass (16/16)
-- [ ] 11.6 Verify coverage >= 90%
-- [ ] 11.7 Record results
-- [ ] 11.8 Commit: `feat: implement qg_role gate (Task 11.0)`
+- [ ] 11.2 Proactive coverage analysis (identify ALL branches before writing tests)
+  - [ ] 11.2.1 Map validate_pre() branches: step check, task_metadata
+  - [ ] 11.2.2 Map validate_post() branches: skeleton, workflow methods, metadata
+  - [ ] 11.2.3 Map validate() routing: PRE/POST mode, invalid mode, empty mode
+  - [ ] 11.2.4 Plan tests for each branch to hit 90%+ from start
+- [ ] 11.3 Write failing tests (TDD)
+  - [ ] 11.3.1 PRE validation tests (5+ tests)
+  - [ ] 11.3.2 POST validation tests (7+ tests)
+  - [ ] 11.3.3 Edge case tests (3+ tests)
+  - [ ] 11.3.4 Error handling tests (2+ tests)
+  - [ ] 11.3.5 DD enforcement tests (3 tests)
+  - [ ] 11.3.6 Integration tests (1 test)
+  - [ ] 11.3.7 Mode routing tests (3+ tests)
+- [ ] 11.4 Implement qg_role gate
+  - [ ] 11.4.1 Create `mcp_server/tools/gates/qg_role.py`
+  - [ ] 11.4.2 PRE: Check is_step_complete(7)
+  - [ ] 11.4.3 PRE: Validate task_metadata present
+  - [ ] 11.4.4 POST: Run detect_skeleton_code (DD-25)
+  - [ ] 11.4.5 POST: Check existing (DD-12)
+  - [ ] 11.4.6 POST: Validate metadata structure (DD-26)
+  - [ ] 11.4.7 validate() routing (PRE/POST mode)
+- [ ] 11.5 Register as MCP tool in server.py (deferred)
+- [ ] 11.6 Run tests, verify all pass (24+)
+- [ ] 11.7 Verify coverage >= 90%
+- [ ] 11.8 Record results
+- [ ] 11.9 Commit: `feat: implement qg_role gate (Task 11.0)`
 
 **Done When:**
-- 16 unit tests pass
+- 24+ unit tests pass (proactive coverage)
 - PRE+POST validation working
 - DD-12, DD-25, DD-26 enforced
 - Registered as MCP tool
@@ -769,30 +797,37 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 | DD-26 | `test_metadata_contract_valid` | [ ] |
 | Integration | `test_blocks_step_10_on_fail` | [ ] |
 
-- [ ] 12.2 Write failing tests (TDD)
-  - [ ] 12.2.1 PRE validation tests (6 tests)
-  - [ ] 12.2.2 POST validation tests (8 tests)
-  - [ ] 12.2.3 Edge case tests (2 tests)
-  - [ ] 12.2.4 Error handling tests (1 test)
-  - [ ] 12.2.5 DD enforcement tests (6 tests)
-  - [ ] 12.2.6 Integration tests (1 test)
-- [ ] 12.3 Implement qg_test_runner gate
-  - [ ] 12.3.1 Create `mcp_server/tools/gates/qg_test_runner.py`
-  - [ ] 12.3.2 PRE: Check is_step_complete(8)
-  - [ ] 12.3.3 PRE: Validate role_metadata and pom_metadata present
-  - [ ] 12.3.4 POST: Run detect_skeleton_code (DD-25)
-  - [ ] 12.3.5 POST: Validate assertions use state methods (DD-15)
-  - [ ] 12.3.6 POST: Validate import paths (DD-18)
-  - [ ] 12.3.7 POST: Validate parameter values (DD-17)
-  - [ ] 12.3.8 POST: Validate file paths (DD-16)
-- [ ] 12.4 Register as MCP tool in server.py
-- [ ] 12.5 Run tests, verify all pass (24/24)
-- [ ] 12.6 Verify coverage >= 90%
-- [ ] 12.7 Record results
-- [ ] 12.8 Commit: `feat: implement qg_test_runner gate (Task 12.0)`
+- [ ] 12.2 Proactive coverage analysis (identify ALL branches before writing tests)
+  - [ ] 12.2.1 Map validate_pre() branches: step check, role_metadata, pom_metadata
+  - [ ] 12.2.2 Map validate_post() branches: skeleton, assertions, imports, params, file paths
+  - [ ] 12.2.3 Map validate() routing: PRE/POST mode, invalid mode, empty mode
+  - [ ] 12.2.4 Plan tests for each branch to hit 90%+ from start
+- [ ] 12.3 Write failing tests (TDD)
+  - [ ] 12.3.1 PRE validation tests (7+ tests)
+  - [ ] 12.3.2 POST validation tests (10+ tests)
+  - [ ] 12.3.3 Edge case tests (3+ tests)
+  - [ ] 12.3.4 Error handling tests (2+ tests)
+  - [ ] 12.3.5 DD enforcement tests (6 tests)
+  - [ ] 12.3.6 Integration tests (1 test)
+  - [ ] 12.3.7 Mode routing tests (3+ tests)
+- [ ] 12.4 Implement qg_test_runner gate
+  - [ ] 12.4.1 Create `mcp_server/tools/gates/qg_test_runner.py`
+  - [ ] 12.4.2 PRE: Check is_step_complete(8)
+  - [ ] 12.4.3 PRE: Validate role_metadata and pom_metadata present
+  - [ ] 12.4.4 POST: Run detect_skeleton_code (DD-25)
+  - [ ] 12.4.5 POST: Validate assertions use state methods (DD-15)
+  - [ ] 12.4.6 POST: Validate import paths (DD-18)
+  - [ ] 12.4.7 POST: Validate parameter values (DD-17)
+  - [ ] 12.4.8 POST: Validate file paths (DD-16)
+  - [ ] 12.4.9 validate() routing (PRE/POST mode)
+- [ ] 12.5 Register as MCP tool in server.py (deferred)
+- [ ] 12.6 Run tests, verify all pass (32+)
+- [ ] 12.7 Verify coverage >= 90%
+- [ ] 12.8 Record results
+- [ ] 12.9 Commit: `feat: implement qg_test_runner gate (Task 12.0)`
 
 **Done When:**
-- 24 unit tests pass
+- 32+ unit tests pass (proactive coverage)
 - PRE+POST validation working
 - DD-15, DD-16, DD-17, DD-18, DD-25, DD-26 enforced
 - POM state assertions validated
@@ -834,27 +869,34 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 | DD-25 | `test_final_skeleton_sweep_all_layers` | [ ] |
 | Integration | `test_final_sweep_catches_skeleton` | [ ] |
 
-- [ ] 13.2 Write failing tests (TDD)
-  - [ ] 13.2.1 PRE validation happy tests (6 tests)
-  - [ ] 13.2.2 PRE validation negative tests (9 tests)
-  - [ ] 13.2.3 Edge case tests (1 test)
-  - [ ] 13.2.4 Error handling tests (2 tests)
-  - [ ] 13.2.5 DD enforcement tests (2 tests)
-  - [ ] 13.2.6 Integration tests (1 test)
-- [ ] 13.3 Implement qg_save_run gate
-  - [ ] 13.3.1 Create `mcp_server/tools/gates/qg_save_run.py`
-  - [ ] 13.3.2 PRE: Check is_step_complete(9)
-  - [ ] 13.3.3 PRE: Validate all code present (POM, Task, Role, Test)
-  - [ ] 13.3.4 PRE: Run detect_skeleton_code on ALL code (DD-25)
-  - [ ] 13.3.5 Return pass/fail (PRE-only mode)
-- [ ] 13.4 Register as MCP tool in server.py
-- [ ] 13.5 Run tests, verify all pass (21/21)
-- [ ] 13.6 Verify coverage >= 90%
-- [ ] 13.7 Record results
-- [ ] 13.8 Commit: `feat: implement qg_save_run gate (Task 13.0)`
+- [ ] 13.2 Proactive coverage analysis (identify ALL branches before writing tests)
+  - [ ] 13.2.1 Map validate_pre() branches: step check, all code present, skeleton in each layer
+  - [ ] 13.2.2 This is PRE-only mode (no POST validation)
+  - [ ] 13.2.3 Map validate() routing: PRE mode, invalid mode handling
+  - [ ] 13.2.4 Plan tests for each branch to hit 90%+ from start
+- [ ] 13.3 Write failing tests (TDD)
+  - [ ] 13.3.1 PRE validation happy tests (7+ tests)
+  - [ ] 13.3.2 PRE validation negative tests (10+ tests)
+  - [ ] 13.3.3 Edge case tests (2+ tests)
+  - [ ] 13.3.4 Error handling tests (3+ tests)
+  - [ ] 13.3.5 DD enforcement tests (2 tests)
+  - [ ] 13.3.6 Integration tests (1 test)
+  - [ ] 13.3.7 Mode validation tests (2+ tests)
+- [ ] 13.4 Implement qg_save_run gate
+  - [ ] 13.4.1 Create `mcp_server/tools/gates/qg_save_run.py`
+  - [ ] 13.4.2 PRE: Check is_step_complete(9)
+  - [ ] 13.4.3 PRE: Validate all code present (POM, Task, Role, Test)
+  - [ ] 13.4.4 PRE: Run detect_skeleton_code on ALL code (DD-25)
+  - [ ] 13.4.5 Return pass/fail (PRE-only mode)
+  - [ ] 13.4.6 validate() routing (PRE mode only)
+- [ ] 13.5 Register as MCP tool in server.py (deferred)
+- [ ] 13.6 Run tests, verify all pass (27+)
+- [ ] 13.7 Verify coverage >= 90%
+- [ ] 13.8 Record results
+- [ ] 13.9 Commit: `feat: implement qg_save_run gate (Task 13.0)`
 
 **Done When:**
-- 21 unit tests pass
+- 27+ unit tests pass (proactive coverage)
 - PRE-only validation working
 - Final skeleton code sweep
 - DD-22, DD-25 enforced
