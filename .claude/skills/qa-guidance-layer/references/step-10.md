@@ -274,4 +274,21 @@ Upon successful completion:
 
 ---
 
+## I. Implementation Clarifications (Gate-Specific)
+
+These clarifications document gate enforcement decisions. If bugs occur, check these for root cause.
+
+| ID | Decision | Rationale | Enforced By |
+|----|----------|-----------|-------------|
+| IC-10-01 | Primary: code from input_data; Fallback: code from state (resume scenario) | Normal flow passes code in input_data; resume/recovery reads from state | `validate_pre()` |
+| IC-10-02 | PRE-only mode (no POST validation) | Gate validates before save; no output to validate after | `validate()` |
+| IC-10-03 | Final skeleton sweep on ALL 4 layers (POM, Task, Role, Test) | Last line of defense before files hit disk (DD-25) | `validate_pre()` |
+| IC-10-04 | Each code block validated independently; first failure stops validation | Fail-fast with clear error pointing to specific layer | `validate_pre()` |
+| IC-10-05 | Missing code returns step hint (e.g., "Go back to Step 6 for POM") | Actionable fix guidance | `validate_pre()` |
+
+**Date Added:** 2025-12-21
+**Task Reference:** Task 13.0 (qg_save_run)
+
+---
+
 *End of 10-Step Workflow*
