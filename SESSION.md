@@ -5,7 +5,59 @@
 
 ---
 
-# Session: 2025-12-21 - Task 10.0 Complete + Merged
+# Session: 2025-12-21 - Task 11.0 Complete
+
+## Quick Resume
+**Completed:** Task 11.0 Role Gate (Step 8) - 40 tests, 96% coverage
+**Status:** Phase 3 (Operation Gates) - Task 11.0 COMPLETE
+**Next:** Task 12.0 Test Runner Gate (Step 9)
+**Branch:** `feature/11.0-qg-role` (28bfa58)
+
+---
+
+## What Was Done This Session
+
+### Task 11.0 Role Gate - Step 8 [COMPLETE]
+- Read step-08.md, Tool 5, role_generator.py, FRAMEWORK.md Section 4.3 + 9.8
+- Analyzed framework consistency (found single-task methods acceptable per FRAMEWORK.md examples)
+- Added 6 Implementation Clarifications (IC-08-01 through IC-08-06) to step-08.md
+- Wrote 40 unit tests (TDD approach)
+- Implemented qg_role.py gate
+- All 40 tests passing, 96% coverage
+
+### Implementation Clarifications Added (IC-08-xx)
+
+| ID | Decision | Rationale |
+|----|----------|-----------|
+| IC-08-01 | Role generator placeholder methods with pass/TODO is a FAIL | DD-25 violation |
+| IC-08-02 | Single-task workflow methods are acceptable | FRAMEWORK.md login()/logout() examples call one task |
+| IC-08-03 | DD-27 applies to Roles - no locators | Locators only in POMs |
+| IC-08-04 | @autologger.automation_logger("Role") required | Missing decorator = incomplete |
+| IC-08-05 | task_metadata must have class_name + task_methods | Validates Tool 4 output |
+| IC-08-06 | Workflow methods must contain task method calls | No empty methods |
+
+### Key Files Created/Updated
+| File | Description |
+|------|-------------|
+| `mcp_server/tools/gates/qg_role.py` | QGRole gate class |
+| `mcp_server/_dev_tests/test_gates/test_qg_role.py` | 40 unit tests |
+| `.claude/skills/qa-guidance-layer/references/step-08.md` | Added IC section |
+
+### QGRole Functionality
+- `validate_pre(input_data)` - PRE: Step 7 complete, task_metadata, role_name PascalCase
+- `validate_post(input_data)` - POST: skeleton (DD-25), locators (DD-27), returns, decorator (IC-08-04), task calls (IC-08-06), metadata (DD-26)
+- `validate(input_data)` - Routes to PRE/POST based on mode
+- Returns `{"status": "pass"}` or `{"status": "fail", "error": "...", "fix_hint": "..."}`
+
+---
+
+## Resume Point
+
+**Next Action:** Merge to main, then Task 12.0 Test Runner Gate (Step 9)
+
+---
+
+# Session: 2025-12-21 - Task 10.0 Complete + Merged (ARCHIVED)
 
 ## Quick Resume
 **Completed:** Task 10.0 Task Gate (Step 7) - 38 tests, 96% coverage
