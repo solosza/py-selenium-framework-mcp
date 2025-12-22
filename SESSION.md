@@ -5,7 +5,71 @@
 
 ---
 
-# Session: 2025-12-21 - Task 11.0 Complete
+# Session: 2025-12-21 - Task 12.0 Complete
+
+## Quick Resume
+**Completed:** Task 12.0 Test Runner Gate (Step 9) - 41 tests, 95% coverage
+**Status:** Phase 3 (Operation Gates) - Task 12.0 COMPLETE
+**Next:** Merge to main, then Task 13.0 Save Run Gate (Step 10)
+**Branch:** `feature/12.0-qg-test-runner` (c64ae18)
+
+---
+
+## What Was Done This Session
+
+### Pre-Implementation Consistency Check (New Pattern)
+- Read step-09.md, Tool 6, test_generator.py, FRAMEWORK.md Section 9.9
+- Found skeleton code fallback in generator (GENERIC_TEST with `pass`/`TODO`)
+- Clarified test_scenarios required but scenario.description optional
+- Documented test complexity allowances (multi-role, multi-method allowed)
+
+### Design-Execution-Engine Skill Updated
+- Added "Pre-implementation check" lesson
+- Added "IC documentation" lesson
+- Added "Proactive coverage" lesson
+- Added "Pre-Implementation Consistency Check" section
+- Added "Implementation Clarifications (IC) Pattern" section
+- Added "Test Complexity Allowances" section
+
+### Task 12.0 Test Runner Gate - Step 9 [COMPLETE]
+- Added 5 Implementation Clarifications (IC-09-01 through IC-09-05) to step-09.md
+- Wrote 41 unit tests (TDD approach)
+- Implemented qg_test_runner.py gate
+- All 41 tests passing, 95% coverage
+
+### Implementation Clarifications Added (IC-09-xx)
+
+| ID | Decision | Rationale |
+|----|----------|-----------|
+| IC-09-01 | test_scenarios from Step 4 required; scenario.description optional | Tool uses description for docstring only |
+| IC-09-02 | Placeholder tests with pass/TODO are FAIL | DD-25 violation |
+| IC-09-03 | At least 1 role call required; no max; multi-role allowed | Complex e2e scenarios legitimate |
+| IC-09-04 | Assertions must use POM state methods, not return values | DD-15 enforcement |
+| IC-09-05 | @autologger.automation_logger("Test") required | Framework pattern |
+
+### Key Files Created/Updated
+| File | Description |
+|------|-------------|
+| `mcp_server/tools/gates/qg_test_runner.py` | QGTestRunner gate class |
+| `mcp_server/_dev_tests/test_gates/test_qg_test_runner.py` | 41 unit tests |
+| `.claude/skills/qa-guidance-layer/references/step-09.md` | Added IC section |
+| `.claude/skills/design-execution-engine/SKILL.md` | Added pre-implementation check pattern |
+
+### QGTestRunner Functionality
+- `validate_pre(input_data)` - PRE: Step 8 complete, role_metadata, pom_metadata, test_scenarios
+- `validate_post(input_data)` - POST: skeleton (DD-25), role calls (IC-09-03), POM assertions (DD-15), decorator (IC-09-05), metadata
+- `validate(input_data)` - Routes to PRE/POST based on mode
+- Returns `{"status": "pass"}` or `{"status": "fail", "error": "...", "fix_hint": "..."}`
+
+---
+
+## Resume Point
+
+**Next Action:** Merge to main, then Task 13.0 Save Run Gate (Step 10)
+
+---
+
+# Session: 2025-12-21 - Task 11.0 Complete (ARCHIVED)
 
 ## Quick Resume
 **Completed:** Task 11.0 Role Gate (Step 8) - 40 tests, 96% coverage
