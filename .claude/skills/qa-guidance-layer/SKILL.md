@@ -58,18 +58,18 @@ Use when:
 
 ## Step References
 
-| Step | Reference | Description |
-|------|-----------|-------------|
-| 1 | `references/step-01.md` | Pre-flight Configuration |
-| 2 | `references/step-02.md` | User Input |
-| 3 | `references/step-03.md` | AI Processing |
-| 4 | `references/step-04.md` | Generate Tests |
-| 5 | `references/step-05.md` | Discover Elements |
-| 6 | `references/step-06.md` | Generate POM |
-| 7 | `references/step-07.md` | Generate Task |
-| 8 | `references/step-08.md` | Generate Role |
-| 9 | `references/step-09.md` | Generate Test Runner |
-| 10 | `references/step-10.md` | Save & Run |
+| Step | Reference | Quality Gate | Gate Mode | Description |
+|------|-----------|--------------|-----------|-------------|
+| 1 | `references/step-01.md` | `qg_preflight` | POST-only | Pre-flight Configuration |
+| 2 | `references/step-02.md` | `qg_user_input` | POST-only | User Input |
+| 3 | `references/step-03.md` | `qg_ai_processing` | POST-only | AI Processing |
+| 4 | `references/step-04.md` | `qg_test_scenarios` | PRE+POST | Generate Tests (Tool 1) |
+| 5 | `references/step-05.md` | `qg_discovered_elements` | PRE+POST | Discover Elements (Tool 2) |
+| 6 | `references/step-06.md` | `qg_page_object` | PRE+POST | Generate POM (Tool 3) |
+| 7 | `references/step-07.md` | `qg_task` | PRE+POST | Generate Task (Tool 4) |
+| 8 | `references/step-08.md` | `qg_role` | PRE+POST | Generate Role (Tool 5) |
+| 9 | `references/step-09.md` | `qg_test_runner` | PRE+POST | Generate Test Runner (Tool 6) |
+| 10 | `references/step-10.md` | `qg_save_run` | PRE-only | Save & Run |
 
 ---
 
@@ -125,6 +125,51 @@ Use when:
 │      │                                                                       │
 │      ▼                                                                       │
 │  PROCEED to next step                                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Gate Return Format
+
+All quality gates return a consistent response format:
+
+**On Success:**
+```json
+{
+  "status": "pass"
+}
+```
+
+**On Failure:**
+```json
+{
+  "status": "fail",
+  "error": "Description of what failed",
+  "fix_hint": "How to fix the issue"
+}
+```
+
+**Gate Modes Explained:**
+
+| Mode | When Used | Behavior |
+|------|-----------|----------|
+| **POST-only** | Steps 1-3 (no operation tool) | Gate validates after AI/user provides data |
+| **PRE+POST** | Steps 4-9 (has operation tool) | PRE validates input, POST validates output |
+| **PRE-only** | Step 10 (save & run) | Gate validates all code before save |
+
+**PRE vs POST Validation:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  POST-only (Steps 1-3):                                                      │
+│    AI/User provides data → Gate validates → State saved                     │
+│                                                                              │
+│  PRE+POST (Steps 4-9):                                                       │
+│    Gate PRE validates → Operation runs → Gate POST validates → State saved  │
+│                                                                              │
+│  PRE-only (Step 10):                                                         │
+│    Gate PRE validates all code → Files saved → Test executed                │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
