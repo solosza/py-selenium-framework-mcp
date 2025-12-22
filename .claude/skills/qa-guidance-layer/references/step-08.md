@@ -280,4 +280,22 @@ arguments = {
 
 ---
 
+## I. Implementation Clarifications (Gate-Specific)
+
+These clarifications document gate enforcement decisions. If bugs occur, check these for root cause.
+
+| ID | Decision | Rationale | Enforced By |
+|----|----------|-----------|-------------|
+| IC-08-01 | Role generator placeholder methods with `pass` and `TODO` is a FAIL | Generator produces skeleton when task_metadata missing/invalid. Gate must catch this. | `validate_post()` |
+| IC-08-02 | Single-task workflow methods are acceptable | FRAMEWORK.md's own `login()` example calls one task. "MULTIPLE tasks" applies to complex workflows, not all methods. | N/A (not enforced) |
+| IC-08-03 | DD-27 applies to Roles - no locators allowed | Locators belong only in POMs. No `By.` imports, tuples, or `find_element()` in Role code. | `validate_post()` |
+| IC-08-04 | `@autologger.automation_logger("Role")` required on workflow methods | Missing decorator = incomplete code. Constructor uses "Role Constructor". | `validate_post()` |
+| IC-08-05 | `task_metadata` in PRE must have `class_name` and `task_methods` | Validates Tool 4 output was passed correctly. Empty `task_methods` may produce skeleton. | `validate_pre()` |
+| IC-08-06 | Workflow methods must contain at least one task method call | Methods with only `pass` or no `self.xxx_tasks.method()` calls = skeleton code. | `validate_post()` |
+
+**Date Added:** 2025-12-21
+**Task Reference:** Task 11.0 (qg_role)
+
+---
+
 *Next: Step 9 - Generate Test Runner (Tool 6)*
