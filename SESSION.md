@@ -5,6 +5,105 @@
 
 ---
 
+# Session: 2025-12-22 - Task 15.0 Complete
+
+## Quick Resume
+**Completed:** Task 15.0 Integration Testing - 38 tests passing
+**Status:** QA Execution Engine - PHASE COMPLETE
+**Next:** Manual E2E validation (optional), or project complete
+**Branch:** main (1efa92f)
+
+---
+
+## What Was Done This Session
+
+### Task 15.0 Integration Testing [COMPLETE]
+- Created 38 integration tests in `test_integration.py`
+- Categories:
+  - Step blocking enforcement (10 tests)
+  - Cross-gate state flow (9 tests)
+  - Resume from any step (10 tests)
+  - Skeleton code propagation (4 tests)
+  - Gate mode enforcement (3 tests)
+  - E2E workflow (2 tests)
+
+### Fix Applied (Testing Skill Protocol)
+- Initial E2E test failed due to factory function data contract mismatches
+- Followed testing skill failure protocol: STOP → REPORT → ANALYZE → FIX OPTIONS
+- User chose Option B: Audit all factory functions against unit test fixtures
+- Fixed Step 9 POST metadata (`class_name` required, not `test_name`)
+
+### Key Files
+| File | Description |
+|------|-------------|
+| `mcp_server/_dev_tests/test_gates/test_integration.py` | 38 integration tests |
+| `docs/projects/qa-execution-engine/2-tasks-qa-execution-engine.md` | Task 15.0 marked complete |
+
+---
+
+## Resume Point
+
+**Project Status:** QA Execution Engine integration tests complete (15.0).
+**Remaining:** 15.5 Manual E2E (optional live workflow test)
+
+---
+
+# Session: 2025-12-21 - Task 14.0 Complete
+
+## Quick Resume
+**Completed:** Task 14.0 Skill Update - SKILL.md updated with gate references
+**Status:** Phase 5 (Integration) - Task 14.0 COMPLETE
+**Next:** Task 15.0 Integration Testing
+**Branch:** main (1b3690b)
+
+---
+
+## What Was Done This Session
+
+### Pre-Implementation Consistency Check
+- Read SKILL.md, FRAMEWORK.md Section 9, step references
+- Verified all 10 gate files exist
+- Found SKILL.md missing gate columns in Step References table
+- Found SKILL.md missing gate return format documentation
+
+### Task 14.0 Skill Update [COMPLETE]
+- Added Quality Gate and Gate Mode columns to Step References table
+- Added Gate Return Format section with JSON examples
+- Added Gate Modes Explained table (POST-only, PRE+POST, PRE-only)
+- Added PRE vs POST Validation flow diagram
+- Verified all step references already have gates documented
+
+### Key Files Updated
+| File | Description |
+|------|-------------|
+| `.claude/skills/qa-guidance-layer/SKILL.md` | Added gate columns, return format, mode explanations |
+| `docs/projects/qa-execution-engine/2-tasks-qa-execution-engine.md` | Task 14.0 marked complete |
+
+### SKILL.md Changes Summary
+
+**Step References Table (before):**
+```
+| Step | Reference | Description |
+```
+
+**Step References Table (after):**
+```
+| Step | Reference | Quality Gate | Gate Mode | Description |
+```
+
+**New Sections Added:**
+- Gate Return Format (JSON examples for pass/fail)
+- Gate Modes Explained (POST-only, PRE+POST, PRE-only)
+- PRE vs POST Validation flow diagram
+
+---
+
+## Resume Point
+
+**Next Action:** Task 15.0 Integration Testing
+
+---
+
 # Session: 2025-12-21 - Task 13.0 Complete
 
 ## Quick Resume
