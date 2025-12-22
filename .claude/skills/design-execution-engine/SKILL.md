@@ -636,6 +636,108 @@ Apply same policy to all steps:
 | **User answers conditionals** | AI never makes IF decisions - ask user explicitly |
 | **Generic options** | Don't hardcode domain values - different sites/contexts vary |
 | **3 retry universal** | Same policy all steps for consistency |
+| **Pre-implementation check** | Before implementing gate, read step skill + FRAMEWORK.md + tool code + generator for inconsistencies |
+| **IC documentation** | Every step needs Implementation Clarifications section documenting decisions made during gate implementation |
+| **Proactive coverage** | Before writing tests, run coverage analysis to identify gaps in TDD approach |
+
+---
+
+## Pre-Implementation Consistency Check
+
+**MANDATORY before implementing any quality gate.**
+
+### Sources to Read
+
+| Source | Purpose |
+|--------|---------|
+| Step skill reference (step-XX.md) | Design intent, validation rules |
+| FRAMEWORK.md relevant section | Authoritative architecture patterns |
+| Tool source code (tool_XX_*.py) | Actual implementation, input/output |
+| Generator source code (*_generator.py) | What gets generated, edge cases |
+
+### Consistency Check Process
+
+```
+1. READ all 4 sources
+2. COMPARE step skill vs tool implementation
+   - Input/output schema matches?
+   - Required vs optional fields?
+   - Edge cases documented?
+3. COMPARE step skill vs FRAMEWORK.md
+   - Numbering consistent?
+   - Rules referenced correctly?
+4. COMPARE generator vs DD-25
+   - Any skeleton/placeholder code generated?
+   - Gate must catch these patterns
+5. DOCUMENT inconsistencies
+6. PROPOSE ICs (Implementation Clarifications)
+7. USER approves before implementation
+```
+
+### Common Inconsistencies
+
+| Type | Example | Resolution |
+|------|---------|------------|
+| **Schema mismatch** | Skill says required, tool treats as optional | Add IC clarifying actual behavior |
+| **Skeleton fallback** | Generator produces `pass`/`TODO` on edge cases | Gate must detect and fail |
+| **Numbering** | Section 8.x vs Section 9.x (different workflow versions) | Document which version applies |
+| **Missing patterns** | Decorator required but not in generator | Gate validates, AI fixes |
+
+---
+
+## Implementation Clarifications (IC) Pattern
+
+**Every step reference must have Section I: Implementation Clarifications.**
+
+### Purpose
+
+- Document decisions made during gate implementation
+- Resolve ambiguities in design docs
+- Record what gate enforces vs what it doesn't
+- Provide task/date reference for audit trail
+
+### IC Format
+
+```markdown
+## I. Implementation Clarifications (Gate-Specific)
+
+These clarifications document gate enforcement decisions. If bugs occur, check these for root cause.
+
+| ID | Decision | Rationale | Enforced By |
+|----|----------|-----------|-------------|
+| IC-XX-01 | [Decision statement] | [Why this choice] | `validate_pre()` or `validate_post()` or N/A |
+| IC-XX-02 | ... | ... | ... |
+
+**Date Added:** YYYY-MM-DD
+**Task Reference:** Task X.0 (gate name)
+```
+
+### IC Naming Convention
+
+- `IC-XX-YY` where XX = step number, YY = sequential within step
+- Example: IC-08-01 through IC-08-06 for Step 8
+
+### What Requires an IC
+
+| Scenario | IC Required |
+|----------|-------------|
+| Skill says required, tool treats as optional | Yes |
+| Framework pattern not enforced by gate | Yes |
+| Edge case behavior decided | Yes |
+| Pattern acceptable per framework examples | Yes |
+| Obvious validation (field present, not empty) | No |
+
+### Test Complexity Allowances
+
+Gates should enforce minimum quality, not restrict test complexity:
+
+| Pattern | Allowed | Gate Enforces |
+|---------|---------|---------------|
+| Single role, single method call | ✅ Default | At least 1 role call |
+| Single role, multiple method calls | ✅ Complex workflows | At least 1 role call |
+| Multiple roles in one test | ✅ Multi-user scenarios | At least 1 role call per role used |
+
+**Rationale:** Complex e2e scenarios (admin + user, buyer + seller) are legitimate test patterns.
 
 ---
 
