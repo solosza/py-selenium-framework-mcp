@@ -320,4 +320,21 @@ arguments = {
 
 ---
 
+## I. Implementation Clarifications (Gate-Specific)
+
+These clarifications document gate enforcement decisions. If bugs occur, check these for root cause.
+
+| ID | Decision | Rationale | Enforced By |
+|----|----------|-----------|-------------|
+| IC-09-01 | test_scenarios from Step 4 required; scenario.description optional for docstrings | Tool uses description for docstring only; actual test structure from role_metadata | `validate_pre()` |
+| IC-09-02 | Placeholder tests with `pass`/`TODO` are FAIL (DD-25) | Generator fallback produces skeleton when metadata incomplete | `validate_post()` |
+| IC-09-03 | At least 1 role method call required; no max limit; multi-role allowed | Complex e2e scenarios (admin+user, buyer+seller) are legitimate | `validate_post()` |
+| IC-09-04 | Assertions must use POM state methods (DD-15), not return values | Framework architecture: roles return None, tests assert via POM | `validate_post()` |
+| IC-09-05 | @autologger.automation_logger("Test") required on test methods | Framework pattern consistency | `validate_post()` |
+
+**Date Added:** 2025-12-21
+**Task Reference:** Task 12.0 (qg_test_runner)
+
+---
+
 *Next: Step 10 - Save & Run*
