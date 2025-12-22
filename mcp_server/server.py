@@ -12,6 +12,18 @@ IMPLEMENTED (Tools 1-6):
 5. generate_role - Task → Role module
 6. generate_test_runner - Role → pytest runner code
 
+QUALITY GATES (Steps 1-10):
+- qg_preflight (Step 1) - Pre-flight configuration validation
+- qg_user_input (Step 2) - User input validation
+- qg_ai_processing (Step 3) - AI processing validation
+- qg_test_scenarios (Step 4) - Test scenarios validation (PRE+POST)
+- qg_discovered_elements (Step 5) - Discovered elements validation (PRE+POST)
+- qg_page_object (Step 6) - Page object validation (PRE+POST)
+- qg_task (Step 7) - Task validation (PRE+POST)
+- qg_role (Step 8) - Role validation (PRE+POST)
+- qg_test_runner (Step 9) - Test runner validation (PRE+POST)
+- qg_save_run (Step 10) - Final save/run validation (PRE-only)
+
 PLANNED (Tools 7-11):
 7. list_tests - Catalog all tests
 8. get_framework_structure - Map framework architecture
@@ -21,6 +33,7 @@ PLANNED (Tools 7-11):
 """
 
 import asyncio
+import json
 import sys
 from pathlib import Path
 
@@ -39,6 +52,18 @@ from tools.tool_04_generate_task import generate_task
 from tools.tool_05_generate_role import generate_role
 from tools.tool_06_generate_test_runner import generate_test_runner
 
+# Import quality gates (Steps 1-10)
+from tools.gates.qg_preflight import QGPreflight
+from tools.gates.qg_user_input import QGUserInput
+from tools.gates.qg_ai_processing import QGAIProcessing
+from tools.gates.qg_test_scenarios import QGTestScenarios
+from tools.gates.qg_discovered_elements import QGDiscoveredElements
+from tools.gates.qg_page_object import QGPageObject
+from tools.gates.qg_task import QGTask
+from tools.gates.qg_role import QGRole
+from tools.gates.qg_test_runner import QGTestRunner
+from tools.gates.qg_save_run import QGSaveRun
+
 # Tools 7-11 not yet implemented - stub functions
 async def list_tests(arguments: dict) -> str:
     return '{"status": "not_implemented", "message": "Tool 7 (list_tests) is planned but not yet implemented"}'
@@ -54,6 +79,70 @@ async def analyze_failure(arguments: dict) -> str:
 
 async def get_test_coverage(arguments: dict) -> str:
     return '{"status": "not_implemented", "message": "Tool 11 (get_test_coverage) is planned but not yet implemented"}'
+
+
+# =============================================================================
+# Quality Gate Wrapper Functions (Steps 1-10)
+# =============================================================================
+
+async def qg_preflight(arguments: dict) -> str:
+    """Step 1: Pre-flight configuration validation (POST-only)."""
+    result = QGPreflight.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_user_input(arguments: dict) -> str:
+    """Step 2: User input validation (POST-only)."""
+    result = QGUserInput.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_ai_processing(arguments: dict) -> str:
+    """Step 3: AI processing validation (POST-only)."""
+    result = QGAIProcessing.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_test_scenarios(arguments: dict) -> str:
+    """Step 4: Test scenarios validation (PRE+POST). Requires 'mode' field."""
+    result = QGTestScenarios.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_discovered_elements(arguments: dict) -> str:
+    """Step 5: Discovered elements validation (PRE+POST). Requires 'mode' field."""
+    result = QGDiscoveredElements.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_page_object(arguments: dict) -> str:
+    """Step 6: Page object validation (PRE+POST). Requires 'mode' field."""
+    result = QGPageObject.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_task(arguments: dict) -> str:
+    """Step 7: Task validation (PRE+POST). Requires 'mode' field."""
+    result = QGTask.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_role(arguments: dict) -> str:
+    """Step 8: Role validation (PRE+POST). Requires 'mode' field."""
+    result = QGRole.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_test_runner(arguments: dict) -> str:
+    """Step 9: Test runner validation (PRE+POST). Requires 'mode' field."""
+    result = QGTestRunner.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_save_run(arguments: dict) -> str:
+    """Step 10: Final save/run validation (PRE-only)."""
+    result = QGSaveRun.validate(arguments)
+    return json.dumps(result, indent=2)
 
 
 # Initialize MCP server
@@ -286,6 +375,319 @@ async def list_available_tools() -> list[Tool]:
                     }
                 }
             }
+        ),
+
+        # =================================================================
+        # Quality Gates (Steps 1-10)
+        # =================================================================
+
+        # Step 1: Pre-flight Configuration (POST-only)
+        Tool(
+            name="qg_preflight",
+            description="Step 1 quality gate: Validate pre-flight configuration (credential_strategy, test_data_location)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "credential_strategy": {
+                        "type": "string",
+                        "description": "Credential approach: static, dynamic, self-contained, none",
+                        "enum": ["static", "dynamic", "self-contained", "none"]
+                    },
+                    "test_data_location": {
+                        "type": "string",
+                        "description": "Test data location: shared, workflow, both, none",
+                        "enum": ["shared", "workflow", "both", "none"]
+                    }
+                },
+                "required": ["credential_strategy", "test_data_location"]
+            }
+        ),
+
+        # Step 2: User Input (POST-only)
+        Tool(
+            name="qg_user_input",
+            description="Step 2 quality gate: Validate user input (persona, URL, role_name, domain)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "persona": {
+                        "type": "string",
+                        "description": "User persona (e.g., 'As a registered user')"
+                    },
+                    "URL": {
+                        "type": "string",
+                        "description": "Target page URL"
+                    },
+                    "role_name": {
+                        "type": "string",
+                        "description": "Derived role name (e.g., RegisteredUser)"
+                    },
+                    "domain": {
+                        "type": "string",
+                        "description": "Workflow domain: auth, catalog, cart, checkout",
+                        "enum": ["auth", "catalog", "cart", "checkout"]
+                    },
+                    "raw_requirement": {
+                        "type": "string",
+                        "description": "Original user requirement text"
+                    }
+                },
+                "required": ["persona", "URL", "role_name", "domain"]
+            }
+        ),
+
+        # Step 3: AI Processing (POST-only)
+        Tool(
+            name="qg_ai_processing",
+            description="Step 3 quality gate: Validate AI processing output (bdd_scenarios, expected_states, intent)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "bdd_scenarios": {
+                        "type": "array",
+                        "description": "BDD scenarios with given/when/then",
+                        "items": {"type": "object"}
+                    },
+                    "expected_states": {
+                        "type": "array",
+                        "description": "Expected state names for POM state-check methods",
+                        "items": {"type": "string"}
+                    },
+                    "intent": {
+                        "type": "string",
+                        "description": "User intent (e.g., login, browse, checkout)"
+                    }
+                },
+                "required": ["bdd_scenarios", "expected_states", "intent"]
+            }
+        ),
+
+        # Step 4: Test Scenarios (PRE+POST)
+        Tool(
+            name="qg_test_scenarios",
+            description="Step 4 quality gate: Validate test scenarios (PRE+POST mode). PRE checks Step 3 complete, POST validates scenarios.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "mode": {
+                        "type": "string",
+                        "description": "Validation mode: PRE (before Tool 1) or POST (after Tool 1)",
+                        "enum": ["PRE", "POST"]
+                    },
+                    "metadata_context": {
+                        "type": "object",
+                        "description": "PRE mode: Context from Step 3 (bdd_scenarios, expected_states, intent)"
+                    },
+                    "workflow": {
+                        "type": "string",
+                        "description": "PRE mode: Target workflow",
+                        "enum": ["auth", "catalog", "cart", "checkout"]
+                    },
+                    "test_scenarios": {
+                        "type": "array",
+                        "description": "POST mode: Generated test scenarios from Tool 1",
+                        "items": {"type": "object"}
+                    }
+                },
+                "required": ["mode"]
+            }
+        ),
+
+        # Step 5: Discovered Elements (PRE+POST)
+        Tool(
+            name="qg_discovered_elements",
+            description="Step 5 quality gate: Validate element discovery (PRE+POST mode). PRE checks Step 4 complete, POST validates elements.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "mode": {
+                        "type": "string",
+                        "description": "Validation mode: PRE (before Tool 2) or POST (after Tool 2)",
+                        "enum": ["PRE", "POST"]
+                    },
+                    "url": {
+                        "type": "string",
+                        "description": "PRE mode: Target page URL"
+                    },
+                    "page_name": {
+                        "type": "string",
+                        "description": "Page object class name (PascalCase)"
+                    },
+                    "credential_strategy": {
+                        "type": "string",
+                        "description": "PRE mode: Credential strategy from Step 1"
+                    },
+                    "elements": {
+                        "type": "array",
+                        "description": "POST mode: Discovered elements from Tool 2",
+                        "items": {"type": "object"}
+                    }
+                },
+                "required": ["mode"]
+            }
+        ),
+
+        # Step 6: Page Object (PRE+POST)
+        Tool(
+            name="qg_page_object",
+            description="Step 6 quality gate: Validate POM generation (PRE+POST mode). PRE checks Step 5 complete, POST validates code quality.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "mode": {
+                        "type": "string",
+                        "description": "Validation mode: PRE (before Tool 3) or POST (after Tool 3)",
+                        "enum": ["PRE", "POST"]
+                    },
+                    "discovered_elements": {
+                        "type": "array",
+                        "description": "PRE mode: Elements from Step 5",
+                        "items": {"type": "object"}
+                    },
+                    "page_name": {
+                        "type": "string",
+                        "description": "Page object class name (PascalCase)"
+                    },
+                    "expected_states": {
+                        "type": "array",
+                        "description": "PRE mode: Expected states from Step 3",
+                        "items": {"type": "object"}
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "POST mode: Generated POM code"
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "description": "POST mode: POM metadata (class_name, import_path, locators, methods)"
+                    }
+                },
+                "required": ["mode"]
+            }
+        ),
+
+        # Step 7: Task (PRE+POST)
+        Tool(
+            name="qg_task",
+            description="Step 7 quality gate: Validate Task generation (PRE+POST mode). PRE checks Step 6 complete, POST validates no locators/skeleton.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "mode": {
+                        "type": "string",
+                        "description": "Validation mode: PRE (before Tool 4) or POST (after Tool 4)",
+                        "enum": ["PRE", "POST"]
+                    },
+                    "pom_metadata": {
+                        "type": "object",
+                        "description": "PRE mode: POM metadata from Step 6"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "POST mode: Generated Task code"
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "description": "POST mode: Task metadata"
+                    }
+                },
+                "required": ["mode"]
+            }
+        ),
+
+        # Step 8: Role (PRE+POST)
+        Tool(
+            name="qg_role",
+            description="Step 8 quality gate: Validate Role generation (PRE+POST mode). PRE checks Step 7 complete, POST validates no skeleton.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "mode": {
+                        "type": "string",
+                        "description": "Validation mode: PRE (before Tool 5) or POST (after Tool 5)",
+                        "enum": ["PRE", "POST"]
+                    },
+                    "task_metadata": {
+                        "type": "object",
+                        "description": "PRE mode: Task metadata from Step 7"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "POST mode: Generated Role code"
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "description": "POST mode: Role metadata"
+                    }
+                },
+                "required": ["mode"]
+            }
+        ),
+
+        # Step 9: Test Runner (PRE+POST)
+        Tool(
+            name="qg_test_runner",
+            description="Step 9 quality gate: Validate test code (PRE+POST mode). PRE checks Step 8 complete, POST validates assertions use POM.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "mode": {
+                        "type": "string",
+                        "description": "Validation mode: PRE (before Tool 6) or POST (after Tool 6)",
+                        "enum": ["PRE", "POST"]
+                    },
+                    "role_metadata": {
+                        "type": "object",
+                        "description": "PRE mode: Role metadata from Step 8"
+                    },
+                    "pom_metadata": {
+                        "type": "object",
+                        "description": "PRE mode: POM metadata from Step 6"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "POST mode: Generated test code"
+                    },
+                    "metadata": {
+                        "type": "object",
+                        "description": "POST mode: Test metadata"
+                    }
+                },
+                "required": ["mode"]
+            }
+        ),
+
+        # Step 10: Save Run (PRE-only)
+        Tool(
+            name="qg_save_run",
+            description="Step 10 quality gate: Final validation before save (PRE-only). Validates all code present and no skeleton.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "mode": {
+                        "type": "string",
+                        "description": "Validation mode: PRE only",
+                        "enum": ["PRE"]
+                    },
+                    "pom_code": {
+                        "type": "string",
+                        "description": "Generated POM code"
+                    },
+                    "task_code": {
+                        "type": "string",
+                        "description": "Generated Task code"
+                    },
+                    "role_code": {
+                        "type": "string",
+                        "description": "Generated Role code"
+                    },
+                    "test_code": {
+                        "type": "string",
+                        "description": "Generated test code"
+                    }
+                },
+                "required": ["mode"]
+            }
         )
     ]
 
@@ -308,7 +710,18 @@ async def call_tool_handler(name: str, arguments: dict) -> list[TextContent]:
         "get_framework_structure": get_framework_structure,
         "run_test": run_test,
         "analyze_failure": analyze_failure,
-        "get_test_coverage": get_test_coverage
+        "get_test_coverage": get_test_coverage,
+        # Quality Gates (Steps 1-10)
+        "qg_preflight": qg_preflight,                     # Step 1
+        "qg_user_input": qg_user_input,                   # Step 2
+        "qg_ai_processing": qg_ai_processing,             # Step 3
+        "qg_test_scenarios": qg_test_scenarios,           # Step 4
+        "qg_discovered_elements": qg_discovered_elements, # Step 5
+        "qg_page_object": qg_page_object,                 # Step 6
+        "qg_task": qg_task,                               # Step 7
+        "qg_role": qg_role,                               # Step 8
+        "qg_test_runner": qg_test_runner,                 # Step 9
+        "qg_save_run": qg_save_run,                       # Step 10
     }
 
     if name not in handlers:
