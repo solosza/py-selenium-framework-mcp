@@ -5,7 +5,78 @@
 
 ---
 
-# Session: 2025-12-21 - Task 12.0 Complete
+# Session: 2025-12-21 - Task 13.0 Complete
+
+## Quick Resume
+**Completed:** Task 13.0 Save Run Gate (Step 10) - 34 tests, 98% coverage
+**Status:** Phase 4 (Final Gate) - Task 13.0 COMPLETE
+**Next:** Merge to main, then Task 14.0 Skill Update (integration)
+**Branch:** `feature/13.0-qg-save-run` (c13c6ca)
+
+---
+
+## What Was Done This Session
+
+### Pre-Implementation Consistency Check
+- Read step-10.md, FRAMEWORK.md Section 9.10, 2-tasks file Task 13.0
+- Read qg_task.py, qg_role.py for pattern reference
+- Checked state_manager.py for state structure
+- Found inconsistency: step-10.md implied code from state, but gates use input_data
+
+### Design Clarification with User
+- Resolved code source ambiguity:
+  - **Primary:** Code from input_data (normal flow)
+  - **Fallback:** Code from state (resume/recovery scenario)
+- Gate validates code regardless of source
+
+### Task 13.0 Save Run Gate - Step 10 [COMPLETE]
+- Added 5 Implementation Clarifications (IC-10-01 through IC-10-05) to step-10.md
+- Wrote 34 unit tests (TDD approach)
+- Implemented qg_save_run.py gate (PRE-only)
+- All 34 tests passing, 98% coverage
+
+### Implementation Clarifications Added (IC-10-xx)
+
+| ID | Decision | Rationale |
+|----|----------|-----------|
+| IC-10-01 | Primary: code from input_data; Fallback: code from state | Normal flow + resume support |
+| IC-10-02 | PRE-only mode (no POST validation) | Validates before save, not after |
+| IC-10-03 | Final skeleton sweep on ALL 4 layers | DD-25 last line of defense |
+| IC-10-04 | Each code block validated independently; first failure stops | Fail-fast |
+| IC-10-05 | Missing code returns step hint | Actionable fix guidance |
+
+### Key Files Created/Updated
+| File | Description |
+|------|-------------|
+| `mcp_server/tools/gates/qg_save_run.py` | QGSaveRun gate class (PRE-only) |
+| `mcp_server/_dev_tests/test_gates/test_qg_save_run.py` | 34 unit tests |
+| `.claude/skills/qa-guidance-layer/references/step-10.md` | Added IC section |
+
+### QGSaveRun Functionality
+- `validate_pre(input_data)` - PRE: Step 9 complete, all 4 code blocks, skeleton detection
+- `_get_code(input_data, field, step)` - Fallback logic (IC-10-01)
+- `validate(input_data)` - Routes to PRE only (POST returns error)
+- Returns `{"status": "pass"}` or `{"status": "fail", "error": "...", "fix_hint": "..."}`
+
+### Test Categories (34 total)
+| Category | Tests |
+|----------|-------|
+| PRE-Happy | 7 |
+| PRE-Negative | 9 |
+| PRE-Skeleton (DD-25) | 4 |
+| Route | 5 |
+| Edge | 4 |
+| Hints | 5 |
+
+---
+
+## Resume Point
+
+**Next Action:** Merge to main, then Task 14.0 Skill Update
+
+---
+
+# Session: 2025-12-21 - Task 12.0 Complete (ARCHIVED)
 
 ## Quick Resume
 **Completed:** Task 12.0 Test Runner Gate (Step 9) - 41 tests, 95% coverage
