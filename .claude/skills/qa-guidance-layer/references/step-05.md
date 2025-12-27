@@ -38,16 +38,39 @@ PREPARE (Credential Handling):
 - IF credential_strategy = "dynamic": Register new user, save creds, login
 - IF credential_strategy = "self-contained": Register in-session, login (don't persist)
 
-ACTION:
+NAVIGATION:
 - NAVIGATE to target URL
-- PREPARE page state (click/interact to reveal dynamic elements - DD-20)
+- PREPARE page state (click/interact to reveal dynamic elements)
 - WAIT for async content to load
-- CALL qg_discovered_elements (PRE-VALIDATE)
-- CALL discover_page_elements (OPERATION)
-- CALL qg_discovered_elements (POST-VALIDATE)
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  DD-33 DECISION POINT (MANDATORY)                                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  Was Playwright used to prepare page state (login, click, modal, form submit)?
+      │
+      ├── YES ──► MUST use DD-33 (Playwright snapshot extraction)
+      │           discovery_method = "playwright"
+      │
+      │           DD-33 FLOW:
+      │           1. browser_snapshot → get accessibility tree
+      │           2. AI extracts relevant elements (token-optimized)
+      │           3. AI builds elements array in Tool 2 format
+      │           4. CALL qg_discovered_elements PRE with discovery_method="playwright"
+      │           5. SKIP Tool 2 (already have elements)
+      │           6. CALL qg_discovered_elements POST with discovery_method="playwright"
+      │           7. Proceed to Tool 3
+      │
+      └── NO ───► May use Tool 2
+                  discovery_method = "tool2"
+
+                  TOOL 2 FLOW:
+                  1. CALL qg_discovered_elements PRE with discovery_method="tool2"
+                  2. CALL discover_page_elements (OPERATION)
+                  3. CALL qg_discovered_elements POST with discovery_method="tool2"
 
 VALIDATE:
-- PRE: Validate URL reachable, page_name provided
+- PRE: Validate URL reachable, page_name provided, discovery_method declared
 - POST: Validate elements array returned, at least 1 interactive element
 
 RETRY:
@@ -129,8 +152,16 @@ RETRY:
 
 | Field | Value |
 |-------|-------|
-| **Rules That Apply** | DD-19 (tool import), DD-20 (dynamic element prep), DD-21 (AI-SDET collaboration), DD-24 (credential strategy from Step 1) |
+| **Rules That Apply** | DD-19 (tool import), DD-20 (dynamic element prep), DD-21 (AI-SDET collaboration), DD-24 (credential strategy from Step 1), DD-33 (Playwright snapshot for dynamic) |
 | **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 6 until elements discovered** |
+
+**DD-33 Enforcement (CRITICAL):**
+
+| Condition | Required Action | Violation Response |
+|-----------|-----------------|-------------------|
+| Playwright prepared page state | MUST use DD-33 (snapshot extraction) | BLOCKED if Tool 2 used after Playwright prep |
+| Static page (no prep needed) | May use Tool 2 | N/A |
+| discovery_method not declared | Gate fails | Must declare "playwright" or "tool2" |
 
 **PRE-Validation Checks:**
 

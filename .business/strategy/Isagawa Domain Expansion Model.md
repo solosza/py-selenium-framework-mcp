@@ -46,9 +46,9 @@ Instead, Isagawa uses **expert partnerships** designed specifically for **knowle
 
 ---
 
-## 4. Ideal Partner Profile
+## 4. Ideal Partner Profile: Pack Contributor SME
 
-Isagawa partners with **non-technical subject matter experts (SMEs)** by design.
+Isagawa partners with **non-technical subject matter experts (SMEs)** as **Pack Contributors**.
 
 ### Required Characteristics
 - Deep, real-world domain authority
@@ -67,23 +67,34 @@ This profile minimizes platform risk while maximizing domain signal.
 
 ---
 
-## 5. What Partners Contribute
+## 5. What Pack Contributors Provide
 
-Partners contribute **expertise artifacts**, not software.
+Pack Contributors provide **expertise artifacts**, not software.
 
-Typical contributions include:
-- Canonical workflows (“gold standard” processes)
-- Decision criteria and tradeoffs
-- Required checks, validations, and edge cases
-- Failure modes and escalation points
-- Domain-specific terminology and definitions
-- Ongoing light validation as the domain evolves
+### Pack Contribution Artifacts
 
-These inputs are transformed by Isagawa into:
-- Skills (workflow guidance)
-- Enforcement rules
-- Validation checkpoints
-- Escalation logic
+| Artifact | Description | Maps to Pack Component |
+|----------|-------------|------------------------|
+| **Canonical workflows** | "Gold standard" processes | Enforced workflows |
+| **Required steps** | Non-skippable actions | Validation checkpoints |
+| **Decision criteria** | Tradeoffs and judgment calls | Rules & validation logic |
+| **Escalation boundaries** | When human handoff is required | Escalation logic |
+| **Approved variants** | Acceptable workflow alternatives | Variant Packs |
+| **Safe variance fields** | What customers can tune | Configuration options |
+| **Terminology** | Precise domain definitions | Pack metadata |
+| **Ongoing validation** | Light review as domain evolves | Pack versioning |
+
+### Transformation Pipeline
+
+```
+SME Input                    Isagawa Output
+─────────────────────────────────────────────────
+Workflows           ───▶     Enforced workflow steps
+Required steps      ───▶     Quality gates (blocking)
+Escalation rules    ───▶     Human handoff triggers
+Approved variants   ───▶     Variant Packs (sell later)
+Safe variance       ───▶     Config layer (sell early)
+```
 
 ---
 
@@ -106,17 +117,50 @@ All derivative works remain the property of Isagawa Corp.
 
 ---
 
-## 7. Incentive Model (Principles)
+## 7. Incentive Model (Pack-Scoped Revenue)
 
-Partners are compensated through **vertical-scoped revenue participation**, not equity.
+Pack Contributors are compensated through **pack-scoped revenue participation**, not equity.
+
+### Revenue Structure
+
+| Revenue Stream | Ownership |
+|----------------|-----------|
+| **Platform license** | 100% Isagawa |
+| **Pack revenue** | Shared with contributing SME(s) |
+| **Custom services** | Isagawa-led, SME optional |
+
+### Key Distinctions
+
+- **Platform revenue** = Core enforcement runtime, gates engine, audit/traceability
+- **Pack revenue** = Domain-specific workflows, rules, validation logic
+- **Custom services** = Implementation, training, org-specific config
 
 ### Guiding Principles
-- Compensation is tied **only** to the vertical they contribute to
-- No claim on company-wide revenue
+
+- Compensation tied **only** to the pack(s) they contribute to
+- No claim on platform revenue
+- No claim on other packs' revenue
 - No governance rights
 - No perpetual, undefined obligations
-- Incentives scale with adoption and value creation
+- Incentives scale with pack adoption
 
-Exact percentages, terms, and milestones are defined per partnership and may evolve as the platform matures.
+Exact percentages, terms, and milestones are defined per partnership and may evolve as packs mature.
 
-This structure aligns incentives without diluting ownership or control.
+This structure:
+- Aligns incentives without diluting ownership
+- Protects platform valuation (100% Isagawa)
+- Creates clear boundaries for SME participation
+
+---
+
+## 8. Related Documents
+
+| Document | Purpose |
+|----------|---------|
+| `Isagawa_Platform_Pack_Architecture.md` | Platform vs Pack structure, customization policy, tech/non-tech examples |
+| `isagawa_operating_system.md` | Full operating system including knowledge acquisition, agent org, implementation guide |
+| `isagawa_corp_thesis_v3.0.md` | External positioning, category definition |
+
+---
+
+*This document defines SME partnership model. For platform architecture details, see Platform & Pack Architecture.*

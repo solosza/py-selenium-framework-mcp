@@ -201,6 +201,14 @@ class LoginPage:
     LOGOUT_LINK = (By.CSS_SELECTOR, ".logout")
     SIGN_IN_LINK = (By.CSS_SELECTOR, ".login")
 
+    # ==================== NAVIGATION ====================
+
+    def navigate(self) -> "LoginPage":
+        """Navigate to login page. Gets URL from WebInterface config."""
+        url = self.web.config["url"]
+        self.web.navigate_to(f"{url}/index.php?controller=authentication")
+        return self
+
     # ==================== ATOMIC METHODS (One UI Action) ====================
 
     def enter_email(self, email: str) -> "LoginPage":
@@ -266,13 +274,13 @@ class AuthTasks:
     - Composes Page Objects
     - One domain operation per method
     - NO return values
+    - NO base_url - POM handles navigation via self.web.config
     - Uses fluent POM API
     """
 
-    def __init__(self, web: WebInterface, base_url: str):
-        """Compose Page Objects - NO decorator on constructor."""
+    def __init__(self, web: WebInterface):
+        """Compose Page Objects - NO base_url parameter."""
         self.web = web
-        self.base_url = base_url
         self.login_page = LoginPage(web)
 
     @autologger.automation_logger("Task")
@@ -283,11 +291,9 @@ class AuthTasks:
         Single domain operation: authenticate user.
         NO return value - test asserts via POM.
         """
-        # Navigate to login page (replace URL pattern for your app)
-        self.web.navigate_to(f"{self.base_url}/login")
-
-        # Use fluent POM API (method chaining)
+        # POM handles navigation (gets URL from self.web.config)
         (self.login_page
+            .navigate()
             .enter_email(email)
             .enter_password(password)
             .click_submit())
@@ -303,12 +309,6 @@ class AuthTasks:
         """
         self.login_page.click_logout()
         # NO return - test will assert via login_page.is_logged_out()
-
-    @autologger.automation_logger("Task")
-    def navigate_to_login_page(self):
-        """Navigate to authentication page."""
-        self.web.navigate_to(f"{self.base_url}/login")
-        # NO return
 ```
 
 ### 4.3 Role Layer
@@ -338,26 +338,27 @@ class AuthenticatedUser:
     - Workflow methods call MULTIPLE tasks
     - NO return values
     - NO locators
+    - NO base_url - Tasks get URL via POM -> WebInterface.config
     """
 
     @autologger.automation_logger("Role Constructor")
-    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any], base_url: str):
+    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any]):
         """
         Initialize with credentials and compose Task modules.
+        NO base_url parameter - URL flows via WebInterface.config.
         """
         self.web = web_interface
         self.user_data = user_data
         self.email = user_data.get('email')
         self.password = user_data.get('password')
-        self.base_url = base_url
 
         # Validate required credentials
         if not self.email or not self.password:
             raise ValueError("AuthenticatedUser requires email and password")
 
-        # Compose Task modules (add your application's task modules)
-        self.auth_tasks = AuthTasks(web_interface, base_url)
-        self.order_tasks = OrderTasks(web_interface, base_url)
+        # Compose Task modules - NO base_url passed
+        self.auth_tasks = AuthTasks(web_interface)
+        self.order_tasks = OrderTasks(web_interface)
 
     @autologger.automation_logger("Role")
     def login(self):

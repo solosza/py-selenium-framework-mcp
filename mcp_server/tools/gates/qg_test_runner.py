@@ -69,6 +69,17 @@ class QGTestRunner(BaseGate):
         r'assert\s+(?:self\.)?\w+\.(is_|has_|get_)\w+\s*\('
     )
 
+    # Task method call pattern - Tests should NOT call Tasks directly
+    TASK_CALL_PATTERN = re.compile(
+        r'\w+_tasks\.\w+\s*\('
+    )
+
+    # POM action method call patterns - Tests should NOT call POM action methods
+    # Action methods: enter_, click_, select_, type_, submit_, etc.
+    POM_ACTION_PATTERN = re.compile(
+        r'\w+_page\.(enter_|click_|select_|type_|submit_|fill_|check_|clear_)\w*\s*\('
+    )
+
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
@@ -217,6 +228,16 @@ class QGTestRunner(BaseGate):
         if role_call_error:
             return role_call_error
 
+        # Check for Task method calls (bypasses Role layer)
+        task_call_error = cls._check_task_calls(code)
+        if task_call_error:
+            return task_call_error
+
+        # Check for POM action method calls (bypasses Role+Task layers)
+        pom_action_error = cls._check_pom_actions(code)
+        if pom_action_error:
+            return pom_action_error
+
         # Check for POM assertions (IC-09-04, DD-15)
         assertion_error = cls._check_assertions(code)
         if assertion_error:
@@ -241,6 +262,13 @@ class QGTestRunner(BaseGate):
         metadata_error = cls._validate_metadata_structure(metadata)
         if metadata_error:
             return metadata_error
+
+        # Save Step 9 state on POST-VALIDATE pass
+        state_manager = cls._get_state_manager()
+        state_manager.save(step=9, data={
+            "test_code": code,
+            "test_metadata": metadata
+        })
 
         return cls.pass_response()
 
@@ -314,6 +342,41 @@ class QGTestRunner(BaseGate):
                 fix_hint="Test must call at least one role method. Add user.login(), user.browse(), etc."
             )
 
+        return None
+
+    @classmethod
+    def _check_task_calls(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Check for Task method calls in test code (architecture violation).
+
+        Tests should NOT call Task methods directly - they should use Roles.
+        Tasks are the layer that Roles compose.
+
+        Returns fail_response if Task calls detected, None otherwise.
+        """
+        if cls.TASK_CALL_PATTERN.search(code):
+            return cls.fail_response(
+                error="Task method call detected in test (architecture violation)",
+                fix_hint="Tests should not call Task methods directly. Use Role methods: user.login(), not auth_tasks.log_in()."
+            )
+        return None
+
+    @classmethod
+    def _check_pom_actions(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Check for POM action method calls in test code (architecture violation).
+
+        Tests should NOT call POM action methods directly - they should use Roles.
+        POM action methods: enter_, click_, select_, type_, submit_, etc.
+        POM state methods (is_, has_, get_) ARE allowed for assertions.
+
+        Returns fail_response if POM action calls detected, None otherwise.
+        """
+        if cls.POM_ACTION_PATTERN.search(code):
+            return cls.fail_response(
+                error="POM action method call detected in test (architecture violation)",
+                fix_hint="Tests should not call POM action methods. Use Role methods: user.login(), not login_page.enter_email()."
+            )
         return None
 
     @classmethod

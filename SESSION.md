@@ -5,6 +5,259 @@
 
 ---
 
+# Session: 2025-12-26 (Part 2) - Architecture Pattern Fix
+
+## Quick Resume
+**Completed:** Test failed, root cause analysis, pattern verification against old framework
+**Status:** FRAMEWORK.md reverted, ready to re-apply correct patterns
+**Next:** Update FRAMEWORK.md + step skills with correct Task/Role/POM patterns
+**Branch:** main
+
+---
+
+## Critical Finding: Task/Role/POM Pattern Was WRONG
+
+### The Problem
+Generated code used WRONG pattern:
+- Tasks had `base_url` parameter
+- Tasks called `self.web.navigate_to()` directly
+- Roles passed `base_url` to Tasks
+
+### Correct Pattern (Verified from Old Framework)
+
+**Reference:** `C:\Users\solos\OneDrive\Documents\nakupuna\v2_04112025\v2\framework\`
+
+| Layer | Has base_url? | Navigation Method |
+|-------|---------------|-------------------|
+| WebInterface | YES - `self.config` | Has `navigate_to(url)` |
+| POM | NO - accesses via `self.web.config["url"]` | Has own `navigate()` method |
+| Task | NO | Calls POM methods ONLY |
+| Role | NO | Calls Task methods ONLY |
+
+### Correct Code Patterns
+
+**POM:**
+```python
+class LoginPage:
+    def __init__(self, web_interface):
+        self.web = web_interface
+
+    def navigate(self) -> "LoginPage":
+        url = self.web.config["url"]  # Gets URL from WebInterface
+        self.web.navigate_to(f"{url}/login")
+        return self
+```
+
+**Task (NO base_url):**
+```python
+class AuthTasks:
+    def __init__(self, web_interface):  # NO base_url
+        self.login_page = LoginPage(web_interface)
+
+    def log_in(self, email, password):
+        (self.login_page
+            .navigate()  # POM handles navigation
+            .enter_email(email)
+            .enter_password(password)
+            .click_submit())
+```
+
+**Role (NO base_url):**
+```python
+class AuthenticatedUser:
+    def __init__(self, web_interface, user_data):  # NO base_url
+        self.auth_tasks = AuthTasks(web_interface)  # NO base_url passed
+```
+
+### Infrastructure Already Supports This
+
+| Component | Status | Key |
+|-----------|--------|-----|
+| conftest.py | ✓ Injects config to WebInterface | Line 102 |
+| WebInterface | ✓ Has `self.config` | Line 47 |
+| environment_config.json | ✓ Has `"url"` key | Line 3 |
+
+---
+
+## Defects Logged This Session
+
+| ID | Description | Status |
+|----|-------------|--------|
+| DEF-037 | DD-33 violated: assumed locators instead of discovery | OPEN |
+| DEF-038 | Test data hardcoded instead of test_users fixture | OPEN |
+| DEF-039 | step-07.md teaches wrong Task pattern (base_url) | OPEN |
+
+---
+
+## Files to Update
+
+### FRAMEWORK.md (Reverted - needs re-update)
+- Section 4.1 POM: Add `navigate()` method pattern
+- Section 4.2 Task: Remove base_url, show POM-only calls
+- Section 4.3 Role: Remove base_url from Task instantiation
+
+### Step Skills
+- `step-06.md` - POM pattern (add navigate method)
+- `step-07.md` - Task pattern (remove base_url)
+- `step-08.md` - Role pattern (remove base_url)
+
+### Generated Code (tests/auth/)
+- `registration_page.py` - Add navigate() method
+- `auth_tasks.py` - Remove base_url, use POM navigate
+- `guest_user.py` - Remove base_url
+- `test_registration.py` - Use test_users fixture
+
+---
+
+## Key Reference Files
+
+| Purpose | Path |
+|---------|------|
+| Old framework tasks | `C:\...\v2\framework\tasks\*.py` |
+| Old framework POMs | `C:\...\v2\framework\pages\*.py` |
+| Old WebInterface | `C:\...\v2\framework\interfaces\web_interface.py` |
+| Our conftest | `tests\conftest.py` |
+| Our WebInterface | `framework\interfaces\web_interface.py` |
+
+---
+
+## Next Steps
+
+1. Update FRAMEWORK.md with correct patterns
+2. Update step-06.md, step-07.md, step-08.md skills
+3. Restart 10-step workflow from Step 1
+
+---
+
+# Session: 2025-12-26 - E2E Registration Test + DD-33 Enforcement
+
+## Quick Resume
+**Completed:** Steps 1-4 PASSED, Step 5 PRE-VALIDATE PASSED, DD-33 enforcement gap identified
+**Status:** Implementing DD-33 enforcement in step-05.md + gate
+**Next:** 1) Update step-05.md with DD-33 inline, 2) Add discovery_method to gate, 3) Restart Step 5
+**Branch:** main
+
+---
+
+## What Was Done This Session
+
+### Defects Updated to READY_TO_TEST
+- DEF-025, DEF-B06, DEF-B07 added (total 13 READY_TO_TEST)
+- Added mitigation notes to all
+
+### MCP Server Fixes Verified
+After `/mcp` reconnect:
+- **DEF-026** CONFIRMED FIXED - Tool 1 outputs `name` (not `title`), when/then as lists
+- **DEF-030** CONFIRMED FIXED - "password" no longer triggers "pass" false positive
+- **DEF-031** CONFIRMED FIXED - State saved on pass
+
+### E2E Registration Test Progress
+| Step | Status | Notes |
+|------|--------|-------|
+| 1 | PASS | credential_strategy=none, test_data_location=workflow |
+| 2 | PASS | persona=new user, role_name=NewUser, domain=auth |
+| 3 | PASS | bdd_scenarios, expected_states, intent=register |
+| 4 | PASS | test_scenarios with correct format (DEF-026 fix working) |
+| 5 | PRE-VALIDATE PASS | But then used Tool 2 instead of DD-33 |
+
+### DD-33 Enforcement Gap Discovered
+**Problem:** AI used Tool 2 instead of DD-33 (Playwright snapshot) for dynamic registration form
+**Root Cause:** DD-33 not referenced in step-05.md - AI didn't know to use it
+**Solution Agreed:** Option 1 + 2
+1. Inline DD-33 decision tree in step-05.md (unavoidable)
+2. Add `discovery_method` parameter to qg_discovered_elements gate
+
+---
+
+## Implementation Plan (Next Session)
+
+### 1. Update step-05.md
+
+**Section C (Skill Instruction) - Add decision point:**
+```
+DECISION POINT (after page prep):
+- If Playwright used to prepare page → MUST use DD-33 (Playwright snapshot extraction)
+- If static page (no prep needed) → May use Tool 2
+
+DD-33 FLOW (inline - do not skip):
+1. Take Playwright snapshot (browser_snapshot)
+2. Extract relevant elements from snapshot (token-optimized)
+3. Build elements array in Tool 2 format
+4. Call qg_discovered_elements POST-VALIDATE with discovery_method="playwright"
+5. Proceed to Tool 3
+```
+
+**Section F (Enforcement) - Add DD-33:**
+```
+| DD-33 | If Playwright prepared page state, MUST use snapshot extraction | BLOCKED if Tool 2 used after Playwright prep |
+```
+
+### 2. Update qg_discovered_elements gate
+
+Add parameter: `discovery_method: "tool2" | "playwright"`
+- PRE-VALIDATE: Check discovery_method declared
+- POST-VALIDATE: Validate format matches method
+
+### 3. Multi-page workflow pattern
+
+```
+FOR each page in workflow:
+  1. Navigate/interact to reach page
+  2. Snapshot → Extract → Build elements
+  3. POST-VALIDATE (qg_discovered_elements)
+  4. Tool 3 → Generate POM
+
+THEN proceed to Steps 7-10 (Task, Role, Test)
+```
+
+---
+
+## Current Browser State
+
+Playwright browser open on registration form page:
+- URL: http://www.automationpractice.pl/index.php?controller=authentication
+- Registration form visible with fields:
+  - Title radios (Mr./Mrs.) - refs e155, e158
+  - First name - ref e162
+  - Last name - ref e166
+  - Email (pre-filled) - ref e170
+  - Password - ref e174
+  - Date of Birth dropdowns - refs e179, e181, e183
+  - Newsletter checkbox - ref e185
+  - Register button - ref e189
+
+---
+
+## Files to Modify
+
+| File | Change |
+|------|--------|
+| `.claude/skills/qa-guidance-layer/references/step-05.md` | Add DD-33 decision point + inline flow |
+| `mcp_server/tools/gates/qg_discovered_elements.py` | Add discovery_method parameter |
+| `mcp_server/_dev_tests/test_gates/test_qg_discovered_elements.py` | Add tests for discovery_method |
+
+---
+
+## Defects Status Summary
+
+| Status | Count | Defects |
+|--------|-------|---------|
+| READY_TO_TEST | 13 | DEF-B08, B09, B10, 025, 026, 030, 031, 033, 034, 035, 036, B06, B07 |
+| Verified This Session | 3 | DEF-026, DEF-030, DEF-031 |
+| OPEN | 8+ | DEF-019, 020, B04, B05, 027, 028, 029, 032 |
+
+---
+
+## Resume Point
+
+1. Implement DD-33 enforcement in step-05.md (inline + enforcement section)
+2. Update qg_discovered_elements with discovery_method parameter
+3. Restart from Step 5 using DD-33 flow
+4. Complete Steps 6-10
+5. Verify all 13 defects fixed
+
+---
+
 # Session: 2025-12-22 - Quality Gates MCP Registration
 
 ## Quick Resume

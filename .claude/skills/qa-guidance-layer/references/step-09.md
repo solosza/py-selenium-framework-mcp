@@ -337,4 +337,185 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 
 ---
 
+## J. Self-Heal Pattern Template
+
+**When AI must complete/fix Test code, use this pattern:**
+
+```python
+import pytest
+from typing import Dict, Any
+from roles.auth.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+from pages.common.home_page import HomePage
+from resources.utilities import autologger
+
+
+class TestValidLogin:
+    """Test suite for valid login scenarios."""
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TEST METHOD - AAA pattern, Role calls, POM assertions
+    # ═══════════════════════════════════════════════════════════════════════════
+    @pytest.mark.auth
+    @pytest.mark.smoke
+    @autologger.automation_logger("Test")
+    def test_user_can_login_with_valid_credentials(
+        self,
+        web_interface,
+        config: Dict[str, Any],
+        test_data: Dict[str, Any]
+    ) -> None:
+        """
+        Verify that a registered user can login with valid credentials.
+
+        AAA Pattern:
+        - Arrange: Create role and page objects
+        - Act: Call ONE role workflow method (can be multiple for complex scenarios)
+        - Assert: Verify state via POM state-check methods
+        """
+        # ═══════════════════════════════════════════════════════════════════════
+        # ARRANGE - Create Role and POM instances for assertions
+        # ═══════════════════════════════════════════════════════════════════════
+        user = RegisteredUser(
+            web=web_interface,
+            user_data=test_data["valid_user"],
+            base_url=config["base_url"]
+        )
+        login_page = LoginPage(web_interface)
+        home_page = HomePage(web_interface)
+
+        # ═══════════════════════════════════════════════════════════════════════
+        # ACT - Call Role workflow method(s)
+        # Note: Can call multiple Role methods for complex multi-persona scenarios
+        # ═══════════════════════════════════════════════════════════════════════
+        user.login()
+
+        # ═══════════════════════════════════════════════════════════════════════
+        # ASSERT - Use POM state-check methods, NOT return values
+        # ═══════════════════════════════════════════════════════════════════════
+        assert login_page.is_logged_in(), "User should be logged in"
+        assert home_page.is_logout_link_visible(), "Logout link should be visible"
+
+
+class TestMultiPersonaScenario:
+    """Example of complex test with multiple roles."""
+
+    @pytest.mark.e2e
+    @autologger.automation_logger("Test")
+    def test_admin_creates_user_then_user_logs_in(
+        self,
+        web_interface,
+        config: Dict[str, Any],
+        test_data: Dict[str, Any]
+    ) -> None:
+        """
+        Complex scenario: Admin creates user, then user logs in.
+
+        Multiple Role calls ARE valid for multi-persona workflows.
+        """
+        # ARRANGE
+        admin = AdminUser(web_interface, test_data["admin"], config["base_url"])
+        new_user = RegisteredUser(web_interface, test_data["new_user"], config["base_url"])
+        admin_page = AdminPage(web_interface)
+        login_page = LoginPage(web_interface)
+
+        # ACT - Multiple Role calls (valid for complex scenarios)
+        admin.login()
+        admin.create_user(test_data["new_user"])
+        admin.logout()
+        new_user.login()
+
+        # ASSERT
+        assert admin_page.is_user_created(test_data["new_user"]["email"])
+        assert login_page.is_logged_in()
+```
+
+**Test Pattern Rules (Checklist):**
+
+| ✓ | Rule |
+|---|------|
+| ☐ | `@autologger.automation_logger("Test")` decorator on test methods |
+| ☐ | `@pytest.mark.{workflow}` marker for categorization |
+| ☐ | AAA pattern: Arrange, Act, Assert sections |
+| ☐ | Call Role workflow methods (one or more) |
+| ☐ | Assert via POM state-check methods |
+| ☐ | Import POMs for assertions only (not for actions) |
+| ☐ | **NO Task method calls** (delegate to Role) |
+| ☐ | **NO POM action method calls** (delegate to Role) |
+| ☐ | **NO orchestration logic** (that belongs in Role) |
+| ☐ | NO assertions on return values (Roles return None) |
+
+**Anti-Patterns to Avoid:**
+
+```python
+# ❌ WRONG: Task method call in test (bypasses Role)
+def test_login(self, web_interface, config):
+    auth_tasks = AuthTasks(web_interface, config["base_url"])
+    auth_tasks.log_in(email, password)  # NO! Use Role
+
+# ❌ WRONG: POM action method call in test (bypasses Role+Task)
+def test_login(self, web_interface, config):
+    login_page = LoginPage(web_interface)
+    login_page.enter_email(email)    # NO! Use Role
+    login_page.enter_password(password)
+    login_page.click_submit()
+
+# ❌ WRONG: Asserting on return value
+def test_login(self, web_interface, config):
+    user = RegisteredUser(...)
+    result = user.login()       # Roles return None
+    assert result is True       # NO! Assert via POM
+
+# ❌ WRONG: Orchestrating workflow in test
+def test_purchase(self, web_interface, config):
+    user = RegisteredUser(...)
+    user.login()                # Multiple calls that should be
+    user.browse_category()      # ONE Role method like
+    user.add_to_cart()          # user.purchase_product()
+    user.checkout()             # This belongs in Role
+
+# ❌ WRONG: Skeleton test
+def test_placeholder(self):
+    pass  # NO! Must have actual test logic
+
+# ❌ WRONG: Missing decorator
+def test_login(self, web_interface):  # Missing @autologger
+    ...
+```
+
+**Correct Pattern: Test calls Role, asserts via POM:**
+
+```python
+# ✅ CORRECT: Single Role call for simple workflow
+@autologger.automation_logger("Test")
+def test_user_can_browse_products(self, web_interface, config, test_data):
+    # Arrange
+    user = GuestUser(web_interface, config["base_url"])
+    catalog_page = CatalogPage(web_interface)
+
+    # Act - ONE Role call
+    user.browse_category("Women")
+
+    # Assert - POM state method
+    assert catalog_page.has_products(), "Products should be displayed"
+
+
+# ✅ CORRECT: Multiple Role calls for multi-persona scenario
+@autologger.automation_logger("Test")
+def test_buyer_and_seller_transaction(self, web_interface, config, test_data):
+    # Arrange
+    seller = SellerUser(web_interface, test_data["seller"], config["base_url"])
+    buyer = BuyerUser(web_interface, test_data["buyer"], config["base_url"])
+    product_page = ProductPage(web_interface)
+
+    # Act - Multiple Role calls (valid: different personas)
+    seller.list_product(test_data["product"])
+    buyer.purchase_product(test_data["product"])
+
+    # Assert
+    assert product_page.is_sold()
+```
+
+---
+
 *Next: Step 10 - Save & Run*

@@ -43,6 +43,20 @@ class QGPageObject(BaseGate):
         (r'#\s*TODO:', 'TODO comment'),
     ]
 
+    # Layer violation patterns - POMs should NOT have these imports
+    LAYER_VIOLATION_PATTERNS = [
+        (r'from\s+tasks\.', 'Task import in POM'),
+        (r'from\s+roles\.', 'Role import in POM'),
+        (r'import\s+tasks\.', 'Task import in POM'),
+        (r'import\s+roles\.', 'Role import in POM'),
+    ]
+
+    # Trivial state method pattern - returns True without checking element
+    TRIVIAL_STATE_PATTERN = re.compile(
+        r'def\s+(is_|has_)\w+\s*\([^)]*\)\s*->\s*bool:\s*\n\s*"""[^"]*"""\s*\n\s*return\s+True\s*$',
+        re.MULTILINE
+    )
+
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
@@ -157,6 +171,16 @@ class QGPageObject(BaseGate):
         if skeleton_error:
             return skeleton_error
 
+        # Check for layer violations (POM should not import Task/Role)
+        layer_error = cls._detect_layer_violations(code)
+        if layer_error:
+            return layer_error
+
+        # Check for trivial state methods (skeleton variant)
+        trivial_error = cls._detect_trivial_state_methods(code)
+        if trivial_error:
+            return trivial_error
+
         # Validate metadata field
         metadata = input_data.get("metadata")
 
@@ -199,6 +223,13 @@ class QGPageObject(BaseGate):
             if match_error:
                 return match_error
 
+        # Save Step 6 state on POST-VALIDATE pass
+        state_manager = cls._get_state_manager()
+        state_manager.save(step=6, data={
+            "pom_code": code,
+            "pom_metadata": metadata
+        })
+
         return cls.pass_response()
 
     @classmethod
@@ -214,6 +245,37 @@ class QGPageObject(BaseGate):
                     error=f"Skeleton code detected: {description} (DD-25 violation)",
                     fix_hint="AI must complete the code. Remove placeholders, implement all methods."
                 )
+        return None
+
+    @classmethod
+    def _detect_layer_violations(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect layer violation patterns - POM should not import Task/Role.
+
+        Returns fail_response if violation detected, None otherwise.
+        """
+        for pattern, description in cls.LAYER_VIOLATION_PATTERNS:
+            if re.search(pattern, code):
+                return cls.fail_response(
+                    error=f"Layer violation detected: {description} (architecture violation)",
+                    fix_hint="POMs should only import WebInterface. Tasks and Roles are higher layers that use POMs, not the other way around."
+                )
+        return None
+
+    @classmethod
+    def _detect_trivial_state_methods(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect trivial state methods that just return True without element check.
+
+        A proper state method should check an actual element, not just return True.
+
+        Returns fail_response if trivial state method detected, None otherwise.
+        """
+        if cls.TRIVIAL_STATE_PATTERN.search(code):
+            return cls.fail_response(
+                error="Trivial state method detected: returns True without checking element (DD-25 violation)",
+                fix_hint="State methods must check actual elements. Replace 'return True' with 'return self.web.is_element_displayed(*self.LOCATOR)'."
+            )
         return None
 
     @classmethod

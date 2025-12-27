@@ -1,69 +1,54 @@
 """
-Test Registration - Account creation tests.
+Test: Guest user successfully registers a new account.
 
-Tests the account registration workflow for new users.
+Tests the registration workflow for a guest user.
 Uses AAA pattern: Arrange, Act, Assert.
 """
 
 import pytest
-import time
+from faker import Faker
 from resources.utilities import autologger
-from roles.new_user import NewUser
+from roles.guest_user import GuestUser
 from pages.auth.registration_page import RegistrationPage
 
 
-class TestRegistration:
-    """
-    Test suite for account registration.
+fake = Faker()
 
-    - @autologger("Test") decorator
-    - Call ONE workflow method per Role
-    - Assert via Page Object state-check methods
-    - NO orchestration (don't call multiple Role methods)
-    """
+
+class TestGuestUserRegistration:
+    """Test suite for guest user registration."""
 
     @pytest.fixture(autouse=True)
     def setup(self, web_interface, config):
         """Setup test fixtures."""
         self.web = web_interface
         self.config = config
-        self.base_url = config.get("url", config.get("base_url", ""))
         self.registration_page = RegistrationPage(web_interface)
 
-    # ==================== TEST METHODS ====================
-
     @pytest.mark.auth
-    @pytest.mark.smoke
     @autologger.automation_logger("Test")
-    def test_successful_registration(self):
+    def test_guest_user_successfully_registers_a_new_account(self):
         """
-        Test that a new user can create an account successfully.
+        Test that a guest user can register a new account.
 
-        Scenario: Successful account registration
-        Given I am on the authentication page
-        When I enter a unique email address and click create account
-        And I fill in the registration form with valid personal details
+        Given I am on the registration page
+        When I enter a valid email address and click create account
+        And I fill out the registration form with valid personal details
         And I submit the registration form
-        Then I should be logged in (account created successfully)
-
-        AAA Pattern:
-        1. Arrange - Create NewUser with unique test data
-        2. Act - Call register() workflow method (no return value)
-        3. Assert - Use RegistrationPage.is_account_created() state-check
+        Then I should see my account is created and I am logged in
         """
-        # Arrange - Generate unique email using timestamp
-        unique_email = f"testuser_{int(time.time())}@test.com"
+        # Arrange - Generate unique test data (self-contained strategy)
         user_data = {
-            "email": unique_email,
-            "firstname": "Test",
-            "lastname": "User",
-            "password": "TestPass123!"
+            "email": fake.email(),
+            "password": "TestPass123!",
+            "first_name": fake.first_name(),
+            "last_name": fake.last_name()
         }
-        user = NewUser(self.web, user_data, self.base_url)
+        guest = GuestUser(self.web, user_data)
 
         # Act - ONE workflow call, NO return value
-        user.register()
+        guest.register_account()
 
-        # Assert - Via Page Object state-check method (DD-15)
-        assert self.registration_page.is_account_created(), \
-            f"Account should be created for {unique_email}"
+        # Assert - Via POM state-check methods
+        assert self.registration_page.is_account_created(), "Account should be created"
+        assert self.registration_page.is_logged_in(), "User should be logged in after registration"

@@ -175,6 +175,114 @@ All quality gates return a consistent response format:
 
 ---
 
+## Self-Heal Validation Protocol
+
+When tools generate skeleton or incomplete code, AI must self-heal by generating code directly. This section defines the mandatory validation process for AI-generated code.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      SELF-HEAL VALIDATION FLOW                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  Tool output → Quality Gate (POST) → FAIL (skeleton detected)
+      │
+      ▼
+  AI generates replacement code (using Section J pattern from step reference)
+      │
+      ▼
+  AI calls same qg_* gate in POST mode with AI-generated code  ← MANDATORY
+      │
+      ├── PASS ──► Proceed to next step
+      │
+      └── FAIL ──► Retry (max 3 attempts)
+              │
+              └── After 3 failures ──► Smart Escalation
+```
+
+### Self-Heal Rules
+
+| Rule | Description |
+|------|-------------|
+| **Mandatory POST-Validate** | AI-generated code MUST pass through quality gate |
+| **Use Pattern Template** | Reference Section J in step-0X.md for correct pattern |
+| **Max 3 Retries** | After 3 failed attempts, trigger smart escalation |
+| **Layer Compliance** | Generated code must follow 4-layer architecture |
+
+### Layer Pattern Summary
+
+| Layer | Must Have | Must NOT Have |
+|-------|-----------|---------------|
+| **POM** | Locators, atomic methods (return self), state methods | Task/Role imports, workflow logic |
+| **Task** | @autologger, POM composition, -> None | By.* imports, locators, return values |
+| **Role** | @autologger, Task composition, -> None | By.* imports, POM imports, direct POM calls |
+| **Test** | @autologger, Role calls, POM assertions | Task calls, POM action calls |
+
+---
+
+## Smart Escalation Protocol
+
+When AI exhausts retry attempts, provide actionable guidance instead of just failing.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      SMART ESCALATION (After 3 Failures)                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  1. SHOW what violated (specific code line/pattern)
+
+  2. SHOW correct pattern (from Section J template)
+
+  3. SHOW diff (wrong vs right)
+
+  4. OFFER options:
+     a) AI retries with different approach
+     b) Log defect + skip this step
+     c) User provides fix
+```
+
+### Escalation Message Template
+
+```
+❌ VALIDATION FAILED (3 attempts exhausted)
+
+ISSUE: [specific violation detected]
+────────────────────────────────────
+YOUR CODE (line XX):
+  [violating code snippet]
+
+CORRECT PATTERN (from step-0X.md Section J):
+  [correct pattern snippet]
+────────────────────────────────────
+
+OPTIONS:
+1. Retry with different approach - AI will try alternative implementation
+2. Skip + log defect - Continue workflow, create DEF-XXX for later
+3. You provide fix - Paste corrected code
+```
+
+### Example Escalation
+
+```
+❌ VALIDATION FAILED (3 attempts exhausted)
+
+ISSUE: Locator detected in Task (DD-27 violation)
+────────────────────────────────────
+YOUR CODE (line 15):
+  product_locator = (By.CSS_SELECTOR, "ul.product_list li")
+
+CORRECT PATTERN (from step-07.md Section J):
+  # Task calls POM methods, never uses locators
+  self.catalog_page.get_product_element(index)
+────────────────────────────────────
+
+OPTIONS:
+1. Retry - Move locator to CatalogPage, add POM method
+2. Skip + log DEF-XXX - Record issue, continue
+3. You provide fix - Paste corrected Task code
+```
+
+---
+
 ## Related Documentation
 
 | Document | Purpose |
@@ -182,6 +290,10 @@ All quality gates return a consistent response format:
 | `FRAMEWORK.md` Section 9 | Full step definitions with examples |
 | `design-execution-engine/` | Meta-skill for engine design patterns |
 | `CLAUDE.md` | Quick reference and DDs |
+| `step-06.md` Section J | POM self-heal pattern |
+| `step-07.md` Section J | Task self-heal pattern |
+| `step-08.md` Section J | Role self-heal pattern |
+| `step-09.md` Section J | Test self-heal pattern |
 
 ---
 

@@ -303,4 +303,117 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 
 ---
 
+## J. Self-Heal Pattern Template
+
+**When AI must complete/fix POM code, use this pattern:**
+
+```python
+from selenium.webdriver.common.by import By
+from interfaces.web_interface import WebInterface
+
+
+class ExamplePage:
+    """Page Object for [page description]."""
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # LOCATORS - Class-level constants, UPPER_SNAKE_CASE
+    # ═══════════════════════════════════════════════════════════════════════════
+    EMAIL_INPUT = (By.CSS_SELECTOR, "#email")
+    PASSWORD_INPUT = (By.CSS_SELECTOR, "#passwd")
+    SUBMIT_BTN = (By.CSS_SELECTOR, "#SubmitLogin")
+    ERROR_MESSAGE = (By.CSS_SELECTOR, ".alert-danger")
+    LOGOUT_LINK = (By.CSS_SELECTOR, "a.logout")
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CONSTRUCTOR - Compose WebInterface, NO inheritance
+    # ═══════════════════════════════════════════════════════════════════════════
+    def __init__(self, web: WebInterface):
+        self.web = web
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # NAVIGATION - POM owns navigation, gets URL from WebInterface.config
+    # ═══════════════════════════════════════════════════════════════════════════
+    def navigate(self) -> "ExamplePage":
+        """Navigate to this page. Gets URL from WebInterface config."""
+        url = self.web.config["url"]
+        self.web.navigate_to(f"{url}/index.php?controller=authentication")
+        return self
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # ATOMIC METHODS - One action per method, return self for chaining
+    # ═══════════════════════════════════════════════════════════════════════════
+    def enter_email(self, text: str) -> "ExamplePage":
+        """Enter text into email field."""
+        self.web.type_text(*self.EMAIL_INPUT, text)
+        return self
+
+    def enter_password(self, text: str) -> "ExamplePage":
+        """Enter text into password field."""
+        self.web.type_text(*self.PASSWORD_INPUT, text)
+        return self
+
+    def click_submit(self) -> "ExamplePage":
+        """Click the submit button."""
+        self.web.click(*self.SUBMIT_BTN)
+        return self
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # STATE-CHECK METHODS - For test assertions, return bool
+    # ═══════════════════════════════════════════════════════════════════════════
+    def is_page_loaded(self) -> bool:
+        """Check if page is fully loaded."""
+        return self.web.is_element_displayed(*self.EMAIL_INPUT, timeout=5)
+
+    def is_logged_in(self) -> bool:
+        """Check if user is logged in (logout link visible)."""
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+
+    def is_error_displayed(self) -> bool:
+        """Check if error message is visible."""
+        return self.web.is_element_displayed(*self.ERROR_MESSAGE, timeout=3)
+
+    def get_error_message(self) -> str:
+        """Get the error message text."""
+        return self.web.get_text(*self.ERROR_MESSAGE)
+```
+
+**POM Pattern Rules (Checklist):**
+
+| ✓ | Rule |
+|---|------|
+| ☐ | Locators as class-level constants (UPPER_SNAKE_CASE) |
+| ☐ | Compose `WebInterface` in `__init__`, NO inheritance |
+| ☐ | `navigate()` method gets URL from `self.web.config["url"]` |
+| ☐ | Atomic methods: one UI action per method |
+| ☐ | Atomic methods return `self` for fluent chaining |
+| ☐ | State-check methods return `bool` |
+| ☐ | NO `@autologger` decorator (logging at Task/Role level) |
+| ☐ | NO Task/Role imports |
+| ☐ | NO workflow logic (just UI interactions) |
+
+**Anti-Patterns to Avoid:**
+
+```python
+# ❌ WRONG: Composite method (belongs in Task)
+def login(self, email, password):
+    self.enter_email(email)
+    self.enter_password(password)
+    self.click_submit()
+
+# ❌ WRONG: Returning None instead of self
+def enter_email(self, text: str) -> None:
+    self.web.type_text(*self.EMAIL_INPUT, text)
+    # Missing return self
+
+# ❌ WRONG: Inheritance
+class LoginPage(BasePage):  # NO - use composition
+    pass
+
+# ❌ WRONG: Skeleton state method
+def is_page_loaded(self) -> bool:
+    return True  # Must check actual element
+```
+
+---
+
 *Next: Step 7 - Generate Task (Tool 4)*

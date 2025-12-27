@@ -297,4 +297,130 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 
 ---
 
+## J. Self-Heal Pattern Template
+
+**When AI must complete/fix Task code, use this pattern:**
+
+```python
+from interfaces.web_interface import WebInterface
+from pages.auth.login_page import LoginPage
+from pages.auth.registration_page import RegistrationPage
+from resources.utilities import autologger
+
+
+class AuthTasks:
+    """Task module for authentication domain operations."""
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CONSTRUCTOR - Compose WebInterface + POMs, NO inheritance, NO base_url
+    # ═══════════════════════════════════════════════════════════════════════════
+    def __init__(self, web: WebInterface):
+        self.web = web
+        # Compose page objects - they get URL from self.web.config
+        self.login_page = LoginPage(web)
+        self.registration_page = RegistrationPage(web)
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TASK METHODS - Single domain operation, return None, use @autologger
+    # ═══════════════════════════════════════════════════════════════════════════
+    @autologger.automation_logger("Task")
+    def log_in(self, email: str, password: str) -> None:
+        """
+        Single domain operation: authenticate user.
+
+        NO return value - test asserts via login_page.is_logged_in()
+        """
+        # POM handles navigation (gets URL from self.web.config)
+        (self.login_page
+            .navigate()
+            .enter_email(email)
+            .enter_password(password)
+            .click_submit())
+
+        # NO return statement
+
+    @autologger.automation_logger("Task")
+    def log_out(self) -> None:
+        """Single domain operation: end session."""
+        self.login_page.click_logout()
+        # NO return - test asserts via login_page.is_logged_out()
+
+    @autologger.automation_logger("Task")
+    def register_user(self, user_data: dict) -> None:
+        """Single domain operation: create new account."""
+        # POM handles navigation
+        (self.registration_page
+            .navigate()
+            .enter_email(user_data["email"])
+            .click_create_account())
+
+        (self.registration_page
+            .select_gender(user_data["gender"])
+            .enter_first_name(user_data["first_name"])
+            .enter_last_name(user_data["last_name"])
+            .enter_password(user_data["password"])
+            .click_register())
+
+        # NO return - test asserts via registration_page.is_account_created()
+```
+
+**Task Pattern Rules (Checklist):**
+
+| ✓ | Rule |
+|---|------|
+| ☐ | `@autologger.automation_logger("Task")` decorator on each method |
+| ☐ | Compose `WebInterface` + POMs in `__init__`, NO inheritance |
+| ☐ | **NO `base_url` parameter** - POM gets URL from `self.web.config` |
+| ☐ | Navigation via POM `navigate()` method (never `self.web.navigate_to()`) |
+| ☐ | Methods return `None` (type hint `-> None`) |
+| ☐ | Call POM atomic methods in fluent chains |
+| ☐ | One domain operation per method |
+| ☐ | **NO `By.*` imports** (locators only in POMs) |
+| ☐ | **NO locator tuples** `(By.CSS_SELECTOR, "...")` |
+| ☐ | **NO `driver.find_element()`** calls |
+| ☐ | NO return values (tests assert via POM state methods) |
+
+**Anti-Patterns to Avoid (DD-27 Violations):**
+
+```python
+# ❌ WRONG: Locator import in Task
+from selenium.webdriver.common.by import By  # NEVER in Task
+
+# ❌ WRONG: Locator tuple in Task
+def add_to_cart(self, product_index: int) -> None:
+    locator = (By.CSS_SELECTOR, f"li:nth-child({product_index})")  # NO!
+    self.web.click(*locator)
+
+# ❌ WRONG: driver.find_element in Task
+def get_product(self) -> None:
+    element = self.web.driver.find_element(By.CSS_SELECTOR, ".product")  # NO!
+
+# ❌ WRONG: Returning value
+def log_in(self, email: str, password: str) -> bool:  # NO!
+    ...
+    return self.login_page.is_logged_in()  # NO!
+
+# ❌ WRONG: Missing decorator
+def log_in(self, email: str, password: str) -> None:  # Missing @autologger
+    ...
+
+# ❌ WRONG: Skeleton with pass
+@autologger.automation_logger("Task")
+def execute_workflow(self) -> None:
+    pass  # NO! Must have actual POM calls
+```
+
+**Correct Pattern: Task calls POM, never has locators:**
+
+```python
+# ✅ CORRECT: Task delegates to POM
+@autologger.automation_logger("Task")
+def add_product_to_cart(self, product_index: int = 0) -> None:
+    self.catalog_page.hover_product(product_index)  # POM method
+    self.catalog_page.click_add_to_cart()           # POM method
+    # Locators are INSIDE catalog_page, not here
+```
+
+---
+
 *Next: Step 8 - Generate Role (Tool 5)*

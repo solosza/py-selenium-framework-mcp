@@ -515,11 +515,17 @@ async def list_available_tools() -> list[Tool]:
                     },
                     "credential_strategy": {
                         "type": "string",
-                        "description": "PRE mode: Credential strategy from Step 1"
+                        "description": "PRE mode: Credential strategy from Step 1",
+                        "enum": ["none", "static", "dynamic", "self-contained"]
+                    },
+                    "discovery_method": {
+                        "type": "string",
+                        "description": "PRE mode: Discovery method (DD-33). Use 'playwright' if Playwright prepared page state, 'tool2' for static pages.",
+                        "enum": ["tool2", "playwright"]
                     },
                     "elements": {
                         "type": "array",
-                        "description": "POST mode: Discovered elements from Tool 2",
+                        "description": "POST mode: Discovered elements from Tool 2 or DD-33 snapshot extraction",
                         "items": {"type": "object"}
                     }
                 },

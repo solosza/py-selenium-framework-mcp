@@ -70,12 +70,25 @@ async def generate_tests_from_user_story(arguments: dict) -> str:
 
             test_name = generate_test_name(scenario, workflow)
 
+            # Convert when/then to lists if they're strings (split on " AND ")
+            when_value = scenario.get("when", "")
+            if isinstance(when_value, str):
+                when_list = [step.strip() for step in when_value.split(" AND ") if step.strip()]
+            else:
+                when_list = when_value if isinstance(when_value, list) else [str(when_value)]
+
+            then_value = scenario.get("then", "")
+            if isinstance(then_value, str):
+                then_list = [step.strip() for step in then_value.split(" AND ") if step.strip()]
+            else:
+                then_list = then_value if isinstance(then_value, list) else [str(then_value)]
+
             test_scenario = {
-                "title": test_name,  # Test function name (e.g., test_valid_login)
+                "name": test_name,  # Gate expects "name" not "title"
                 "description": f"Verify {scenario.get('when', 'scenario')}",
                 "given": scenario.get("given", ""),
-                "when": scenario.get("when", ""),
-                "then": scenario.get("then", ""),
+                "when": when_list,  # Gate expects list, not string
+                "then": then_list,  # Gate expects list, not string
                 "workflow": workflow
             }
 
@@ -83,15 +96,15 @@ async def generate_tests_from_user_story(arguments: dict) -> str:
 
         # Build metadata for downstream tools (PRD FR-08, FR-09, FR-10)
         # This is the standardized format that AI passes to subsequent tools
-        # Format per FRAMEWORK.md Section 8.4 and PRD Section 6.2:
-        # test_scenarios: [{title, given, when, then, workflow}]
+        # Format per qg_test_scenarios gate data contract:
+        # test_scenarios: [{name, given, when (list), then (list), workflow}]
         metadata = {
             "test_scenarios": [
                 {
-                    "title": scenario["title"],  # Test function name
+                    "name": scenario["name"],  # Gate expects "name" not "title"
                     "given": scenario["given"],
-                    "when": scenario["when"],
-                    "then": scenario["then"],
+                    "when": scenario["when"],  # List format
+                    "then": scenario["then"],  # List format
                     "workflow": scenario["workflow"]
                 }
                 for scenario in test_scenarios

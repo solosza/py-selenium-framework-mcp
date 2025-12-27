@@ -298,4 +298,143 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 
 ---
 
+## J. Self-Heal Pattern Template
+
+**When AI must complete/fix Role code, use this pattern:**
+
+```python
+from typing import Dict, Any
+from interfaces.web_interface import WebInterface
+from tasks.auth.auth_tasks import AuthTasks
+from tasks.catalog.catalog_tasks import CatalogTasks
+from tasks.checkout.checkout_tasks import CheckoutTasks
+from resources.utilities import autologger
+
+
+class RegisteredUser:
+    """Role representing an authenticated user persona."""
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CONSTRUCTOR - Compose WebInterface + Tasks, NO inheritance, NO base_url
+    # ═══════════════════════════════════════════════════════════════════════════
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web: WebInterface, user_data: Dict[str, Any]):
+        self.web = web
+        self.user_data = user_data
+        self.email = user_data.get("email")
+        self.password = user_data.get("password")
+
+        # Compose Task modules - NO base_url passed (Tasks get URL via POM -> web.config)
+        self.auth_tasks = AuthTasks(web)
+        self.catalog_tasks = CatalogTasks(web)
+        self.checkout_tasks = CheckoutTasks(web)
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # WORKFLOW METHODS - Orchestrate Tasks, return None, use @autologger
+    # ═══════════════════════════════════════════════════════════════════════════
+    @autologger.automation_logger("Role")
+    def login_and_browse_category(self, category: str) -> None:
+        """
+        Complete workflow: Login then browse products.
+
+        Orchestrates MULTIPLE tasks into user journey.
+        NO return value - test asserts via POM state methods.
+        """
+        self.auth_tasks.log_in(self.email, self.password)
+        self.catalog_tasks.browse_category(category)
+        # NO return - test asserts via catalog_page.has_products()
+
+    @autologger.automation_logger("Role")
+    def purchase_product(self, product_data: dict) -> None:
+        """
+        Complete workflow: Login -> Browse -> Add to Cart -> Checkout.
+
+        This is what makes Role different from Task:
+        - Role orchestrates MULTIPLE tasks
+        - Role represents a complete user journey/story
+        """
+        self.auth_tasks.log_in(self.email, self.password)
+        self.catalog_tasks.browse_category(product_data["category"])
+        self.catalog_tasks.add_to_cart(product_data["name"])
+        self.checkout_tasks.complete_purchase()
+        # NO return - test asserts via checkout_page.is_order_confirmed()
+
+    @autologger.automation_logger("Role")
+    def login(self) -> None:
+        """
+        Simple workflow: Just login.
+
+        Note: Single-task workflows ARE valid when that's all the story requires.
+        """
+        self.auth_tasks.log_in(self.email, self.password)
+        # NO return - test asserts via login_page.is_logged_in()
+```
+
+**Role Pattern Rules (Checklist):**
+
+| ✓ | Rule |
+|---|------|
+| ☐ | `@autologger.automation_logger("Role")` decorator on workflow methods |
+| ☐ | `@autologger.automation_logger("Role Constructor")` on `__init__` |
+| ☐ | Compose `WebInterface` + Tasks in `__init__`, NO inheritance |
+| ☐ | **NO `base_url` parameter** - URL flows via Task -> POM -> `web.config` |
+| ☐ | Task instantiation: `AuthTasks(web)` - NO base_url passed |
+| ☐ | Methods return `None` (type hint `-> None`) |
+| ☐ | Call Task methods (NOT POM methods directly) |
+| ☐ | Store credentials in `self.user_data` or attributes |
+| ☐ | **NO `By.*` imports** (locators only in POMs) |
+| ☐ | **NO POM imports** (Roles use Tasks, not POMs) |
+| ☐ | **NO direct POM method calls** (delegate to Tasks) |
+| ☐ | NO return values (tests assert via POM state methods) |
+
+**Anti-Patterns to Avoid:**
+
+```python
+# ❌ WRONG: POM import in Role
+from pages.auth.login_page import LoginPage  # NO - Roles use Tasks
+
+# ❌ WRONG: Locator import in Role
+from selenium.webdriver.common.by import By  # NEVER in Role
+
+# ❌ WRONG: Direct POM method call
+@autologger.automation_logger("Role")
+def login(self) -> None:
+    self.login_page.enter_email(self.email)  # NO! Use Task
+    self.login_page.enter_password(self.password)
+    self.login_page.click_submit()
+
+# ❌ WRONG: Returning value
+@autologger.automation_logger("Role")
+def login(self) -> bool:  # NO!
+    self.auth_tasks.log_in(self.email, self.password)
+    return self.login_page.is_logged_in()  # NO!
+
+# ❌ WRONG: Missing decorator
+def purchase_product(self, product: dict) -> None:  # Missing @autologger
+    ...
+
+# ❌ WRONG: Skeleton with pass
+@autologger.automation_logger("Role")
+def execute_workflow(self) -> None:
+    pass  # NO! Must have actual Task calls
+
+# ❌ WRONG: Inheritance
+class RegisteredUser(BaseRole):  # NO - use composition
+    pass
+```
+
+**Correct Pattern: Role calls Tasks, never POMs directly:**
+
+```python
+# ✅ CORRECT: Role orchestrates Tasks
+@autologger.automation_logger("Role")
+def add_product_and_checkout(self, product: dict) -> None:
+    self.catalog_tasks.add_to_cart(product["name"])  # Task method
+    self.checkout_tasks.proceed_to_checkout()        # Task method
+    self.checkout_tasks.complete_purchase()          # Task method
+    # POMs are used INSIDE Tasks, not here
+```
+
+---
+
 *Next: Step 9 - Generate Test Runner (Tool 6)*

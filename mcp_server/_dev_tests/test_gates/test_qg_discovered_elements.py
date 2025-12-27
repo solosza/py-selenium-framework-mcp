@@ -1,10 +1,10 @@
 """
 Tests for QGDiscoveredElements quality gate (Step 5).
 
-PRE+POST validation gate for Tool 2 (discover_page_elements).
+PRE+POST validation gate for Tool 2 (discover_page_elements) or DD-33 (Playwright snapshot).
 
 Test Categories:
-- PRE validation: Step 4 complete, URL, page_name, credential_strategy (IC-05-01)
+- PRE validation: Step 4 complete, URL, page_name, credential_strategy (IC-05-01), discovery_method (DD-33)
 - POST validation: elements array, element structure, locators (IC-05-03), page_name PascalCase (IC-05-02)
 - Routing: validate() routes to PRE/POST based on mode
 
@@ -28,7 +28,8 @@ def valid_pre_input():
         "mode": "PRE",
         "url": "http://www.automationpractice.pl/index.php",
         "page_name": "LoginPage",
-        "credential_strategy": "static"
+        "credential_strategy": "static",
+        "discovery_method": "tool2"
     }
 
 
@@ -297,6 +298,85 @@ class TestPreValidationCredentialStrategy:
         # Assert
         assert result["status"] == "fail", "Should fail when credential_strategy invalid"
         assert "credential_strategy" in result["error"].lower(), "Error should mention credential_strategy"
+
+
+# =============================================================================
+# PRE Validation - Negative (discovery_method - DD-33)
+# =============================================================================
+
+class TestPreValidationDiscoveryMethod:
+    """PRE validation discovery_method checks (DD-33)."""
+
+    @pytest.mark.unit
+    def test_pre_discovery_method_missing_fails(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P0: PRE fails when discovery_method is missing (DD-33).
+
+        # Arrange
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        del input_data["discovery_method"]
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when discovery_method missing"
+        assert "discovery_method" in result["error"].lower(), "Error should mention discovery_method"
+        assert "DD-33" in result["error"], "Error should reference DD-33"
+
+    @pytest.mark.unit
+    def test_pre_discovery_method_invalid_fails(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P0: PRE fails when discovery_method has invalid value.
+
+        # Arrange
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        input_data["discovery_method"] = "invalid_method"
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when discovery_method invalid"
+        assert "discovery_method" in result["error"].lower(), "Error should mention discovery_method"
+
+    @pytest.mark.unit
+    def test_pre_discovery_method_tool2_passes(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P0: PRE passes when discovery_method is 'tool2'.
+
+        # Arrange
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        input_data["discovery_method"] = "tool2"
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass when discovery_method is tool2"
+
+    @pytest.mark.unit
+    def test_pre_discovery_method_playwright_passes(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P0: PRE passes when discovery_method is 'playwright'.
+
+        # Arrange
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        input_data["discovery_method"] = "playwright"
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass when discovery_method is playwright"
 
 
 # =============================================================================

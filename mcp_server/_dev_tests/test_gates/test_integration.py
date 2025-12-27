@@ -122,7 +122,8 @@ def valid_step_5_pre_data():
         "mode": "PRE",
         "url": "http://www.automationpractice.pl/index.php?controller=authentication",
         "page_name": "LoginPage",
-        "credential_strategy": "static"
+        "credential_strategy": "static",
+        "discovery_method": "tool2"
     }
 
 

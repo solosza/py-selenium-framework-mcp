@@ -44,7 +44,15 @@
       "Bash(copy \"rag\\ingestion\\tests\\test_loader.py\" \"tests\\ingestion\\test_loader.py\")",
       "Bash(copy \"rag\\ingestion\\tests\\test_chunker.py\" \"tests\\ingestion\\test_chunker.py\")",
       "Bash(copy \"rag\\ingestion\\tests\\test_embedder.py\" \"tests\\ingestion\\test_embedder.py\")",
-      "Bash(git -C \"D:\\my_ai_projects\\py_sel_framework_mcp\" add -A)"
+      "Bash(git -C \"D:\\my_ai_projects\\py_sel_framework_mcp\" add -A)",
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/3.0-gate-infrastructure)",
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add mcp_server/tools/gates/ mcp_server/_dev_tests/test_gates/ docs/projects/qa-execution-engine/2-tasks-qa-execution-engine.md)",
+      "Bash(cd /d D:my_ai_projectspy_sel_framework_mcpmcp_server_dev_tests)",
+      "Skill(dialogue-engine)",
+      "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" add mcp_server/tools/gates/qg_task.py mcp_server/_dev_tests/test_gates/test_qg_task.py .claude/skills/qa-guidance-layer/references/step-07.md docs/DEFECT_LOG.md SESSION.md)",
+      "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" add mcp_server/tools/gates/qg_role.py mcp_server/_dev_tests/test_gates/test_qg_role.py .claude/skills/qa-guidance-layer/references/step-08.md)",
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/14.0-skill-update)",
+      "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" diff FRAMEWORK.md)"
     ],
     "deny": [],
     "ask": []

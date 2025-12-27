@@ -1,20 +1,21 @@
 """
 Quality Gate: Discovered Elements (Step 5).
 
-PRE+POST validation gate for Tool 2 (discover_page_elements).
+PRE+POST validation gate for Tool 2 (discover_page_elements) or DD-33 (Playwright snapshot).
 
 PRE Validation:
 - Step 4 complete (test_scenarios exist in state)
 - URL present and valid format (http/https)
 - page_name present
 - credential_strategy present and valid (IC-05-01)
+- discovery_method present and valid ("tool2" or "playwright") (DD-33)
 
 POST Validation:
 - elements array present and not empty
 - Each element has: suggested_name, element_type, at least one non-empty locator (IC-05-03)
 - page_name is PascalCase (IC-05-02)
 
-Enforces: DD-19, DD-20, DD-21, DD-24, IC-05-01, IC-05-02, IC-05-03
+Enforces: DD-19, DD-20, DD-21, DD-24, DD-33, IC-05-01, IC-05-02, IC-05-03
 """
 
 import re
@@ -30,6 +31,9 @@ class QGDiscoveredElements(BaseGate):
     # Valid credential strategies (from DD-24)
     VALID_CREDENTIAL_STRATEGIES = {"none", "static", "dynamic", "self-contained"}
 
+    # Valid discovery methods (from DD-33)
+    VALID_DISCOVERY_METHODS = {"tool2", "playwright"}
+
     # PascalCase pattern (IC-05-02): starts with uppercase, alphanumeric
     PASCAL_CASE_PATTERN = re.compile(r'^[A-Z][a-zA-Z0-9]*$')
 
@@ -41,16 +45,17 @@ class QGDiscoveredElements(BaseGate):
     @classmethod
     def validate_pre(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        PRE validation before Tool 2 operation.
+        PRE validation before Tool 2 operation or DD-33 snapshot extraction.
 
         Validates:
         - Step 4 is complete
         - URL is present and valid format
         - page_name is present
         - credential_strategy is present and valid (IC-05-01)
+        - discovery_method is present and valid (DD-33)
 
         Args:
-            input_data: Dict with url, page_name, credential_strategy
+            input_data: Dict with url, page_name, credential_strategy, discovery_method
 
         Returns:
             {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
@@ -111,17 +116,33 @@ class QGDiscoveredElements(BaseGate):
                 fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_CREDENTIAL_STRATEGIES))}"
             )
 
+        # Validate discovery_method (DD-33)
+        discovery_method = input_data.get("discovery_method")
+        if discovery_method is None:
+            return cls.fail_response(
+                error="Missing required field: discovery_method (DD-33)",
+                fix_hint=f"Declare discovery_method. Use 'playwright' if Playwright prepared page state, 'tool2' for static pages. Valid options: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}"
+            )
+
+        if discovery_method not in cls.VALID_DISCOVERY_METHODS:
+            return cls.fail_response(
+                error=f"Invalid discovery_method: '{discovery_method}'",
+                fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}. Use 'playwright' if Playwright prepared page state."
+            )
+
         return cls.pass_response()
 
     @classmethod
     def validate_post(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        POST validation after Tool 2 operation.
+        POST validation after Tool 2 operation or DD-33 snapshot extraction.
 
         Validates:
         - elements array is present and not empty
         - Each element has: suggested_name, element_type, at least one non-empty locator (IC-05-03)
         - page_name is PascalCase (IC-05-02)
+
+        On PASS: Saves Step 5 state (enables DD-33 flow where Tool 2 is skipped).
 
         Args:
             input_data: Dict with elements array and page_name
@@ -175,6 +196,13 @@ class QGDiscoveredElements(BaseGate):
                 error=f"page_name '{page_name}' is not PascalCase (IC-05-02)",
                 fix_hint="Use PascalCase format: 'LoginPage', 'CartModal', 'CheckoutForm'"
             )
+
+        # Save Step 5 state on POST-VALIDATE pass (enables DD-33 flow)
+        state_manager = cls._get_state_manager()
+        state_manager.save(5, {
+            "discovered_elements": elements,
+            "page_name": page_name
+        })
 
         return cls.pass_response()
 

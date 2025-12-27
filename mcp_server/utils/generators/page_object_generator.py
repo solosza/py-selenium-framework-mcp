@@ -185,6 +185,13 @@ CHECKBOX_METHOD_TEMPLATE = '''
         return self
 '''
 
+RADIO_METHOD_TEMPLATE = '''
+    def select_{method_name}(self) -> "{page_name}":
+        """Select {readable_name} radio button."""
+        self.web.click(*self.{locator_name})
+        return self
+'''
+
 
 def generate_action_methods_block(
     elements: List[Dict[str, str]],
@@ -277,6 +284,14 @@ def generate_action_methods_block(
 
         elif elem_type == "checkboxes":
             methods.append(CHECKBOX_METHOD_TEMPLATE.format(
+                method_name=method_name,
+                page_name=page_name,
+                locator_name=locator_name,
+                readable_name=readable_name
+            ))
+
+        elif elem_type == "radios":
+            methods.append(RADIO_METHOD_TEMPLATE.format(
                 method_name=method_name,
                 page_name=page_name,
                 locator_name=locator_name,
@@ -620,6 +635,15 @@ def _build_action_methods_metadata(
             })
             methods.append({
                 "name": f"uncheck_{method_name_base}",
+                "params": [],
+                "returns": "self",
+                "element_type": elem_type,
+                "locator_name": name.upper()
+            })
+
+        elif elem_type == "radios":
+            methods.append({
+                "name": f"select_{method_name_base}",
                 "params": [],
                 "returns": "self",
                 "element_type": elem_type,

@@ -17,6 +17,7 @@ POST Validation:
 Enforces: DD-19, DD-23, DD-25
 """
 
+import re
 from typing import Any, Dict, List
 
 from .base_gate import BaseGate
@@ -30,12 +31,13 @@ class QGTestScenarios(BaseGate):
     VALID_WORKFLOWS = {"auth", "catalog", "cart", "checkout"}
 
     # Skeleton patterns to detect in scenarios
+    # Tuple of (pattern, is_regex) - regex patterns use word boundaries to avoid false positives
     SKELETON_PATTERNS = [
-        "pass",
-        "# add",
-        "# todo",
-        "as needed",
-        "placeholder",
+        (r"\bpass\b", True),      # Word boundary to avoid matching "password"
+        ("# add", False),
+        ("# todo", False),
+        ("as needed", False),
+        ("placeholder", False),
     ]
 
     @classmethod
@@ -157,7 +159,13 @@ class QGTestScenarios(BaseGate):
                     fix_hint="Remove skeleton patterns (pass, # TODO, # Add...as needed). Provide concrete Given/When/Then steps."
                 )
 
-        return cls.pass_response()
+        # All valid - save state and return pass
+        state_manager = cls._get_state_manager()
+        state_manager.save(step=4, data={"test_scenarios": test_scenarios})
+
+        response = cls.pass_response()
+        response["test_scenarios"] = test_scenarios
+        return response
 
     @classmethod
     def _validate_scenario_fields(cls, scenario: Dict[str, Any], index: int) -> str:
@@ -186,27 +194,38 @@ class QGTestScenarios(BaseGate):
         return ""
 
     @classmethod
+    def _matches_skeleton_pattern(cls, text: str, pattern: str, is_regex: bool) -> bool:
+        """Check if text matches a skeleton pattern."""
+        if is_regex:
+            return bool(re.search(pattern, text))
+        else:
+            return pattern in text
+
+    @classmethod
     def _check_skeleton_in_scenario(cls, scenario: Dict[str, Any], index: int) -> str:
         """Check for skeleton code patterns in scenario fields."""
         # Check 'given'
         given = scenario.get("given", "").lower()
-        for pattern in cls.SKELETON_PATTERNS:
-            if pattern in given:
-                return f"Scenario {index} 'given' contains skeleton pattern: '{pattern}'"
+        for pattern, is_regex in cls.SKELETON_PATTERNS:
+            if cls._matches_skeleton_pattern(given, pattern, is_regex):
+                display_pattern = pattern if not is_regex else pattern.replace(r"\b", "")
+                return f"Scenario {index} 'given' contains skeleton pattern: '{display_pattern}'"
 
         # Check 'when' list
         for action in scenario.get("when", []):
             action_lower = str(action).lower()
-            for pattern in cls.SKELETON_PATTERNS:
-                if pattern in action_lower:
-                    return f"Scenario {index} 'when' contains skeleton pattern: '{pattern}'"
+            for pattern, is_regex in cls.SKELETON_PATTERNS:
+                if cls._matches_skeleton_pattern(action_lower, pattern, is_regex):
+                    display_pattern = pattern if not is_regex else pattern.replace(r"\b", "")
+                    return f"Scenario {index} 'when' contains skeleton pattern: '{display_pattern}'"
 
         # Check 'then' list
         for assertion in scenario.get("then", []):
             assertion_lower = str(assertion).lower()
-            for pattern in cls.SKELETON_PATTERNS:
-                if pattern in assertion_lower:
-                    return f"Scenario {index} 'then' contains skeleton pattern: '{pattern}'"
+            for pattern, is_regex in cls.SKELETON_PATTERNS:
+                if cls._matches_skeleton_pattern(assertion_lower, pattern, is_regex):
+                    display_pattern = pattern if not is_regex else pattern.replace(r"\b", "")
+                    return f"Scenario {index} 'then' contains skeleton pattern: '{display_pattern}'"
 
         return ""
 

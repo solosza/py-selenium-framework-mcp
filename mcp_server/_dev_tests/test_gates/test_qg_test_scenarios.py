@@ -804,6 +804,60 @@ class TestPostSkeletonInWhenThen:
         assert "then" in result["error"].lower(), "Error should mention then"
 
 
+class TestDEF030PasswordFalsePositive:
+    """DEF-030: Ensure 'password' doesn't trigger false positive for 'pass' skeleton pattern."""
+
+    @pytest.mark.unit
+    @pytest.mark.gates
+    @pytest.mark.qg_test_scenarios
+    def test_password_in_when_does_not_trigger_skeleton(self):
+        """DEF-030: 'password' in when clause should not match 'pass' skeleton pattern."""
+        # Arrange
+        input_data = {
+            "mode": "POST",
+            "test_scenarios": [
+                {
+                    "name": "test_user_registration",
+                    "given": "I am on the registration page",
+                    "when": ["I enter my password", "I confirm my password", "I click register"],
+                    "then": ["I should see my account page"]
+                }
+            ]
+        }
+
+        # Act
+        result = QGTestScenarios.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", f"Should pass - 'password' should not match 'pass' skeleton. Error: {result.get('error', '')}"
+
+    @pytest.mark.unit
+    @pytest.mark.gates
+    @pytest.mark.qg_test_scenarios
+    def test_standalone_pass_still_detected(self):
+        """DEF-030: Standalone 'pass' should still be detected as skeleton."""
+        # Arrange
+        input_data = {
+            "mode": "POST",
+            "test_scenarios": [
+                {
+                    "name": "test_skeleton",
+                    "given": "Precondition",
+                    "when": ["pass"],  # Standalone 'pass' should fail
+                    "then": ["Assertion"]
+                }
+            ]
+        }
+
+        # Act
+        result = QGTestScenarios.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Standalone 'pass' should still be detected"
+        assert "skeleton" in result["error"].lower() or "pass" in result["error"].lower(), \
+            "Error should mention skeleton/pass pattern"
+
+
 class TestValidateMethodRouting:
     """P1: Tests the main validate() method routing."""
 

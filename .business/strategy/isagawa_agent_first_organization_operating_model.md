@@ -1,8 +1,10 @@
 # Isagawa Agent-First Organization & Operating Model
 
-**Purpose:** Define a solopreneur, agent-native org structure that allows the founder to orchestrate execution engines across infinite verticals while remaining hands-off in day-to-day operations.
+**Purpose:** Define a solopreneur, agent-native org structure that allows the founder to orchestrate infinite packs on a single platform while remaining hands-off in day-to-day operations.
 
-This is **not a traditional company org chart**. This is an **operating system** for building, enforcing, and scaling execution engines.
+This is **not a traditional company org chart**. This is an **operating system** for building, enforcing, and scaling packs.
+
+> **Core Invariant:** One platform, infinite packs, zero headcount.
 
 ---
 
@@ -12,8 +14,9 @@ This is **not a traditional company org chart**. This is an **operating system**
 - **Founder as orchestrator, not operator**
 - **Enforcement > suggestions**
 - **Architecture and moat are non-delegable**
-- **Verticals scale independently**
+- **Packs scale independently** (never new engines)
 - **No single agent (or human) sees the whole system**
+- **No pack or config can weaken enforcement**
 
 ---
 
@@ -26,7 +29,7 @@ This is **not a traditional company org chart**. This is an **operating system**
         ------------------------------------------------
         |                      |                      |
    CORE GOVERNANCE        PRODUCT FACTORY        BUSINESS FACTORY
-   (Never scales)         (Scales linearly)      (Scales asymmetrically)
+   (Never scales)         (Scales by pack)       (Scales asymmetrically)
 ```
 
 ---
@@ -71,12 +74,17 @@ CORE GOVERNANCE
 **Responsibilities:**
 - Enforce Hybrid Skills + MCP Validation architecture
 - Enforce 4-Layer Architecture (tech domains)
+- **Protect Core Platform boundary** (platform logic never leaks into packs)
+- **Protect Pack runtime boundary** (packs never modify platform behavior)
 - Block shortcuts, exceptions, or convenience-driven changes
-- Review all new MCP tools and engine proposals
+- Review all new MCP tools and pack proposals
 
 **Authority:** Can block releases.
 
-> This agent answers: “Does this violate the thesis?”
+**Invariant enforced:**
+> Packs run ON the platform. Packs never modify the platform.
+
+> This agent answers: "Does this violate the thesis?"
 
 ---
 
@@ -88,7 +96,13 @@ CORE GOVERNANCE
 - Maintain Design Decisions (DDs)
 - Own Quality Gates and validation rules
 - Decide what is enforceable vs. what requires escalation
-- Audit verticals for enforcement drift
+- Audit packs for enforcement drift
+- **Own gate invariants** (gates block, never advise)
+- **Own config schema constraints** (what customers can/cannot tune)
+- **Enforce "no weakening" rule** across all packs and variants
+
+**Invariant enforced:**
+> No pack, variant, or config can remove a gate. They can only add stricter ones.
 
 **This agent protects the moat.**
 
@@ -101,14 +115,21 @@ CORE GOVERNANCE
 **Responsibilities:**
 - Ensure every product is an execution engine, not a tool
 - Enforce category language and naming conventions
-- Guard against “AI assistant” framing
-- Maintain thesis alignment across all verticals
+- Guard against "AI assistant" framing
+- Maintain thesis alignment across all packs
+- **Enforce "platform + packs" framing** (never "custom engine per customer")
+- **Block "one-off" or "bespoke" product language**
+
+**Invariant enforced:**
+> Isagawa sells platform licenses + standardized packs. Never custom engines.
 
 ---
 
-## 3. Product Factory (Scales by Vertical)
+## 3. Product Factory (Scales by Pack)
 
-This is the engine that creates **new execution engines**.
+This is the factory that creates **new packs on the single platform**.
+
+> Remember: New vertical = new pack(s). Never a new engine.
 
 ```
 PRODUCT FACTORY
@@ -117,6 +138,7 @@ PRODUCT FACTORY
 ├── Skill Authoring Agent
 ├── Validation Toolsmith Agent
 ├── Adversarial Breaker Agent
+├── Pack Curator Agent          ← NEW: lifecycle, variants, versioning
 └── Release Packaging Agent
 ```
 
@@ -196,14 +218,43 @@ PRODUCT FACTORY
 
 ---
 
-### 3.6 Release Packaging Agent
+### 3.6 Pack Curator Agent
 
-**Purpose:** Ship without friction.
+**Purpose:** Own pack lifecycle, variants, and versioning.
 
 **Responsibilities:**
-- Package `pip install isagawa-[domain]`
-- Bundle Skills
-- Manage versioning and changelogs
+- Manage pack versioning and compatibility
+- Define variant policy (what variants are allowed)
+- Define config schema (what customers can tune)
+- Ensure variant packs inherit base enforcement
+- Coordinate pack dependencies
+
+**Outputs:**
+- Pack version manifest
+- Variant policy document
+- Config schema with constraints
+- Pack compatibility matrix
+
+**Constraint:**
+> All variants must pass through Enforcement Authority before release.
+
+---
+
+### 3.7 Release Packaging Agent
+
+**Purpose:** Ship packs without friction.
+
+**Outputs:**
+- Shippable pack (`pip install isagawa-[pack-name]`)
+- Variant packs (if any)
+- Config schema + policy mapping
+- Pack version notes
+- Skills bundle
+
+**Responsibilities:**
+- Package for distribution
+- Validate: no gates removed in pack or variants
+- Manage changelogs
 
 ---
 
@@ -291,15 +342,27 @@ Humans are contractors to agents — not collaborators to the founder.
 
 - This structure cannot be copied wholesale
 - The moat lives in enforcement, not code
-- Scaling = adding agents, not people
+- Scaling = adding packs, not engines or people
 - You remain hands-off by design
+- One platform, infinite packs, zero headcount
+
+---
+
+## Related Documents
+
+| Document | Purpose |
+|----------|---------|
+| `Isagawa_Platform_Pack_Architecture.md` | Platform vs Pack structure, customization policy |
+| `isagawa_operating_system.md` | Full operating system with implementation guide |
+| `Isagawa Domain Expansion Model.md` | Pack Contributor SME partnerships |
 
 ---
 
 **Next possible extensions:**
 - Agent interface contracts
-- Domain ingestion pipeline spec
+- Pack ingestion pipeline spec
 - Internal agent communication protocol
+- Pack compatibility framework
 
 *End of document.*
 

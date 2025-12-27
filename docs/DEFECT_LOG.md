@@ -23,6 +23,7 @@
 |--------|-------------|
 | **OPEN** | Defect identified, not yet addressed |
 | **IN_PROGRESS** | Currently being fixed |
+| **READY_TO_TEST** | Fix implemented, awaiting E2E verification |
 | **RESOLVED** | Fix applied and verified |
 | **WONT_FIX** | Intentionally not fixing (with justification) |
 
@@ -877,13 +878,20 @@ discover_elements({
 
 **Fix Options:**
 
-| Option | Description |
-|--------|-------------|
-| **Quality gate MCP tools** | Create validation tools that enforce checks before each step proceeds |
-| **SDK orchestration** | Code enforces step order and validations programmatically |
-| **Pre-tool checkpoint in skill** | Add explicit "STOP: Is this static or dynamic?" before Tool 2 |
+| Option | Description | Effort |
+|--------|-------------|--------|
+| **A. Expose driver_session in MCP interface** | Add `driver_session` parameter to Tool 2 MCP schema so AI can pass prepared Playwright session | Medium |
+| **B. AI constructs elements from observation** | AI uses Playwright snapshot to build elements array, passes to Tool 3. This is valid AI behavior - AI adapts when tools fall short. | None (workaround) |
+| **C. Quality gate MCP tools** | Create validation tools that enforce checks before each step proceeds | High |
+| **D. Tool 2 internal page prep** | Tool 2 accepts `prep_actions` parameter (list of interactions to perform before discovery) | Medium |
 
-**Recommended Fix:** Quality gate MCP tools - enforce DD compliance at each step transition.
+**Recommended Permanent Fix:** Option A - Expose `driver_session` in MCP interface.
+
+**Recommended Workaround:** Option B - AI constructs elements from Playwright observation. This is acceptable because:
+- AI observed the dynamic form via Playwright
+- AI can extract element info from snapshot
+- AI passes constructed elements to Tool 3
+- No human intervention required
 
 **Verified:** TBD - requires E2E rerun with enforcement in place
 **Resolved Date:** TBD
@@ -949,7 +957,7 @@ DD-19 is now documented in:
 
 ### [DEF-B06] AI did not format user story in explicit BDD before Tool 1
 **Severity:** MEDIUM
-**Status:** OPEN
+**Status:** READY_TO_TEST
 **Run ID:** 2025-12-17-R1
 **Caught By:** Test 1 Registration (Step 3)
 **Code Version:** feature/2.0-sr-qa-engineer-agent
@@ -1009,14 +1017,19 @@ When calling Tool 1 (generate_tests_from_user_story):
 - NEVER use bullet-point acceptance criteria format
 ```
 
-**Verified:** TBD
+**Mitigation (2025-12-26):**
+- Step reference `step-03.md` and `step-04.md` guide AI on proper BDD formatting
+- `qg_ai_processing.py` validates bdd_scenarios have proper structure
+- `qg_test_scenarios.py` validates Tool 1 output has Given/When/Then fields
+
+**Verified:** TBD - requires E2E workflow run
 **Resolved Date:** TBD
 
 ---
 
 ### [DEF-B07] Tool 6 ignores scenario parameter and generates generic template
 **Severity:** HIGH
-**Status:** OPEN
+**Status:** READY_TO_TEST
 **Run ID:** 2025-12-17-R2
 **Caught By:** Test 1 Registration (Step 8)
 **Code Version:** feature/2.0-sr-qa-engineer-agent
@@ -1052,14 +1065,19 @@ Tool 6 should:
 **Workaround:**
 Manually write the test file.
 
-**Verified:** TBD
+**Mitigation (2025-12-26):**
+- `qg_test_runner.py` skeleton detection catches generic/placeholder test code
+- Step reference `step-09.md` Section J provides correct test code patterns
+- Self-heal validation protocol requires AI to POST-VALIDATE generated test code
+
+**Verified:** TBD - requires E2E workflow run
 **Resolved Date:** TBD
 
 ---
 
 ### [DEF-B08] AI passed wrong element format to Tool 3 (not Tool 2 output format)
 **Severity:** HIGH
-**Status:** OPEN
+**Status:** READY_TO_TEST
 **Run ID:** 2025-12-17-R3
 **Caught By:** Test 2 Login + Cart (Step 5)
 **Code Version:** feature/2.0-sr-qa-engineer-agent
@@ -1131,14 +1149,19 @@ Tool Chain Data Contracts:
 - Skill documents exact contract for each tool transition
 ```
 
-**Verified:** TBD
+**Mitigation Implemented (2025-12-26):**
+- Self-heal validation protocol requires POST-VALIDATE after AI generates/constructs data
+- Pattern templates in step references show correct element formats
+- Quality gates detect missing required fields and incorrect formats
+
+**Verified:** TBD - requires E2E workflow run
 **Resolved Date:** TBD
 
 ---
 
 ### [DEF-B09] Tool 4 generates skeleton Task code when POM metadata not passed
 **Severity:** HIGH
-**Status:** OPEN
+**Status:** READY_TO_TEST
 **Run ID:** 2025-12-17-R3
 **Caught By:** Test 2 Login + Cart (Step 6)
 **Code Version:** feature/2.0-sr-qa-engineer-agent
@@ -1196,14 +1219,19 @@ Tool 3 → Tool 4 Data Contract:
 - AI MUST: task_input["pom_metadata"] = tool_3_result["metadata"]
 ```
 
-**Verified:** TBD
+**Mitigation Implemented (2025-12-26):**
+- `qg_task.py` POST-validate detects skeleton code (pass statements, TODO comments)
+- Self-heal validation protocol requires POST-VALIDATE after AI generates code
+- Pattern template in `step-07.md` Section J shows correct Task pattern with POM composition
+
+**Verified:** TBD - requires E2E workflow run
 **Resolved Date:** TBD
 
 ---
 
 ### [DEF-B10] AI manual Task code included locators (architecture violation)
 **Severity:** CRITICAL
-**Status:** OPEN
+**Status:** READY_TO_TEST
 **Run ID:** 2025-12-17-R3
 **Caught By:** Test 2 Login + Cart (Step 6 manual fix attempt)
 **Code Version:** feature/2.0-sr-qa-engineer-agent
@@ -1262,14 +1290,20 @@ BEFORE saving any Task code, verify:
 If ANY locator pattern found → ARCHITECTURE VIOLATION → STOP
 ```
 
-**Verified:** TBD
+**Mitigation Implemented (2025-12-26):**
+- Enhanced `qg_task.py` with layer violation detection (By.* imports, locator tuples)
+- Added pattern template in `step-07.md` Section J showing correct Task patterns
+- Self-heal validation protocol in SKILL.md requires POST-VALIDATE after AI generates code
+- Smart escalation protocol after 3 failed attempts
+
+**Verified:** TBD - requires E2E workflow run
 **Resolved Date:** TBD
 
 ---
 
 ### [DEF-025] [TOOL-FIX] Task generator produces skeleton code fallbacks
 **Severity:** MEDIUM
-**Status:** OPEN
+**Status:** READY_TO_TEST
 **Layer:** MCP Tool
 **File:** `mcp_server/utils/generators/task_generator.py`
 **Line(s):** 137, 261-279, 398-403
@@ -1295,10 +1329,597 @@ These violate DD-25 and will be caught by qg_task POST validation.
 2. Align parameter naming between FRAMEWORK.md and tool code
 3. Ensure generator never outputs skeleton code
 
-**Gate Mitigation:**
-qg_task POST validation will catch these patterns. See IC-07-01, IC-07-02 in step-07.md.
+**Gate Mitigation (2025-12-26):**
+- `qg_task.py` POST validation catches skeleton patterns (pass, TODO, NotImplementedError)
+- Step reference `step-07.md` Section J provides correct Task code patterns
+- Self-heal validation protocol requires AI to POST-VALIDATE and fix skeleton code
+- See IC-07-01, IC-07-02 in step-07.md
+
+**Verified:** TBD - requires E2E workflow run
+**Resolved Date:** TBD
+
+---
+
+### [DEF-026] Tool 1 output vs qg_test_scenarios gate data contract mismatch
+**Severity:** HIGH
+**Status:** RESOLVED
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 4 POST-VALIDATE (Registration Test)
+**Code Version:** main
+**Layer:** MCP Tool / Quality Gate
+**File:** `mcp_server/tools/tool_01_generate_tests_from_user_story.py`
+
+**Error Message:**
+```
+{'status': 'fail', 'error': "Scenario 0 missing required field: 'name'", 'fix_hint': 'Ensure each scenario has: name (str), given (str), when (list), then (list).'}
+```
+
+**Description:**
+Tool 1 (`generate_tests_from_user_story`) outputs scenarios with field names that don't match what `qg_test_scenarios` gate expects for POST validation.
+
+**Data Contract Mismatch (before fix):**
+
+| Field | Gate Expects | Tool 1 Output (OLD) |
+|-------|--------------|---------------------|
+| Test name | `name` (str) | `title` (str) |
+| When clause | `when` (list) | `when` (str with "AND") |
+| Then clause | `then` (list) | `then` (str with "AND") |
+
+**Root Cause:**
+Tool 1 and qg_test_scenarios were developed independently without a shared data contract.
+
+**Fix Applied (Option C - Update Tool 1):**
+Updated `tool_01_generate_tests_from_user_story.py` to output gate-compatible format:
+1. Changed `title` → `name`
+2. Convert `when` string → list (split on " AND ")
+3. Convert `then` string → list (split on " AND ")
+
+```python
+test_scenario = {
+    "name": test_name,  # Gate expects "name" not "title"
+    "when": when_list,  # Gate expects list, not string
+    "then": then_list,  # Gate expects list, not string
+    ...
+}
+```
+
+**Verified:** 32 tests pass
+**Resolved Date:** 2025-12-26
+
+---
+
+### [DEF-027] AI prompts user for fix approach on gate failures (should auto-fix)
+**Severity:** MEDIUM
+**Status:** OPEN
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 4 POST-VALIDATE (Registration Test)
+**Code Version:** main
+**Layer:** AI Orchestration / Skill Design
+**File:** `.claude/skills/qa-guidance-layer/` (workflow behavior)
+
+**Description:**
+When a gate validation fails during the 10-step workflow, AI follows the testing skill's failure-handling protocol (STOP → REPORT → FIX OPTIONS → DISCUSS). However, the testing skill is designed for **test execution failures**, not **tool chain gate failures**.
+
+For gate failures within the workflow:
+- AI should auto-fix (transform data, retry) without prompting user
+- Only escalate to user after 3 failed attempts (per step skill instructions)
+
+**Current Behavior (Wrong):**
+```
+POST-VALIDATE: FAIL
+...
+FIX OPTIONS:
+| A | AI transforms output | ...
+| B | Fix gate | ...
+Which fix approach?   ← User shouldn't see this
+```
+
+**Expected Behavior:**
+```
+POST-VALIDATE: FAIL (attempt 1/3)
+Retrying with transformed data...
+POST-VALIDATE: PASS
+```
+
+**Root Cause:**
+AI conflated two different failure protocols:
+1. **Testing skill** - For test execution failures (user decides)
+2. **QA Guidance Layer** - For gate failures (AI retries up to 3x, then user decides)
+
+**Fix Required:**
+Clarify in qa-guidance-layer skill that gate failures follow retry protocol, not testing skill's discuss-first protocol.
 
 **Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-028] Internal DD references visible to user in prompts
+**Severity:** LOW
+**Status:** OPEN
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 1 (Registration Test)
+**Code Version:** main
+**Layer:** AI Orchestration / UX
+**File:** N/A (AI prompt formatting)
+
+**Description:**
+AI shows internal Design Decision (DD) references to user:
+```
+Question 1 of 2 (DD-24 - Credential Strategy)
+```
+
+Users should not see DD-XX references - these are internal documentation codes.
+
+**Expected:**
+```
+Question 1 of 2: Credential Strategy
+```
+
+**Fix Required:**
+Update AI prompt templates in qa-guidance-layer step references to omit DD-XX codes when presenting to user.
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-031] Tool 1 does not save Step 4 state after successful execution
+**Severity:** HIGH
+**Status:** RESOLVED
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 5 PRE-VALIDATE (Registration Test)
+**Code Version:** main
+**Layer:** MCP Tool / State Management
+**File:** `mcp_server/tools/gates/qg_test_scenarios.py`
+
+**Error Message:**
+```
+{'status': 'fail', 'error': 'Step 4 is not complete. Cannot proceed to Step 5.', ...}
+```
+
+**Description:**
+After Tool 1 (generate_tests_from_user_story) executes successfully and POST-VALIDATE passes, the state for Step 4 is not saved. State file shows Steps 1-3 complete, but Step 4 missing.
+
+**Expected:** Tool 1 should save `test_scenarios` to state on success.
+**Actual:** State file has no `step_4` entry.
+
+**Root Cause:**
+`validate_post()` in qg_test_scenarios returned pass_response() without saving state, unlike Steps 1-3 gates which save state on PASS.
+
+**Fix Applied:**
+Updated `validate_post()` in `qg_test_scenarios.py` to save state on PASS:
+```python
+# All valid - save state and return pass
+state_manager = cls._get_state_manager()
+state_manager.save(step=4, data={"test_scenarios": test_scenarios})
+
+response = cls.pass_response()
+response["test_scenarios"] = test_scenarios
+return response
+```
+
+**Verified:** 32 tests pass
+**Resolved Date:** 2025-12-26
+
+---
+
+### [DEF-030] Skeleton pattern check false positive on "password"
+**Severity:** HIGH
+**Status:** RESOLVED
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 4 POST-VALIDATE (Registration Test)
+**Code Version:** main
+**Layer:** Quality Gate
+**File:** `mcp_server/tools/gates/qg_test_scenarios.py`
+**Line(s):** 198-202
+
+**Error Message:**
+```
+{'status': 'fail', 'error': "Scenario 0 'when' contains skeleton pattern: 'pass'", ...}
+```
+
+**Description:**
+Skeleton pattern check uses substring matching (`if pattern in action_lower`), causing false positive when BDD step contains "password" (which contains "pass").
+
+**Root Cause:**
+Line 201: `if pattern in action_lower:` matches "pass" inside "password".
+
+**Fix Applied:**
+Changed SKELETON_PATTERNS to use tuple format with (pattern, is_regex) flag:
+```python
+SKELETON_PATTERNS = [
+    (r"\bpass\b", True),      # Word boundary to avoid matching "password"
+    ("# add", False),
+    ("# todo", False),
+    ("as needed", False),
+    ("placeholder", False),
+]
+```
+Added `_matches_skeleton_pattern()` helper to use regex for word boundary patterns.
+
+**Verified:** 32 tests pass including 2 new DEF-030 regression tests
+**Resolved Date:** 2025-12-26
+
+---
+
+### [DEF-029] Internal gate status shown to user
+**Severity:** LOW
+**Status:** OPEN
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 3 (Registration Test)
+**Code Version:** main
+**Layer:** AI Orchestration / UX
+**File:** N/A (AI output formatting)
+
+**Description:**
+AI shows internal gate status to user:
+```
+Step 3 Complete - Gate: PASS
+```
+
+Users should see simplified confirmation, not implementation details.
+
+**Expected:**
+```
+Step 3 Complete
+```
+Or just proceed silently to next step.
+
+**Fix Required:**
+Update AI response format to hide gate implementation details from user output.
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-032] [ENHANCEMENT] No automatic context window management / auto-compact
+**Severity:** LOW
+**Status:** OPEN
+**Run ID:** 2025-12-22-R1
+**Caught By:** User observation during long workflow
+**Code Version:** main
+**Layer:** AI / Claude Code Infrastructure
+**File:** N/A (Claude Code CLI capability)
+
+**Description:**
+During long-running workflows (like the 10-step QA workflow), context window fills up and user must manually invoke `/compact`. There's no automatic mechanism to:
+1. Monitor context window token usage
+2. Auto-compact before context runs out
+3. Continue workflow seamlessly after compaction
+
+**Impact:**
+- Workflow interruption requiring user action
+- Risk of losing context if not compacted in time
+- Poor UX for autonomous multi-step processes
+
+**Current Workaround:**
+User manually runs `/compact` when prompted or when they notice slowdown.
+
+**Potential Solutions:**
+
+| Option | Approach | Feasibility |
+|--------|----------|-------------|
+| A | Claude Code CLI feature: auto-compact at X% token usage | Requires Anthropic feature request |
+| B | Skill-level checkpoint: "Is context getting full? Compact now." | Crude - no token visibility in prompts |
+| C | External wrapper script monitoring session | Complex, outside current tooling |
+| D | Request Anthropic add `--auto-compact` CLI flag | Feature request to Claude Code team |
+
+**Recommendation:**
+File feature request with Claude Code GitHub: https://github.com/anthropics/claude-code/issues
+
+Request: Add `--auto-compact-threshold` flag that auto-compacts when context reaches N% capacity, preserving state files before compaction.
+
+**Verified:** N/A (enhancement)
+**Resolved Date:** TBD
+
+---
+
+### [DEF-035] CRITICAL: Quality gate passed skeleton code - validation gap
+**Severity:** CRITICAL
+**Status:** READY_TO_TEST
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 7 (Registration Test)
+**Code Version:** main
+**Layer:** Quality Gate
+**File:** `mcp_server/tools/gates/qg_page_object.py`
+
+**Description:**
+Tool 3 generated POM with skeleton code (`is_page_loaded()` returning `True` with `TODO` comment). The POST-VALIDATE gate (qg_page_object) should have caught this but passed.
+
+Next step (Tool 4) then received incomplete metadata and produced skeleton Task.
+
+**Impact:**
+- Skeleton code propagates through tool chain
+- Quality gates not enforcing DD-25 (skeleton detection)
+- Downstream tools fail due to incomplete input
+
+**Root Cause:**
+Gate's skeleton detection likely checks for `pass` keyword but not:
+- `TODO` comments in method bodies
+- Methods that just `return True` without real logic
+- Missing methods for certain element types (radios)
+
+**Fix Required:**
+Enhance qg_page_object POST-VALIDATE to detect:
+1. `TODO` in method bodies
+2. Trivial `return True` without element checks
+3. Missing action methods for all locator types
+
+**Mitigation Implemented (2025-12-26):**
+- Enhanced `qg_page_object.py` with `_detect_trivial_state_methods()` - catches `return True` without element checks
+- Enhanced `qg_page_object.py` with layer violation detection (Task/Role imports in POM)
+- Added pattern template in `step-06.md` Section J showing correct POM patterns
+- Self-heal validation protocol requires POST-VALIDATE after AI generates code
+
+**Verified:** TBD - requires E2E workflow run
+**Resolved Date:** TBD
+
+---
+
+### [DEF-036] AI self-heal code must pass quality gate validation
+**Severity:** HIGH
+**Status:** READY_TO_TEST
+**Run ID:** 2025-12-22-R1
+**Caught By:** User observation (Registration Test)
+**Code Version:** main
+**Layer:** AI Orchestration / Quality Gate
+**File:** N/A (workflow design gap)
+
+**Description:**
+When tools produce skeleton code, AI can self-heal by generating code directly. However:
+1. AI-generated code currently bypasses quality gate
+2. No validation that AI code matches project patterns
+3. Could produce code that doesn't follow established architecture
+
+**Required Flow:**
+```
+Tool output → Quality Gate → FAIL (skeleton)
+    ↓
+AI self-heals (generates code)
+    ↓
+AI output → Quality Gate → must PASS
+    ↓
+Proceed to next step
+```
+
+**Fix Required:**
+After AI self-heal, pass generated code through same quality gate before proceeding.
+
+**Mitigation Implemented (2025-12-26):**
+- Added "Self-Heal Validation Protocol" to SKILL.md - mandatory POST-VALIDATE after AI generates code
+- Added "Smart Escalation Protocol" - after 3 failed retries, show violation + correct pattern + options
+- Pattern templates embedded in step references (step-06/07/08/09.md Section J)
+- Layer-specific pattern checks in quality gates detect architecture violations
+
+**Verified:** TBD - requires E2E workflow run
+**Resolved Date:** TBD
+
+---
+
+### [DEF-034] Tool 4 skeleton output when workflow_description passed instead of pom_metadata
+**Severity:** MEDIUM
+**Status:** READY_TO_TEST
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 7 (Registration Test)
+**Code Version:** main
+**Layer:** MCP Tool
+**File:** `mcp_server/tools/tool_04_generate_task.py`
+
+**Description:**
+Tool 4 generated skeleton Task with `execute_workflow()` containing `pass`. Output showed:
+- `pom_metadata_used: 0`
+- `task_methods_generated: 0`
+- `composed_pages: []`
+
+**Root Cause:**
+Same as DEF-B09. Tool 4 expects structured `pom_metadata` from Tool 3 output, but received only `workflow_description` text. Without POM method info, tool cannot generate proper Task methods.
+
+**Pattern:** Tool chain data contract (DD-26) not enforced by MCP interface.
+
+**Mitigation Implemented (2025-12-26):**
+- Same as DEF-B09: `qg_task.py` POST-validate detects skeleton code
+- Self-heal validation protocol requires AI to POST-VALIDATE after generating code
+- Pattern template in `step-07.md` Section J shows correct data flow
+
+**Verified:** TBD - requires E2E workflow run
+**Resolved Date:** TBD
+
+---
+
+### [DEF-033] Tool 3 incomplete POM generation (missing radio methods, skeleton state check)
+**Severity:** MEDIUM
+**Status:** RESOLVED
+**Run ID:** 2025-12-22-R1
+**Caught By:** Step 6 POST review (Registration Test)
+**Code Version:** main
+**Layer:** MCP Tool
+**File:** `mcp_server/utils/generators/page_object_generator.py`
+
+**Description:**
+Tool 3 generated POM with gaps:
+1. Radio button locators (GENDER_MR, GENDER_MRS) present but no click methods generated
+2. `is_page_loaded()` contains `TODO` comment and just returns `True` (skeleton)
+3. No test-specific state method (e.g., `is_account_created()`)
+
+**Root Cause:**
+Tool 3's generator didn't have a handler for radio element types.
+
+**Fix Applied:**
+1. Added `RADIO_METHOD_TEMPLATE` for radio button select methods
+2. Added `elem_type == "radios"` handling in `generate_action_methods_block()`
+3. Added radios support in `_build_action_methods_metadata()` for metadata generation
+
+```python
+RADIO_METHOD_TEMPLATE = '''
+    def select_{method_name}(self) -> "{page_name}":
+        """Select {readable_name} radio button."""
+        self.web.click(*self.{locator_name})
+        return self
+'''
+```
+
+**Note:** Issues 2 and 3 (skeleton state methods, expected_states) are mitigated by:
+- qg_page_object.py `_detect_trivial_state_methods()` catches skeleton patterns
+- Self-heal validation protocol requires AI to fix skeleton code
+- Pattern templates in step-06.md Section J guide correct patterns
+
+**Verified:** 39 tests pass
+**Resolved Date:** 2025-12-26
+
+---
+
+### [DEF-039] Skill step-07.md teaches incorrect Task pattern (base_url, navigate_to)
+**Severity:** HIGH
+**Status:** OPEN
+**Run ID:** 2025-12-26-R1
+**Caught By:** Comparison with old framework reference
+**Code Version:** main
+**Layer:** Skill / Documentation
+**File:** `.claude/skills/qa-guidance-layer/references/step-07.md`
+
+**Description:**
+The step-07.md skill teaches a Task pattern that differs from the established old framework pattern:
+
+| Aspect | Old Framework (Correct) | Skill Pattern (Wrong) |
+|--------|------------------------|----------------------|
+| Constructor | `def __init__(self, web_interface):` | `def __init__(self, web: WebInterface, base_url: str):` |
+| Navigation | Via POM methods only | Direct `self.web.navigate_to()` |
+| base_url | NOT in Task | Passed to Task constructor |
+
+**Old Framework Pattern (Verified across 8 task files):**
+```python
+class SomeTask:
+    def __init__(self, web_interface):  # NO base_url
+        self.home_page = HomePage(web_interface)
+        self.some_page = SomePage(web_interface)
+
+    @autologger.automation_logger("Task")
+    def do_something(self):
+        (self.home_page.click_tile("Dashboard"))  # Navigation via POM
+        (self.some_page.enter_data(...))
+```
+
+**Skill Pattern (Incorrect):**
+```python
+class AuthTasks:
+    def __init__(self, web: WebInterface, base_url: str):  # WRONG
+        self.base_url = base_url
+
+    def register_user(self, user_data: dict) -> None:
+        self.web.navigate_to(f"{self.base_url}/...")  # WRONG
+```
+
+**Impact:**
+- Generated Tasks don't match established framework patterns
+- Introduces inconsistency between old and new code
+- Navigation responsibility incorrectly placed in Task layer
+
+**Fix Required:**
+1. Update step-07.md Section J pattern template
+2. Update FRAMEWORK.md Task layer documentation
+3. Remove base_url from Task constructor pattern
+4. Move navigation to POM methods (e.g., `login_page.goto()` or `home_page.navigate_to_auth()`)
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-038] Test data hardcoded instead of using test_users fixture
+**Severity:** MEDIUM
+**Status:** OPEN
+**Run ID:** 2025-12-26-R1
+**Caught By:** Code review during E2E test failure analysis
+**Code Version:** main
+**Layer:** Test / AI Orchestration
+**File:** `tests/auth/test_registration.py`
+**Line(s):** 54-66
+
+**Error (Pattern Violation):**
+```python
+# GENERATED (WRONG):
+user_data = {
+    "email": "testuser_reg@example.com",
+    "password": "TestPass123!",
+    ...
+}
+guest = GuestUser(self.web, self.base_url)
+```
+
+**Expected (Per step-09.md Section J):**
+```python
+# CORRECT - Use fixture:
+def test_guest_can_register_new_account(self, web_interface, config, test_users):
+    user_data = test_users["new_registration"]  # From tests/data/test_users.json
+    guest = GuestUser(web_interface, config["base_url"])
+```
+
+**Rule Violated:**
+- DD-28: Test data organization - should use shared `tests/data/test_users.json`
+- conftest.py provides `test_users` fixture (line 82-98)
+- step-09.md Section J shows correct pattern with fixtures
+
+**Root Cause:**
+AI did not follow step-09.md self-heal pattern template which shows `test_data` parameter in test signature. AI generated inline hardcoded dict instead of using pytest fixture.
+
+**Fix Required:**
+1. Add test user entry to `tests/data/test_users.json`
+2. Update test signature to include `test_users` fixture
+3. Load data from fixture instead of hardcoding
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-037] DD-33 violated: AI assumed locators instead of Playwright discovery
+**Severity:** CRITICAL
+**Status:** OPEN
+**Run ID:** 2025-12-26-R1
+**Caught By:** E2E Registration Test
+**Code Version:** main
+**Layer:** AI Orchestration
+**File:** `framework/pages/auth/registration_page.py`
+
+**Error Message:**
+```
+TimeoutException: Element not found: css selector='#address1' after 20s
+```
+
+**Description:**
+AI generated RegistrationPage POM with assumed locators (`#address1`, `#city`, etc.) instead of using DD-33 Playwright element discovery workflow.
+
+**DD-33 states:**
+> "AI uses Playwright snapshot → extracts elements → builds POM"
+
+**What happened:**
+1. Step 5 (Element Discovery) was bypassed
+2. AI assumed registration form locators existed
+3. POM saved with `#address1` locator that doesn't exist on actual page
+4. Test failed at `enter_address()` - element not found
+
+**Rule Violated:**
+- DD-33: Dynamic element discovery requires Playwright snapshot
+- FRAMEWORK.md Section 8.14: "AI uses Playwright snapshot → extracts → builds"
+- Never assume page structure without discovery
+
+**Root Cause:**
+AI skipped element discovery (Step 5) and proceeded directly to POM generation with assumed locators. The qa-guidance-layer skill mandates Playwright discovery but AI did not follow it.
+
+**Fix Required:**
+1. Navigate to registration page using Playwright
+2. Fill email and click "Create Account" to reveal registration form
+3. Take browser snapshot to discover actual elements
+4. Build POM from discovered elements, not assumptions
+5. Re-run test with correct locators
+
+**Prevention (reinforce existing DD-33):**
+- Step 5 PRE-VALIDATE should fail if no Playwright snapshot taken
+- Gate should require `discovery_method: playwright` before allowing Tool 3
+
+**Verified:** TBD - requires restart from Step 1 with proper discovery
 **Resolved Date:** TBD
 
 ---

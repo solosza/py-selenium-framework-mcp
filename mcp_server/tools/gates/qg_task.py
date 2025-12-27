@@ -227,6 +227,13 @@ class QGTask(BaseGate):
         if metadata_error:
             return metadata_error
 
+        # Save Step 7 state on POST-VALIDATE pass
+        state_manager = cls._get_state_manager()
+        state_manager.save(step=7, data={
+            "task_code": code,
+            "task_metadata": metadata
+        })
+
         return cls.pass_response()
 
     @classmethod

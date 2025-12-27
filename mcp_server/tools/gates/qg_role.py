@@ -76,6 +76,17 @@ class QGRole(BaseGate):
         r'self\.\w+_tasks\.\w+\s*\('
     )
 
+    # POM import patterns - Roles should NOT import POMs directly
+    POM_IMPORT_PATTERNS = [
+        (r'from\s+pages\.', 'POM import in Role'),
+        (r'import\s+pages\.', 'POM import in Role'),
+    ]
+
+    # Direct POM method call pattern - Roles should use Tasks, not POMs
+    POM_CALL_PATTERN = re.compile(
+        r'self\.\w+_page\.\w+\s*\('
+    )
+
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
@@ -196,6 +207,16 @@ class QGRole(BaseGate):
         if locator_error:
             return locator_error
 
+        # Check for POM imports (Roles should use Tasks, not POMs)
+        pom_import_error = cls._detect_pom_imports(code)
+        if pom_import_error:
+            return pom_import_error
+
+        # Check for direct POM method calls (Roles should use Tasks)
+        pom_call_error = cls._detect_pom_calls(code)
+        if pom_call_error:
+            return pom_call_error
+
         # Check for return values
         return_error = cls._detect_return_values(code)
         if return_error:
@@ -231,6 +252,13 @@ class QGRole(BaseGate):
         if metadata_error:
             return metadata_error
 
+        # Save Step 8 state on POST-VALIDATE pass
+        state_manager = cls._get_state_manager()
+        state_manager.save(step=8, data={
+            "role_code": code,
+            "role_metadata": metadata
+        })
+
         return cls.pass_response()
 
     @classmethod
@@ -263,6 +291,41 @@ class QGRole(BaseGate):
                     error=f"Locator detected in Role: {description} (DD-27 violation)",
                     fix_hint="Locators belong in Page Objects, not Roles. Use Task methods which use POM methods."
                 )
+        return None
+
+    @classmethod
+    def _detect_pom_imports(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect POM import patterns in Role code.
+
+        Roles should NOT import POMs directly - they should use Tasks.
+        Tasks are the layer that composes POMs.
+
+        Returns fail_response if POM imports detected, None otherwise.
+        """
+        for pattern, description in cls.POM_IMPORT_PATTERNS:
+            if re.search(pattern, code):
+                return cls.fail_response(
+                    error=f"Layer violation detected: {description} (architecture violation)",
+                    fix_hint="Roles should not import POMs. Roles use Tasks, and Tasks use POMs. Remove POM imports and use Task methods."
+                )
+        return None
+
+    @classmethod
+    def _detect_pom_calls(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect direct POM method calls in Role code.
+
+        Roles should NOT call POM methods directly - they should use Tasks.
+        Pattern: self.xxx_page.method() indicates direct POM usage.
+
+        Returns fail_response if POM calls detected, None otherwise.
+        """
+        if cls.POM_CALL_PATTERN.search(code):
+            return cls.fail_response(
+                error="Direct POM method call detected in Role (architecture violation)",
+                fix_hint="Roles should not call POM methods. Use Task methods instead: self.xxx_tasks.method(), not self.xxx_page.method()."
+            )
         return None
 
     @classmethod
