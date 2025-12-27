@@ -330,6 +330,9 @@ class WebInterface:
         """
         Check if element is displayed on page.
 
+        Waits for element to be VISIBLE (not just present in DOM).
+        This handles AJAX-loaded modals that exist in DOM but are initially hidden.
+
         Args:
             by: Locator strategy
             value: Locator value
@@ -338,8 +341,10 @@ class WebInterface:
         Returns:
             True if element is displayed, False otherwise
         """
+        timeout = timeout or 5
         try:
-            element = self.find_element(by, value, timeout=timeout or 5)
+            wait = WebDriverWait(self.driver, timeout)
+            element = wait.until(EC.visibility_of_element_located((by, value)))
             return element.is_displayed()
         except (TimeoutException, NoSuchElementException):
             return False

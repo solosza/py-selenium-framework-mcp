@@ -1,3 +1,8 @@
+---
+name: testing
+description: Define and enforce testing process. Use WHEN running tests, handling test failures, tracking defects, or discussing test coverage. Triggers on "run tests", "test failed", "defect", "coverage".
+---
+
 # Testing Skill
 
 Define and enforce a consistent testing process. Project-agnostic.

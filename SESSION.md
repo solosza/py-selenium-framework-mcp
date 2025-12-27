@@ -5,6 +5,402 @@
 
 ---
 
+# Session: 2025-12-27 - Add to Cart E2E COMPLETE + Infrastructure Fixes
+
+## Quick Resume
+**Completed:** Add to Cart 10-step workflow PASSED, 3 bugs fixed, dynamic marker registration added
+**Status:** MVP Ready (8.5/10)
+**Next:** Implement tools-off flag for v2 architecture
+**Branch:** feature/v2-skill-gate-architecture
+
+---
+
+## MVP Readiness: 8.5/10
+
+| Dimension | Score | Notes |
+|-----------|-------|-------|
+| Framework Architecture | 9/10 | 4-layer pattern solid |
+| Quality Gates | 8/10 | Gates validate AI-generated code |
+| E2E Reliability | 8/10 | 3 bugs fixed, test passes |
+| Documentation | 8/10 | Skills, FRAMEWORK.md complete |
+| Code Generation | 8/10 | AI generates with skill patterns |
+| Marker Registration | 10/10 | Dynamic, zero maintenance |
+
+**Scope Adjustments:**
+- Tools-off flag planned (MCP tool skeleton issue bypassed)
+- Not demo piece (test coverage requirement removed)
+
+---
+
+## Add to Cart E2E Test (Steps 1-10) - COMPLETE
+
+### Test Configuration
+- **Credential Strategy:** None (guest user)
+- **Test Data Location:** Shared (`tests/data/`)
+- **Product:** Printed Summer Dress, Size L, Blue color, Product ID 5
+
+### Steps Completed
+
+| Step | Status | Notes |
+|------|--------|-------|
+| 1 | ✓ PASS | Pre-flight: credential_strategy=none, test_data_location=shared |
+| 2 | ✓ PASS | User input: persona=guest user, domain=cart |
+| 3 | ✓ PASS | AI processing: BDD scenarios, expected_states |
+| 4 | ✓ PASS | Tool 1: test_scenarios generated |
+| 5 | ✓ PASS | DD-33 Playwright discovery |
+| 6 | ✓ PASS | POM generated (ProductPage) - self-healed |
+| 7 | ✓ PASS | Task generated (CartTasks) - self-healed |
+| 8 | ✓ PASS | Role extended (GuestUser) - self-healed |
+| 9 | ✓ PASS | Test generated (test_add_summer_dress_to_cart.py) |
+| 10 | ✓ PASS | Test executed successfully (10.27s) |
+
+### Test Execution
+```bash
+pytest tests/cart/test_add_summer_dress_to_cart.py -v --html=tests/_reports/report.html
+# Result: 1 passed in 10.27s
+```
+
+---
+
+## Bugs Fixed This Session
+
+### Bug 1: Wrong WebInterface Method Name
+| Field | Value |
+|-------|-------|
+| **Error** | `AttributeError: 'WebInterface' object has no attribute 'select_by_visible_text'` |
+| **Location** | `framework/pages/catalog/product_page.py:45` |
+| **Fix** | Changed to `select_dropdown_by_visible_text` |
+
+### Bug 2: AJAX Timing (Add to Cart)
+| Field | Value |
+|-------|-------|
+| **Error** | Add to Cart clicked before product in stock |
+| **Cause** | Size/Color selection triggers AJAX, button not ready |
+| **Fix** | Added `wait_for_in_stock()` method in POM, called from Task |
+
+### Bug 3: WebInterface `is_element_displayed` (CRITICAL)
+| Field | Value |
+|-------|-------|
+| **Error** | `is_cart_modal_displayed()` returned False for visible modal |
+| **Cause** | Used `presence_of_element_located` - finds hidden DOM elements |
+| **Fix** | Changed to `visibility_of_element_located` - waits for actual visibility |
+| **Impact** | Any test using `is_element_displayed` for AJAX content was affected |
+
+**See "WebInterface Bug Elaboration" section below for details.**
+
+---
+
+## Dynamic Pytest Marker Registration
+
+Added to `tests/conftest.py`:
+- `_register_dynamic_markers()` function
+- Scans test files with AST parser
+- Extracts `@pytest.mark.X` decorators
+- Auto-registers at pytest startup
+
+**Result:** No more `PytestUnknownMarkWarning` for any marker.
+
+---
+
+## Files Created/Modified
+
+| File | Action | Purpose |
+|------|--------|---------|
+| `framework/pages/catalog/product_page.py` | Created | POM for product detail + cart modal |
+| `framework/tasks/cart/cart_tasks.py` | Created | Task for add to cart workflow |
+| `framework/roles/guest_user.py` | Extended | Added `add_product_to_cart()` method |
+| `tests/cart/test_add_summer_dress_to_cart.py` | Created | Test file |
+| `framework/interfaces/web_interface.py` | Fixed | `is_element_displayed` visibility fix |
+| `tests/conftest.py` | Updated | Dynamic marker registration |
+
+---
+
+## WebInterface Bug Elaboration
+
+### The Problem
+
+`is_element_displayed()` returned `False` for a modal that was visibly displayed on screen.
+
+### Root Cause Analysis
+
+**Original implementation:**
+```python
+def is_element_displayed(self, by: By, value: str, timeout: Optional[int] = None) -> bool:
+    try:
+        element = self.find_element(by, value, timeout=timeout or 5)  # Uses presence_of_element_located
+        return element.is_displayed()
+    except (TimeoutException, NoSuchElementException):
+        return False
+```
+
+**The bug:**
+1. `find_element()` uses `EC.presence_of_element_located`
+2. This finds elements that exist in DOM - even if hidden (`display: none`)
+3. The cart modal `#layer_cart` exists in DOM from page load (hidden)
+4. When we click Add to Cart, modal animates in via JavaScript
+5. `find_element()` finds the hidden element IMMEDIATELY (no wait)
+6. `is_displayed()` returns `False` because animation hasn't completed
+
+### Why This Affects AJAX Content
+
+Many modern sites have modal/overlay elements pre-loaded in DOM but hidden:
+```html
+<div id="layer_cart" style="display: none;">...</div>  <!-- Always in DOM -->
+```
+
+JavaScript then shows them:
+```javascript
+$('#layer_cart').show();  // Changes display: block
+```
+
+Using `presence_of_element_located` finds the hidden element instantly, defeating the timeout.
+
+### The Fix
+
+```python
+def is_element_displayed(self, by: By, value: str, timeout: Optional[int] = None) -> bool:
+    timeout = timeout or 5
+    try:
+        wait = WebDriverWait(self.driver, timeout)
+        element = wait.until(EC.visibility_of_element_located((by, value)))  # Waits for VISIBLE
+        return element.is_displayed()
+    except (TimeoutException, NoSuchElementException):
+        return False
+```
+
+**Key change:** `visibility_of_element_located` waits until element is both:
+1. Present in DOM
+2. Visible (not `display: none`, not `visibility: hidden`, has width/height > 0)
+
+### Impact Assessment
+
+| Method | Before Fix | After Fix |
+|--------|------------|-----------|
+| Hidden modal check | Returns False immediately | Waits up to timeout for visibility |
+| AJAX-loaded content | May miss content | Properly waits |
+| Pre-existing visible elements | Works | Works (no change) |
+
+### Recommendation
+
+Consider auditing other WebInterface methods that use `presence_of_element_located` where `visibility_of_element_located` might be more appropriate.
+
+---
+
+## Skill Registration Issue FIXED
+
+### Problem Discovered
+Only 3 of 9 skills appeared in Skill tool's available_skills list:
+- dialogue-engine ✓
+- execute-from-step1 ✓
+- rag-learning ✓
+- testing ✗ MISSING
+- design-decisions ✗ MISSING
+- documentation ✗ MISSING
+- qa-guidance-layer ✗ MISSING
+- design-execution-engine ✗ MISSING
+- create-vertical-validation-agents ✗ MISSING
+
+### Root Cause
+Missing YAML frontmatter. Skills require:
+```yaml
+---
+name: skill-name
+description: What it does and when to use it
+---
+```
+
+### Fix Applied
+Added YAML frontmatter to all 6 missing skills:
+
+| Skill | Frontmatter Added |
+|-------|-------------------|
+| testing | ✓ |
+| design-decisions | ✓ |
+| documentation | ✓ |
+| qa-guidance-layer | ✓ |
+| design-execution-engine | ✓ |
+| create-vertical-validation-agents | ✓ |
+
+### Verification Required
+**MUST restart Claude Code** - skill discovery runs at startup only.
+
+---
+
+## Files Created (Add to Cart)
+
+| File | Purpose |
+|------|---------|
+| `framework/pages/catalog/product_detail_page.py` | POM for product detail + cart modal |
+| `framework/tasks/cart/cart_tasks.py` | Task for add to cart workflow |
+| `framework/roles/guest_shopper.py` | Role for guest shopping |
+| `tests/cart/test_add_to_cart.py` | Test file |
+| `tests/cart/__init__.py` | Package init |
+| `framework/tasks/cart/__init__.py` | Package init |
+
+---
+
+## Files Modified (Skill Registration)
+
+| File | Change |
+|------|--------|
+| `.claude/skills/testing/SKILL.md` | Added YAML frontmatter |
+| `.claude/skills/design-decisions/SKILL.md` | Added YAML frontmatter |
+| `.claude/skills/documentation/SKILL.md` | Added YAML frontmatter |
+| `.claude/skills/qa-guidance-layer/SKILL.md` | Added YAML frontmatter |
+| `.claude/skills/design-execution-engine/SKILL.md` | Added YAML frontmatter |
+| `.claude/skills/create-vertical-validation-agents/SKILL.md` | Added YAML frontmatter |
+
+---
+
+## Resume Point
+
+1. **Exit and restart Claude Code** (skills reload at startup)
+2. **Verify all 9 skills available** in Skill tool
+3. **Debug cart test failure:**
+   - Check selector `#layer_cart` is correct
+   - Add explicit wait or increase timeout
+   - Verify Add to Cart click executed
+4. After fix, complete Add to Cart E2E
+
+---
+
+# Session: 2025-12-26 (Part 3) - v1.0 Complete + Architecture Pivot
+
+## Quick Resume
+**Completed:** Registration test PASSED, v1.0 tagged, architecture pivot proposed
+**Status:** Paused at Add to Cart Step 1 Pre-flight (awaiting user answer)
+**Next:** Answer test data location (a/b/c), then continue Add to Cart E2E
+**Branch:** `feature/v2-skill-gate-architecture`
+**Tag:** `v1.0-tool-based` (rollback point)
+
+---
+
+## Major Milestone: v1.0 Registration Test PASSED
+
+### Test Execution Results
+```bash
+python -m pytest tests/auth/test_registration.py -v --html=tests/_reports/registration_report.html --self-contained-html
+# Result: 1 passed in 12.14s
+```
+
+- Browser visible during execution
+- HTML report generated
+- Minor warning: unregistered `pytest.mark.auth` (cosmetic)
+
+### Working Code Patterns (v1.0)
+
+**Role (no base_url):**
+```python
+class GuestUser:
+    def __init__(self, web: WebInterface, user_data: Dict[str, Any]):
+        self.web = web
+        self.user_data = user_data
+        self.auth_tasks = AuthTasks(web)  # NO base_url
+```
+
+**Task (no base_url, uses POM navigate):**
+```python
+class AuthTasks:
+    def __init__(self, web: WebInterface):
+        self.web = web
+        self.registration_page = RegistrationPage(web)
+```
+
+**Test (self-contained credentials via Faker):**
+```python
+user_data = {
+    "email": fake.email(),
+    "password": "TestPass123!",
+    "first_name": fake.first_name(),
+    "last_name": fake.last_name()
+}
+guest = GuestUser(self.web, user_data)
+guest.register_account()
+assert self.registration_page.is_account_created()
+```
+
+---
+
+## Architecture Pivot Proposed: Remove Tool-Based Code Generation
+
+### User Insight
+> "If AI can generate the right code pattern, why do we even need the tools to generate the code? We have the skills that orchestrate, with the correct patterns, then the quality gates to correct AI if it doesn't present the correct format."
+
+### v1 vs v2 Architecture
+
+| Component | v1 (Tool-Based) | v2 (Skill+Gate) |
+|-----------|-----------------|-----------------|
+| Code Generation | MCP Tools 3-6 | AI generates directly |
+| Pattern Guidance | Tools encode patterns | Skills encode patterns |
+| Validation | Gates after tools | Gates after AI generation |
+| Token Cost | ~6000 tokens/step | ~3200 tokens/step |
+
+### Token Savings Analysis
+- **Per code-gen step:** ~47% reduction
+- **Per E2E workflow:** ~2800 tokens saved
+- **Reason:** Remove tool invocation overhead, AI already generates correct patterns
+
+### Version Control
+- **Tag created:** `v1.0-tool-based` (rollback point)
+- **Branch created:** `feature/v2-skill-gate-architecture`
+
+---
+
+## Add to Cart Test Started (Medium Complexity)
+
+### User Story
+> "As a guest user, I want to browse products and add an item to my cart so that I can review before purchasing."
+
+### Pages Involved (Multi-Page Workflow)
+1. **Catalog Page** - Category navigation
+2. **Product Listing Page** - Product grid
+3. **Product Detail Page** - Add to cart button
+4. **Cart Page** - Verify item added
+
+### Step 1 Pre-flight Question PENDING
+
+**Question asked:**
+```
+"Which test data location? (a/b/c)"
+a) Shared - tests/data/ (cross-workflow)
+b) Workflow-specific - tests/catalog/data/
+c) Both - shared credentials + workflow-specific product data
+```
+
+**Awaiting user answer to continue.**
+
+---
+
+## Plan After Add to Cart
+
+1. Complete Add to Cart E2E (10-step workflow)
+2. Use **4D Framework** to plan v2 architecture:
+   - **Design** - Conversational design discussion
+   - **Define** - Create PRD for v2
+   - **Divide** - Break into tasks
+   - **Deliver** - Execute and ship
+
+---
+
+## Files Verified Working (v1.0)
+
+| File | Status |
+|------|--------|
+| `tests/auth/test_registration.py` | ✓ PASSED |
+| `framework/roles/guest_user.py` | ✓ Working |
+| `framework/tasks/auth/auth_tasks.py` | ✓ Working |
+| `framework/pages/auth/registration_page.py` | ✓ Working |
+
+---
+
+## Resume Point
+
+1. **Answer Step 1 Pre-flight:** Which test data location? (a/b/c)
+2. Continue 10-step E2E workflow for Add to Cart
+3. After Add to Cart, use 4D Framework to plan v2
+
+---
+
 # Session: 2025-12-26 (Part 2) - Architecture Pattern Fix
 
 ## Quick Resume

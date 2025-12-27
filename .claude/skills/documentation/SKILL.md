@@ -1,3 +1,8 @@
+---
+name: documentation
+description: Create and maintain project documentation. Use WHEN writing docs, READMEs, API references, or explaining WHAT something does and HOW to use it.
+---
+
 # Documentation Skill
 
 Create and maintain project documentation. Capture WHAT something does and HOW to use it.

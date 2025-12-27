@@ -1,3 +1,8 @@
+---
+name: qa-guidance-layer
+description: Guide AI through 10-step QA test generation workflow with quality gates. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
+---
+
 # QA Guidance Layer
 
 **Purpose:** Guide AI through the 10-step QA test generation workflow with enforced quality gates.

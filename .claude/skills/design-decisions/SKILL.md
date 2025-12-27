@@ -1,3 +1,8 @@
+---
+name: design-decisions
+description: Record architectural decisions with rationale. Use WHEN making design choices, documenting WHY behind decisions, or creating DD-XX entries. Triggers on "design decision", "DD-", "architecture choice".
+---
+
 # Design Decisions Skill
 
 Record architectural decisions with rationale. Capture the WHY behind choices.

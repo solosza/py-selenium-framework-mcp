@@ -1,3 +1,8 @@
+---
+name: design-execution-engine
+description: Guide design of execution engines (guidance + gates + operations + state) for any tool chain workflow. Use WHEN designing multi-step validation systems, creating enforcement layers for verticals. Meta-skill for building execution engines.
+---
+
 # Design Execution Engine
 
 **Purpose:** Guide the design of complete execution engines (guidance layer + quality gates + operations + state) for any tool chain workflow.
