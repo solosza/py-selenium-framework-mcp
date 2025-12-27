@@ -166,8 +166,7 @@ async def list_available_tools() -> list[Tool]:
                     },
                     "workflow": {
                         "type": "string",
-                        "description": "Target workflow (auth, catalog, cart, checkout)",
-                        "enum": ["auth", "catalog", "cart", "checkout"]
+                        "description": "Target workflow/domain (e.g., auth, catalog, cart, checkout, or any custom domain)"
                     }
                 },
                 "required": ["user_story", "workflow"]
@@ -187,8 +186,7 @@ async def list_available_tools() -> list[Tool]:
                     },
                     "workflow": {
                         "type": "string",
-                        "description": "Workflow category",
-                        "enum": ["auth", "catalog", "cart", "checkout"]
+                        "description": "Workflow/domain category (e.g., auth, catalog, cart, checkout, or custom)"
                     },
                     "role": {
                         "type": "string",
@@ -197,6 +195,18 @@ async def list_available_tools() -> list[Tool]:
                     "scenario": {
                         "type": "object",
                         "description": "Test scenario with given/when/then (from Tool 1)"
+                    },
+                    "role_metadata": {
+                        "type": "object",
+                        "description": "Role metadata from Tool 5 (class_name, import_path, workflow_methods)"
+                    },
+                    "pom_metadata": {
+                        "type": "object",
+                        "description": "POM metadata from Tool 3 (for state-check method references)"
+                    },
+                    "task_metadata": {
+                        "type": "object",
+                        "description": "Task metadata from Tool 4"
                     }
                 },
                 "required": ["test_name", "workflow", "role"]
@@ -214,6 +224,10 @@ async def list_available_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Role name (e.g., RegisteredUser, GuestUser)"
                     },
+                    "workflow": {
+                        "type": "string",
+                        "description": "Workflow/domain (e.g., auth, catalog, cart, checkout, or custom)"
+                    },
                     "capabilities": {
                         "type": "array",
                         "items": {"type": "string"},
@@ -222,6 +236,14 @@ async def list_available_tools() -> list[Tool]:
                     "credentials": {
                         "type": "object",
                         "description": "Optional user credentials"
+                    },
+                    "task_metadata": {
+                        "type": "object",
+                        "description": "Task metadata from Tool 4 (class_name, import_path, task_methods)"
+                    },
+                    "force_generate": {
+                        "type": "boolean",
+                        "description": "Skip existing role check (default: false)"
                     }
                 },
                 "required": ["role_name"]
@@ -239,9 +261,30 @@ async def list_available_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Task class name (e.g., CatalogTasks, CartTasks)"
                     },
+                    "workflow": {
+                        "type": "string",
+                        "description": "Workflow/domain (e.g., auth, catalog, cart, checkout, or custom)"
+                    },
                     "workflow_description": {
                         "type": "string",
                         "description": "Description of workflow steps"
+                    },
+                    "pom_metadata": {
+                        "type": "object",
+                        "description": "POM metadata from Tool 3 (class_name, import_path, action_methods, state_methods)"
+                    },
+                    "page_objects": {
+                        "type": "array",
+                        "items": {"type": "object"},
+                        "description": "Legacy: list of page object dicts (deprecated, use pom_metadata)"
+                    },
+                    "force_generate": {
+                        "type": "boolean",
+                        "description": "Skip existing task check (default: false)"
+                    },
+                    "base_url_path": {
+                        "type": "string",
+                        "description": "URL path for navigation (optional)"
                     }
                 },
                 "required": ["task_name"]
@@ -262,6 +305,14 @@ async def list_available_tools() -> list[Tool]:
                     "page_name": {
                         "type": "string",
                         "description": "Suggested page object name"
+                    },
+                    "workflow": {
+                        "type": "string",
+                        "description": "Workflow/domain for organizing discovered elements"
+                    },
+                    "wait_for_state": {
+                        "type": "string",
+                        "description": "Wait condition before discovery (e.g., 'networkidle', 'domcontentloaded')"
                     }
                 },
                 "required": ["url"]
@@ -279,10 +330,23 @@ async def list_available_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Page object class name"
                     },
+                    "workflow": {
+                        "type": "string",
+                        "description": "Workflow/domain for file path organization"
+                    },
                     "elements": {
                         "type": "array",
                         "items": {"type": "object"},
                         "description": "Elements from discover_page_elements"
+                    },
+                    "expected_states": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Expected state names for state-check methods (from AI processing)"
+                    },
+                    "base_url": {
+                        "type": "string",
+                        "description": "Base URL for the page"
                     }
                 },
                 "required": ["page_name", "elements"]
@@ -390,13 +454,11 @@ async def list_available_tools() -> list[Tool]:
                 "properties": {
                     "credential_strategy": {
                         "type": "string",
-                        "description": "Credential approach: static, dynamic, self-contained, none",
-                        "enum": ["static", "dynamic", "self-contained", "none"]
+                        "description": "Credential approach (e.g., static, dynamic, self-contained, none)"
                     },
                     "test_data_location": {
                         "type": "string",
-                        "description": "Test data location: shared, workflow, both, none",
-                        "enum": ["shared", "workflow", "both", "none"]
+                        "description": "Test data location (e.g., shared, workflow, both, none)"
                     }
                 },
                 "required": ["credential_strategy", "test_data_location"]
@@ -406,7 +468,7 @@ async def list_available_tools() -> list[Tool]:
         # Step 2: User Input (POST-only)
         Tool(
             name="qg_user_input",
-            description="Step 2 quality gate: Validate user input (persona, URL, role_name, domain)",
+            description="Step 2 quality gate: Validate user input (persona, URL, role_name, workflow)",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -422,17 +484,16 @@ async def list_available_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Derived role name (e.g., RegisteredUser)"
                     },
-                    "domain": {
+                    "workflow": {
                         "type": "string",
-                        "description": "Workflow domain: auth, catalog, cart, checkout",
-                        "enum": ["auth", "catalog", "cart", "checkout"]
+                        "description": "Workflow/domain (e.g., auth, catalog, cart, checkout, or custom)"
                     },
                     "raw_requirement": {
                         "type": "string",
                         "description": "Original user requirement text"
                     }
                 },
-                "required": ["persona", "URL", "role_name", "domain"]
+                "required": ["persona", "URL", "role_name", "workflow"]
             }
         ),
 
@@ -480,8 +541,7 @@ async def list_available_tools() -> list[Tool]:
                     },
                     "workflow": {
                         "type": "string",
-                        "description": "PRE mode: Target workflow",
-                        "enum": ["auth", "catalog", "cart", "checkout"]
+                        "description": "PRE mode: Target workflow/domain"
                     },
                     "test_scenarios": {
                         "type": "array",
@@ -515,17 +575,15 @@ async def list_available_tools() -> list[Tool]:
                     },
                     "credential_strategy": {
                         "type": "string",
-                        "description": "PRE mode: Credential strategy from Step 1",
-                        "enum": ["none", "static", "dynamic", "self-contained"]
+                        "description": "PRE mode: Credential strategy from Step 1 (e.g., none, static, dynamic, self-contained)"
                     },
                     "discovery_method": {
                         "type": "string",
-                        "description": "PRE mode: Discovery method (DD-33). Use 'playwright' if Playwright prepared page state, 'tool2' for static pages.",
-                        "enum": ["tool2", "playwright"]
+                        "description": "PRE mode: Discovery method (e.g., tool2, playwright)"
                     },
                     "elements": {
                         "type": "array",
-                        "description": "POST mode: Discovered elements from Tool 2 or DD-33 snapshot extraction",
+                        "description": "POST mode: Discovered elements from Tool 2 or snapshot extraction",
                         "items": {"type": "object"}
                     }
                 },

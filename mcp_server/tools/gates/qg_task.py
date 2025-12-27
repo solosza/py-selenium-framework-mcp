@@ -7,7 +7,7 @@ PRE Validation:
 - Step 6 complete (pom_metadata exist in state)
 - pom_metadata present and is dict
 - pom_metadata.class_name present and not empty (IC-07-05)
-- domain valid (auth, catalog, cart, checkout)
+- workflow present and not empty (dynamic, not hardcoded)
 - task_name present and not empty
 
 POST Validation:
@@ -19,6 +19,8 @@ POST Validation:
 - metadata present with class_name and import_path (DD-26)
 
 Enforces: DD-12, DD-25, DD-26, DD-27, IC-07-01 through IC-07-05
+
+Note: workflow (formerly domain) is now dynamic - any non-empty string is valid.
 """
 
 import re
@@ -30,9 +32,6 @@ from utils.state_manager import StateManager
 
 class QGTask(BaseGate):
     """Quality gate for Step 7: Task Generation."""
-
-    # Valid domains
-    VALID_DOMAINS = {"auth", "catalog", "cart", "checkout"}
 
     # Skeleton code patterns (DD-25, IC-07-01)
     SKELETON_PATTERNS = [
@@ -123,18 +122,18 @@ class QGTask(BaseGate):
                 fix_hint="Ensure Tool 3 output includes class_name in metadata."
             )
 
-        # Validate domain
-        domain = input_data.get("domain")
-        if domain is None:
+        # Validate workflow (supports 'domain' for backwards compatibility)
+        workflow = input_data.get("workflow") or input_data.get("domain")
+        if workflow is None:
             return cls.fail_response(
-                error="Missing required field: domain",
-                fix_hint="Provide domain (auth, catalog, cart, checkout)."
+                error="Missing required field: workflow",
+                fix_hint="Provide workflow (e.g., 'auth', 'catalog', 'checkout', or any custom name)."
             )
 
-        if not isinstance(domain, str) or domain.lower() not in cls.VALID_DOMAINS:
+        if not isinstance(workflow, str) or not workflow.strip():
             return cls.fail_response(
-                error=f"Invalid domain: '{domain}'. Must be one of: {', '.join(cls.VALID_DOMAINS)}",
-                fix_hint="Use valid domain: auth, catalog, cart, or checkout."
+                error=f"Invalid workflow: '{workflow}'. Must be a non-empty string.",
+                fix_hint="Provide a valid workflow name (e.g., 'auth', 'catalog', or custom)."
             )
 
         # Validate task_name

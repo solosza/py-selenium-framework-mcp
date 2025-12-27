@@ -7,10 +7,13 @@ Validates:
 - DD-01: persona (must be present and non-empty)
 - DD-02: URL (must be valid HTTP/HTTPS format)
 - role_name: must be present (PascalCase, derived from persona)
-- domain: must be one of auth, catalog, cart, checkout
+- workflow: must be present and non-empty (dynamic, not hardcoded)
 - raw_requirement: must be present
 
 Saves state on PASS via StateManager.
+
+Note: workflow (formerly domain) is now dynamic - any non-empty string is valid.
+This allows the framework to work with any website, not just e-commerce.
 """
 
 import re
@@ -24,9 +27,6 @@ from utils.state_manager import StateManager
 class QGUserInput(BaseGate):
     """Step 2 quality gate for user input validation."""
 
-    # Valid domain values
-    VALID_DOMAINS = ["auth", "catalog", "cart", "checkout"]
-
     # URL pattern - must start with http:// or https://
     URL_PATTERN = re.compile(r'^https?://\S+$')
 
@@ -36,14 +36,20 @@ class QGUserInput(BaseGate):
         Validate user input fields.
 
         Args:
-            input_data: Dict with persona, URL, role_name, domain, raw_requirement
+            input_data: Dict with persona, URL, role_name, workflow, raw_requirement
+                        (also accepts 'domain' for backwards compatibility)
 
         Returns:
             {"status": "pass"} on success
             {"status": "fail", "error": "...", "fix_hint": "..."} on failure
         """
+        # Support both 'workflow' and 'domain' (backwards compatibility)
+        workflow = input_data.get("workflow") or input_data.get("domain")
+        if workflow:
+            input_data["workflow"] = workflow
+
         # Check required fields
-        required_fields = ["persona", "URL", "role_name", "domain", "raw_requirement"]
+        required_fields = ["persona", "URL", "role_name", "workflow", "raw_requirement"]
         missing = cls.validate_required_fields(input_data, required_fields)
 
         if missing:
@@ -76,12 +82,11 @@ class QGUserInput(BaseGate):
                 fix_hint=cls._get_role_name_hint()
             )
 
-        # Validate domain - must be one of valid domains
-        domain = input_data.get("domain")
-        if not cls._is_valid_domain(domain):
+        # Validate workflow - must be non-empty (dynamic, not hardcoded)
+        if not cls._is_valid_workflow(workflow):
             return cls.fail_response(
-                error=f"Invalid domain: '{domain}'",
-                fix_hint=cls._get_domain_hint()
+                error="Invalid workflow: must be non-empty",
+                fix_hint=cls._get_workflow_hint()
             )
 
         # Validate raw_requirement - must be non-empty
@@ -98,7 +103,7 @@ class QGUserInput(BaseGate):
             "persona": persona,
             "URL": url,
             "role_name": role_name,
-            "domain": domain,
+            "workflow": workflow,
             "raw_requirement": raw_requirement
         })
 
@@ -138,11 +143,11 @@ class QGUserInput(BaseGate):
         return isinstance(value, str) and len(value.strip()) > 0
 
     @classmethod
-    def _is_valid_domain(cls, value: Any) -> bool:
-        """Check if domain is one of the valid values."""
+    def _is_valid_workflow(cls, value: Any) -> bool:
+        """Check if workflow is valid (non-empty string - dynamic, not hardcoded)."""
         if value is None or value == "":
             return False
-        return value in cls.VALID_DOMAINS
+        return isinstance(value, str) and len(value.strip()) > 0
 
     @classmethod
     def _is_valid_raw_requirement(cls, value: Any) -> bool:
@@ -171,9 +176,9 @@ class QGUserInput(BaseGate):
                 "Provide role_name: PascalCase role (e.g., 'RegisteredUser')"
             )
 
-        if "domain" in missing_fields:
+        if "workflow" in missing_fields:
             hints.append(
-                "Provide domain: one of 'auth', 'catalog', 'cart', 'checkout'"
+                "Provide workflow: the workflow/domain name (e.g., 'auth', 'catalog', 'checkout', or any custom name)"
             )
 
         if "raw_requirement" in missing_fields:
@@ -208,12 +213,12 @@ class QGUserInput(BaseGate):
         )
 
     @staticmethod
-    def _get_domain_hint() -> str:
-        """Get fix hint for invalid domain."""
+    def _get_workflow_hint() -> str:
+        """Get fix hint for invalid workflow."""
         return (
-            "domain must be one of: 'auth' (login/register), "
-            "'catalog' (browse products), 'cart' (shopping cart), "
-            "'checkout' (payment/order)"
+            "workflow must be a non-empty string describing the workflow/domain. "
+            "Examples: 'auth', 'catalog', 'cart', 'checkout', 'dashboard', 'admin', "
+            "or any custom workflow name for your application."
         )
 
     @staticmethod

@@ -5,6 +5,93 @@
 
 ---
 
+# Session: 2025-12-27 (Part 3) - Release Readiness Phase 0 COMPLETE
+
+## Quick Resume
+**Completed:** All 9 design topics decided, PRD created with full decisions
+**Status:** Phase 0 (Design) COMPLETE, ready for Phase 2 (Divide/Tasks)
+**Next:** Generate task list from PRD
+**Branch:** feature/v2-skill-gate-architecture
+
+---
+
+## What Was Done
+
+1. **Completed 4D Framework Phase 0 (Design)** - All 9 topics decided
+2. **Created PRD:** `docs/projects/release-readiness/1-prd-release-readiness.md`
+3. **Established 3 core principles:**
+   - Generation is replaceable, enforcement is not
+   - Don't claim the category, demonstrate it
+   - Platform + Packs model
+
+---
+
+## 9 Topics - Final Decisions
+
+| # | Topic | Decision |
+|---|-------|----------|
+| 1 | Execution Modes | MIXED + SKILLS_ONLY (no TOOLS_ONLY). MIXED default. |
+| 2 | Audit Trail | JSON per run: `audit_log_{timestamp}.json` |
+| 3 | Self-Heal Cap | 3 retries per step, then blocked + DD-22 |
+| 4 | Artifact Layout | DEFERRED (skills teach, no gate enforcement) |
+| 5 | Adversarial Tests | NOT DESIGN - QA validation task |
+| 6 | Gate Drift | NOT NEEDED - PRE gates already enforce |
+| 7 | Smoke Matrix | 2-3 sites, simple+medium+complex, Chrome only |
+| 8 | Packaging | Manual clone + license-protected skills |
+| 9 | Positioning | Controlled hybrid: demonstrate, don't claim |
+
+---
+
+## Key Strategic Decisions
+
+### Positioning Strategy
+- **Public:** "Isagawa QA - Enforced AI Execution for Test Automation"
+- **Don't say publicly:** "AI Management Layer", "Category", "Governance platform"
+- **Do say:** "Enforced execution", "Non-bypassable quality gates", "Standards encoded as rules"
+- **Reveal sequence:** Ship QA → Validate → Launch vertical #2 → Then reveal category
+
+### Core Principle
+> "Categories are not owned by naming them. They're owned by enforcing a structure no one else has."
+
+---
+
+## Files Created/Updated
+
+| File | Purpose |
+|------|---------|
+| `docs/projects/release-readiness/1-prd-release-readiness.md` | Full PRD with all 9 decisions |
+| `docs/projects/release-readiness/0-design-release-readiness.md` | Original design discussion doc |
+
+---
+
+## What Needs Implementation
+
+| Type | Items |
+|------|-------|
+| **Code** | Audit trail (Topic 2), Self-heal cap (Topic 3), Execution mode tracking (Topic 1) |
+| **Validation** | Smoke test 2-3 sites (Topic 7), 5 adversarial inputs (Topic 5) |
+| **Docs** | License headers on skills (Topic 8), README install steps (Topic 8) |
+
+---
+
+## Resume Point
+
+**Phase 0 (Design) COMPLETE.**
+
+Next: Phase 2 (Divide) - Generate task list from PRD.
+
+---
+
+# Session: 2025-12-27 (Part 2) - Release Readiness Design Discussion
+
+## Quick Resume
+**Completed:** Committed Add to Cart feature, started 4D Framework Phase 0 design
+**Status:** Design discussion in progress (9 topics)
+**Next:** Discuss Topic 1 (Tools Off/On Flag) or user's choice
+**Branch:** feature/v2-skill-gate-architecture
+
+---
+
 # Session: 2025-12-27 - Add to Cart E2E COMPLETE + Infrastructure Fixes
 
 ## Quick Resume
