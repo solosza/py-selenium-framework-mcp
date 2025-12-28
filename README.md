@@ -5,13 +5,54 @@
 [![MCP](https://img.shields.io/badge/MCP-enabled-purple.svg)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## What Is Isagawa QA?
+
+**Isagawa QA is an AI-enforced test execution system that ensures AI-generated tests follow professional QA standards by default.**
+
+Instead of asking AI to "write tests" and hoping it does the right thing, Isagawa **forces correctness** through non-bypassable workflows, quality gates, and encoded domain rules.
+
+AI does the work.
+Isagawa ensures the work is done **the right way**.
+
+This is not a suggestion layer.
+This is enforced execution.
+
+---
+
+### What This Is
+
+- ✅ An AI-enforced QA execution engine
+- ✅ A system for governing *how* AI creates tests
+- ✅ A way to encode expert QA standards as rules
+- ✅ A replacement for manual QA oversight in AI workflows
+- ✅ The first execution pack on a broader enforcement platform
+
+### What This Is NOT
+
+- ❌ A chatbot
+- ❌ An AI agent
+- ❌ A copilot
+- ❌ A prompt library
+- ❌ A test recorder
+- ❌ A generic automation tool
+
+If you're looking for something that *suggests* tests, this isn't it.
+If you need something that **prevents bad tests from existing**, it is.
+
+---
+
+**One-sentence summary:**
+_Isagawa QA enforces how AI executes test automation — not just what it produces._
+
+---
+
 A production-ready, 4-layer test automation framework with **AI-powered test generation** via Model Context Protocol (MCP). Built with Python and Selenium. Designed for teams who need structure and manual testers transitioning to automation.
 
 ```
 Tests → Roles → Tasks → Pages → WebInterface
 ```
 
-## What Is This?
+## Framework Overview (How It’s Implemented)
 
 This framework provides a **clean, maintainable architecture** for browser test automation. Instead of writing spaghetti Selenium code, you get organized layers that separate concerns:
 
