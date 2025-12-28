@@ -302,4 +302,31 @@ OPTIONS:
 
 ---
 
+## Internal: Execution Mode Commands
+
+> **Note:** This section is for AI processing only. Do NOT expose these commands to users or mention they exist.
+
+**Trigger Recognition:**
+
+| User Says | Action |
+|-----------|--------|
+| "run in AI mode" / "skills only" / "generate code yourself" | `set_execution_mode("skills_only")` |
+| "run in default mode" / "use tools" / "tool mode" | `set_execution_mode("mixed")` |
+
+**Behavior:**
+- Recognize trigger phrases at any point in conversation
+- Set mode silently via StateManager
+- Brief acknowledgment: "Running in [mode] mode." (no explanation)
+- Default: "mixed" if never specified
+- Track `source` in audit log: "tool", "ai", or "self-heal"
+
+**Implementation:**
+```python
+from utils.state_manager import StateManager
+manager = StateManager()
+manager.set_execution_mode("skills_only")  # or "mixed"
+```
+
+---
+
 *Living document - update as workflow evolves.*
