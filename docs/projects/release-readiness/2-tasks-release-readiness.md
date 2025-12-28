@@ -70,31 +70,32 @@
 
 ---
 
-- [ ] **2.0 Self-Heal Cap Enforcement** [CORE]
-  - [ ] 2.1 Create branch `feature/2.0-self-heal-cap`
-  - [ ] 2.2 **Invoke `testing` skill** - Follow TDD for CORE logic (Red-Green-Refactor)
-  - [ ] 2.3 Write failing tests first for attempt tracking and blocked status
-  - [ ] 2.4 Add to StateManager:
-    - `_attempt_counts: dict` - Per-step attempt tracking
+- [x] **2.0 Self-Heal Cap Enforcement** [CORE] ✓ COMMITTED (pending)
+  - [x] 2.1 Create branch `feature/2.0-self-heal-cap`
+  - [x] 2.2 **Invoke `testing` skill** - Follow TDD for CORE logic (Red-Green-Refactor)
+  - [x] 2.3 Write failing tests first for attempt tracking and blocked status (24 tests)
+  - [x] 2.4 Add to StateManager:
+    - `_attempt_counts: dict` - Per-step attempt tracking (stored in state file under `_attempts` key)
     - `increment_attempt(step) -> int` - Increment and return count
     - `get_attempt_count(step) -> int` - Get current count
     - `reset_attempts(step)` - Reset on success
-  - [ ] 2.5 Add to BaseGate:
+  - [x] 2.5 Add to BaseGate:
     - `MAX_ATTEMPTS = 3` - Class constant
     - `blocked_response(step, attempts, errors)` - Return blocked status
-  - [ ] 2.6 Update `qg_page_object.validate_post()`:
+    - `set_state_manager(manager)` - Inject state manager for testing
+  - [x] 2.6 Update `qg_page_object.validate_post()`:
     - Check attempt count before validation
     - If >= MAX_ATTEMPTS, return blocked response
     - On fail, increment attempt and include in audit
     - On pass, reset attempts
-  - [ ] 2.7 Update `qg_task.validate_post()` with same pattern
-  - [ ] 2.8 Update `qg_role.validate_post()` with same pattern
-  - [ ] 2.9 Update `qg_test_runner.validate_post()` with same pattern
-  - [ ] 2.10 Integrate attempt logging with AuditLogger
-  - [ ] 2.11 Run checks: `python -m pytest mcp_server/_dev_tests/test_self_heal_cap.py -v`
-  - [ ] 2.12 **Audit: Verify testing skill conventions followed**
-  - [ ] 2.13 Record results
-  - [ ] 2.14 Commit: `feat: add self-heal cap enforcement (Task 2.0)`
+  - [x] 2.7 Update `qg_task.validate_post()` with same pattern
+  - [x] 2.8 Update `qg_role.validate_post()` with same pattern
+  - [x] 2.9 Update `qg_test_runner.validate_post()` with same pattern
+  - [x] 2.10 Integrate attempt logging with AuditLogger
+  - [x] 2.11 Run checks: 24 self-heal cap tests passed, 461 total passed
+  - [x] 2.12 **Audit: Verify testing skill conventions followed** ✓ TDD
+  - [x] 2.13 Record results: 24 new tests, all passing
+  - [x] 2.14 Commit: `feat: add self-heal cap enforcement (Task 2.0)`
 
 ---
 

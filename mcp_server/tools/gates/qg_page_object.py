@@ -133,6 +133,9 @@ class QGPageObject(BaseGate):
 
         return cls.pass_response()
 
+    # Step number for this gate (used for attempt tracking)
+    STEP_NUMBER = 6
+
     @classmethod
     def validate_post(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -150,7 +153,43 @@ class QGPageObject(BaseGate):
 
         Returns:
             {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
+            or {"status": "blocked", ...} if max attempts exceeded
         """
+        # Task 2.0: Check if blocked due to max attempts
+        state_manager = cls._state_manager
+        if state_manager:
+            attempts = state_manager.get_attempt_count(cls.STEP_NUMBER)
+            if attempts >= cls.MAX_ATTEMPTS:
+                return cls.blocked_response(
+                    step=cls.STEP_NUMBER,
+                    attempts=attempts,
+                    errors=[]  # Error history not tracked in simple impl
+                )
+
+        # Run actual validation
+        result = cls._validate_post_internal(input_data)
+
+        # Task 2.0: Track attempts and log to audit
+        if state_manager:
+            if result.get("status") == "fail":
+                state_manager.increment_attempt(cls.STEP_NUMBER)
+                # Log failure to audit
+                if cls._audit_logger:
+                    cls._audit_logger.log_gate(
+                        step=cls.STEP_NUMBER,
+                        gate_name="qg_page_object",
+                        mode="POST",
+                        result="fail",
+                        error=result.get("error")
+                    )
+            elif result.get("status") == "pass":
+                state_manager.reset_attempts(cls.STEP_NUMBER)
+
+        return result
+
+    @classmethod
+    def _validate_post_internal(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Internal validation logic (separated for attempt tracking)."""
         # Validate code field
         code = input_data.get("code")
 
@@ -224,8 +263,8 @@ class QGPageObject(BaseGate):
                 return match_error
 
         # Save Step 6 state on POST-VALIDATE pass
-        state_manager = cls._get_state_manager()
-        state_manager.save(step=6, data={
+        internal_state_manager = cls._get_state_manager()
+        internal_state_manager.save(step=6, data={
             "pom_code": code,
             "pom_metadata": metadata
         })

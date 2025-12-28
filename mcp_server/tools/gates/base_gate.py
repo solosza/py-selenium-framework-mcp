@@ -11,6 +11,11 @@ Task 3.0 - Provides common functionality for all quality gates:
 Task 1.0 - Added audit logging integration:
 - Audit logger instance (class-level)
 - Automatic logging on pass/fail responses
+
+Task 2.0 - Added self-heal cap enforcement:
+- MAX_ATTEMPTS constant (3)
+- blocked_response() for capped steps
+- State manager integration for attempt tracking
 """
 
 import re
@@ -18,13 +23,20 @@ from typing import List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from utils.audit_logger import AuditLogger
+    from utils.state_manager import StateManager
 
 
 class BaseGate:
     """Base class with shared validation utilities for quality gates."""
 
+    # Task 2.0: Self-heal cap (DD-22)
+    MAX_ATTEMPTS = 3
+
     # Audit logger instance (shared across all gates for a workflow run)
     _audit_logger: Optional["AuditLogger"] = None
+
+    # State manager for attempt tracking (Task 2.0)
+    _state_manager: Optional["StateManager"] = None
 
     # DD-25: Skeleton code patterns to detect
     SKELETON_PATTERNS = [
@@ -62,6 +74,57 @@ class BaseGate:
     def get_audit_logger(cls) -> Optional["AuditLogger"]:
         """Get the current audit logger."""
         return cls._audit_logger
+
+    @classmethod
+    def set_state_manager(cls, manager: Optional["StateManager"]) -> None:
+        """
+        Set the state manager for attempt tracking.
+
+        Args:
+            manager: StateManager instance, or None to disable tracking.
+        """
+        cls._state_manager = manager
+
+    @classmethod
+    def get_state_manager(cls) -> Optional["StateManager"]:
+        """Get the current state manager."""
+        return cls._state_manager
+
+    @classmethod
+    def blocked_response(
+        cls,
+        step: int,
+        attempts: int,
+        errors: List[str]
+    ) -> dict:
+        """
+        Return blocked response when max attempts exceeded (DD-22).
+
+        Args:
+            step: Step number that is blocked
+            attempts: Number of attempts made
+            errors: List of errors from previous attempts
+
+        Returns:
+            {"status": "blocked", "step": int, "attempts": int, "errors": list, "fix_hint": str}
+        """
+        # Log to audit trail if logger set
+        if cls._audit_logger:
+            cls._audit_logger.log_gate(
+                step=step,
+                gate_name=f"step_{step}_blocked",
+                mode="POST",
+                result="blocked",
+                error=f"Max attempts ({attempts}) exceeded"
+            )
+
+        return {
+            "status": "blocked",
+            "step": step,
+            "attempts": attempts,
+            "errors": errors,
+            "fix_hint": f"Step {step} blocked after {attempts} attempts. Manual user intervention required (DD-22)."
+        }
 
     @classmethod
     def pass_response(

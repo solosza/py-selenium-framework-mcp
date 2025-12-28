@@ -126,3 +126,94 @@ class StateManager:
         """Clear state file (for testing and workflow reset)."""
         if self._state_file.exists():
             self._state_file.unlink()
+
+    # =========================================================================
+    # Attempt Tracking (Task 2.0 - Self-Heal Cap)
+    # =========================================================================
+
+    def get_attempt_count(self, step: int) -> int:
+        """
+        Get current attempt count for a step.
+
+        Args:
+            step: Step number (1-10)
+
+        Returns:
+            Current attempt count (0 if no attempts yet).
+        """
+        state = self.load()
+        attempts = state.get("_attempts", {})
+        return attempts.get(str(step), 0)
+
+    def increment_attempt(self, step: int) -> int:
+        """
+        Increment attempt count for a step and persist to disk.
+
+        Args:
+            step: Step number (1-10)
+
+        Returns:
+            New attempt count after increment.
+        """
+        state = self.load()
+
+        # Initialize attempts dict if needed
+        if "_attempts" not in state:
+            state["_attempts"] = {}
+
+        # Increment
+        step_key = str(step)
+        current = state["_attempts"].get(step_key, 0)
+        new_count = current + 1
+        state["_attempts"][step_key] = new_count
+
+        # Persist
+        self._save_state(state)
+
+        return new_count
+
+    def reset_attempts(self, step: int) -> None:
+        """
+        Reset attempt count for a step to zero.
+
+        Args:
+            step: Step number (1-10)
+        """
+        state = self.load()
+
+        if "_attempts" not in state:
+            return  # Nothing to reset
+
+        step_key = str(step)
+        if step_key in state["_attempts"]:
+            state["_attempts"][step_key] = 0
+            self._save_state(state)
+
+    def _save_state(self, state: dict) -> None:
+        """
+        Internal method to save complete state to disk.
+
+        Args:
+            state: Complete state dictionary to persist.
+        """
+        # Ensure parent directory exists
+        self._state_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Atomic write: write to temp file, then rename
+        temp_fd, temp_path = tempfile.mkstemp(
+            dir=self._state_file.parent,
+            suffix=".tmp"
+        )
+        try:
+            with os.fdopen(temp_fd, 'w') as f:
+                json.dump(state, f, indent=2)
+
+            # Atomic rename (on Windows, need to remove target first)
+            if os.name == 'nt' and self._state_file.exists():
+                self._state_file.unlink()
+            os.rename(temp_path, self._state_file)
+        except Exception:
+            # Clean up temp file on failure
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+            raise

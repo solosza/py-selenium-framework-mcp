@@ -152,6 +152,9 @@ class QGTask(BaseGate):
 
         return cls.pass_response()
 
+    # Step number for this gate (used for attempt tracking)
+    STEP_NUMBER = 7
+
     @classmethod
     def validate_post(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -170,7 +173,34 @@ class QGTask(BaseGate):
 
         Returns:
             {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
+            or {"status": "blocked", ...} if max attempts exceeded
         """
+        # Task 2.0: Check if blocked due to max attempts
+        state_manager = cls._state_manager
+        if state_manager:
+            attempts = state_manager.get_attempt_count(cls.STEP_NUMBER)
+            if attempts >= cls.MAX_ATTEMPTS:
+                return cls.blocked_response(
+                    step=cls.STEP_NUMBER,
+                    attempts=attempts,
+                    errors=[]
+                )
+
+        # Run actual validation
+        result = cls._validate_post_internal(input_data)
+
+        # Task 2.0: Track attempts
+        if state_manager:
+            if result.get("status") == "fail":
+                state_manager.increment_attempt(cls.STEP_NUMBER)
+            elif result.get("status") == "pass":
+                state_manager.reset_attempts(cls.STEP_NUMBER)
+
+        return result
+
+    @classmethod
+    def _validate_post_internal(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Internal validation logic (separated for attempt tracking)."""
         # Validate code field
         code = input_data.get("code")
 
