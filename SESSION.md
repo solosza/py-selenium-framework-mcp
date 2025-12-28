@@ -34,6 +34,13 @@
    - Backwards compatible: Gates accept both `workflow` and `domain` keys
    - 62 gate tests now pass
 
+4. **Added hidden execution mode commands** ✓ COMMITTED (a641197)
+   - Hidden triggers in skill (not exposed to users):
+     - "run in AI mode" → skills_only (AI generates all code)
+     - "run in default mode" → mixed (tools + AI)
+   - AI recognizes phrases, sets mode silently
+   - Stored in qa-guidance-layer/SKILL.md (ships with framework)
+
 ---
 
 # Session: 2025-12-27 (Part 4) - Release Readiness Phase 3 (Deliver)
