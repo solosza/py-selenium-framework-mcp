@@ -30,6 +30,9 @@ class QGUserInput(BaseGate):
     # URL pattern - must start with http:// or https://
     URL_PATTERN = re.compile(r'^https?://\S+$')
 
+    # PascalCase pattern: starts with uppercase, alphanumeric only
+    PASCAL_CASE_PATTERN = re.compile(r'^[A-Z][a-zA-Z0-9]*$')
+
     @classmethod
     def validate(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -74,11 +77,11 @@ class QGUserInput(BaseGate):
                 fix_hint=cls._get_url_hint()
             )
 
-        # Validate role_name - must be non-empty
+        # Validate role_name - must be PascalCase
         role_name = input_data.get("role_name")
         if not cls._is_valid_role_name(role_name):
             return cls.fail_response(
-                error="Invalid role_name: must be non-empty",
+                error=f"Invalid role_name: '{role_name}' must be PascalCase (e.g., RegisteredUser, GuestUser)",
                 fix_hint=cls._get_role_name_hint()
             )
 
@@ -137,10 +140,13 @@ class QGUserInput(BaseGate):
 
     @classmethod
     def _is_valid_role_name(cls, value: Any) -> bool:
-        """Check if role_name is valid (non-empty string)."""
+        """Check if role_name is valid (non-empty PascalCase string)."""
         if value is None or value == "":
             return False
-        return isinstance(value, str) and len(value.strip()) > 0
+        if not isinstance(value, str) or not value.strip():
+            return False
+        # Must be PascalCase (starts with uppercase, alphanumeric)
+        return bool(cls.PASCAL_CASE_PATTERN.match(value))
 
     @classmethod
     def _is_valid_workflow(cls, value: Any) -> bool:

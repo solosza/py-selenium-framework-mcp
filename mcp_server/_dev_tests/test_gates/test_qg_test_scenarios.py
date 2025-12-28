@@ -158,14 +158,41 @@ class TestPreMetadataContextMissingFails:
         assert "metadata_context" in result["error"], "Error should mention metadata_context"
 
 
-class TestPreInvalidWorkflowFails:
-    """P1: PRE validation fails when workflow is invalid."""
+class TestPreWorkflowValidation:
+    """P1: PRE validation for workflow field (dynamic - any non-empty string is valid)."""
 
     @pytest.mark.unit
     @pytest.mark.gates
     @pytest.mark.qg_test_scenarios
-    def test_pre_invalid_workflow_fails(self):
-        """P1: PRE validation fails when workflow is not auth/catalog/cart/checkout."""
+    def test_pre_custom_workflow_passes(self):
+        """P1: PRE validation passes with any custom workflow name (dynamic workflow)."""
+        # Arrange - custom workflow names should now be valid
+        input_data = {
+            "mode": "PRE",
+            "metadata_context": {
+                "bdd_scenarios": [{"given": "x", "when": ["y"], "then": ["z"]}],
+                "expected_states": ["is_visible"],
+                "intent": "search"
+            },
+            "workflow": "custom_workflow"
+        }
+
+        # Act
+        with patch.object(QGTestScenarios, '_get_state_manager') as mock_sm:
+            mock_instance = MagicMock()
+            mock_instance.is_step_complete.return_value = True
+            mock_sm.return_value = mock_instance
+
+            result = QGTestScenarios.validate_pre(input_data)
+
+        # Assert - custom workflow should now pass (not hardcoded to auth/catalog/cart/checkout)
+        assert result["status"] == "pass", "PRE should pass with any non-empty workflow"
+
+    @pytest.mark.unit
+    @pytest.mark.gates
+    @pytest.mark.qg_test_scenarios
+    def test_pre_empty_workflow_fails(self):
+        """P1: PRE validation fails when workflow is empty."""
         # Arrange
         input_data = {
             "mode": "PRE",
@@ -174,7 +201,7 @@ class TestPreInvalidWorkflowFails:
                 "expected_states": ["is_visible"],
                 "intent": "search"
             },
-            "workflow": "invalid_workflow"
+            "workflow": ""
         }
 
         # Act
@@ -186,7 +213,7 @@ class TestPreInvalidWorkflowFails:
             result = QGTestScenarios.validate_pre(input_data)
 
         # Assert
-        assert result["status"] == "fail", "PRE should fail when workflow is invalid"
+        assert result["status"] == "fail", "PRE should fail when workflow is empty"
         assert "workflow" in result["error"].lower(), "Error should mention workflow"
 
 

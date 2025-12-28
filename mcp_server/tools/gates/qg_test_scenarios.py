@@ -27,8 +27,8 @@ from utils.state_manager import StateManager
 class QGTestScenarios(BaseGate):
     """Quality gate for Step 4: Test Scenarios generation."""
 
-    # Valid workflow values
-    VALID_WORKFLOWS = {"auth", "catalog", "cart", "checkout"}
+    # Step number for this gate (used for attempt tracking)
+    STEP_NUMBER = 4
 
     # Skeleton patterns to detect in scenarios
     # Tuple of (pattern, is_regex) - regex patterns use word boundaries to avoid false positives
@@ -86,18 +86,12 @@ class QGTestScenarios(BaseGate):
                 fix_hint=f"Ensure metadata_context includes: {', '.join(required_fields)}"
             )
 
-        # Validate workflow
+        # Validate workflow (dynamic - any non-empty string is valid)
         workflow = input_data.get("workflow")
-        if not workflow:
+        if not workflow or not isinstance(workflow, str) or not workflow.strip():
             return cls.fail_response(
-                error="Missing required field: workflow",
-                fix_hint=f"Provide workflow value. Valid options: {', '.join(sorted(cls.VALID_WORKFLOWS))}"
-            )
-
-        if workflow not in cls.VALID_WORKFLOWS:
-            return cls.fail_response(
-                error=f"Invalid workflow: '{workflow}'",
-                fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_WORKFLOWS))}"
+                error="Missing or empty required field: workflow",
+                fix_hint="Provide workflow value (e.g., 'auth', 'catalog', 'checkout', or any custom workflow name)."
             )
 
         return cls.pass_response()
@@ -118,7 +112,54 @@ class QGTestScenarios(BaseGate):
 
         Returns:
             {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
+            or {"status": "blocked", ...} if max attempts exceeded
         """
+        # P1: Check if blocked due to max attempts
+        state_manager = cls._state_manager
+        if state_manager:
+            attempts = state_manager.get_attempt_count(cls.STEP_NUMBER)
+            if attempts >= cls.MAX_ATTEMPTS:
+                return cls.blocked_response(
+                    step=cls.STEP_NUMBER,
+                    attempts=attempts,
+                    errors=[]
+                )
+
+        # Run actual validation
+        result = cls._validate_post_internal(input_data)
+
+        # P2: Extract source from input_data for audit logging
+        source = input_data.get("source")
+
+        # P1: Track attempts and log to audit
+        if state_manager:
+            if result.get("status") == "fail":
+                state_manager.increment_attempt(cls.STEP_NUMBER)
+                if cls._audit_logger:
+                    cls._audit_logger.log_gate(
+                        step=cls.STEP_NUMBER,
+                        gate_name="qg_test_scenarios",
+                        mode="POST",
+                        result="fail",
+                        error=result.get("error"),
+                        source=source
+                    )
+            elif result.get("status") == "pass":
+                state_manager.reset_attempts(cls.STEP_NUMBER)
+                if cls._audit_logger:
+                    cls._audit_logger.log_gate(
+                        step=cls.STEP_NUMBER,
+                        gate_name="qg_test_scenarios",
+                        mode="POST",
+                        result="pass",
+                        source=source
+                    )
+
+        return result
+
+    @classmethod
+    def _validate_post_internal(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Internal validation logic (separated for attempt tracking)."""
         test_scenarios = input_data.get("test_scenarios")
 
         # Check test_scenarios present

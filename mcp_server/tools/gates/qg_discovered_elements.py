@@ -28,6 +28,9 @@ from utils.state_manager import StateManager
 class QGDiscoveredElements(BaseGate):
     """Quality gate for Step 5: Discovered Elements."""
 
+    # Step number for this gate (used for attempt tracking)
+    STEP_NUMBER = 5
+
     # Valid credential strategies (from DD-24)
     VALID_CREDENTIAL_STRATEGIES = {"none", "static", "dynamic", "self-contained"}
 
@@ -149,7 +152,54 @@ class QGDiscoveredElements(BaseGate):
 
         Returns:
             {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
+            or {"status": "blocked", ...} if max attempts exceeded
         """
+        # P1: Check if blocked due to max attempts
+        state_manager = cls._state_manager
+        if state_manager:
+            attempts = state_manager.get_attempt_count(cls.STEP_NUMBER)
+            if attempts >= cls.MAX_ATTEMPTS:
+                return cls.blocked_response(
+                    step=cls.STEP_NUMBER,
+                    attempts=attempts,
+                    errors=[]
+                )
+
+        # Run actual validation
+        result = cls._validate_post_internal(input_data)
+
+        # P2: Extract source from input_data for audit logging
+        source = input_data.get("source")
+
+        # P1: Track attempts and log to audit
+        if state_manager:
+            if result.get("status") == "fail":
+                state_manager.increment_attempt(cls.STEP_NUMBER)
+                if cls._audit_logger:
+                    cls._audit_logger.log_gate(
+                        step=cls.STEP_NUMBER,
+                        gate_name="qg_discovered_elements",
+                        mode="POST",
+                        result="fail",
+                        error=result.get("error"),
+                        source=source
+                    )
+            elif result.get("status") == "pass":
+                state_manager.reset_attempts(cls.STEP_NUMBER)
+                if cls._audit_logger:
+                    cls._audit_logger.log_gate(
+                        step=cls.STEP_NUMBER,
+                        gate_name="qg_discovered_elements",
+                        mode="POST",
+                        result="pass",
+                        source=source
+                    )
+
+        return result
+
+    @classmethod
+    def _validate_post_internal(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Internal validation logic (separated for attempt tracking)."""
         # Validate elements array
         elements = input_data.get("elements")
 

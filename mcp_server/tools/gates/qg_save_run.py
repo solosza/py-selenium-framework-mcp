@@ -63,11 +63,11 @@ class QGSaveRun(BaseGate):
         if code is not None:
             return code
 
-        # Fallback: check state
+        # Fallback: check state (use same field name as input)
         state_manager = cls._get_state_manager()
         step_data = state_manager.get_step(step)
         if step_data and isinstance(step_data, dict):
-            return step_data.get("code")
+            return step_data.get(field)
 
         return None
 

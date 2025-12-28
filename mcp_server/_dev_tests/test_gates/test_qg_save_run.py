@@ -170,13 +170,13 @@ def mock_state_manager_with_code(valid_pom_code, valid_task_code, valid_role_cod
 
         def get_step_side_effect(step):
             if step == 6:
-                return {"code": valid_pom_code}
+                return {"pom_code": valid_pom_code}
             elif step == 7:
-                return {"code": valid_task_code}
+                return {"task_code": valid_task_code}
             elif step == 8:
-                return {"code": valid_role_code}
+                return {"role_code": valid_role_code}
             elif step == 9:
-                return {"code": valid_test_code}
+                return {"test_code": valid_test_code}
             return None
 
         state_manager.get_step.side_effect = get_step_side_effect
