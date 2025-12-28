@@ -47,26 +47,26 @@
 
 ## Tasks
 
-- [ ] **1.0 Audit Trail System** [CORE]
-  - [ ] 1.1 Create branch `feature/1.0-audit-trail`
-  - [ ] 1.2 **Invoke `testing` skill** - Follow TDD for CORE logic (Red-Green-Refactor)
-  - [ ] 1.3 Write failing tests first for AuditLogger
-  - [ ] 1.4 Create `mcp_server/utils/audit_logger.py` with AuditLogger class
+- [x] **1.0 Audit Trail System** [CORE] ✓ COMMITTED (a90a5d7)
+  - [x] 1.1 Create branch `feature/1.0-audit-trail`
+  - [x] 1.2 **Invoke `testing` skill** - Follow TDD for CORE logic (Red-Green-Refactor)
+  - [x] 1.3 Write failing tests first for AuditLogger (31 tests)
+  - [x] 1.4 Create `mcp_server/utils/audit_logger.py` with AuditLogger class
     - `__init__(run_id)` - Initialize with timestamp-based run ID
     - `log_gate(step, gate_name, mode, result, error=None, source=None)` - Record gate call
     - `log_self_heal(step, attempt, error)` - Record self-heal attempt
     - `log_file_generated(path, step)` - Record file output
     - `get_summary()` - Return summary dict (total_steps, gates_passed, etc.)
     - `finalize()` - Write JSON file to `mcp_server/state/`
-  - [ ] 1.5 Define audit log JSON schema matching PRD spec
-  - [ ] 1.6 Add `_audit_logger` class variable to BaseGate
-  - [ ] 1.7 Add `set_audit_logger(logger)` class method to BaseGate
-  - [ ] 1.8 Update `pass_response()` to log gate pass if logger set
-  - [ ] 1.9 Update `fail_response()` to log gate fail if logger set
-  - [ ] 1.10 Run checks: `python -m pytest mcp_server/_dev_tests/test_audit_logger.py -v`
-  - [ ] 1.11 **Audit: Verify testing skill conventions followed**
-  - [ ] 1.12 Record results
-  - [ ] 1.13 Commit: `feat: add audit trail system (Task 1.0)`
+  - [x] 1.5 Define audit log JSON schema matching PRD spec
+  - [x] 1.6 Add `_audit_logger` class variable to BaseGate
+  - [x] 1.7 Add `set_audit_logger(logger)` class method to BaseGate
+  - [x] 1.8 Update `pass_response()` to log gate pass if logger set
+  - [x] 1.9 Update `fail_response()` to log gate fail if logger set
+  - [x] 1.10 Run checks: 50 tests passed
+  - [x] 1.11 **Audit: Verify testing skill conventions followed** ✓ TDD
+  - [x] 1.12 Record results: 31 audit + 19 base_gate tests
+  - [x] 1.13 Commit: `feat: add audit trail system (Task 1.0)`
 
 ---
 
