@@ -7,14 +7,24 @@ Task 3.0 - Provides common functionality for all quality gates:
 - Locator detection (DD-27)
 - POM assertion validation (DD-15)
 - Required field validation
+
+Task 1.0 - Added audit logging integration:
+- Audit logger instance (class-level)
+- Automatic logging on pass/fail responses
 """
 
 import re
-from typing import List
+from typing import List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from utils.audit_logger import AuditLogger
 
 
 class BaseGate:
     """Base class with shared validation utilities for quality gates."""
+
+    # Audit logger instance (shared across all gates for a workflow run)
+    _audit_logger: Optional["AuditLogger"] = None
 
     # DD-25: Skeleton code patterns to detect
     SKELETON_PATTERNS = [
@@ -38,14 +48,88 @@ class BaseGate:
         r'By\.PARTIAL_LINK_TEXT',
     ]
 
-    @staticmethod
-    def pass_response() -> dict:
-        """Return standard pass response."""
+    @classmethod
+    def set_audit_logger(cls, logger: Optional["AuditLogger"]) -> None:
+        """
+        Set the audit logger for all gates.
+
+        Args:
+            logger: AuditLogger instance, or None to disable logging.
+        """
+        cls._audit_logger = logger
+
+    @classmethod
+    def get_audit_logger(cls) -> Optional["AuditLogger"]:
+        """Get the current audit logger."""
+        return cls._audit_logger
+
+    @classmethod
+    def pass_response(
+        cls,
+        step: Optional[int] = None,
+        gate_name: Optional[str] = None,
+        mode: Optional[str] = None,
+        source: Optional[str] = None
+    ) -> dict:
+        """
+        Return standard pass response and optionally log to audit trail.
+
+        Args:
+            step: Step number (for audit logging)
+            gate_name: Gate name (for audit logging)
+            mode: Gate mode PRE/POST (for audit logging)
+            source: Execution source tool/ai/self-heal (for audit logging)
+
+        Returns:
+            {"status": "pass"}
+        """
+        # Log to audit trail if logger set and context provided
+        if cls._audit_logger and step is not None and gate_name is not None:
+            cls._audit_logger.log_gate(
+                step=step,
+                gate_name=gate_name,
+                mode=mode or "POST",
+                result="pass",
+                source=source
+            )
+
         return {"status": "pass"}
 
-    @staticmethod
-    def fail_response(error: str, fix_hint: str) -> dict:
-        """Return standard fail response with error and fix hint."""
+    @classmethod
+    def fail_response(
+        cls,
+        error: str,
+        fix_hint: str,
+        step: Optional[int] = None,
+        gate_name: Optional[str] = None,
+        mode: Optional[str] = None,
+        source: Optional[str] = None
+    ) -> dict:
+        """
+        Return standard fail response and optionally log to audit trail.
+
+        Args:
+            error: Error message
+            fix_hint: Hint for fixing the issue
+            step: Step number (for audit logging)
+            gate_name: Gate name (for audit logging)
+            mode: Gate mode PRE/POST (for audit logging)
+            source: Execution source tool/ai/self-heal (for audit logging)
+
+        Returns:
+            {"status": "fail", "error": str, "fix_hint": str}
+        """
+        # Log to audit trail if logger set and context provided
+        if cls._audit_logger and step is not None and gate_name is not None:
+            cls._audit_logger.log_gate(
+                step=step,
+                gate_name=gate_name,
+                mode=mode or "POST",
+                result="fail",
+                error=error,
+                source=source
+            )
+
         return {
             "status": "fail",
             "error": error,
