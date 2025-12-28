@@ -70,7 +70,7 @@
 
 ---
 
-- [x] **2.0 Self-Heal Cap Enforcement** [CORE] ✓ COMMITTED (pending)
+- [x] **2.0 Self-Heal Cap Enforcement** [CORE] ✓ COMMITTED (84d9d31)
   - [x] 2.1 Create branch `feature/2.0-self-heal-cap`
   - [x] 2.2 **Invoke `testing` skill** - Follow TDD for CORE logic (Red-Green-Refactor)
   - [x] 2.3 Write failing tests first for attempt tracking and blocked status (24 tests)
