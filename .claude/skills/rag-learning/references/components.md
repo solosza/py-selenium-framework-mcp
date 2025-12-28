@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 # RAG Component Deep Dive
 
 Detailed reference for each RAG pipeline component. Load when user needs more depth on a specific component.

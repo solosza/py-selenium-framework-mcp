@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 # Step 9: Tool 6 - Generate Test Runner
 
 **Purpose:** Generate pytest test code that calls Role workflow and asserts via POM state methods.

@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 ---
 name: qa-guidance-layer
 description: Guide AI through 10-step QA test generation workflow with quality gates. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".

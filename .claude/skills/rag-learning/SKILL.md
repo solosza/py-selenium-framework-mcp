@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 ---
 name: rag-learning
 description: Guided learning skill for building RAG systems. Use when the user is learning RAG concepts by building, wants to understand RAG component decisions (document loading, chunking, embedding, vector storage, search, prompt building, generation, evaluation), or asks "why" questions about RAG architecture. Triggers on RAG projects where learning is the goal, not just implementation.

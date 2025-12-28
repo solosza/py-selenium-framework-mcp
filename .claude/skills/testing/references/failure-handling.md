@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 # Failure Handling
 
 Detailed protocol for handling test failures, root cause analysis, and defect tracking.

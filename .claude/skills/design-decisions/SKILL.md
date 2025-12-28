@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 ---
 name: design-decisions
 description: Record architectural decisions with rationale. Use WHEN making design choices, documenting WHY behind decisions, or creating DD-XX entries. Triggers on "design decision", "DD-", "architecture choice".

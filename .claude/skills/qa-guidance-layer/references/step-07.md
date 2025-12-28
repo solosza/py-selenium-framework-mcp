@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 # Step 7: Tool 4 - Generate Task
 
 **Purpose:** Generate Task class code that orchestrates POM methods for domain operations.

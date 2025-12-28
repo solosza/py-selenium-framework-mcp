@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 ---
 name: testing
 description: Define and enforce testing process. Use WHEN running tests, handling test failures, tracking defects, or discussing test coverage. Triggers on "run tests", "test failed", "defect", "coverage".

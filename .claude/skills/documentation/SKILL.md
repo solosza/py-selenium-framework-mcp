@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 ---
 name: documentation
 description: Create and maintain project documentation. Use WHEN writing docs, READMEs, API references, or explaining WHAT something does and HOW to use it.

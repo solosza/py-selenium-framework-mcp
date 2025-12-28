@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 ---
 name: design-execution-engine
 description: Guide design of execution engines (guidance + gates + operations + state) for any tool chain workflow. Use WHEN designing multi-step validation systems, creating enforcement layers for verticals. Meta-skill for building execution engines.

@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 ---
 name: execute-from-step1
 description: Execute the 9-step MCP tool chain for generating Selenium test automation code. Use WHEN user wants to create tests from user stories, generate page objects, tasks, or roles using the MCP qa-automation tools. Use WHEN user mentions "step 1", "9-step workflow", "generate test", "create page object", or "MCP tools". Triggers on test generation requests for the QA automation framework.

@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 # Step 4: Tool 1 - Generate Tests
 
 **Purpose:** Generate test scenarios from BDD metadata using MCP tool.

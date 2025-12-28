@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 ---
 name: create-vertical-validation-agents
 description: Template for creating AI agent validation systems for DaaS verticals. Use WHEN setting up validation agents for new verticals (QA, RAG, API, Sales Contracts). Triggers on "validation agent", "vertical validation", "DaaS agent".

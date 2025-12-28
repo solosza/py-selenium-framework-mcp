@@ -260,6 +260,32 @@ claude mcp list
 
 You should see both `qa-automation` and `playwright` listed and enabled.
 
+#### Step 4: Install Skills (Required for AI-Guided Workflow)
+
+The framework includes **Claude Code skills** that guide AI through the 10-step test generation workflow with quality gates. Copy them to your project:
+
+```bash
+# Copy skills directory to your project
+cp -r .claude/skills /path/to/your/project/.claude/skills
+```
+
+**Windows:**
+```bash
+xcopy /E /I .claude\skills C:\path\to\your\project\.claude\skills
+```
+
+The skills include:
+- **qa-guidance-layer** - 10-step workflow with quality gates
+- **testing** - TDD and test conventions
+- **design-decisions** - Architecture decision recording
+- **documentation** - Documentation conventions
+
+These skills enable AI to:
+- Follow the correct 10-step workflow sequence
+- Validate generated code through quality gates
+- Self-heal when tool output is incomplete
+- Block progression until quality standards are met
+
 #### Common MCP Issues
 
 **Server not starting:**
@@ -487,9 +513,9 @@ The 4-layer architecture is framework-agnostic. The current implementation uses 
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) for details.
+**Framework Code (MIT):** The test automation framework (framework/, tests/) is MIT licensed - free to use, modify, and distribute.
 
-Free to use, modify, and distribute.
+**Skills (Proprietary):** The Claude Code skills (.claude/skills/) are proprietary. You may use them with Claude Code but may not redistribute or modify them. See [LICENSE.md](LICENSE.md) for full terms.
 
 ## Author
 

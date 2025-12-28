@@ -1,3 +1,8 @@
+<!-- LICENSE: Proprietary - Isagawa Corp -->
+<!-- You may USE this skill with Claude Code. -->
+<!-- You may NOT redistribute, modify, or create derivative works. -->
+<!-- See LICENSE.md for full terms. -->
+
 # Step 8: Tool 5 - Generate Role
 
 **Purpose:** Generate Role class code that orchestrates multiple Tasks into complete business workflows.
