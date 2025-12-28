@@ -8,10 +8,11 @@
 # Session: 2025-12-27 (Part 5) - Release Readiness Phase 3 (Deliver)
 
 ## Quick Resume
-**Completed:** Task 1.0 Audit Trail, Task 2.0 Self-Heal Cap, Task 2.5 Execution Mode
+**Completed:** Task 1.0, 2.0, 2.5 + workflow/domain fix
 **Status:** Phase 3 (Deliver) in progress
 **Next:** Task 3.0 License & Documentation
 **Branch:** feature/2.5-execution-mode
+**Tests:** 62 gate tests passing
 
 ---
 
@@ -24,6 +25,14 @@
    - AuditLogger: source parameter (tool/ai/self-heal)
    - Gates updated: qg_page_object, qg_task, qg_role, qg_test_runner
    - 21 new tests, all passing
+
+3. **Fixed domain→workflow consistency** ✓ COMMITTED (8caa262)
+   - Issue: 3 tests failing due to hardcoded domain validation
+   - Root cause: Tests expected `auth, catalog, cart, checkout` but workflow is dynamic
+   - Fix: Tests now check empty workflow fails (any non-empty string is valid)
+   - Updated step-02.md: `domain` → `workflow` throughout
+   - Backwards compatible: Gates accept both `workflow` and `domain` keys
+   - 62 gate tests now pass
 
 ---
 
