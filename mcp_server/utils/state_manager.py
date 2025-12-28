@@ -2,11 +2,13 @@
 StateManager - Workflow state persistence for QA Execution Engine
 
 Task 2.0 - Manages workflow state across quality gate operations.
+Task 2.5 - Adds execution mode management.
 
 Features:
 - Atomic writes to prevent corruption
 - Step validation (1-10 range)
 - Graceful handling of missing/corrupted files
+- Execution mode get/set with env var default
 """
 
 import json
@@ -14,6 +16,10 @@ import os
 import tempfile
 from pathlib import Path
 from typing import Optional
+
+
+# Valid execution modes (Topic 1 from PRD)
+VALID_EXECUTION_MODES = {"mixed", "skills_only"}
 
 
 # Valid step range for the 10-step workflow
@@ -188,6 +194,56 @@ class StateManager:
         if step_key in state["_attempts"]:
             state["_attempts"][step_key] = 0
             self._save_state(state)
+
+    # =========================================================================
+    # Execution Mode (Task 2.5 - Execution Mode Flag)
+    # =========================================================================
+
+    def get_execution_mode(self) -> str:
+        """
+        Get current execution mode.
+
+        Priority:
+        1. Saved value in state file (if exists)
+        2. ISAGAWA_EXECUTION_MODE env var (if set)
+        3. Default: "mixed"
+
+        Returns:
+            Execution mode ("mixed" or "skills_only").
+        """
+        # Check saved state first
+        state = self.load()
+        saved_mode = state.get("_execution_mode")
+        if saved_mode is not None:
+            return saved_mode
+
+        # Check env var
+        env_mode = os.environ.get("ISAGAWA_EXECUTION_MODE")
+        if env_mode and env_mode in VALID_EXECUTION_MODES:
+            return env_mode
+
+        # Default
+        return "mixed"
+
+    def set_execution_mode(self, mode: str) -> None:
+        """
+        Set execution mode.
+
+        Args:
+            mode: Execution mode ("mixed" or "skills_only")
+
+        Raises:
+            ValueError: If mode is not valid.
+        """
+        if mode not in VALID_EXECUTION_MODES:
+            valid_modes = ", ".join(sorted(VALID_EXECUTION_MODES))
+            raise ValueError(
+                f"Invalid execution mode: '{mode}'. Valid modes: {valid_modes}"
+            )
+
+        state = self.load()
+        state["_execution_mode"] = mode
+        self._save_state(state)
 
     def _save_state(self, state: dict) -> None:
         """

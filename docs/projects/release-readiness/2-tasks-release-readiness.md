@@ -24,6 +24,15 @@
 - `mcp_server/tools/gates/qg_test_runner.py` - Update POST to check attempts
 - `mcp_server/_dev_tests/test_self_heal_cap.py` - NEW: Unit tests for cap enforcement
 
+### Execution Mode Flag (Task 2.5)
+- `mcp_server/utils/state_manager.py` - Add execution_mode get/set methods
+- `mcp_server/utils/audit_logger.py` - Add source parameter to log_gate(), execution summary
+- `mcp_server/tools/gates/qg_page_object.py` - Accept source parameter in POST
+- `mcp_server/tools/gates/qg_task.py` - Accept source parameter in POST
+- `mcp_server/tools/gates/qg_role.py` - Accept source parameter in POST
+- `mcp_server/tools/gates/qg_test_runner.py` - Accept source parameter in POST
+- `mcp_server/_dev_tests/test_execution_mode.py` - NEW: Unit tests for execution mode
+
 ### License & Documentation (Task 3.0)
 - `.claude/skills/qa-guidance-layer/SKILL.md` - Add license header
 - `.claude/skills/qa-guidance-layer/references/*.md` - Add license headers
@@ -96,6 +105,39 @@
   - [x] 2.12 **Audit: Verify testing skill conventions followed** ✓ TDD
   - [x] 2.13 Record results: 24 new tests, all passing
   - [x] 2.14 Commit: `feat: add self-heal cap enforcement (Task 2.0)`
+
+---
+
+- [x] **2.5 Execution Mode Flag** [CORE] ✓ COMMITTED
+  - [x] 2.5.1 Create branch `feature/2.5-execution-mode`
+  - [x] 2.5.2 **Invoke `testing` skill** - Follow TDD for CORE logic (Red-Green-Refactor)
+  - [x] 2.5.3 Write failing tests first for execution mode infrastructure (21 tests)
+  - [x] 2.5.4 Add to StateManager:
+    - `get_execution_mode() -> str` - Return current mode ("mixed" or "skills_only")
+    - `set_execution_mode(mode: str)` - Set mode (validated)
+    - Default from env var `ISAGAWA_EXECUTION_MODE` or "mixed"
+  - [x] 2.5.5 Add to workflow state schema:
+    - `execution_mode` field (default: "mixed")
+  - [x] 2.5.6 Update AuditLogger:
+    - `log_gate()` now accepts `source` parameter (tool/ai/self-heal)
+    - Store source per step in audit log
+  - [x] 2.5.7 Update code-generating gates (Steps 6-9) to accept `source` parameter:
+    - `qg_page_object` POST: Add `source` to input_data, pass to audit
+    - `qg_task` POST: Same pattern
+    - `qg_role` POST: Same pattern
+    - `qg_test_runner` POST: Same pattern
+  - [x] 2.5.8 Add "Execution Summary" section to audit log:
+    - Count of tool-generated vs ai-generated vs self-healed steps
+    - Execution mode used
+  - [x] 2.5.9 Run checks: 21 tests pass (466 total, 3 pre-existing failures)
+  - [x] 2.5.10 **Audit: Verify testing skill conventions followed** ✓ TDD
+  - [x] 2.5.11 Commit: `feat: add execution mode flag infrastructure (Task 2.5)`
+
+  **Done When:**
+  - `execution_mode` stored in workflow state
+  - `source` tracked per step in audit log
+  - Execution summary in audit report
+  - All tests pass
 
 ---
 
@@ -221,8 +263,10 @@
 
 ```
 1.0 Audit Trail ──────┐
-                      ├──► 6.0 E2E Verification
+                      │
 2.0 Self-Heal Cap ────┤
+                      ├──► 6.0 E2E Verification
+2.5 Execution Mode ───┤
                       │
 3.0 License/Docs ─────┘
 

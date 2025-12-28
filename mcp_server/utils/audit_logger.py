@@ -127,7 +127,8 @@ class AuditLogger:
         Calculate summary statistics.
 
         Returns:
-            Dict with total_steps, gates_passed, gates_failed, self_heals, final_result
+            Dict with total_steps, gates_passed, gates_failed, self_heals,
+            final_result, execution_mode, source_counts
         """
         # Count unique steps
         unique_steps = set()
@@ -135,6 +136,9 @@ class AuditLogger:
         gates_failed = 0
         self_heals = 0
         last_result = None
+
+        # Task 2.5: Count sources
+        source_counts: Dict[str, int] = {}
 
         for entry in self.steps:
             step = entry.get("step")
@@ -157,12 +161,19 @@ class AuditLogger:
                     gates_failed += 1
                     last_result = "blocked"
 
+                # Task 2.5: Track source
+                source = entry.get("source")
+                if source is not None:
+                    source_counts[source] = source_counts.get(source, 0) + 1
+
         return {
             "total_steps": len(unique_steps),
             "gates_passed": gates_passed,
             "gates_failed": gates_failed,
             "self_heals": self_heals,
-            "final_result": last_result if last_result else "incomplete"
+            "final_result": last_result if last_result else "incomplete",
+            "execution_mode": self.execution_mode,
+            "source_counts": source_counts
         }
 
     def finalize(self, output_dir: Optional[str] = None) -> str:

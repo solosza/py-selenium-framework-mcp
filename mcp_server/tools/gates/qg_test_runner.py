@@ -216,12 +216,34 @@ class QGTestRunner(BaseGate):
         # Run actual validation
         result = cls._validate_post_internal(input_data)
 
-        # Task 2.0: Track attempts
+        # Task 2.5: Extract source from input_data
+        source = input_data.get("source")
+
+        # Task 2.0: Track attempts and log to audit
         if state_manager:
             if result.get("status") == "fail":
                 state_manager.increment_attempt(cls.STEP_NUMBER)
+                # Log failure to audit
+                if cls._audit_logger:
+                    cls._audit_logger.log_gate(
+                        step=cls.STEP_NUMBER,
+                        gate_name="qg_test_runner",
+                        mode="POST",
+                        result="fail",
+                        error=result.get("error"),
+                        source=source
+                    )
             elif result.get("status") == "pass":
                 state_manager.reset_attempts(cls.STEP_NUMBER)
+                # Task 2.5: Log success with source
+                if cls._audit_logger:
+                    cls._audit_logger.log_gate(
+                        step=cls.STEP_NUMBER,
+                        gate_name="qg_test_runner",
+                        mode="POST",
+                        result="pass",
+                        source=source
+                    )
 
         return result
 
