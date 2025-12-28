@@ -11,7 +11,7 @@
 | **Step** | 2 - User Input |
 | **Dependencies** | Step 1 complete (credential_strategy, test_data_location exist) |
 | **Input** | User's natural language requirement |
-| **Output** | `persona`, `URL`, `role_name`, `domain`, `raw_requirement` |
+| **Output** | `persona`, `URL`, `role_name`, `workflow`, `raw_requirement` |
 
 ---
 
@@ -20,7 +20,7 @@
 | Persona | Actions |
 |---------|---------|
 | **User** | Provides test requirement in "As a [role], I want to..." format with URL |
-| **AI** | Asks for requirement if not provided, extracts persona/URL/role_name/domain, passes to gate |
+| **AI** | Asks for requirement if not provided, extracts persona/URL/role_name/workflow, passes to gate |
 | **Tool** | `qg_user_input` validates extracted fields, saves state on PASS |
 
 ---
@@ -36,7 +36,7 @@ ACTION:
   "What test do you want to create?
    Format: 'As a [role], I want to [action]...'
    URL: [target page]"
-- IF user provided requirement: EXTRACT persona, URL, role_name, domain
+- IF user provided requirement: EXTRACT persona, URL, role_name, workflow
 
 VALIDATE:
 - CALL qg_user_input with extracted fields
@@ -62,7 +62,7 @@ RETRY:
 
 | Field | Value |
 |-------|-------|
-| **State Saved** | `persona`, `URL`, `role_name`, `domain`, `raw_requirement` |
+| **State Saved** | `persona`, `URL`, `role_name`, `workflow`, `raw_requirement` |
 | **Who Saves** | Quality gate (`qg_user_input`) |
 | **When Saved** | On gate PASS |
 | **State Schema** | See below |
@@ -76,7 +76,7 @@ RETRY:
     "persona": "registered user",
     "URL": "http://automationpractice.pl/index.php?controller=authentication",
     "role_name": "RegisteredUser",
-    "domain": "auth",
+    "workflow": "auth",
     "raw_requirement": "As a registered user, I want to login with email and password"
   }
 }
@@ -98,7 +98,7 @@ RETRY:
 | `persona` | Must be present (extracted from "As a [X]") |
 | `URL` | Must be valid URL format |
 | `role_name` | Must be derivable from persona (PascalCase) |
-| `domain` | Must be one of: auth, catalog, cart, checkout |
+| `workflow` | Must be non-empty string (accepts `domain` for backwards compatibility) |
 | `raw_requirement` | Must be specific enough for BDD generation |
 
 ---
@@ -112,7 +112,7 @@ RETRY:
 | Persona missing | ASK: "Please specify persona. Example: 'As a customer, I want to...'" |
 | URL missing | ASK: "Which page? Example: 'http://yoursite.com/login'" |
 | Cannot determine role | ASK: "What type of user? Example: 'customer', 'admin', 'visitor'" |
-| Cannot determine domain | ASK: "What workflow area? Example: 'authentication', 'catalog', 'checkout'" |
+| Cannot determine workflow | ASK: "What workflow area? Example: 'auth', 'search', 'checkout', or any custom name" |
 | Requirement vague | ASK: "Please be more specific. Example: 'I want to add a blue t-shirt size M to cart'" |
 
 **Known Defects:** Enforcement gap - AI sometimes forgets to ask for missing info
@@ -179,7 +179,7 @@ Say:
               │  - persona          │
               │  - URL              │
               │  - role_name        │
-              │  - domain           │
+              │  - workflow         │
               └─────────────────────┘
                          │
                          ▼

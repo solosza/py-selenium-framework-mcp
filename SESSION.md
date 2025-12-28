@@ -5,6 +5,28 @@
 
 ---
 
+# Session: 2025-12-27 (Part 5) - Release Readiness Phase 3 (Deliver)
+
+## Quick Resume
+**Completed:** Task 1.0 Audit Trail, Task 2.0 Self-Heal Cap, Task 2.5 Execution Mode
+**Status:** Phase 3 (Deliver) in progress
+**Next:** Task 3.0 License & Documentation
+**Branch:** feature/2.5-execution-mode
+
+---
+
+## What Was Done This Session
+
+1. **Recovered from window close** - Found Task 2.5 work in progress
+2. **Completed Task 2.5 (Execution Mode Flag)** ✓ COMMITTED (81de292)
+   - StateManager: get/set execution_mode (mixed/skills_only)
+   - Environment variable: ISAGAWA_EXECUTION_MODE
+   - AuditLogger: source parameter (tool/ai/self-heal)
+   - Gates updated: qg_page_object, qg_task, qg_role, qg_test_runner
+   - 21 new tests, all passing
+
+---
+
 # Session: 2025-12-27 (Part 4) - Release Readiness Phase 3 (Deliver)
 
 ## Quick Resume

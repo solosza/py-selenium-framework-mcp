@@ -323,17 +323,18 @@ class TestPreNegative:
         assert result["status"] == "fail", "Empty class_name should fail"
 
     @pytest.mark.unit
-    def test_pre_domain_invalid_fails(self, valid_pom_metadata, mock_state_manager_step6_complete):
+    def test_pre_empty_workflow_fails(self, valid_pom_metadata, mock_state_manager_step6_complete):
         """
-        P0: Invalid domain fails validation.
+        P0: Empty workflow fails validation.
 
-        # Arrange
+        Workflow/domain is dynamic - any non-empty string is valid.
+        Only empty/missing workflow should fail.
         """
         from tools.gates.qg_task import QGTask
         input_data = {
             "mode": "PRE",
             "pom_metadata": valid_pom_metadata,
-            "domain": "invalid_domain",
+            "workflow": "",  # Empty workflow should fail
             "task_name": "AuthTasks"
         }
 
@@ -341,8 +342,8 @@ class TestPreNegative:
         result = QGTask.validate_pre(input_data)
 
         # Assert
-        assert result["status"] == "fail", "Invalid domain should fail"
-        assert "domain" in result["error"].lower(), "Error should mention domain"
+        assert result["status"] == "fail", "Empty workflow should fail"
+        assert "workflow" in result["error"].lower() or "domain" in result["error"].lower(), "Error should mention workflow/domain"
 
     @pytest.mark.unit
     def test_pre_task_name_missing_fails(self, valid_pom_metadata, mock_state_manager_step6_complete):

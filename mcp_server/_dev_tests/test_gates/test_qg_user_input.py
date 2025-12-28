@@ -276,7 +276,7 @@ class TestStateSaved:
             assert "persona" in call_kwargs["data"], "Should include persona"
             assert "URL" in call_kwargs["data"], "Should include URL"
             assert "role_name" in call_kwargs["data"], "Should include role_name"
-            assert "domain" in call_kwargs["data"], "Should include domain"
+            assert "workflow" in call_kwargs["data"], "Should include workflow"
 
 
 class TestInvalidInputs:
@@ -599,21 +599,25 @@ class TestErrorHandling:
         assert "url" in result["fix_hint"].lower(), "fix_hint should mention URL"
 
 
-class TestInvalidDomain:
+class TestWorkflowValidation:
     """
-    Test suite for domain validation.
+    Test suite for workflow validation.
 
-    Tests organized by: domain values
+    Workflow/domain is dynamic - any non-empty string is valid.
+    Tests verify empty/missing workflow fails.
     """
 
     @pytest.mark.unit
     @pytest.mark.qg_user_input
-    def test_invalid_domain_fails(self):
+    def test_empty_workflow_fails(self):
         """
-        P0: Verify invalid domain fails validation.
+        P0: Verify empty workflow fails validation.
+
+        Workflow/domain is dynamic (any non-empty string is valid).
+        Only empty/missing workflow should fail.
 
         AAA Pattern:
-        1. Arrange - Create input with invalid domain
+        1. Arrange - Create input with empty workflow
         2. Act - Call qg_user_input.validate()
         3. Assert - Returns fail status
         """
@@ -622,7 +626,7 @@ class TestInvalidDomain:
             "persona": "guest",
             "URL": "http://example.com/page",
             "role_name": "Guest",
-            "domain": "invalid_domain",
+            "workflow": "",  # Empty workflow should fail
             "raw_requirement": "As a guest, I want to do something"
         }
 
@@ -630,7 +634,7 @@ class TestInvalidDomain:
         result = QGUserInput.validate(input_data)
 
         # Assert
-        assert result["status"] == "fail", "Invalid domain should fail"
+        assert result["status"] == "fail", "Empty workflow should fail"
         assert "error" in result, "Should include error message"
 
 
