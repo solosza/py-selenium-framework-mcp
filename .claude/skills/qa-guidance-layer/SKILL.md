@@ -105,10 +105,16 @@ Use when:
    - State enables resume on failure
    - Accumulated data flows through steps
 
-4. STOP-AND-DISCUSS (DD-22)
+4. STOP-AND-DISCUSS
    - On ANY blocker: STOP → REPORT → DISCUSS → PROCEED
    - Never loop through fixes without user
    - User decides resolution path
+
+5. INTERNAL REFERENCES HIDDEN
+   - NEVER mention DD-XX references to users (internal implementation details)
+   - NEVER say "per DD-22" or "following DD-33" out loud
+   - Reference rules internally but present actions naturally
+   - Example: Say "I'll stop and discuss this with you" NOT "Per DD-22, I must stop"
 ```
 
 ---
@@ -275,7 +281,7 @@ OPTIONS:
 ```
 ❌ VALIDATION FAILED (3 attempts exhausted)
 
-ISSUE: Locator detected in Task (DD-27 violation)
+ISSUE: Locator detected in Task (Tasks must not contain locators)
 ────────────────────────────────────
 YOUR CODE (line 15):
   product_locator = (By.CSS_SELECTOR, "ul.product_list li")
