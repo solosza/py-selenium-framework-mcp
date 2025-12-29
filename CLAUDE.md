@@ -174,9 +174,13 @@ Step 9: Save files & run test
 | DD-20 | Dynamic elements: AI prepares page state before Tool 2 |
 | DD-21 | AI-SDET collaboration for dynamic discovery |
 | DD-22 | On ANY blocker: STOP → REPORT → DISCUSS with user → then proceed |
+| DD-23 | BDD format required for Tool 1 (explicit Given/When/Then) |
 | DD-24 | Test credentials: ASK user which strategy (static/dynamic/self-contained) |
 | DD-25 | Skeleton code quality gate: STOP if any tool generates incomplete code |
+| DD-26 | Tool chain data contracts: pass metadata directly between tools |
+| DD-27 | Task code quality gate: NO locators in Tasks (CRITICAL) |
 | DD-28 | Test data organization: ASK user shared vs workflow-specific data location |
+| DD-29 | Slash command entry: `/qa-workflow` (prod) or `/qa-workflow-dev` (dev) |
 | DD-33 | Dynamic element discovery: AI uses Playwright snapshot → extracts → builds → validates via gate (see FRAMEWORK.md) |
 
 ### DD-22: Stop-and-Discuss Protocol (CRITICAL)

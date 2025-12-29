@@ -43,6 +43,8 @@
    - [8.19 DD-26: Tool Chain Data Contracts](#819-dd-26-tool-chain-data-contracts)
    - [8.20 DD-27: Task Code Quality Gate](#820-dd-27-task-code-quality-gate-no-locators)
    - [8.21 DD-28: Test Data Organization](#821-dd-28-test-data-organization)
+   - [8.22 DD-29: Slash Command Modes](#822-dd-29-slash-command-modes-workflow-entry-point)
+   - [8.23 DD-30: Progressive Audit Trail](#823-dd-30-progressive-audit-trail)
 9. [10-Step Workflow with Quality Gates (v2)](#9-10-step-workflow-with-quality-gates-v2)
    - [9.1 Step 1: Pre-flight Configuration](#91-step-1-pre-flight-configuration)
    - [9.2 Step 2: User Input](#92-step-2-user-input)
@@ -1477,6 +1479,9 @@ AI PROMPTING RULES FOR TOOL 6:
 | DD-26 | Tool chain data contracts: pass metadata directly between tools | Tool outputs must flow unchanged to next tool; AI enforces contracts (see 8.19) |
 | DD-27 | Task code quality gate: NO locators in Tasks (CRITICAL) | Architecture violation if Tasks contain By.* locators (see 8.20) |
 | DD-28 | Test data organization: ASK user shared vs workflow-specific location | Hybrid model: shared + workflow-specific data; smart loader (see 8.21) |
+| DD-29 | Slash command modes: `/qa-workflow` (prod) vs `/qa-workflow-dev` (dev) | Controls AI modification permissions; prod=restricted, dev=full with approval (see 8.22) |
+| DD-30 | Progressive audit trail: PostToolUse hook writes to `tests/_audit/` after each gate | Complete traceability for regulated verticals (healthcare, finance, legal); SRP separation (see 8.23) |
+| DD-33 | Dynamic element discovery: AI uses Playwright snapshot → extracts → builds | Enables discovery when Tool 2 cannot access dynamic elements (see skills/step-05.md) |
 
 ### 8.12 DD-16, DD-17, DD-18: AI Post-Processing Rules
 
@@ -2044,6 +2049,160 @@ Test data can be shared or workflow-specific. AI must ask which strategy.
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### 8.22 DD-29: Slash Command Modes (Workflow Entry Point)
+
+Two slash commands provide controlled entry to the 10-step workflow:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-29: SLASH COMMAND MODES                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ ENTRY POINT:                                                                │
+│ ────────────                                                                │
+│   User types: /qa-workflow      (production)                                │
+│           or: /qa-workflow-dev  (development)                               │
+│                                                                             │
+│ FLOW:                                                                       │
+│   1. Slash command reads qa-guidance-layer skill                            │
+│   2. AI prompts user for requirement (persona + URL)                        │
+│   3. 10-step workflow executes with proper guidance                         │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ PRODUCTION MODE (/qa-workflow):                                             │
+│ ───────────────────────────────                                             │
+│                                                                             │
+│   CAN MODIFY:                    │   CANNOT MODIFY:                         │
+│   ─────────────                  │   ──────────────                         │
+│   tests/                         │   mcp_server/                            │
+│   framework/pages/               │   .claude/skills/                        │
+│   framework/tasks/               │   .claude/commands/                      │
+│   framework/roles/               │   framework/interfaces/                  │
+│   tests/data/                    │   framework/resources/                   │
+│                                  │   CLAUDE.md, FRAMEWORK.md                │
+│                                                                             │
+│   ON FAILURE: STOP → Report issue → Contact support                         │
+│   AI does NOT attempt to fix framework code                                 │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ DEVELOPMENT MODE (/qa-workflow-dev):                                        │
+│ ────────────────────────────────────                                        │
+│                                                                             │
+│   CAN MODIFY (with approval):                                               │
+│   ───────────────────────────                                               │
+│   - Everything: tests/, framework/, mcp_server/, skills, commands, docs     │
+│                                                                             │
+│   APPROVAL REQUIRED:                                                        │
+│   Before modifying ANY file, AI MUST:                                       │
+│   1. Show user what will change (file path, summary)                        │
+│   2. Wait for explicit approval ("yes", "ok", "approved")                   │
+│   3. Only then make the change                                              │
+│                                                                             │
+│   ON FAILURE:                                                               │
+│   1. STOP → Analyze root cause                                              │
+│   2. Present options to user (fix, manual, abort)                           │
+│   3. WAIT for user approval before any fix                                  │
+│   4. Log defect to docs/DEFECT_LOG.md                                       │
+│   5. Restart from Step 1 after fix                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Files:**
+- `.claude/commands/qa-workflow.md` - Production mode
+- `.claude/commands/qa-workflow-dev.md` - Development mode
+
+---
+
+### 8.23 DD-30: Progressive Audit Trail
+
+A PostToolUse hook automatically captures each quality gate result for complete traceability.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-30: PROGRESSIVE AUDIT TRAIL                                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ PURPOSE:                                                                    │
+│ Complete traceability for regulated verticals (healthcare, finance, legal)  │
+│                                                                             │
+│ HOW IT WORKS:                                                               │
+│ ─────────────                                                               │
+│   Step 1 gate passes → Audit file created with step_1 data                 │
+│   Step 2 gate passes → step_2 appended                                     │
+│   Step 3 gate passes → step_3 appended                                     │
+│   ...                                                                       │
+│   Step 10 gate passes → Audit finalized with test result                   │
+│                                                                             │
+│ AUDIT FILE LOCATION:                                                        │
+│ ────────────────────                                                        │
+│   tests/_audit/YYYY-MM-DD_HHMMSS_{workflow}_{intent}.json                  │
+│                                                                             │
+│ EXAMPLE:                                                                    │
+│   tests/_audit/2025-12-28_120000_cart_login_and_add_to_cart.json           │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ SRP SEPARATION:                                                             │
+│ ───────────────                                                             │
+│   ┌─────────────────┐    ┌─────────────────────────────┐                   │
+│   │   qg_* Gates    │    │   audit-trail-writer.py     │                   │
+│   │   ───────────   │    │   ─────────────────────     │                   │
+│   │   Validate      │ →  │   Write audit trail         │                   │
+│   │   quality       │    │   (PostToolUse hook)        │                   │
+│   └─────────────────┘    └─────────────────────────────┘                   │
+│                                                                             │
+│ HOOK REGISTRATION (.claude/settings.local.json):                            │
+│ ────────────────────────────────────────────────                            │
+│   "PostToolUse": [{                                                         │
+│     "matcher": "mcp__qa-automation__qg_.*",                                 │
+│     "hooks": [{                                                             │
+│       "type": "command",                                                    │
+│       "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/audit-trail-writer.py\""
+│     }]                                                                      │
+│   }]                                                                        │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ AUDIT FILE STRUCTURE:                                                       │
+│ ─────────────────────                                                       │
+│   {                                                                         │
+│     "audit_metadata": {                                                     │
+│       "created": "2025-12-28T12:00:00Z",                                   │
+│       "platform": "qa-automation",                                          │
+│       "version": "1.0"                                                      │
+│     },                                                                      │
+│     "step_1": { "timestamp": "...", "gate_result": "pass", "data": {...} },│
+│     "step_2": { "timestamp": "...", "gate_result": "pass", "data": {...} },│
+│     ...                                                                     │
+│     "step_10": { "timestamp": "...", "gate_result": "pass", "data": {...} }│
+│   }                                                                         │
+│                                                                             │
+│ KEY DECISIONS:                                                              │
+│ ──────────────                                                              │
+│   • Progressive (not final) - If workflow crashes, audit exists up to that │
+│   • Hook-based (SRP) - Gates validate; hook writes audit                   │
+│   • Code stripped - Raw code replaced with [CODE_STRIPPED_FOR_AUDIT]       │
+│   • Timestamped filename - Each run creates unique file (never overwrites) │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ COMPLIANCE USE CASES:                                                       │
+│ ─────────────────────                                                       │
+│   Healthcare: "Show every step that generated this patient report test"    │
+│   Finance:    "Prove this trading algorithm test was validated at each gate"│
+│   Legal:      "Document chain for this contract review automation"         │
+│   Insurance:  "Compliance evidence for claims processing test"             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Files:**
+- `.claude/hooks/audit-trail-writer.py` - PostToolUse hook
+- `tests/_audit/` - Audit trail directory
+
 ---
 
 ## 9. 10-Step Workflow with Quality Gates (v2)
@@ -2056,13 +2215,23 @@ The v2 workflow adds:
 - Step 1: Pre-flight Configuration (new)
 - Explicit quality gates at each step
 - Gate enforcement: Cannot proceed until checks pass
-- Four-layer architecture: Skill → Gates → Operations → State
+- Six-layer architecture: Slash Command → Skill → Gates → Operations → State → Audit
+- DD-29: Slash command entry point controls AI modification permissions
+- DD-30: Progressive audit trail via PostToolUse hook for compliance
 
 > **Template Reference:** See `.claude/skills/design-execution-engine/SKILL.md` for the complete step template that applies to all verticals.
 
-### Four-Layer Architecture
+### Six-Layer Architecture (with Slash Command Entry + Audit)
 
 ```
+┌─────────────────────────────────────────────────────────────────────┐
+│ SLASH COMMAND (entry point) - DD-29                                  │
+│ - /qa-workflow (prod) or /qa-workflow-dev (dev)                      │
+│ - .claude/commands/qa-workflow*.md                                   │
+│ - Controls AI modification permissions                               │
+└─────────────────────────────────────────────────────────────────────┘
+      │
+      ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │ SKILL (guidance-layer)                                               │
 │ - Guides AI through workflow                                         │
@@ -2075,12 +2244,13 @@ The v2 workflow adds:
 │ - Validates input/output at each step                               │
 │ - mcp_server/tools/gates/                                           │
 └─────────────────────────────────────────────────────────────────────┘
-      │
-      ▼
+      │                                    │
+      ▼                                    ▼ (PostToolUse)
 ┌─────────────────────────────────────────────────────────────────────┐
-│ OPERATION TOOLS                                                      │
-│ - Does the actual work                                               │
-│ - mcp_server/tools/operations/                                       │
+│ OPERATION TOOLS                          │ AUDIT TRAIL - DD-30       │
+│ - Does the actual work                   │ - PostToolUse hook        │
+│ - mcp_server/tools/operations/           │ - .claude/hooks/          │
+│                                          │ - tests/_audit/           │
 └─────────────────────────────────────────────────────────────────────┘
       │
       ▼
@@ -2111,6 +2281,17 @@ mcp_server/
 │
 └── utils/
     └── state_manager.py     ← Save/load state logic
+
+.claude/
+├── hooks/                   ← Claude Code hooks (DD-30)
+│   ├── qa-gate-enforcer.py  ← PreToolUse: blocks unauthorized writes
+│   └── audit-trail-writer.py ← PostToolUse: writes audit trail
+│
+└── settings.local.json      ← Hook registration
+
+tests/
+└── _audit/                  ← Progressive audit trail (DD-30)
+    └── YYYY-MM-DD_HHMMSS_{workflow}_{intent}.json
 ```
 
 ### State Save Rules

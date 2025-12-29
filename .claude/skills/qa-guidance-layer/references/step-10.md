@@ -274,7 +274,106 @@ Upon successful completion:
 │  Test result: PASSED (1 passed in 2.3s)                                     │
 │                                                                              │
 │  State saved to: mcp_server/state/workflow_state.json                       │
+│                                                                              │
+│  Audit trail: tests/_audit/2025-12-28_120000_auth_login.json                │
 └─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## H. Progressive Audit Trail
+
+**Purpose:** Complete traceability for regulated verticals (healthcare, finance, legal, insurance).
+
+### How It Works
+
+A PostToolUse hook (`audit-trail-writer.py`) automatically captures each gate result:
+
+```
+Step 1 gate passes → Audit file created with step_1 data
+Step 2 gate passes → step_2 appended
+Step 3 gate passes → step_3 appended
+...
+Step 10 gate passes → Audit finalized
+```
+
+### Audit File Location
+
+```
+tests/_audit/
+└── YYYY-MM-DD_HHMMSS_{workflow}_{intent}.json
+```
+
+**Example:** `2025-12-28_120000_cart_login_and_add_to_cart.json`
+
+### Audit File Structure
+
+```json
+{
+  "audit_metadata": {
+    "created": "2025-12-28T12:00:00Z",
+    "last_updated": "2025-12-28T12:03:00Z",
+    "platform": "qa-automation",
+    "version": "1.0"
+  },
+  "step_1": {
+    "timestamp": "2025-12-28T12:00:00Z",
+    "gate_result": "pass",
+    "data": { "credential_strategy": "self-contained", "test_data_location": "both" }
+  },
+  "step_2": {
+    "timestamp": "2025-12-28T12:00:05Z",
+    "gate_result": "pass",
+    "data": { "persona": "registered user", "URL": "...", "workflow": "cart" }
+  },
+  ...
+  "step_10": {
+    "timestamp": "2025-12-28T12:03:00Z",
+    "gate_result": "pass",
+    "data": { "files_saved": [...], "test_result": {...} }
+  }
+}
+```
+
+### Key Design Decisions
+
+| Decision | Rationale |
+|----------|-----------|
+| **Progressive (not final)** | If workflow crashes, audit exists up to that point |
+| **Hook-based (SRP)** | Gates validate; hook writes audit (separation of concerns) |
+| **Code stripped** | Raw code blobs replaced with `[CODE_STRIPPED_FOR_AUDIT]` to reduce file size |
+| **Timestamped filename** | Each workflow run creates unique file (never overwrites) |
+| **Session marker** | `.audit_session` file tracks current workflow's audit file |
+
+### Compliance Use Cases
+
+| Vertical | Audit Question Answered |
+|----------|-------------------------|
+| **Healthcare** | "Show every step that generated this patient report test" |
+| **Finance** | "Prove this trading algorithm test was validated at each gate" |
+| **Legal** | "Document chain for this contract review automation" |
+| **Insurance** | "Compliance evidence for claims processing test" |
+
+### Hook Registration
+
+Located in `.claude/settings.local.json`:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "mcp__qa-automation__qg_.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/audit-trail-writer.py\""
+          }
+        ]
+      }
+    ]
+  }
+}
 ```
 
 ---

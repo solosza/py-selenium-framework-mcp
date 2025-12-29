@@ -74,6 +74,11 @@ async def generate_page_object(arguments: dict) -> str:
     force_generate = arguments.get("force_generate", False)
     expected_states = arguments.get("expected_states", [])
 
+    # Convert string expected_states to objects (backwards compatible)
+    # Schema accepts strings like ["is_logged_in"], generator expects {"name": "is_logged_in"}
+    if expected_states and isinstance(expected_states[0], str):
+        expected_states = [{"name": s, "description": s.replace("_", " ")} for s in expected_states]
+
     if not page_name:
         return json.dumps({
             "error": "page_name is required",
