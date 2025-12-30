@@ -72,7 +72,7 @@ class QGPreflight(BaseGate):
             "test_data_location": test_data_location
         })
 
-        return cls.pass_response()
+        return cls.pass_response(step=1, gate_name="qg_preflight", mode="POST")
 
     @classmethod
     def _is_valid_credential_strategy(cls, value: Any) -> bool:

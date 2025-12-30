@@ -71,8 +71,39 @@ class BaseGate:
         cls._audit_logger = logger
 
     @classmethod
-    def get_audit_logger(cls) -> Optional["AuditLogger"]:
-        """Get the current audit logger."""
+    def get_audit_logger(cls) -> "AuditLogger":
+        """
+        Get the audit logger, creating one if needed (lazy init).
+
+        DEF-040: Ensures audit logger is always available. Creates one
+        with auto-generated run_id if not already set.
+
+        DEF-043: Persists run_id in workflow_state.json to continue same
+        audit session across separate MCP tool calls (separate Python processes).
+
+        Returns:
+            AuditLogger instance (never None).
+        """
+        if cls._audit_logger is None:
+            from utils.audit_logger import AuditLogger
+            from utils.state_manager import StateManager
+
+            # DEF-043: Check workflow_state for existing audit session
+            state = StateManager()
+            state_data = state.load()
+
+            # audit_run_id is stored under step_0 (metadata step)
+            step_0_data = state_data.get("step_0", {}) if state_data else {}
+            existing_run_id = step_0_data.get("audit_run_id")
+
+            if existing_run_id:
+                # Continue existing audit session
+                cls._audit_logger = AuditLogger(run_id=existing_run_id)
+            else:
+                # Start new audit session and save run_id to state (step_0 = metadata)
+                cls._audit_logger = AuditLogger()
+                state.save(step=0, data={"audit_run_id": cls._audit_logger.run_id})
+
         return cls._audit_logger
 
     @classmethod
@@ -108,15 +139,14 @@ class BaseGate:
         Returns:
             {"status": "blocked", "step": int, "attempts": int, "errors": list, "fix_hint": str}
         """
-        # Log to audit trail if logger set
-        if cls._audit_logger:
-            cls._audit_logger.log_gate(
-                step=step,
-                gate_name=f"step_{step}_blocked",
-                mode="POST",
-                result="blocked",
-                error=f"Max attempts ({attempts}) exceeded"
-            )
+        # DEF-040: Always log to audit trail (lazy init)
+        cls.get_audit_logger().log_gate(
+            step=step,
+            gate_name=f"step_{step}_blocked",
+            mode="POST",
+            result="blocked",
+            error=f"Max attempts ({attempts}) exceeded"
+        )
 
         return {
             "status": "blocked",
@@ -146,9 +176,9 @@ class BaseGate:
         Returns:
             {"status": "pass"}
         """
-        # Log to audit trail if logger set and context provided
-        if cls._audit_logger and step is not None and gate_name is not None:
-            cls._audit_logger.log_gate(
+        # DEF-040: Log to audit trail if context provided (lazy init)
+        if step is not None and gate_name is not None:
+            cls.get_audit_logger().log_gate(
                 step=step,
                 gate_name=gate_name,
                 mode=mode or "POST",
@@ -182,9 +212,9 @@ class BaseGate:
         Returns:
             {"status": "fail", "error": str, "fix_hint": str}
         """
-        # Log to audit trail if logger set and context provided
-        if cls._audit_logger and step is not None and gate_name is not None:
-            cls._audit_logger.log_gate(
+        # DEF-040: Log to audit trail if context provided (lazy init)
+        if step is not None and gate_name is not None:
+            cls.get_audit_logger().log_gate(
                 step=step,
                 gate_name=gate_name,
                 mode=mode or "POST",

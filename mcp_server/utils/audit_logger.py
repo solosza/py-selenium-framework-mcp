@@ -2,6 +2,7 @@
 AuditLogger - Audit Trail System for QA Execution Engine.
 
 Task 1.0 - Provides per-run audit logging for the 10-step workflow.
+DEF-040 - Added incremental persist after each log_gate() call.
 
 Features:
 - Logs gate calls with results and sources
@@ -9,12 +10,14 @@ Features:
 - Logs generated files
 - Generates summary statistics
 - Writes JSON audit file per run
+- Incremental persist: crash-safe, no data loss (DEF-040)
 
 Schema matches PRD spec (1-prd-release-readiness.md).
 """
 
 import json
 import os
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -26,7 +29,8 @@ class AuditLogger:
     def __init__(
         self,
         run_id: Optional[str] = None,
-        execution_mode: str = "mixed"
+        execution_mode: str = "mixed",
+        output_dir: Optional[str] = None
     ):
         """
         Initialize AuditLogger.
@@ -34,14 +38,57 @@ class AuditLogger:
         Args:
             run_id: Optional custom run ID. If None, generates ISO timestamp.
             execution_mode: Execution mode (mixed, skills_only). Default: mixed.
+            output_dir: Directory for audit file. Default: mcp_server/state/
         """
         if run_id is None:
             run_id = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
 
         self.run_id = run_id
         self.execution_mode = execution_mode
+
+        # DEF-040: Set up audit file path for incremental persist
+        # DEF-042: Write to tests/_audit/ instead of mcp_server/state/
+        if output_dir is None:
+            # Navigate from mcp_server/utils/ to project root, then to tests/_audit/
+            project_root = Path(__file__).parent.parent.parent
+            output_dir = str(project_root / "tests" / "_audit")
+        self._output_dir = Path(output_dir)
+
+        # Generate filename from run_id (replace : with - for Windows compatibility)
+        safe_run_id = self.run_id.replace(":", "-")
+        self._audit_file = self._output_dir / f"audit_log_{safe_run_id}.json"
+
+        # DEF-043: Load existing audit data if continuing a session
         self.steps: List[Dict[str, Any]] = []
         self.files_generated: List[Dict[str, Any]] = []
+        self._load_existing_data()
+
+    def _load_existing_data(self) -> None:
+        """
+        DEF-043: Load existing audit data when continuing a session.
+
+        If the audit file already exists (from a previous MCP tool call in
+        the same workflow run), load its steps and files_generated lists
+        to continue appending to them.
+        """
+        if not self._audit_file.exists():
+            return
+
+        try:
+            with open(self._audit_file, 'r') as f:
+                data = json.load(f)
+
+            # Restore existing steps and files
+            self.steps = data.get("steps", [])
+            self.files_generated = data.get("files_generated", [])
+
+            # Restore execution_mode if present
+            if "execution_mode" in data:
+                self.execution_mode = data["execution_mode"]
+        except (json.JSONDecodeError, IOError):
+            # If file is corrupted, start fresh
+            self.steps = []
+            self.files_generated = []
 
     def log_gate(
         self,
@@ -53,7 +100,7 @@ class AuditLogger:
         source: Optional[str] = None
     ) -> None:
         """
-        Log a gate call.
+        Log a gate call and persist immediately (DEF-040).
 
         Args:
             step: Step number (1-10)
@@ -79,6 +126,9 @@ class AuditLogger:
 
         self.steps.append(entry)
 
+        # DEF-040: Persist immediately after each log
+        self._persist()
+
     def log_self_heal(
         self,
         step: int,
@@ -86,7 +136,7 @@ class AuditLogger:
         error: str
     ) -> None:
         """
-        Log a self-heal attempt.
+        Log a self-heal attempt and persist immediately (DEF-040).
 
         Args:
             step: Step number where self-heal occurred
@@ -103,13 +153,16 @@ class AuditLogger:
 
         self.steps.append(entry)
 
+        # DEF-040: Persist immediately after each log
+        self._persist()
+
     def log_file_generated(
         self,
         path: str,
         step: int
     ) -> None:
         """
-        Log a generated file.
+        Log a generated file and persist immediately (DEF-040).
 
         Args:
             path: File path (relative to project root)
@@ -121,6 +174,9 @@ class AuditLogger:
         }
 
         self.files_generated.append(entry)
+
+        # DEF-040: Persist immediately after each log
+        self._persist()
 
     def get_summary(self) -> Dict[str, Any]:
         """
@@ -176,23 +232,17 @@ class AuditLogger:
             "source_counts": source_counts
         }
 
-    def finalize(self, output_dir: Optional[str] = None) -> str:
+    def _persist(self) -> None:
         """
-        Write audit log to JSON file.
+        DEF-040: Persist audit log to disk using atomic write.
 
-        Args:
-            output_dir: Directory to write file. Default: mcp_server/state/
-
-        Returns:
-            Path to created audit log file.
+        Called automatically after each log_gate(), log_self_heal(),
+        and log_file_generated() call. Crash-safe - data is never lost.
         """
-        if output_dir is None:
-            output_dir = str(Path(__file__).parent.parent / "state")
+        # Ensure parent directory exists
+        self._output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Create directory if needed
-        os.makedirs(output_dir, exist_ok=True)
-
-        # Build output data
+        # Build output data (always includes current summary)
         data = {
             "run_id": self.run_id,
             "execution_mode": self.execution_mode,
@@ -201,13 +251,40 @@ class AuditLogger:
             "summary": self.get_summary()
         }
 
-        # Generate filename from run_id (replace : with - for Windows compatibility)
-        safe_run_id = self.run_id.replace(":", "-")
-        filename = f"audit_log_{safe_run_id}.json"
-        filepath = os.path.join(output_dir, filename)
+        # Atomic write: write to temp file, then rename
+        temp_fd, temp_path = tempfile.mkstemp(
+            dir=self._output_dir,
+            suffix=".tmp"
+        )
+        try:
+            with os.fdopen(temp_fd, 'w') as f:
+                json.dump(data, f, indent=2)
 
-        # Write JSON
-        with open(filepath, 'w') as f:
-            json.dump(data, f, indent=2)
+            # Atomic rename (on Windows, need to remove target first)
+            if os.name == 'nt' and self._audit_file.exists():
+                self._audit_file.unlink()
+            os.rename(temp_path, self._audit_file)
+        except Exception:
+            # Clean up temp file on failure
+            if os.path.exists(temp_path):
+                os.unlink(temp_path)
+            raise
 
-        return filepath
+    def finalize(self, output_dir: Optional[str] = None) -> str:
+        """
+        Finalize audit log (optional - data is already persisted).
+
+        DEF-040: Since we now persist after each log call, this method
+        is optional. It's kept for backward compatibility and returns
+        the audit file path.
+
+        Args:
+            output_dir: Ignored (kept for backward compatibility).
+
+        Returns:
+            Path to audit log file.
+        """
+        # Ensure final persist with complete summary
+        self._persist()
+
+        return str(self._audit_file)

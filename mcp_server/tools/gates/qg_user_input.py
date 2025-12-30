@@ -110,7 +110,7 @@ class QGUserInput(BaseGate):
             "raw_requirement": raw_requirement
         })
 
-        return cls.pass_response()
+        return cls.pass_response(step=2, gate_name="qg_user_input", mode="POST")
 
     @classmethod
     def _is_valid_persona(cls, value: Any) -> bool:

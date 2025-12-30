@@ -77,7 +77,7 @@ class QGAIProcessing(BaseGate):
         state_manager = StateManager()
         state_manager.save(step=3, data=metadata_context)
 
-        response = cls.pass_response()
+        response = cls.pass_response(step=3, gate_name="qg_ai_processing", mode="POST")
         response["metadata_context"] = metadata_context
         return response
 
