@@ -123,23 +123,34 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py -v
 
 ### Phase 2: Per-Page Element Discovery
 
-- [ ] 2.0 Extend Step 5 Gate for Per-Page Discovery [CORE]
-  - [ ] 2.1 Create branch `feature/2.0-per-page-discovery`
-  - [ ] 2.2 **ASSESS:** Read current `qg_discovered_elements.py` implementation
-  - [ ] 2.3 **EXTEND:** `mcp_server/tools/gates/qg_discovered_elements.py`:
-    - Add PRE mode check for scope_discovery completion
-    - Add page_list validation in POST mode
-    - Add per-page element tracking
-  - [ ] 2.4 **EXTEND:** Unit tests for new gate functionality
-  - [ ] 2.5 Run checks following testing skill
-  - [ ] 2.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 2.7 Record results
-  - [ ] 2.8 Commit: `feat: extend Step 5 gate for per-page element discovery (Task 2.0)`
+- [x] 2.0 Extend Step 5 Gate for Per-Page Discovery [CORE]
+  - [x] 2.1 Create branch `feature/2.0-per-page-discovery`
+  - [x] 2.2 **ASSESS:** Read current `qg_discovered_elements.py` implementation
+  - [x] 2.3 **EXTEND:** `mcp_server/tools/gates/qg_discovered_elements.py`:
+    - Add PRE mode check for scope_result validation (page_name in scope)
+    - Add per-page element tracking in POST mode (discovered_pages dict)
+    - Add discovery progress tracking (pages_discovered, total_pages, discovery_complete)
+    - Add helper methods: get_discovery_progress(), is_discovery_complete()
+  - [x] 2.4 **EXTEND:** Unit tests `mcp_server/_dev_tests/test_qg_discovered_elements.py`
+  - [x] 2.5 Run checks following testing skill
+  - [x] 2.6 **Audit:** Verify testing skill conventions followed
+  - [x] 2.7 Record results
+  - [x] 2.8 Commit: `feat: extend Step 5 gate for per-page element discovery (Task 2.0)`
 
 **Done When:**
-- Gate validates scope discovery completed before element discovery
-- Per-page elements tracked separately
-- Tests pass
+- [x] Gate validates scope discovery (if provided) before element discovery
+- [x] Per-page elements tracked separately in discovered_pages
+- [x] Discovery progress tracked (pages_discovered/total_pages)
+- [x] Tests pass
+
+**Results (2025-12-30):**
+```bash
+pytest mcp_server/_dev_tests/test_qg_discovered_elements.py -v
+# 25 passed, 36 warnings (custom marks) in 0.34s
+
+pytest mcp_server/_dev_tests/test_scope_discovery.py -v
+# 14 passed, 14 warnings (custom marks) in 0.09s
+```
 
 ---
 

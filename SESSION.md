@@ -2,74 +2,80 @@
 
 ---
 
-# Session: 2025-12-30 - DEF-042/043 Audit Fixes VERIFIED
+# Session: 2025-12-30 - Enhanced Runtime Validation Gates
 
 ## Quick Resume
-**Completed:** DEF-042 and DEF-043 audit logging fixes verified
-**Status:** Ready for commit
-**Branch:** main (uncommitted changes)
+**Status:** Phase 3 (Deliver) - Task 2.0 IN PROGRESS
+**Next Action:** Task 2.0.2 - ASSESS `qg_discovered_elements.py`
+**Branch:** Creating `feature/2.0-per-page-discovery`
 
 ---
 
-## Fixes Verified This Session
+## 4D Framework Progress
 
-| Defect | Issue | Fix | Verification |
-|--------|-------|-----|--------------|
-| DEF-042 | Audit log in wrong location | Changed output_dir to `tests/_audit/` | Audit file created at `tests/_audit/audit_log_2025-12-30T07-15-13.197729Z.json` |
-| DEF-043 | New session per MCP call | Persist run_id in workflow_state step_0 | Both qg_preflight + qg_user_input logged to SAME file |
+| Phase | Description | Status |
+|-------|-------------|--------|
+| Phase 0 | Design Discussion | COMPLETE |
+| Phase 1 | Define (PRD) | COMPLETE (v1.5) |
+| Phase 2 | Divide (Tasks) | COMPLETE (15 phases) |
+| Phase 3 | Deliver | IN PROGRESS (1/15 tasks done) |
 
----
-
-## Root Cause Found (Additional Fix)
-
-**Issue:** Early gates (qg_preflight, qg_user_input, qg_ai_processing) called `pass_response()` with NO arguments, so audit logging was never triggered.
-
-**Fix:** Updated these gates to pass step/gate_name:
-- `qg_preflight.py:75` - `pass_response(step=1, gate_name="qg_preflight", mode="POST")`
-- `qg_user_input.py:113` - `pass_response(step=2, gate_name="qg_user_input", mode="POST")`
-- `qg_ai_processing.py:80` - `pass_response(step=3, gate_name="qg_ai_processing", mode="POST")`
+**PRD Location:** `docs/projects/enhanced-runtime-validation/1-prd-enhanced-runtime-validation.md`
+**Task List:** `docs/projects/enhanced-runtime-validation/2-tasks-enhanced-runtime-validation.md`
 
 ---
 
-## Files Changed This Session
+## Completed Tasks
 
-### MCP Server
-- `mcp_server/utils/audit_logger.py` - DEF-042 (output_dir) + DEF-043 (_load_existing_data)
-- `mcp_server/tools/gates/base_gate.py` - DEF-043 (session persistence via step_0)
-- `mcp_server/tools/gates/qg_preflight.py` - Pass step/gate_name to pass_response
-- `mcp_server/tools/gates/qg_user_input.py` - Pass step/gate_name to pass_response
-- `mcp_server/tools/gates/qg_ai_processing.py` - Pass step/gate_name to pass_response
-
-### Docs
-- `docs/DEFECT_LOG.md` - Updated DEF-042, DEF-043 to RESOLVED
+### Task 1.0 - Scope Discovery (COMPLETE)
+- Created `mcp_server/utils/scope_discovery.py`
+- Created `mcp_server/_dev_tests/test_scope_discovery.py`
+- 14 tests passing
+- Committed: `feat: add scope discovery for two-pass element discovery (Task 1.0)`
 
 ---
 
-## Test Evidence
+## Current Task: 2.0 - Per-Page Element Discovery
 
-**Audit log at:** `tests/_audit/audit_log_2025-12-30T07-15-13.197729Z.json`
-```json
-{
-  "run_id": "2025-12-30T07:15:13.197729Z",
-  "steps": [
-    {"step": 1, "gate": "qg_preflight", "result": "pass"},
-    {"step": 2, "gate": "qg_user_input", "result": "pass"}
-  ],
-  "summary": {"total_steps": 2, "gates_passed": 2}
-}
-```
+**Branch:** `feature/2.0-per-page-discovery`
 
-**workflow_state.json has:**
-```json
-"step_0": {"audit_run_id": "2025-12-30T07:15:13.197729Z"}
-```
+**Subtasks:**
+- [ ] 2.1 Create branch
+- [ ] 2.2 ASSESS current `qg_discovered_elements.py`
+- [ ] 2.3 EXTEND gate with scope validation
+- [ ] 2.4 EXTEND unit tests
+- [ ] 2.5 Run checks
+- [ ] 2.6-2.8 Audit, record, commit
 
 ---
 
-## Next Steps
-1. Commit these changes
-2. Continue with any pending work
+## Design Decisions Made This Session
+
+### SRP-Compliant Module Design
+
+| Module | Single Responsibility |
+|--------|----------------------|
+| `scope_discovery.py` | "How many pages in this workflow?" |
+| `runtime_validator.py` | "Is element usable? What's wrong?" |
+| `fix_suggester.py` | "Given error, what fix to try?" (returns Optional) |
+| `knowledge_base.py` | "Read/write patterns from KB file" |
+| `webinterface_checker.py` | "Does WebInterface have this method?" |
+
+### No-Fix Handling
+- `fix_suggester.py` returns `None` when no pattern found
+- AI orchestration (not code) handles "no fix" case
+- AI stops, asks user (DD-22 protocol)
 
 ---
 
-**Last Updated:** 2025-12-30 ~07:20 UTC
+## Files This Session
+
+**Created:**
+- `mcp_server/utils/scope_discovery.py`
+- `mcp_server/_dev_tests/test_scope_discovery.py`
+- `docs/projects/enhanced-runtime-validation/1-prd-enhanced-runtime-validation.md`
+- `docs/projects/enhanced-runtime-validation/2-tasks-enhanced-runtime-validation.md`
+
+---
+
+**Last Updated:** 2025-12-30

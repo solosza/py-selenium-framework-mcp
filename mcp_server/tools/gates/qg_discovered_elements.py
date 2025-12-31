@@ -9,17 +9,19 @@ PRE Validation:
 - page_name present
 - credential_strategy present and valid (IC-05-01)
 - discovery_method present and valid ("tool2" or "playwright") (DD-33)
+- NEW (Task 2.0): If scope_result provided, validate page_name is in scope's page list
 
 POST Validation:
 - elements array present and not empty
 - Each element has: suggested_name, element_type, at least one non-empty locator (IC-05-03)
 - page_name is PascalCase (IC-05-02)
+- NEW (Task 2.0): Track per-page elements, track discovery progress for multi-page workflows
 
 Enforces: DD-19, DD-20, DD-21, DD-24, DD-33, IC-05-01, IC-05-02, IC-05-03
 """
 
 import re
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from .base_gate import BaseGate
 from utils.state_manager import StateManager
@@ -133,7 +135,121 @@ class QGDiscoveredElements(BaseGate):
                 fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}. Use 'playwright' if Playwright prepared page state."
             )
 
+        # Task 2.0: Validate scope_result if provided (for multi-page workflows)
+        scope_result = input_data.get("scope_result")
+        if scope_result is not None:
+            scope_validation = cls._validate_scope_result(scope_result, page_name)
+            if scope_validation is not None:
+                return scope_validation
+
         return cls.pass_response()
+
+    @classmethod
+    def _validate_scope_result(cls, scope_result: Dict[str, Any], page_name: str) -> Optional[Dict[str, Any]]:
+        """
+        Task 2.0: Validate scope_result structure and page_name membership.
+
+        Args:
+            scope_result: Scope analysis result from scope_discovery
+            page_name: Page name being discovered
+
+        Returns:
+            None if valid, fail_response dict if invalid
+        """
+        # Validate scope_result structure
+        if not isinstance(scope_result, dict):
+            return cls.fail_response(
+                error="scope_result must be a dictionary",
+                fix_hint="Provide scope_result from scope_discovery.analyze_workflow()"
+            )
+
+        page_count = scope_result.get("page_count")
+        if page_count is None or not isinstance(page_count, int):
+            return cls.fail_response(
+                error="scope_result missing required field: page_count",
+                fix_hint="scope_result must have page_count (int) from scope_discovery"
+            )
+
+        pages = scope_result.get("pages", [])
+        if not isinstance(pages, list):
+            return cls.fail_response(
+                error="scope_result.pages must be a list",
+                fix_hint="scope_result.pages should be list of PageInfo dicts"
+            )
+
+        # For multi-page workflows, validate page_name is in scope
+        if page_count > 1:
+            page_names_in_scope = cls._extract_page_names(pages)
+            if page_name not in page_names_in_scope:
+                return cls.fail_response(
+                    error=f"page_name '{page_name}' not found in scope's page list",
+                    fix_hint=f"page_name must match one from scope discovery. Available: {', '.join(page_names_in_scope)}"
+                )
+
+        return None
+
+    @classmethod
+    def _extract_page_names(cls, pages: List[Any]) -> List[str]:
+        """
+        Extract page names from scope_result.pages list.
+
+        Args:
+            pages: List of PageInfo dicts or objects
+
+        Returns:
+            List of page name strings
+        """
+        names = []
+        for page in pages:
+            if isinstance(page, dict):
+                name = page.get("name")
+            elif hasattr(page, "name"):
+                name = page.name
+            else:
+                continue
+            if name and isinstance(name, str):
+                names.append(name)
+        return names
+
+    @classmethod
+    def get_discovery_progress(cls) -> Dict[str, Any]:
+        """
+        Task 2.0: Get current element discovery progress.
+
+        Returns:
+            Dict with discovery status:
+            - discovered_pages: dict mapping page_name -> elements
+            - pages_discovered: number of pages discovered so far
+            - total_pages: total pages in scope
+            - discovery_complete: True if all pages discovered
+            - remaining_pages: list of page names not yet discovered (if scope available)
+        """
+        state_manager = cls._get_state_manager()
+        step_5_state = state_manager.get_step(5) or {}
+
+        discovered_pages = step_5_state.get("discovered_pages", {})
+        pages_discovered = step_5_state.get("pages_discovered", 0)
+        total_pages = step_5_state.get("total_pages", 0)
+        discovery_complete = step_5_state.get("discovery_complete", False)
+
+        return {
+            "discovered_pages": discovered_pages,
+            "pages_discovered": pages_discovered,
+            "total_pages": total_pages,
+            "discovery_complete": discovery_complete
+        }
+
+    @classmethod
+    def is_discovery_complete(cls) -> bool:
+        """
+        Task 2.0: Check if all pages in scope have been discovered.
+
+        Returns:
+            True if discovery_complete flag is set, False otherwise
+        """
+        state_manager = cls._get_state_manager()
+        step_5_state = state_manager.get_step(5) or {}
+        return step_5_state.get("discovery_complete", False)
 
     @classmethod
     def validate_post(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -175,25 +291,25 @@ class QGDiscoveredElements(BaseGate):
         if state_manager:
             if result.get("status") == "fail":
                 state_manager.increment_attempt(cls.STEP_NUMBER)
-                if cls._audit_logger:
-                    cls._audit_logger.log_gate(
-                        step=cls.STEP_NUMBER,
-                        gate_name="qg_discovered_elements",
-                        mode="POST",
-                        result="fail",
-                        error=result.get("error"),
-                        source=source
-                    )
+                # DEF-040: Log failure to audit (lazy init)
+                cls.get_audit_logger().log_gate(
+                    step=cls.STEP_NUMBER,
+                    gate_name="qg_discovered_elements",
+                    mode="POST",
+                    result="fail",
+                    error=result.get("error"),
+                    source=source
+                )
             elif result.get("status") == "pass":
                 state_manager.reset_attempts(cls.STEP_NUMBER)
-                if cls._audit_logger:
-                    cls._audit_logger.log_gate(
-                        step=cls.STEP_NUMBER,
-                        gate_name="qg_discovered_elements",
-                        mode="POST",
-                        result="pass",
-                        source=source
-                    )
+                # DEF-040: Log success with source (lazy init)
+                cls.get_audit_logger().log_gate(
+                    step=cls.STEP_NUMBER,
+                    gate_name="qg_discovered_elements",
+                    mode="POST",
+                    result="pass",
+                    source=source
+                )
 
         return result
 
@@ -247,11 +363,35 @@ class QGDiscoveredElements(BaseGate):
                 fix_hint="Use PascalCase format: 'LoginPage', 'CartModal', 'CheckoutForm'"
             )
 
-        # Save Step 5 state on POST-VALIDATE pass (enables DD-33 flow)
+        # Task 2.0: Track per-page elements for multi-page workflows
         state_manager = cls._get_state_manager()
+        scope_result = input_data.get("scope_result")
+
+        # Load existing step 5 state to preserve per-page tracking
+        existing_state = state_manager.get_step(5) or {}
+        discovered_pages = existing_state.get("discovered_pages", {})
+
+        # Add/update this page's elements
+        discovered_pages[page_name] = elements
+
+        # Calculate discovery progress
+        if scope_result and isinstance(scope_result, dict):
+            total_pages = scope_result.get("page_count", 1)
+            pages_discovered = len(discovered_pages)
+            discovery_complete = pages_discovered >= total_pages
+        else:
+            total_pages = 1
+            pages_discovered = 1
+            discovery_complete = True
+
+        # Save enhanced Step 5 state
         state_manager.save(5, {
-            "discovered_elements": elements,
-            "page_name": page_name
+            "discovered_elements": elements,  # Keep for backward compatibility
+            "page_name": page_name,  # Current page (backward compat)
+            "discovered_pages": discovered_pages,  # Task 2.0: Per-page tracking
+            "pages_discovered": pages_discovered,  # Task 2.0: Progress tracking
+            "total_pages": total_pages,  # Task 2.0: Total scope
+            "discovery_complete": discovery_complete  # Task 2.0: Completion flag
         })
 
         return cls.pass_response()
