@@ -231,11 +231,11 @@ pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/tes
 
 ### Phase 5: Fix Suggester
 
-- [ ] 5.0 Implement Fix Suggester [CORE]
-  - [ ] 5.1 Create branch `feature/5.0-fix-suggester`
-  - [ ] 5.2 **ASSESS:** Read runtime_validator.py for error categories
-  - [ ] 5.3 **ASSESS:** Read knowledge_base.py for pattern interface
-  - [ ] 5.4 **CREATE:** `mcp_server/utils/fix_suggester.py` with:
+- [x] 5.0 Implement Fix Suggester [CORE]
+  - [x] 5.1 Create branch `feature/5.0-fix-suggester`
+  - [x] 5.2 **ASSESS:** Read runtime_validator.py for error categories
+  - [x] 5.3 **ASSESS:** Read knowledge_base.py for pattern interface
+  - [x] 5.4 **CREATE:** `mcp_server/utils/fix_suggester.py` with:
     - `FixSuggester` class
     - `__init__(self, kb: KnowledgeBase)` - Inject KB dependency
     - `suggest_fix(error_category: str, context: dict) -> Optional[FixRecommendation]`
@@ -245,20 +245,30 @@ pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/tes
       - `fix_action: str` - What to do
       - `fix_details: dict` - Parameters/specifics
       - `confidence: float` - From KB pattern
-  - [ ] 5.5 **CREATE:** Unit tests `mcp_server/_dev_tests/test_fix_suggester.py`
+  - [x] 5.5 **CREATE:** Unit tests `mcp_server/_dev_tests/test_fix_suggester.py`
     - Test: Known pattern returns recommendation
     - Test: Unknown pattern returns None
     - Test: Correct KB integration
-  - [ ] 5.6 Run checks following testing skill
-  - [ ] 5.7 **Audit:** Verify testing skill conventions followed
-  - [ ] 5.8 Record results
-  - [ ] 5.9 Commit: `feat: add fix suggester with KB integration (Task 5.0)`
+  - [x] 5.6 Run checks following testing skill
+  - [x] 5.7 **Audit:** Verify testing skill conventions followed
+  - [x] 5.8 Record results
+  - [x] 5.9 Commit: `feat: add fix suggester with KB integration (Task 5.0)`
 
 **Done When:**
-- FixSuggester returns Optional[FixRecommendation]
-- Returns None when no pattern (not fallback - caller decides)
-- Properly queries KnowledgeBase
-- Tests pass
+- [x] FixSuggester returns Optional[FixRecommendation]
+- [x] Returns None when no pattern (not fallback - caller decides)
+- [x] Properly queries KnowledgeBase
+- [x] Tests pass
+
+**Results (2025-12-31):**
+```bash
+pytest mcp_server/_dev_tests/test_fix_suggester.py -v
+# 28 passed, 28 warnings (custom marks) in 0.16s
+
+# Regression check
+pytest mcp_server/_dev_tests/test_knowledge_base.py mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_qg_discovered_elements.py -v
+# 82 passed, 93 warnings in 0.37s
+```
 
 ---
 
