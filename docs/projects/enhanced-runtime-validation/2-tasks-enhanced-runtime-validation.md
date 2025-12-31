@@ -156,10 +156,10 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py -v
 
 ### Phase 3: Runtime Validator (Validation + Categorization)
 
-- [ ] 3.0 Implement Runtime Validator [CORE]
-  - [ ] 3.1 Create branch `feature/3.0-runtime-validator`
-  - [ ] 3.2 **ASSESS:** Read Playwright MCP tools available (browser_snapshot, browser_click, etc.)
-  - [ ] 3.3 **CREATE:** `mcp_server/utils/runtime_validator.py` with:
+- [x] 3.0 Implement Runtime Validator [CORE]
+  - [x] 3.1 Create branch `feature/3.0-runtime-validator`
+  - [x] 3.2 **ASSESS:** Read Playwright MCP tools available (browser_snapshot, browser_click, etc.)
+  - [x] 3.3 **CREATE:** `mcp_server/utils/runtime_validator.py` with:
     - `RuntimeValidator` class
     - `validate_element(locator: str) -> ValidationResult` - Check element usability
     - `ValidationResult` dataclass with:
@@ -167,17 +167,27 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py -v
       - `error_category: Optional[str]` - LOCATOR_NOT_FOUND, NOT_VISIBLE, NOT_INTERACTABLE, STALE_REFERENCE, METHOD_NOT_FOUND
       - `details: dict` - Additional context
     - **NO fix suggestion logic** - that's fix_suggester's job
-  - [ ] 3.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_runtime_validator.py`
-  - [ ] 3.5 Run checks following testing skill
-  - [ ] 3.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 3.7 Record results
-  - [ ] 3.8 Commit: `feat: add runtime validator with error categorization (Task 3.0)`
+  - [x] 3.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_runtime_validator.py`
+  - [x] 3.5 Run checks following testing skill
+  - [x] 3.6 **Audit:** Verify testing skill conventions followed
+  - [x] 3.7 Record results
+  - [x] 3.8 Commit: `feat: add runtime validator with error categorization (Task 3.0)`
 
 **Done When:**
-- RuntimeValidator validates elements exist, visible, interactable
-- Returns error category (not fix suggestion)
-- Tests cover all error categories
-- Tests pass
+- [x] RuntimeValidator validates elements exist, visible, interactable
+- [x] Returns error category (not fix suggestion)
+- [x] Tests cover all error categories
+- [x] Tests pass
+
+**Results (2025-12-30):**
+```bash
+pytest mcp_server/_dev_tests/test_runtime_validator.py -v
+# 23 passed, 23 warnings (custom marks) in 0.10s
+
+# Regression check
+pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_qg_discovered_elements.py -v
+# 39 passed, 50 warnings in 0.28s
+```
 
 ---
 
