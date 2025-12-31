@@ -274,11 +274,11 @@ pytest mcp_server/_dev_tests/test_knowledge_base.py mcp_server/_dev_tests/test_r
 
 ### Phase 6: Visual Feedback During Validation
 
-- [ ] 6.0 Implement Visual Feedback Module [GLUE]
-  - [ ] 6.1 Create branch `feature/6.0-visual-feedback`
-  - [ ] 6.2 **ASSESS:** Read RuntimeValidator for integration points
-  - [ ] 6.3 **ASSESS:** Read Playwright MCP browser_evaluate capabilities
-  - [ ] 6.4 **CREATE:** `mcp_server/utils/visual_feedback.py` with:
+- [x] 6.0 Implement Visual Feedback Module [GLUE]
+  - [x] 6.1 Create branch `feature/6.0-visual-feedback`
+  - [x] 6.2 **ASSESS:** Read RuntimeValidator for integration points
+  - [x] 6.3 **ASSESS:** Read Playwright MCP browser_evaluate capabilities
+  - [x] 6.4 **CREATE:** `mcp_server/utils/visual_feedback.py` with:
     - `VisualFeedback` class
     - `highlight_element(ref: str, status: str) -> None` - Inject CSS for element
     - `highlight_valid(ref: str) -> None` - Green outline for valid elements
@@ -293,8 +293,8 @@ pytest mcp_server/_dev_tests/test_knowledge_base.py mcp_server/_dev_tests/test_r
     - `update_step_status(step: int, status: str, details: str) -> None` - Update individual step
     - `show_results_panel(results: List[ValidationResult]) -> None` - Show element-by-element results
     - `cleanup() -> None` - Remove injected elements (optional)
-    - CSS classes: `.validation-ok`, `.validation-fail`, `.pipeline-header`, `.pipeline-step`, `.results-panel`
-  - [ ] 6.5 **CREATE:** Unit tests `mcp_server/_dev_tests/test_visual_feedback.py`
+    - CSS classes: `.qa-validation-ok`, `.qa-validation-fail`, `.qa-pipeline-header`, `.qa-pipeline-step`, `.qa-results-panel`
+  - [x] 6.5 **CREATE:** Unit tests `mcp_server/_dev_tests/test_visual_feedback.py`
     - Test: highlight_valid injects correct CSS class
     - Test: highlight_invalid injects correct CSS class with label
     - Test: show_pipeline_header displays 3-step status
@@ -302,22 +302,32 @@ pytest mcp_server/_dev_tests/test_knowledge_base.py mcp_server/_dev_tests/test_r
     - Test: show_results_panel displays element list
     - Test: cleanup removes injected elements
     - Test: headless mode skips visual injection
-  - [ ] 6.6 **INTEGRATE:** Add visual feedback calls to RuntimeValidator
-  - [ ] 6.7 Run checks following testing skill
-  - [ ] 6.8 **Audit:** Verify testing skill conventions followed
-  - [ ] 6.9 Record results
-  - [ ] 6.10 Commit: `feat: add visual feedback during validation (Task 6.0)`
+  - [x] 6.6 **INTEGRATE:** Add visual feedback calls to RuntimeValidator (via constructor injection)
+  - [x] 6.7 Run checks following testing skill
+  - [x] 6.8 **Audit:** Verify testing skill conventions followed
+  - [x] 6.9 Record results
+  - [x] 6.10 Commit: `feat: add visual feedback during validation (Task 6.0)`
 
 **Done When:**
-- Valid elements highlighted with green outline
-- Invalid elements highlighted with red outline + error label
-- 3-step pipeline header displays:
+- [x] Valid elements highlighted with green outline
+- [x] Invalid elements highlighted with red outline + error label
+- [x] 3-step pipeline header displays:
   - Step 1: ScopeDiscovery status (Single/Multi Page + page names)
   - Step 2: RuntimeValidator status (X Valid, Y Errors)
   - Step 3: KnowledgeBase status (Patterns Ready/Loading)
-- Results panel displays element-by-element validation
-- Headless mode gracefully skips visuals
-- Tests pass
+- [x] Results panel displays element-by-element validation
+- [x] Headless mode gracefully skips visuals
+- [x] Tests pass
+
+**Results (2025-12-31):**
+```bash
+pytest mcp_server/_dev_tests/test_visual_feedback.py -v
+# 47 passed, 47 warnings (custom marks) in 0.14s
+
+# Regression check (Tasks 1-5)
+pytest mcp_server/_dev_tests/test_fix_suggester.py mcp_server/_dev_tests/test_knowledge_base.py mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/test_scope_discovery.py -v
+# 85 passed, 85 warnings in 0.22s
+```
 
 **CSS Classes:**
 ```css
