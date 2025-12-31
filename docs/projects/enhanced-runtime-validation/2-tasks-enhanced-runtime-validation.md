@@ -273,14 +273,23 @@ pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/tes
     - `highlight_element(ref: str, status: str) -> None` - Inject CSS for element
     - `highlight_valid(ref: str) -> None` - Green outline for valid elements
     - `highlight_invalid(ref: str, error_category: str) -> None` - Red outline for errors
-    - `show_pipeline_status(step: str, progress: dict) -> None` - Display status header
-    - `show_results_panel(results: List[ValidationResult]) -> None` - Show results summary
+    - `show_pipeline_header(scope_result, validation_results, kb_status) -> None` - Display 3-step pipeline:
+      ```
+      RUNTIME VALIDATION PIPELINE - LIVE DEMO
+      Step 1: ScopeDiscovery ......... [OK] Single Page (LoginPage)
+      Step 2: RuntimeValidator ....... [OK] 4 Valid, 0 Errors
+      Step 3: KnowledgeBase .......... [OK] Patterns Ready
+      ```
+    - `update_step_status(step: int, status: str, details: str) -> None` - Update individual step
+    - `show_results_panel(results: List[ValidationResult]) -> None` - Show element-by-element results
     - `cleanup() -> None` - Remove injected elements (optional)
-    - CSS classes: `.validation-ok`, `.validation-fail`, `.pipeline-header`, `.results-panel`
+    - CSS classes: `.validation-ok`, `.validation-fail`, `.pipeline-header`, `.pipeline-step`, `.results-panel`
   - [ ] 6.5 **CREATE:** Unit tests `mcp_server/_dev_tests/test_visual_feedback.py`
     - Test: highlight_valid injects correct CSS class
     - Test: highlight_invalid injects correct CSS class with label
-    - Test: show_pipeline_status creates header element
+    - Test: show_pipeline_header displays 3-step status
+    - Test: update_step_status updates individual step
+    - Test: show_results_panel displays element list
     - Test: cleanup removes injected elements
     - Test: headless mode skips visual injection
   - [ ] 6.6 **INTEGRATE:** Add visual feedback calls to RuntimeValidator
@@ -292,8 +301,11 @@ pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/tes
 **Done When:**
 - Valid elements highlighted with green outline
 - Invalid elements highlighted with red outline + error label
-- Pipeline status header shows current step
-- Results panel displays validation summary
+- 3-step pipeline header displays:
+  - Step 1: ScopeDiscovery status (Single/Multi Page + page names)
+  - Step 2: RuntimeValidator status (X Valid, Y Errors)
+  - Step 3: KnowledgeBase status (Patterns Ready/Loading)
+- Results panel displays element-by-element validation
 - Headless mode gracefully skips visuals
 - Tests pass
 
