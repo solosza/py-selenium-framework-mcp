@@ -5,9 +5,9 @@
 # Session: 2025-12-30 - Enhanced Runtime Validation Gates
 
 ## Quick Resume
-**Status:** Phase 3 (Deliver) - Task 3.0 IN PROGRESS
-**Next Action:** Task 3.1 - Create branch
-**Branch:** `main` (need to create `feature/3.0-runtime-validator`)
+**Status:** Phase 3 (Deliver) - Task 4.0 COMPLETE
+**Next Action:** Task 5.0 - Implement Fix Suggester
+**Branch:** `feature/4.0-knowledge-base` (ready to merge)
 
 ---
 
@@ -18,7 +18,7 @@
 | Phase 0 | Design Discussion | COMPLETE |
 | Phase 1 | Define (PRD) | COMPLETE (v1.5) |
 | Phase 2 | Divide (Tasks) | COMPLETE (15 phases) |
-| Phase 3 | Deliver | IN PROGRESS (2/15 tasks done) |
+| Phase 3 | Deliver | IN PROGRESS (4/15 tasks done) |
 
 **PRD Location:** `docs/projects/enhanced-runtime-validation/1-prd-enhanced-runtime-validation.md`
 **Task List:** `docs/projects/enhanced-runtime-validation/2-tasks-enhanced-runtime-validation.md`
@@ -42,23 +42,49 @@
 - 25 tests passing
 - Committed: `feat: extend Step 5 gate for per-page element discovery (Task 2.0)`
 
+### Task 3.0 - Runtime Validator (COMPLETE)
+- Created `mcp_server/utils/runtime_validator.py`:
+  - RuntimeValidator class with validate_element(), validate_element_from_snapshot()
+  - ValidationResult dataclass (is_valid, error_category, details)
+  - ErrorCategory enum: LOCATOR_NOT_FOUND, NOT_VISIBLE, NOT_INTERACTABLE, STALE_REFERENCE, METHOD_NOT_FOUND
+  - ElementInfo dataclass for snapshot node parsing
+  - Convenience functions: validate_element(), validate_elements()
+- Created `mcp_server/_dev_tests/test_runtime_validator.py`
+- 23 tests passing
+- Committed: `feat: add runtime validator with error categorization (Task 3.0)`
+
+### Task 4.0 - Knowledge Base Read/Write (COMPLETE)
+- Created `mcp_server/utils/knowledge_base.py`:
+  - KnowledgeBase class with find_pattern(), save_pattern(), find_all_patterns()
+  - Pattern dataclass (error_category, context_match, fix, confidence, source)
+  - Structured pattern parsing from "Runtime Validation Patterns" section
+  - Legacy pattern parsing for backwards compatibility
+  - Convenience functions: load_knowledge_base(), find_pattern_for_error()
+- Created `mcp_server/_dev_tests/test_knowledge_base.py`
+- 20 tests passing
+- Committed: `feat: add knowledge base read/write module (Task 4.0)`
+
 ---
 
-## Next Task: 3.0 - Runtime Validator
+## Next Task: 5.0 - Fix Suggester
 
-**Branch:** `feature/3.0-runtime-validator`
+**Branch:** `feature/5.0-fix-suggester`
 
 **Subtasks:**
-- 3.1 Create branch
-- 3.2 ASSESS Playwright MCP tools available
-- 3.3 CREATE runtime_validator.py with ValidationResult dataclass
-- 3.4 CREATE unit tests
-- 3.5-3.8 Run checks, audit, record, commit
+- 5.1 Create branch `feature/5.0-fix-suggester`
+- 5.2 ASSESS runtime_validator.py for error categories
+- 5.3 ASSESS knowledge_base.py for pattern interface
+- 5.4 CREATE `mcp_server/utils/fix_suggester.py` with:
+  - FixSuggester class with __init__(kb: KnowledgeBase)
+  - suggest_fix(error_category, context) -> Optional[FixRecommendation]
+  - FixRecommendation dataclass (fix_action, fix_details, confidence)
+- 5.5 CREATE unit tests
+- 5.6-5.9 Run checks, audit, record, commit
 
 **Key design points:**
-- Returns error_category (not fix suggestion)
-- Categories: LOCATOR_NOT_FOUND, NOT_VISIBLE, NOT_INTERACTABLE, STALE_REFERENCE, METHOD_NOT_FOUND
-- SRP: "Is element usable? What's wrong?"
+- Returns Optional[FixRecommendation] - None if no known fix
+- Queries KnowledgeBase for pattern matching
+- SRP: "Given error, what fix to try?"
 
 ---
 
@@ -87,6 +113,8 @@
 - `mcp_server/utils/scope_discovery.py` (Task 1.0)
 - `mcp_server/_dev_tests/test_scope_discovery.py` (Task 1.0)
 - `mcp_server/_dev_tests/test_qg_discovered_elements.py` (Task 2.0)
+- `mcp_server/utils/runtime_validator.py` (Task 3.0)
+- `mcp_server/_dev_tests/test_runtime_validator.py` (Task 3.0)
 
 **Extended:**
 - `mcp_server/tools/gates/qg_discovered_elements.py` (Task 2.0)

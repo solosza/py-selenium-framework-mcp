@@ -2,7 +2,7 @@
 
 **PRD:** `1-prd-enhanced-runtime-validation.md`
 **Generated:** 2025-12-30
-**Version:** 1.1 (SRP-compliant design)
+**Version:** 1.3 (Visual Feedback moved to Phase 6)
 
 ---
 
@@ -193,10 +193,10 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ### Phase 4: Knowledge Base Module
 
-- [ ] 4.0 Implement Knowledge Base Read/Write [CORE]
-  - [ ] 4.1 Create branch `feature/4.0-knowledge-base`
-  - [ ] 4.2 **ASSESS:** Read current `docs/KNOWLEDGE_BASE.md` structure
-  - [ ] 4.3 **CREATE:** `mcp_server/utils/knowledge_base.py` with:
+- [x] 4.0 Implement Knowledge Base Read/Write [CORE]
+  - [x] 4.1 Create branch `feature/4.0-knowledge-base`
+  - [x] 4.2 **ASSESS:** Read current `docs/KNOWLEDGE_BASE.md` structure
+  - [x] 4.3 **CREATE:** `mcp_server/utils/knowledge_base.py` with:
     - `KnowledgeBase` class
     - `find_pattern(error_category: str, context: dict) -> Optional[Pattern]` - Find matching pattern
     - `save_pattern(pattern: Pattern) -> None` - Save new pattern to KB
@@ -205,17 +205,27 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
       - `context_match: dict` - What context this applies to
       - `fix: str` - The fix to apply
       - `confidence: float` - How confident (0-1)
-  - [ ] 4.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_knowledge_base.py`
-  - [ ] 4.5 Run checks following testing skill
-  - [ ] 4.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 4.7 Record results
-  - [ ] 4.8 Commit: `feat: add knowledge base read/write module (Task 4.0)`
+  - [x] 4.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_knowledge_base.py`
+  - [x] 4.5 Run checks following testing skill
+  - [x] 4.6 **Audit:** Verify testing skill conventions followed
+  - [x] 4.7 Record results
+  - [x] 4.8 Commit: `feat: add knowledge base read/write module (Task 4.0)`
 
 **Done When:**
-- KnowledgeBase can read patterns from KNOWLEDGE_BASE.md
-- KnowledgeBase can write new patterns
-- Tests cover find (exists/not exists) and save
-- Tests pass
+- [x] KnowledgeBase can read patterns from KNOWLEDGE_BASE.md
+- [x] KnowledgeBase can write new patterns
+- [x] Tests cover find (exists/not exists) and save
+- [x] Tests pass
+
+**Results (2025-12-30):**
+```bash
+pytest mcp_server/_dev_tests/test_knowledge_base.py -v
+# 20 passed, 20 warnings (custom marks) in 0.15s
+
+# Regression check
+pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_qg_discovered_elements.py -v
+# 62 passed, 73 warnings in 0.37s
+```
 
 ---
 
@@ -252,21 +262,104 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 6: WebInterface Checker
+### Phase 6: Visual Feedback During Validation
 
-- [ ] 6.0 Implement WebInterface Checker [CORE]
-  - [ ] 6.1 Create branch `feature/6.0-webinterface-checker`
-  - [ ] 6.2 **ASSESS:** Read `framework/interfaces/web_interface.py` to understand structure
-  - [ ] 6.3 **CREATE:** `mcp_server/utils/webinterface_checker.py` with:
+- [ ] 6.0 Implement Visual Feedback Module [GLUE]
+  - [ ] 6.1 Create branch `feature/6.0-visual-feedback`
+  - [ ] 6.2 **ASSESS:** Read RuntimeValidator for integration points
+  - [ ] 6.3 **ASSESS:** Read Playwright MCP browser_evaluate capabilities
+  - [ ] 6.4 **CREATE:** `mcp_server/utils/visual_feedback.py` with:
+    - `VisualFeedback` class
+    - `highlight_element(ref: str, status: str) -> None` - Inject CSS for element
+    - `highlight_valid(ref: str) -> None` - Green outline for valid elements
+    - `highlight_invalid(ref: str, error_category: str) -> None` - Red outline for errors
+    - `show_pipeline_header(scope_result, validation_results, kb_status) -> None` - Display 3-step pipeline:
+      ```
+      RUNTIME VALIDATION PIPELINE - LIVE DEMO
+      Step 1: ScopeDiscovery ......... [OK] Single Page (LoginPage)
+      Step 2: RuntimeValidator ....... [OK] 4 Valid, 0 Errors
+      Step 3: KnowledgeBase .......... [OK] Patterns Ready
+      ```
+    - `update_step_status(step: int, status: str, details: str) -> None` - Update individual step
+    - `show_results_panel(results: List[ValidationResult]) -> None` - Show element-by-element results
+    - `cleanup() -> None` - Remove injected elements (optional)
+    - CSS classes: `.validation-ok`, `.validation-fail`, `.pipeline-header`, `.pipeline-step`, `.results-panel`
+  - [ ] 6.5 **CREATE:** Unit tests `mcp_server/_dev_tests/test_visual_feedback.py`
+    - Test: highlight_valid injects correct CSS class
+    - Test: highlight_invalid injects correct CSS class with label
+    - Test: show_pipeline_header displays 3-step status
+    - Test: update_step_status updates individual step
+    - Test: show_results_panel displays element list
+    - Test: cleanup removes injected elements
+    - Test: headless mode skips visual injection
+  - [ ] 6.6 **INTEGRATE:** Add visual feedback calls to RuntimeValidator
+  - [ ] 6.7 Run checks following testing skill
+  - [ ] 6.8 **Audit:** Verify testing skill conventions followed
+  - [ ] 6.9 Record results
+  - [ ] 6.10 Commit: `feat: add visual feedback during validation (Task 6.0)`
+
+**Done When:**
+- Valid elements highlighted with green outline
+- Invalid elements highlighted with red outline + error label
+- 3-step pipeline header displays:
+  - Step 1: ScopeDiscovery status (Single/Multi Page + page names)
+  - Step 2: RuntimeValidator status (X Valid, Y Errors)
+  - Step 3: KnowledgeBase status (Patterns Ready/Loading)
+- Results panel displays element-by-element validation
+- Headless mode gracefully skips visuals
+- Tests pass
+
+**CSS Classes:**
+```css
+.validation-ok {
+    outline: 3px solid #00ff00 !important;
+    outline-offset: 2px;
+}
+.validation-fail {
+    outline: 3px solid #ff0000 !important;
+    outline-offset: 2px;
+}
+.pipeline-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #1a1a2e;
+    color: #00ff00;
+    padding: 10px;
+    z-index: 99999;
+    font-family: monospace;
+}
+.results-panel {
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 99998;
+    font-family: monospace;
+}
+```
+
+---
+
+### Phase 7: WebInterface Checker
+
+- [ ] 7.0 Implement WebInterface Checker [CORE]
+  - [ ] 7.1 Create branch `feature/7.0-webinterface-checker`
+  - [ ] 7.2 **ASSESS:** Read `framework/interfaces/web_interface.py` to understand structure
+  - [ ] 7.3 **CREATE:** `mcp_server/utils/webinterface_checker.py` with:
     - `WebInterfaceChecker` class
     - `get_available_methods() -> List[MethodInfo]` - Parse WebInterface for public methods
     - `method_exists(method_name: str) -> bool` - Check if method exists
     - `get_method_signature(method_name: str) -> Optional[MethodSignature]` - Get parameters
-  - [ ] 6.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_webinterface_checker.py`
-  - [ ] 6.5 Run checks following testing skill
-  - [ ] 6.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 6.7 Record results
-  - [ ] 6.8 Commit: `feat: add WebInterface method checker (Task 6.0)`
+  - [ ] 7.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_webinterface_checker.py`
+  - [ ] 7.5 Run checks following testing skill
+  - [ ] 7.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 7.7 Record results
+  - [ ] 7.8 Commit: `feat: add WebInterface method checker (Task 7.0)`
 
 **Done When:**
 - WebInterfaceChecker parses WebInterface class
@@ -276,22 +369,22 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 7: POM Runtime Validation (Step 6)
+### Phase 8: POM Runtime Validation (Step 6)
 
-- [ ] 7.0 Extend Step 6 Gate with Runtime Validation [CORE]
-  - [ ] 7.1 Create branch `feature/7.0-pom-runtime-validation`
-  - [ ] 7.2 **ASSESS:** Read current `qg_page_object.py` implementation
-  - [ ] 7.3 **EXTEND:** `mcp_server/tools/gates/qg_page_object.py`:
+- [ ] 8.0 Extend Step 6 Gate with Runtime Validation [CORE]
+  - [ ] 8.1 Create branch `feature/8.0-pom-runtime-validation`
+  - [ ] 8.2 **ASSESS:** Read current `qg_page_object.py` implementation
+  - [ ] 8.3 **EXTEND:** `mcp_server/tools/gates/qg_page_object.py`:
     - Import RuntimeValidator, FixSuggester, WebInterfaceChecker
     - Add runtime validation in POST mode (call RuntimeValidator)
     - Add WebInterface method check (call WebInterfaceChecker)
     - Return validation result with error category
     - **Do NOT implement fix loop** - that's AI orchestration
-  - [ ] 7.4 **EXTEND:** Gate tests for new validation
-  - [ ] 7.5 Run checks following testing skill
-  - [ ] 7.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 7.7 Record results
-  - [ ] 7.8 Commit: `feat: add runtime validation to Step 6 gate (Task 7.0)`
+  - [ ] 8.4 **EXTEND:** Gate tests for new validation
+  - [ ] 8.5 Run checks following testing skill
+  - [ ] 8.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 8.7 Record results
+  - [ ] 8.8 Commit: `feat: add runtime validation to Step 6 gate (Task 8.0)`
 
 **Done When:**
 - POM locators validated at runtime
@@ -301,19 +394,19 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 8: Task Runtime Validation (Step 7)
+### Phase 9: Task Runtime Validation (Step 7)
 
-- [ ] 8.0 Extend Step 7 Gate with Runtime Validation [CORE]
-  - [ ] 8.1 Create branch `feature/8.0-task-runtime-validation`
-  - [ ] 8.2 **ASSESS:** Read current `qg_task.py` implementation
-  - [ ] 8.3 **EXTEND:** `mcp_server/tools/gates/qg_task.py`:
+- [ ] 9.0 Extend Step 7 Gate with Runtime Validation [CORE]
+  - [ ] 9.1 Create branch `feature/9.0-task-runtime-validation`
+  - [ ] 9.2 **ASSESS:** Read current `qg_task.py` implementation
+  - [ ] 9.3 **EXTEND:** `mcp_server/tools/gates/qg_task.py`:
     - Add runtime validation for POM method calls
     - Validate workflow sequence feasibility
-  - [ ] 8.4 **EXTEND:** Gate tests for new validation
-  - [ ] 8.5 Run checks following testing skill
-  - [ ] 8.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 8.7 Record results
-  - [ ] 8.8 Commit: `feat: add runtime validation to Step 7 gate (Task 8.0)`
+  - [ ] 9.4 **EXTEND:** Gate tests for new validation
+  - [ ] 9.5 Run checks following testing skill
+  - [ ] 9.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 9.7 Record results
+  - [ ] 9.8 Commit: `feat: add runtime validation to Step 7 gate (Task 9.0)`
 
 **Done When:**
 - Task POM method calls validated
@@ -322,19 +415,19 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 9: Role Runtime Validation (Step 8)
+### Phase 10: Role Runtime Validation (Step 8)
 
-- [ ] 9.0 Extend Step 8 Gate with Runtime Validation [CORE]
-  - [ ] 9.1 Create branch `feature/9.0-role-runtime-validation`
-  - [ ] 9.2 **ASSESS:** Read current `qg_role.py` implementation
-  - [ ] 9.3 **EXTEND:** `mcp_server/tools/gates/qg_role.py`:
+- [ ] 10.0 Extend Step 8 Gate with Runtime Validation [CORE]
+  - [ ] 10.1 Create branch `feature/10.0-role-runtime-validation`
+  - [ ] 10.2 **ASSESS:** Read current `qg_role.py` implementation
+  - [ ] 10.3 **EXTEND:** `mcp_server/tools/gates/qg_role.py`:
     - Add runtime validation for Task method calls
     - Validate complete workflow feasibility
-  - [ ] 9.4 **EXTEND:** Gate tests for new validation
-  - [ ] 9.5 Run checks following testing skill
-  - [ ] 9.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 9.7 Record results
-  - [ ] 9.8 Commit: `feat: add runtime validation to Step 8 gate (Task 9.0)`
+  - [ ] 10.4 **EXTEND:** Gate tests for new validation
+  - [ ] 10.5 Run checks following testing skill
+  - [ ] 10.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 10.7 Record results
+  - [ ] 10.8 Commit: `feat: add runtime validation to Step 8 gate (Task 10.0)`
 
 **Done When:**
 - Role Task method calls validated
@@ -343,19 +436,19 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 10: Test Runtime Validation (Step 9)
+### Phase 11: Test Runtime Validation (Step 9)
 
-- [ ] 10.0 Extend Step 9 Gate with Runtime Validation [CORE]
-  - [ ] 10.1 Create branch `feature/10.0-test-runtime-validation`
-  - [ ] 10.2 **ASSESS:** Read current `qg_test_runner.py` implementation
-  - [ ] 10.3 **EXTEND:** `mcp_server/tools/gates/qg_test_runner.py`:
+- [ ] 11.0 Extend Step 9 Gate with Runtime Validation [CORE]
+  - [ ] 11.1 Create branch `feature/11.0-test-runtime-validation`
+  - [ ] 11.2 **ASSESS:** Read current `qg_test_runner.py` implementation
+  - [ ] 11.3 **EXTEND:** `mcp_server/tools/gates/qg_test_runner.py`:
     - Add full workflow simulation
     - Validate all assertions reachable
-  - [ ] 10.4 **EXTEND:** Gate tests for new validation
-  - [ ] 10.5 Run checks following testing skill
-  - [ ] 10.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 10.7 Record results
-  - [ ] 10.8 Commit: `feat: add runtime validation to Step 9 gate (Task 10.0)`
+  - [ ] 11.4 **EXTEND:** Gate tests for new validation
+  - [ ] 11.5 Run checks following testing skill
+  - [ ] 11.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 11.7 Record results
+  - [ ] 11.8 Commit: `feat: add runtime validation to Step 9 gate (Task 11.0)`
 
 **Done When:**
 - Full workflow simulation works
@@ -364,20 +457,20 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 11: Mandatory Final Gate (Step 10)
+### Phase 12: Mandatory Final Gate (Step 10)
 
-- [ ] 11.0 Enforce Mandatory Final Validation [CORE]
-  - [ ] 11.1 Create branch `feature/11.0-mandatory-final-gate`
-  - [ ] 11.2 **ASSESS:** Read current `qg_save_run.py` implementation
-  - [ ] 11.3 **EXTEND:** `mcp_server/tools/gates/qg_save_run.py`:
+- [ ] 12.0 Enforce Mandatory Final Validation [CORE]
+  - [ ] 12.1 Create branch `feature/12.0-mandatory-final-gate`
+  - [ ] 12.2 **ASSESS:** Read current `qg_save_run.py` implementation
+  - [ ] 12.3 **EXTEND:** `mcp_server/tools/gates/qg_save_run.py`:
     - Make final gate mandatory (cannot be bypassed)
     - Aggregate all previous validations
     - Require all steps complete before save
-  - [ ] 11.4 **EXTEND:** Gate tests for mandatory enforcement
-  - [ ] 11.5 Run checks following testing skill
-  - [ ] 11.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 11.7 Record results
-  - [ ] 11.8 Commit: `feat: make Step 10 final gate mandatory (Task 11.0)`
+  - [ ] 12.4 **EXTEND:** Gate tests for mandatory enforcement
+  - [ ] 12.5 Run checks following testing skill
+  - [ ] 12.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 12.7 Record results
+  - [ ] 12.8 Commit: `feat: make Step 10 final gate mandatory (Task 12.0)`
 
 **Done When:**
 - Final gate cannot be bypassed
@@ -386,20 +479,20 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 12: Audit Trail Enhancement
+### Phase 13: Audit Trail Enhancement
 
-- [ ] 12.0 Extend Audit Logger for Runtime Validation [GLUE]
-  - [ ] 12.1 Create branch `feature/12.0-audit-enhancement`
-  - [ ] 12.2 **ASSESS:** Read current `mcp_server/utils/audit_logger.py` implementation
-  - [ ] 12.3 **EXTEND:** `mcp_server/utils/audit_logger.py`:
+- [ ] 13.0 Extend Audit Logger for Runtime Validation [GLUE]
+  - [ ] 13.1 Create branch `feature/13.0-audit-enhancement`
+  - [ ] 13.2 **ASSESS:** Read current `mcp_server/utils/audit_logger.py` implementation
+  - [ ] 13.3 **EXTEND:** `mcp_server/utils/audit_logger.py`:
     - Add `log_runtime_validation(element, result, category)` method
     - Add `log_fix_attempt(element, fix, outcome)` method
     - Preserve existing functionality
-  - [ ] 12.4 **EXTEND:** Unit tests for new logging methods
-  - [ ] 12.5 Run checks following testing skill
-  - [ ] 12.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 12.7 Record results
-  - [ ] 12.8 Commit: `feat: extend audit logger for runtime validation (Task 12.0)`
+  - [ ] 13.4 **EXTEND:** Unit tests for new logging methods
+  - [ ] 13.5 Run checks following testing skill
+  - [ ] 13.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 13.7 Record results
+  - [ ] 13.8 Commit: `feat: extend audit logger for runtime validation (Task 13.0)`
 
 **Done When:**
 - Runtime validation logged with categories
@@ -409,11 +502,11 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 13: Knowledge Base Patterns
+### Phase 14: Knowledge Base Patterns
 
-- [ ] 13.0 Extend Knowledge Base with Runtime Patterns [GLUE]
-  - [ ] 13.1 Create branch `feature/13.0-kb-patterns`
-  - [ ] 13.2 **EXTEND:** `docs/KNOWLEDGE_BASE.md`:
+- [ ] 14.0 Extend Knowledge Base with Runtime Patterns [GLUE]
+  - [ ] 14.1 Create branch `feature/14.0-kb-patterns`
+  - [ ] 14.2 **EXTEND:** `docs/KNOWLEDGE_BASE.md`:
     - Add "Runtime Validation Patterns" section
     - Add initial error category → fix mappings:
       - LOCATOR_NOT_FOUND → check selector, try different strategy
@@ -421,10 +514,10 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
       - NOT_INTERACTABLE → use click_js
       - STALE_REFERENCE → re-find element
       - METHOD_NOT_FOUND → check WebInterface, propose addition
-  - [ ] 13.3 Verify knowledge_base.py can parse new section
-  - [ ] 13.4 **Audit:** Verify documentation quality
-  - [ ] 13.5 Record results
-  - [ ] 13.6 Commit: `feat: add runtime validation patterns to KB (Task 13.0)`
+  - [ ] 14.3 Verify knowledge_base.py can parse new section
+  - [ ] 14.4 **Audit:** Verify documentation quality
+  - [ ] 14.5 Record results
+  - [ ] 14.6 Commit: `feat: add runtime validation patterns to KB (Task 14.0)`
 
 **Done When:**
 - KB has runtime validation patterns section
@@ -434,20 +527,20 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 14: Re-Validation Triggers
+### Phase 15: Re-Validation Triggers
 
-- [ ] 14.0 Implement Re-Validation on User Changes [GLUE]
-  - [ ] 14.1 Create branch `feature/14.0-revalidation-triggers`
-  - [ ] 14.2 **ASSESS:** Read existing gate implementations for trigger points
-  - [ ] 14.3 **EXTEND:** Base gate or individual gates:
+- [ ] 15.0 Implement Re-Validation on User Changes [GLUE]
+  - [ ] 15.1 Create branch `feature/15.0-revalidation-triggers`
+  - [ ] 15.2 **ASSESS:** Read existing gate implementations for trigger points
+  - [ ] 15.3 **EXTEND:** Base gate or individual gates:
     - Add change detection logic
     - Add re-validation trigger on user modification
     - Add cascade re-validation for downstream steps
-  - [ ] 14.4 **EXTEND:** Tests for re-validation triggers
-  - [ ] 14.5 Run checks following testing skill
-  - [ ] 14.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 14.7 Record results
-  - [ ] 14.8 Commit: `feat: add re-validation triggers on user changes (Task 14.0)`
+  - [ ] 15.4 **EXTEND:** Tests for re-validation triggers
+  - [ ] 15.5 Run checks following testing skill
+  - [ ] 15.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 15.7 Record results
+  - [ ] 15.8 Commit: `feat: add re-validation triggers on user changes (Task 15.0)`
 
 **Done When:**
 - User changes trigger re-validation
@@ -456,21 +549,21 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ---
 
-### Phase 15: Checkpoint Resume
+### Phase 16: Checkpoint Resume
 
-- [ ] 15.0 Extend State Manager for Checkpoint Resume [GLUE]
-  - [ ] 15.1 Create branch `feature/15.0-checkpoint-resume`
-  - [ ] 15.2 **ASSESS:** Read current `mcp_server/utils/state_manager.py` implementation
-  - [ ] 15.3 **EXTEND:** `mcp_server/utils/state_manager.py`:
+- [ ] 16.0 Extend State Manager for Checkpoint Resume [GLUE]
+  - [ ] 16.1 Create branch `feature/16.0-checkpoint-resume`
+  - [ ] 16.2 **ASSESS:** Read current `mcp_server/utils/state_manager.py` implementation
+  - [ ] 16.3 **EXTEND:** `mcp_server/utils/state_manager.py`:
     - Add `save_checkpoint(step, data)` method
     - Add `restore_checkpoint(step)` method
     - Add `list_checkpoints()` method
     - Add `get_resume_step()` method
-  - [ ] 15.4 **EXTEND:** Unit tests for checkpoint functionality
-  - [ ] 15.5 Run checks following testing skill
-  - [ ] 15.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 15.7 Record results
-  - [ ] 15.8 Commit: `feat: add checkpoint resume to state manager (Task 15.0)`
+  - [ ] 16.4 **EXTEND:** Unit tests for checkpoint functionality
+  - [ ] 16.5 Run checks following testing skill
+  - [ ] 16.6 **Audit:** Verify testing skill conventions followed
+  - [ ] 16.7 Record results
+  - [ ] 16.8 Commit: `feat: add checkpoint resume to state manager (Task 16.0)`
 
 **Done When:**
 - Checkpoints can be saved and restored
@@ -490,6 +583,7 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 | `mcp_server/utils/fix_suggester.py` | Suggest fixes (returns None if unknown) |
 | `mcp_server/utils/knowledge_base.py` | Read/write KB patterns |
 | `mcp_server/utils/webinterface_checker.py` | Check WebInterface methods |
+| `mcp_server/utils/visual_feedback.py` | Inject visual highlighting during validation |
 
 ### Test Files To CREATE
 
@@ -500,6 +594,7 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 | `mcp_server/_dev_tests/test_fix_suggester.py` | fix_suggester.py |
 | `mcp_server/_dev_tests/test_knowledge_base.py` | knowledge_base.py |
 | `mcp_server/_dev_tests/test_webinterface_checker.py` | webinterface_checker.py |
+| `mcp_server/_dev_tests/test_visual_feedback.py` | visual_feedback.py |
 | `mcp_server/_dev_tests/test_enhanced_gates.py` | Gate integration |
 
 ### Files To EXTEND
@@ -546,4 +641,4 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 ---
 
 **Last Updated:** 2025-12-30
-**Version:** 1.1 (SRP-compliant design)
+**Version:** 1.3 (Visual Feedback moved to Phase 6)
