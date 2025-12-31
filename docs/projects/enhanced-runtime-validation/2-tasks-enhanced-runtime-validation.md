@@ -2,7 +2,7 @@
 
 **PRD:** `1-prd-enhanced-runtime-validation.md`
 **Generated:** 2025-12-30
-**Version:** 1.1 (SRP-compliant design)
+**Version:** 1.2 (Added Visual Feedback)
 
 ---
 
@@ -489,6 +489,77 @@ pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/tes
 
 ---
 
+### Phase 16: Visual Feedback During Validation
+
+- [ ] 16.0 Implement Visual Feedback Module [GLUE]
+  - [ ] 16.1 Create branch `feature/16.0-visual-feedback`
+  - [ ] 16.2 **ASSESS:** Read RuntimeValidator for integration points
+  - [ ] 16.3 **ASSESS:** Read Playwright MCP browser_evaluate capabilities
+  - [ ] 16.4 **CREATE:** `mcp_server/utils/visual_feedback.py` with:
+    - `VisualFeedback` class
+    - `highlight_element(ref: str, status: str) -> None` - Inject CSS for element
+    - `highlight_valid(ref: str) -> None` - Green outline for valid elements
+    - `highlight_invalid(ref: str, error_category: str) -> None` - Red outline for errors
+    - `show_pipeline_status(step: str, progress: dict) -> None` - Display status header
+    - `show_results_panel(results: List[ValidationResult]) -> None` - Show results summary
+    - `cleanup() -> None` - Remove injected elements (optional)
+    - CSS classes: `.validation-ok`, `.validation-fail`, `.pipeline-header`, `.results-panel`
+  - [ ] 16.5 **CREATE:** Unit tests `mcp_server/_dev_tests/test_visual_feedback.py`
+    - Test: highlight_valid injects correct CSS class
+    - Test: highlight_invalid injects correct CSS class with label
+    - Test: show_pipeline_status creates header element
+    - Test: cleanup removes injected elements
+    - Test: headless mode skips visual injection
+  - [ ] 16.6 **INTEGRATE:** Add visual feedback calls to RuntimeValidator
+  - [ ] 16.7 Run checks following testing skill
+  - [ ] 16.8 **Audit:** Verify testing skill conventions followed
+  - [ ] 16.9 Record results
+  - [ ] 16.10 Commit: `feat: add visual feedback during validation (Task 16.0)`
+
+**Done When:**
+- Valid elements highlighted with green outline
+- Invalid elements highlighted with red outline + error label
+- Pipeline status header shows current step
+- Results panel displays validation summary
+- Headless mode gracefully skips visuals
+- Tests pass
+
+**CSS Classes:**
+```css
+.validation-ok {
+    outline: 3px solid #00ff00 !important;
+    outline-offset: 2px;
+}
+.validation-fail {
+    outline: 3px solid #ff0000 !important;
+    outline-offset: 2px;
+}
+.pipeline-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #1a1a2e;
+    color: #00ff00;
+    padding: 10px;
+    z-index: 99999;
+    font-family: monospace;
+}
+.results-panel {
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 99998;
+    font-family: monospace;
+}
+```
+
+---
+
 ## Relevant Files Summary
 
 ### Files To CREATE (SRP-Compliant)
@@ -500,6 +571,7 @@ pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/tes
 | `mcp_server/utils/fix_suggester.py` | Suggest fixes (returns None if unknown) |
 | `mcp_server/utils/knowledge_base.py` | Read/write KB patterns |
 | `mcp_server/utils/webinterface_checker.py` | Check WebInterface methods |
+| `mcp_server/utils/visual_feedback.py` | Inject visual highlighting during validation |
 
 ### Test Files To CREATE
 
@@ -510,6 +582,7 @@ pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/tes
 | `mcp_server/_dev_tests/test_fix_suggester.py` | fix_suggester.py |
 | `mcp_server/_dev_tests/test_knowledge_base.py` | knowledge_base.py |
 | `mcp_server/_dev_tests/test_webinterface_checker.py` | webinterface_checker.py |
+| `mcp_server/_dev_tests/test_visual_feedback.py` | visual_feedback.py |
 | `mcp_server/_dev_tests/test_enhanced_gates.py` | Gate integration |
 
 ### Files To EXTEND
@@ -556,4 +629,4 @@ pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/tes
 ---
 
 **Last Updated:** 2025-12-30
-**Version:** 1.1 (SRP-compliant design)
+**Version:** 1.2 (Added Visual Feedback)

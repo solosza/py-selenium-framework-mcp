@@ -1,11 +1,12 @@
 # PRD: Enhanced Runtime Validation Gates
 
-**Version:** 1.5 (Living Document)
+**Version:** 1.6 (Living Document)
 **Created:** 2025-12-30
 **Last Updated:** 2025-12-30
 **Status:** Ready for Task Generation
 
 **Changelog:**
+- v1.6: Added Visual Feedback feature (Section 4.13, FR-81 to FR-88, AT-12); Updated Section 6.4 with `visual_feedback.py`
 - v1.5: SRP-compliant module design - Added `scope_discovery.py`, `fix_suggester.py`; Updated Sections 6.4, 9.1, 18.3 with SRP responsibilities
 - v1.4: Split Section 9.0 into 9.0a (Runtime Checkpoints) and 9.0b (Development Testing); Added Sections 14-19 (NFRs, Observability, Security, Rollout, Repo Steps, Definition of Ready)
 - v1.3: Added Testing Skill reference in Section 9.0 and Section 11; mandatory testing process per phase
@@ -219,6 +220,58 @@ Check: WebInterface.has_method("click_js")?
 | FR-75 | Form validation rules (no numbers in name fields) |
 | FR-76 | Method availability (select_option vs select_dropdown_by_visible_text) |
 
+### 4.13 Visual Feedback During Validation (NEW)
+
+| FR | Requirement |
+|----|-------------|
+| FR-81 | During element validation, inject visual highlighting into browser for validated elements |
+| FR-82 | Valid elements: green outline (3px solid #00ff00) with label |
+| FR-83 | Invalid elements: red outline (3px solid #ff0000) with error category label |
+| FR-84 | Display pipeline status header showing current step and progress |
+| FR-85 | Show validation results panel with element-by-element status |
+| FR-86 | Visual feedback uses JavaScript injection via Playwright `browser_evaluate` |
+| FR-87 | Clean up visual overlays after validation step completes (optional, user preference) |
+| FR-88 | Support for both headed (visible) and headless modes (skip visual in headless) |
+
+**Visual Feedback Flow:**
+```
+Element Validation Starts
+    |
+    v
+For each element:
+    +-- Find element in DOM
+    +-- Validate (exists, visible, interactable)
+    +-- Inject CSS class:
+    |       Valid   -> .validation-ok (green outline)
+    |       Invalid -> .validation-fail (red outline)
+    +-- Update results panel
+    |
+    v
+Show summary header:
+    "Step 2: RuntimeValidator -> X Valid, Y Errors"
+    |
+    v
+User sees visual state of all elements on page
+```
+
+**CSS Injection Example:**
+```css
+.validation-ok {
+    outline: 3px solid #00ff00 !important;
+    outline-offset: 2px;
+}
+.validation-fail {
+    outline: 3px solid #ff0000 !important;
+    outline-offset: 2px;
+}
+```
+
+**Benefits:**
+- User immediately sees which elements passed/failed validation
+- Reduces cognitive load during fix loops
+- Makes debugging faster (can correlate element visually with error message)
+- Provides confidence that validation is working correctly
+
 ---
 
 ## 5. Non-Goals (Out of Scope)
@@ -336,7 +389,8 @@ mcp_server/
     ├── runtime_validator.py          ← NEW: Playwright-based validation + error categorization
     ├── fix_suggester.py              ← NEW: Fix suggestions (returns Optional, None if no known fix)
     ├── knowledge_base.py             ← NEW: KB read/write utilities
-    └── webinterface_checker.py       ← NEW: WebInterface method existence check
+    ├── webinterface_checker.py       ← NEW: WebInterface method existence check
+    └── visual_feedback.py            ← NEW: Browser visual highlighting during validation
 ```
 
 ---
@@ -688,6 +742,17 @@ AND re-validates the element with the new method
 AND proceeds only after validation passes
 ```
 
+**AT-12: Visual Feedback During Validation**
+```
+GIVEN element validation is running in headed browser mode
+WHEN RuntimeValidator validates elements on the page
+THEN valid elements are highlighted with green outline (3px solid #00ff00)
+AND invalid elements are highlighted with red outline (3px solid #ff0000)
+AND a status header shows current pipeline step and progress
+AND a results panel displays element-by-element validation status
+AND user can visually correlate highlighted elements with validation results
+```
+
 ---
 
 ## 11. Implementation Order (Step-by-Step Rollout)
@@ -919,6 +984,7 @@ AND structural gates still function
 | `fix_suggester.py` | `mcp_server/utils/` | Given error, what fix to try? (returns Optional) |
 | `knowledge_base.py` | `mcp_server/utils/` | Read/write patterns from KB file |
 | `webinterface_checker.py` | `mcp_server/utils/` | Does WebInterface have this method? |
+| `visual_feedback.py` | `mcp_server/utils/` | Inject visual highlighting into browser during validation |
 | Audit logs | `mcp_server/audit/` (gitignored) | - |
 | Checkpoints | `mcp_server/state/` (gitignored) | - |
 
