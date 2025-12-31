@@ -18,6 +18,7 @@ POST Validation:
 - state_methods present and not empty
 - state_methods match expected_states if provided (IC-06-01)
 - class_name and import_path present (DD-26)
+- WebInterface method calls are valid (Task 8.0)
 
 Enforces: DD-09, DD-25, DD-26, IC-06-01, IC-06-02, IC-06-03
 """
@@ -27,6 +28,7 @@ from typing import Any, Dict, List, Optional
 
 from .base_gate import BaseGate
 from utils.state_manager import StateManager
+from utils.webinterface_checker import WebInterfaceChecker
 
 
 class QGPageObject(BaseGate):
@@ -176,27 +178,25 @@ class QGPageObject(BaseGate):
         if state_manager:
             if result.get("status") == "fail":
                 state_manager.increment_attempt(cls.STEP_NUMBER)
-                # Log failure to audit
-                if cls._audit_logger:
-                    cls._audit_logger.log_gate(
-                        step=cls.STEP_NUMBER,
-                        gate_name="qg_page_object",
-                        mode="POST",
-                        result="fail",
-                        error=result.get("error"),
-                        source=source
-                    )
+                # DEF-040: Log failure to audit (lazy init)
+                cls.get_audit_logger().log_gate(
+                    step=cls.STEP_NUMBER,
+                    gate_name="qg_page_object",
+                    mode="POST",
+                    result="fail",
+                    error=result.get("error"),
+                    source=source
+                )
             elif result.get("status") == "pass":
                 state_manager.reset_attempts(cls.STEP_NUMBER)
-                # Task 2.5: Log success with source
-                if cls._audit_logger:
-                    cls._audit_logger.log_gate(
-                        step=cls.STEP_NUMBER,
-                        gate_name="qg_page_object",
-                        mode="POST",
-                        result="pass",
-                        source=source
-                    )
+                # DEF-040: Log success with source (lazy init)
+                cls.get_audit_logger().log_gate(
+                    step=cls.STEP_NUMBER,
+                    gate_name="qg_page_object",
+                    mode="POST",
+                    result="pass",
+                    source=source
+                )
 
         return result
 
@@ -274,6 +274,11 @@ class QGPageObject(BaseGate):
             match_error = cls._validate_state_methods_match(metadata, expected_states)
             if match_error:
                 return match_error
+
+        # Task 8.0: Validate WebInterface method calls are valid
+        webinterface_error = cls._validate_webinterface_methods(code)
+        if webinterface_error:
+            return webinterface_error
 
         # Save Step 6 state on POST-VALIDATE pass
         internal_state_manager = cls._get_state_manager()
@@ -471,6 +476,60 @@ class QGPageObject(BaseGate):
             return cls.fail_response(
                 error=f"state_methods missing for expected_states: {', '.join(missing_methods)} (IC-06-01 violation)",
                 fix_hint="Ensure Tool 3 receives expected_states and generates matching state-check methods."
+            )
+
+        return None
+
+    # WebInterface method call pattern: self.web.<method_name>(
+    WEBINTERFACE_CALL_PATTERN = re.compile(r'self\.web\.(\w+)\s*\(')
+
+    @classmethod
+    def _validate_webinterface_methods(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Task 8.0: Validate WebInterface method calls in POM code.
+
+        Extracts all self.web.<method>() calls and validates each method
+        exists in WebInterface. Provides suggestions for typos.
+
+        Returns fail_response if invalid method found, None otherwise.
+        """
+        # Extract all WebInterface method calls
+        method_calls = cls.WEBINTERFACE_CALL_PATTERN.findall(code)
+
+        if not method_calls:
+            # No WebInterface calls found - this might be valid for state-only POMs
+            return None
+
+        # Create checker instance (lazy load)
+        checker = WebInterfaceChecker()
+
+        # Track invalid methods
+        invalid_methods = []
+
+        for method_name in set(method_calls):  # Use set to avoid duplicate checks
+            result = checker.validate_method_call(method_name)
+
+            if not result.get("valid"):
+                suggestion = ""
+                similar = result.get("similar_methods", [])
+                if similar:
+                    suggestion = f" Did you mean: {', '.join(similar)}?"
+
+                invalid_methods.append({
+                    "method": method_name,
+                    "reason": result.get("reason", "Unknown error"),
+                    "suggestion": suggestion
+                })
+
+        if invalid_methods:
+            # Format error message
+            error_details = "; ".join(
+                f"'{m['method']}' - {m['reason']}{m['suggestion']}"
+                for m in invalid_methods
+            )
+            return cls.fail_response(
+                error=f"Invalid WebInterface method(s) in POM: {error_details}",
+                fix_hint="Use valid WebInterface methods. Check mcp_server/utils/webinterface_checker.py for available methods."
             )
 
         return None

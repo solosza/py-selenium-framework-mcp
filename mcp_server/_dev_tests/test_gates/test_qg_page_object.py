@@ -837,3 +837,209 @@ class TestErrorHints:
         # Assert
         assert result["status"] == "fail"
         assert "fix_hint" in result
+
+
+# =============================================================================
+# WEBINTERFACE METHOD VALIDATION (Task 8.0)
+# =============================================================================
+
+class TestWebInterfaceMethodValidation:
+    """Task 8.0: WebInterface method validation tests."""
+
+    def test_post_valid_webinterface_methods_passes(self, valid_post_input):
+        """
+        P0: POST validation passes when code uses valid WebInterface methods.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        # valid_post_input already uses self.web.type_text and self.web.is_element_displayed
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "pass", f"Valid WebInterface methods should pass: {result.get('error', '')}"
+
+    def test_post_invalid_webinterface_method_fails(self, valid_post_input):
+        """
+        P0: POST validation fails when code uses invalid WebInterface method.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["code"] = '''class LoginPage:
+    EMAIL = (By.CSS_SELECTOR, "#email")
+
+    def enter_email(self, email: str) -> "LoginPage":
+        self.web.invalid_method_name(*self.EMAIL, text=email)
+        return self
+
+    def is_logged_in(self) -> bool:
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+'''
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "invalid_method_name" in result["error"].lower()
+
+    def test_post_typo_suggests_similar_method(self, valid_post_input):
+        """
+        P0: POST validation suggests similar method for typos.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["code"] = '''class LoginPage:
+    EMAIL = (By.CSS_SELECTOR, "#email")
+
+    def enter_email(self, email: str) -> "LoginPage":
+        self.web.clik(*self.EMAIL)
+        return self
+
+    def is_logged_in(self) -> bool:
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+'''
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "fail"
+        # Should suggest "click" for typo "clik"
+        assert "clik" in result["error"].lower()
+        assert "click" in result["error"].lower() or "Did you mean" in result["error"]
+
+    def test_post_multiple_invalid_methods_all_reported(self, valid_post_input):
+        """
+        P0: POST validation reports all invalid methods.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["code"] = '''class LoginPage:
+    EMAIL = (By.CSS_SELECTOR, "#email")
+
+    def enter_email(self, email: str) -> "LoginPage":
+        self.web.fake_method_one(*self.EMAIL)
+        self.web.fake_method_two(*self.PASSWORD)
+        return self
+
+    def is_logged_in(self) -> bool:
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+'''
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "fail"
+        # Both invalid methods should be in error message
+        assert "fake_method_one" in result["error"].lower()
+        assert "fake_method_two" in result["error"].lower()
+
+    def test_post_no_webinterface_calls_passes(self, valid_post_input):
+        """
+        P1: POST validation passes for POMs with no WebInterface calls.
+
+        Some POMs may only have state-check methods that access attributes.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["code"] = '''class StaticPage:
+    TITLE = "Static Page"
+
+    def get_title(self) -> str:
+        return self.TITLE
+
+    def is_valid(self) -> bool:
+        return True
+'''
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "pass", "POMs without WebInterface calls should pass"
+
+    def test_post_private_webinterface_method_fails(self, valid_post_input):
+        """
+        P1: POST validation fails when code uses private WebInterface method.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["code"] = '''class LoginPage:
+    EMAIL = (By.CSS_SELECTOR, "#email")
+
+    def enter_email(self, email: str) -> "LoginPage":
+        self.web._take_screenshot()
+        self.web.type_text(*self.EMAIL, text=email)
+        return self
+
+    def is_logged_in(self) -> bool:
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+'''
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "_take_screenshot" in result["error"] or "private" in result["error"].lower()
+
+    def test_post_common_webinterface_methods_pass(self, valid_post_input):
+        """
+        P1: POST validation passes for common WebInterface methods.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["code"] = '''class LoginPage:
+    EMAIL = (By.CSS_SELECTOR, "#email")
+    PASSWORD = (By.CSS_SELECTOR, "#passwd")
+    SUBMIT = (By.CSS_SELECTOR, "#SubmitLogin")
+
+    def enter_email(self, email: str) -> "LoginPage":
+        self.web.type_text(*self.EMAIL, text=email)
+        return self
+
+    def click_submit(self) -> "LoginPage":
+        self.web.click(*self.SUBMIT)
+        return self
+
+    def navigate_to_login(self) -> "LoginPage":
+        self.web.navigate_to(self.url)
+        return self
+
+    def is_logged_in(self) -> bool:
+        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+
+    def get_error_text(self) -> str:
+        return self.web.get_text(*self.ERROR_MESSAGE)
+'''
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "pass", f"Common methods should pass: {result.get('error', '')}"
+
+    def test_webinterface_method_pattern_extracts_correctly(self):
+        """
+        P1: WebInterface method call pattern correctly extracts method names.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        code = '''
+        self.web.click(*self.BTN)
+        self.web.type_text(By.CSS_SELECTOR, "#input", text="test")
+        self.web.navigate_to(url)
+        self.web.is_element_displayed ( *self.ELEM )
+        '''
+
+        # Act
+        matches = QGPageObject.WEBINTERFACE_CALL_PATTERN.findall(code)
+
+        # Assert
+        assert "click" in matches
+        assert "type_text" in matches
+        assert "navigate_to" in matches
+        assert "is_element_displayed" in matches
