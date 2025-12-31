@@ -193,10 +193,10 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
 
 ### Phase 4: Knowledge Base Module
 
-- [ ] 4.0 Implement Knowledge Base Read/Write [CORE]
-  - [ ] 4.1 Create branch `feature/4.0-knowledge-base`
-  - [ ] 4.2 **ASSESS:** Read current `docs/KNOWLEDGE_BASE.md` structure
-  - [ ] 4.3 **CREATE:** `mcp_server/utils/knowledge_base.py` with:
+- [x] 4.0 Implement Knowledge Base Read/Write [CORE]
+  - [x] 4.1 Create branch `feature/4.0-knowledge-base`
+  - [x] 4.2 **ASSESS:** Read current `docs/KNOWLEDGE_BASE.md` structure
+  - [x] 4.3 **CREATE:** `mcp_server/utils/knowledge_base.py` with:
     - `KnowledgeBase` class
     - `find_pattern(error_category: str, context: dict) -> Optional[Pattern]` - Find matching pattern
     - `save_pattern(pattern: Pattern) -> None` - Save new pattern to KB
@@ -205,17 +205,27 @@ pytest mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_
       - `context_match: dict` - What context this applies to
       - `fix: str` - The fix to apply
       - `confidence: float` - How confident (0-1)
-  - [ ] 4.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_knowledge_base.py`
-  - [ ] 4.5 Run checks following testing skill
-  - [ ] 4.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 4.7 Record results
-  - [ ] 4.8 Commit: `feat: add knowledge base read/write module (Task 4.0)`
+  - [x] 4.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_knowledge_base.py`
+  - [x] 4.5 Run checks following testing skill
+  - [x] 4.6 **Audit:** Verify testing skill conventions followed
+  - [x] 4.7 Record results
+  - [x] 4.8 Commit: `feat: add knowledge base read/write module (Task 4.0)`
 
 **Done When:**
-- KnowledgeBase can read patterns from KNOWLEDGE_BASE.md
-- KnowledgeBase can write new patterns
-- Tests cover find (exists/not exists) and save
-- Tests pass
+- [x] KnowledgeBase can read patterns from KNOWLEDGE_BASE.md
+- [x] KnowledgeBase can write new patterns
+- [x] Tests cover find (exists/not exists) and save
+- [x] Tests pass
+
+**Results (2025-12-30):**
+```bash
+pytest mcp_server/_dev_tests/test_knowledge_base.py -v
+# 20 passed, 20 warnings (custom marks) in 0.15s
+
+# Regression check
+pytest mcp_server/_dev_tests/test_runtime_validator.py mcp_server/_dev_tests/test_scope_discovery.py mcp_server/_dev_tests/test_qg_discovered_elements.py -v
+# 62 passed, 73 warnings in 0.37s
+```
 
 ---
 
