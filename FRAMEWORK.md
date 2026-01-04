@@ -46,6 +46,8 @@
    - [8.22 DD-29: Slash Command Modes](#822-dd-29-slash-command-modes-workflow-entry-point)
    - [8.23 DD-30: Progressive Audit Trail](#823-dd-30-progressive-audit-trail)
    - [8.24 DD-49: Navigation Responsibility](#824-dd-49-navigation-responsibility)
+   - [8.25 DD-44: Multi-Page Scope Discovery](#825-dd-44-multi-page-scope-discovery)
+   - [8.26 DD-46: Visual Feedback Enforcement](#826-dd-46-visual-feedback-enforcement)
 9. [10-Step Workflow with Quality Gates (v2)](#9-10-step-workflow-with-quality-gates-v2)
    - [9.1 Step 1: Pre-flight Configuration](#91-step-1-pre-flight-configuration)
    - [9.2 Step 2: User Input](#92-step-2-user-input)
@@ -1483,6 +1485,9 @@ AI PROMPTING RULES FOR TOOL 6:
 | DD-29 | Slash command modes: `/qa-workflow` (prod) vs `/qa-workflow-dev` (dev) | Controls AI modification permissions; prod=restricted, dev=full with approval (see 8.22) |
 | DD-30 | Progressive audit trail: PostToolUse hook writes to `tests/_audit/` after each gate | Complete traceability for regulated verticals (healthcare, finance, legal); SRP separation (see 8.23) |
 | DD-33 | Dynamic element discovery: AI uses Playwright snapshot → extracts → builds | Enables discovery when Tool 2 cannot access dynamic elements (see skills/step-05.md) |
+| DD-44 | Multi-page scope discovery: AI MUST call scope_discovery.analyze_workflow() before Step 5 | Enables proper POM generation for multi-page workflows (see 8.25) |
+| DD-46 | Visual feedback enforcement: AI MUST call RuntimeValidator for each discovered element | Prevents AI hallucination of selectors; validates against live page (see 8.26) |
+| DD-49 | Navigation responsibility: Only POMs have navigate(); Tasks call pom.navigate() | Single source of truth for page URLs; config-based base URLs (see 8.24) |
 
 ### 8.12 DD-16, DD-17, DD-18: AI Post-Processing Rules
 
@@ -2297,6 +2302,117 @@ Navigation is exclusively a POM responsibility. Tasks call POM navigate methods,
 - Config owns environment (base URL enables dev/staging/prod switching)
 - Tasks orchestrate POMs, don't replicate their responsibility
 - Single source of truth for each page's URL
+
+---
+
+### 8.25 DD-44: Multi-Page Scope Discovery
+
+When BDD scenarios span multiple pages, AI must discover scope before element discovery.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-44: MULTI-PAGE SCOPE DISCOVERY                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ TRIGGER: BDD scenario mentions multiple pages/views                         │
+│                                                                             │
+│   Example: "Given I am on registration page                                 │
+│            When I complete registration                                     │
+│            Then I see account overview page"                                │
+│                                                                             │
+│   Pages involved: RegistrationPage, AccountOverviewPage                     │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ RULE: AI MUST call scope_discovery.analyze_workflow() before Step 5         │
+│                                                                             │
+│   from utils.scope_discovery import analyze_workflow                        │
+│                                                                             │
+│   scope = analyze_workflow(bdd_scenarios)                                   │
+│   # Returns: {                                                              │
+│   #   "pages": ["RegistrationPage", "AccountOverviewPage"],                 │
+│   #   "transitions": [("registration", "account_overview")],                │
+│   #   "discovery_urls": ["/register.htm", "/overview.htm"]                  │
+│   # }                                                                       │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ WORKFLOW:                                                                   │
+│                                                                             │
+│   Step 3 (AI Processing)                                                    │
+│       ↓                                                                     │
+│   Detect multi-page scenario                                                │
+│       ↓                                                                     │
+│   Call scope_discovery.analyze_workflow()                                   │
+│       ↓                                                                     │
+│   Step 5 (Element Discovery) - FOR EACH page in scope                       │
+│       ↓                                                                     │
+│   Step 6 (POM Generation) - FOR EACH page in scope                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Files:**
+- `mcp_server/utils/scope_discovery.py` - Scope analysis utility
+
+---
+
+### 8.26 DD-46: Visual Feedback Enforcement
+
+AI must validate discovered elements against live page before POM generation.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-46: VISUAL FEEDBACK ENFORCEMENT                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ RULE: AI MUST call RuntimeValidator for each discovered element             │
+│                                                                             │
+│   from utils.runtime_validator import RuntimeValidator                      │
+│                                                                             │
+│   validator = RuntimeValidator(page)                                        │
+│   for element in discovered_elements:                                       │
+│       result = validator.validate_element(element)                          │
+│       # Triggers VisualFeedback automatically                               │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ PURPOSE:                                                                    │
+│   - Verify selector actually finds element on live page                     │
+│   - Prevent AI hallucination of selectors                                   │
+│   - Provide visual confirmation during discovery                            │
+│   - Catch stale/invalid selectors before POM generation                     │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ INTEGRATION WITH STEP 5:                                                    │
+│                                                                             │
+│   Step 5 (Element Discovery)                                                │
+│       ↓                                                                     │
+│   Discover elements via Playwright snapshot                                 │
+│       ↓                                                                     │
+│   FOR EACH element:                                                         │
+│       RuntimeValidator.validate_element()                                   │
+│       VisualFeedback.highlight() ← triggered automatically                  │
+│       ↓                                                                     │
+│   Only validated elements proceed to Step 6                                 │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ FAILURE HANDLING:                                                           │
+│                                                                             │
+│   If validation fails:                                                      │
+│     - Log failed selector                                                   │
+│     - Remove from discovered_elements                                       │
+│     - Continue with remaining elements                                      │
+│     - Report summary at end of Step 5                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Files:**
+- `mcp_server/utils/runtime_validator.py` - Element validation
+- `mcp_server/utils/visual_feedback.py` - Visual highlighting
 
 ---
 

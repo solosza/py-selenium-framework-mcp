@@ -163,9 +163,17 @@ Step 9: Save files & run test
 | DD-01 | User MUST specify persona ("As a...") - ASK if missing |
 | DD-02 | URL required upfront - ASK if missing |
 | DD-03 | Metadata context accumulated through tool chain |
+| DD-04 | Single documentation source (FRAMEWORK.md) |
+| DD-05 | Exact method names emerge from tool chain, not upfront |
+| DD-06 | AI extracts intent, not exact method names |
+| DD-07 | Domain determined by AI in Step 2, passed through metadata |
 | DD-08 | AI orchestrates tool chain, tools don't call other tools |
 | DD-09 | Extract expected_states from BDD "Then" clause for POM state methods |
+| DD-10 | Action methods derived from element types (input→enter, button→click) |
+| DD-11 | State method naming: is_*/has_* for bool, get_* for values |
 | DD-12 | Check existing classes/methods BEFORE generating new |
+| DD-13 | Each tool has specific AI prompting rules |
+| DD-14 | One test file per scenario, grouped by domain folder |
 | DD-15 | Test assertions MUST use POM state methods from metadata |
 | DD-16 | AI overrides Tool 6 file paths to `tests/test1/`, `tests/test2/` |
 | DD-17 | AI injects actual parameter values from requirement |
@@ -181,10 +189,11 @@ Step 9: Save files & run test
 | DD-27 | Task code quality gate: NO locators in Tasks (CRITICAL) |
 | DD-28 | Test data organization: ASK user shared vs workflow-specific data location |
 | DD-29 | Slash command entry: `/qa-workflow` (prod) or `/qa-workflow-dev` (dev) |
-| DD-33 | Dynamic element discovery: AI uses Playwright snapshot → extracts → builds → validates via gate (see FRAMEWORK.md) |
-| DD-44 | Multi-page scope discovery: AI MUST call scope_discovery.analyze_workflow() before Step 5 if BDD has multiple pages |
-| DD-46 | Visual feedback enforcement: AI MUST call RuntimeValidator for each discovered element (triggers VisualFeedback automatically) |
-| DD-49 | Navigation responsibility: Only POMs have navigate(); Tasks call pom.navigate(); URLs from config only |
+| DD-30 | Progressive audit trail: PostToolUse hook writes to `tests/_audit/` after each gate |
+| DD-33 | Dynamic element discovery: AI uses Playwright snapshot → extracts → builds |
+| DD-44 | Multi-page scope discovery: AI MUST call scope_discovery before Step 5 |
+| DD-46 | Visual feedback enforcement: AI MUST call RuntimeValidator for each element |
+| DD-49 | Navigation responsibility: Only POMs navigate(); Tasks call pom.navigate() |
 
 ### DD-22: Stop-and-Discuss Protocol (CRITICAL)
 
