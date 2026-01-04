@@ -334,7 +334,7 @@ class QGTestRunner(BaseGate):
         for pattern, description in cls.SKELETON_PATTERNS:
             if re.search(pattern, code, re.MULTILINE):
                 return cls.fail_response(
-                    error=f"Skeleton code detected: {description} (DD-25 violation)",
+                    error=f"Skeleton code detected: {description}",
                     fix_hint="AI must complete the test code. Remove placeholders and implement all test methods with real assertions."
                 )
         return None
@@ -446,7 +446,7 @@ class QGTestRunner(BaseGate):
         # Check for return value assertion pattern
         if cls.RETURN_ASSERTION_PATTERN.search(code):
             return cls.fail_response(
-                error="Return value assertion detected (DD-15 violation)",
+                error="Return value assertion detected",
                 fix_hint="Tests must assert via POM state methods. Replace 'result = role.method(); assert result' with 'role.method(); assert page.is_state()'."
             )
 
@@ -454,14 +454,14 @@ class QGTestRunner(BaseGate):
         for pattern, description in cls.WEAK_ASSERTION_PATTERNS:
             if re.search(pattern, code, re.MULTILINE):
                 return cls.fail_response(
-                    error=f"Weak assertion detected: {description} (IC-09-04 violation)",
+                    error=f"Weak assertion detected: {description}",
                     fix_hint="Tests must assert via POM state methods. Replace 'assert True' with 'assert page.is_logged_in()' etc."
                 )
 
         # Check for POM state assertions
         if not cls.POM_ASSERTION_PATTERN.search(code):
             return cls.fail_response(
-                error="No POM state assertions found (DD-15 violation)",
+                error="No POM state assertions found",
                 fix_hint="Tests must assert via POM state methods. Add assertions like 'assert self.page.is_logged_in()'."
             )
 

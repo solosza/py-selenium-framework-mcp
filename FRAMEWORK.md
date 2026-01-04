@@ -45,6 +45,7 @@
    - [8.21 DD-28: Test Data Organization](#821-dd-28-test-data-organization)
    - [8.22 DD-29: Slash Command Modes](#822-dd-29-slash-command-modes-workflow-entry-point)
    - [8.23 DD-30: Progressive Audit Trail](#823-dd-30-progressive-audit-trail)
+   - [8.24 DD-49: Navigation Responsibility](#824-dd-49-navigation-responsibility)
 9. [10-Step Workflow with Quality Gates (v2)](#9-10-step-workflow-with-quality-gates-v2)
    - [9.1 Step 1: Pre-flight Configuration](#91-step-1-pre-flight-configuration)
    - [9.2 Step 2: User Input](#92-step-2-user-input)
@@ -2202,6 +2203,100 @@ A PostToolUse hook automatically captures each quality gate result for complete 
 **Files:**
 - `.claude/hooks/audit-trail-writer.py` - PostToolUse hook
 - `tests/_audit/` - Audit trail directory
+
+---
+
+### 8.24 DD-49: Navigation Responsibility
+
+Navigation is exclusively a POM responsibility. Tasks call POM navigate methods, never WebInterface directly.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-49: NAVIGATION RESPONSIBILITY                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ ARCHITECTURE RULE: Only POMs navigate                                        │
+│                                                                             │
+│ ┌─────────────────────────────────────────────────────────────────────────┐ │
+│ │ Layer           │ Navigation?  │ How                                    │ │
+│ ├─────────────────┼──────────────┼────────────────────────────────────────┤ │
+│ │ Page Object     │ ✓ YES        │ navigate() using self.web.config["url"]│ │
+│ │ Task            │ Calls POM    │ self.pom.navigate() - NO direct calls  │ │
+│ │ Role            │ ✗ NO         │ Orchestrates Tasks only                │ │
+│ │ Test            │ ✗ NO         │ Calls Role methods only                │ │
+│ └─────────────────┴──────────────┴────────────────────────────────────────┘ │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ URL SOURCE:                                                                 │
+│ ───────────                                                                 │
+│   environment_config.json → conftest.py → WebInterface.config → POM        │
+│                                                                             │
+│   {                                                                         │
+│     "DEFAULT": {"url": "http://www.automationpractice.pl/index.php"},      │
+│     "PARABANK": {"url": "https://parabank.parasoft.com/parabank"}          │
+│   }                                                                         │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ ✓ CORRECT PATTERN:                                                          │
+│ ──────────────────                                                          │
+│                                                                             │
+│   # POM - owns navigation                                                   │
+│   class RegistrationPage:                                                   │
+│       def navigate(self) -> "RegistrationPage":                             │
+│           url = self.web.config["url"]                                      │
+│           self.web.navigate_to(f"{url}/register.htm")                       │
+│           return self                                                       │
+│                                                                             │
+│   # Task - calls POM navigate                                               │
+│   class BankingTasks:                                                       │
+│       def register_user(self, user_data: dict) -> None:                     │
+│           (self.registration_page                                           │
+│               .navigate()                 # ✓ Delegates to POM              │
+│               .enter_first_name(...)                                        │
+│               .click_register())                                            │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ ✗ VIOLATION INDICATORS:                                                     │
+│ ─────────────────────────                                                   │
+│                                                                             │
+│   # Task with direct WebInterface navigation - VIOLATION                    │
+│   class BankingTasks:                                                       │
+│       def register_user(self, user_data: dict) -> None:                     │
+│           self.web.navigate_to("https://...")  # ✗ VIOLATION                │
+│                                                                             │
+│   # POM with hardcoded URL - VIOLATION                                      │
+│   class RegistrationPage:                                                   │
+│       def navigate(self) -> "RegistrationPage":                             │
+│           self.web.navigate_to("https://parabank.com/...")  # ✗ VIOLATION   │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ ENFORCEMENT (Quality Gates):                                                │
+│ ────────────────────────────                                                │
+│                                                                             │
+│   qg_task POST:                                                             │
+│     Pattern: self.web.navigate_to(                                          │
+│     Action:  FAIL - "Tasks must call POM navigate(), not WebInterface"      │
+│                                                                             │
+│   qg_page_object POST:                                                      │
+│     Pattern: navigate_to("http or navigate_to("https                        │
+│     Without: self.web.config                                                │
+│     Action:  FAIL - "POM must use self.web.config['url'] for base URL"      │
+│                                                                             │
+│   /framework-check:                                                         │
+│     Scan all layers for hardcoded URLs and report violations                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Rationale:**
+- POM owns page knowledge (URL path is part of page identity)
+- Config owns environment (base URL enables dev/staging/prod switching)
+- Tasks orchestrate POMs, don't replicate their responsibility
+- Single source of truth for each page's URL
 
 ---
 

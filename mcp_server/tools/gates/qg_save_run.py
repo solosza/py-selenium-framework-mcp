@@ -124,7 +124,7 @@ class QGSaveRun(BaseGate):
         for pattern, description in cls.SKELETON_PATTERNS:
             if re.search(pattern, code, re.MULTILINE):
                 return cls.fail_response(
-                    error=f"Skeleton code detected in {layer}: {description} (DD-25 violation)",
+                    error=f"Skeleton code detected in {layer}: {description}",
                     fix_hint=f"Complete the {layer} code. Remove placeholders and implement all methods."
                 )
         return None

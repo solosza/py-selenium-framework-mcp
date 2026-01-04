@@ -323,7 +323,7 @@ class QGRole(BaseGate):
         for pattern, description in cls.SKELETON_PATTERNS:
             if re.search(pattern, code, re.MULTILINE):
                 return cls.fail_response(
-                    error=f"Skeleton code detected: {description} (DD-25 violation)",
+                    error=f"Skeleton code detected: {description}",
                     fix_hint="AI must complete the code. Remove placeholders and implement all workflow methods with task calls."
                 )
         return None
@@ -340,7 +340,7 @@ class QGRole(BaseGate):
         for pattern, description in cls.LOCATOR_PATTERNS:
             if re.search(pattern, code):
                 return cls.fail_response(
-                    error=f"Locator detected in Role: {description} (DD-27 violation)",
+                    error=f"Locator detected in Role: {description}",
                     fix_hint="Locators belong in Page Objects, not Roles. Use Task methods which use POM methods."
                 )
         return None

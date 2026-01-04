@@ -14,11 +14,12 @@ POST Validation:
 - code field present and not empty
 - No skeleton code (DD-25): pass, # Add..., NotImplementedError, # TODO
 - No locators (DD-27): By. imports, tuple patterns, find_element
+- No direct navigation (DD-49): self.web.navigate_to() - must use POM navigate()
 - No return values except bare return/return None (IC-07-02)
 - @autologger.automation_logger("Task") decorator present (IC-07-04)
 - metadata present with class_name and import_path (DD-26)
 
-Enforces: DD-12, DD-25, DD-26, DD-27, IC-07-01 through IC-07-05
+Enforces: DD-12, DD-25, DD-26, DD-27, DD-49, IC-07-01 through IC-07-05
 
 Note: workflow (formerly domain) is now dynamic - any non-empty string is valid.
 """
@@ -55,6 +56,12 @@ class QGTask(BaseGate):
         (r'By\.PARTIAL_LINK_TEXT', 'By.PARTIAL_LINK_TEXT'),
         (r'\.find_element\s*\(', 'find_element call'),
         (r'\.find_elements\s*\(', 'find_elements call'),
+    ]
+
+    # Navigation patterns (DD-49) - Tasks must NOT call WebInterface.navigate_to directly
+    NAVIGATION_PATTERNS = [
+        (r'self\.web\.navigate_to\s*\(', 'self.web.navigate_to() call'),
+        (r'\.navigate_to\s*\(\s*["\']https?://', 'navigate_to with hardcoded URL'),
     ]
 
     # Required decorator pattern (IC-07-04)
@@ -248,6 +255,11 @@ class QGTask(BaseGate):
         if locator_error:
             return locator_error
 
+        # Check for direct navigation (DD-49)
+        navigation_error = cls._detect_navigation(code)
+        if navigation_error:
+            return navigation_error
+
         # Check for return values (IC-07-02)
         return_error = cls._detect_return_values(code)
         if return_error:
@@ -278,7 +290,9 @@ class QGTask(BaseGate):
         if metadata_error:
             return metadata_error
 
-        # Save Step 7 state on POST-VALIDATE pass
+        # Save Step 7 state (basic - Tasks are per-domain, not per-page)
+        # Note: Multi-page loop tracking only applies to Step 6 (POMs)
+        # Tasks are per-domain (e.g., AuthTasks, CatalogTasks), not per-page
         state_manager = cls._get_state_manager()
         state_manager.save(step=7, data={
             "task_code": code,
@@ -297,7 +311,7 @@ class QGTask(BaseGate):
         for pattern, description in cls.SKELETON_PATTERNS:
             if re.search(pattern, code, re.MULTILINE):
                 return cls.fail_response(
-                    error=f"Skeleton code detected: {description} (DD-25 violation)",
+                    error=f"Skeleton code detected: {description}",
                     fix_hint="AI must complete the code. Remove placeholders and implement all method bodies with POM calls."
                 )
         return None
@@ -314,8 +328,26 @@ class QGTask(BaseGate):
         for pattern, description in cls.LOCATOR_PATTERNS:
             if re.search(pattern, code):
                 return cls.fail_response(
-                    error=f"Locator detected in Task: {description} (DD-27 violation)",
+                    error=f"Locator detected in Task: {description}",
                     fix_hint="Locators belong in Page Objects, not Tasks. Use POM methods instead."
+                )
+        return None
+
+    @classmethod
+    def _detect_navigation(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect direct navigation calls in Task code (DD-49).
+
+        Tasks should NOT call self.web.navigate_to() directly.
+        Instead, Tasks should call POM navigate() methods.
+
+        Returns fail_response if navigation detected, None otherwise.
+        """
+        for pattern, description in cls.NAVIGATION_PATTERNS:
+            if re.search(pattern, code):
+                return cls.fail_response(
+                    error=f"Direct navigation in Task: {description}",
+                    fix_hint="Tasks must call POM navigate() methods, not self.web.navigate_to() directly. Move navigation to POM."
                 )
         return None
 

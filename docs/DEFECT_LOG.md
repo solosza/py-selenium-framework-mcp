@@ -2181,6 +2181,320 @@ def get_audit_logger(cls) -> "AuditLogger":
 
 ---
 
+### [DEF-044] Multi-page BDD scenarios pass Step 5 with incomplete element discovery
+**Severity:** HIGH
+**Status:** OPEN
+**Run ID:** 2025-12-31-R1
+**Caught By:** Live test of Customer creation workflow (heliosdigital-retail-qa)
+**Code Version:** main
+**Layer:** Quality Gate / AI Orchestration
+**Files:**
+- `mcp_server/tools/gates/qg_discovered_elements.py`
+- `mcp_server/utils/scope_discovery.py`
+- `.claude/skills/qa-guidance-layer/references/step-05.md`
+
+**Description:**
+During live test of 4-step Customer creation wizard (Search → Customer → Contacts → Address), Step 5 quality gate passed after discovering elements from only 1 of 4 pages. The BDD scenario clearly had 12 "When" steps spanning 4 wizard pages, but the gate did not enforce multi-page scope discovery.
+
+**Test Details:**
+- User Story: "As a sales agent, I want to create a new customer with contact and address details"
+- URL: https://heliosdigital-retail-qa.azurewebsites.net/Portal/Customers
+- Workflow: customers (4-step wizard)
+- Role: SalesAgent
+
+**What Should Have Happened:**
+```
+Step 5 (Multi-page flow):
+1. Call scope_discovery.analyze_workflow(bdd_scenarios)
+   → Returns: {page_count: 4, pages: [SearchPage, CustomerPage, ContactsPage, AddressPage]}
+
+2. For EACH page in scope:
+   - Navigate to page (interact to reveal elements)
+   - Call qg_discovered_elements PRE with scope_result
+   - Extract elements from snapshot
+   - Call qg_discovered_elements POST with elements
+   - Gate tracks: discovered_pages[page_name] = elements
+
+3. Check is_discovery_complete() == True before Step 6
+```
+
+**What Actually Happened:**
+- Discovered elements from only Step 1 (Search page)
+- Gate passed without scope_result (scope_result is optional)
+- Proceeded to Step 6 (POM generation) with incomplete discovery
+
+**Root Causes:**
+1. **scope_result is optional** - Gate accepts but doesn't require scope analysis for multi-page flows
+2. **step-05.md doesn't enforce scope** - Skill reference doesn't mandate scope_discovery.analyze_workflow()
+3. **discovered_pages tracking unused** - Gate has per-page tracking (Task 2.0) but AI didn't use it
+4. **No is_discovery_complete() check** - Gate has method but workflow doesn't require completion
+
+**Impact:**
+- POMs generated for only 1 of 4 pages
+- Test would fail at runtime trying to interact with undiscovered pages
+- Quality gate gives false "PASS" for incomplete work
+
+**Fix Required:**
+
+| Component | Change Needed |
+|-----------|---------------|
+| `qg_discovered_elements.py` | Require scope_result when BDD has multiple pages |
+| `step-05.md` | Mandate scope_discovery call before element discovery |
+| PRE-VALIDATE | Detect page_count > 1 → require scope_result |
+| POST-VALIDATE | Check discovered_pages.count >= page_count before allowing Step 6 |
+
+**Proposed Fix:**
+```python
+# In qg_discovered_elements PRE-VALIDATE:
+if bdd_scenario_page_count > 1 and not scope_result:
+    return fail_response(
+        "Multi-page workflow detected but scope_result not provided. "
+        "Call scope_discovery.analyze_workflow() first."
+    )
+
+# In qg_discovered_elements POST-VALIDATE:
+if scope_result and not cls.is_discovery_complete(scope_result):
+    return fail_response(
+        f"Discovery incomplete: {discovered_count}/{expected_count} pages. "
+        "Discover remaining pages before proceeding."
+    )
+```
+
+**Prevention Rule (DD-44):**
+```
+Multi-Page Scope Discovery Enforcement:
+1. At Step 5, AI MUST call scope_discovery.analyze_workflow(bdd_scenarios)
+2. If page_count > 1, AI MUST discover elements for EACH page
+3. qg_discovered_elements requires scope_result for multi-page flows
+4. Step 6 blocked until is_discovery_complete() returns True
+```
+
+**Implementation (Partial - Steps 5-6 only):**
+- `qg_discovered_elements.py`: Added `_detect_page_count_from_bdd()` to auto-detect multi-page from BDD
+- `qg_discovered_elements.py`: PRE fails if multi-page detected without scope_result (DD-44)
+- `qg_discovered_elements.py`: POST returns `multi_page_progress` with hint for incomplete discovery
+- `qg_page_object.py`: PRE fails if multi-page and `discovery_complete` is False
+- `step-05.md`: Added Multi-Page Discovery section with loop pattern
+- `CLAUDE.md`: Added DD-44 to design decisions table
+- Tests: 8 new tests in `test_qg_discovered_elements.py` (all passing)
+
+**Remaining Work (Steps 6-9):**
+- Step 6: Loop to generate POMs for ALL pages
+- Step 7: Task must compose ALL POMs from multi-page scope
+- Step 9: Test must have ALL POMs for assertions
+- step-06.md through step-09.md need multi-page guidance
+
+**Verified:** TBD - Requires live production test
+**Resolved Date:** TBD
+
+---
+
+### [DEF-045] AI generates state-check methods based on guesses, not verified page observation
+**Severity:** HIGH
+**Status:** OPEN
+**Run ID:** 2026-01-02-R1
+**Caught By:** Test execution (ParaBank banking workflow)
+**Code Version:** main
+**Layer:** AI Orchestration / Workflow Design
+**File:** N/A (workflow gap)
+
+**Error Message:**
+```
+AssertionError: Welcome message should be displayed after registration
+assert False
+ +  where False = has_welcome_message()
+```
+
+**Description:**
+During the 10-step QA workflow, AI generates POM state-check methods (`is_*`, `has_*`) based on assumptions rather than verified page observation. The state methods are meant to verify OUTPUT states (confirmation pages, success messages) but AI only sees INPUT pages (forms, buttons).
+
+**Example of guessed code:**
+```python
+# AI assumed this text would appear after registration:
+def has_welcome_message(self) -> bool:
+    text = self.web.get_text(*self.WELCOME_HEADING, timeout=5)
+    return text.startswith("Welcome ")  # GUESS - never verified
+
+def is_registration_confirmed(self) -> bool:
+    return "Your account was created successfully" in text  # GUESS
+```
+
+**Root Cause:**
+The 10-step workflow has a fundamental gap:
+- **Step 5 (Element Discovery)** captures elements on ENTRY pages (forms, buttons)
+- **State-check methods** verify EXIT pages (confirmations, success messages)
+- AI generates EXIT verification without ever seeing the EXIT page
+
+**Impact:**
+- Tests fail at assertion phase even when workflow executes correctly
+- State methods are untested guesses based on pattern matching
+- No validation that expected text/elements actually exist on confirmation pages
+
+**Proposed Solutions:**
+
+| Option | Description | Tradeoff |
+|--------|-------------|----------|
+| B | Add "confirmation discovery" step - navigate manually, capture output elements after action | Extra manual step, but accurate |
+| C | Generate state methods as stubs, fill after first run | Accepts first run will fail, iterative approach |
+
+**Prevention Rule (DD-47 - Proposed):**
+```
+State-Check Method Verification:
+1. State-check methods MUST be verified against actual page state
+2. AI cannot generate is_*/has_* methods without observing confirmation page
+3. Options: A) Run action + capture confirmation, or B) Generate stubs for manual completion
+```
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-047] Hardcoded URLs in Task layer - should use config
+**Severity:** HIGH
+**Status:** OPEN
+**Run ID:** 2026-01-02-R1
+**Caught By:** Code review (ParaBank banking workflow)
+**Code Version:** main
+**Layer:** Task / AI Orchestration
+**File:** `framework/tasks/banking/banking_tasks.py`
+**Line(s):** 54, 77, 95, 113
+
+**Error (Pattern Violation):**
+```python
+# GENERATED (WRONG) - banking_tasks.py:
+self.web.navigate_to("https://parabank.parasoft.com/parabank/register.htm")
+self.web.navigate_to("https://parabank.parasoft.com/parabank/openaccount.htm")
+self.web.navigate_to("https://parabank.parasoft.com/parabank/transfer.htm")
+self.web.navigate_to("https://parabank.parasoft.com/parabank/overview.htm")
+```
+
+**Established Pattern (conftest.py + environment_config.json):**
+```python
+# environment_config.json:
+{
+  "DEFAULT": {"url": "http://www.automationpractice.pl/index.php"},
+  "PARABANK": {"url": "https://parabank.parasoft.com/parabank"}
+}
+
+# Task accesses via config:
+base_url = self.web.config["url"]
+self.web.navigate_to(f"{base_url}/register.htm")
+
+# Or POM handles navigation:
+self.registration_page.navigate()  # POM uses self.web.config["url"]
+```
+
+**Framework Pattern Evidence:**
+- `conftest.py:72-79`: Loads URL from `environment_config.json`
+- `conftest.py:102-119`: Passes `config` to `WebInterface`
+- `WebInterface:47`: Stores `self.config` for access by layers
+- `cart/login_page.py:36`: POM has `navigate()` method (though also hardcoded - see note)
+
+**Root Cause:**
+AI-generated Task code hardcoded URLs instead of:
+1. Using `self.web.config["url"]` from environment config
+2. Adding ParaBank environment to `environment_config.json`
+3. Delegating navigation to POM methods
+
+**Impact:**
+- Cannot switch environments (dev/staging/prod)
+- Tests not portable to other ParaBank instances
+- Violates separation of config from code
+- Maintenance burden when URLs change
+
+**Fix Required:**
+1. Add PARABANK environment to `environment_config.json`
+2. Update `banking_tasks.py` to remove `self.web.navigate_to()` calls
+3. Add `navigate()` methods to each banking POM using `self.web.config["url"]`
+4. Task methods call `self.pom.navigate()` instead
+
+**Prevention Rule: DD-49 (Added to FRAMEWORK.md 8.24)**
+
+| Layer | Navigation Allowed | How |
+|-------|-------------------|-----|
+| POM | YES | `navigate()` using `self.web.config["url"]` |
+| Task | Calls POM only | `self.pom.navigate()` - NO direct WebInterface |
+| Role | NO | Orchestrates Tasks only |
+| Test | NO | Calls Role methods only |
+
+**Enforcement (3 layers):**
+
+| Gate/Check | Pattern | Action |
+|------------|---------|--------|
+| `qg_task` POST | `self.web.navigate_to(` in code | FAIL - "Tasks must call POM navigate()" |
+| `qg_page_object` POST | `navigate_to("http` without `self.web.config` | FAIL - "Use config URL" |
+| `/framework-check` | Scan all layers for hardcoded URLs | Report violations |
+
+**Pre-existing Violations (also need fix):**
+- `cart/login_page.py:36` - hardcoded saucedemo URL
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
+### [DEF-046] Quality gates do not enforce one user story = one test principle
+**Severity:** MEDIUM
+**Status:** OPEN
+**Run ID:** 2026-01-02-R1
+**Caught By:** User observation (ParaBank banking workflow)
+**Code Version:** main
+**Layer:** Quality Gate / AI Orchestration
+**File:** `mcp_server/tools/gates/qg_test_runner.py`
+
+**Description:**
+The workflow generated TWO test methods for ONE user story. The first test (`test_new_customer_can_register_and_open_savings`) is a subset of the second test (`test_customer_can_register_transfer_and_verify`), making it redundant.
+
+**Principle Violated:**
+In production QA, the pattern is:
+```
+Existing atomic tests (built incrementally):
+├── test_registration.py       → Tests register, creates RegistrationPage POM
+├── test_open_account.py       → Tests account opening, creates OpenAccountPage POM
+├── test_transfer_funds.py     → Tests transfers, creates TransferPage POM
+
+New E2E journey test:
+└── test_new_customer_banking.py  → ONE test, ONE Role method
+    - Reuses existing POMs (already validated)
+    - Role orchestrates the complete journey
+```
+
+**What Happened:**
+- User story described ONE complete journey (register → open savings → transfer → verify)
+- AI/Tool 6 generated TWO tests (partial journey + full journey)
+- First test is redundant subset of second
+- Gate passed without detecting redundancy
+
+**Root Cause:**
+1. No validation that one user story = one E2E test
+2. AI broke acceptance criteria into multiple tests instead of one orchestrated test
+3. Gate doesn't detect when one test is subset of another
+
+**Impact:**
+- Redundant test execution
+- Confusing test structure
+- Violates DRY principle
+
+**Fix Required:**
+1. Add guidance to Step 4/Step 9: "One user story = one E2E test"
+2. Gate should warn if test methods have overlapping Role calls
+3. AI should consolidate acceptance criteria into single Role workflow method
+
+**Prevention Rule (DD-48 - Proposed):**
+```
+E2E Test Consolidation:
+1. One user story with complete journey = ONE test method
+2. Multiple acceptance criteria = ONE Role method that orchestrates all steps
+3. Subset tests only valid when testing atomic workflows independently
+4. Gate should detect and warn on redundant test coverage
+```
+
+**Verified:** TBD
+**Resolved Date:** TBD
+
+---
+
 ## Summary
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
@@ -2191,18 +2505,18 @@ def get_audit_logger(cls) -> "AuditLogger":
 | Tests | 2 | 0 | 0 | 0 | 2 | 2 |
 | MCP Tools | 1 | 4 | 0 | 0 | 5 | 3 (2 READY_TO_TEST) |
 | MCP Tools (Phase B) | 1 | 0 | 0 | 0 | 1 | 1 |
-| AI Orchestration | 1 | 1 | 2 | 0 | 4 | 4 |
-| Quality Gates | 1 | 2 | 0 | 0 | 3 | 3 |
+| AI Orchestration | 1 | 3 | 2 | 0 | 6 | 4 |
+| Quality Gates | 1 | 3 | 1 | 0 | 5 | 3 |
 | Claude Code Infra | 0 | 0 | 1 | 0 | 1 | 1 (alt mechanism) |
 | MCP State Mgmt | 0 | 1 | 1 | 0 | 2 | 2 |
-| **Total** | **11** | **11** | **8** | **5** | **35** | **31 + 1 WONT_FIX + 1 INVALID** |
+| **Total** | **11** | **14** | **9** | **5** | **39** | **31 + 1 WONT_FIX + 1 INVALID** |
 
 ### Status Breakdown
 - **RESOLVED:** 31 (includes DEF-040 via alt mechanism, DEF-042, DEF-043)
 - **WONT_FIX:** 1 (DEF-008)
 - **INVALID:** 1 (DEF-016)
 - **READY_TO_TEST:** 5 (DEF-B08, B09, B10, DEF-025, DEF-034)
-- **OPEN:** 8 (DEF-019, 020, 027, 028, 029, 032, 037, 038, 039)
+- **OPEN:** 12 (DEF-019, 020, 027, 028, 029, 032, 037, 038, 039, 044, 045, 046, 047)
 
 ---
 
@@ -2216,4 +2530,4 @@ def get_audit_logger(cls) -> "AuditLogger":
 
 ---
 
-**Last Updated:** 2025-12-30
+**Last Updated:** 2026-01-02

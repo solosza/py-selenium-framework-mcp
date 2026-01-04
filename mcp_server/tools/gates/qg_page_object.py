@@ -5,6 +5,7 @@ PRE+POST validation gate for Tool 3 (generate_page_object).
 
 PRE Validation:
 - Step 5 complete (discovered_elements, page_name exist in state)
+- DD-44: If multi-page workflow, verify is_discovery_complete() == True
 - discovered_elements present and not empty
 - page_name present and PascalCase
 - expected_states present (optional but recommended)
@@ -13,6 +14,7 @@ POST Validation:
 - code field present and not empty
 - metadata field present with required structure
 - No skeleton code (DD-25): pass, # Add..., NotImplementedError, # TODO:
+- No hardcoded URLs (DD-49): navigate_to must use self.web.config["url"]
 - locators array present and not empty
 - action_methods present and not empty when locators exist (IC-06-03)
 - state_methods present and not empty
@@ -20,7 +22,7 @@ POST Validation:
 - class_name and import_path present (DD-26)
 - WebInterface method calls are valid (Task 8.0)
 
-Enforces: DD-09, DD-25, DD-26, IC-06-01, IC-06-02, IC-06-03
+Enforces: DD-09, DD-25, DD-26, DD-44, DD-49, IC-06-01, IC-06-02, IC-06-03
 """
 
 import re
@@ -51,6 +53,12 @@ class QGPageObject(BaseGate):
         (r'from\s+roles\.', 'Role import in POM'),
         (r'import\s+tasks\.', 'Task import in POM'),
         (r'import\s+roles\.', 'Role import in POM'),
+    ]
+
+    # Hardcoded URL patterns (DD-49) - POM navigate() must use self.web.config["url"]
+    HARDCODED_URL_PATTERNS = [
+        (r'navigate_to\s*\(\s*["\']https?://', 'navigate_to with hardcoded URL'),
+        (r'navigate_to\s*\(\s*f?["\']https?://', 'navigate_to with hardcoded URL in f-string'),
     ]
 
     # Trivial state method pattern - returns True without checking element
@@ -87,6 +95,21 @@ class QGPageObject(BaseGate):
             return cls.fail_response(
                 error="Step 5 is not complete. Cannot proceed to Step 6.",
                 fix_hint="Complete Step 5 (Discover Elements) first. Ensure discovered_elements are generated."
+            )
+
+        # DD-44: For multi-page workflows, verify all pages are discovered
+        step_5_state = state_manager.get_step(5) or {}
+        total_pages = step_5_state.get("total_pages", 1)
+        discovery_complete = step_5_state.get("discovery_complete", True)
+
+        if total_pages > 1 and not discovery_complete:
+            pages_discovered = step_5_state.get("pages_discovered", 0)
+            discovered_pages = step_5_state.get("discovered_pages", {})
+            discovered_names = list(discovered_pages.keys())
+
+            return cls.fail_response(
+                error=f"Multi-page discovery incomplete (DD-44): {pages_discovered}/{total_pages} pages discovered",
+                fix_hint=f"Discover all pages before generating POMs. Discovered: {', '.join(discovered_names)}. Remaining: {total_pages - pages_discovered} pages."
             )
 
         # Validate discovered_elements
@@ -228,6 +251,11 @@ class QGPageObject(BaseGate):
         if layer_error:
             return layer_error
 
+        # Check for hardcoded URLs (DD-49)
+        url_error = cls._detect_hardcoded_urls(code)
+        if url_error:
+            return url_error
+
         # Check for trivial state methods (skeleton variant)
         trivial_error = cls._detect_trivial_state_methods(code)
         if trivial_error:
@@ -280,14 +308,56 @@ class QGPageObject(BaseGate):
         if webinterface_error:
             return webinterface_error
 
-        # Save Step 6 state on POST-VALIDATE pass
+        # Task 8.5.9: Multi-page POM generation tracking
         internal_state_manager = cls._get_state_manager()
+
+        # Get page_name from input (required for multi-page tracking)
+        page_name = input_data.get("page_name")
+        if not page_name:
+            # Fallback to metadata class_name
+            page_name = metadata.get("class_name", "UnknownPage")
+
+        # Load existing Step 6 state to preserve per-page tracking
+        existing_state = internal_state_manager.get_step(6) or {}
+        generated_poms = existing_state.get("generated_poms", {})
+
+        # Add/update this page's POM
+        generated_poms[page_name] = {
+            "code": code,
+            "metadata": metadata
+        }
+
+        # Get total_pages from Step 5 state
+        step_5_state = internal_state_manager.get_step(5) or {}
+        total_pages = step_5_state.get("total_pages", 1)
+
+        # Calculate generation progress
+        poms_generated = len(generated_poms)
+        generation_complete = poms_generated >= total_pages
+
+        # Save enhanced Step 6 state
         internal_state_manager.save(step=6, data={
-            "pom_code": code,
-            "pom_metadata": metadata
+            "pom_code": code,  # Keep for backward compatibility
+            "pom_metadata": metadata,  # Keep for backward compatibility
+            "generated_poms": generated_poms,  # Task 8.5.9: Per-page tracking
+            "poms_generated": poms_generated,  # Task 8.5.9: Progress tracking
+            "total_poms": total_pages,  # Task 8.5.9: Total scope (from Step 5)
+            "generation_complete": generation_complete  # Task 8.5.9: Completion flag
         })
 
-        return cls.pass_response()
+        # Task 8.5.9: For multi-page workflows, return progress info
+        response = cls.pass_response()
+        if total_pages > 1:
+            response["multi_page_progress"] = {
+                "poms_generated": poms_generated,
+                "total_poms": total_pages,
+                "generation_complete": generation_complete,
+                "remaining_poms": total_pages - poms_generated
+            }
+            if not generation_complete:
+                response["hint"] = f"POM generation in progress: {poms_generated}/{total_pages} POMs. Continue generating remaining POMs before proceeding to Step 7."
+
+        return response
 
     @classmethod
     def _detect_skeleton_code(cls, code: str) -> Optional[Dict[str, Any]]:
@@ -299,7 +369,7 @@ class QGPageObject(BaseGate):
         for pattern, description in cls.SKELETON_PATTERNS:
             if re.search(pattern, code, re.MULTILINE):
                 return cls.fail_response(
-                    error=f"Skeleton code detected: {description} (DD-25 violation)",
+                    error=f"Skeleton code detected: {description}",
                     fix_hint="AI must complete the code. Remove placeholders, implement all methods."
                 )
         return None
@@ -320,6 +390,24 @@ class QGPageObject(BaseGate):
         return None
 
     @classmethod
+    def _detect_hardcoded_urls(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect hardcoded URLs in navigate_to calls (DD-49).
+
+        POM navigate() methods must use self.web.config["url"] for base URL,
+        not hardcoded http:// or https:// strings.
+
+        Returns fail_response if hardcoded URL detected, None otherwise.
+        """
+        for pattern, description in cls.HARDCODED_URL_PATTERNS:
+            if re.search(pattern, code):
+                return cls.fail_response(
+                    error=f"Hardcoded URL detected: {description}",
+                    fix_hint="POM navigate() must use self.web.config['url'] for base URL. Example: self.web.navigate_to(f\"{self.web.config['url']}/page.htm\")"
+                )
+        return None
+
+    @classmethod
     def _detect_trivial_state_methods(cls, code: str) -> Optional[Dict[str, Any]]:
         """
         Detect trivial state methods that just return True without element check.
@@ -330,7 +418,7 @@ class QGPageObject(BaseGate):
         """
         if cls.TRIVIAL_STATE_PATTERN.search(code):
             return cls.fail_response(
-                error="Trivial state method detected: returns True without checking element (DD-25 violation)",
+                error="Trivial state method detected: returns True without checking element",
                 fix_hint="State methods must check actual elements. Replace 'return True' with 'return self.web.is_element_displayed(*self.LOCATOR)'."
             )
         return None
@@ -533,6 +621,37 @@ class QGPageObject(BaseGate):
             )
 
         return None
+
+    @classmethod
+    def is_generation_complete(cls) -> bool:
+        """
+        Task 8.5.9: Check if all POMs are generated (for multi-page workflows).
+
+        Returns:
+            True if generation_complete flag is True or total_poms <= poms_generated
+        """
+        state_manager = cls._get_state_manager()
+        step_6_state = state_manager.get_step(6) or {}
+        return step_6_state.get("generation_complete", False)
+
+    @classmethod
+    def get_generation_progress(cls) -> Dict[str, Any]:
+        """
+        Task 8.5.9: Get current POM generation progress.
+
+        Returns:
+            Dict with poms_generated, total_poms, generation_complete, generated_pages
+        """
+        state_manager = cls._get_state_manager()
+        step_6_state = state_manager.get_step(6) or {}
+        generated_poms = step_6_state.get("generated_poms", {})
+
+        return {
+            "poms_generated": step_6_state.get("poms_generated", 0),
+            "total_poms": step_6_state.get("total_poms", 1),
+            "generation_complete": step_6_state.get("generation_complete", False),
+            "generated_pages": list(generated_poms.keys())
+        }
 
     @classmethod
     def validate(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:

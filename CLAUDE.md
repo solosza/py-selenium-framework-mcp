@@ -182,6 +182,9 @@ Step 9: Save files & run test
 | DD-28 | Test data organization: ASK user shared vs workflow-specific data location |
 | DD-29 | Slash command entry: `/qa-workflow` (prod) or `/qa-workflow-dev` (dev) |
 | DD-33 | Dynamic element discovery: AI uses Playwright snapshot → extracts → builds → validates via gate (see FRAMEWORK.md) |
+| DD-44 | Multi-page scope discovery: AI MUST call scope_discovery.analyze_workflow() before Step 5 if BDD has multiple pages |
+| DD-46 | Visual feedback enforcement: AI MUST call RuntimeValidator for each discovered element (triggers VisualFeedback automatically) |
+| DD-49 | Navigation responsibility: Only POMs have navigate(); Tasks call pom.navigate(); URLs from config only |
 
 ### DD-22: Stop-and-Discuss Protocol (CRITICAL)
 
