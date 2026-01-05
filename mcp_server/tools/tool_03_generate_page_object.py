@@ -57,7 +57,14 @@ async def generate_page_object(arguments: dict) -> str:
     Args:
         arguments: {
             "page_name": str - Page class name (e.g., LoginPage)
-            "elements": list - List of element dicts from Tool 2
+
+            # DEF-045: Dual elements (NEW - preferred)
+            "input_elements": list - Input elements from Step 5 PASS 1 (forms, buttons)
+            "output_elements": list - Output elements from Step 5 PASS 2 (messages, confirmations)
+
+            # Backward compatibility (OLD)
+            "elements": list - Flat list of all elements (backward compat)
+
             "workflow": str - Optional workflow for file path (e.g., "auth")
             "force_generate": bool - Skip existing check (default: False)
             "expected_states": list - Optional list of expected state dicts from AI Step 2
@@ -69,7 +76,12 @@ async def generate_page_object(arguments: dict) -> str:
         JSON string with generated POM code OR existing page info
     """
     page_name = arguments.get("page_name", "")
+
+    # DEF-045: Support both dual elements (new) and flat elements (backward compat)
+    input_elements = arguments.get("input_elements", [])
+    output_elements = arguments.get("output_elements", [])
     elements = arguments.get("elements", [])
+
     workflow = arguments.get("workflow", "")
     force_generate = arguments.get("force_generate", False)
     expected_states = arguments.get("expected_states", [])
@@ -85,11 +97,27 @@ async def generate_page_object(arguments: dict) -> str:
             "status": "error"
         }, indent=2)
 
-    if not elements:
-        return json.dumps({
-            "error": "elements list is required (use Tool 2 to discover elements)",
-            "status": "error"
-        }, indent=2)
+    # DEF-045: Determine which element structure is being used
+    using_dual_elements = bool(input_elements or output_elements)
+
+    if using_dual_elements:
+        # NEW structure - combine input + output elements
+        # Input elements → action methods (enter_email, click_submit)
+        # Output elements → state methods (is_logged_in, has_error_message)
+        elements = input_elements + output_elements
+
+        if not elements:
+            return json.dumps({
+                "error": "Both input_elements and output_elements are empty. At least one must have elements.",
+                "status": "error"
+            }, indent=2)
+    else:
+        # OLD structure (backward compat) - use flat elements list
+        if not elements:
+            return json.dumps({
+                "error": "elements list is required (use Tool 2 to discover elements)",
+                "status": "error"
+            }, indent=2)
 
     # Detect workflow type from page name or workflow argument
     workflow_type = _detect_workflow_type(page_name, workflow) or workflow

@@ -112,26 +112,75 @@ class QGPageObject(BaseGate):
                 fix_hint=f"Discover all pages before generating POMs. Discovered: {', '.join(discovered_names)}. Remaining: {total_pages - pages_discovered} pages."
             )
 
-        # Validate discovered_elements
+        # DEF-045: Support BOTH flat discovered_elements (backward compat) AND dual elements (new)
+        # NEW structure (preferred): input_elements + output_elements
+        # OLD structure (backward compat): discovered_elements (flat list)
+        input_elements = input_data.get("input_elements")
+        output_elements = input_data.get("output_elements")
         discovered_elements = input_data.get("discovered_elements")
 
-        if discovered_elements is None:
-            return cls.fail_response(
-                error="Missing required field: discovered_elements",
-                fix_hint="Provide discovered_elements from Step 5 state."
-            )
+        # Determine which structure is being used
+        using_dual_elements = input_elements is not None or output_elements is not None
 
-        if not isinstance(discovered_elements, list):
-            return cls.fail_response(
-                error="discovered_elements must be a list",
-                fix_hint="Provide discovered_elements as an array from Tool 2 output."
-            )
+        if using_dual_elements:
+            # NEW structure - validate both input and output elements
+            if input_elements is None:
+                return cls.fail_response(
+                    error="Missing input_elements. Two-pass discovery requires both input and output elements.",
+                    fix_hint="Run Step 5 PASS 1 (input discovery) before generating POM."
+                )
 
-        if len(discovered_elements) == 0:
-            return cls.fail_response(
-                error="discovered_elements is empty. At least one element required.",
-                fix_hint="Go back to Step 5 - ensure Tool 2 discovers elements."
-            )
+            if output_elements is None:
+                return cls.fail_response(
+                    error="Missing output_elements. Two-pass discovery requires both input and output elements.",
+                    fix_hint="Run Step 5 PASS 2 (output discovery) before generating POM."
+                )
+
+            if not isinstance(input_elements, list):
+                return cls.fail_response(
+                    error="input_elements must be a list",
+                    fix_hint="Provide input_elements as an array from Step 5 PASS 1."
+                )
+
+            if not isinstance(output_elements, list):
+                return cls.fail_response(
+                    error="output_elements must be a list",
+                    fix_hint="Provide output_elements as an array from Step 5 PASS 2."
+                )
+
+            # DEF-045: When using dual elements, BOTH types must have elements
+            # (If using two-pass discovery, you should have discovered both types)
+            if len(input_elements) == 0 or len(output_elements) == 0:
+                missing = []
+                if len(input_elements) == 0:
+                    missing.append("input")
+                if len(output_elements) == 0:
+                    missing.append("output")
+
+                return cls.fail_response(
+                    error=f"Two-pass discovery requires both types. Missing: {', '.join(missing)} elements.",
+                    fix_hint=f"Run Step 5 two-pass discovery:\n  - PASS 1 (input) if missing input elements\n  - PASS 2 (output) if missing output elements"
+                )
+
+        else:
+            # OLD structure (backward compat) - validate flat discovered_elements
+            if discovered_elements is None:
+                return cls.fail_response(
+                    error="Missing required field: discovered_elements",
+                    fix_hint="Provide discovered_elements from Step 5 state."
+                )
+
+            if not isinstance(discovered_elements, list):
+                return cls.fail_response(
+                    error="discovered_elements must be a list",
+                    fix_hint="Provide discovered_elements as an array from Tool 2 output."
+                )
+
+            if len(discovered_elements) == 0:
+                return cls.fail_response(
+                    error="discovered_elements is empty. At least one element required.",
+                    fix_hint="Go back to Step 5 - ensure Tool 2 discovers elements."
+                )
 
         # Validate page_name
         page_name = input_data.get("page_name")

@@ -1366,3 +1366,174 @@ class TestMultiPagePomTracking:
             assert result["status"] == "pass"
             saved_data = state_manager.save.call_args[1]["data"]
             assert "LoginPage" in saved_data["generated_poms"]
+
+
+# =============================================================================
+# DEF-045: Dual Elements (Input + Output) Support
+# =============================================================================
+
+class TestDEF045DualElements:
+    """Test PRE validation with dual elements (input_elements + output_elements)."""
+
+    def test_pre_dual_elements_both_present_passes(self, mock_state_complete):
+        """Test PRE passes when both input_elements and output_elements are provided."""
+        # Arrange
+        input_data = {
+            "mode": "PRE",
+            "input_elements": [
+                {"suggested_name": "EMAIL_INPUT", "element_type": "textbox"},
+                {"suggested_name": "PASSWORD_INPUT", "element_type": "textbox"}
+            ],
+            "output_elements": [
+                {"suggested_name": "SUCCESS_MESSAGE", "element_type": "text"}
+            ],
+            "page_name": "LoginPage"
+        }
+
+        # Act
+        from tools.gates.qg_page_object import QGPageObject
+        result = QGPageObject.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass"
+
+    def test_pre_dual_elements_missing_input_fails(self, mock_state_complete):
+        """Test PRE fails when output_elements provided but input_elements missing."""
+        # Arrange
+        input_data = {
+            "mode": "PRE",
+            "output_elements": [
+                {"suggested_name": "SUCCESS_MESSAGE", "element_type": "text"}
+            ],
+            "page_name": "LoginPage"
+        }
+
+        # Act
+        from tools.gates.qg_page_object import QGPageObject
+        result = QGPageObject.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "Missing input_elements" in result["error"]
+        assert "PASS 1" in result["fix_hint"]
+
+    def test_pre_dual_elements_missing_output_fails(self, mock_state_complete):
+        """Test PRE fails when input_elements provided but output_elements missing."""
+        # Arrange
+        input_data = {
+            "mode": "PRE",
+            "input_elements": [
+                {"suggested_name": "EMAIL_INPUT", "element_type": "textbox"}
+            ],
+            "page_name": "LoginPage"
+        }
+
+        # Act
+        from tools.gates.qg_page_object import QGPageObject
+        result = QGPageObject.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "Missing output_elements" in result["error"]
+        assert "PASS 2" in result["fix_hint"]
+
+    def test_pre_dual_elements_both_empty_fails(self, mock_state_complete):
+        """Test PRE fails when both input_elements and output_elements are empty."""
+        # Arrange
+        input_data = {
+            "mode": "PRE",
+            "input_elements": [],
+            "output_elements": [],
+            "page_name": "LoginPage"
+        }
+
+        # Act
+        from tools.gates.qg_page_object import QGPageObject
+        result = QGPageObject.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "Missing: input, output" in result["error"]
+        assert "PASS 1" in result["fix_hint"]
+        assert "PASS 2" in result["fix_hint"]
+
+    def test_pre_dual_elements_not_list_fails(self, mock_state_complete):
+        """Test PRE fails when input_elements or output_elements are not lists."""
+        # Arrange
+        input_data = {
+            "mode": "PRE",
+            "input_elements": "not a list",
+            "output_elements": [{"suggested_name": "SUCCESS_MESSAGE"}],
+            "page_name": "LoginPage"
+        }
+
+        # Act
+        from tools.gates.qg_page_object import QGPageObject
+        result = QGPageObject.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "input_elements must be a list" in result["error"]
+
+    def test_pre_backward_compat_flat_elements_still_works(self, mock_state_complete):
+        """Test backward compatibility - flat discovered_elements still works."""
+        # Arrange
+        input_data = {
+            "mode": "PRE",
+            "discovered_elements": [
+                {"suggested_name": "EMAIL_INPUT", "element_type": "textbox"},
+                {"suggested_name": "SUCCESS_MESSAGE", "element_type": "text"}
+            ],
+            "page_name": "LoginPage"
+        }
+
+        # Act
+        from tools.gates.qg_page_object import QGPageObject
+        result = QGPageObject.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass"
+
+    def test_pre_dual_elements_input_only_fails(self, mock_state_complete):
+        """Test PRE fails when only input_elements has values (missing output)."""
+        # Arrange
+        input_data = {
+            "mode": "PRE",
+            "input_elements": [
+                {"suggested_name": "SEARCH_INPUT", "element_type": "textbox"}
+            ],
+            "output_elements": [],
+            "page_name": "SearchPage"
+        }
+
+        # Act
+        from tools.gates.qg_page_object import QGPageObject
+        result = QGPageObject.validate_pre(input_data)
+
+        # Assert
+        # Should fail because both types are required for two-pass discovery
+        assert result["status"] == "fail"
+        assert "Missing: output" in result["error"]
+        assert "PASS 2" in result["fix_hint"]
+
+    def test_pre_dual_elements_output_only_fails(self, mock_state_complete):
+        """Test PRE fails when only output_elements has values (missing input)."""
+        # Arrange
+        input_data = {
+            "mode": "PRE",
+            "input_elements": [],
+            "output_elements": [
+                {"suggested_name": "CONFIRMATION_MESSAGE", "element_type": "text"}
+            ],
+            "page_name": "ConfirmationPage"
+        }
+
+        # Act
+        from tools.gates.qg_page_object import QGPageObject
+        result = QGPageObject.validate_pre(input_data)
+
+        # Assert
+        # Should fail because both types are required for two-pass discovery
+        assert result["status"] == "fail"
+        assert "Missing: input" in result["error"]
+        assert "PASS 1" in result["fix_hint"]

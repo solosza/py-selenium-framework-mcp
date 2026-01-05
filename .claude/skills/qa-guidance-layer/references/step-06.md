@@ -76,6 +76,33 @@ RETRY:
 | **When Saved** | On POST-VALIDATE pass (for each page) |
 | **State Schema** | See below |
 
+**DEF-045: Dual Elements (NEW - Preferred):**
+
+With two-pass discovery, POMs are generated using BOTH input and output elements:
+
+```python
+# From Step 5 state
+step_5 = state_manager.get_step(5)
+discovered_pages = step_5["discovered_pages"]
+
+# Get BOTH element types for page
+input_elements = discovered_pages["LoginPage"]["input_elements"]   # Forms, buttons
+output_elements = discovered_pages["LoginPage"]["output_elements"] # Messages, confirmations
+
+# Tool 3 call with dual elements
+arguments = {
+    "page_name": "LoginPage",
+    "input_elements": input_elements,    # → Generate action methods
+    "output_elements": output_elements,  # → Generate state methods
+    "workflow": "auth",
+    "expected_states": expected_states   # From Step 3
+}
+```
+
+**Method Generation Logic:**
+- **input_elements** → action methods (`enter_email`, `click_submit`)
+- **output_elements + expected_states** → state-check methods (`is_logged_in`, `has_error_message`)
+
 **Single-Page Workflow (Backward Compatible):**
 
 ```json
@@ -88,7 +115,7 @@ RETRY:
     "pom_metadata": {
       "class_name": "LoginPage",
       "file_path": "framework/pages/auth/login_page.py",
-      "locators": ["EMAIL", "PASSWORD", "SUBMIT_BTN"],
+      "locators": ["EMAIL", "PASSWORD", "SUBMIT_BTN", "SUCCESS_MESSAGE"],
       "atomic_methods": ["enter_email", "enter_password", "click_submit"],
       "state_methods": ["is_logged_in", "is_error_displayed"]
     },

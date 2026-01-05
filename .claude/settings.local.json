@@ -56,7 +56,8 @@
       "WebFetch(domain:api.github.com)",
       "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" push origin main)",
       "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" stash pop)",
-      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/2.0-discovery-checkpoint)"
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/2.0-discovery-checkpoint)",
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/3.0-pom-dual-elements)"
     ],
     "deny": [],
     "ask": []
