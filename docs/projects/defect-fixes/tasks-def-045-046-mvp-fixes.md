@@ -521,20 +521,20 @@ Before committing ANY changes, verify:
 
 ## Tasks
 
-- [ ] 1.0 Extend Step 5 for Two-Pass Discovery (DEF-045) [CORE]
+- [x] 1.0 Extend Step 5 for Two-Pass Discovery (DEF-045) [CORE]
   - [x] 1.1 **ASSESS**: Read current `step-05.md` - understand existing multi-page loop (DD-44)
   - [x] 1.2 **ASSESS**: Read current `qg_discovered_elements.py` - identify all parameters and validation logic
   - [x] 1.3 **ASSESS**: Read `test_qg_discovered_elements.py` - understand existing test coverage
   - [x] 1.4 **ASSESS**: Document what MUST NOT CHANGE (RuntimeValidator, visual feedback, DD-44 loop)
   - [x] 1.5 Create branch `feature/1.0-two-pass-discovery`
-  - [ ] 1.6 Update `step-05.md`: Add PASS 2 (Output Discovery) AFTER existing PASS 1, preserve DD-44 loop
-  - [ ] 1.7 Update `qg_discovered_elements.py`: Add `type` parameter (default="input" for backwards compat)
-  - [ ] 1.8 Update `qg_discovered_elements.py`: Type-specific validation WITHOUT breaking existing calls
-  - [ ] 1.9 Write NEW tests in `test_qg_discovered_elements.py`: Test type="input" and type="output"
-  - [ ] 1.10 Run existing tests FIRST: Verify nothing broken
-  - [ ] 1.11 Run new tests: `pytest mcp_server/_dev_tests/test_gates/test_qg_discovered_elements.py -v`
-  - [ ] 1.12 Record results
-  - [ ] 1.13 Commit: `feat: Add two-pass discovery to Step 5 (Task 1.0)`
+  - [x] 1.6 Update `step-05.md`: Add PASS 2 (Output Discovery) AFTER existing PASS 1, preserve DD-44 loop
+  - [x] 1.7 Update `qg_discovered_elements.py`: Add `type` parameter (default="input" for backwards compat)
+  - [x] 1.8 Update `qg_discovered_elements.py`: Type-specific validation WITHOUT breaking existing calls
+  - [x] 1.9 Write NEW tests in `test_qg_discovered_elements.py`: Test type="input" and type="output"
+  - [x] 1.10 Run existing tests FIRST: Verify nothing broken
+  - [x] 1.11 Run new tests: `pytest mcp_server/_dev_tests/test_gates/test_qg_discovered_elements.py -v`
+  - [x] 1.12 Record results
+  - [x] 1.13 Commit: `feat: Add two-pass discovery to Step 5 (Task 1.0)`
 
 - [ ] 2.0 Create Discovery Checkpoint Gate [CORE]
   - [ ] 2.1 **ASSESS**: Read `qg_page_object.py` PRE - understand how it currently checks discovered_elements
