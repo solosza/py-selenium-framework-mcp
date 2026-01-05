@@ -78,6 +78,47 @@ VALIDATE:
 - PRE: Validate URL reachable, page_name provided, discovery_method declared
 - POST: Validate elements array returned, at least 1 interactive element
 
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  VALIDATE ELEMENTS (MANDATORY - TRIGGERS VISUAL FEEDBACK)                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+After discovery, MUST validate each element via RuntimeValidator:
+
+1. INITIALIZE visual feedback:
+   ```python
+   from utils.runtime_validator import RuntimeValidator
+   from utils.visual_feedback import VisualFeedback
+
+   # VisualFeedback is injected into RuntimeValidator via constructor
+   visual = VisualFeedback(evaluate_fn=browser_evaluate)
+   validator = RuntimeValidator(visual_feedback=visual)
+   visual.initialize()
+   ```
+
+2. For EACH discovered element:
+   ```python
+   result = validator.validate_element(element)
+   # RuntimeValidator automatically calls:
+   #   - visual.highlight_valid(ref) if valid
+   #   - visual.highlight_invalid(ref, error_category) if invalid
+   ```
+
+3. COLLECT validation_results:
+   ```python
+   validation_results = {
+       "valid_count": N,
+       "error_count": M,
+       "elements": [
+           {"name": "...", "ref": "...", "is_valid": True/False, "error_category": "..."}
+       ]
+   }
+   ```
+
+4. PASS validation_results to qg_discovered_elements POST
+
+**Why Mandatory:** Visual feedback shows user which elements passed/failed validation
+in real-time. Skipping RuntimeValidator = no visual highlights = poor user experience.
+
 RETRY:
 - If PRE-VALIDATE fails: AI adjusts page state (max 3 attempts)
 - If POST-VALIDATE fails: AI re-prepares page, retries (max 3 attempts)
@@ -111,12 +152,12 @@ RETRY:
 
 | Field | Value |
 |-------|-------|
-| **State Saved** | `discovered_elements` (from tool), `auth_completed` (AI-tracked), `page_name` (AI-tracked) |
-| **Who Saves** | Operation tool saves `discovered_elements`; AI saves `auth_completed`, `page_name` |
+| **State Saved** | `discovered_elements` (from tool), `validation_results` (from RuntimeValidator), `auth_completed` (AI-tracked), `page_name` (AI-tracked) |
+| **Who Saves** | Operation tool saves `discovered_elements`; RuntimeValidator produces `validation_results`; AI saves `auth_completed`, `page_name` |
 | **When Saved** | On operation SUCCESS (after POST-VALIDATE passes) |
 | **State Schema** | See below |
 
-**Note:** Tool 2 only outputs `elements[]` and `metadata`. AI tracks `auth_completed` and `page_name` separately based on workflow execution.
+**Note:** Tool 2 only outputs `elements[]` and `metadata`. RuntimeValidator produces `validation_results` with visual feedback. AI tracks `auth_completed` and `page_name` separately based on workflow execution.
 
 ```json
 {
@@ -157,8 +198,16 @@ RETRY:
 
 | Field | Value |
 |-------|-------|
-| **Rules That Apply** | DD-19 (tool import), DD-20 (dynamic element prep), DD-21 (AI-SDET collaboration), DD-24 (credential strategy from Step 1), DD-33 (Playwright snapshot for dynamic) |
-| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 6 until elements discovered** |
+| **Rules That Apply** | DD-19 (tool import), DD-20 (dynamic element prep), DD-21 (AI-SDET collaboration), DD-24 (credential strategy from Step 1), DD-33 (Playwright snapshot for dynamic), DD-46 (visual feedback via RuntimeValidator) |
+| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 6 until elements discovered AND validated** |
+
+**DD-46 Visual Feedback Enforcement (MANDATORY):**
+
+| Condition | Required Action | Violation Response |
+|-----------|-----------------|-------------------|
+| Elements discovered | MUST call RuntimeValidator for each element | BLOCKED if validation_results missing |
+| RuntimeValidator called | Automatically triggers VisualFeedback | Visual highlights appear in browser |
+| validation_results missing in POST | Gate fails | "Must validate elements via RuntimeValidator" |
 
 **DD-33 Enforcement (CRITICAL):**
 
@@ -225,6 +274,275 @@ How should we proceed?
 2. Manual element list - You provide selectors
 3. Abort workflow - Stop and log issue"
 ```
+
+---
+
+## Multi-Page Discovery (DD-44) - MANDATORY CHECK
+
+**When does this apply?** When BDD scenarios reference multiple pages (e.g., wizard flows, multi-step forms).
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  DD-44 MULTI-PAGE SCOPE DISCOVERY (MANDATORY)                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+BEFORE first element discovery:
+1. Call scope_discovery.analyze_workflow(bdd_scenarios)
+   → Returns: {page_count: N, pages: [{name: "Page1Page", order: 1}, ...]}
+
+2. IF page_count > 1:
+   → Gate REQUIRES scope_result parameter
+   → Must discover elements for EACH page before Step 6
+
+DISCOVERY LOOP (for each page in scope):
+   ┌─────────────────────────────────────────┐
+   │  For page in scope_result.pages:       │
+   │    1. Navigate to page URL             │
+   │    2. Prepare page state (reveal       │
+   │       dynamic elements)                │
+   │    3. Call qg_discovered_elements PRE  │
+   │       with scope_result                │
+   │    4. Extract elements (Playwright     │
+   │       snapshot or Tool 2)              │
+   │    5. Call qg_discovered_elements POST │
+   │       with scope_result                │
+   │    6. Gate tracks progress:            │
+   │       discovered_pages[page_name] =    │
+   │       elements                         │
+   └─────────────────────────────────────────┘
+
+STEP 6 BLOCKED UNTIL:
+- is_discovery_complete() returns True
+- All pages in scope have been discovered
+
+GATE ENFORCEMENT:
+| Check | When | Behavior |
+|-------|------|----------|
+| Multi-page detected, no scope_result | PRE Step 5 | FAIL: "Call scope_discovery first" |
+| Discovery incomplete | PRE Step 6 | FAIL: "N/M pages discovered" |
+| scope_result.page_count mismatch | POST Step 5 | Warn but allow |
+```
+
+**Example Multi-Page Flow (4-Step Wizard):**
+
+```python
+# 1. Analyze scope
+from utils.scope_discovery import ScopeDiscovery
+discovery = ScopeDiscovery()
+scope_result = discovery.analyze_workflow(bdd_scenarios)
+# → page_count: 4, pages: [SearchPage, CustomerPage, ContactsPage, AddressPage]
+
+# 2. For each page, discover elements
+for page_info in scope_result.pages:
+    # Navigate to reveal page
+    # ... playwright interactions ...
+
+    # PRE-VALIDATE (pass scope_result)
+    pre_result = qg_discovered_elements.validate_pre({
+        "mode": "PRE",
+        "url": page_info.entry_url,
+        "page_name": page_info.name,
+        "credential_strategy": "none",
+        "discovery_method": "playwright",
+        "scope_result": scope_result.to_dict()  # REQUIRED for multi-page
+    })
+
+    # Extract elements from snapshot
+    elements = extract_from_snapshot(...)
+
+    # POST-VALIDATE (pass scope_result)
+    post_result = qg_discovered_elements.validate_post({
+        "mode": "POST",
+        "elements": elements,
+        "page_name": page_info.name,
+        "scope_result": scope_result.to_dict()
+    })
+    # → Returns: {status: "pass", multi_page_progress: {pages_discovered: N, ...}}
+
+# 3. Verify complete before Step 6
+if not qg_discovered_elements.is_discovery_complete():
+    # BLOCKED - continue discovery loop
+    pass
+else:
+    # PROCEED to Step 6
+    pass
+```
+
+---
+
+## Two-Pass Discovery (DEF-045) - Input + Output Elements
+
+**Purpose:** Discover BOTH input elements (forms, buttons) AND output elements (confirmations, messages) to enable real state-check methods in POMs (not guesses).
+
+**Problem Solved:** AI previously generated state-check methods without observing confirmation pages, leading to guessed implementations (DEF-045).
+
+**Solution:** Two-pass discovery per page - PASS 1 for input elements, PASS 2 for output elements.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  TWO-PASS DISCOVERY FLOW (extends DD-44 multi-page loop)                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+BEFORE discovery:
+1. Call scope_discovery.analyze_workflow(bdd_scenarios) → scope_result
+
+PASS 1: INPUT ELEMENT DISCOVERY (for all pages)
+   ┌─────────────────────────────────────────┐
+   │  For page in scope_result.pages:       │
+   │    1. Navigate to input page URL       │
+   │       (e.g., login form)               │
+   │    2. Prepare page state (reveal       │
+   │       forms, buttons)                  │
+   │    3. Call qg_discovered_elements PRE  │
+   │       with type="input"                │
+   │    4. Extract INPUT elements           │
+   │       (textboxes, buttons, dropdowns)  │
+   │    5. Call qg_discovered_elements POST │
+   │       with type="input"                │
+   │    6. Gate tracks:                     │
+   │       discovered_pages[page_name]      │
+   │         ["input_elements"] = elements  │
+   └─────────────────────────────────────────┘
+
+PASS 2: OUTPUT ELEMENT DISCOVERY (for all pages)
+   ┌─────────────────────────────────────────┐
+   │  For page in scope_result.pages:       │
+   │    1. Navigate/trigger to OUTPUT page  │
+   │       (e.g., confirmation after login) │
+   │    2. Prepare page state (submit form, │
+   │       reveal messages)                 │
+   │    3. Call qg_discovered_elements PRE  │
+   │       with type="output"               │
+   │    4. Extract OUTPUT elements          │
+   │       (success messages, error msgs,   │
+   │        confirmation text)              │
+   │    5. Call qg_discovered_elements POST │
+   │       with type="output"               │
+   │    6. Gate tracks:                     │
+   │       discovered_pages[page_name]      │
+   │         ["output_elements"] = elements │
+   └─────────────────────────────────────────┘
+
+CHECKPOINT: Before Step 6
+- Verify ALL pages have BOTH input_elements AND output_elements
+- is_discovery_complete() checks both types present for each page
+```
+
+**Type Parameter (NEW):**
+
+| Type | When | Elements Discovered |
+|------|------|---------------------|
+| `input` (default) | PASS 1 | Forms, buttons, textboxes, dropdowns - elements user INTERACTS with |
+| `output` | PASS 2 | Success messages, error messages, confirmation text - elements user OBSERVES |
+
+**Example Two-Pass Flow:**
+
+```python
+from utils.scope_discovery import ScopeDiscovery
+
+# 1. Analyze scope
+discovery = ScopeDiscovery()
+scope_result = discovery.analyze_workflow(bdd_scenarios)
+
+# PASS 1: Input elements for all pages
+for page_info in scope_result.pages:
+    # Navigate to INPUT page (e.g., login form)
+    browser.navigate(page_info.entry_url)
+
+    # PRE-VALIDATE with type="input"
+    pre_result = qg_discovered_elements.validate_pre({
+        "mode": "PRE",
+        "url": page_info.entry_url,
+        "page_name": page_info.name,
+        "credential_strategy": "none",
+        "discovery_method": "playwright",
+        "type": "input",  # NEW: Specify element type
+        "scope_result": scope_result.to_dict()
+    })
+
+    # Extract INPUT elements (forms, buttons)
+    input_elements = extract_input_elements_from_snapshot(...)
+
+    # POST-VALIDATE with type="input"
+    post_result = qg_discovered_elements.validate_post({
+        "mode": "POST",
+        "elements": input_elements,
+        "page_name": page_info.name,
+        "type": "input",  # NEW: Specify element type
+        "validation_results": {...},  # DD-46
+        "scope_result": scope_result.to_dict()
+    })
+    # → Saves to discovered_pages[page_name]["input_elements"]
+
+# PASS 2: Output elements for all pages
+for page_info in scope_result.pages:
+    # Navigate/trigger to OUTPUT page (e.g., submit form, see confirmation)
+    browser.navigate(page_info.entry_url)
+    # ... perform action to reveal output (submit form, click button)
+
+    # PRE-VALIDATE with type="output"
+    pre_result = qg_discovered_elements.validate_pre({
+        "mode": "PRE",
+        "url": page_info.confirmation_url,
+        "page_name": page_info.name,
+        "credential_strategy": "none",
+        "discovery_method": "playwright",
+        "type": "output",  # NEW: Specify element type
+        "scope_result": scope_result.to_dict()
+    })
+
+    # Extract OUTPUT elements (messages, confirmations)
+    output_elements = extract_output_elements_from_snapshot(...)
+
+    # POST-VALIDATE with type="output"
+    post_result = qg_discovered_elements.validate_post({
+        "mode": "POST",
+        "elements": output_elements,
+        "page_name": page_info.name,
+        "type": "output",  # NEW: Specify element type
+        "validation_results": {...},  # DD-46
+        "scope_result": scope_result.to_dict()
+    })
+    # → Saves to discovered_pages[page_name]["output_elements"]
+
+# 3. Verify BOTH types discovered for ALL pages
+if not qg_discovered_elements.is_discovery_complete():
+    # BLOCKED - missing input or output for some page
+    raise Exception("Discovery incomplete - all pages need both input and output elements")
+else:
+    # PROCEED to Step 6 - Generate POMs with BOTH element types
+    pass
+```
+
+**State Structure (NEW):**
+
+```python
+# Step 5 state after two-pass discovery:
+{
+    "discovered_pages": {
+        "LoginPage": {
+            "input_elements": [
+                {"suggested_name": "EMAIL", "element_type": "textbox", "locator_id": "#email"},
+                {"suggested_name": "PASSWORD", "element_type": "textbox", "locator_id": "#passwd"},
+                {"suggested_name": "SUBMIT_BTN", "element_type": "button", "locator_id": "#SubmitLogin"}
+            ],
+            "output_elements": [
+                {"suggested_name": "SUCCESS_MESSAGE", "element_type": "text", "locator_css": ".success"},
+                {"suggested_name": "ERROR_MESSAGE", "element_type": "text", "locator_css": ".alert-danger"}
+            ]
+        }
+    },
+    "pages_discovered": 1,  # Number of pages with BOTH types
+    "total_pages": 1,
+    "discovery_complete": true  # True only if ALL pages have BOTH types
+}
+```
+
+**Backward Compatibility:**
+
+- If `type` parameter omitted → defaults to "input"
+- Old code calling without `type` still works (single-pass discovery)
+- Nested state structure preserves old `discovered_elements` field (last page)
 
 ---
 

@@ -37,9 +37,9 @@ PRE-CHECK:
 - None (first step)
 
 ACTION:
-- ASK user Question 1 (DD-24: credential strategy)
+- ASK user Question 1 (credential strategy)
 - WAIT for answer
-- ASK user Question 2 (DD-28: test data location)
+- ASK user Question 2 (test data location)
 - WAIT for answer
 
 VALIDATE:

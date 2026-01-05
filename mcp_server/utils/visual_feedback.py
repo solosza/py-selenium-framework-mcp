@@ -28,8 +28,8 @@ from typing import Any, Callable, Dict, List, Optional
 VALIDATION_CSS = """
 .qa-validation-overlay {
     position: fixed;
-    top: 10px;
-    right: 10px;
+    bottom: 10px;
+    left: 10px;
     z-index: 999999;
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 12px;
@@ -37,8 +37,11 @@ VALIDATION_CSS = """
     color: #fff;
     padding: 15px;
     border-radius: 8px;
-    max-width: 400px;
+    max-width: 350px;
+    max-height: 250px;
+    overflow-y: auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
 }
 
 .qa-pipeline-header {
@@ -48,6 +51,12 @@ VALIDATION_CSS = """
     margin-bottom: 10px;
     border-bottom: 1px solid #444;
     padding-bottom: 8px;
+    cursor: move;
+    pointer-events: auto;
+}
+
+.qa-pipeline-header:hover {
+    color: #88ff88;
 }
 
 .qa-pipeline-step {
@@ -188,11 +197,49 @@ CREATE_OVERLAY_JS = """
     overlay.id = 'qa-validation-overlay';
     overlay.className = 'qa-validation-overlay';
     overlay.innerHTML = `
-        <div class="qa-pipeline-header">RUNTIME VALIDATION PIPELINE</div>
+        <div class="qa-pipeline-header" title="Drag to move, click to collapse">ELEMENT DISCOVERY</div>
         <div id="qa-pipeline-steps"></div>
         <div id="qa-results-panel" class="qa-results-panel"></div>
     `;
     document.body.appendChild(overlay);
+
+    const header = overlay.querySelector('.qa-pipeline-header');
+    let isDragging = false, offsetX, offsetY;
+
+    // Draggable by header
+    header.onmousedown = function(e) {
+        isDragging = true;
+        offsetX = e.clientX - overlay.offsetLeft;
+        offsetY = e.clientY - overlay.offsetTop;
+        overlay.style.opacity = '0.8';
+    };
+    document.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+            overlay.style.left = (e.clientX - offsetX) + 'px';
+            overlay.style.top = (e.clientY - offsetY) + 'px';
+            overlay.style.bottom = 'auto';
+            overlay.style.right = 'auto';
+        }
+    });
+    document.addEventListener('mouseup', function() {
+        if (isDragging) {
+            isDragging = false;
+            overlay.style.opacity = '1';
+        }
+    });
+
+    // Click-to-collapse (only if not dragging)
+    header.onclick = function(e) {
+        if (isDragging) return;
+        const steps = document.getElementById('qa-pipeline-steps');
+        const panel = document.getElementById('qa-results-panel');
+        const isHidden = panel.style.display === 'none';
+        if (steps) steps.style.display = isHidden ? 'block' : 'none';
+        if (panel) panel.style.display = isHidden ? 'block' : 'none';
+        const baseText = header.textContent.replace(' [+]', '');
+        header.textContent = isHidden ? baseText : baseText + ' [+]';
+    };
+
     return true;
 })();
 """
@@ -544,6 +591,43 @@ class VisualFeedback:
             return result is True
         except Exception:
             return False
+
+    def highlight_discovered_elements(
+        self,
+        elements: List[Dict[str, Any]],
+        show_results: bool = True
+    ) -> int:
+        """
+        Highlight all discovered elements with green outline.
+
+        This is used during element discovery phase to show which
+        elements were found. All elements are highlighted as valid.
+
+        Args:
+            elements: List of discovered elements with 'ref' and 'name' keys
+            show_results: Whether to also add to results panel
+
+        Returns:
+            Number of elements successfully highlighted
+        """
+        if self._headless:
+            return 0
+
+        if not self._initialized:
+            self.initialize()
+
+        count = 0
+        for elem in elements:
+            ref = elem.get("ref", "")
+            name = elem.get("name", elem.get("suggested_name", "Unknown"))
+
+            if ref and self.highlight_valid(ref):
+                count += 1
+
+            if show_results:
+                self.add_result(name, ref, is_valid=True)
+
+        return count
 
     def cleanup(self) -> bool:
         """

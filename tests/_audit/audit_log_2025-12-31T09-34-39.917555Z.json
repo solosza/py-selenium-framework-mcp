@@ -1,0 +1,23 @@
+{
+  "run_id": "2025-12-31T09:34:39.917555Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 6,
+      "type": "self-heal",
+      "attempt": 1,
+      "error": "skeleton detected",
+      "timestamp": "2025-12-31T09:34:39.917555Z"
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 0,
+    "gates_failed": 0,
+    "self_heals": 1,
+    "final_result": "incomplete",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

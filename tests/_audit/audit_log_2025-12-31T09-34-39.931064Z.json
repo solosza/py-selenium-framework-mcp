@@ -1,0 +1,37 @@
+{
+  "run_id": "2025-12-31T09:34:39.931064Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2025-12-31T09:34:39.931064Z"
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2025-12-31T09:34:39.931064Z"
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2025-12-31T09:34:39.932064Z"
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 1,
+    "gates_failed": 2,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

@@ -27,6 +27,20 @@ Use when:
 
 ---
 
+## Communication Guidelines
+
+**DO NOT show users:**
+- Internal gate status ("Gate: PASS", "POST-VALIDATE: PASS")
+- Gate implementation details
+- Internal field names (input_data, metadata)
+
+**DO show users:**
+- "Step X Complete" (without gate status)
+- Progress indicators ("Discovering elements...", "Generating POM...")
+- Actionable errors only (if gate fails, explain what to fix, not gate mechanics)
+
+---
+
 ## Workflow Overview
 
 ```

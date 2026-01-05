@@ -71,10 +71,12 @@ RETRY:
 
 | Field | Value |
 |-------|-------|
-| **State Saved** | `pom_code`, `pom_metadata` (class name, methods, locators) |
-| **Who Saves** | Operation tool (`generate_page_object`) |
-| **When Saved** | On operation SUCCESS (after POST-VALIDATE passes) |
+| **State Saved** | `pom_code`, `pom_metadata`, `generated_poms`, `poms_generated`, `total_poms`, `generation_complete` |
+| **Who Saves** | Quality gate (`qg_page_object` POST) |
+| **When Saved** | On POST-VALIDATE pass (for each page) |
 | **State Schema** | See below |
+
+**Single-Page Workflow (Backward Compatible):**
 
 ```json
 {
@@ -89,10 +91,46 @@ RETRY:
       "locators": ["EMAIL", "PASSWORD", "SUBMIT_BTN"],
       "atomic_methods": ["enter_email", "enter_password", "click_submit"],
       "state_methods": ["is_logged_in", "is_error_displayed"]
-    }
+    },
+    "generated_poms": {"LoginPage": {"code": "...", "metadata": {...}}},
+    "poms_generated": 1,
+    "total_poms": 1,
+    "generation_complete": true
   }
 }
 ```
+
+**Multi-Page Workflow (Task 8.5.9):**
+
+```json
+{
+  "step": 6,
+  "status": "complete",
+  "timestamp": "ISO-8601",
+  "data": {
+    "pom_code": "class CheckoutPage:\n    ...",
+    "pom_metadata": {"class_name": "CheckoutPage", ...},
+    "generated_poms": {
+      "LoginPage": {"code": "class LoginPage:\n    ...", "metadata": {...}},
+      "InventoryPage": {"code": "class InventoryPage:\n    ...", "metadata": {...}},
+      "CartPage": {"code": "class CartPage:\n    ...", "metadata": {...}},
+      "CheckoutPage": {"code": "class CheckoutPage:\n    ...", "metadata": {...}}
+    },
+    "poms_generated": 4,
+    "total_poms": 4,
+    "generation_complete": true
+  }
+}
+```
+
+| Field | Purpose |
+|-------|---------|
+| `pom_code` | Last generated POM (backward compat) |
+| `pom_metadata` | Last generated metadata (backward compat) |
+| `generated_poms` | Per-page POM tracking (multi-page) |
+| `poms_generated` | Progress counter |
+| `total_poms` | Total from Step 5 `total_pages` |
+| `generation_complete` | True when all POMs generated |
 
 ---
 
@@ -238,6 +276,103 @@ How should we proceed?
               │  PROCEED TO STEP 7  │
               └─────────────────────┘
 ```
+
+---
+
+## G.1 Multi-Page POM Generation Loop (Task 8.5.9)
+
+**For multi-page workflows (DD-44), repeat Step 6 for each discovered page.**
+
+### Flow Pattern
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    MULTI-PAGE POM GENERATION LOOP                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Step 5 State:
+  discovered_pages = {
+    "LoginPage": [...elements...],
+    "InventoryPage": [...elements...],
+    "CartPage": [...elements...],
+    "CheckoutPage": [...elements...]
+  }
+  total_pages = 4
+
+                                      │
+                                      ▼
+                    ┌─────────────────────────────────────┐
+                    │  FOR EACH page IN discovered_pages: │
+                    └─────────────────────────────────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    ▼                 ▼                 ▼
+             ┌───────────┐    ┌───────────┐      ┌───────────┐
+             │ LoginPage │    │ Inventory │ ...  │ Checkout  │
+             └─────┬─────┘    │   Page    │      │   Page    │
+                   │          └─────┬─────┘      └─────┬─────┘
+                   │                │                  │
+                   ▼                ▼                  ▼
+             ┌──────────────────────────────────────────────┐
+             │  PRE → GENERATE → POST (for each page)       │
+             │  State tracks: poms_generated / total_poms   │
+             │  POST returns: multi_page_progress           │
+             └──────────────────────────────────────────────┘
+                                      │
+                                      ▼
+                    ┌─────────────────────────────────────┐
+                    │  generation_complete = True?         │
+                    └─────────────────────────────────────┘
+                                      │
+                          ┌───────────┴───────────┐
+                          ▼                       ▼
+                    ┌──────────┐            ┌──────────┐
+                    │  YES     │            │  NO      │
+                    └────┬─────┘            └────┬─────┘
+                         │                       │
+                         ▼                       ▼
+              ┌─────────────────────┐  ┌─────────────────────┐
+              │  PROCEED TO STEP 7  │  │  Continue loop      │
+              │  with ALL POMs      │  │  for remaining      │
+              └─────────────────────┘  │  pages              │
+                                       └─────────────────────┘
+```
+
+### AI Orchestration for Multi-Page
+
+```python
+# Get all discovered pages from Step 5 state
+step_5_state = state_manager.get_step(5)
+discovered_pages = step_5_state.get("discovered_pages", {})
+total_pages = step_5_state.get("total_pages", 1)
+
+# Loop: Generate POM for each page
+for page_name, elements in discovered_pages.items():
+    # PRE-VALIDATE
+    pre_result = qg_page_object(mode="PRE", discovered_elements=elements, page_name=page_name)
+
+    # OPERATION
+    pom_result = generate_page_object(page_name=page_name, elements=elements, ...)
+
+    # POST-VALIDATE (automatically tracks progress)
+    post_result = qg_page_object(mode="POST", code=pom_result["code"], metadata=pom_result["metadata"], page_name=page_name)
+
+    # Check progress
+    progress = post_result.get("multi_page_progress", {})
+    print(f"Generated {progress['poms_generated']}/{progress['total_poms']} POMs")
+
+# Verify all POMs generated before Step 7
+if not QGPageObject.is_generation_complete():
+    # Handle incomplete generation
+    pass
+```
+
+### Helper Methods
+
+| Method | Purpose |
+|--------|---------|
+| `QGPageObject.is_generation_complete()` | Returns True when all POMs generated |
+| `QGPageObject.get_generation_progress()` | Returns progress dict with generated_pages list |
 
 ---
 

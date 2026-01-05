@@ -1,6 +1,8 @@
 # CLAUDE.md
 
-**Version:** v1.9.0 | **Status:** Active Development
+**Version:** v2.0.0 | **Status:** Production Development
+**Company:** Isagawa Corp
+**Product:** QA Execution Engine (AI Management Layer - First Vertical)
 
 ---
 
@@ -26,21 +28,25 @@ See `.claude/skills/dialogue-engine/` for complete protocol and references.
 
 ## Project Overview
 
-**Project:** py_sel_framework_mcp - Python Selenium Test Automation Framework with MCP Integration
+**Project:** py_sel_framework_mcp - QA Execution Engine (Isagawa Corp)
 
-**Purpose:** Portfolio showcase demonstrating QA Lead-level test automation architecture with AI integration (MCP server) for job interviews.
+**Company:** Isagawa Corp - The AI Management Layer for Complex Domains
+
+**Purpose:** First implementation of Isagawa's AI Management Layer - a production system that enforces how AI executes QA test automation workflows through domain-specific rules, quality gates, and validation checkpoints.
+
+**Product Category:** AI Management Layer implemented as domain-specific Execution Engine
 
 **Key Features:**
 - Production-grade 4-layer architecture (Role → Task → Page → WebInterface)
-- Tests full e-commerce application (Automation Practice)
-- 15-20 test scenarios covering core workflows
-- MCP server for AI-assisted testing workflows
-- HTML reporting, logging, screenshot capture
-- Pytest-based test execution
+- 10-step workflow with mandatory quality gates (v2.0)
+- 28 Design Decisions enforced via MCP validation tools
+- Hybrid architecture: Skills (guidance) + MCP Tools (enforcement)
+- Progressive audit trail and state management
+- Real-world test generation against live applications
 
-**Target Application:** http://www.automationpractice.pl/index.php
+**Target Application:** http://www.automationpractice.pl/index.php (demo), expandable to any web application
 
-**Timeline:** 2 weeks (Week 1: Framework, Week 2: MCP + Polish)
+**Company Thesis:** See `.business/strategy/isagawa_corp_thesis_v3.0.md` for complete AI Management Layer vision
 
 ## Technology Stack
 
@@ -646,16 +652,18 @@ GOLDEN RULES:
 ## Intellectual Property Protection
 
 **What's Protected:**
-- `docs/` folder (gitignored) - Strategic planning, PRDs, task lists, MCP design
-- Reason: Portfolio strategy, process framework, MCP architecture are competitive advantages
+- `.business/` folder - Company strategy, thesis, business model, domain expansion plans
+- `docs/` folder (gitignored) - Product design, PRDs, task lists, internal architecture decisions
+- Reason: AI Management Layer implementation, execution engine architecture, and domain expertise encoding are proprietary competitive advantages for Isagawa Corp
 
 **Backup Strategy:**
 - Cloud backup via OneDrive/Google Drive/Dropbox
 - Manual sync to cloud storage for disaster recovery
 
-**What's Public:**
-- Framework code (`framework/`, `tests/`, `mcp_server/`)
-- README.md (project documentation)
+**What's Public (for distribution):**
+- Framework code (`framework/`, `tests/`, `mcp_server/`) - distributed via `pip install isagawa-qa`
+- Skills (.md files) - distributed via Claude plugins
+- README.md (product documentation)
 
 ## Git Workflow
 

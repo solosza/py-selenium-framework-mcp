@@ -23,7 +23,10 @@ PRD Reference: enhanced-runtime-validation
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from utils.visual_feedback import VisualFeedback
 
 
 class ErrorCategory(Enum):
@@ -130,7 +133,8 @@ class RuntimeValidator:
     def __init__(
         self,
         snapshot_fn: Optional[Callable[[], Dict[str, Any]]] = None,
-        evaluate_fn: Optional[Callable[[str], Any]] = None
+        evaluate_fn: Optional[Callable[[str], Any]] = None,
+        visual_feedback: Optional["VisualFeedback"] = None
     ):
         """
         Initialize RuntimeValidator with browser access functions.
@@ -138,9 +142,11 @@ class RuntimeValidator:
         Args:
             snapshot_fn: Function that returns browser accessibility snapshot
             evaluate_fn: Function that evaluates JavaScript in browser
+            visual_feedback: Optional VisualFeedback instance for automatic highlighting
         """
         self._snapshot_fn = snapshot_fn
         self._evaluate_fn = evaluate_fn
+        self._visual_feedback = visual_feedback
         self._last_snapshot: Optional[Dict[str, Any]] = None
 
     def validate_element(
@@ -170,6 +176,7 @@ class RuntimeValidator:
         # Step 1: Check element exists
         existence_result = self._check_element_exists(locator)
         if not existence_result.is_valid:
+            self._highlight_element(existence_result, {})
             return existence_result
 
         element_info = existence_result.details.get("element_info", {})
@@ -178,16 +185,23 @@ class RuntimeValidator:
         if check_visibility:
             visibility_result = self._check_element_visible(locator, element_info)
             if not visibility_result.is_valid:
+                self._highlight_element(visibility_result, element_info)
                 return visibility_result
 
         # Step 3: Check interactability (if requested)
         if check_interactable:
             interactable_result = self._check_element_interactable(locator, element_info)
             if not interactable_result.is_valid:
+                self._highlight_element(interactable_result, element_info)
                 return interactable_result
 
         # All checks passed
-        return ValidationResult.valid(locator, element_info)
+        result = ValidationResult.valid(locator, element_info)
+
+        # Trigger visual highlighting if enabled
+        self._highlight_element(result, element_info)
+
+        return result
 
     def validate_element_from_snapshot(
         self,
@@ -249,6 +263,38 @@ class RuntimeValidator:
     # =========================================================================
     # PRIVATE VALIDATION METHODS
     # =========================================================================
+
+    def _highlight_element(
+        self,
+        result: ValidationResult,
+        element_info: Dict[str, Any]
+    ) -> bool:
+        """
+        Highlight element based on validation result.
+
+        Args:
+            result: Validation result with is_valid and error_category
+            element_info: Element info containing ref
+
+        Returns:
+            True if highlighted, False if no visual feedback configured
+        """
+        if not self._visual_feedback:
+            return False
+
+        # Get element ref from element_info or result details
+        ref = element_info.get("ref", "") or result.details.get("locator", "")
+        if not ref:
+            return False
+
+        try:
+            if result.is_valid:
+                return self._visual_feedback.highlight_valid(ref)
+            else:
+                error_category = result.error_category.value if result.error_category else "UNKNOWN"
+                return self._visual_feedback.highlight_invalid(ref, error_category)
+        except Exception:
+            return False
 
     def _check_element_exists(self, locator: str) -> ValidationResult:
         """Check if element exists in the page."""

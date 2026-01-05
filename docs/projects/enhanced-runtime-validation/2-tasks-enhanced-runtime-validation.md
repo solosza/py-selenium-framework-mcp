@@ -2,7 +2,7 @@
 
 **PRD:** `1-prd-enhanced-runtime-validation.md`
 **Generated:** 2025-12-30
-**Version:** 1.3 (Visual Feedback moved to Phase 6)
+**Version:** 1.5 (Tasks 1-8 complete, URL-based scope discovery implemented)
 
 ---
 
@@ -14,7 +14,7 @@ Each module has ONE responsibility:
 
 | Module | Single Responsibility | Returns |
 |--------|----------------------|---------|
-| `scope_discovery.py` | "How many pages in this workflow?" | Scope analysis result |
+| `scope_discovery.py` | "Track pages via URL changes during navigation" | ScopeResult (page_count, pages list) |
 | `runtime_validator.py` | "Is element usable? What's wrong?" | Validation result with error category |
 | `fix_suggester.py` | "Given error, what fix to try?" | `Optional[dict]` - None if no known fix |
 | `knowledge_base.py` | "Read/write patterns from KB file" | Pattern data |
@@ -98,25 +98,38 @@ user         (AI orchestration)
   - [x] 1.3 **ASSESS:** Read `mcp_server/tools/gates/qg_discovered_elements.py` for Step 5 gate
   - [x] 1.4 **CREATE:** `mcp_server/utils/scope_discovery.py` with:
     - `ScopeDiscovery` class
-    - `analyze_workflow(bdd_scenarios: list) -> ScopeResult` - Analyze BDD scenarios for page count
-    - `get_page_list() -> List[PageInfo]` - Return list of page identifiers
-    - `is_single_page() -> bool` - Convenience check
-    - `is_multi_page() -> bool` - Convenience check
+    - `analyze_workflow(bdd_scenarios: list) -> ScopeResult` - Analyze BDD scenarios for page count (fallback)
+    - `register_page(url) -> PageInfo` - Register page via URL (primary method)
+    - `is_new_page(current_url, previous_url) -> bool` - Detect page change via URL comparison
+    - `get_scope_result() -> ScopeResult` - Get final scope from navigation tracking
+    - `create_navigation_tracker()` - Convenience function
   - [x] 1.5 **CREATE:** Unit tests `mcp_server/_dev_tests/test_scope_discovery.py`
   - [x] 1.6 Run checks (lint, type, tests) following testing skill
   - [x] 1.7 **Audit:** Verify testing skill conventions followed
   - [x] 1.8 Record results in this file
   - [x] 1.9 Commit: `feat: add scope discovery for two-pass element discovery (Task 1.0)`
+  - [x] 1.10 **UPDATE (2025-12-31):** Replaced pattern-matching with URL-based detection per PRD FR-04
 
 **Done When:**
 - [x] ScopeDiscovery class detects single vs multi-page workflows
 - [x] Unit tests pass with happy path, edge cases
 - [x] Testing skill failure protocol followed if any failures
+- [x] **URL-based detection works universally** (validated on SauceDemo)
 
 **Results (2025-12-30):**
 ```bash
 pytest mcp_server/_dev_tests/test_scope_discovery.py -v
 # 14 passed, 14 warnings (custom marks) in 0.10s
+```
+
+**Results (2025-12-31 - URL-based update):**
+```bash
+# Tested on SauceDemo checkout flow - 5 pages detected via URL changes
+# /inventory.html -> InventoryPage
+# /cart.html -> CartPage
+# /checkout-step-one.html -> CheckoutStepOnePage
+# /checkout-step-two.html -> CheckoutStepTwoPage
+# /checkout-complete.html -> CheckoutCompletePage
 ```
 
 ---
@@ -367,50 +380,134 @@ pytest mcp_server/_dev_tests/test_fix_suggester.py mcp_server/_dev_tests/test_kn
 
 ### Phase 7: WebInterface Checker
 
-- [ ] 7.0 Implement WebInterface Checker [CORE]
-  - [ ] 7.1 Create branch `feature/7.0-webinterface-checker`
-  - [ ] 7.2 **ASSESS:** Read `framework/interfaces/web_interface.py` to understand structure
-  - [ ] 7.3 **CREATE:** `mcp_server/utils/webinterface_checker.py` with:
+- [x] 7.0 Implement WebInterface Checker [CORE]
+  - [x] 7.1 Create branch `feature/7.0-webinterface-checker`
+  - [x] 7.2 **ASSESS:** Read `framework/interfaces/web_interface.py` to understand structure
+  - [x] 7.3 **CREATE:** `mcp_server/utils/webinterface_checker.py` with:
     - `WebInterfaceChecker` class
     - `get_available_methods() -> List[MethodInfo]` - Parse WebInterface for public methods
     - `method_exists(method_name: str) -> bool` - Check if method exists
     - `get_method_signature(method_name: str) -> Optional[MethodSignature]` - Get parameters
-  - [ ] 7.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_webinterface_checker.py`
-  - [ ] 7.5 Run checks following testing skill
-  - [ ] 7.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 7.7 Record results
-  - [ ] 7.8 Commit: `feat: add WebInterface method checker (Task 7.0)`
+  - [x] 7.4 **CREATE:** Unit tests `mcp_server/_dev_tests/test_webinterface_checker.py`
+  - [x] 7.5 Run checks following testing skill
+  - [x] 7.6 **Audit:** Verify testing skill conventions followed
+  - [x] 7.7 Record results
+  - [x] 7.8 Commit: `feat: add WebInterface method checker (Task 7.0)`
 
 **Done When:**
-- WebInterfaceChecker parses WebInterface class
-- method_exists() works correctly
-- Tests cover existing and non-existing methods
-- Tests pass
+- [x] WebInterfaceChecker parses WebInterface class
+- [x] method_exists() works correctly
+- [x] Tests cover existing and non-existing methods
+- [x] Tests pass
+
+**Results (2025-12-31):**
+```bash
+pytest mcp_server/_dev_tests/test_webinterface_checker.py -v
+# 49 passed in 0.15s
+```
 
 ---
 
 ### Phase 8: POM Runtime Validation (Step 6)
 
-- [ ] 8.0 Extend Step 6 Gate with Runtime Validation [CORE]
-  - [ ] 8.1 Create branch `feature/8.0-pom-runtime-validation`
-  - [ ] 8.2 **ASSESS:** Read current `qg_page_object.py` implementation
-  - [ ] 8.3 **EXTEND:** `mcp_server/tools/gates/qg_page_object.py`:
-    - Import RuntimeValidator, FixSuggester, WebInterfaceChecker
-    - Add runtime validation in POST mode (call RuntimeValidator)
-    - Add WebInterface method check (call WebInterfaceChecker)
-    - Return validation result with error category
-    - **Do NOT implement fix loop** - that's AI orchestration
-  - [ ] 8.4 **EXTEND:** Gate tests for new validation
-  - [ ] 8.5 Run checks following testing skill
-  - [ ] 8.6 **Audit:** Verify testing skill conventions followed
-  - [ ] 8.7 Record results
-  - [ ] 8.8 Commit: `feat: add runtime validation to Step 6 gate (Task 8.0)`
+- [x] 8.0 Extend Step 6 Gate with Runtime Validation [CORE]
+  - [x] 8.1 Create branch `feature/8.0-gate-extensions`
+  - [x] 8.2 **ASSESS:** Read current `qg_page_object.py` implementation
+  - [x] 8.3 **EXTEND:** `mcp_server/tools/gates/qg_page_object.py`:
+    - Import WebInterfaceChecker
+    - Add `_validate_webinterface_methods()` in POST mode
+    - Regex pattern extracts `self.web.<method>()` calls
+    - Validates each method exists via WebInterfaceChecker
+    - Reports invalid methods with suggestions for typos
+  - [x] 8.4 **EXTEND:** Gate tests for new validation (8 new tests)
+  - [x] 8.5 Run checks following testing skill
+  - [x] 8.6 **Audit:** Verify testing skill conventions followed
+  - [x] 8.7 Record results
+  - [x] 8.8 Commit: `feat: integrate WebInterfaceChecker into qg_page_object (Task 8.0)`
 
 **Done When:**
-- POM locators validated at runtime
-- WebInterface method existence verified
-- Gate returns error category (not fix)
-- Tests pass
+- [x] POM WebInterface method calls validated
+- [x] WebInterface method existence verified
+- [x] Gate returns error with suggestions for typos
+- [x] Tests pass
+
+**Results (2025-12-31):**
+```bash
+pytest mcp_server/_dev_tests/test_gates/test_qg_page_object.py -v
+# 47 passed in 0.25s
+
+pytest mcp_server/_dev_tests/test_gates/ -v
+# 402 passed in 1.5s
+```
+
+---
+
+### Phase 8.5: Multi-Page Workflow Support (DD-44)
+
+**Context:** DEF-044 discovered that multi-page BDD workflows (e.g., 4-step wizard) need enforcement across ALL code generation steps, not just Steps 5-6.
+
+**Multi-Page Data Flow:**
+```
+Step 5: Discover elements for ALL pages (loop)
+    ↓ discovered_pages: {Page1: [...], Page2: [...], Page3: [...], Page4: [...]}
+Step 6: Generate POMs for ALL pages (loop)
+    ↓ pom_metadata: {Page1: {class, import, methods}, Page2: {...}, ...}
+Step 7: Task must compose ALL POMs from scope
+    ↓ task_metadata: {pom_dependencies: [Page1, Page2, Page3, Page4]}
+Step 8: Role uses Task (single)
+    ↓ role_metadata: {task_dependency: TaskClass}
+Step 9: Test needs ALL POMs for assertions
+    ↓ test assertions use POM state methods from all pages
+```
+
+- [x] 8.5.0 Multi-Page Scope Detection (Step 5) - DONE
+  - [x] 8.5.1 Auto-detect page count from BDD via _detect_page_count_from_bdd()
+  - [x] 8.5.2 Require scope_result when page_count > 1 (DD-44 enforcement)
+  - [x] 8.5.3 Return multi_page_progress with hint for incomplete discovery
+  - [x] 8.5.4 Add 8 unit tests for DD-44 detection
+  - [x] 8.5.5 Update step-05.md with Multi-Page Discovery section
+
+- [x] 8.5.6 Multi-Page Discovery Blocking (Step 6 PRE) - DONE
+  - [x] 8.5.7 Block Step 6 PRE if discovery_complete is False
+  - [x] 8.5.8 Add DD-44 to qg_page_object.py docstring
+
+- [x] 8.5.9 Multi-Page POM Generation Loop (Step 6) [CORE] ✅ COMPLETE
+  - [x] 8.5.10 Update step-06.md with multi-page POM generation loop
+  - [x] 8.5.11 Add generated_poms dict for per-page tracking
+  - [x] 8.5.12 Track pom_generation_progress (poms_generated, total_poms, generation_complete)
+  - [x] 8.5.13 Add 11 tests for multi-page POM tracking
+
+**DC-01: Multi-Page Loop Scope Clarification (2025-12-31)**
+
+Multi-page loop tracking ONLY applies to Step 6 (POM generation):
+
+| Step | Layer | Loop? | Rationale |
+|------|-------|-------|-----------|
+| Step 6 | POMs | YES | One POM per page (1:1 mapping) |
+| Step 7 | Tasks | NO | Tasks are per-domain, not per-page |
+| Step 8 | Roles | NO | One Role per persona |
+| Step 9 | Tests | NO | One test per scenario |
+
+The following tasks were scoped out per DC-01:
+- ~~8.5.14-8.5.18 Multi-Page Task Composition~~ - NOT APPLICABLE (Tasks are per-domain)
+- ~~8.5.19-8.5.22 Multi-Page Test Assertions~~ - NOT APPLICABLE (Tests are per-scenario)
+
+- [ ] 8.5.14 Production Validation [GLUE]
+  - [ ] 8.5.15 Re-run SauceDemo checkout workflow with multi-page POM generation
+  - [ ] 8.5.16 Verify all pages discovered → all POMs generated
+  - [ ] 8.5.17 Mark DEF-044 as RESOLVED after successful production test
+
+**Done When:**
+- Multi-page BDD workflows enforce scope discovery at Step 5 ✅
+- Step 6 generates POMs for ALL pages in scope ✅
+- Step 6 tracks generation progress with completion flag ✅
+- Production validation passes
+- DEF-044 marked RESOLVED
+
+**Current Status:**
+- 8.5.0-8.5.8: COMPLETE (Steps 5-6 enforcement)
+- 8.5.9-8.5.13: COMPLETE (Multi-page POM generation loop)
+- 8.5.14-8.5.17: PENDING (Production validation)
 
 ---
 
@@ -598,7 +695,7 @@ pytest mcp_server/_dev_tests/test_fix_suggester.py mcp_server/_dev_tests/test_kn
 
 | File | Single Responsibility |
 |------|----------------------|
-| `mcp_server/utils/scope_discovery.py` | Analyze workflow scope |
+| `mcp_server/utils/scope_discovery.py` | Track pages via URL changes during navigation |
 | `mcp_server/utils/runtime_validator.py` | Validate elements, return error category |
 | `mcp_server/utils/fix_suggester.py` | Suggest fixes (returns None if unknown) |
 | `mcp_server/utils/knowledge_base.py` | Read/write KB patterns |
@@ -660,5 +757,5 @@ pytest mcp_server/_dev_tests/test_fix_suggester.py mcp_server/_dev_tests/test_kn
 
 ---
 
-**Last Updated:** 2025-12-30
-**Version:** 1.3 (Visual Feedback moved to Phase 6)
+**Last Updated:** 2025-12-31
+**Version:** 1.5 (Tasks 1-8 complete, URL-based scope discovery implemented)

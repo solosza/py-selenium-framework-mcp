@@ -1,28 +1,4 @@
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python \"D:/my_ai_projects/py_sel_framework_mcp/.claude/hooks/qa-gate-enforcer.py\""
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "mcp__qa-automation__qg_.*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python \"D:/my_ai_projects/py_sel_framework_mcp/.claude/hooks/audit-trail-writer.py\""
-          }
-        ]
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "WebFetch(domain:www.automationpractice.pl)",
@@ -77,7 +53,9 @@
       "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" add mcp_server/tools/gates/qg_role.py mcp_server/_dev_tests/test_gates/test_qg_role.py .claude/skills/qa-guidance-layer/references/step-08.md)",
       "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/14.0-skill-update)",
       "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" diff FRAMEWORK.md)",
-      "WebFetch(domain:api.github.com)"
+      "WebFetch(domain:api.github.com)",
+      "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" push origin main)",
+      "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" stash pop)"
     ],
     "deny": [],
     "ask": []
@@ -86,6 +64,29 @@
   "enabledMcpjsonServers": [
     "qa-automation",
     "playwright"
-  ]
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"D:/my_ai_projects/py_sel_framework_mcp/.claude/hooks/qa-gate-enforcer.py\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__qa-automation__qg_.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"D:/my_ai_projects/py_sel_framework_mcp/.claude/hooks/audit-trail-writer.py\""
+          }
+        ]
+      }
+    ]
+  }
 }
-

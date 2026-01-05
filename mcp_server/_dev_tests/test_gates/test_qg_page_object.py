@@ -16,10 +16,15 @@ from unittest.mock import patch, MagicMock
 
 @pytest.fixture
 def mock_state_complete():
-    """Mock StateManager with Step 5 complete."""
+    """Mock StateManager with Step 5 complete (single-page workflow)."""
     with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
         state_manager = MagicMock()
         state_manager.is_step_complete.return_value = True
+        # Task 8.5.9: Add default single-page Step 5 state
+        state_manager.get_step.side_effect = lambda step: {
+            5: {"total_pages": 1, "discovery_complete": True},
+            6: None
+        }.get(step)
         mock.return_value = state_manager
         yield state_manager
 
@@ -30,6 +35,8 @@ def mock_state_incomplete():
     with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
         state_manager = MagicMock()
         state_manager.is_step_complete.return_value = False
+        # Task 8.5.9: Add default Step 5 state (even if incomplete)
+        state_manager.get_step.return_value = {"total_pages": 1, "discovery_complete": True}
         mock.return_value = state_manager
         yield state_manager
 
@@ -1043,3 +1050,319 @@ class TestWebInterfaceMethodValidation:
         assert "type_text" in matches
         assert "navigate_to" in matches
         assert "is_element_displayed" in matches
+
+
+# =============================================================================
+# MULTI-PAGE POM TRACKING (Task 8.5.9)
+# =============================================================================
+
+class TestMultiPagePomTracking:
+    """Task 8.5.9: Multi-page POM generation tracking tests."""
+
+    @pytest.fixture
+    def mock_multi_page_state(self):
+        """Mock StateManager with multi-page Step 5 state."""
+        with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
+            state_manager = MagicMock()
+            state_manager.is_step_complete.return_value = True
+            # Multi-page Step 5 state
+            state_manager.get_step.side_effect = lambda step: {
+                5: {
+                    "total_pages": 4,
+                    "discovery_complete": True,
+                    "discovered_pages": {
+                        "LoginPage": [],
+                        "InventoryPage": [],
+                        "CartPage": [],
+                        "CheckoutPage": []
+                    }
+                },
+                6: None  # No Step 6 state yet
+            }.get(step)
+            mock.return_value = state_manager
+            yield state_manager
+
+    @pytest.fixture
+    def mock_partial_pom_state(self):
+        """Mock StateManager with partially completed POM generation."""
+        with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
+            state_manager = MagicMock()
+            state_manager.is_step_complete.return_value = True
+            state_manager.get_step.side_effect = lambda step: {
+                5: {
+                    "total_pages": 4,
+                    "discovery_complete": True,
+                    "discovered_pages": {
+                        "LoginPage": [],
+                        "InventoryPage": [],
+                        "CartPage": [],
+                        "CheckoutPage": []
+                    }
+                },
+                6: {
+                    "generated_poms": {
+                        "LoginPage": {"code": "...", "metadata": {}},
+                        "InventoryPage": {"code": "...", "metadata": {}}
+                    },
+                    "poms_generated": 2,
+                    "total_poms": 4,
+                    "generation_complete": False
+                }
+            }.get(step)
+            mock.return_value = state_manager
+            yield state_manager
+
+    def test_post_saves_generated_poms_dict(self, mock_multi_page_state, valid_post_input):
+        """
+        P0: POST validation saves generated_poms dict with per-page tracking.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["page_name"] = "LoginPage"
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "pass"
+        # Verify state was saved with generated_poms
+        mock_multi_page_state.save.assert_called()
+        saved_data = mock_multi_page_state.save.call_args[1]["data"]
+        assert "generated_poms" in saved_data
+        assert "LoginPage" in saved_data["generated_poms"]
+
+    def test_post_tracks_pom_generation_progress(self, mock_multi_page_state, valid_post_input):
+        """
+        P0: POST validation tracks poms_generated / total_poms progress.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["page_name"] = "LoginPage"
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "pass"
+        saved_data = mock_multi_page_state.save.call_args[1]["data"]
+        assert saved_data["poms_generated"] == 1
+        assert saved_data["total_poms"] == 4
+        assert saved_data["generation_complete"] is False
+
+    def test_post_accumulates_poms_across_calls(self, mock_partial_pom_state, valid_post_input):
+        """
+        P0: POST validation accumulates POMs across multiple calls.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["page_name"] = "CartPage"
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "pass"
+        saved_data = mock_partial_pom_state.save.call_args[1]["data"]
+        # Should have 3 POMs now (LoginPage, InventoryPage from existing + CartPage)
+        assert saved_data["poms_generated"] == 3
+        assert "CartPage" in saved_data["generated_poms"]
+        assert "LoginPage" in saved_data["generated_poms"]
+        assert "InventoryPage" in saved_data["generated_poms"]
+
+    def test_post_returns_multi_page_progress(self, mock_multi_page_state, valid_post_input):
+        """
+        P0: POST validation returns multi_page_progress for multi-page workflows.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["page_name"] = "LoginPage"
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "pass"
+        assert "multi_page_progress" in result
+        progress = result["multi_page_progress"]
+        assert progress["poms_generated"] == 1
+        assert progress["total_poms"] == 4
+        assert progress["generation_complete"] is False
+        assert progress["remaining_poms"] == 3
+
+    def test_post_returns_hint_when_incomplete(self, mock_multi_page_state, valid_post_input):
+        """
+        P0: POST validation returns hint when POM generation is incomplete.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        valid_post_input["page_name"] = "LoginPage"
+
+        # Act
+        result = QGPageObject.validate_post(valid_post_input)
+
+        # Assert
+        assert result["status"] == "pass"
+        assert "hint" in result
+        assert "1/4" in result["hint"]
+        assert "Step 7" in result["hint"]
+
+    def test_post_generation_complete_when_all_poms_done(self, valid_post_input):
+        """
+        P0: POST validation sets generation_complete=True when all POMs done.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
+            state_manager = MagicMock()
+            state_manager.is_step_complete.return_value = True
+            state_manager.get_step.side_effect = lambda step: {
+                5: {"total_pages": 2, "discovery_complete": True},
+                6: {
+                    "generated_poms": {"LoginPage": {"code": "...", "metadata": {}}},
+                    "poms_generated": 1,
+                    "total_poms": 2,
+                    "generation_complete": False
+                }
+            }.get(step)
+            mock.return_value = state_manager
+
+            valid_post_input["page_name"] = "InventoryPage"
+
+            # Act
+            result = QGPageObject.validate_post(valid_post_input)
+
+            # Assert
+            assert result["status"] == "pass"
+            saved_data = state_manager.save.call_args[1]["data"]
+            assert saved_data["generation_complete"] is True
+            assert saved_data["poms_generated"] == 2
+
+    def test_is_generation_complete_returns_false_when_incomplete(self):
+        """
+        P0: is_generation_complete() returns False when generation incomplete.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
+            state_manager = MagicMock()
+            state_manager.get_step.return_value = {
+                "generation_complete": False,
+                "poms_generated": 2,
+                "total_poms": 4
+            }
+            mock.return_value = state_manager
+
+            # Act
+            result = QGPageObject.is_generation_complete()
+
+            # Assert
+            assert result is False
+
+    def test_is_generation_complete_returns_true_when_done(self):
+        """
+        P0: is_generation_complete() returns True when all POMs generated.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
+            state_manager = MagicMock()
+            state_manager.get_step.return_value = {
+                "generation_complete": True,
+                "poms_generated": 4,
+                "total_poms": 4
+            }
+            mock.return_value = state_manager
+
+            # Act
+            result = QGPageObject.is_generation_complete()
+
+            # Assert
+            assert result is True
+
+    def test_get_generation_progress_returns_status(self):
+        """
+        P0: get_generation_progress() returns current progress status.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
+            state_manager = MagicMock()
+            state_manager.get_step.return_value = {
+                "generated_poms": {
+                    "LoginPage": {"code": "...", "metadata": {}},
+                    "InventoryPage": {"code": "...", "metadata": {}}
+                },
+                "poms_generated": 2,
+                "total_poms": 4,
+                "generation_complete": False
+            }
+            mock.return_value = state_manager
+
+            # Act
+            progress = QGPageObject.get_generation_progress()
+
+            # Assert
+            assert progress["poms_generated"] == 2
+            assert progress["total_poms"] == 4
+            assert progress["generation_complete"] is False
+            assert "LoginPage" in progress["generated_pages"]
+            assert "InventoryPage" in progress["generated_pages"]
+
+    def test_single_page_workflow_still_works(self, valid_post_input):
+        """
+        P0: Single-page workflows still work (backward compatibility).
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
+            state_manager = MagicMock()
+            state_manager.is_step_complete.return_value = True
+            # Single-page workflow (total_pages = 1)
+            state_manager.get_step.side_effect = lambda step: {
+                5: {"total_pages": 1, "discovery_complete": True},
+                6: None
+            }.get(step)
+            mock.return_value = state_manager
+
+            valid_post_input["page_name"] = "LoginPage"
+
+            # Act
+            result = QGPageObject.validate_post(valid_post_input)
+
+            # Assert
+            assert result["status"] == "pass"
+            # No multi_page_progress for single-page
+            assert "multi_page_progress" not in result
+            # Still saves backward-compatible fields
+            saved_data = state_manager.save.call_args[1]["data"]
+            assert "pom_code" in saved_data
+            assert "pom_metadata" in saved_data
+            assert saved_data["generation_complete"] is True
+
+    def test_page_name_fallback_to_metadata_class_name(self, valid_post_input):
+        """
+        P1: Uses metadata.class_name when page_name not provided in input.
+        """
+        # Arrange
+        from tools.gates.qg_page_object import QGPageObject
+        with patch("tools.gates.qg_page_object.QGPageObject._get_state_manager") as mock:
+            state_manager = MagicMock()
+            state_manager.is_step_complete.return_value = True
+            state_manager.get_step.side_effect = lambda step: {
+                5: {"total_pages": 1},
+                6: None
+            }.get(step)
+            mock.return_value = state_manager
+
+            # Remove page_name from input, but metadata has class_name
+            if "page_name" in valid_post_input:
+                del valid_post_input["page_name"]
+            valid_post_input["metadata"]["class_name"] = "LoginPage"
+
+            # Act
+            result = QGPageObject.validate_post(valid_post_input)
+
+            # Assert
+            assert result["status"] == "pass"
+            saved_data = state_manager.save.call_args[1]["data"]
+            assert "LoginPage" in saved_data["generated_poms"]

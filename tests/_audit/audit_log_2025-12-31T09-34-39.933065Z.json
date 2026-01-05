@@ -1,0 +1,30 @@
+{
+  "run_id": "2025-12-31T09:34:39.933065Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 6,
+      "type": "self-heal",
+      "attempt": 1,
+      "error": "skeleton",
+      "timestamp": "2025-12-31T09:34:39.933065Z"
+    },
+    {
+      "step": 6,
+      "type": "self-heal",
+      "attempt": 2,
+      "error": "missing method",
+      "timestamp": "2025-12-31T09:34:39.934064Z"
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 0,
+    "gates_failed": 0,
+    "self_heals": 2,
+    "final_result": "incomplete",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

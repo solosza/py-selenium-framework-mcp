@@ -10,14 +10,17 @@ PRE Validation:
 - credential_strategy present and valid (IC-05-01)
 - discovery_method present and valid ("tool2" or "playwright") (DD-33)
 - NEW (Task 2.0): If scope_result provided, validate page_name is in scope's page list
+- NEW (DD-44): Auto-detect multi-page from BDD, require scope_result if page_count > 1
 
 POST Validation:
 - elements array present and not empty
 - Each element has: suggested_name, element_type, at least one non-empty locator (IC-05-03)
 - page_name is PascalCase (IC-05-02)
 - NEW (Task 2.0): Track per-page elements, track discovery progress for multi-page workflows
+- NEW (DD-44): Block Step 6 if multi-page and discovery incomplete
+- NEW (DD-46): validation_results required (from RuntimeValidator, triggers VisualFeedback)
 
-Enforces: DD-19, DD-20, DD-21, DD-24, DD-33, IC-05-01, IC-05-02, IC-05-03
+Enforces: DD-19, DD-20, DD-21, DD-24, DD-33, DD-44, DD-46, IC-05-01, IC-05-02, IC-05-03
 """
 
 import re
@@ -25,6 +28,7 @@ from typing import Any, Dict, List, Optional
 
 from .base_gate import BaseGate
 from utils.state_manager import StateManager
+from utils.scope_discovery import ScopeDiscovery, ScopeResult
 
 
 class QGDiscoveredElements(BaseGate):
@@ -38,6 +42,9 @@ class QGDiscoveredElements(BaseGate):
 
     # Valid discovery methods (from DD-33)
     VALID_DISCOVERY_METHODS = {"tool2", "playwright"}
+
+    # Valid element types (DEF-045 two-pass discovery)
+    VALID_ELEMENT_TYPES = {"input", "output"}
 
     # PascalCase pattern (IC-05-02): starts with uppercase, alphanumeric
     PASCAL_CASE_PATTERN = re.compile(r'^[A-Z][a-zA-Z0-9]*$')
@@ -135,8 +142,26 @@ class QGDiscoveredElements(BaseGate):
                 fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}. Use 'playwright' if Playwright prepared page state."
             )
 
-        # Task 2.0: Validate scope_result if provided (for multi-page workflows)
+        # Validate element type (DEF-045 two-pass discovery)
+        # Default to "input" for backward compatibility
+        element_type = input_data.get("type", "input")
+        if element_type not in cls.VALID_ELEMENT_TYPES:
+            return cls.fail_response(
+                error=f"Invalid type: '{element_type}'",
+                fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_ELEMENT_TYPES))}. Use 'input' for forms/buttons (PASS 1), 'output' for messages/confirmations (PASS 2)."
+            )
+
+        # DD-44: Auto-detect multi-page from BDD and enforce scope_result
         scope_result = input_data.get("scope_result")
+        detected_page_count = cls._detect_page_count_from_bdd(state_manager)
+
+        if detected_page_count > 1 and scope_result is None:
+            return cls.fail_response(
+                error=f"Multi-page workflow detected ({detected_page_count} pages) but scope_result not provided (DD-44)",
+                fix_hint="Call scope_discovery.analyze_workflow(bdd_scenarios) first, then pass scope_result to this gate."
+            )
+
+        # Task 2.0: Validate scope_result if provided (for multi-page workflows)
         if scope_result is not None:
             scope_validation = cls._validate_scope_result(scope_result, page_name)
             if scope_validation is not None:
@@ -210,6 +235,49 @@ class QGDiscoveredElements(BaseGate):
             if name and isinstance(name, str):
                 names.append(name)
         return names
+
+    @classmethod
+    def _detect_page_count_from_bdd(cls, state_manager: StateManager) -> int:
+        """
+        DD-44: Detect page count from BDD scenarios OR snapshot analysis.
+
+        Priority:
+        1. Check if snapshot_analysis was stored in Step 5 state (most reliable)
+        2. Fall back to BDD analysis from Step 4 (less reliable)
+
+        Note: Prefer AI calling analyze_snapshot_for_pages() with actual DOM
+        and passing scope_result explicitly. BDD analysis is a fallback only.
+
+        Args:
+            state_manager: StateManager instance to read state
+
+        Returns:
+            Detected page count (defaults to 1 if detection fails)
+        """
+        try:
+            # Priority 1: Check for snapshot-based analysis (more reliable)
+            step_5_state = state_manager.get_step(5) or {}
+            if step_5_state.get("total_pages", 0) > 1:
+                return step_5_state["total_pages"]
+
+            # Priority 2: Fall back to BDD analysis
+            step_4_state = state_manager.get_step(4)
+            if not step_4_state:
+                return 1  # No Step 4 state, assume single page
+
+            test_scenarios = step_4_state.get("test_scenarios", [])
+            if not test_scenarios:
+                return 1  # No scenarios, assume single page
+
+            # Use ScopeDiscovery to analyze BDD
+            discovery = ScopeDiscovery()
+            result = discovery.analyze_workflow(test_scenarios)
+
+            return result.page_count
+
+        except Exception:
+            # If anything fails, default to single page (don't block workflow)
+            return 1
 
     @classmethod
     def get_discovery_progress(cls) -> Dict[str, Any]:
@@ -343,6 +411,21 @@ class QGDiscoveredElements(BaseGate):
             if element_error:
                 return element_error
 
+        # DD-46: Validate validation_results (from RuntimeValidator, triggers VisualFeedback)
+        validation_results = input_data.get("validation_results")
+        if validation_results is None:
+            return cls.fail_response(
+                error="Missing required field: validation_results (DD-46)",
+                fix_hint="Call RuntimeValidator.validate_element() for each discovered element. "
+                         "RuntimeValidator automatically triggers VisualFeedback for visual highlights. "
+                         "Collect results into validation_results dict with valid_count, error_count, elements."
+            )
+
+        # Validate validation_results structure
+        validation_error = cls._validate_validation_results(validation_results)
+        if validation_error:
+            return validation_error
+
         # Validate page_name PascalCase (IC-05-02)
         page_name = input_data.get("page_name")
         if page_name is None:
@@ -364,37 +447,74 @@ class QGDiscoveredElements(BaseGate):
             )
 
         # Task 2.0: Track per-page elements for multi-page workflows
+        # DEF-045: Track BOTH input and output elements per page
         state_manager = cls._get_state_manager()
         scope_result = input_data.get("scope_result")
+        element_type = input_data.get("type", "input")  # Default to "input" for backward compat
 
         # Load existing step 5 state to preserve per-page tracking
         existing_state = state_manager.get_step(5) or {}
         discovered_pages = existing_state.get("discovered_pages", {})
 
-        # Add/update this page's elements
-        discovered_pages[page_name] = elements
+        # DEF-045: Nested structure for two-pass discovery
+        # Initialize page structure if first time
+        if page_name not in discovered_pages:
+            discovered_pages[page_name] = {}
+
+        # Add elements to appropriate type key
+        if element_type == "input":
+            discovered_pages[page_name]["input_elements"] = elements
+        elif element_type == "output":
+            discovered_pages[page_name]["output_elements"] = elements
 
         # Calculate discovery progress
         if scope_result and isinstance(scope_result, dict):
             total_pages = scope_result.get("page_count", 1)
-            pages_discovered = len(discovered_pages)
+            # DEF-045: Page is discovered when it has BOTH input AND output elements
+            pages_discovered = sum(
+                1 for page_data in discovered_pages.values()
+                if isinstance(page_data, dict) and
+                   page_data.get("input_elements") and
+                   page_data.get("output_elements")
+            )
             discovery_complete = pages_discovered >= total_pages
         else:
             total_pages = 1
-            pages_discovered = 1
-            discovery_complete = True
+            # Single page: check if both types present
+            page_data = discovered_pages.get(page_name, {})
+            if isinstance(page_data, dict):
+                has_both = page_data.get("input_elements") and page_data.get("output_elements")
+            else:
+                # Backward compat: old flat structure
+                has_both = bool(page_data)
+            pages_discovered = 1 if has_both else 0
+            discovery_complete = has_both
 
         # Save enhanced Step 5 state
         state_manager.save(5, {
-            "discovered_elements": elements,  # Keep for backward compatibility
+            "discovered_elements": elements,  # Keep for backward compatibility (last elements discovered)
             "page_name": page_name,  # Current page (backward compat)
-            "discovered_pages": discovered_pages,  # Task 2.0: Per-page tracking
-            "pages_discovered": pages_discovered,  # Task 2.0: Progress tracking
+            "discovered_pages": discovered_pages,  # Task 2.0 + DEF-045: Nested per-page tracking
+            "pages_discovered": pages_discovered,  # Task 2.0 + DEF-045: Pages with BOTH types
             "total_pages": total_pages,  # Task 2.0: Total scope
-            "discovery_complete": discovery_complete  # Task 2.0: Completion flag
+            "discovery_complete": discovery_complete  # Task 2.0 + DEF-045: True if all pages have both types
         })
 
-        return cls.pass_response()
+        # DD-44: For multi-page workflows, return progress info (don't block yet)
+        # AI is responsible for calling PRE/POST for each page
+        # Final check happens before Step 6 via is_discovery_complete()
+        response = cls.pass_response()
+        if total_pages > 1:
+            response["multi_page_progress"] = {
+                "pages_discovered": pages_discovered,
+                "total_pages": total_pages,
+                "discovery_complete": discovery_complete,
+                "remaining_pages": total_pages - pages_discovered
+            }
+            if not discovery_complete:
+                response["hint"] = f"Discovery in progress: {pages_discovered}/{total_pages} pages. Continue discovering remaining pages before proceeding to Step 6."
+
+        return response
 
     @classmethod
     def _validate_element(cls, element: Any, index: int) -> Dict[str, Any] | None:
@@ -454,6 +574,90 @@ class QGDiscoveredElements(BaseGate):
                 error=f"Element {index} has no valid locator (IC-05-03)",
                 fix_hint="At least one of locator_id, locator_css, or locator_xpath must be non-empty."
             )
+
+        return None
+
+    @classmethod
+    def _validate_validation_results(cls, validation_results: Any) -> Dict[str, Any] | None:
+        """
+        DD-46: Validate validation_results structure from RuntimeValidator.
+
+        Required structure:
+        {
+            "valid_count": int,
+            "error_count": int,
+            "elements": [
+                {"name": str, "is_valid": bool, "error_category": str|None}
+            ]
+        }
+
+        Returns:
+            None if valid, fail_response dict if invalid
+        """
+        if not isinstance(validation_results, dict):
+            return cls.fail_response(
+                error="validation_results must be a dictionary (DD-46)",
+                fix_hint="validation_results should be dict with valid_count, error_count, elements"
+            )
+
+        # Check valid_count
+        valid_count = validation_results.get("valid_count")
+        if valid_count is None:
+            return cls.fail_response(
+                error="validation_results missing required field: valid_count (DD-46)",
+                fix_hint="Include valid_count (int) - number of elements that passed validation"
+            )
+        if not isinstance(valid_count, int):
+            return cls.fail_response(
+                error="validation_results.valid_count must be an integer (DD-46)",
+                fix_hint="valid_count should be count of valid elements"
+            )
+
+        # Check error_count
+        error_count = validation_results.get("error_count")
+        if error_count is None:
+            return cls.fail_response(
+                error="validation_results missing required field: error_count (DD-46)",
+                fix_hint="Include error_count (int) - number of elements that failed validation"
+            )
+        if not isinstance(error_count, int):
+            return cls.fail_response(
+                error="validation_results.error_count must be an integer (DD-46)",
+                fix_hint="error_count should be count of invalid elements"
+            )
+
+        # Check elements array
+        elements = validation_results.get("elements")
+        if elements is None:
+            return cls.fail_response(
+                error="validation_results missing required field: elements (DD-46)",
+                fix_hint="Include elements array with per-element validation status"
+            )
+        if not isinstance(elements, list):
+            return cls.fail_response(
+                error="validation_results.elements must be a list (DD-46)",
+                fix_hint="elements should be list of validation results per element"
+            )
+
+        # Validate each element result has required fields
+        for i, elem_result in enumerate(elements):
+            if not isinstance(elem_result, dict):
+                return cls.fail_response(
+                    error=f"validation_results.elements[{i}] must be a dictionary (DD-46)",
+                    fix_hint="Each element result should have name, is_valid, error_category"
+                )
+
+            if "name" not in elem_result:
+                return cls.fail_response(
+                    error=f"validation_results.elements[{i}] missing 'name' field (DD-46)",
+                    fix_hint="Each element result must include the element name"
+                )
+
+            if "is_valid" not in elem_result:
+                return cls.fail_response(
+                    error=f"validation_results.elements[{i}] missing 'is_valid' field (DD-46)",
+                    fix_hint="Each element result must include is_valid (bool)"
+                )
 
         return None
 

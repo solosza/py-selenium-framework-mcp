@@ -1,11 +1,12 @@
 # PRD: Enhanced Runtime Validation Gates
 
-**Version:** 1.6 (Living Document)
+**Version:** 1.7 (Living Document)
 **Created:** 2025-12-30
-**Last Updated:** 2025-12-30
+**Last Updated:** 2025-12-31
 **Status:** Ready for Task Generation
 
 **Changelog:**
+- v1.7: Updated scope discovery to use URL-based detection (FR-04 clarified); Removed pattern-matching approach; Added navigation tracker API
 - v1.6: Added Visual Feedback feature (Section 4.13, FR-81 to FR-88, AT-12); Updated Section 6.4 with `visual_feedback.py`
 - v1.5: SRP-compliant module design - Added `scope_discovery.py`, `fix_suggester.py`; Updated Sections 6.4, 9.1, 18.3 with SRP responsibilities
 - v1.4: Split Section 9.0 into 9.0a (Runtime Checkpoints) and 9.0b (Development Testing); Added Sections 14-19 (NFRs, Observability, Security, Rollout, Repo Steps, Definition of Ready)
@@ -66,12 +67,18 @@
 | FR-01 | After Step 4 (test scenarios), AI initiates scope discovery before element discovery |
 | FR-02 | AI navigates to starting URL and takes Playwright snapshot |
 | FR-03 | AI prompts user: "What action advances this workflow?" |
-| FR-04 | User performs action; AI detects page change (URL, DOM, or key elements) |
-| FR-05 | AI logs each new page/state with distinguishing characteristics |
+| FR-04 | User performs action; AI detects page change via **URL comparison** (primary method - works universally). URL change = new page. No pattern matching required. |
+| FR-05 | AI logs each new page/state with URL and derived page name (e.g., `/cart.html` → `CartPage`) |
 | FR-06 | Repeat until user indicates workflow complete |
 | FR-07 | AI presents scope summary: "Found N pages: [list]" for confirmation |
 | FR-08 | Capture cross-POM dependencies (e.g., InquiryPage requires LoginPage) |
 | FR-09 | Save checkpoint: `workflow_scope.json` |
+
+**Implementation Notes (v1.7):**
+- URL-based detection is universal - works on any site regardless of UI patterns
+- Page names derived from URL path: `/checkout-step-one.html` → `CheckoutStepOnePage`
+- No dependency on numbered steppers, tabs, or breadcrumbs (pattern matching removed)
+- API: `tracker = create_navigation_tracker()`, `tracker.is_new_page(url, prev)`, `tracker.register_page(url)`
 
 ### 4.2 Per-Page Element Discovery (Step 5b - ENHANCED)
 
@@ -392,6 +399,12 @@ mcp_server/
     ├── webinterface_checker.py       ← NEW: WebInterface method existence check
     └── visual_feedback.py            ← NEW: Browser visual highlighting during validation
 ```
+
+### 6.5 Design Clarifications
+
+| ID | Clarification | Date |
+|----|---------------|------|
+| DC-01 | Multi-page loop tracking only applies to Step 6 (POMs). POMs are 1:1 with pages. Tasks are per-domain (shared), Roles are per-persona, Tests are per-scenario - none require loop tracking. | 2025-12-31 |
 
 ---
 
@@ -979,7 +992,7 @@ AND structural gates still function
 
 | New File | Location | Responsibility (SRP) |
 |----------|----------|---------------------|
-| `scope_discovery.py` | `mcp_server/utils/` | How many pages in this workflow? |
+| `scope_discovery.py` | `mcp_server/utils/` | Track pages via URL changes during navigation. API: `create_navigation_tracker()`, `is_new_page()`, `register_page()`, `get_scope_result()` |
 | `runtime_validator.py` | `mcp_server/utils/` | Is element usable? What's wrong? (categorization) |
 | `fix_suggester.py` | `mcp_server/utils/` | Given error, what fix to try? (returns Optional) |
 | `knowledge_base.py` | `mcp_server/utils/` | Read/write patterns from KB file |

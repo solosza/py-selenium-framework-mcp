@@ -174,6 +174,12 @@ mcp_server/
 | Architecture | `FRAMEWORK.md` Section 9 |
 | Meta-template | `.claude/skills/design-execution-engine/SKILL.md` |
 
+### Design Clarifications
+
+| ID | Clarification | Date |
+|----|---------------|------|
+| DC-01 | Multi-page loop tracking only applies to Step 6 (POMs). Tasks are per-domain, Roles are per-persona, Tests are per-scenario - none require loop tracking. | 2025-12-31 |
+
 ---
 
 ## 7. Technical Considerations

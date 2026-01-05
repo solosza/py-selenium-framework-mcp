@@ -47,7 +47,18 @@ def valid_post_input():
                 "locator_css": "",
                 "locator_xpath": ""
             }
-        ]
+        ],
+        "validation_results": {
+            "valid_count": 1,
+            "error_count": 0,
+            "elements": [
+                {
+                    "name": "EMAIL_INPUT",
+                    "is_valid": True,
+                    "error_category": None
+                }
+            ]
+        }
     }
 
 
@@ -820,3 +831,718 @@ class TestValidateRouting:
 
         # Assert
         assert result["status"] == "fail", "Should fail with missing mode"
+
+
+# =============================================================================
+# DD-44: Multi-Page Scope Discovery Tests
+# =============================================================================
+
+@pytest.fixture
+def mock_state_manager_multi_page():
+    """Mock StateManager with Step 4 complete and multi-page BDD scenarios."""
+    with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
+        state_manager = MagicMock()
+        state_manager.is_step_complete.return_value = True
+        # Multi-page BDD scenario (4 pages)
+        state_manager.get_step.return_value = {
+            "test_scenarios": [
+                {
+                    "given": ["user is on search page"],
+                    "when": ["user searches for customer", "user clicks new customer"],
+                    "then": ["user is on customer page"]
+                },
+                {
+                    "given": ["user is on customer page"],
+                    "when": ["user fills customer details"],
+                    "then": ["user sees contacts page"]
+                },
+                {
+                    "given": ["user is on contacts page"],
+                    "when": ["user fills contact details"],
+                    "then": ["user sees address page"]
+                },
+                {
+                    "given": ["user is on address page"],
+                    "when": ["user fills address details"],
+                    "then": ["customer is created"]
+                }
+            ]
+        }
+        mock.return_value = state_manager
+        yield mock
+
+
+@pytest.fixture
+def mock_state_manager_single_page():
+    """Mock StateManager with Step 4 complete and single-page BDD scenario."""
+    with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
+        state_manager = MagicMock()
+        state_manager.is_step_complete.return_value = True
+        # Single-page BDD scenario
+        state_manager.get_step.return_value = {
+            "test_scenarios": [
+                {
+                    "given": ["user is on login page"],
+                    "when": ["user enters credentials", "user clicks submit"],
+                    "then": ["user is logged in"]
+                }
+            ]
+        }
+        mock.return_value = state_manager
+        yield mock
+
+
+class TestDD44MultiPageDetection:
+    """DD-44: Multi-page scope discovery enforcement tests."""
+
+    @pytest.mark.unit
+    def test_pre_multi_page_without_scope_result_fails(self, valid_pre_input, mock_state_manager_multi_page):
+        """
+        P0: PRE fails when multi-page BDD detected but scope_result not provided (DD-44).
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        # No scope_result provided
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when multi-page without scope_result"
+        assert "DD-44" in result["error"], "Error should reference DD-44"
+        assert "scope_result" in result["error"].lower(), "Error should mention scope_result"
+
+    @pytest.mark.unit
+    def test_pre_multi_page_with_scope_result_passes(self, valid_pre_input, mock_state_manager_multi_page):
+        """
+        P0: PRE passes when multi-page BDD has scope_result provided (DD-44).
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        input_data["scope_result"] = {
+            "page_count": 4,
+            "pages": [
+                {"name": "SearchPage", "order": 1},
+                {"name": "CustomerPage", "order": 2},
+                {"name": "ContactsPage", "order": 3},
+                {"name": "AddressPage", "order": 4}
+            ]
+        }
+        input_data["page_name"] = "SearchPage"  # Must match one in scope
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass when multi-page with scope_result"
+
+    @pytest.mark.unit
+    def test_pre_single_page_without_scope_result_passes(self, valid_pre_input, mock_state_manager_single_page):
+        """
+        P0: PRE passes for single-page BDD without scope_result (DD-44 not triggered).
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        # No scope_result needed for single page
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass when single-page without scope_result"
+
+    @pytest.mark.unit
+    def test_pre_no_bdd_in_state_passes(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P1: PRE passes when no BDD scenarios in state (defaults to single page).
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        # mock_state_manager_step_4_complete doesn't set up get_step, so it returns None
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass when no BDD in state (defaults single page)"
+
+    @pytest.mark.unit
+    def test_detect_page_count_from_bdd(self, mock_state_manager_multi_page):
+        """
+        P0: _detect_page_count_from_bdd correctly counts pages from BDD.
+        """
+        # Arrange
+        state_manager = mock_state_manager_multi_page.return_value
+
+        # Act
+        page_count = QGDiscoveredElements._detect_page_count_from_bdd(state_manager)
+
+        # Assert
+        assert page_count >= 4, "Should detect at least 4 pages from multi-page BDD"
+
+
+@pytest.fixture
+def mock_state_manager_for_post():
+    """Mock StateManager for POST validation with clean state."""
+    with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
+        state_manager = MagicMock()
+        state_manager.get_step.return_value = {}  # Clean state
+        state_manager.save = MagicMock()  # Mock save
+        mock.return_value = state_manager
+        yield mock
+
+
+class TestDD44MultiPageProgress:
+    """DD-44: Multi-page discovery progress tracking tests."""
+
+    @pytest.mark.unit
+    def test_post_multi_page_returns_progress(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P0: POST returns multi_page_progress for multi-page workflows.
+
+        NOTE: DEF-045 two-pass discovery - page only counts as discovered when it has BOTH types.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["type"] = "input"  # DEF-045: First pass (input only)
+        input_data["scope_result"] = {
+            "page_count": 4,
+            "pages": [
+                {"name": "SearchPage", "order": 1},
+                {"name": "CustomerPage", "order": 2},
+                {"name": "ContactsPage", "order": 3},
+                {"name": "AddressPage", "order": 4}
+            ]
+        }
+        input_data["page_name"] = "SearchPage"
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass"
+        assert "multi_page_progress" in result, "Should include progress info"
+        assert result["multi_page_progress"]["total_pages"] == 4
+        # DEF-045: With only input elements, page not yet discovered (needs output too)
+        assert result["multi_page_progress"]["pages_discovered"] == 0
+        assert result["multi_page_progress"]["discovery_complete"] is False
+
+    @pytest.mark.unit
+    def test_post_single_page_no_progress(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P1: POST does not return multi_page_progress for single-page workflows.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        # No scope_result = single page
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass"
+        assert "multi_page_progress" not in result, "Should not include progress for single page"
+
+    @pytest.mark.unit
+    def test_post_incomplete_discovery_has_hint(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P0: POST returns hint when discovery incomplete.
+
+        NOTE: DEF-045 two-pass discovery - page only counts as discovered when it has BOTH types.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["type"] = "input"  # DEF-045: First pass (input only)
+        input_data["scope_result"] = {
+            "page_count": 4,
+            "pages": [{"name": "SearchPage", "order": 1}]
+        }
+        input_data["page_name"] = "SearchPage"
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should still pass (just one page at a time)"
+        assert "hint" in result, "Should include hint about remaining pages"
+        # DEF-045: With only input elements, shows 0/4 (needs output too)
+        assert "0/4" in result["hint"], "Hint should show progress (0 pages with both types)"
+
+
+# =============================================================================
+# DEF-045: Two-Pass Discovery - Type Parameter Tests
+# =============================================================================
+
+class TestDEF045TypeParameter:
+    """DEF-045: Type parameter validation tests for two-pass discovery."""
+
+    @pytest.mark.unit
+    def test_pre_type_missing_defaults_to_input(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P0: PRE without type parameter defaults to 'input' (backward compat).
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        # No type parameter
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass and default to input"
+
+    @pytest.mark.unit
+    def test_pre_type_input_passes(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P0: PRE passes when type='input'.
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        input_data["type"] = "input"
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass with type=input"
+
+    @pytest.mark.unit
+    def test_pre_type_output_passes(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P0: PRE passes when type='output'.
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        input_data["type"] = "output"
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass with type=output"
+
+    @pytest.mark.unit
+    def test_pre_type_invalid_fails(self, valid_pre_input, mock_state_manager_step_4_complete):
+        """
+        P0: PRE fails when type has invalid value.
+        """
+        # Arrange
+        input_data = valid_pre_input.copy()
+        input_data["type"] = "invalid_type"
+
+        # Act
+        result = QGDiscoveredElements.validate_pre(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail with invalid type"
+        assert "type" in result["error"].lower(), "Error should mention type"
+
+    @pytest.mark.unit
+    def test_post_type_input_saves_to_input_elements(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P0: POST with type='input' saves to discovered_pages[page]['input_elements'].
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["type"] = "input"
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "error_count": 0,
+            "elements": [{"name": "EMAIL_INPUT", "is_valid": True}]
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass"
+        # Verify state saved with nested structure
+        state_manager = mock_state_manager_for_post.return_value
+        saved_state = state_manager.save.call_args[0][1]
+        assert "LoginPage" in saved_state["discovered_pages"], "Page should be in discovered_pages"
+        assert "input_elements" in saved_state["discovered_pages"]["LoginPage"], "Should have input_elements key"
+
+    @pytest.mark.unit
+    def test_post_type_output_saves_to_output_elements(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P0: POST with type='output' saves to discovered_pages[page]['output_elements'].
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["type"] = "output"
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "error_count": 0,
+            "elements": [{"name": "SUCCESS_MESSAGE", "is_valid": True}]
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass"
+        # Verify state saved with nested structure
+        state_manager = mock_state_manager_for_post.return_value
+        saved_state = state_manager.save.call_args[0][1]
+        assert "LoginPage" in saved_state["discovered_pages"], "Page should be in discovered_pages"
+        assert "output_elements" in saved_state["discovered_pages"]["LoginPage"], "Should have output_elements key"
+
+    @pytest.mark.unit
+    def test_post_type_missing_defaults_to_input(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P0: POST without type parameter defaults to 'input' (backward compat).
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "error_count": 0,
+            "elements": [{"name": "EMAIL_INPUT", "is_valid": True}]
+        }
+        # No type parameter
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass and default to input"
+        state_manager = mock_state_manager_for_post.return_value
+        saved_state = state_manager.save.call_args[0][1]
+        assert "input_elements" in saved_state["discovered_pages"]["LoginPage"], "Should default to input_elements"
+
+
+# =============================================================================
+# DEF-045: Two-Pass Discovery - Nested State Tests
+# =============================================================================
+
+class TestDEF045NestedState:
+    """DEF-045: Nested state structure tests for two-pass discovery."""
+
+    @pytest.mark.unit
+    def test_post_creates_nested_structure_on_first_input(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P0: POST creates nested structure on first input pass.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["type"] = "input"
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "error_count": 0,
+            "elements": [{"name": "EMAIL_INPUT", "is_valid": True}]
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass"
+        state_manager = mock_state_manager_for_post.return_value
+        saved_state = state_manager.save.call_args[0][1]
+        discovered_pages = saved_state["discovered_pages"]
+        assert isinstance(discovered_pages["LoginPage"], dict), "Page should be dict"
+        assert "input_elements" in discovered_pages["LoginPage"], "Should have input_elements"
+
+    @pytest.mark.unit
+    def test_post_adds_output_to_existing_input(self, valid_post_input):
+        """
+        P0: POST adds output_elements to existing page with input_elements.
+        """
+        # Arrange - mock state with existing input elements
+        with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
+            state_manager = MagicMock()
+            state_manager.get_step.return_value = {
+                "discovered_pages": {
+                    "LoginPage": {
+                        "input_elements": [{"suggested_name": "EMAIL", "element_type": "textbox"}]
+                    }
+                }
+            }
+            state_manager.save = MagicMock()
+            mock.return_value = state_manager
+
+            input_data = valid_post_input.copy()
+            input_data["type"] = "output"
+            input_data["validation_results"] = {
+                "valid_count": 1,
+                "error_count": 0,
+                "elements": [{"name": "SUCCESS_MSG", "is_valid": True}]
+            }
+
+            # Act
+            result = QGDiscoveredElements.validate_post(input_data)
+
+            # Assert
+            assert result["status"] == "pass"
+            saved_state = state_manager.save.call_args[0][1]
+            login_page = saved_state["discovered_pages"]["LoginPage"]
+            assert "input_elements" in login_page, "Should preserve input_elements"
+            assert "output_elements" in login_page, "Should add output_elements"
+
+    @pytest.mark.unit
+    def test_post_state_saved_with_correct_nested_structure(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P0: POST saves state with correct nested structure.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["type"] = "input"
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "error_count": 0,
+            "elements": [{"name": "EMAIL_INPUT", "is_valid": True}]
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass"
+        state_manager = mock_state_manager_for_post.return_value
+        saved_state = state_manager.save.call_args[0][1]
+
+        # Verify backward compat fields
+        assert "discovered_elements" in saved_state, "Should have backward compat field"
+        assert "page_name" in saved_state, "Should have backward compat field"
+
+        # Verify new nested structure
+        assert "discovered_pages" in saved_state, "Should have discovered_pages"
+        assert isinstance(saved_state["discovered_pages"]["LoginPage"], dict), "Page should be dict"
+
+
+# =============================================================================
+# DEF-045: Two-Pass Discovery - Discovery Complete Tests
+# =============================================================================
+
+class TestDEF045DiscoveryComplete:
+    """DEF-045: Discovery complete calculation tests."""
+
+    @pytest.mark.unit
+    def test_discovery_complete_false_when_only_input_elements(self, valid_post_input):
+        """
+        P0: discovery_complete is False when page has only input_elements.
+        """
+        # Arrange - single page with only input elements
+        with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
+            state_manager = MagicMock()
+            state_manager.get_step.return_value = {}
+            state_manager.save = MagicMock()
+            mock.return_value = state_manager
+
+            input_data = valid_post_input.copy()
+            input_data["type"] = "input"
+            input_data["validation_results"] = {
+                "valid_count": 1,
+                "error_count": 0,
+                "elements": [{"name": "EMAIL", "is_valid": True}]
+            }
+
+            # Act
+            result = QGDiscoveredElements.validate_post(input_data)
+
+            # Assert
+            assert result["status"] == "pass"
+            saved_state = state_manager.save.call_args[0][1]
+            assert saved_state["discovery_complete"] is False, "Should not be complete with only input"
+
+    @pytest.mark.unit
+    def test_discovery_complete_true_when_both_input_and_output(self, valid_post_input):
+        """
+        P0: discovery_complete is True when page has both input_elements and output_elements.
+        """
+        # Arrange - state with input, adding output
+        with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
+            state_manager = MagicMock()
+            state_manager.get_step.return_value = {
+                "discovered_pages": {
+                    "LoginPage": {
+                        "input_elements": [{"suggested_name": "EMAIL"}]
+                    }
+                }
+            }
+            state_manager.save = MagicMock()
+            mock.return_value = state_manager
+
+            input_data = valid_post_input.copy()
+            input_data["type"] = "output"
+            input_data["validation_results"] = {
+                "valid_count": 1,
+                "error_count": 0,
+                "elements": [{"name": "SUCCESS", "is_valid": True}]
+            }
+
+            # Act
+            result = QGDiscoveredElements.validate_post(input_data)
+
+            # Assert
+            assert result["status"] == "pass"
+            saved_state = state_manager.save.call_args[0][1]
+            assert saved_state["discovery_complete"] is True, "Should be complete with both types"
+
+    @pytest.mark.unit
+    def test_multi_page_all_pages_need_both_types(self, valid_post_input):
+        """
+        P0: Multi-page discovery requires ALL pages to have both types.
+        """
+        # Arrange - 2 pages, only first has both types
+        with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
+            state_manager = MagicMock()
+            state_manager.get_step.return_value = {
+                "discovered_pages": {
+                    "Page1": {
+                        "input_elements": [{"suggested_name": "INPUT1"}],
+                        "output_elements": [{"suggested_name": "OUTPUT1"}]
+                    },
+                    "Page2": {
+                        "input_elements": [{"suggested_name": "INPUT2"}]
+                        # Missing output_elements
+                    }
+                }
+            }
+            state_manager.save = MagicMock()
+            mock.return_value = state_manager
+
+            input_data = valid_post_input.copy()
+            input_data["type"] = "output"
+            input_data["page_name"] = "Page2"
+            input_data["validation_results"] = {
+                "valid_count": 1,
+                "error_count": 0,
+                "elements": [{"name": "OUTPUT2", "is_valid": True}]
+            }
+            input_data["scope_result"] = {
+                "page_count": 2,
+                "pages": [{"name": "Page1"}, {"name": "Page2"}]
+            }
+
+            # Act
+            result = QGDiscoveredElements.validate_post(input_data)
+
+            # Assert
+            assert result["status"] == "pass"
+            saved_state = state_manager.save.call_args[0][1]
+            assert saved_state["pages_discovered"] == 2, "Both pages should have both types"
+            assert saved_state["discovery_complete"] is True, "Should be complete when all pages have both"
+
+
+# =============================================================================
+# DD-46: Validation Results Tests (CRITICAL GAP)
+# =============================================================================
+
+class TestDD46ValidationResults:
+    """DD-46: Validation results enforcement tests (CRITICAL - was missing)."""
+
+    @pytest.mark.unit
+    def test_post_validation_results_missing_fails(self, valid_post_input):
+        """
+        P0: POST fails when validation_results is missing (DD-46).
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        # No validation_results
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when validation_results missing"
+        assert "validation_results" in result["error"].lower(), "Error should mention validation_results"
+        assert "DD-46" in result["error"], "Error should reference DD-46"
+
+    @pytest.mark.unit
+    def test_post_validation_results_not_dict_fails(self, valid_post_input):
+        """
+        P0: POST fails when validation_results is not a dict.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["validation_results"] = "not a dict"
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when validation_results not dict"
+        assert "validation_results" in result["error"].lower()
+
+    @pytest.mark.unit
+    def test_post_validation_results_missing_valid_count_fails(self, valid_post_input):
+        """
+        P0: POST fails when validation_results missing valid_count.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["validation_results"] = {
+            "error_count": 0,
+            "elements": []
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when valid_count missing"
+        assert "valid_count" in result["error"].lower()
+
+    @pytest.mark.unit
+    def test_post_validation_results_missing_error_count_fails(self, valid_post_input):
+        """
+        P0: POST fails when validation_results missing error_count.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "elements": []
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when error_count missing"
+        assert "error_count" in result["error"].lower()
+
+    @pytest.mark.unit
+    def test_post_validation_results_missing_elements_fails(self, valid_post_input):
+        """
+        P0: POST fails when validation_results missing elements array.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "error_count": 0
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when elements missing"
+        assert "elements" in result["error"].lower()
+
+    @pytest.mark.unit
+    def test_post_validation_results_valid_passes(self, valid_post_input, mock_state_manager_for_post):
+        """
+        P0: POST passes when validation_results has all required fields.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "error_count": 0,
+            "elements": [
+                {
+                    "name": "EMAIL_INPUT",
+                    "is_valid": True,
+                    "error_category": None
+                }
+            ]
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass with valid validation_results"

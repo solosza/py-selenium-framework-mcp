@@ -1,0 +1,37 @@
+{
+  "run_id": "2025-12-31T09:34:39.929064Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2025-12-31T09:34:39.929064Z"
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2025-12-31T09:34:39.929064Z"
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2025-12-31T09:34:39.930063Z"
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 3,
+    "gates_passed": 2,
+    "gates_failed": 1,
+    "self_heals": 0,
+    "final_result": "fail",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

@@ -71,10 +71,14 @@ RETRY:
 
 | Field | Value |
 |-------|-------|
-| **State Saved** | `task_code`, `task_metadata` (class name, methods, composed POMs) |
-| **Who Saves** | Operation tool (`generate_task`) |
-| **When Saved** | On operation SUCCESS (after POST-VALIDATE passes) |
+| **State Saved** | `task_code`, `task_metadata` |
+| **Who Saves** | Quality gate (`qg_task` POST) |
+| **When Saved** | On POST-VALIDATE pass |
 | **State Schema** | See below |
+
+**Note:** Unlike Step 6 (POMs), Tasks do NOT use multi-page loop tracking.
+Tasks are per-domain (e.g., AuthTasks, CatalogTasks), not per-page.
+Multiple pages may share the same Task class.
 
 ```json
 {
@@ -93,6 +97,11 @@ RETRY:
   }
 }
 ```
+
+| Field | Purpose |
+|-------|---------|
+| `task_code` | Generated Task code |
+| `task_metadata` | Task metadata for Step 8 |
 
 ---
 
