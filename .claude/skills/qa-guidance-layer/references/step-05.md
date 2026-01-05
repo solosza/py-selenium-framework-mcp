@@ -505,10 +505,17 @@ for page_info in scope_result.pages:
     })
     # → Saves to discovered_pages[page_name]["output_elements"]
 
-# 3. Verify BOTH types discovered for ALL pages
-if not qg_discovered_elements.is_discovery_complete():
+# 3. CHECKPOINT: Verify BOTH types discovered for ALL pages (NEW - DEF-045)
+from tools.gates.qg_discovery_complete import QGDiscoveryComplete
+
+checkpoint_result = QGDiscoveryComplete.validate_pre({})
+# → Reads Step 5 state, validates ALL pages have input_elements AND output_elements
+
+if checkpoint_result["status"] == "fail":
     # BLOCKED - missing input or output for some page
-    raise Exception("Discovery incomplete - all pages need both input and output elements")
+    print(f"Discovery incomplete: {checkpoint_result['error']}")
+    print(f"Fix: {checkpoint_result['fix_hint']}")
+    raise Exception("Discovery checkpoint failed - cannot proceed to Step 6")
 else:
     # PROCEED to Step 6 - Generate POMs with BOTH element types
     pass

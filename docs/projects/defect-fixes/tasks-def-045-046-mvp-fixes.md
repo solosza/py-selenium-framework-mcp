@@ -536,17 +536,17 @@ Before committing ANY changes, verify:
   - [x] 1.12 Record results
   - [x] 1.13 Commit: `feat: Add two-pass discovery to Step 5 (Task 1.0)`
 
-- [ ] 2.0 Create Discovery Checkpoint Gate [CORE]
-  - [ ] 2.1 **ASSESS**: Read `qg_page_object.py` PRE - understand how it currently checks discovered_elements
-  - [ ] 2.2 **ASSESS**: Read state management - understand how discovered_pages are tracked
-  - [ ] 2.3 **ASSESS**: Identify where checkpoint should be called in workflow (after Step 5, before Step 6)
-  - [ ] 2.4 Create branch `feature/2.0-discovery-checkpoint`
-  - [ ] 2.5 Create `qg_discovery_complete.py`: NEW gate, follows existing gate pattern
-  - [ ] 2.6 Add checkpoint call to `step-05.md`: After loop, before Step 6 (non-breaking addition)
-  - [ ] 2.7 Write tests in `test_qg_discovery_complete.py`: Test pass when complete, fail when missing
-  - [ ] 2.8 Run checks: `pytest mcp_server/_dev_tests/test_gates/test_qg_discovery_complete.py -v`
-  - [ ] 2.9 Record results
-  - [ ] 2.10 Commit: `feat: Add discovery checkpoint gate (Task 2.0)`
+- [x] 2.0 Create Discovery Checkpoint Gate [CORE]
+  - [x] 2.1 **ASSESS**: Read `qg_page_object.py` PRE - understand how it currently checks discovered_elements
+  - [x] 2.2 **ASSESS**: Read state management - understand how discovered_pages are tracked
+  - [x] 2.3 **ASSESS**: Identify where checkpoint should be called in workflow (after Step 5, before Step 6)
+  - [x] 2.4 Create branch `feature/2.0-discovery-checkpoint`
+  - [x] 2.5 Create `qg_discovery_complete.py`: NEW gate, follows existing gate pattern
+  - [x] 2.6 Add checkpoint call to `step-05.md`: After loop, before Step 6 (non-breaking addition)
+  - [x] 2.7 Write tests in `test_qg_discovery_complete.py`: Test pass when complete, fail when missing
+  - [x] 2.8 Run checks: `pytest mcp_server/_dev_tests/test_gates/test_qg_discovery_complete.py -v`
+  - [x] 2.9 Record results
+  - [x] 2.10 Commit: `feat: Add discovery checkpoint gate (Task 2.0)`
 
 - [ ] 3.0 Update Step 6 POM Generation for Dual Elements [CORE]
   - [ ] 3.1 **ASSESS**: Read `qg_page_object.py` - understand current PRE/POST validation logic
@@ -607,14 +607,16 @@ Before committing ANY changes, verify:
 ```bash
 # Task 1.10 & 1.11: Test execution
 python -m pytest mcp_server/_dev_tests/test_gates/test_qg_discovered_elements.py -v --tb=line
-
 # Results: 59/62 tests passing
-# - All 43 existing tests: PASS (after fixing DD-46 gap in fixture)
-# - 16/19 new tests: PASS
-# - 3 minor test fixes needed (mock setup issues, not logic issues)
+
+# Task 2.8: Discovery checkpoint gate tests
+python -m pytest mcp_server/_dev_tests/test_gates/test_qg_discovery_complete.py -v --tb=line
+# Results: 16/16 tests passing (100%)
 ```
 
 **Results:**
+
+**Task 1.0 (Two-Pass Discovery):**
 - ✅ step-05.md updated with two-pass discovery guidance (Task 1.6)
 - ✅ qg_discovered_elements.py updated with type parameter and nested state (Tasks 1.7 & 1.8)
 - ✅ 21 new tests added (Task 1.9)
@@ -626,7 +628,22 @@ python -m pytest mcp_server/_dev_tests/test_gates/test_qg_discovered_elements.py
 - ✅ 59/62 tests passing
 - ⚠️ 3 tests need mock setup fixes (not logic errors)
 
-**Critical Achievement:** Filled DD-46 gap - validation_results was enforced but had ZERO tests!
+**Task 2.0 (Discovery Checkpoint Gate):**
+- ✅ qg_discovery_complete.py created (Task 2.5)
+- ✅ step-05.md updated with checkpoint call (Task 2.6)
+- ✅ 16 comprehensive tests added (Task 2.7)
+  - 2 Step 5 completion tests
+  - 2 discovered_pages structure tests
+  - 4 single-page validation tests
+  - 3 multi-page validation tests
+  - 1 backward compatibility test
+  - 1 POST validation test
+  - 3 error message/fix hint tests
+- ✅ 16/16 tests passing (100%)
+
+**Critical Achievements:**
+- Filled DD-46 gap - validation_results was enforced but had ZERO tests!
+- New checkpoint gate validates ALL pages have both input AND output before Step 6
 
 ---
 
