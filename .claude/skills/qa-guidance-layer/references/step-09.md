@@ -103,7 +103,7 @@ RETRY:
 
 | Field | Value |
 |-------|-------|
-| **Rules That Apply** | DD-15 (POM state assertions), DD-16 (file paths), DD-17 (parameter injection), DD-18 (import validation), DD-19 (tool import), DD-25 (no skeleton), DD-26 (data contracts) |
+| **Rules That Apply** | DD-15 (POM state assertions), DD-16 (file paths), DD-17 (parameter injection), DD-18 (import validation), DD-19 (tool import), DD-25 (no skeleton), DD-26 (data contracts), DEF-046 (no redundant tests) |
 | **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 10 until test code complete** |
 
 **PRE-Validation Checks:**
@@ -114,7 +114,7 @@ RETRY:
 | `pom_metadata` | Present from Step 6 (for state methods) |
 | `test_scenarios` | Present from Step 4 |
 
-**POST-Validation Checks (DD-25):**
+**POST-Validation Checks (DD-25 + DEF-046):**
 
 | Check | Rule |
 |-------|------|
@@ -124,6 +124,33 @@ RETRY:
 | Parameters | Actual values injected (no placeholders like `"category_name_value"`) |
 | File path | Correct tests/{workflow}/ location |
 | No skeleton | No placeholder tests, no `pass`, no `# TODO` |
+| **No redundancy** | **One user story = ONE E2E test (MVP constraint)** |
+
+**DEF-046: Test Redundancy Detection (MVP Constraint)**
+
+**Problem:** AI sometimes generates multiple tests for one user story, where one test's role calls are a subset of another.
+
+**Example of Redundancy (FAIL):**
+```python
+# Test A: login only
+def test_login():
+    user.login()
+    assert login_page.is_logged_in()
+
+# Test B: login + browse
+def test_login_and_browse():
+    user.login()
+    user.browse_category("Women")
+    assert catalog_page.has_products()
+```
+
+Test A is redundant because its role calls (`login`) are a subset of Test B's role calls (`login`, `browse_category`).
+
+**Solution:** One user story should map to ONE E2E test. Either:
+1. Merge the smaller test into the larger test
+2. Split the user story into separate stories
+
+**Gate Enforcement:** `qg_test_runner` POST validation detects subset redundancy and FAILS the gate.
 
 ---
 

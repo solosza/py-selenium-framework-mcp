@@ -15,9 +15,10 @@ POST Validation:
 - At least one role method call (IC-09-03)
 - POM state assertions used, no return value assertions (IC-09-04, DD-15)
 - @autologger.automation_logger("Test") decorator present (IC-09-05)
+- No redundant tests (DEF-046): one test's role calls cannot be subset of another
 - metadata present with class_name and file_path
 
-Enforces: DD-15, DD-25, IC-09-01 through IC-09-05
+Enforces: DD-15, DD-25, DEF-046, IC-09-01 through IC-09-05
 """
 
 import re
@@ -295,6 +296,11 @@ class QGTestRunner(BaseGate):
         if assertion_error:
             return assertion_error
 
+        # DEF-046: Check for redundant tests (subset redundancy)
+        redundancy_error = cls._detect_redundant_tests(code)
+        if redundancy_error:
+            return redundancy_error
+
         # Validate metadata field
         metadata = input_data.get("metadata")
 
@@ -466,6 +472,111 @@ class QGTestRunner(BaseGate):
             )
 
         return None
+
+    @classmethod
+    def _detect_redundant_tests(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Detect redundant tests (DEF-046).
+
+        Checks if one test's role calls are a subset of another test's role calls.
+        This indicates redundancy: one user story should map to ONE E2E test.
+
+        Returns fail_response if redundancy detected, None otherwise.
+        """
+        # Extract all test methods
+        test_methods = cls._extract_test_methods(code)
+
+        if len(test_methods) <= 1:
+            # Only one test or no tests - no redundancy possible
+            return None
+
+        # For each pair of tests, check if one is a subset of another
+        for i, test_a in enumerate(test_methods):
+            for j, test_b in enumerate(test_methods):
+                if i >= j:
+                    continue  # Skip self-comparison and already compared pairs
+
+                # Extract role calls from both tests
+                calls_a = set(test_a['role_calls'])
+                calls_b = set(test_b['role_calls'])
+
+                # Check if one is a subset of the other
+                if calls_a.issubset(calls_b) and calls_a != calls_b:
+                    return cls.fail_response(
+                        error=f"Redundant test detected: '{test_a['name']}' is a subset of '{test_b['name']}'",
+                        fix_hint=f"One user story should map to ONE E2E test (MVP constraint). Merge '{test_a['name']}' into '{test_b['name']}' or split user story."
+                    )
+                elif calls_b.issubset(calls_a) and calls_a != calls_b:
+                    return cls.fail_response(
+                        error=f"Redundant test detected: '{test_b['name']}' is a subset of '{test_a['name']}'",
+                        fix_hint=f"One user story should map to ONE E2E test (MVP constraint). Merge '{test_b['name']}' into '{test_a['name']}' or split user story."
+                    )
+
+        return None
+
+    @classmethod
+    def _extract_test_methods(cls, code: str) -> list:
+        """
+        Extract all test methods with their role calls.
+
+        Returns:
+            List of dicts with 'name' and 'role_calls' keys.
+        """
+        # Find all test method definitions
+        # Match from 'def test_*' to the next 'def ' or end of file
+        test_pattern = re.compile(
+            r'def\s+(test_\w+)\s*\([^)]*\):(.*?)(?=\n\s*(?:def\s+|\Z))',
+            re.DOTALL
+        )
+
+        test_methods = []
+        for match in test_pattern.finditer(code):
+            method_name = match.group(1)
+            method_body = match.group(2)
+
+            # Extract role method calls from this test
+            role_calls = cls._extract_role_calls(method_body)
+
+            test_methods.append({
+                'name': method_name,
+                'role_calls': role_calls
+            })
+
+        return test_methods
+
+    @classmethod
+    def _extract_role_calls(cls, method_body: str) -> list:
+        """
+        Extract role method calls from a test method body.
+
+        Matches patterns like: user.login(), admin.create_user(), guest.browse()
+        Excludes POM method calls like: self.page.is_logged_in(), page.has_error()
+
+        Returns:
+            List of role method names (e.g., ['login', 'browse_category'])
+        """
+        role_calls = []
+
+        # Use the existing ROLE_CALL_PATTERN
+        for match in cls.ROLE_CALL_PATTERN.finditer(method_body):
+            full_match = match.group(0)
+
+            # Exclude calls that start with 'self.' (those are POM calls)
+            # Look back to see if there's 'self.' before the match
+            match_start = match.start()
+            if match_start >= 5:  # len('self.') = 5
+                prefix = method_body[match_start-5:match_start]
+                if prefix == 'self.':
+                    continue  # Skip POM calls
+
+            # Exclude POM state method calls (is_, has_, get_)
+            method_name = full_match.split('.')[-1].rstrip('(').strip()
+            if method_name.startswith(('is_', 'has_', 'get_')):
+                continue  # Skip POM state methods
+
+            role_calls.append(method_name)
+
+        return role_calls
 
     @classmethod
     def _validate_metadata_structure(cls, metadata: Dict[str, Any]) -> Optional[Dict[str, Any]]:

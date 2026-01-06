@@ -999,6 +999,331 @@ class TestFixHints:
 
 
 # =============================================================================
+# POST-VALIDATION: REDUNDANCY DETECTION (DEF-046)
+# =============================================================================
+
+class TestDEF046RedundancyDetection:
+    """Test POST validation catches redundant tests (subset redundancy)."""
+
+    def test_post_passes_single_test_no_redundancy(self, valid_test_metadata):
+        """POST passes when only one test present (no redundancy possible)."""
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        single_test_code = '''"""Single test."""
+import pytest
+from resources.utilities import autologger
+from roles.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+
+
+class TestSingleTest:
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_login(self):
+        """Test login."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        assert self.login_page.is_logged_in()
+'''
+        result = QGTestRunner.validate_post({
+            "mode": "POST",
+            "code": single_test_code,
+            "metadata": valid_test_metadata
+        })
+
+        assert result["status"] == "pass"
+
+    def test_post_passes_independent_tests_no_redundancy(self, valid_test_metadata):
+        """POST passes when tests have different role calls (no subset)."""
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        independent_tests_code = '''"""Independent tests."""
+import pytest
+from resources.utilities import autologger
+from roles.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+from pages.catalog.catalog_page import CatalogPage
+
+
+class TestIndependent:
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_login(self):
+        """Test login only."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        assert self.login_page.is_logged_in()
+
+    @pytest.mark.catalog
+    @autologger.automation_logger("Test")
+    def test_browse(self):
+        """Test browse only."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.browse_category("Women")
+        assert self.catalog_page.has_products()
+'''
+        result = QGTestRunner.validate_post({
+            "mode": "POST",
+            "code": independent_tests_code,
+            "metadata": valid_test_metadata
+        })
+
+        assert result["status"] == "pass"
+
+    def test_post_fails_test_a_subset_of_test_b(self, valid_test_metadata):
+        """POST fails when test A's role calls are subset of test B's."""
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        redundant_code = '''"""Redundant tests."""
+import pytest
+from resources.utilities import autologger
+from roles.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+from pages.catalog.catalog_page import CatalogPage
+
+
+class TestRedundant:
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_login(self):
+        """Test login only (REDUNDANT - subset of test_login_and_browse)."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        assert self.login_page.is_logged_in()
+
+    @pytest.mark.e2e
+    @autologger.automation_logger("Test")
+    def test_login_and_browse(self):
+        """Test login and browse."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        user.browse_category("Women")
+        assert self.catalog_page.has_products()
+'''
+        result = QGTestRunner.validate_post({
+            "mode": "POST",
+            "code": redundant_code,
+            "metadata": valid_test_metadata
+        })
+
+        assert result["status"] == "fail"
+        assert "redundant" in result["error"].lower()
+        assert "test_login" in result["error"]
+        assert "test_login_and_browse" in result["error"]
+        assert "subset" in result["error"].lower()
+
+    def test_post_fails_test_b_subset_of_test_a(self, valid_test_metadata):
+        """POST fails when test B's role calls are subset of test A's (reversed order)."""
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        redundant_code = '''"""Redundant tests (reversed)."""
+import pytest
+from resources.utilities import autologger
+from roles.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+from pages.catalog.catalog_page import CatalogPage
+
+
+class TestRedundant:
+    @pytest.mark.e2e
+    @autologger.automation_logger("Test")
+    def test_complete_workflow(self):
+        """Test complete workflow."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        user.browse_category("Women")
+        user.add_to_cart("Blouse")
+        assert self.cart_page.has_items()
+
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_login_only(self):
+        """Test login only (REDUNDANT - subset of test_complete_workflow)."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        assert self.login_page.is_logged_in()
+'''
+        result = QGTestRunner.validate_post({
+            "mode": "POST",
+            "code": redundant_code,
+            "metadata": valid_test_metadata
+        })
+
+        assert result["status"] == "fail"
+        assert "redundant" in result["error"].lower()
+        assert "test_login_only" in result["error"]
+        assert "test_complete_workflow" in result["error"]
+
+    def test_post_passes_identical_role_calls(self, valid_test_metadata):
+        """POST passes when tests have identical role calls (not considered redundant)."""
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        identical_tests_code = '''"""Tests with identical role calls."""
+import pytest
+from resources.utilities import autologger
+from roles.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+
+
+class TestIdentical:
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_login_valid_credentials(self):
+        """Test login with valid credentials."""
+        user = RegisteredUser(self.web, valid_user_data, self.base_url)
+        user.login()
+        assert self.login_page.is_logged_in()
+
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_login_invalid_credentials(self):
+        """Test login with invalid credentials."""
+        user = RegisteredUser(self.web, invalid_user_data, self.base_url)
+        user.login()
+        assert self.login_page.has_error_message()
+'''
+        result = QGTestRunner.validate_post({
+            "mode": "POST",
+            "code": identical_tests_code,
+            "metadata": valid_test_metadata
+        })
+
+        # Identical role calls means sets are equal, not subset
+        assert result["status"] == "pass"
+
+    def test_post_fails_multiple_redundant_tests(self, valid_test_metadata):
+        """POST fails when multiple tests have redundancy."""
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        multi_redundant_code = '''"""Multiple redundant tests."""
+import pytest
+from resources.utilities import autologger
+from roles.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+from pages.catalog.catalog_page import CatalogPage
+from pages.cart.cart_page import CartPage
+
+
+class TestMultiRedundant:
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_login(self):
+        """Test login only (REDUNDANT)."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        assert self.login_page.is_logged_in()
+
+    @pytest.mark.catalog
+    @autologger.automation_logger("Test")
+    def test_login_and_browse(self):
+        """Test login and browse (REDUNDANT)."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        user.browse_category("Women")
+        assert self.catalog_page.has_products()
+
+    @pytest.mark.e2e
+    @autologger.automation_logger("Test")
+    def test_full_workflow(self):
+        """Test full workflow."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        user.browse_category("Women")
+        user.add_to_cart("Blouse")
+        assert self.cart_page.has_items()
+'''
+        result = QGTestRunner.validate_post({
+            "mode": "POST",
+            "code": multi_redundant_code,
+            "metadata": valid_test_metadata
+        })
+
+        # Should detect first redundancy pair
+        assert result["status"] == "fail"
+        assert "redundant" in result["error"].lower()
+
+    def test_post_passes_multi_persona_tests(self, valid_test_metadata):
+        """POST passes when tests use different roles (admin vs user)."""
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        multi_persona_code = '''"""Multi-persona tests."""
+import pytest
+from resources.utilities import autologger
+from roles.admin_user import AdminUser
+from roles.registered_user import RegisteredUser
+from pages.admin.user_management_page import UserManagementPage
+from pages.auth.login_page import LoginPage
+
+
+class TestMultiPersona:
+    @pytest.mark.admin
+    @autologger.automation_logger("Test")
+    def test_admin_login(self):
+        """Test admin login."""
+        admin = AdminUser(self.web, admin_data, self.base_url)
+        admin.login()
+        assert self.admin_page.is_logged_in()
+
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_user_login(self):
+        """Test user login."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        assert self.login_page.is_logged_in()
+'''
+        result = QGTestRunner.validate_post({
+            "mode": "POST",
+            "code": multi_persona_code,
+            "metadata": valid_test_metadata
+        })
+
+        # Both call login(), but different role instances (admin vs user)
+        assert result["status"] == "pass"
+
+    def test_post_error_includes_fix_hint(self, valid_test_metadata):
+        """POST redundancy error includes helpful fix hint."""
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        redundant_code = '''"""Redundant tests."""
+import pytest
+from resources.utilities import autologger
+from roles.registered_user import RegisteredUser
+from pages.auth.login_page import LoginPage
+
+
+class TestRedundant:
+    @pytest.mark.auth
+    @autologger.automation_logger("Test")
+    def test_login(self):
+        """Test login."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        assert self.login_page.is_logged_in()
+
+    @pytest.mark.e2e
+    @autologger.automation_logger("Test")
+    def test_login_and_browse(self):
+        """Test login and browse."""
+        user = RegisteredUser(self.web, user_data, self.base_url)
+        user.login()
+        user.browse_category("Women")
+        assert self.catalog_page.has_products()
+'''
+        result = QGTestRunner.validate_post({
+            "mode": "POST",
+            "code": redundant_code,
+            "metadata": valid_test_metadata
+        })
+
+        assert result["status"] == "fail"
+        assert "fix_hint" in result
+        assert "One user story" in result["fix_hint"]
+        assert "ONE E2E test" in result["fix_hint"]
+        assert "Merge" in result["fix_hint"] or "split" in result["fix_hint"].lower()
+
+
+# =============================================================================
 # MAIN
 # =============================================================================
 
