@@ -564,19 +564,19 @@ Before committing ANY changes, verify:
   - [x] 3.13 Record results
   - [x] 3.14 Commit: `feat: Update POM generation for dual elements (Task 3.0)`
 
-- [ ] 4.0 Add Test Redundancy Detection (DEF-046) [CORE]
-  - [ ] 4.1 **ASSESS**: Read `qg_test_runner.py` - understand current POST validation logic
-  - [ ] 4.2 **ASSESS**: Read `test_qg_test_runner.py` - understand existing test coverage
-  - [ ] 4.3 **ASSESS**: Review DEF-046 example - understand what "subset" means in context
-  - [ ] 4.4 Create branch `feature/4.0-test-redundancy`
-  - [ ] 4.5 Update `qg_test_runner.py` POST: Add `_detect_redundant_tests()` method (new, non-breaking)
-  - [ ] 4.6 Implement subset detection: Check if one test's Role calls are subset of another
-  - [ ] 4.7 Update `step-09.md`: Add "One user story = one E2E test" guidance (append, don't replace)
-  - [ ] 4.8 Run existing tests FIRST: Verify current test runner validation still works
-  - [ ] 4.9 Write NEW tests in `test_qg_test_runner.py`: Test redundancy detection
-  - [ ] 4.10 Run checks: `pytest mcp_server/_dev_tests/test_gates/test_qg_test_runner.py -v`
-  - [ ] 4.11 Record results
-  - [ ] 4.12 Commit: `feat: Add test redundancy detection (Task 4.0)`
+- [x] 4.0 Add Test Redundancy Detection (DEF-046) [CORE]
+  - [x] 4.1 **ASSESS**: Read `qg_test_runner.py` - understand current POST validation logic
+  - [x] 4.2 **ASSESS**: Read `test_qg_test_runner.py` - understand existing test coverage
+  - [x] 4.3 **ASSESS**: Review DEF-046 example - understand what "subset" means in context
+  - [x] 4.4 Create branch `feature/4.0-test-redundancy`
+  - [x] 4.5 Update `qg_test_runner.py` POST: Add `_detect_redundant_tests()` method (new, non-breaking)
+  - [x] 4.6 Implement subset detection: Check if one test's Role calls are subset of another
+  - [x] 4.7 Update `step-09.md`: Add "One user story = one E2E test" guidance (append, don't replace)
+  - [x] 4.8 Run existing tests FIRST: Verify current test runner validation still works
+  - [x] 4.9 Write NEW tests in `test_qg_test_runner.py`: Test redundancy detection
+  - [x] 4.10 Run checks: `pytest mcp_server/_dev_tests/test_gates/test_qg_test_runner.py -v`
+  - [x] 4.11 Record results
+  - [x] 4.12 Commit: `feat: Add test redundancy detection (Task 4.0)`
 
 - [ ] 5.0 Update Documentation and Verify E2E [GLUE]
   - [ ] 5.1 **ASSESS**: Read current FRAMEWORK.md Section 9 - identify what needs updating
@@ -616,6 +616,10 @@ python -m pytest mcp_server/_dev_tests/test_gates/test_qg_discovery_complete.py 
 # Task 3.10 & 3.12: POM generation dual elements tests
 python -m pytest mcp_server/_dev_tests/test_gates/test_qg_page_object.py -v --tb=line
 # Results: 66/66 tests passing (100% - 58 existing + 8 new DEF-045 tests)
+
+# Task 4.10: Test redundancy detection tests
+python -m pytest mcp_server/_dev_tests/test_gates/test_qg_test_runner.py -v --tb=short
+# Results: 49/49 tests passing (100% - 41 existing + 8 new DEF-046 tests)
 ```
 
 **Results:**
@@ -658,9 +662,31 @@ python -m pytest mcp_server/_dev_tests/test_gates/test_qg_page_object.py -v --tb
   - 1 edge case test
 - ✅ 66/66 tests passing (100% - 58 existing + 8 new)
 
+**Task 4.0 (Test Redundancy Detection - DEF-046):**
+- ✅ qg_test_runner.py POST updated with redundancy detection (Tasks 4.5 & 4.6)
+  - Added _detect_redundant_tests() method
+  - Added _extract_test_methods() method
+  - Added _extract_role_calls() method with POM state method filtering
+- ✅ step-09.md updated with "One user story = one E2E test" guidance (Task 4.7)
+  - Added DEF-046 section with examples
+  - Updated enforcement table
+- ✅ 8 new DEF-046 tests added (Task 4.9)
+  - 1 single test no redundancy test
+  - 1 independent tests no redundancy test
+  - 2 subset redundancy detection tests (A→B and B→A)
+  - 1 identical role calls test (not redundant)
+  - 1 multiple redundant tests test
+  - 1 multi-persona tests test
+  - 1 error fix hint test
+- ✅ 49/49 tests passing (100% - 41 existing + 8 new)
+- ✅ Critical fix: Excludes POM state methods (is_, has_, get_) from role call extraction
+- ✅ Critical fix: Excludes self.* prefixed calls (POM calls) from role call extraction
+
 **Critical Achievements:**
 - Filled DD-46 gap - validation_results was enforced but had ZERO tests!
 - New checkpoint gate validates ALL pages have both input AND output before Step 6
+- DEF-046 redundancy detection enforces "one user story = one E2E test" MVP constraint
+- All 4 core tasks complete: 130/132 tests passing (98.5%)
 
 ---
 
