@@ -1,9 +1,9 @@
 # Session State - 2026-01-05
 
 ## Quick Resume
-**Resume Point:** Phase 3 (Deliver) - Tasks 1.0-3.0 COMPLETE, ready for Task 4.0 (Test Redundancy Detection)
-**Status:** Two-pass discovery, checkpoint gate, and POM dual elements implemented
-**Branch:** feature/3.0-pom-dual-elements
+**Resume Point:** Phase 3 (Deliver) - Tasks 1.0-4.0 COMPLETE, Tasks 5.1-5.8 COMPLETE, ready for Task 5.9 (E2E Test)
+**Status:** All implementation and documentation complete - ready to verify with E2E test
+**Branch:** feature/5.0-docs-and-verification
 **Project:** DEF-045 & DEF-046 MVP Fixes (Two-Pass Discovery + Test Redundancy Detection)
 
 ---
@@ -81,8 +81,28 @@
 - [x] Tasks 3.13-3.14: Recorded results and committed
 - **Achievement:** POMs now use input → actions, output + expected_states → state methods
 
+#### 8. Task 4.0: Add Test Redundancy Detection (COMPLETE)
+- [x] Tasks 4.1-4.3: Assessment (qg_test_runner.py, test file, step-09.md)
+- [x] Task 4.4: Created feature branch `feature/4.0-test-redundancy`
+- [x] Task 4.5-4.6: Added redundancy detection to qg_test_runner.py POST
+- [x] Task 4.7: Updated step-09.md with "One user story = one E2E test" guidance
+- [x] Task 4.8: Ran existing tests - all pass
+- [x] Task 4.9: Added 8 new DEF-046 tests
+- [x] Task 4.10: Ran tests - 49/49 passing (100%)
+- [x] Tasks 4.11-4.12: Recorded results and committed
+- **Critical Fix:** Excludes POM state methods (is_, has_, get_) from role call extraction
+- **Achievement:** Enforces "one user story = one E2E test" MVP constraint
+
+#### 9. Task 5.0: Update Documentation and Verify E2E (Tasks 5.1-5.8 COMPLETE)
+- [x] Tasks 5.1-5.3: Assessment (FRAMEWORK.md, CLAUDE.md, review all changes)
+- [x] Task 5.4: Created feature branch `feature/5.0-docs-and-verification`
+- [x] Task 5.5: Updated FRAMEWORK.md Section 9
+- [x] Task 5.6: Updated CLAUDE.md (if needed)
+- [x] Task 5.7-5.8: Updated DEFECT_LOG.md - marked DEF-045 & DEF-046 as READY_TO_TEST
+- **Status:** PAUSED at Task 5.8 - ready for E2E test
+
 ### In Progress
-- [ ] Phase 3 (Deliver): Task 4.0 - Add Test Redundancy Detection (DEF-046)
+- [ ] Phase 3 (Deliver): Task 5.9-5.14 - E2E Verification (see E2E Test Plan below)
 
 ---
 
@@ -163,6 +183,15 @@ def _detect_redundant_tests(test_methods):
 - `.claude/skills/qa-guidance-layer/references/step-06.md` - Dual element guidance
 - `mcp_server/_dev_tests/test_gates/test_qg_page_object.py` - 8 new tests (66/66 total pass)
 
+**Task 4.0 Implementation (feature/4.0-test-redundancy):**
+- `mcp_server/tools/gates/qg_test_runner.py` - Redundancy detection methods (+110 lines)
+- `.claude/skills/qa-guidance-layer/references/step-09.md` - DEF-046 guidance (+30 lines)
+- `mcp_server/_dev_tests/test_gates/test_qg_test_runner.py` - 8 new tests (49/49 total pass)
+
+**Task 5.0 Implementation (feature/5.0-docs-and-verification):**
+- `docs/DEFECT_LOG.md` - Updated DEF-045 & DEF-046 entries (READY_TO_TEST)
+- `docs/projects/defect-fixes/tasks-def-045-046-mvp-fixes.md` - Tracking updates
+
 ---
 
 ## Task Breakdown Summary
@@ -206,32 +235,81 @@ def _detect_redundant_tests(test_methods):
 
 ---
 
+## E2E Test Plan (Task 5.9)
+
+**Objective:** Verify DEF-045 and DEF-046 fixes with production workflow
+
+**Test Scenario:** Replicate existing banking test as new `parabank` domain
+- **Why:** Most complex test (4 pages, multiple forms) - perfect for two-pass discovery
+- **Old Test:** `tests/banking/test_new_customer_banking.py` (generated with old workflow)
+- **New Test:** `tests/parabank/test_new_customer_banking.py` (generated with new workflow)
+- **Comparison:** Apple-to-apples comparison of old vs new workflow output
+
+**Workflow Name Strategy (Option 1 + 2):**
+1. **Option 1:** Include "ParaBank" in user story naturally
+2. **Option 2:** Explicitly remind AI at Step 2 to use "parabank" as workflow name
+3. **Step 2 Enforcement:** AI extracts workflow field - must guide it to "parabank" not "banking"
+
+**User Story (Exact Text):**
+```
+As a new customer on ParaBank, I want to register for an account, open a savings account,
+transfer $100 to the new account, and view the transaction in my account history
+```
+
+**Expected Framework Structure:**
+```
+tests/parabank/test_new_customer_banking.py
+framework/pages/parabank/registration_page.py
+framework/pages/parabank/open_new_account_page.py
+framework/pages/parabank/transfer_funds_page.py
+framework/pages/parabank/accounts_overview_page.py
+framework/tasks/parabank/parabank_tasks.py
+framework/roles/new_customer.py  (may reuse existing)
+```
+
+**Verification Criteria:**
+1. ✅ Two-pass discovery executes for all 4 pages (input + output)
+2. ✅ Discovery checkpoint validates all pages have both element types
+3. ✅ Generated POMs have action methods (from input) + state methods (from output)
+4. ✅ State-check methods based on ACTUAL observed elements (not guesses) - **DEF-045**
+5. ✅ No redundant tests generated - **DEF-046**
+6. ✅ All quality gates pass
+7. ✅ Test executes successfully
+
+**After E2E Success:**
+- Mark DEF-045 status: READY_TO_TEST → RESOLVED
+- Mark DEF-046 status: READY_TO_TEST → RESOLVED
+- Update resolved dates in DEFECT_LOG.md
+- Run full test suite: `pytest mcp_server/_dev_tests/test_gates/ -v`
+- Commit final changes
+- Merge all feature branches
+
+---
+
 ## Context for Next Session
 
-**Resume Point:** Tasks 1.0-3.0 COMPLETE - Ready for Task 4.0 (Test Redundancy Detection)
+**Resume Point:** Tasks 1.0-4.0 COMPLETE, Tasks 5.1-5.8 COMPLETE - Ready for Task 5.9 (E2E Test)
 
 **Next Steps:**
-1. Execute Task 4.0 - Add Test Redundancy Detection (DEF-046) (12 sub-tasks)
-   - Start with ASSESS tasks (4.1-4.3)
-   - Update qg_test_runner.py POST with redundancy detection
-   - Add "One user story = one E2E test" guidance to step-09.md
-2. Execute Task 5.0 - Update Documentation and Verify E2E (14 sub-tasks)
-   - Update FRAMEWORK.md, CLAUDE.md, DEFECT_LOG.md
-   - Run E2E test with two-pass discovery
-   - Verify all gates pass and no redundant tests
+1. Execute Task 5.9 - Run E2E test with ParaBank user story (see E2E Test Plan above)
+2. Execute Task 5.10-5.11 - Verify all gates pass and no redundant tests
+3. Execute Task 5.12 - Run full test suite
+4. Execute Task 5.13-5.14 - Record results and commit
 
 **Progress Summary:**
 - ✅ Task 1.0: Two-pass discovery (59/62 tests, DD-46 gap filled)
 - ✅ Task 2.0: Discovery checkpoint (16/16 tests, 100%)
 - ✅ Task 3.0: POM dual elements (66/66 tests, 100%, backward compat maintained)
-- ⏳ Task 4.0: Test redundancy detection (next)
-- ⏳ Task 5.0: Documentation and E2E verification (final)
+- ✅ Task 4.0: Test redundancy detection (49/49 tests, 100%)
+- ✅ Task 5.0 (5.1-5.8): Documentation updates (DEFECT_LOG.md updated)
+- ⏳ Task 5.0 (5.9-5.14): E2E verification (next session)
 
 **Total Test Results:**
 - Task 1.0: 59/62 tests passing (98%)
 - Task 2.0: 16/16 tests passing (100%)
 - Task 3.0: 66/66 tests passing (100%)
-- Combined: 141/144 tests passing (98%)
+- Task 4.0: 49/49 tests passing (100%)
+- Combined: 190/193 tests passing (98.4%)
 
 **Important Context:**
 - Core DEF-045 implementation is complete (two-pass discovery → dual element POMs)
@@ -249,8 +327,32 @@ def _detect_redundant_tests(test_methods):
 
 ---
 
+## Critical Reminders for E2E Test
+
+**Step 2 Workflow Naming:**
+- User story includes "on ParaBank" to guide AI
+- At Step 2, EXPLICITLY set workflow="parabank" (not "banking")
+- Quality gate qg_user_input must validate workflow="parabank"
+
+**Two-Pass Discovery (Step 5):**
+- For EACH page: Execute PASS 1 (input elements) then PASS 2 (output elements)
+- Call qg_discovery_complete checkpoint BEFORE proceeding to Step 6
+- Verify nested state structure: `{page_name: {input_elements: [...], output_elements: [...]}}`
+
+**POM Generation (Step 6):**
+- Pass both input_elements AND output_elements to Tool 3
+- Verify action methods generated from input_elements
+- Verify state-check methods generated from output_elements + expected_states
+
+**Test Generation (Step 9):**
+- Verify no redundant tests (DEF-046 detection)
+- Verify assertions use POM state-check methods
+
+---
+
 ## Token Usage
-- This session: ~60% used
+- Previous session: ~64% used (128k/200k tokens)
+- Recommendation: Restart with fresh context for E2E test
 
 ---
 
