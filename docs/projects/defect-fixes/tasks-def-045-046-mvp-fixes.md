@@ -578,16 +578,16 @@ Before committing ANY changes, verify:
   - [x] 4.11 Record results
   - [x] 4.12 Commit: `feat: Add test redundancy detection (Task 4.0)`
 
-- [ ] 5.0 Update Documentation and Verify E2E [GLUE]
-  - [ ] 5.1 **ASSESS**: Read current FRAMEWORK.md Section 9 - identify what needs updating
-  - [ ] 5.2 **ASSESS**: Read current CLAUDE.md - identify what needs updating
-  - [ ] 5.3 **ASSESS**: Review all changes from Tasks 1-4 - prepare comprehensive test plan
-  - [ ] 5.4 Create branch `feature/5.0-docs-and-verification`
-  - [ ] 5.5 Update `FRAMEWORK.md` Section 9: Document two-pass discovery (non-breaking additions)
-  - [ ] 5.6 Update `CLAUDE.md`: Document DEF-045 and DEF-046 fixes (if needed)
-  - [ ] 5.7 Update `DEFECT_LOG.md`: Mark DEF-045 as RESOLVED with fix details
-  - [ ] 5.8 Update `DEFECT_LOG.md`: Mark DEF-046 as RESOLVED with fix details
-  - [ ] 5.9 Run E2E test: Test production workflow with two-pass discovery
+- [ ] 5.0 Update Documentation and Verify E2E [GLUE] - **PAUSED AT 5.8**
+  - [x] 5.1 **ASSESS**: Read current FRAMEWORK.md Section 9 - identify what needs updating
+  - [x] 5.2 **ASSESS**: Read current CLAUDE.md - identify what needs updating
+  - [x] 5.3 **ASSESS**: Review all changes from Tasks 1-4 - prepare comprehensive test plan
+  - [x] 5.4 Create branch `feature/5.0-docs-and-verification`
+  - [x] 5.5 Update `FRAMEWORK.md` Section 9: Document two-pass discovery (non-breaking additions)
+  - [x] 5.6 Update `CLAUDE.md`: Document DEF-045 and DEF-046 fixes (if needed)
+  - [x] 5.7 Update `DEFECT_LOG.md`: Mark DEF-045 as READY_TO_TEST with fix details
+  - [x] 5.8 Update `DEFECT_LOG.md`: Mark DEF-046 as READY_TO_TEST with fix details
+  - [ ] 5.9 Run E2E test: Test production workflow with two-pass discovery **← STOPPED HERE**
   - [ ] 5.10 Verify: All quality gates pass, tests generate with real state-check methods (not guesses)
   - [ ] 5.11 Verify: No redundant tests generated
   - [ ] 5.12 Run checks: Full test suite `pytest mcp_server/_dev_tests/test_gates/ -v`
