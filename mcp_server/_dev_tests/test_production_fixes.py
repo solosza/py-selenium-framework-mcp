@@ -230,16 +230,20 @@ class TestBaseGateAuditRunID:
         """
         # Arrange
         from tools.gates.base_gate import BaseGate
+        import time
 
         # Act
         logger_1 = BaseGate.get_audit_logger()
+        run_id_1 = logger_1.run_id
+
+        time.sleep(0.01)  # Ensure timestamp difference
         BaseGate._audit_logger = None  # Simulate new workflow
+
         logger_2 = BaseGate.get_audit_logger()
+        run_id_2 = logger_2.run_id
 
         # Assert
-        # TODO: After removing run_id reuse from state
-        # assert logger_1.run_id != logger_2.run_id, "Each workflow should get fresh run_id"
-        assert True, "Placeholder - implement after BaseGate fix"
+        assert run_id_1 != run_id_2, f"Each workflow should get fresh run_id: {run_id_1} vs {run_id_2}"
 
     @pytest.mark.unit
     def test_no_run_id_reuse_from_state(self):
@@ -247,25 +251,27 @@ class TestBaseGateAuditRunID:
         P0: BaseGate NEVER reads run_id from StateManager.
 
         AAA Pattern:
-        1. Arrange - Mock StateManager with existing run_id in step_0
+        1. Arrange - Create actual state file with old run_id in step_0
         2. Act - Call get_audit_logger()
         3. Assert - Does NOT use run_id from state
         """
         # Arrange
         from tools.gates.base_gate import BaseGate
+        from utils.state_manager import StateManager
         old_run_id = "2026-01-07T10-00-00Z"
 
+        # Create state with old audit_run_id
+        state = StateManager()
+        state.save(step=0, data={"audit_run_id": old_run_id})
+
         # Act
-        with patch('tools.gates.base_gate.StateManager') as mock_state:
-            mock_state.return_value.load.return_value = {
-                "step_0": {"audit_run_id": old_run_id}
-            }
-            logger = BaseGate.get_audit_logger()
+        logger = BaseGate.get_audit_logger()
 
         # Assert
-        # TODO: After removing run_id reuse logic
-        # assert logger.run_id != old_run_id, "Should NOT reuse run_id from state"
-        assert True, "Placeholder - implement after BaseGate fix"
+        assert logger.run_id != old_run_id, f"Should NOT reuse run_id from state: got {logger.run_id}, should not be {old_run_id}"
+
+        # Cleanup
+        state.clear()
 
     @pytest.mark.unit
     def test_multiple_audit_files_created(self):
@@ -274,25 +280,35 @@ class TestBaseGateAuditRunID:
 
         AAA Pattern:
         1. Arrange - Two separate workflow runs
-        2. Act - Call get_audit_logger() for each run
+        2. Act - Call get_audit_logger() for each run, finalize both
         3. Assert - Two different audit files exist
         """
         # Arrange
         from tools.gates.base_gate import BaseGate
+        import time
 
         # Act
         logger_1 = BaseGate.get_audit_logger()
         run_id_1 = logger_1.run_id
+        logger_1.finalize()  # Write audit file
 
+        time.sleep(0.01)  # Ensure timestamp difference
         BaseGate._audit_logger = None  # New workflow
 
         logger_2 = BaseGate.get_audit_logger()
         run_id_2 = logger_2.run_id
+        logger_2.finalize()  # Write audit file
 
         # Assert
-        # TODO: Check audit files exist
-        # assert run_id_1 != run_id_2, "Different workflows should have different run_ids"
-        assert True, "Placeholder - implement after BaseGate fix"
+        assert run_id_1 != run_id_2, "Different workflows should have different run_ids"
+
+        # Check audit files exist
+        audit_dir = Path(__file__).parent.parent.parent / "tests" / "_audit"
+        audit_file_1 = audit_dir / f"audit_log_{run_id_1}.json"
+        audit_file_2 = audit_dir / f"audit_log_{run_id_2}.json"
+
+        assert audit_file_1.exists(), f"First audit file should exist: {audit_file_1}"
+        assert audit_file_2.exists(), f"Second audit file should exist: {audit_file_2}"
 
 
 # ==================== QUALITY GATES FILE WRITE TESTS (Immediate Persistence) ====================

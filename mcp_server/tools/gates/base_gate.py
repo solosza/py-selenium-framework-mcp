@@ -86,25 +86,187 @@ class BaseGate:
         """
         if cls._audit_logger is None:
             from utils.audit_logger import AuditLogger
-            from utils.state_manager import StateManager
 
-            # DEF-043: Check workflow_state for existing audit session
-            state = StateManager()
-            state_data = state.load()
-
-            # audit_run_id is stored under step_0 (metadata step)
-            step_0_data = state_data.get("step_0", {}) if state_data else {}
-            existing_run_id = step_0_data.get("audit_run_id")
-
-            if existing_run_id:
-                # Continue existing audit session
-                cls._audit_logger = AuditLogger(run_id=existing_run_id)
-            else:
-                # Start new audit session and save run_id to state (step_0 = metadata)
-                cls._audit_logger = AuditLogger()
-                state.save(step=0, data={"audit_run_id": cls._audit_logger.run_id})
+            # DEF-049 FIX: Always create fresh audit logger (never reuse)
+            # Each workflow gets its own audit trail
+            cls._audit_logger = AuditLogger()
 
         return cls._audit_logger
+
+    @classmethod
+    def _enforce_audit_write(
+        cls,
+        step: int,
+        gate_name: str,
+        mode: Optional[str]
+    ) -> Optional[dict]:
+        """
+        Smart gate enforcement: Validate audit trail write succeeded (DD-30).
+
+        Checks that:
+        1. Audit file exists and is writable
+        2. Recent audit entry was written successfully
+        3. Audit directory structure is correct
+
+        Args:
+            step: Step number that was logged
+            gate_name: Gate name that was logged
+            mode: Gate mode (PRE/POST)
+
+        Returns:
+            fail_response dict if audit write failed, None if successful
+        """
+        import os
+        from pathlib import Path
+
+        try:
+            audit_logger = cls.get_audit_logger()
+
+            # Check 1: Audit directory exists (use audit logger's actual path)
+            audit_file_path = Path(audit_logger._audit_file)
+            audit_dir = audit_file_path.parent
+
+            if not audit_dir.exists():
+                return {
+                    "status": "fail",
+                    "error": "Audit directory missing (DD-30 violation)",
+                    "fix_hint": """
+Audit trail directory does not exist.
+
+Pattern:
+1. Create tests/_audit/ directory
+2. Ensure write permissions
+3. Verify AuditLogger configuration
+
+Fix:
+mkdir -p tests/_audit
+# Or in Python:
+from pathlib import Path
+Path("tests/_audit").mkdir(parents=True, exist_ok=True)
+
+Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
+                    """
+                }
+
+            # Check 2: Audit file exists (use audit logger's actual file path)
+            audit_file = audit_file_path
+            if not audit_file.exists():
+                return {
+                    "status": "fail",
+                    "error": f"Audit file not created: {audit_file.name} (DD-30 violation)",
+                    "fix_hint": f"""
+Audit file was not created after gate passed.
+
+Expected file: {audit_file}
+Run ID: {audit_logger.run_id}
+
+Pattern:
+1. Check AuditLogger.log_gate() is writing to correct path
+2. Verify file permissions in tests/_audit/
+3. Ensure disk space available
+
+Debug:
+import json
+from pathlib import Path
+audit_path = Path("{audit_file}")
+print(f"Exists: {{audit_path.exists()}}")
+print(f"Parent writable: {{os.access(audit_path.parent, os.W_OK)}}")
+
+Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
+                    """
+                }
+
+            # Check 3: Audit file is readable and contains valid JSON
+            try:
+                import json
+                with open(audit_file, 'r') as f:
+                    audit_data = json.load(f)
+
+                # Check 4: Recent entry exists for this step/gate
+                steps = audit_data.get("steps", [])
+                recent_entry = next(
+                    (s for s in reversed(steps)
+                     if s.get("step") == step and s.get("gate") == gate_name),
+                    None
+                )
+
+                if not recent_entry:
+                    return {
+                        "status": "fail",
+                        "error": f"Audit entry not found for Step {step} {gate_name} (DD-30 violation)",
+                        "fix_hint": f"""
+Audit file exists but entry was not written.
+
+File: {audit_file}
+Expected: Step {step}, Gate {gate_name}, Mode {mode or 'POST'}
+Found: {len(steps)} total entries
+
+Pattern:
+1. Check AuditLogger.log_gate() is called correctly
+2. Verify step/gate_name parameters match
+3. Ensure JSON write is not failing silently
+
+Debug:
+import json
+with open("{audit_file}", 'r') as f:
+    data = json.load(f)
+    print("Steps logged:", [s.get("gate") for s in data.get("steps", [])])
+
+Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
+                        """
+                    }
+
+            except json.JSONDecodeError:
+                return {
+                    "status": "fail",
+                    "error": f"Audit file corrupted: {audit_file.name} (DD-30 violation)",
+                    "fix_hint": """
+Audit file exists but contains invalid JSON.
+
+Pattern:
+1. Check if write operation was interrupted
+2. Verify file wasn't manually edited
+3. Delete corrupted file and regenerate
+
+Fix:
+# Delete corrupted audit file
+import os
+os.remove("tests/_audit/audit_log_<run_id>.json")
+# Restart workflow from Step 1
+
+Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
+                    """
+                }
+
+        except Exception as e:
+            # Catch any unexpected errors
+            return {
+                "status": "fail",
+                "error": f"Audit enforcement error: {str(e)}",
+                "fix_hint": f"""
+Unexpected error during audit trail validation.
+
+Error: {str(e)}
+
+Pattern:
+1. Check AuditLogger is initialized correctly
+2. Verify tests/_audit/ directory permissions
+3. Ensure no file system issues
+
+Debug:
+import os
+from pathlib import Path
+audit_dir = Path("tests/_audit")
+print(f"Directory exists: {{audit_dir.exists()}}")
+print(f"Directory writable: {{os.access(audit_dir, os.W_OK)}}")
+print(f"Run ID: {{cls.get_audit_logger().run_id}}")
+
+Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
+                """
+            }
+
+        # All checks passed
+        return None
 
     @classmethod
     def set_state_manager(cls, manager: Optional["StateManager"]) -> None:
@@ -126,7 +288,8 @@ class BaseGate:
         cls,
         step: int,
         attempts: int,
-        errors: List[str]
+        errors: List[str],
+        metadata: Optional[dict] = None
     ) -> dict:
         """
         Return blocked response when max attempts exceeded (DD-22).
@@ -135,6 +298,7 @@ class BaseGate:
             step: Step number that is blocked
             attempts: Number of attempts made
             errors: List of errors from previous attempts
+            metadata: Validation data from this step (for audit logging)
 
         Returns:
             {"status": "blocked", "step": int, "attempts": int, "errors": list, "fix_hint": str}
@@ -145,7 +309,8 @@ class BaseGate:
             gate_name=f"step_{step}_blocked",
             mode="POST",
             result="blocked",
-            error=f"Max attempts ({attempts}) exceeded"
+            error=f"Max attempts ({attempts}) exceeded",
+            metadata=metadata
         )
 
         return {
@@ -162,7 +327,8 @@ class BaseGate:
         step: Optional[int] = None,
         gate_name: Optional[str] = None,
         mode: Optional[str] = None,
-        source: Optional[str] = None
+        source: Optional[str] = None,
+        metadata: Optional[dict] = None
     ) -> dict:
         """
         Return standard pass response and optionally log to audit trail.
@@ -172,6 +338,7 @@ class BaseGate:
             gate_name: Gate name (for audit logging)
             mode: Gate mode PRE/POST (for audit logging)
             source: Execution source tool/ai/self-heal (for audit logging)
+            metadata: Validation data from this step (for audit logging)
 
         Returns:
             {"status": "pass"}
@@ -183,8 +350,14 @@ class BaseGate:
                 gate_name=gate_name,
                 mode=mode or "POST",
                 result="pass",
-                source=source
+                source=source,
+                metadata=metadata
             )
+
+            # Smart gate enforcement: Validate audit write succeeded
+            audit_error = cls._enforce_audit_write(step, gate_name, mode)
+            if audit_error:
+                return audit_error
 
         return {"status": "pass"}
 
@@ -196,7 +369,8 @@ class BaseGate:
         step: Optional[int] = None,
         gate_name: Optional[str] = None,
         mode: Optional[str] = None,
-        source: Optional[str] = None
+        source: Optional[str] = None,
+        metadata: Optional[dict] = None
     ) -> dict:
         """
         Return standard fail response and optionally log to audit trail.
@@ -208,6 +382,7 @@ class BaseGate:
             gate_name: Gate name (for audit logging)
             mode: Gate mode PRE/POST (for audit logging)
             source: Execution source tool/ai/self-heal (for audit logging)
+            metadata: Validation data from this step (for audit logging)
 
         Returns:
             {"status": "fail", "error": str, "fix_hint": str}
@@ -220,7 +395,8 @@ class BaseGate:
                 mode=mode or "POST",
                 result="fail",
                 error=error,
-                source=source
+                source=source,
+                metadata=metadata
             )
 
         return {
