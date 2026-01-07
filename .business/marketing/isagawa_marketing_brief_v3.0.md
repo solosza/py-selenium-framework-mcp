@@ -65,6 +65,23 @@ This layer must:
 
 ---
 
+## Platform Primitives
+
+> **The Isagawa Platform is built on two primitives: Protocols and Smart Gates.**
+
+| Primitive | What It Does |
+|-----------|--------------|
+| **Protocols** | Define the correct way AI must perform work. Think of these as expert-authored playbooks that tell AI exactly what steps to follow. |
+| **Smart Gates** | Enforce those protocols at every step. They validate, block non-compliant work, and provide corrections when needed. |
+
+**Why two primitives:**
+- **Protocols** = the rules (what must happen)
+- **Smart Gates** = the enforcement (guarantees it happens)
+
+This separation is what makes Isagawa different from suggestion-based AI tools. Protocols provide guidance. Smart Gates make that guidance non-optional.
+
+---
+
 ## The Market Shift: Why Execution Is the Bottleneck
 
 AI has moved faster than organizational trust.

@@ -79,6 +79,18 @@ AI Orchestration (AI does the work, following the rules)
 A new category of software
 ```
 
+### The Two Building Blocks
+
+Every DaaS product is built on two things:
+
+| Building Block | What It Does | Simple Analogy |
+|----------------|--------------|----------------|
+| **Protocols** | Expert rules that tell AI how to do it right | Like a recipe from a master chef |
+| **Smart Gates** | Checkpoints that enforce the rules | Like a spell-checker that won't let you submit with errors |
+
+**Protocols** = "Here's exactly how an expert does this"
+**Smart Gates** = "You can't skip steps or do it wrong"
+
 ---
 
 ## Real World Example
