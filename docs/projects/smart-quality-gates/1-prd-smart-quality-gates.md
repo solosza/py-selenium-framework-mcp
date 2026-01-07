@@ -53,6 +53,364 @@ Enhance QA Execution Engine gates from "detect + hint" to "detect + provide fix 
 
 ---
 
+## Agent-Agnostic Architecture
+
+**This design works with ANY AI coding agent, not just Claude.**
+
+### MCP Tool Categories
+
+Both generators and gates are MCP tools:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ MCP SERVER (All are MCP Tools)                                  │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  GENERATORS (Tool 1-6)           VALIDATORS (Smart Gates)       │
+│  ─────────────────────           ─────────────────────────      │
+│  generate_tests_from_user_story  qg_preflight                   │
+│  discover_page_elements          qg_user_input                  │
+│  generate_page_object            qg_ai_processing               │
+│  generate_task                   qg_test_scenarios              │
+│  generate_role                   qg_discovered_elements         │
+│  generate_test_runner            qg_page_object                 │
+│                                  qg_task                        │
+│                                  qg_role                        │
+│                                  qg_test_runner                 │
+│                                  qg_save_run                    │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Agent-Specific vs Universal
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ AGENT-SPECIFIC (Thin Adapters)                                  │
+│                                                                 │
+│  Claude Code:  .claude/skills/*.md                              │
+│  Cursor:       .cursorrules                                     │
+│  Copilot:      .github/copilot-instructions.md                  │
+│  Windsurf:     .windsurfrules                                   │
+│  Aider:        .aider.conf.yml                                  │
+│  Codex/GPT:    System prompt                                    │
+│  Gemini:       System instructions                              │
+│                                                                 │
+│  [Minimal pointers - "what to do"]                              │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼ calls
+┌─────────────────────────────────────────────────────────────────┐
+│ AGENT-AGNOSTIC (Universal Enforcement via MCP)                  │
+│                                                                 │
+│  MCP Tools (Generators + Smart Gates)                           │
+│  - Same API for any agent                                       │
+│  - Same validation logic                                        │
+│  - Same structured fix responses                                │
+│  - The intelligence lives HERE                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Strategic Implication
+
+| Component | Varies Per Agent | Universal |
+|-----------|------------------|-----------|
+| Instructions format | Yes | - |
+| MCP tool interface | - | Yes |
+| Validation rules | - | Yes |
+| Fix data responses | - | Yes |
+
+**To support a new AI agent:** Write a thin adapter (skill file in agent's format). Reuse 100% of MCP tools and gates.
+
+---
+
+## Architecture Evolution: v1 → v2
+
+### Current Architecture (v1): Generator-Centric
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           v1: GENERATOR-CENTRIC FLOW                            │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  PERSONA: USER                                                                  │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ Step 1: Answers pre-flight questions (credentials, data location)          │ │
+│  │ Step 2: Provides requirement ("As a registered user, I want to...")        │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                                      ▼                                          │
+│  PERSONA: AI (Orchestrator)                                                     │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ Step 3:  AI Processing - Extract BDD, expected_states, intent              │ │
+│  │ Step 4:  Call Tool 1 (generate_tests_from_user_story) → scenarios          │ │
+│  │ Step 5:  Call Tool 2 (discover_page_elements) → elements                   │ │
+│  │ Step 6:  Call Tool 3 (generate_page_object) → POM code + metadata          │ │
+│  │ Step 7:  Call Tool 4 (generate_task) → Task code + metadata                │ │
+│  │ Step 8:  Call Tool 5 (generate_role) → Role code + metadata                │ │
+│  │ Step 9:  Call Tool 6 (generate_test_runner) → Test code                    │ │
+│  │ Step 10: Save files, run pytest                                            │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                                      ▼                                          │
+│  PERSONA: TOOLS (Generators)                                                    │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ Tool 1: Generate BDD scenarios from user story                             │ │
+│  │ Tool 2: Discover page elements (locators, types)                           │ │
+│  │ Tool 3: Generate Page Object code (skeleton + methods)                     │ │
+│  │ Tool 4: Generate Task code (skeleton + workflow)                           │ │
+│  │ Tool 5: Generate Role code (skeleton + orchestration)                      │ │
+│  │ Tool 6: Generate Test code (skeleton + assertions)                         │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                                      ▼                                          │
+│  PERSONA: GATES (Validators Only)                                               │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ qg_preflight         → Validate credentials & data strategy                │ │
+│  │ qg_user_input        → Validate persona, URL, workflow extracted           │ │
+│  │ qg_ai_processing     → Validate BDD, expected_states present               │ │
+│  │ qg_test_scenarios    → Validate scenarios have Given/When/Then             │ │
+│  │ qg_discovered_elements → Validate elements have locators, types            │ │
+│  │ qg_page_object       → Validate POM: no skeleton, has methods              │ │
+│  │ qg_task              → Validate Task: no locators, no return values        │ │
+│  │ qg_role              → Validate Role: no POM imports, no locators          │ │
+│  │ qg_test_runner       → Validate Test: uses Role, asserts via POM           │ │
+│  │ qg_save_run          → Validate all code present before save               │ │
+│  │                                                                            │ │
+│  │ ON FAIL: Return text hint → AI guesses fix → retry                         │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                 │
+│  PROBLEM: Tools generate skeleton → AI fills → Gate validates → AI guesses fix │
+│           The "fill" and "fix" steps rely on AI memorizing rules from Skills   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Proposed Architecture (v2): Gate-Centric (No Generators)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                           v2: GATE-CENTRIC FLOW                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  PERSONA: USER                                                                  │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ Step 1: Answers pre-flight questions (credentials, data location)          │ │
+│  │ Step 2: Provides requirement ("As a registered user, I want to...")        │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                                      ▼                                          │
+│  PERSONA: AI (Constructor, not just Orchestrator)                               │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ Step 3:  AI Processing - Extract BDD, expected_states, intent              │ │
+│  │ Step 4:  AI constructs scenarios → Gate validates + provides patterns      │ │
+│  │ Step 5:  AI discovers elements (Playwright) → Gate validates + fixes       │ │
+│  │ Step 6:  AI constructs POM code → Gate validates + provides patterns       │ │
+│  │ Step 7:  AI constructs Task code → Gate validates + provides patterns      │ │
+│  │ Step 8:  AI constructs Role code → Gate validates + provides patterns      │ │
+│  │ Step 9:  AI constructs Test code → Gate validates + provides patterns      │ │
+│  │ Step 10: Save files, run pytest                                            │ │
+│  │                                                                            │ │
+│  │ KEY CHANGE: AI builds from patterns, not from generator output             │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                           NO GENERATOR TOOLS                                    │
+│                                      │                                          │
+│                                      ▼                                          │
+│  PERSONA: GATES (Validators + Teachers)                                         │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │                                                                            │ │
+│  │  ON PASS: Proceed to next step                                             │ │
+│  │                                                                            │ │
+│  │  ON FAIL: Return structured fix data (DD-50 Smart Gate Pattern)            │ │
+│  │  ┌──────────────────────────────────────────────────────────────────────┐  │ │
+│  │  │ {                                                                    │  │ │
+│  │  │   "status": "fail",                                                  │  │ │
+│  │  │   "error": "Missing state method for login verification",           │  │ │
+│  │  │   "suggested_context": {                                            │  │ │
+│  │  │     "code_pattern": "def is_logged_in(self) -> bool:\n    ...",     │  │ │
+│  │  │     "naming_guide": { "prefix": "is_", "examples": [...] },         │  │ │
+│  │  │     "common_mistakes": [{ "pattern": "...", "fix": "..." }]         │  │ │
+│  │  │   }                                                                  │  │ │
+│  │  │ }                                                                    │  │ │
+│  │  └──────────────────────────────────────────────────────────────────────┘  │ │
+│  │                                                                            │ │
+│  │  AI uses pattern to construct correct code → retry → Gate passes           │ │
+│  │                                                                            │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                 │
+│  BENEFIT: Gate IS the source of truth for code patterns                         │
+│           AI doesn't need to memorize rules - receives them at runtime          │
+│           No generator code to maintain                                         │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Metadata Flow: Bottom-Up Code Construction
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    METADATA ACCUMULATION THROUGH STEPS                          │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  Step 1-2: USER CONTEXT                                                         │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ credential_strategy: "static"                                              │ │
+│  │ test_data_location: "workflow"                                             │ │
+│  │ persona: "As a registered user"                                            │ │
+│  │ URL: "http://site.com/login"                                               │ │
+│  │ workflow: "auth"                                                           │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                                      ▼                                          │
+│  Step 3-4: BDD SCENARIOS                                                        │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ + bdd_scenarios: [{ given, when, then }]                                   │ │
+│  │ + expected_states: ["is_logged_in", "is_error_displayed"]                  │ │
+│  │ + intent: "login"                                                          │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                                      ▼                                          │
+│  Step 5: DISCOVERED ELEMENTS                                                    │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ + elements: [                                                              │ │
+│  │     { name: "email", type: "input", locator: "#email" },                   │ │
+│  │     { name: "password", type: "input", locator: "#passwd" },               │ │
+│  │     { name: "submit", type: "button", locator: "#SubmitLogin" }            │ │
+│  │   ]                                                                        │ │
+│  │ + page_name: "LoginPage"                                                   │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                                      ▼                                          │
+│  Step 6: POM METADATA (Foundation Layer)                                        │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ + pom_metadata: {                                                          │ │
+│  │     class_name: "LoginPage",                                               │ │
+│  │     import_path: "framework.pages.auth.login_page",                        │ │
+│  │     action_methods: ["enter_email", "enter_password", "click_submit"],     │ │
+│  │     state_methods: ["is_logged_in", "is_error_displayed", "get_error_msg"] │ │
+│  │   }                                                                        │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                   ┌──────────────────┴──────────────────┐                       │
+│                   │  POM methods inform Task methods    │                       │
+│                   └──────────────────┬──────────────────┘                       │
+│                                      ▼                                          │
+│  Step 7: TASK METADATA (Domain Layer)                                           │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ + task_metadata: {                                                         │ │
+│  │     class_name: "AuthTasks",                                               │ │
+│  │     import_path: "framework.tasks.auth.auth_tasks",                        │ │
+│  │     task_methods: ["log_in", "log_out"],  ← Uses POM action methods        │ │
+│  │     pom_used: ["LoginPage"]                                                │ │
+│  │   }                                                                        │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                   ┌──────────────────┴──────────────────┐                       │
+│                   │  Task methods inform Role methods   │                       │
+│                   └──────────────────┬──────────────────┘                       │
+│                                      ▼                                          │
+│  Step 8: ROLE METADATA (Orchestration Layer)                                    │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ + role_metadata: {                                                         │ │
+│  │     class_name: "RegisteredUser",                                          │ │
+│  │     import_path: "framework.roles.registered_user",                        │ │
+│  │     workflow_methods: ["login_and_verify"],  ← Calls Task methods          │ │
+│  │     tasks_used: ["AuthTasks"]                                              │ │
+│  │   }                                                                        │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                      │                                          │
+│                   ┌──────────────────┴──────────────────┐                       │
+│                   │  Role methods inform Test structure │                       │
+│                   │  POM state methods inform assertions│                       │
+│                   └──────────────────┬──────────────────┘                       │
+│                                      ▼                                          │
+│  Step 9: TEST CODE (Assertion Layer)                                            │
+│  ┌────────────────────────────────────────────────────────────────────────────┐ │
+│  │ Test Structure:                                                            │ │
+│  │   - Import: RegisteredUser (from role_metadata.import_path)                │ │
+│  │   - Import: LoginPage (from pom_metadata.import_path)                      │ │
+│  │   - Act: user.login_and_verify()  ← From role_metadata.workflow_methods    │ │
+│  │   - Assert: login_page.is_logged_in()  ← From pom_metadata.state_methods   │ │
+│  └────────────────────────────────────────────────────────────────────────────┘ │
+│                                                                                 │
+│  BOTTOM-UP: POM → Task → Role → Test                                            │
+│  Each layer's metadata informs the next layer's code generation                 │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Self-Healing Loop (v2)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         v2: SELF-HEALING LOOP                                   │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│                         ┌─────────────────┐                                     │
+│                         │  SKILL (Thin)   │                                     │
+│                         │ "Generate POM"  │                                     │
+│                         └────────┬────────┘                                     │
+│                                  │                                              │
+│                                  ▼                                              │
+│                   ┌──────────────────────────────┐                              │
+│                   │  AI ATTEMPTS CODE            │                              │
+│                   │  (May be incomplete/wrong)   │                              │
+│                   └──────────────┬───────────────┘                              │
+│                                  │                                              │
+│                                  ▼                                              │
+│                   ┌──────────────────────────────┐                              │
+│                   │  GATE VALIDATES              │                              │
+│                   └──────────────┬───────────────┘                              │
+│                                  │                                              │
+│               ┌──────────────────┼──────────────────┐                           │
+│               │                  │                  │                           │
+│               ▼                  ▼                  ▼                           │
+│         ┌──────────┐      ┌──────────┐      ┌──────────┐                        │
+│         │  PASS    │      │  FAIL    │      │ BLOCKED  │                        │
+│         └────┬─────┘      └────┬─────┘      └────┬─────┘                        │
+│              │                 │                  │                             │
+│              ▼                 ▼                  ▼                             │
+│    ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                │
+│    │ Proceed to      │  │ Return pattern  │  │ Stop, escalate  │                │
+│    │ next step       │  │ + fix data      │  │ to user (DD-22) │                │
+│    └─────────────────┘  └────────┬────────┘  └─────────────────┘                │
+│                                  │                                              │
+│                                  ▼                                              │
+│                   ┌──────────────────────────────┐                              │
+│                   │  AI CONSTRUCTS FROM PATTERN  │                              │
+│                   │  Uses suggested_context:     │                              │
+│                   │  - code_pattern              │                              │
+│                   │  - naming_guide              │                              │
+│                   │  - common_mistakes           │                              │
+│                   └──────────────┬───────────────┘                              │
+│                                  │                                              │
+│                                  └───────────────┐                              │
+│                                                  │                              │
+│                                  ┌───────────────┘                              │
+│                                  │                                              │
+│                                  ▼                                              │
+│                   ┌──────────────────────────────┐                              │
+│                   │  GATE VALIDATES (Retry)      │                              │
+│                   └──────────────────────────────┘                              │
+│                                                                                 │
+│  MAX 3 ATTEMPTS: After 3 fails → BLOCKED → Escalate to user                     │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Persona Responsibilities Summary
+
+| Persona | v1 Role | v2 Role | Change |
+|---------|---------|---------|--------|
+| **User** | Provides requirements, answers questions | Same | No change |
+| **AI** | Orchestrates tools, fills skeleton gaps | Constructs code from patterns | From "filler" to "builder" |
+| **Generators** | Create skeleton code | **REMOVED** | AI constructs directly |
+| **Gates** | Validate, return text hints | Validate, provide patterns + fix data | From "blocker" to "teacher" |
+| **Skills** | Heavy documentation, rules, examples | Minimal pointers ("what to do") | 50%+ reduction |
+
+---
+
 ## DD-50: Smart Gate Pattern
 
 **Core Principle:** Infrastructure that teaches AI how to succeed.
@@ -515,6 +873,10 @@ main (merge when validated)
 | 2026-01-07 | Removed Suggester pattern - gates already modular |
 | 2026-01-07 | Added implementation priority based on gap analysis |
 | 2026-01-07 | Added Analysis Methodology section - repeatable process for step dissection |
+| 2026-01-07 | Added Agent-Agnostic Architecture section - MCP tools work with any AI agent |
+| 2026-01-07 | Added Architecture Evolution (v1→v2) with comprehensive visuals |
+| 2026-01-07 | Added Metadata Flow showing bottom-up code construction |
+| 2026-01-07 | Added Self-Healing Loop and Persona Responsibilities |
 
 ---
 
