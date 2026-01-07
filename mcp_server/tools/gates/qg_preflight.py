@@ -66,13 +66,23 @@ class QGPreflight(BaseGate):
             )
 
         # All valid - save state and return pass
-        state_manager = StateManager()
+        # Task 9.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        state_manager = StateManager(run_id=audit_logger.run_id)
         state_manager.save(step=1, data={
             "credential_strategy": credential_strategy,
             "test_data_location": test_data_location
         })
 
-        return cls.pass_response(step=1, gate_name="qg_preflight", mode="POST")
+        return cls.pass_response(
+            step=1,
+            gate_name="qg_preflight",
+            mode="POST",
+            metadata={
+                "credential_strategy": credential_strategy,
+                "test_data_location": test_data_location
+            }
+        )
 
     @classmethod
     def _is_valid_credential_strategy(cls, value: Any) -> bool:

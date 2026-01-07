@@ -58,8 +58,10 @@ class StateManager:
         elif run_id is not None:
             # New: per-run state directory
             # Path: tests/_state/{run_id}/workflow_state.json
+            # Sanitize run_id for Windows (replace : with -)
+            safe_run_id = run_id.replace(":", "-")
             project_root = Path(__file__).parent.parent.parent  # Go up from mcp_server/utils/
-            run_state_dir = project_root / "tests" / "_state" / run_id
+            run_state_dir = project_root / "tests" / "_state" / safe_run_id
             self._state_file = run_state_dir / "workflow_state.json"
         else:
             # Default: mcp_server/state/workflow_state.json (backward compatible)
