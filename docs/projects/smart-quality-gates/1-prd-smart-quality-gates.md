@@ -409,6 +409,36 @@ Both generators and gates are MCP tools:
 | **Gates** | Validate, return text hints | Validate, provide explicit patterns | From "blocker" to "teacher" |
 | **Skills** | Heavy documentation, rules, examples | Minimal pointers ("what to do") | 50%+ reduction |
 
+### DD Distribution (v2)
+
+> **NOTE:** This distribution is preliminary. Must be validated during 4D Framework Phase 0 by auditing each DD against the "can it be pattern-matched?" criteria.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ DDs IN v2                                                   │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  GATE CODE (Enforced)          SKILLS (Guidance Only)       │
+│  ─────────────────────         ────────────────────────     │
+│  DD-25: Skeleton detection     DD-22: Stop-and-discuss      │
+│  DD-27: No locators in Task    DD-01: Why persona needed    │
+│  DD-49: Navigation rules       DD-04: Single doc source     │
+│  DD-46: Visual feedback        Architecture rationale       │
+│  DD-26: Metadata contracts     Philosophy ("why" not "what")│
+│  DD-33: Discovery method                                    │
+│  etc. (pattern-matchable)                                   │
+│                                                             │
+│  ~80% of DDs                   ~20% of DDs                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Classification Rule:**
+- If DD can be regex/pattern-matched → **Gate** (enforced + pattern provided)
+- If DD is behavioral or "why" explanation → **Skill** (minimal guidance)
+
+**TODO (Phase 0):** Audit all 50 DDs and classify each as Gate vs Skill.
+
 ---
 
 ## DD-50: Smart Gate Pattern
