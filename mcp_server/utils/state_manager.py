@@ -29,19 +29,43 @@ VALID_STEPS = range(1, 11)  # 1-10 inclusive
 class StateManager:
     """Manages workflow state persistence across gate operations."""
 
-    def __init__(self, state_file: str = None):
+    def __init__(self, state_file: str = None, run_id: str = None):
         """
-        Initialize StateManager with optional state file path.
+        Initialize StateManager with optional run_id for per-run isolation.
 
         Args:
-            state_file: Path to state JSON file. If None, uses default location.
+            state_file: (DEPRECATED) Path to state JSON file. Use run_id instead.
+            run_id: Unique identifier for this workflow run. If provided, creates
+                    per-run state directory at tests/_state/{run_id}/workflow_state.json.
+                    If None, uses legacy path mcp_server/state/workflow_state.json.
+
+        Raises:
+            ValueError: If run_id is provided but empty or invalid.
         """
-        if state_file is None:
-            # Default: mcp_server/state/workflow_state.json
+        # Validate run_id if provided
+        if run_id is not None and not isinstance(run_id, str):
+            raise ValueError("run_id must be a string")
+
+        if run_id is not None and run_id.strip() == "":
+            raise ValueError("run_id cannot be empty")
+
+        self._run_id = run_id
+
+        # Determine state file path
+        if state_file is not None:
+            # Legacy: explicit state_file parameter (backward compatible)
+            self._state_file = Path(state_file)
+        elif run_id is not None:
+            # New: per-run state directory
+            # Path: tests/_state/{run_id}/workflow_state.json
+            project_root = Path(__file__).parent.parent.parent  # Go up from mcp_server/utils/
+            run_state_dir = project_root / "tests" / "_state" / run_id
+            self._state_file = run_state_dir / "workflow_state.json"
+        else:
+            # Default: mcp_server/state/workflow_state.json (backward compatible)
             default_dir = Path(__file__).parent.parent / "state"
             state_file = str(default_dir / "workflow_state.json")
-
-        self._state_file = Path(state_file)
+            self._state_file = Path(state_file)
 
     def save(self, step: int, data: dict) -> None:
         """
@@ -132,6 +156,15 @@ class StateManager:
         """Clear state file (for testing and workflow reset)."""
         if self._state_file.exists():
             self._state_file.unlink()
+
+    def get_run_id(self) -> Optional[str]:
+        """
+        Get the run_id for this StateManager instance.
+
+        Returns:
+            run_id if this is a per-run StateManager, None otherwise.
+        """
+        return self._run_id
 
     # =========================================================================
     # Attempt Tracking (Task 2.0 - Self-Heal Cap)

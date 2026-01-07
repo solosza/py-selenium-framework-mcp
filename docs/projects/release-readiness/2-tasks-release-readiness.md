@@ -276,32 +276,33 @@
 ---
 
 - [ ] **7.0 Foundation: StateManager Per-Run Architecture** [CORE]
-  - [ ] 7.1 Create branch `feature/7.0-state-manager-refactor`
-  - [ ] 7.2 **Impact Assessment**
-    - Who calls `StateManager()`? → Find all usage (14 locations)
+  - [x] 7.1 Create branch `feature/7.0-state-manager-refactor`
+  - [x] 7.2 **Impact Assessment**
+    - Who calls `StateManager()`? → Found 14 locations
     - What depends on current behavior? → Existing tests expect monolithic file
     - What will break? → All callers if run_id made required
     - Migration path? → Optional run_id parameter (backward compatible)
-  - [ ] 7.3 **Invoke `testing` skill** - TDD for StateManager refactor
+  - [x] 7.3 **Invoke `testing` skill** - TDD for StateManager refactor
     - Read `test-case-structure.md` (AAA, fixtures, markers)
     - Read `test-matrix.md` (types, categories, pyramid)
     - Read `test-coverage.md` (targets, gaps, coverage command)
     - Read `conventions.md` (project-specific patterns)
     - Read `failure-handling.md` (protocol, defect format)
-  - [ ] 7.4 Write failing tests (6 tests for per-run behavior)
-  - [ ] 7.5 Update `StateManager.__init__()`:
+  - [x] 7.4 Write failing tests (6 tests for per-run behavior)
+  - [x] 7.5 Update `StateManager.__init__()`:
     - Accept optional `run_id` parameter
     - If run_id provided: create `tests/_state/{run_id}/workflow_state.json`
     - If no run_id: use old path `mcp_server/state/workflow_state.json` (backward compatible)
-  - [ ] 7.6 Add `StateManager.get_run_id()` method
-  - [ ] 7.7 Run tests: New tests pass, old tests still pass (backward compatible)
+  - [x] 7.6 Add `StateManager.get_run_id()` method
+  - [x] 7.7 Run tests: New tests pass, old tests still pass (backward compatible)
+    - **Results:** 6 new tests PASSED, 16 existing tests PASSED ✓
   - [ ] 7.8 Commit: `refactor: add per-run state directories (Task 7.0)`
 
   **Done When:**
-  - StateManager accepts optional run_id
-  - Per-run directories work when run_id provided
-  - Old behavior still works (backward compatible)
-  - All 13 existing tests + 6 new tests pass
+  - StateManager accepts optional run_id ✓
+  - Per-run directories work when run_id provided ✓
+  - Old behavior still works (backward compatible) ✓
+  - All 16 existing tests + 6 new tests pass ✓
 
 ---
 
