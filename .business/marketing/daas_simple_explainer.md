@@ -2,6 +2,8 @@
 
 **Explaining DaaS like you're in high school**
 
+> **Note:** DaaS is an *educational analogy* to help explain what Isagawa does. The official market category is **AI Management Layer**, built on **Protocols + Smart Gates**. This document uses the DaaS framing because it's easier to understand for newcomers.
+
 ---
 
 ## What's the Problem?
@@ -150,6 +152,21 @@ No one else is doing this. They're all building generic tools.
 - **DaaS** = Expertise you don't have to learn (like having an expert built into your tools)
 - **Why it matters** = You get professional results without spending years learning
 - **Why no one else does this** = They build generic tools, we build domain-specific expertise
+
+---
+
+## The Official Terms (When You Graduate)
+
+Once you understand DaaS, here's how Isagawa actually describes itself:
+
+| Term | What It Means |
+|------|---------------|
+| **AI Management Layer** | The market category - systems that control how AI executes work |
+| **Protocols** | Expert rules that define correct execution (the "how to do it right") |
+| **Smart Gates** | Enforcement checkpoints that guarantee protocols are followed |
+| **Execution Engine** | A domain-specific product (QA Engine, Legal Engine, etc.) |
+
+**DaaS** is the simple explanation. **AI Management Layer + Protocols + Smart Gates** is the real identity.
 
 ---
 

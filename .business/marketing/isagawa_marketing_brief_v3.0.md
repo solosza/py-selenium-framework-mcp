@@ -82,6 +82,26 @@ This separation is what makes Isagawa different from suggestion-based AI tools. 
 
 ---
 
+## Identity Hierarchy
+
+To be precise about how Isagawa positions itself:
+
+| Level | Term | What It Is | Status |
+|-------|------|------------|--------|
+| **Category** | AI Management Layer | The market we define | Primary identity |
+| **Primitives** | Protocols + Smart Gates | The building blocks | Core differentiator |
+| **Products** | Execution Engines | Domain-specific implementations | What we sell |
+| **Analogy** | Domain as a Service (DaaS) | Educational framing | Communication tool |
+
+**Key distinction:**
+- **AI Management Layer** is what Isagawa IS (the category)
+- **Protocols + Smart Gates** is HOW Isagawa works (the architecture)
+- **DaaS** is how we EXPLAIN it to newcomers (the analogy)
+
+DaaS ("like SaaS, but for domain expertise") is useful for quick explanations. It is not the primary positioning. When speaking to investors, partners, or press, lead with **AI Management Layer**.
+
+---
+
 ## The Market Shift: Why Execution Is the Bottleneck
 
 AI has moved faster than organizational trust.
