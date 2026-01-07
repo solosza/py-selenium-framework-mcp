@@ -4,6 +4,10 @@
 
 Isagawa enforces execution through non-bypassable gates. The gate mechanism varies based on workflow topology.
 
+> **Platform Definition:** The Isagawa Platform is an AI Management Layer built on two primitives:
+> - **Protocols** (Skills) define the correct way AI must perform work
+> - **Smart Gates** enforce those protocols at every step
+
 ---
 
 ## Pattern 1: Assembly Line (Sequential Pipeline)
@@ -38,6 +42,55 @@ Isagawa enforces execution through non-bypassable gates. The gate mechanism vari
 
 ## The Isagawa Principle
 
+**Infrastructure that teaches AI how to succeed.**
+
+All Isagawa patterns share this core philosophy: the system doesn't just block incorrect execution - it guides AI to correct execution.
+
+---
+
+## Pattern 3: Smart Gates (Cross-Cutting)
+
+**Used by:** All Execution Engines
+
+**Characteristics:**
+- Gates detect missing or invalid data
+- Gates PROVIDE the fix, not just report the error
+- AI receives what it needs to retry successfully
+- No guessing, no hallucination
+
+**Two Layers of Self-Healing:**
+
+| Layer | Pattern |
+|-------|---------|
+| **Code Generation** (existing) | Tool generates skeleton → Gate detects → AI fills gaps → Gate validates |
+| **Gate Orchestration** (NEW) | Gate detects missing data → Gate provides fix → AI retries → Gate passes |
+
+**Example:**
+
+```
+Instead of:
+  Gate: "You're missing scope_result. Go figure it out." ❌
+
+We do:
+  Gate: "You're missing scope_result. Here it is. Retry." ✅
+```
+
+**Implementation:**
+```python
+# Gate detects missing required data
+if not input_data.get("scope_result"):
+    # Gate PROVIDES the missing data instead of just failing
+    scope_result = scope_discovery.analyze_workflow(url, ...)
+    return {
+        "status": "NEEDS_RETRY",
+        "fix_applied": "scope_result",
+        "scope_result": scope_result,  # <-- HERE'S YOUR DATA
+        "message": "Missing scope_result. Provided. Retry with this."
+    }
+```
+
+**Enforcement:** Smart infrastructure that helps, not just blocks.
+
 ---
 
 ## Pattern Selection Guide
@@ -52,8 +105,8 @@ Isagawa enforces execution through non-bypassable gates. The gate mechanism vari
 ## Implementation Examples
 
 ### Assembly Line (QA Engine)
-- Skills: 
-- Gates: 
+- Protocols (Skills): Define correct workflow at each step
+- Smart Gates: Enforce protocols, provide explicit patterns on failure
 - Metadata flows via tool chain contracts
 
 ### Inspection Team (Intel Scan)

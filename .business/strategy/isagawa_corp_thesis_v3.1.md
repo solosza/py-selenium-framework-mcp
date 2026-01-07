@@ -90,7 +90,7 @@ Nothing sits above the AI Management Layer except human intent.
 |   AI MANAGEMENT LAYER                    |
 |   (Isagawa)                              |
 |                                          |
-|   - Skills / SOPs                        |
+|   - Protocols (Skills) / SOPs            |
 |   - Enforcement rules                    |
 |   - Quality gates                        |
 |   - Escalation logic                     |
@@ -220,7 +220,7 @@ Isagawa's architecture separates agent-specific guidance from universal enforcem
 | Validation rules | - | Yes |
 | Fix data responses | - | Yes |
 
-This means Isagawa can support new AI agents by writing a thin adapter (skill file in agent's format) while reusing 100% of the enforcement infrastructure.
+This means Isagawa can support new AI agents by writing a thin protocol adapter (skill file in agent's format) while reusing 100% of the enforcement infrastructure.
 
 ---
 

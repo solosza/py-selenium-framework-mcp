@@ -34,19 +34,23 @@ See `.claude/skills/dialogue-engine/` for complete protocol and references.
 
 **Purpose:** First implementation of Isagawa's AI Management Layer - a production system that enforces how AI executes QA test automation workflows through domain-specific rules, quality gates, and validation checkpoints.
 
+**Platform Definition:** The Isagawa Platform is an AI Management Layer built on two primitives:
+- **Protocols** (Skills) define the correct way AI must perform work
+- **Smart Gates** enforce those protocols at every step
+
 **Product Category:** AI Management Layer implemented as domain-specific Execution Engine
 
 **Key Features:**
 - Production-grade 4-layer architecture (Role → Task → Page → WebInterface)
 - 10-step workflow with mandatory quality gates (v2.0)
 - 28 Design Decisions enforced via MCP validation tools
-- Hybrid architecture: Skills (guidance) + MCP Tools (enforcement)
+- Hybrid architecture: Protocols (Skills for guidance) + Smart Gates (MCP Tools for enforcement)
 - Progressive audit trail and state management
 - Real-world test generation against live applications
 
 **Target Application:** http://www.automationpractice.pl/index.php (demo), expandable to any web application
 
-**Company Thesis:** See `.business/strategy/isagawa_corp_thesis_v3.0.md` for complete AI Management Layer vision
+**Company Thesis:** See `.business/strategy/isagawa_corp_thesis_v3.1.md` for complete AI Management Layer vision
 
 ## Technology Stack
 
@@ -115,7 +119,7 @@ Step 10: Save & Run                → files saved, test executed
 
 **Full Details:** FRAMEWORK.md Section 9
 
-### QA Guidance Layer (Skill)
+### QA Guidance Layer (Protocol)
 
 For guided 10-step workflow with quality gates:
 ```
@@ -129,16 +133,16 @@ For guided 10-step workflow with quality gates:
 
 **Usage:** Read relevant step reference before executing each step.
 
-**Meta Skill:** See `design-execution-engine/` for patterns applicable to any vertical.
+**Meta Protocol:** See `design-execution-engine/` for patterns applicable to any vertical.
 
-### Legacy Skill (Deprecated - Use Section 9 Instead)
+### Legacy Protocol (Deprecated - Use Section 9 Instead)
 
 For old 9-step workflow:
 ```
 /skill execute-from-step1
 ```
 
-The skill provides:
+The protocol provides:
 - Complete 9-step workflow guide
 - Autonomous troubleshooting (iframe detection, shadow DOM, JS fallbacks)
 - Step-by-step DevTools guidance when AI needs help
@@ -200,6 +204,7 @@ Step 9: Save files & run test
 | DD-44 | Multi-page scope discovery: AI MUST call scope_discovery before Step 5 |
 | DD-46 | Visual feedback enforcement: AI MUST call RuntimeValidator for each element |
 | DD-49 | Navigation responsibility: Only POMs navigate(); Tasks call pom.navigate() |
+| DD-50 | Smart gate pattern: Gates provide fix data, not just block |
 
 ### DD-22: Stop-and-Discuss Protocol (CRITICAL)
 
@@ -312,9 +317,9 @@ tests/
 - conftest.py provides smart loader with fallback logic
 
 **Implementation Note:**
-Per-step skills are being created to enforce tool chain contracts. DD-28 implementation
-will be integrated into the appropriate step skill (likely Step 1 or Step 9) once
-DDs are ported to dedicated skills. See DEF-B08/DEF-B09 for skill architecture plan.
+Per-step protocols are being created to enforce tool chain contracts. DD-28 implementation
+will be integrated into the appropriate step protocol (likely Step 1 or Step 9) once
+DDs are ported to dedicated protocols. See DEF-B08/DEF-B09 for protocol architecture plan.
 
 ### NO HALLUCINATIONS Policy
 - NEVER guess method names - use metadata from previous tool
@@ -336,7 +341,7 @@ user.browse_category("Women")  # From "browse products in Women category"
 
 ### E2E Testing & Defect Handling
 
-**Use the skill for detailed workflow:**
+**Use the protocol for detailed workflow:**
 ```
 /skill execute-from-step1
 ```
@@ -662,7 +667,7 @@ GOLDEN RULES:
 
 **What's Public (for distribution):**
 - Framework code (`framework/`, `tests/`, `mcp_server/`) - distributed via `pip install isagawa-qa`
-- Skills (.md files) - distributed via Claude plugins
+- Protocols (Skills as .md files) - distributed via Claude plugins
 - README.md (product documentation)
 
 ## Git Workflow

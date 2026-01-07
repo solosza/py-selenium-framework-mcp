@@ -36,7 +36,7 @@
    - [8.12 DD-16, DD-17, DD-18: AI Post-Processing](#812-dd-16-dd-17-dd-18-ai-post-processing-rules)
    - [8.13 DD-19: Tool Invocation Pattern](#813-dd-19-tool-invocation-pattern)
    - [8.14 DD-22: Stop-and-Discuss Protocol](#814-dd-22-stop-and-discuss-protocol-critical)
-   - [8.15 Claude Code Skills](#815-claude-code-skills)
+   - [8.15 Protocols (Claude Code Skills)](#815-protocols-claude-code-skills)
    - [8.16 DD-23: BDD Format Required](#816-dd-23-bdd-format-required-for-tool-1)
    - [8.17 DD-24: Test Credential Strategies](#817-dd-24-test-credential-strategies)
    - [8.18 DD-25: Skeleton Code Quality Gate](#818-dd-25-skeleton-code-quality-gate)
@@ -48,6 +48,7 @@
    - [8.24 DD-49: Navigation Responsibility](#824-dd-49-navigation-responsibility)
    - [8.25 DD-44: Multi-Page Scope Discovery](#825-dd-44-multi-page-scope-discovery)
    - [8.26 DD-46: Visual Feedback Enforcement](#826-dd-46-visual-feedback-enforcement)
+   - [8.27 DD-50: Smart Gate Pattern](#827-dd-50-smart-gate-pattern)
 9. [10-Step Workflow with Quality Gates (v2)](#9-10-step-workflow-with-quality-gates-v2)
    - [9.1 Step 1: Pre-flight Configuration](#91-step-1-pre-flight-configuration)
    - [9.2 Step 2: User Input](#92-step-2-user-input)
@@ -59,6 +60,7 @@
    - [9.8 Step 8: Tool 5](#98-step-8-tool-5)
    - [9.9 Step 9: Tool 6](#99-step-9-tool-6)
    - [9.10 Step 10: Save & Run](#910-step-10-save--run)
+   - [9.11 Context Reconstruction from Audit Trail](#911-context-reconstruction-from-audit-trail)
 
 ---
 
@@ -1488,6 +1490,7 @@ AI PROMPTING RULES FOR TOOL 6:
 | DD-44 | Multi-page scope discovery: AI MUST call scope_discovery.analyze_workflow() before Step 5 | Enables proper POM generation for multi-page workflows (see 8.25) |
 | DD-46 | Visual feedback enforcement: AI MUST call RuntimeValidator for each discovered element | Prevents AI hallucination of selectors; validates against live page (see 8.26) |
 | DD-49 | Navigation responsibility: Only POMs have navigate(); Tasks call pom.navigate() | Single source of truth for page URLs; config-based base URLs (see 8.24) |
+| DD-50 | Smart gate pattern: Gates provide fix data, not just block | Infrastructure teaches AI to succeed; gates detect missing data and provide it (see 8.27) |
 
 ### 8.12 DD-16, DD-17, DD-18: AI Post-Processing Rules
 
@@ -1603,17 +1606,21 @@ What would you like me to investigate first?"
 
 ---
 
-### 8.15 Claude Code Skills
+### 8.15 Protocols (Claude Code Skills)
 
-Claude Code Skills provide on-demand workflow guidance loaded via `/skill <name>`.
+> **Platform Definition:** The Isagawa Platform is built on two primitives:
+> - **Protocols** (Skills) define the correct way AI must perform work
+> - **Smart Gates** enforce those protocols at every step
 
-**Available Skills:**
+Protocols provide on-demand workflow guidance. In Claude Code, they are implemented as Skills loaded via `/skill <name>`.
 
-| Skill | Purpose | When to Use |
-|-------|---------|-------------|
+**Available Protocols:**
+
+| Protocol | Purpose | When to Use |
+|----------|---------|-------------|
 | `execute-from-step1` | Full 9-step MCP workflow with autonomous troubleshooting | Running E2E tests, validating tool chain |
 
-**Skill: execute-from-step1**
+**Protocol: execute-from-step1**
 
 Location: `.claude/skills/execute-from-step1.md`
 
@@ -1633,9 +1640,9 @@ Usage:
 /skill execute-from-step1
 ```
 
-**Skills vs CLAUDE.md:**
+**Protocols vs CLAUDE.md:**
 - CLAUDE.md: Core rules (DD-01 through DD-28), always loaded
-- Skills: Detailed procedures, loaded on-demand to save tokens
+- Protocols (Skills): Detailed procedures, loaded on-demand to save tokens
 
 ---
 
@@ -2048,9 +2055,9 @@ Test data can be shared or workflow-specific. AI must ask which strategy.
 │ - conftest.py provides smart loader with fallback logic                     │
 │                                                                             │
 │ IMPLEMENTATION NOTE:                                                        │
-│ Per-step skills are being created to enforce tool chain contracts.          │
-│ DD-28 implementation will be integrated into the appropriate step skill     │
-│ (likely Step 1 or Step 9) once DDs are ported to dedicated skills.          │
+│ Per-step protocols are being created to enforce tool chain contracts.       │
+│ DD-28 implementation will be integrated into the appropriate step protocol  │
+│ (likely Step 1 or Step 9) once DDs are ported to dedicated protocols.       │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -2070,7 +2077,7 @@ Two slash commands provide controlled entry to the 10-step workflow:
 │           or: /qa-workflow-dev  (development)                               │
 │                                                                             │
 │ FLOW:                                                                       │
-│   1. Slash command reads qa-guidance-layer skill                            │
+│   1. Slash command reads qa-guidance-layer protocol (skill)                 │
 │   2. AI prompts user for requirement (persona + URL)                        │
 │   3. 10-step workflow executes with proper guidance                         │
 │                                                                             │
@@ -2098,7 +2105,7 @@ Two slash commands provide controlled entry to the 10-step workflow:
 │                                                                             │
 │   CAN MODIFY (with approval):                                               │
 │   ───────────────────────────                                               │
-│   - Everything: tests/, framework/, mcp_server/, skills, commands, docs     │
+│   - Everything: tests/, framework/, mcp_server/, protocols (skills), commands, docs │
 │                                                                             │
 │   APPROVAL REQUIRED:                                                        │
 │   Before modifying ANY file, AI MUST:                                       │
@@ -2175,16 +2182,41 @@ A PostToolUse hook automatically captures each quality gate result for complete 
 │ AUDIT FILE STRUCTURE:                                                       │
 │ ─────────────────────                                                       │
 │   {                                                                         │
-│     "audit_metadata": {                                                     │
-│       "created": "2025-12-28T12:00:00Z",                                   │
-│       "platform": "qa-automation",                                          │
-│       "version": "1.0"                                                      │
-│     },                                                                      │
-│     "step_1": { "timestamp": "...", "gate_result": "pass", "data": {...} },│
-│     "step_2": { "timestamp": "...", "gate_result": "pass", "data": {...} },│
-│     ...                                                                     │
-│     "step_10": { "timestamp": "...", "gate_result": "pass", "data": {...} }│
+│     "run_id": "2026-01-07T10:19:17.493153Z",                               │
+│     "execution_mode": "production",                                         │
+│     "steps": [                                                              │
+│       {                                                                     │
+│         "step": 1,                                                          │
+│         "gate": "qg_preflight",                                             │
+│         "mode": "POST",                                                     │
+│         "result": "pass",                                                   │
+│         "timestamp": "2026-01-07T10:19:18.123456Z",                         │
+│         "metadata": {                                                       │
+│           "credential_strategy": "static",                                  │
+│           "test_data_location": "shared"                                    │
+│         }                                                                   │
+│       },                                                                    │
+│       {                                                                     │
+│         "step": 2,                                                          │
+│         "gate": "qg_user_input",                                            │
+│         "mode": "POST",                                                     │
+│         "result": "pass",                                                   │
+│         "timestamp": "2026-01-07T10:19:20.456789Z",                         │
+│         "metadata": {                                                       │
+│           "persona": "As a registered user",                                │
+│           "URL": "https://automationpractice.pl/login",                     │
+│           "role_name": "RegisteredUser",                                    │
+│           "workflow": "auth"                                                │
+│         }                                                                   │
+│       }                                                                     │
+│     ]                                                                       │
 │   }                                                                         │
+│                                                                             │
+│ METADATA FIELD (NEW):                                                       │
+│ ─────────────────────                                                       │
+│   Each step now captures lightweight validation data, not just pass/fail   │
+│   Enables context reconstruction after context window overflow              │
+│   See docs/CONTEXT_RECONSTRUCTION.md for full metadata schema              │
 │                                                                             │
 │ KEY DECISIONS:                                                              │
 │ ──────────────                                                              │
@@ -2416,9 +2448,77 @@ AI must validate discovered elements against live page before POM generation.
 
 ---
 
+### 8.27 DD-50: Smart Gate Pattern
+
+Gates don't just block - they provide the data needed for AI to succeed.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DD-50: SMART GATE PATTERN                                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ PRINCIPLE: Infrastructure that teaches AI how to succeed                    │
+│                                                                             │
+│ Instead of:                                                                 │
+│   Gate: "You're missing scope_result. Go figure it out." ❌                 │
+│                                                                             │
+│ We do:                                                                      │
+│   Gate: "You're missing scope_result. Here it is. Retry." ✅                │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ TWO LAYERS OF SELF-HEALING:                                                 │
+│                                                                             │
+│ ┌─────────────────────────────────────────────────────────────────────────┐ │
+│ │ Layer                  │ Pattern                                        │ │
+│ ├────────────────────────┼────────────────────────────────────────────────┤ │
+│ │ Code Generation        │ Tool generates skeleton → Gate detects →       │ │
+│ │ (existing)             │ AI fills gaps → Gate validates ✅               │ │
+│ ├────────────────────────┼────────────────────────────────────────────────┤ │
+│ │ Gate Orchestration     │ Gate detects missing data → Gate provides      │ │
+│ │ (NEW)                  │ fix → AI retries → Gate passes ✅               │ │
+│ └─────────────────────────────────────────────────────────────────────────┘ │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ SAME PHILOSOPHY:                                                            │
+│   - Tools/Gates provide data needed for success                             │
+│   - AI doesn't guess or hallucinate                                         │
+│   - System guides AI to correct execution                                   │
+│   - "Smart infrastructure" that helps, not just blocks                      │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ IMPLEMENTATION:                                                             │
+│                                                                             │
+│   # Gate detects missing required data                                      │
+│   if not input_data.get("scope_result"):                                    │
+│       # Gate PROVIDES the missing data instead of just failing              │
+│       scope_result = scope_discovery.analyze_workflow(url, ...)             │
+│       return {                                                              │
+│           "status": "NEEDS_RETRY",                                          │
+│           "fix_applied": "scope_result",                                    │
+│           "scope_result": scope_result,  # <-- HERE'S YOUR DATA             │
+│           "message": "Missing scope_result. Provided. Retry with this."     │
+│       }                                                                     │
+│                                                                             │
+│   # AI receives fix data and retries - no guessing required                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**This is Pure Isagawa:**
+- Infrastructure that teaches, not just blocks
+- AI executes within guided constraints
+- System ensures success, not just compliance
+
+---
+
 ## 9. 10-Step Workflow with Quality Gates (v2)
 
 > **Note:** This section documents the updated workflow with explicit quality gates. Section 8 is preserved for reference during transition.
+
+> **Context Reconstruction:** When context window overflows, audit trail metadata enables workflow reconstruction and resume from any completed step. See `docs/CONTEXT_RECONSTRUCTION.md` for complete details on context reconstruction capabilities.
 
 ### Overview
 
@@ -2426,9 +2526,10 @@ The v2 workflow adds:
 - Step 1: Pre-flight Configuration (new)
 - Explicit quality gates at each step
 - Gate enforcement: Cannot proceed until checks pass
-- Six-layer architecture: Slash Command → Skill → Gates → Operations → State → Audit
+- Six-layer architecture: Slash Command → Protocol (Skill) → Smart Gates → Operations → State → Audit
 - DD-29: Slash command entry point controls AI modification permissions
 - DD-30: Progressive audit trail via PostToolUse hook for compliance
+- **Audit Metadata Capture:** Each quality gate logs lightweight validation metadata to enable context reconstruction
 
 > **Template Reference:** See `.claude/skills/design-execution-engine/SKILL.md` for the complete step template that applies to all verticals.
 
@@ -2546,13 +2647,13 @@ Each step definition must include these sections:
 |---------|----------|
 | **A. Identity & Flow** | Step, Dependencies, Input, Output |
 | **B. Persona Map** | User Actions, AI Actions, Tool Actions |
-| **C. Skill Instruction** | PRE-CHECK, ACTION, VALIDATE, RETRY |
+| **C. Protocol Instruction** | PRE-CHECK, ACTION, VALIDATE, RETRY |
 | **D. Tools** | Operation Tool, Quality Gate, Gate Mode |
 | **E. State Management** | State Saved, Who Saves, When Saved, State Schema |
 | **F. Enforcement** | Rules That Apply, Validation Checks, Gate Enforcement |
 | **G. Error Handling** | Failure Behavior, Error Message Templates, Known Defects |
 
-**Skill Reference:** Each step has a corresponding file in `.claude/skills/qa-guidance-layer/references/step-NN.md`
+**Protocol Reference:** Each step has a corresponding file in `.claude/skills/qa-guidance-layer/references/step-NN.md`
 
 ---
 
@@ -2637,12 +2738,13 @@ This flow applies to ALL tool steps (Steps 4-9). When any tool validation fails:
 | Aspect | Details |
 |--------|---------|
 | **Step** | 1 - Pre-flight Configuration |
-| **Skill Reference** | `qa-guidance-layer/references/step-01.md` |
+| **Protocol Reference** | `qa-guidance-layer/references/step-01.md` |
 | **Operation Tool** | - (none, AI asks user) |
 | **Quality Gate** | `qg_preflight` |
 | **Input** | None (first step) |
 | **Output** | `credential_strategy`, `test_data_location` |
 | **State Saved** | `{ step: 1, status: "complete", credential_strategy, test_data_location }` |
+| **Audit Metadata** | `{ credential_strategy, test_data_location }` |
 | **Dependencies** | None |
 | **Who Executes** | AI asks → User answers → Gate validates |
 | **DDs That Apply** | DD-24 (credential strategy), DD-28 (test data location) |
@@ -2782,12 +2884,13 @@ TBD (decide after all steps analyzed)
 | Aspect | Details |
 |--------|---------|
 | **Step** | 2 - User Input |
-| **Skill Reference** | `qa-guidance-layer/references/step-02.md` |
+| **Protocol Reference** | `qa-guidance-layer/references/step-02.md` |
 | **Operation Tool** | - (none, AI extracts from user input) |
 | **Quality Gate** | `qg_user_input` |
 | **Input** | User's natural language requirement |
 | **Output** | Validated: `persona`, `URL`, `role_name`, `domain` |
 | **State Saved** | `{ step: 2, status: "complete", persona, URL, role_name, domain }` |
+| **Audit Metadata** | `{ persona, URL, role_name, workflow }` |
 | **Dependencies** | Step 1 complete (credential_strategy, test_data_location) |
 | **Who Executes** | User provides → AI extracts → Gate validates |
 | **DDs That Apply** | DD-01 (persona required), DD-02 (URL required) |
@@ -2936,12 +3039,13 @@ TBD
 | Aspect | Details |
 |--------|---------|
 | **Step** | 3 - AI Processing |
-| **Skill Reference** | `qa-guidance-layer/references/step-03.md` |
+| **Protocol Reference** | `qa-guidance-layer/references/step-03.md` |
 | **Operation Tool** | - (none, AI processes) |
 | **Quality Gate** | `qg_ai_processing` |
 | **Input** | Step 2 output: `persona`, `URL`, `role_name`, `domain` + original requirement |
 | **Output** | `metadata_context`: `bdd_scenarios`, `expected_states`, `intent` |
 | **State Saved** | `{ step: 3, bdd_scenarios, expected_states, intent }` |
+| **Audit Metadata** | `{ intent, scenarios_count, expected_states_count }` |
 | **Dependencies** | Step 2 complete (validated inputs) |
 | **Who Executes** | AI creates → Gate validates |
 | **DDs That Apply** | DD-03 (metadata context), DD-09 (expected_states from "Then" clause) |
@@ -3079,12 +3183,14 @@ How should we proceed?
 | Aspect | Details |
 |--------|---------|
 | **Step** | 4 - Tool 1 |
-| **Skill Reference** | `qa-guidance-layer/references/step-04.md` |
+| **Protocol Reference** | `qa-guidance-layer/references/step-04.md` |
 | **Operation Tool** | `generate_tests_from_user_story` |
 | **Quality Gate** | `qg_test_scenarios` (pre + post validation) |
 | **Input** | `metadata_context` from Step 3 |
 | **Output** | `test_scenarios`: array of given/when/then objects |
 | **State Saved** | `{ step: 4, test_scenarios }` |
+| **Audit Metadata (PRE)** | `{ workflow }` |
+| **Audit Metadata (POST)** | `{ scenarios_count }` |
 | **Dependencies** | Step 3 complete (valid metadata) |
 | **Who Executes** | AI prepares → Tool validates + generates |
 | **DDs That Apply** | DD-23 (BDD format required) |
@@ -3204,6 +3310,8 @@ How should we proceed?
 | **Quality Gate** | `qg_discovered_elements` |
 | **Gate Mode** | PRE+POST |
 | **Who Saves** | Operation tool |
+| **Audit Metadata (PRE)** | `{ page_name, url, multi_page, total_pages }` |
+| **Audit Metadata (POST)** | `{ page_name, elements_count, pages_discovered, total_pages, discovery_complete }` |
 | **Key Rules** | DD-20 (dynamic element prep), DD-24 (credential strategy) |
 
 **Credential Handling:**
@@ -3223,12 +3331,22 @@ How should we proceed?
 | **Quality Gate** | `qg_page_object` |
 | **Gate Mode** | PRE+POST |
 | **Who Saves** | Operation tool |
-| **Key Rules** | DD-25 (no skeleton code), DD-09 (state methods from expected_states) |
+| **Audit Metadata (PRE)** | `{ page_name, elements_count }` |
+| **Audit Metadata (POST)** | `{ page_name, class_name, import_path, action_methods_count, state_methods_count, multi_page }` |
+| **Key Rules** | DD-25 (no skeleton code), DD-09 (state methods from expected_states), DD-49 (navigate method required) |
 
 **DD-25 Enforcement:**
 - No empty methods with `pass`
 - All locators as class constants
 - State-check methods for each expected_state
+
+**Smart Enforcement (DD-49, DD-50):**
+- Navigate method required: Validates `navigate()` in action_methods
+- Validates `navigate_to()` only called inside `navigate()`
+- Self-teaching error with pattern + example if missing
+
+**Multi-Page Audit Trail:**
+For workflows with multiple POMs, each POST creates a separate audit entry with progress tracking (`poms_generated`, `total_poms`, `generation_complete`, `page_index`). See `docs/CONTEXT_RECONSTRUCTION.md` for details.
 
 ---
 
@@ -3242,7 +3360,9 @@ How should we proceed?
 | **Quality Gate** | `qg_task` |
 | **Gate Mode** | PRE+POST |
 | **Who Saves** | Operation tool |
-| **Key Rules** | DD-12 (check existing), DD-25 (no skeleton), NO return values |
+| **Audit Metadata (PRE)** | `{ task_name }` |
+| **Audit Metadata (POST)** | `{ class_name, import_path, task_methods_count }` |
+| **Key Rules** | DD-12 (check existing), DD-25 (no skeleton), DD-27 (NO locators), NO return values |
 
 **DD-12 Enforcement:**
 - Check if Task class already exists for domain
@@ -3261,6 +3381,8 @@ How should we proceed?
 | **Quality Gate** | `qg_role` |
 | **Gate Mode** | PRE+POST |
 | **Who Saves** | Operation tool |
+| **Audit Metadata (PRE)** | `{ role_name }` |
+| **Audit Metadata (POST)** | `{ class_name, import_path, workflow_methods_count }` |
 | **Key Rules** | DD-12 (check existing), DD-25 (no skeleton), NO return values, orchestrates MULTIPLE tasks |
 
 **Role vs Task:**
@@ -3279,6 +3401,8 @@ How should we proceed?
 | **Quality Gate** | `qg_test_runner` |
 | **Gate Mode** | PRE+POST |
 | **Who Saves** | Operation tool |
+| **Audit Metadata (PRE)** | `{ scenarios_count }` |
+| **Audit Metadata (POST)** | `{ test_name, file_path }` |
 | **Key Rules** | DD-15 (POM assertions), DD-16 (file paths), DD-17 (parameter injection), DD-18 (imports) |
 
 **AI Post-Processing Required:**
@@ -3299,7 +3423,8 @@ How should we proceed?
 | **Quality Gate** | `qg_save_run` |
 | **Gate Mode** | PRE-only |
 | **Who Saves** | AI (after file writes) |
-| **Key Rules** | DD-22 (stop-and-discuss on failure) |
+| **Audit Metadata (PRE)** | `{ validated_layers, ready_for_save }` |
+| **Key Rules** | DD-22 (stop-and-discuss on failure), DEF-048 (code reconstruction detection) |
 
 **File Save Locations:**
 ```
@@ -3309,6 +3434,12 @@ framework/roles/{role_name}.py
 tests/{domain}/test_{intent}.py
 ```
 
+**Smart Enforcement (DEF-048, DD-50):**
+- Code reconstruction detection: Compares code against state
+- Requires POST gate validation proof if code differs
+- Prevents saving reconstructed code without quality gate validation
+- Self-teaching error with fix instructions if validation missing
+
 **On Test Failure (DD-22):**
 - STOP → REPORT → DISCUSS with user
 - NEVER attempt fixes without user consultation
@@ -3316,5 +3447,110 @@ tests/{domain}/test_{intent}.py
 
 ---
 
+### 9.11 Context Reconstruction from Audit Trail
+
+When context window overflows, use audit trail metadata to reconstruct workflow state and resume from any completed step.
+
+**Utility:** `mcp_server/utils/context_reconstructor.py`
+
+**Key Functions:**
+
+| Function | Purpose | Returns |
+|----------|---------|---------|
+| `get_completed_steps()` | List of steps that passed validation | `List[int]` |
+| `get_step_metadata(step)` | All metadata for a specific step (supports multi-page) | `List[Dict]` |
+| `get_workflow_summary()` | Human-readable progress summary | `Dict` |
+| `can_resume_from_step(step)` | Check if resumable from this step | `bool` |
+| `reconstruct_state()` | Rebuild workflow_state.json from audit | `Dict` |
+
+**Benefits:**
+
+1. **Unlimited Workflow Length** - Context window no longer limits workflow complexity
+2. **Resume from Interruption** - Can resume from last completed step instead of restarting
+3. **Multi-Page Support** - Each POM POST creates separate audit entry, tracking progress
+4. **DEF-048 Resolution** - Code reconstruction after context loss by reading audit + state
+5. **Audit as Source of Truth** - Audit trail becomes authoritative record independent of conversation
+
+**Usage Example:**
+
+```python
+from utils.context_reconstructor import ContextReconstructor, find_latest_audit_file
+
+# After context window overflow
+audit_file = find_latest_audit_file()
+reconstructor = ContextReconstructor(audit_file)
+
+# Check what's complete
+completed_steps = reconstructor.get_completed_steps()
+# Returns: [1, 2, 3, 6, 7, 8, 9, 10]
+
+# Get summary
+summary = reconstructor.get_workflow_summary()
+# Returns: {
+#   "run_id": "...",
+#   "completed_steps": [1, 2, 3, 6, 7, 8, 9, 10],
+#   "last_step": 10,
+#   "workflow_complete": true,
+#   "step_details": {
+#     "preflight": {"credential_strategy": "static", ...},
+#     "user_input": {"persona": "As a registered user", ...},
+#     "poms_generated": {"count": 4, "pages": ["LoginPage", ...]},
+#     ...
+#   }
+# }
+
+# Check if can resume
+can_resume = reconstructor.can_resume_from_step(7)
+# Returns: True (if Step 6 complete)
+
+# Rebuild state
+state = reconstructor.reconstruct_state()
+# Returns: {"step_0": {...}, "step_1": {...}, ...}
+```
+
+**Multi-Page Workflow Support:**
+
+For workflows generating multiple POMs (e.g., 4-page ParaBank test), each POM POST creates a separate audit entry:
+
+```json
+{
+  "steps": [
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "metadata": {
+        "page_name": "AccountOverviewPage",
+        "multi_page": {
+          "poms_generated": 2,
+          "total_poms": 4,
+          "page_index": 2
+        }
+      }
+    }
+  ]
+}
+```
+
+Each POM generation is tracked individually. No data is lost even if workflow interrupted mid-generation.
+
+**Full Details:** See `docs/CONTEXT_RECONSTRUCTION.md` for complete metadata schema, implementation details, and usage scenarios.
+
+---
+
 **Document Status:** This is the authoritative source of truth for framework architecture.
-**Related Docs:** CLAUDE.md (quick reference), README.md (overview), `.claude/skills/` (workflow skills)
+**Related Docs:** CLAUDE.md (quick reference), README.md (overview), `.claude/skills/` (workflow protocols), `docs/CONTEXT_RECONSTRUCTION.md` (context reconstruction)
