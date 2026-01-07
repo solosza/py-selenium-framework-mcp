@@ -406,7 +406,7 @@ Both generators and gates are MCP tools:
 | **User** | Provides requirements, answers questions | Same | No change |
 | **AI** | Orchestrates tools, fills skeleton gaps | Constructs code from patterns | From "filler" to "builder" |
 | **Generators** | Create skeleton code | **REMOVED** | AI constructs directly |
-| **Gates** | Validate, return text hints | Validate, provide patterns + fix data | From "blocker" to "teacher" |
+| **Gates** | Validate, return text hints | Validate, provide explicit patterns | From "blocker" to "teacher" |
 | **Skills** | Heavy documentation, rules, examples | Minimal pointers ("what to do") | 50%+ reduction |
 
 ---
