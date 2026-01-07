@@ -11,7 +11,7 @@
 
 ### Audit Trail (Task 1.0)
 - `mcp_server/utils/audit_logger.py` - NEW: Audit log writer class
-- `mcp_server/state/` - Directory for `audit_log_{timestamp}.json` files
+- `tests/_audit/` - Directory for `audit_log_{timestamp}.json` files (was mcp_server/state)
 - `mcp_server/tools/gates/base_gate.py` - Add audit logging hook
 - `mcp_server/_dev_tests/test_audit_logger.py` - NEW: Unit tests for AuditLogger
 
@@ -43,6 +43,22 @@
 ### Validation (Tasks 4.0, 5.0)
 - `SESSION.md` - Document smoke test results
 - `docs/DEFECT_LOG.md` - Track any issues found
+
+### Production Fixes (Task 7.0)
+- `mcp_server/utils/state_manager.py` - Refactor to per-run directories
+- `mcp_server/tools/gates/base_gate.py` - Fix audit run_id reuse
+- `mcp_server/tools/gates/qg_page_object.py` - Add immediate file write
+- `mcp_server/tools/gates/qg_task.py` - Add immediate file write
+- `mcp_server/tools/gates/qg_role.py` - Add immediate file write
+- `mcp_server/tools/gates/qg_test_runner.py` - Add immediate file write
+- `mcp_server/tools/gates/qg_save_run.py` - Add file existence validation
+- `.claude/skills/qa-guidance-layer/references/step-06.md` - Update docs
+- `.claude/skills/qa-guidance-layer/references/step-07.md` - Update docs
+- `.claude/skills/qa-guidance-layer/references/step-08.md` - Update docs
+- `.claude/skills/qa-guidance-layer/references/step-09.md` - Update docs
+- `.claude/skills/qa-guidance-layer/references/step-10.md` - Update docs
+- `tests/_state/{run_id}/` - NEW: Per-run state directories
+- `mcp_server/_dev_tests/test_production_fixes.py` - NEW: Unit tests for fixes
 
 ---
 
@@ -259,21 +275,98 @@
 
 ---
 
+- [ ] **7.0 Production Test Fixes** [CORE] - UNBLOCKS MULTI-PAGE WORKFLOWS
+  - [ ] 7.1 Create branch `feature/7.0-production-fixes`
+  - [ ] 7.2 **Invoke `testing` skill** - Follow TDD for CORE logic (Red-Green-Refactor)
+  - [ ] 7.3 Write failing tests first for per-run state architecture (15 tests)
+  - [ ] 7.4 **FIX #1: Audit run_id reuse (DEF-049)**
+    - Update `BaseGate.get_audit_logger()`:
+      - Remove check for `existing_run_id` from state
+      - Always create fresh AuditLogger with new run_id
+      - Document: "Each workflow run gets fresh audit file"
+    - Test: Multiple workflow runs create separate audit files
+  - [ ] 7.5 **FIX #2: Per-run state directories (DEF-050)**
+    - Update `StateManager.__init__()`:
+      - Accept `run_id` parameter (required)
+      - Create `tests/_state/{run_id}/` directory
+      - Set state file path to `tests/_state/{run_id}/workflow_state.json`
+    - Update `StateManager.save()`:
+      - Write to per-run state file (not monolithic)
+    - Update `StateManager.load()`:
+      - Load from per-run state file
+    - Add `StateManager.get_run_id()` method
+    - Test: Multiple runs create separate state directories
+  - [ ] 7.6 **FIX #3: Immediate file writes (DEF-051)**
+    - Update `qg_page_object.validate_post()`:
+      - After validation passes, write POM file to disk IMMEDIATELY
+      - Use metadata.file_path for target location
+      - Multi-page: iterate ALL POMs in generated_poms, write each
+      - Log file write to audit trail
+    - Update `qg_task.validate_post()`:
+      - After validation passes, write Task file to disk IMMEDIATELY
+      - Log file write to audit trail
+    - Update `qg_role.validate_post()`:
+      - After validation passes, write Role file to disk IMMEDIATELY
+      - Log file write to audit trail
+    - Update `qg_test_runner.validate_post()`:
+      - After validation passes, write Test file to disk IMMEDIATELY
+      - Log file write to audit trail
+    - Test: Files exist on disk after each gate passes
+  - [ ] 7.7 **ENHANCEMENT: Step 10 validation**
+    - Update `qg_save_run.validate_pre()`:
+      - Load expected files list from state (steps 6-9 metadata)
+      - Verify all files exist on disk
+      - Return fail with missing file list if any missing
+      - Include helpful error: "Expected files: [...], Missing: [...]"
+    - Test: Missing files detected and reported
+  - [ ] 7.8 Update step skill references (6-10):
+    - `.claude/skills/qa-guidance-layer/references/step-06.md` - Document immediate write
+    - `.claude/skills/qa-guidance-layer/references/step-07.md` - Document immediate write
+    - `.claude/skills/qa-guidance-layer/references/step-08.md` - Document immediate write
+    - `.claude/skills/qa-guidance-layer/references/step-09.md` - Document immediate write
+    - `.claude/skills/qa-guidance-layer/references/step-10.md` - Document validation role
+  - [ ] 7.9 Integration with BaseGate:
+    - Update all gates to pass run_id to StateManager
+    - Ensure StateManager initialized with run_id from audit logger
+  - [ ] 7.10 Run checks: All tests pass (485+ tests)
+  - [ ] 7.11 **Audit: Verify testing skill conventions followed** ✓ TDD
+  - [ ] 7.12 Record results: 15+ new tests, all passing
+  - [ ] 7.13 Commit: `fix: production test critical failures (Task 7.0)`
+
+  **Done When:**
+  - Each workflow run creates separate state directory
+  - Each workflow run creates separate audit file
+  - All files written immediately after gate passes
+  - Step 10 validates all files exist
+  - Multi-page workflows save ALL POMs
+  - All tests pass
+
+  **Defects Fixed:**
+  - DEF-049: Audit run_id reuse causes audit history loss
+  - DEF-050: State not persisted per-run (no context recovery)
+  - DEF-051: Multi-POM workflows only save 1 file (Step 10 bug)
+
+---
+
 ## Task Dependencies
 
 ```
 1.0 Audit Trail ──────┐
                       │
 2.0 Self-Heal Cap ────┤
-                      ├──► 6.0 E2E Verification
+                      ├──► 7.0 Production Fixes ──► 6.0 E2E Verification
 2.5 Execution Mode ───┤
                       │
 3.0 License/Docs ─────┘
 
-4.0 Smoke Test ─────────► Independent (parallel OK)
+4.0 Smoke Test ─────────► Independent (parallel OK, blocked by 7.0)
 
-5.0 Adversarial ────────► Independent (parallel OK)
+5.0 Adversarial ────────► Independent (parallel OK, blocked by 7.0)
 ```
+
+**CRITICAL:** Task 7.0 MUST complete before Tasks 4.0, 5.0, 6.0 can succeed.
+- Multi-page workflows are broken without Task 7.0 fixes
+- Production test demonstrated all 3 bugs block real workflows
 
 ---
 

@@ -83,25 +83,28 @@ Prepare the Isagawa QA Execution Engine for public release by closing architectu
 ### Topic 2: Audit Trail Improvements
 
 **Decision Date:** 2025-12-27
+**Enhanced:** 2026-01-07 (Metadata Capture Added)
 
 **Context:**
 - No automatic record of what happened during a run
 - Gate responses not persisted
 - If workflow fails mid-way, no trace of which gates passed/failed
+- **NEW (2026-01-07):** Need to capture actual validation data, not just pass/fail, to enable context reconstruction after context window overflow
 
 **Decision:**
 
 | Aspect | Decision |
 |--------|----------|
-| What to capture | All: gates, execution source, self-heal attempts, files generated, errors |
-| Where to store | Separate file per run: `audit_log_{timestamp}.json` |
+| What to capture | All: gates, execution source, self-heal attempts, files generated, errors, **metadata** |
+| Where to store | Separate file per run: `audit_log_{timestamp}.json` in `tests/_audit/` |
 | Format | JSON (machine-readable), human summary generated on demand |
+| Metadata | Each gate logs lightweight summary of validation data (counts, names, not full structures) |
 
-**Audit Log Schema:**
+**Audit Log Schema (Enhanced with Metadata):**
 
 ```json
 {
-  "run_id": "2025-12-27T14:30:00Z",
+  "run_id": "2026-01-07T10:19:17.493153Z",
   "execution_mode": "mixed",
   "steps": [
     {
@@ -109,15 +112,35 @@ Prepare the Isagawa QA Execution Engine for public release by closing architectu
       "gate": "qg_preflight",
       "mode": "POST",
       "result": "pass",
-      "timestamp": "...",
-      "data": {}
+      "timestamp": "2026-01-07T10:39:22.126203Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-07T10:39:44.002427Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "https://example.com/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
     },
     {
       "step": 6,
       "gate": "qg_page_object",
       "mode": "PRE",
       "result": "pass",
-      "timestamp": "..."
+      "timestamp": "2026-01-07T10:40:10.000000Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 15
+      }
     },
     {
       "step": 6,
@@ -126,7 +149,7 @@ Prepare the Isagawa QA Execution Engine for public release by closing architectu
       "result": "fail",
       "error": "skeleton detected",
       "source": "tool",
-      "timestamp": "..."
+      "timestamp": "2026-01-07T10:40:15.000000Z"
     },
     {
       "step": 6,
@@ -134,12 +157,40 @@ Prepare the Isagawa QA Execution Engine for public release by closing architectu
       "mode": "POST",
       "result": "pass",
       "source": "self-heal",
-      "attempt": 1,
-      "timestamp": "..."
+      "timestamp": "2026-01-07T10:40:37.305582Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 4,
+        "state_methods_count": 2
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "source": "tool",
+      "timestamp": "2026-01-07T10:41:00.000000Z",
+      "metadata": {
+        "page_name": "AccountOverviewPage",
+        "class_name": "AccountOverviewPage",
+        "import_path": "pages.parabank.account_overview_page",
+        "action_methods_count": 3,
+        "state_methods_count": 3,
+        "multi_page": {
+          "poms_generated": 2,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 2
+        }
+      }
     }
   ],
   "files_generated": [
     {"path": "framework/pages/auth/login_page.py", "step": 6},
+    {"path": "framework/pages/parabank/account_overview_page.py", "step": 6},
     {"path": "framework/tasks/auth/auth_tasks.py", "step": 7}
   ],
   "summary": {
@@ -147,24 +198,41 @@ Prepare the Isagawa QA Execution Engine for public release by closing architectu
     "gates_passed": 18,
     "gates_failed": 2,
     "self_heals": 2,
-    "final_result": "pass"
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {
+      "tool": 12,
+      "self-heal": 6
+    }
   }
 }
 ```
 
+**Metadata Benefits:**
+- **Context Reconstruction:** Can rebuild workflow state after context window overflow
+- **Multi-Page Tracking:** Each POM POST creates separate entry with progress info
+- **Debugging:** Know exact inputs/outputs at each step
+- **Resume Capability:** Can resume from any completed step
+- **Lightweight:** Counts instead of full structures (90% smaller than logging tool metadata)
+
 **Implementation Scope:**
 
-| Component | Change |
-|-----------|--------|
-| `mcp_server/state/` | New `audit_log_{timestamp}.json` per run |
-| All gates | Append to audit log on each call |
-| `qg_save_run` | Write final summary, close audit log |
-| CLI (future) | `isagawa audit --run <id>` to view/summarize |
+| Component | Change | Status |
+|-----------|--------|--------|
+| `tests/_audit/` | New `audit_log_{timestamp}.json` per run | ✅ DONE |
+| `utils/audit_logger.py` | Added `metadata` parameter to `log_gate()` | ✅ DONE |
+| `tools/gates/base_gate.py` | Added `metadata` parameter to `pass_response()`, `fail_response()`, `blocked_response()` | ✅ DONE |
+| All gates (Steps 1-10) | Extract and pass metadata summaries to audit logger | ✅ DONE |
+| `qg_save_run` | Write final summary, close audit log | ✅ DONE |
+| `utils/context_reconstructor.py` | Utility to rebuild workflow state from audit metadata | ✅ DONE |
+| CLI (future) | `isagawa audit --run <id>` to view/summarize | PENDING |
 
 **Rationale:**
 - Separate file per run = easy to compare runs, no data loss
 - JSON = machine-readable, can generate human summary on demand
 - Captures everything needed to debug failures or demonstrate resilience
+- **Metadata enables context reconstruction** = can resume after context window overflow
+- **Lightweight metadata** = audit files 90% smaller than logging full tool metadata
 
 ---
 
@@ -497,6 +565,262 @@ Dog-whistle to the right people without naming the category:
 
 ---
 
+### Topic 10: Context Reconstruction from Audit Trail
+
+**Decision Date:** 2026-01-07
+
+**Context:**
+- Claude's context window has limits (200K tokens)
+- Long workflows can exceed context window, causing conversation summarization
+- When context is lost, detailed workflow data (personas, URLs, page names, method signatures) is gone
+- Previously required restarting workflow from Step 1
+- **Problem:** Limits maximum workflow complexity to what fits in context window
+
+**Solution: Audit Trail as State Reconstruction Source**
+
+| Aspect | Decision |
+|--------|----------|
+| **Metadata Capture** | Each gate logs lightweight summary of validation data to audit trail |
+| **Metadata Format** | Counts + key identifiers, not full structures (90% smaller) |
+| **Reconstruction Utility** | `utils/context_reconstructor.py` rebuilds workflow state from audit metadata |
+| **Resume Capability** | Can resume from any completed step after context loss |
+
+**Metadata Captured by Step:**
+
+| Step | PRE Metadata | POST Metadata |
+|------|-------------|---------------|
+| **1** | - | credential_strategy, test_data_location |
+| **2** | - | persona, URL, role_name, workflow |
+| **3** | - | intent, scenarios_count, expected_states_count |
+| **4** | workflow | scenarios_count |
+| **5** | page_name, url, multi_page, total_pages | page_name, elements_count, pages_discovered, discovery_complete |
+| **6** | page_name, elements_count | page_name, class_name, import_path, action_methods_count, state_methods_count, multi_page progress |
+| **7** | task_name | class_name, import_path, task_methods_count |
+| **8** | role_name | class_name, import_path, workflow_methods_count |
+| **9** | scenarios_count | test_name, file_path |
+| **10** | validated_layers, ready_for_save | - |
+
+**Context Reconstruction Features:**
+- `get_completed_steps()` - List of steps that passed
+- `get_step_metadata(step)` - All metadata for a step (supports multi-page)
+- `get_workflow_summary()` - Human-readable workflow progress
+- `can_resume_from_step(step)` - Check if we have enough data to resume
+- `reconstruct_state()` - Rebuild workflow_state.json structure
+
+**Benefits:**
+- **Unlimited workflow length** - No longer limited by context window
+- **Resume from interruption** - Don't restart from Step 1
+- **Multi-page support** - Each POM POST creates separate audit entry
+- **Solves DEF-048** - Code reconstruction after context loss possible
+
+**Implementation:**
+- ✅ Enhanced `AuditLogger.log_gate()` with metadata parameter
+- ✅ Updated `BaseGate.pass_response/fail_response/blocked_response()` with metadata parameter
+- ✅ All gates (Steps 1-10) extract and pass metadata summaries
+- ✅ Created `utils/context_reconstructor.py` utility
+- ✅ Created `docs/CONTEXT_RECONSTRUCTION.md` documentation
+- ✅ Demonstration test: `_dev_tests/test_context_reconstruction.py`
+
+**Rationale:**
+- Separates concerns: tool metadata (for generation) vs audit metadata (for tracking)
+- Lightweight summaries keep audit files small (~2KB vs ~50KB for full metadata)
+- Enables context-independent workflow execution
+- Audit trail becomes authoritative source of truth
+
+---
+
+### Topic 11: Smart Gate Enforcement Patterns
+
+**Decision Date:** 2026-01-07
+
+**Context:**
+- Traditional quality gates just validate inputs/outputs
+- When gates fail, error messages don't teach AI how to fix the issue
+- Three enforcement gaps discovered:
+  1. Navigate method missing from POMs (DD-49 violation)
+  2. Code reconstruction without POST validation (DEF-048)
+  3. Audit write success not validated (DD-30 compliance)
+
+**Decision: Smart Gates with Self-Teaching Errors**
+
+| Aspect | Decision |
+|--------|----------|
+| **Pattern** | Minimal docs + smart enforcement + self-teaching error messages |
+| **Error Format** | Violation + Pattern + Example + Fix |
+| **Documentation Strategy** | Don't document every rule - enforce it in code with teaching errors |
+
+**Smart Gate Implementations:**
+
+**1. Navigate Method Enforcement (DEF-048 Resolution)**
+- **Gate:** qg_page_object POST
+- **Validates:** All POMs must have `navigate()` method (DD-49 compliance)
+- **Enforcement:** Checks metadata.action_methods for "navigate", validates code doesn't call navigate_to() outside navigate()
+- **Self-Teaching Error:**
+  ```
+  Pattern:
+  def navigate(self) -> "LoginPage":
+      '''Navigate to this page.'''
+      self.web.navigate_to(self.web.config['url'] + '/path')
+      return self
+
+  Fix: Add navigate() method to the POM.
+  ```
+
+**2. Code Reconstruction Detection (DEF-048 Resolution)**
+- **Gate:** qg_save_run PRE
+- **Validates:** Reconstructed code must pass POST gate before saving
+- **Enforcement:** Compares code against state, requires metadata proof if differs
+- **Self-Teaching Error:**
+  ```
+  Pattern:
+  1. Call qg_page_object POST validation with modified code
+  2. If validation passes, provide metadata proof
+  3. Then proceed to Step 10 save
+
+  Fix: Validate reconstructed POM code through POST gate first.
+  ```
+
+**3. Audit Write Validation (DD-30 Enforcement)**
+- **Gate:** BaseGate.pass_response (all gates)
+- **Validates:** Audit file exists, writable, contains expected entry
+- **Enforcement:** Checks directory exists, file exists, JSON valid, entry logged
+- **Self-Teaching Error:**
+  ```
+  Pattern:
+  1. Create tests/_audit/ directory
+  2. Ensure write permissions
+  3. Verify AuditLogger configuration
+
+  Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
+  ```
+
+**Benefits:**
+- **Self-correcting system** - AI learns from error messages
+- **Minimal documentation** - Rules are enforced, not just documented
+- **Faster debugging** - Errors include fix patterns
+- **Consistent enforcement** - Code enforces what docs describe
+
+**Implementation:**
+- ✅ `_validate_navigate_method()` in qg_page_object.py
+- ✅ `_check_code_reconstruction()` in qg_save_run.py
+- ✅ `_enforce_audit_write()` in base_gate.py
+- ✅ All validation methods follow pattern: detect + explain + teach
+
+**Rationale:**
+- Gates become active teachers, not passive validators
+- Reduces documentation burden (code IS documentation)
+- Scales better than writing rules in markdown
+
+---
+
+### Topic 12: Production Test Findings - Critical Architecture Fixes
+
+**Decision Date:** 2026-01-07
+
+**Context:**
+- Ran first production E2E test (ParaBank multi-page workflow)
+- Discovered 3 critical failures that blocked test completion:
+  1. Audit file reuse across runs (losing history)
+  2. State not persisted per-run (context recovery impossible)
+  3. Only 1 of 6 POMs saved to disk (multi-page workflow broken)
+
+**Problem Analysis:**
+
+**Failure #1: Audit File Overwriting**
+```python
+# base_gate.py:96-105 - BUG
+existing_run_id = step_0_data.get("audit_run_id")  # Gets old run_id
+if existing_run_id:
+    cls._audit_logger = AuditLogger(run_id=existing_run_id)  # REUSES same file!
+```
+- Evidence: Only 1 audit file exists, last modified 13:38, but run_id from 10:19
+- Root Cause: `workflow_state.json` never clears `step_0.audit_run_id`, so each new test run overwrites previous audit file
+- Impact: Losing audit history, can't compare runs
+
+**Failure #2: State Persistence Architecture Gap**
+- Expected: `tests/_state/{run_id}/step_N.json` (per-run, per-step files)
+- Actual: `mcp_server/state/workflow_state.json` (single monolithic file)
+- Root Cause: Documentation described per-run state architecture, but StateManager was never updated to implement it
+- Impact: No context recovery after compaction, no run isolation
+
+**Failure #3: Multi-POM File Saving Bug**
+- Expected: All 6 POMs saved to disk (LoginPage, OpenAccountPage, TransferFundsPage, AccountActivityPage, TestPage, ParabankRegistrationPage)
+- Actual: Only ParabankRegistrationPage saved
+- Evidence: `workflow_state.json` step_6.generated_poms has all 6 POMs with full code (577-4473 chars each)
+- Root Cause: Step 10 didn't iterate through `generated_poms` dict, only saved last POM
+- Impact: Multi-page workflows completely broken
+
+**Decision: Immediate Write + Per-Run State Architecture**
+
+| Aspect | Decision |
+|--------|----------|
+| **State Strategy** | One state file per run: `tests/_state/{run_id}/workflow_state.json` |
+| **File Writing** | Write files IMMEDIATELY after generation (Steps 6-9), not in Step 10 |
+| **Audit Run ID** | Always generate NEW run_id per workflow (never reuse from state) |
+| **Step 10 Role** | Validation/verification step, not file writing step |
+| **Recovery Mode** | Backup capability, not primary workflow |
+
+**Rationale:**
+
+**Why one file per run (not per step)?**
+- ✅ Simpler implementation
+- ✅ Atomic reads/writes
+- ✅ Complete state snapshot in one place
+- ✅ JSON size not an issue (<50KB typical)
+- ✅ Easier to inspect and debug
+
+**Why immediate file writes (not Step 10)?**
+```
+BEFORE (broken):
+Step 6: Generate POM → Save to state (memory only)
+Step 7: Generate Task → Save to state (memory only)
+Step 8: Generate Role → Save to state (memory only)
+Step 9: Generate Test → Save to state (memory only)
+Step 10: Loop state → Write files ← CONTEXT LOSS HERE ❌
+
+AFTER (fixed):
+Step 6: Generate POM → Write file IMMEDIATELY → Save metadata to state ✅
+Step 7: Generate Task → Write file IMMEDIATELY → Save metadata to state ✅
+Step 8: Generate Role → Write file IMMEDIATELY → Save metadata to state ✅
+Step 9: Generate Test → Write file IMMEDIATELY → Save metadata to state ✅
+Step 10: Validate all files exist + run test ✅
+```
+
+**Benefits:**
+- Files persisted immediately (crash-safe)
+- Context loss doesn't matter (files already on disk)
+- Step 10 becomes validation, not I/O
+- Smart gates can verify files were written
+- Eliminates entire class of "lost files due to context compaction" bugs
+
+**Implementation Scope:**
+
+| Component | Change | Priority |
+|-----------|--------|----------|
+| StateManager | Accept run_id, write to `tests/_state/{run_id}/workflow_state.json` | CRITICAL |
+| BaseGate.get_audit_logger() | Always create NEW run_id (don't reuse from state) | CRITICAL |
+| qg_page_object POST | Write POM file immediately after validation passes | CRITICAL |
+| qg_task POST | Write Task file immediately after validation passes | CRITICAL |
+| qg_role POST | Write Role file immediately after validation passes | CRITICAL |
+| qg_test_runner POST | Write Test file immediately after validation passes | CRITICAL |
+| qg_save_run PRE | Validate all expected files exist on disk | HIGH |
+| Step skill references | Update Step 6-9 to write files, Step 10 to validate | HIGH |
+
+**Smart Gate Enhancement:**
+
+Step 10 PRE gate validates:
+1. All expected files exist on disk (read from step metadata)
+2. File contents match state metadata (checksums)
+3. No missing POMs from multi-page workflows
+4. Import paths are valid
+
+**Defects Created:**
+- DEF-049: Audit run_id reuse causes audit history loss
+- DEF-050: State not persisted per-run (no context recovery)
+- DEF-051: Multi-POM workflows only save 1 file (Step 10 bug)
+
+---
+
 ---
 
 ## Summary of All Design Decisions
@@ -504,7 +828,7 @@ Dog-whistle to the right people without naming the category:
 | Topic | Decision | Implementation |
 |-------|----------|----------------|
 | **1. Execution Modes** | Two modes: MIXED (default) and SKILLS_ONLY. No TOOLS_ONLY. | Hardcoded MIXED for MVP, env var for advanced users |
-| **2. Audit Trail** | JSON per run: gates, sources, self-heals, files, errors | `audit_log_{timestamp}.json` in `mcp_server/state/` |
+| **2. Audit Trail** | JSON per run: gates, sources, self-heals, files, errors, **metadata** | `audit_log_{timestamp}.json` in `tests/_audit/` ✅ |
 | **3. Self-Heal Cap** | 3 retries per step, then blocked + DD-22 user decision | Gate tracks attempt count, returns `blocked` status |
 | **4. Artifact Layout** | DEFERRED | Skills teach paths, no gate enforcement for MVP |
 | **5. Adversarial Tests** | NOT A DESIGN TOPIC | QA task: run 5 edge cases through workflow |
@@ -512,6 +836,9 @@ Dog-whistle to the right people without naming the category:
 | **7. Smoke Matrix** | 2-3 sites, simple+medium+complex, Chrome only | Validation activity, not code change |
 | **8. Packaging** | Manual clone + pip install, license-protected skills | README docs, license headers on skills |
 | **9. Positioning** | Controlled hybrid: demonstrate, don't claim category | "Isagawa QA - Enforced AI Execution" |
+| **10. Context Reconstruction** | Audit metadata enables state rebuild after context loss | `utils/context_reconstructor.py` ✅ |
+| **11. Smart Gates** | Self-teaching error messages with patterns + examples | Navigate enforcement, code reconstruction detection, audit validation ✅ |
+| **12. Production Fixes** | Immediate file writes + per-run state + fresh audit run_ids | StateManager refactor, gates write files immediately, Step 10 validates |
 
 ---
 
@@ -575,6 +902,28 @@ PACKS (Domain-specific)
 - FR-8.1: All skill files include license header
 - FR-8.2: README includes complete installation steps
 - FR-8.3: LICENSE.md defines terms of use for skills
+
+### From Topic 10: Context Reconstruction
+- FR-10.1: Each gate logs metadata summary to audit trail (not full tool metadata)
+- FR-10.2: Metadata includes counts, names, identifiers (not full structures)
+- FR-10.3: ContextReconstructor utility can rebuild workflow state from audit metadata
+- FR-10.4: Multi-page workflows create separate audit entries per POM
+- FR-10.5: Can resume workflow from any completed step after context loss
+
+### From Topic 11: Smart Gates
+- FR-11.1: All POMs must have navigate() method (enforced by qg_page_object POST)
+- FR-11.2: Reconstructed code must pass POST gate before saving (enforced by qg_save_run PRE)
+- FR-11.3: Audit write success validated (enforced by BaseGate.pass_response)
+- FR-11.4: Gate error messages include: violation + pattern + example + fix
+- FR-11.5: Gates are self-teaching (AI learns from error messages)
+
+### From Topic 12: Production Fixes
+- FR-12.1: StateManager creates per-run directories: `tests/_state/{run_id}/workflow_state.json`
+- FR-12.2: Each workflow run gets fresh audit run_id (never reused from state)
+- FR-12.3: Quality gates write files immediately after validation (Steps 6-9)
+- FR-12.4: Step 10 validates all expected files exist on disk
+- FR-12.5: Multi-page workflows save ALL generated POMs to disk
+- FR-12.6: File writes are crash-safe (files persisted before state saved)
 
 ---
 
