@@ -283,6 +283,11 @@
     - What will break? → All callers if run_id made required
     - Migration path? → Optional run_id parameter (backward compatible)
   - [ ] 7.3 **Invoke `testing` skill** - TDD for StateManager refactor
+    - Read `test-case-structure.md` (AAA, fixtures, markers)
+    - Read `test-matrix.md` (types, categories, pyramid)
+    - Read `test-coverage.md` (targets, gaps, coverage command)
+    - Read `conventions.md` (project-specific patterns)
+    - Read `failure-handling.md` (protocol, defect format)
   - [ ] 7.4 Write failing tests (6 tests for per-run behavior)
   - [ ] 7.5 Update `StateManager.__init__()`:
     - Accept optional `run_id` parameter
@@ -307,6 +312,7 @@
     - What will break? → Nothing - removing reuse is safe
     - Migration path? → None needed - fresh run_id is correct behavior
   - [ ] 8.2 **Invoke `testing` skill** - TDD for audit logger fix
+    - Read ALL testing skill references (test-case-structure, test-matrix, test-coverage, conventions, failure-handling)
   - [ ] 8.3 Write failing tests (3 tests for fresh run_id)
   - [ ] 8.4 Update `BaseGate.get_audit_logger()`:
     - Remove lines 91-97 (existing_run_id check)
@@ -385,6 +391,7 @@
     - What breaks? → Currently only saves 1 POM (the bug!)
     - Migration? → Add immediate file write after validation
   - [ ] 15.2 **Invoke `testing` skill** - TDD for immediate write
+    - Read ALL testing skill references
   - [ ] 15.3 Write failing tests (2 tests: single POM, multi-POM)
   - [ ] 15.4 Update `qg_page_object.validate_post()`:
     - Change to `StateManager(run_id=...)`
@@ -403,6 +410,7 @@
 - [ ] **16.0 Refactor + Feature: qg_task** [CORE] - DEF-051 FIX
   - [ ] 16.1 **Impact Assessment**
   - [ ] 16.2 **Invoke `testing` skill** - TDD for immediate write
+    - Read ALL testing skill references
   - [ ] 16.3 Write failing test (1 test: Task file written)
   - [ ] 16.4 Update `qg_task.validate_post()`:
     - Change to `StateManager(run_id=...)`
@@ -416,6 +424,7 @@
 - [ ] **17.0 Refactor + Feature: qg_role** [CORE] - DEF-051 FIX
   - [ ] 17.1 **Impact Assessment**
   - [ ] 17.2 **Invoke `testing` skill** - TDD for immediate write
+    - Read ALL testing skill references
   - [ ] 17.3 Write failing test (1 test: Role file written)
   - [ ] 17.4 Update `qg_role.validate_post()`:
     - Change to `StateManager(run_id=...)`
@@ -429,6 +438,7 @@
 - [ ] **18.0 Refactor + Feature: qg_test_runner** [CORE] - DEF-051 FIX
   - [ ] 18.1 **Impact Assessment**
   - [ ] 18.2 **Invoke `testing` skill** - TDD for immediate write
+    - Read ALL testing skill references
   - [ ] 18.3 Write failing test (1 test: Test file written)
   - [ ] 18.4 Update `qg_test_runner.validate_post()`:
     - Change to `StateManager(run_id=...)`
@@ -446,6 +456,7 @@
     - What breaks? → Nothing - adding new validation
     - Migration? → Pure enhancement
   - [ ] 19.2 **Invoke `testing` skill** - TDD for validation
+    - Read ALL testing skill references
   - [ ] 19.3 Write failing tests (2 tests: missing files detected, all files present)
   - [ ] 19.4 Update `qg_save_run.validate_pre()`:
     - Change to `StateManager(run_id=...)`
