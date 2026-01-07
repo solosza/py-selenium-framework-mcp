@@ -343,7 +343,7 @@
     - Change `StateManager()` → `StateManager(run_id=audit_logger.run_id)` ✓
   - [x] 9.3 Run gate tests: `pytest test_gates/test_qg_preflight.py`
     - **Results:** 20/20 tests PASSED ✓
-  - [ ] 9.4 Commit: `refactor: qg_preflight uses per-run state (Task 9.0)`
+  - [x] 9.4 Commit: `refactor: qg_preflight uses per-run state (Task 9.0)` ✓
 
   **Bonus Fix:**
   - Fixed Windows path issue in StateManager (sanitize run_id: replace : with -)
@@ -351,9 +351,20 @@
 ---
 
 - [ ] **10.0 Refactor: qg_user_input** [CORE]
-  - [ ] 10.1 **Impact Assessment** (same pattern as 9.0)
-  - [ ] 10.2 Update to use `StateManager(run_id=...)`
-  - [ ] 10.3 Run gate tests: `pytest test_gates/test_qg_user_input.py`
+  - [x] 10.1 **Impact Assessment** (same pattern as 9.0)
+    - Who calls? → Step 2 workflows
+    - What depends? → Line 104: StateManager().save(step=2, ...)
+    - What breaks? → Nothing - backward compatible StateManager
+    - Migration? → Change to StateManager(run_id=audit_logger.run_id) ✓
+  - [x] 10.1b **Invoke `testing` skill**
+    - Read test-case-structure.md ✓
+    - Read test-matrix.md ✓
+    - Read test-coverage.md ✓
+    - Read conventions.md ✓
+    - Read failure-handling.md ✓
+  - [x] 10.2 Update to use `StateManager(run_id=...)`
+  - [x] 10.3 Run gate tests: `pytest test_gates/test_qg_user_input.py`
+    - **Results:** 24/24 tests PASSED ✓
   - [ ] 10.4 Commit: `refactor: qg_user_input uses per-run state (Task 10.0)`
 
 ---

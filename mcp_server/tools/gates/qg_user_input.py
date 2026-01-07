@@ -101,7 +101,9 @@ class QGUserInput(BaseGate):
             )
 
         # All valid - save state and return pass
-        state_manager = StateManager()
+        # Task 10.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        state_manager = StateManager(run_id=audit_logger.run_id)
         state_manager.save(step=2, data={
             "persona": persona,
             "URL": url,
@@ -110,7 +112,17 @@ class QGUserInput(BaseGate):
             "raw_requirement": raw_requirement
         })
 
-        return cls.pass_response(step=2, gate_name="qg_user_input", mode="POST")
+        return cls.pass_response(
+            step=2,
+            gate_name="qg_user_input",
+            mode="POST",
+            metadata={
+                "persona": persona,
+                "URL": url,
+                "role_name": role_name,
+                "workflow": workflow
+            }
+        )
 
     @classmethod
     def _is_valid_persona(cls, value: Any) -> bool:
