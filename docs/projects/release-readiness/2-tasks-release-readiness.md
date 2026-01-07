@@ -350,7 +350,7 @@
 
 ---
 
-- [ ] **10.0 Refactor: qg_user_input** [CORE]
+- [x] **10.0 Refactor: qg_user_input** [CORE] ✓ COMMITTED (3bd641f)
   - [x] 10.1 **Impact Assessment** (same pattern as 9.0)
     - Who calls? → Step 2 workflows
     - What depends? → Line 104: StateManager().save(step=2, ...)
@@ -365,14 +365,25 @@
   - [x] 10.2 Update to use `StateManager(run_id=...)`
   - [x] 10.3 Run gate tests: `pytest test_gates/test_qg_user_input.py`
     - **Results:** 24/24 tests PASSED ✓
-  - [ ] 10.4 Commit: `refactor: qg_user_input uses per-run state (Task 10.0)`
+  - [x] 10.4 Commit: `refactor: qg_user_input uses per-run state (Task 10.0)` ✓
 
 ---
 
 - [ ] **11.0 Refactor: qg_ai_processing** [CORE]
-  - [ ] 11.1 **Impact Assessment**
-  - [ ] 11.2 Update to use `StateManager(run_id=...)`
-  - [ ] 11.3 Run gate tests: `pytest test_gates/test_qg_ai_processing.py`
+  - [x] 11.1 **Impact Assessment**
+    - Who calls? → Step 3 workflows
+    - What depends? → Line 77: StateManager().save(step=3, ...)
+    - What breaks? → Nothing - backward compatible StateManager
+    - Migration? → Change to StateManager(run_id=audit_logger.run_id) ✓
+  - [x] 11.1b **Invoke `testing` skill**
+    - Read test-case-structure.md ✓
+    - Read test-matrix.md ✓
+    - Read test-coverage.md ✓
+    - Read conventions.md ✓
+    - Read failure-handling.md ✓
+  - [x] 11.2 Update to use `StateManager(run_id=...)`
+  - [x] 11.3 Run gate tests: `pytest test_gates/test_qg_ai_processing.py`
+    - **Results:** 27/27 tests PASSED ✓
   - [ ] 11.4 Commit: `refactor: qg_ai_processing uses per-run state (Task 11.0)`
 
 ---

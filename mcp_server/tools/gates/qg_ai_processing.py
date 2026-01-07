@@ -74,10 +74,21 @@ class QGAIProcessing(BaseGate):
             "intent": intent
         }
 
-        state_manager = StateManager()
+        # Task 11.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        state_manager = StateManager(run_id=audit_logger.run_id)
         state_manager.save(step=3, data=metadata_context)
 
-        response = cls.pass_response(step=3, gate_name="qg_ai_processing", mode="POST")
+        response = cls.pass_response(
+            step=3,
+            gate_name="qg_ai_processing",
+            mode="POST",
+            metadata={
+                "intent": intent,
+                "scenarios_count": len(bdd_scenarios),
+                "expected_states_count": len(expected_states)
+            }
+        )
         response["metadata_context"] = metadata_context
         return response
 
