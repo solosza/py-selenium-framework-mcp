@@ -275,76 +275,220 @@
 
 ---
 
-- [ ] **7.0 Production Test Fixes** [CORE] - UNBLOCKS MULTI-PAGE WORKFLOWS
-  - [ ] 7.1 Create branch `feature/7.0-production-fixes`
-  - [ ] 7.2 **Invoke `testing` skill** - Follow TDD for CORE logic (Red-Green-Refactor)
-  - [ ] 7.3 Write failing tests first for per-run state architecture (15 tests)
-  - [ ] 7.4 **FIX #1: Audit run_id reuse (DEF-049)**
-    - Update `BaseGate.get_audit_logger()`:
-      - Remove check for `existing_run_id` from state
-      - Always create fresh AuditLogger with new run_id
-      - Document: "Each workflow run gets fresh audit file"
-    - Test: Multiple workflow runs create separate audit files
-  - [ ] 7.5 **FIX #2: Per-run state directories (DEF-050)**
-    - Update `StateManager.__init__()`:
-      - Accept `run_id` parameter (required)
-      - Create `tests/_state/{run_id}/` directory
-      - Set state file path to `tests/_state/{run_id}/workflow_state.json`
-    - Update `StateManager.save()`:
-      - Write to per-run state file (not monolithic)
-    - Update `StateManager.load()`:
-      - Load from per-run state file
-    - Add `StateManager.get_run_id()` method
-    - Test: Multiple runs create separate state directories
-  - [ ] 7.6 **FIX #3: Immediate file writes (DEF-051)**
-    - Update `qg_page_object.validate_post()`:
-      - After validation passes, write POM file to disk IMMEDIATELY
-      - Use metadata.file_path for target location
-      - Multi-page: iterate ALL POMs in generated_poms, write each
-      - Log file write to audit trail
-    - Update `qg_task.validate_post()`:
-      - After validation passes, write Task file to disk IMMEDIATELY
-      - Log file write to audit trail
-    - Update `qg_role.validate_post()`:
-      - After validation passes, write Role file to disk IMMEDIATELY
-      - Log file write to audit trail
-    - Update `qg_test_runner.validate_post()`:
-      - After validation passes, write Test file to disk IMMEDIATELY
-      - Log file write to audit trail
-    - Test: Files exist on disk after each gate passes
-  - [ ] 7.7 **ENHANCEMENT: Step 10 validation**
-    - Update `qg_save_run.validate_pre()`:
-      - Load expected files list from state (steps 6-9 metadata)
-      - Verify all files exist on disk
-      - Return fail with missing file list if any missing
-      - Include helpful error: "Expected files: [...], Missing: [...]"
-    - Test: Missing files detected and reported
-  - [ ] 7.8 Update step skill references (6-10):
-    - `.claude/skills/qa-guidance-layer/references/step-06.md` - Document immediate write
-    - `.claude/skills/qa-guidance-layer/references/step-07.md` - Document immediate write
-    - `.claude/skills/qa-guidance-layer/references/step-08.md` - Document immediate write
-    - `.claude/skills/qa-guidance-layer/references/step-09.md` - Document immediate write
-    - `.claude/skills/qa-guidance-layer/references/step-10.md` - Document validation role
-  - [ ] 7.9 Integration with BaseGate:
-    - Update all gates to pass run_id to StateManager
-    - Ensure StateManager initialized with run_id from audit logger
-  - [ ] 7.10 Run checks: All tests pass (485+ tests)
-  - [ ] 7.11 **Audit: Verify testing skill conventions followed** ✓ TDD
-  - [ ] 7.12 Record results: 15+ new tests, all passing
-  - [ ] 7.13 Commit: `fix: production test critical failures (Task 7.0)`
+- [ ] **7.0 Foundation: StateManager Per-Run Architecture** [CORE]
+  - [ ] 7.1 Create branch `feature/7.0-state-manager-refactor`
+  - [ ] 7.2 **Impact Assessment**
+    - Who calls `StateManager()`? → Find all usage (14 locations)
+    - What depends on current behavior? → Existing tests expect monolithic file
+    - What will break? → All callers if run_id made required
+    - Migration path? → Optional run_id parameter (backward compatible)
+  - [ ] 7.3 **Invoke `testing` skill** - TDD for StateManager refactor
+  - [ ] 7.4 Write failing tests (6 tests for per-run behavior)
+  - [ ] 7.5 Update `StateManager.__init__()`:
+    - Accept optional `run_id` parameter
+    - If run_id provided: create `tests/_state/{run_id}/workflow_state.json`
+    - If no run_id: use old path `mcp_server/state/workflow_state.json` (backward compatible)
+  - [ ] 7.6 Add `StateManager.get_run_id()` method
+  - [ ] 7.7 Run tests: New tests pass, old tests still pass (backward compatible)
+  - [ ] 7.8 Commit: `refactor: add per-run state directories (Task 7.0)`
 
   **Done When:**
-  - Each workflow run creates separate state directory
-  - Each workflow run creates separate audit file
-  - All files written immediately after gate passes
-  - Step 10 validates all files exist
-  - Multi-page workflows save ALL POMs
-  - All tests pass
+  - StateManager accepts optional run_id
+  - Per-run directories work when run_id provided
+  - Old behavior still works (backward compatible)
+  - All 13 existing tests + 6 new tests pass
 
-  **Defects Fixed:**
-  - DEF-049: Audit run_id reuse causes audit history loss
-  - DEF-050: State not persisted per-run (no context recovery)
-  - DEF-051: Multi-POM workflows only save 1 file (Step 10 bug)
+---
+
+- [ ] **8.0 Foundation: BaseGate Audit Logger Fix** [CORE]
+  - [ ] 8.1 **Impact Assessment**
+    - Who calls `get_audit_logger()`? → All quality gates (12 files)
+    - What depends on run_id reuse? → DEF-043 design (now deprecated)
+    - What will break? → Nothing - removing reuse is safe
+    - Migration path? → None needed - fresh run_id is correct behavior
+  - [ ] 8.2 **Invoke `testing` skill** - TDD for audit logger fix
+  - [ ] 8.3 Write failing tests (3 tests for fresh run_id)
+  - [ ] 8.4 Update `BaseGate.get_audit_logger()`:
+    - Remove lines 91-97 (existing_run_id check)
+    - Always create fresh AuditLogger()
+    - Create StateManager(run_id=audit_logger.run_id)
+    - Remove step_0 save (no longer needed)
+  - [ ] 8.5 Run tests: Fresh run_id tests pass
+  - [ ] 8.6 Commit: `fix: remove audit run_id reuse (DEF-049, Task 8.0)`
+
+  **Done When:**
+  - Each workflow gets fresh audit file
+  - BaseGate uses StateManager with run_id
+  - Tests verify no run_id reuse
+  - DEF-049 fixed
+
+---
+
+- [ ] **9.0 Refactor: qg_preflight** [CORE]
+  - [ ] 9.1 **Impact Assessment**
+    - Who calls this gate? → Step 1 workflows
+    - What depends? → Tests expect StateManager()
+    - What breaks? → Nothing - backward compatible StateManager
+    - Migration? → Change to StateManager(run_id=...)
+  - [ ] 9.2 Update `qg_preflight.validate_post()`:
+    - Get audit_logger from BaseGate
+    - Change `StateManager()` → `StateManager(run_id=audit_logger.run_id)`
+  - [ ] 9.3 Run gate tests: `pytest test_gates/test_qg_preflight.py`
+  - [ ] 9.4 Commit: `refactor: qg_preflight uses per-run state (Task 9.0)`
+
+---
+
+- [ ] **10.0 Refactor: qg_user_input** [CORE]
+  - [ ] 10.1 **Impact Assessment** (same pattern as 9.0)
+  - [ ] 10.2 Update to use `StateManager(run_id=...)`
+  - [ ] 10.3 Run gate tests: `pytest test_gates/test_qg_user_input.py`
+  - [ ] 10.4 Commit: `refactor: qg_user_input uses per-run state (Task 10.0)`
+
+---
+
+- [ ] **11.0 Refactor: qg_ai_processing** [CORE]
+  - [ ] 11.1 **Impact Assessment**
+  - [ ] 11.2 Update to use `StateManager(run_id=...)`
+  - [ ] 11.3 Run gate tests: `pytest test_gates/test_qg_ai_processing.py`
+  - [ ] 11.4 Commit: `refactor: qg_ai_processing uses per-run state (Task 11.0)`
+
+---
+
+- [ ] **12.0 Refactor: qg_test_scenarios** [CORE]
+  - [ ] 12.1 **Impact Assessment**
+  - [ ] 12.2 Update to use `StateManager(run_id=...)`
+  - [ ] 12.3 Run gate tests: `pytest test_gates/test_qg_test_scenarios.py`
+  - [ ] 12.4 Commit: `refactor: qg_test_scenarios uses per-run state (Task 12.0)`
+
+---
+
+- [ ] **13.0 Refactor: qg_discovered_elements** [CORE]
+  - [ ] 13.1 **Impact Assessment**
+  - [ ] 13.2 Update to use `StateManager(run_id=...)`
+  - [ ] 13.3 Run gate tests: `pytest test_gates/test_qg_discovered_elements.py`
+  - [ ] 13.4 Commit: `refactor: qg_discovered_elements uses per-run state (Task 13.0)`
+
+---
+
+- [ ] **14.0 Refactor: qg_discovery_complete** [CORE]
+  - [ ] 14.1 **Impact Assessment**
+  - [ ] 14.2 Update to use `StateManager(run_id=...)`
+  - [ ] 14.3 Run gate tests (if exist)
+  - [ ] 14.4 Commit: `refactor: qg_discovery_complete uses per-run state (Task 14.0)`
+
+---
+
+- [ ] **15.0 Refactor + Feature: qg_page_object** [CORE] - DEF-051 FIX
+  - [ ] 15.1 **Impact Assessment**
+    - Who calls? → Step 6 workflows
+    - What depends? → Multi-page workflows need ALL POMs saved
+    - What breaks? → Currently only saves 1 POM (the bug!)
+    - Migration? → Add immediate file write after validation
+  - [ ] 15.2 **Invoke `testing` skill** - TDD for immediate write
+  - [ ] 15.3 Write failing tests (2 tests: single POM, multi-POM)
+  - [ ] 15.4 Update `qg_page_object.validate_post()`:
+    - Change to `StateManager(run_id=...)`
+    - After validation passes, iterate ALL POMs in metadata
+    - Write each POM to disk immediately: `Write(file_path, code)`
+    - Log file write to audit trail
+  - [ ] 15.5 Run tests: Multi-POM test passes
+  - [ ] 15.6 Commit: `fix: qg_page_object writes all POMs immediately (DEF-051, Task 15.0)`
+
+  **Done When:**
+  - All POMs saved to disk (not just last one)
+  - DEF-051 fixed
+
+---
+
+- [ ] **16.0 Refactor + Feature: qg_task** [CORE] - DEF-051 FIX
+  - [ ] 16.1 **Impact Assessment**
+  - [ ] 16.2 **Invoke `testing` skill** - TDD for immediate write
+  - [ ] 16.3 Write failing test (1 test: Task file written)
+  - [ ] 16.4 Update `qg_task.validate_post()`:
+    - Change to `StateManager(run_id=...)`
+    - After validation passes, write Task file immediately
+    - Log file write to audit
+  - [ ] 16.5 Run tests
+  - [ ] 16.6 Commit: `fix: qg_task writes file immediately (DEF-051, Task 16.0)`
+
+---
+
+- [ ] **17.0 Refactor + Feature: qg_role** [CORE] - DEF-051 FIX
+  - [ ] 17.1 **Impact Assessment**
+  - [ ] 17.2 **Invoke `testing` skill** - TDD for immediate write
+  - [ ] 17.3 Write failing test (1 test: Role file written)
+  - [ ] 17.4 Update `qg_role.validate_post()`:
+    - Change to `StateManager(run_id=...)`
+    - After validation passes, write Role file immediately
+    - Log file write to audit
+  - [ ] 17.5 Run tests
+  - [ ] 17.6 Commit: `fix: qg_role writes file immediately (DEF-051, Task 17.0)`
+
+---
+
+- [ ] **18.0 Refactor + Feature: qg_test_runner** [CORE] - DEF-051 FIX
+  - [ ] 18.1 **Impact Assessment**
+  - [ ] 18.2 **Invoke `testing` skill** - TDD for immediate write
+  - [ ] 18.3 Write failing test (1 test: Test file written)
+  - [ ] 18.4 Update `qg_test_runner.validate_post()`:
+    - Change to `StateManager(run_id=...)`
+    - After validation passes, write Test file immediately
+    - Log file write to audit
+  - [ ] 18.5 Run tests
+  - [ ] 18.6 Commit: `fix: qg_test_runner writes file immediately (DEF-051, Task 18.0)`
+
+---
+
+- [ ] **19.0 Feature: qg_save_run File Validation** [CORE]
+  - [ ] 19.1 **Impact Assessment**
+    - Who calls? → Step 10 workflows
+    - What depends? → Currently assumes files exist
+    - What breaks? → Nothing - adding new validation
+    - Migration? → Pure enhancement
+  - [ ] 19.2 **Invoke `testing` skill** - TDD for validation
+  - [ ] 19.3 Write failing tests (2 tests: missing files detected, all files present)
+  - [ ] 19.4 Update `qg_save_run.validate_pre()`:
+    - Change to `StateManager(run_id=...)`
+    - Load expected files from state (steps 6-9 metadata)
+    - Check each file exists on disk
+    - If missing, return fail with list
+  - [ ] 19.5 Run tests
+  - [ ] 19.6 Commit: `feat: qg_save_run validates file existence (Task 19.0)`
+
+---
+
+- [ ] **20.0 Integration Testing** [INTEGRATION]
+  - [ ] 20.1 Run all gate tests: `pytest mcp_server/_dev_tests/test_gates/ -v`
+  - [ ] 20.2 Run all dev tests: `pytest mcp_server/_dev_tests/ -v`
+  - [ ] 20.3 Verify 485+ tests pass
+  - [ ] 20.4 Check coverage: `pytest --cov=mcp_server --cov-report=term`
+
+---
+
+- [ ] **21.0 Documentation Update** [GLUE]
+  - [ ] 21.1 Update `.claude/skills/qa-guidance-layer/references/step-06.md` - Document immediate write
+  - [ ] 21.2 Update step-07.md, step-08.md, step-09.md - Document immediate write
+  - [ ] 21.3 Update step-10.md - Document file validation
+  - [ ] 21.4 Commit: `docs: update step skills for immediate file writes (Task 21.0)`
+
+---
+
+- [ ] **22.0 Production E2E Test** [VALIDATION]
+  - [ ] 22.1 Clear all state: Delete `tests/_state/`, `tests/_audit/`
+  - [ ] 22.2 Run ParaBank production test (same as before)
+  - [ ] 22.3 Verify:
+    - Multiple audit files created (one per run)
+    - State directories per run_id
+    - ALL 6 POMs saved to disk
+    - Task, Role, Test files saved
+  - [ ] 22.4 Document results in SESSION.md
+  - [ ] 22.5 If PASS → Merge to main
+  - [ ] 22.6 If FAIL → Create DEF-052+, iterate
+
+  **Done When:**
+  - Production test passes end-to-end
+  - All 3 critical bugs fixed (DEF-049, DEF-050, DEF-051)
+  - Ready for release readiness validation
 
 ---
 
