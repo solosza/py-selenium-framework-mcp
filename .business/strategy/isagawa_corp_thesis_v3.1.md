@@ -40,6 +40,19 @@ Rather than suggesting steps or generating code in isolation, Isagawa enforces e
 
 The result is consistent, correct outcomes without relying on tribal knowledge, manual enforcement, or constant human oversight.
 
+### Platform Primitives
+
+> **The Isagawa Platform is an AI Management Layer built on two primitives: Protocols and Smart Gates.**
+
+| Primitive | Purpose | Implementation |
+|-----------|---------|----------------|
+| **Protocols** (Skills) | Define the correct way AI must perform work | Agent-specific adapters (Claude skills, Cursor rules, etc.) |
+| **Smart Gates** | Enforce protocols at every step | Agent-agnostic MCP tools with explicit pattern responses |
+
+This separation enables:
+- **Protocols** = thin, minimal, varies per AI agent
+- **Smart Gates** = universal enforcement, same for all agents
+
 ### Precise Definitions
 
 **AI Management Layer (external / conceptual)**

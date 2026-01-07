@@ -7,12 +7,20 @@
 
 ---
 
+## Platform Definition
+
+> **The Isagawa Platform is an AI Management Layer built on two primitives: Protocols and Smart Gates.**
+> - **Protocols** (Skills) define the correct way AI must perform work.
+> - **Smart Gates** enforce those protocols at every step.
+
+---
+
 ## Executive Summary
 
 Enhance QA Execution Engine gates from "detect + hint" to "detect + provide fix data".
 
-**Current State:** Gates validate well; Skills teach everything; AI gets text hints
-**Target State:** Gates validate + provide structured fixes; Skills point only; AI gets actionable data
+**Current State:** Gates validate well; Protocols (Skills) teach everything; AI gets text hints
+**Target State:** Gates validate + provide structured fixes; Protocols (Skills) point only; AI gets actionable data
 
 ---
 
@@ -20,7 +28,7 @@ Enhance QA Execution Engine gates from "detect + hint" to "detect + provide fix 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ SKILLS (Minimal)                                            │
+│ PROTOCOLS (Skills) - Minimal                                │
 │ - Light guidance: "what to do"                              │
 │ - Points AI to correct step                                 │
 │ - NOT heavy documentation                                   │
@@ -28,9 +36,9 @@ Enhance QA Execution Engine gates from "detect + hint" to "detect + provide fix 
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ GATES (Smart)                                               │
+│ SMART GATES - Enforcement                                   │
 │ - Check: Is this correct?                                   │
-│ - If NO: Provide example/fix → AI retries                   │
+│ - If NO: Provide explicit pattern → AI retries              │
 │ - If YES: Proceed                                           │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -39,9 +47,9 @@ Enhance QA Execution Engine gates from "detect + hint" to "detect + provide fix 
 
 | OLD | NEW |
 |-----|-----|
-| Skills = heavy docs explaining everything | Skills = minimal pointers |
-| Gates = detect + text hint | Gates = detect + structured fix data |
-| AI memorizes rules | AI receives guidance at runtime |
+| Protocols (Skills) = heavy docs explaining everything | Protocols (Skills) = minimal pointers |
+| Gates = detect + text hint | Smart Gates = detect + explicit patterns |
+| AI memorizes rules | AI receives patterns at runtime |
 | Documentation-heavy | Enforcement-heavy |
 
 ### Why This Works
@@ -82,11 +90,11 @@ Both generators and gates are MCP tools:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Agent-Specific vs Universal
+### Protocols (Skills) vs Smart Gates
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ AGENT-SPECIFIC (Thin Adapters)                                  │
+│ PROTOCOLS (Skills) - Agent-Specific Adapters                    │
 │                                                                 │
 │  Claude Code:  .claude/skills/*.md                              │
 │  Cursor:       .cursorrules                                     │
@@ -101,12 +109,12 @@ Both generators and gates are MCP tools:
                               │
                               ▼ calls
 ┌─────────────────────────────────────────────────────────────────┐
-│ AGENT-AGNOSTIC (Universal Enforcement via MCP)                  │
+│ SMART GATES - Agent-Agnostic Enforcement (via MCP)              │
 │                                                                 │
-│  MCP Tools (Generators + Smart Gates)                           │
+│  MCP Tools (Smart Gates only in v2)                             │
 │  - Same API for any agent                                       │
 │  - Same validation logic                                        │
-│  - Same structured fix responses                                │
+│  - Same explicit pattern responses                              │
 │  - The intelligence lives HERE                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -115,12 +123,12 @@ Both generators and gates are MCP tools:
 
 | Component | Varies Per Agent | Universal |
 |-----------|------------------|-----------|
-| Instructions format | Yes | - |
-| MCP tool interface | - | Yes |
+| Protocol (Skill) format | Yes | - |
+| MCP Smart Gate interface | - | Yes |
 | Validation rules | - | Yes |
-| Fix data responses | - | Yes |
+| Explicit pattern responses | - | Yes |
 
-**To support a new AI agent:** Write a thin adapter (skill file in agent's format). Reuse 100% of MCP tools and gates.
+**To support a new AI agent:** Write a thin Protocol adapter (skill file in agent's format). Reuse 100% of Smart Gates.
 
 ---
 
@@ -181,7 +189,7 @@ Both generators and gates are MCP tools:
 │  └────────────────────────────────────────────────────────────────────────────┘ │
 │                                                                                 │
 │  PROBLEM: Tools generate skeleton → AI fills → Gate validates → AI guesses fix │
-│           The "fill" and "fix" steps rely on AI memorizing rules from Skills   │
+│           The "fill" and "fix" steps rely on AI memorizing rules from Protocols│
 │                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -348,7 +356,7 @@ Both generators and gates are MCP tools:
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │                         ┌─────────────────┐                                     │
-│                         │  SKILL (Thin)   │                                     │
+│                         │ PROTOCOL (Skill)│                                     │
 │                         │ "Generate POM"  │                                     │
 │                         └────────┬────────┘                                     │
 │                                  │                                              │
@@ -406,8 +414,8 @@ Both generators and gates are MCP tools:
 | **User** | Provides requirements, answers questions | Same | No change |
 | **AI** | Orchestrates tools, fills skeleton gaps | Constructs code from patterns | From "filler" to "builder" |
 | **Generators** | Create skeleton code | **REMOVED** | AI constructs directly |
-| **Gates** | Validate, return text hints | Validate, provide explicit patterns | From "blocker" to "teacher" |
-| **Skills** | Heavy documentation, rules, examples | Minimal pointers ("what to do") | 50%+ reduction |
+| **Smart Gates** | Validate, return text hints | Validate, provide explicit patterns | From "blocker" to "teacher" |
+| **Protocols (Skills)** | Heavy documentation, rules, examples | Minimal pointers ("what to do") | 50%+ reduction |
 
 ### DD Distribution (v2)
 
@@ -418,7 +426,7 @@ Both generators and gates are MCP tools:
 │ DDs IN v2                                                   │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  GATE CODE (Enforced)          SKILLS (Guidance Only)       │
+│  SMART GATES (Enforced)        PROTOCOLS (Skills)           │
 │  ─────────────────────         ────────────────────────     │
 │  DD-25: Skeleton detection     DD-22: Stop-and-discuss      │
 │  DD-27: No locators in Task    DD-01: Why persona needed    │
@@ -434,10 +442,10 @@ Both generators and gates are MCP tools:
 ```
 
 **Classification Rule:**
-- If DD can be regex/pattern-matched → **Gate** (enforced + pattern provided)
-- If DD is behavioral or "why" explanation → **Skill** (minimal guidance)
+- If DD can be regex/pattern-matched → **Smart Gate** (enforced + pattern provided)
+- If DD is behavioral or "why" explanation → **Protocol (Skill)** (minimal guidance)
 
-**TODO (Phase 0):** Audit all 50 DDs and classify each as Gate vs Skill.
+**TODO (Phase 0):** Audit all 50 DDs and classify each as Smart Gate vs Protocol.
 
 ---
 
@@ -473,9 +481,9 @@ We do:
 │ STEP DISSECTION PROCESS                                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│  1. READ SKILL FILE                                                         │
+│  1. READ PROTOCOL (SKILL) FILE                                              │
 │     └── .claude/skills/qa-guidance-layer/references/step-XX.md              │
-│         • What rules does skill teach?                                      │
+│         • What rules does protocol teach?                                   │
 │         • What code examples are provided?                                  │
 │         • What decision guidance exists?                                    │
 │                                                                             │
@@ -487,18 +495,18 @@ We do:
 │                                                                             │
 │  3. CREATE COMPARISON TABLE                                                 │
 │     ┌──────────────────┬──────────────────┬─────────────────┐               │
-│     │ What Skill       │ What Gate        │ Gap             │               │
+│     │ What Protocol    │ What Gate        │ Gap             │               │
 │     │ Teaches          │ Checks           │                 │               │
 │     ├──────────────────┼──────────────────┼─────────────────┤               │
 │     │ Rule X           │ Pattern X        │ None            │               │
 │     │ Rule Y           │ (not checked)    │ Could move      │               │
-│     │ Philosophy Z     │ (not applicable) │ Stays in skill  │               │
+│     │ Philosophy Z     │ (not applicable) │ Stays in proto  │               │
 │     └──────────────────┴──────────────────┴─────────────────┘               │
 │                                                                             │
 │  4. CALCULATE CONTENT DISTRIBUTION                                          │
 │     • % already in gate (detected + enforced)                               │
 │     • % could move to gate (rules → detection patterns)                     │
-│     • % stays in skill (philosophy, rationale, "why")                       │
+│     • % stays in protocol (philosophy, rationale, "why")                    │
 │                                                                             │
 │  5. ASSESS IMPLEMENTATION APPROACH                                          │
 │     • Does gate need new validation patterns? (add detection)               │
@@ -515,14 +523,14 @@ We do:
 │  7. DOCUMENT FINDINGS                                                       │
 │     • "Currently in Gate" - what's already enforced                         │
 │     • "Could Move to Gate" - rules that become detection                    │
-│     • "Stays in Skill" - philosophy and architecture rationale              │
+│     • "Stays in Protocol" - philosophy and architecture rationale           │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### File Mapping Reference
 
-| Step | Skill File | Gate File |
+| Step | Protocol (Skill) File | Gate File |
 |------|------------|-----------|
 | 5 | `references/step-05.md` | `qg_discovered_elements.py` |
 | 6 | `references/step-06.md` | `qg_page_object.py` |
@@ -536,21 +544,21 @@ We do:
 |----------|----------|---------|
 | **In Gate** | Detected via regex/pattern matching | Skeleton code detection |
 | **Could Move** | Currently text instruction, could become detection | "Use is_* prefix" → regex check |
-| **Stays in Skill** | Architectural rationale, "why" not "what" | "Why POMs use composition" |
+| **Stays in Protocol** | Architectural rationale, "why" not "what" | "Why POMs use composition" |
 
 ### Key Questions Per Step
 
 1. **What fails without this check?** → Priority indicator
 2. **Can this be pattern-matched?** → Gate candidate
 3. **Does AI need example code?** → Add to suggested_context
-4. **Is this about "why" or "what"?** → Skill vs Gate decision
+4. **Is this about "why" or "what"?** → Protocol vs Gate decision
 5. **Does downstream step depend on this?** → Priority boost
 
 ### Anti-Patterns to Avoid
 
 | Anti-Pattern | Why Bad | Instead Do |
 |--------------|---------|------------|
-| Move everything to gate | Bloats gate code | Keep "why" in skill |
+| Move everything to gate | Bloats gate code | Keep "why" in protocol |
 | Add new module layer | Over-engineering | Enhance existing helpers |
 | Skip comparison step | Miss gaps | Always table comparison |
 | Assume without reading | Wrong conclusions | Read actual code first |
@@ -572,7 +580,7 @@ Gates are **already well-structured** with comprehensive validation:
 
 ### Content Distribution by Step
 
-| Step | In Gate Already | Could Move to Gate | Stays in Skill |
+| Step | In Gate Already | Could Move to Gate | Stays in Protocol |
 |------|-----------------|-------------------|----------------|
 | 5 (Discovery) | 25% | 40% | 35% |
 | 6 (POM) | 40% | 30% | 30% |
@@ -630,7 +638,7 @@ Gates detect problems well. They return text hints, not structured fix data:
 - Two-pass discovery workflow sequence
 - Visual feedback initialization pattern
 
-**Stays in Skill:**
+**Stays in Protocol:**
 - Architectural rationale for discovery approaches
 - When to use dynamic vs static discovery
 
@@ -651,7 +659,7 @@ Gates detect problems well. They return text hints, not structured fix data:
 - Action method patterns per element_type
 - State method code templates
 
-**Stays in Skill:**
+**Stays in Protocol:**
 - Why POMs use composition not inheritance
 - Architectural boundaries explanation
 
@@ -671,7 +679,7 @@ Gates detect problems well. They return text hints, not structured fix data:
 - Common mistakes catalog (8 anti-patterns)
 - Code template showing proper structure
 
-**Stays in Skill:**
+**Stays in Protocol:**
 - Domain operation vs workflow explanation
 - When to split into multiple tasks
 
@@ -692,7 +700,7 @@ Gates detect problems well. They return text hints, not structured fix data:
 - Code templates (single-task and multi-task)
 - Common mistakes catalog (6 anti-patterns)
 
-**Stays in Skill:**
+**Stays in Protocol:**
 - Role orchestration philosophy
 - When multi-task vs single-task
 
@@ -716,7 +724,7 @@ Gates detect problems well. They return text hints, not structured fix data:
 - Common mistakes catalog (5 anti-patterns)
 - Assertion examples (correct vs incorrect)
 
-**Stays in Skill:**
+**Stays in Protocol:**
 - Multi-persona workflow explanation
 - Complex scenario guidance
 
@@ -821,10 +829,10 @@ Initial proposal was to add separate Suggester modules. After analysis:
 - Add common mistakes catalogs
 - Add code templates
 
-### Phase 5: Skill Reduction
-- Trim skill files by ~50%
+### Phase 5: Protocol Reduction
+- Trim protocol (skill) files by ~50%
 - Move code examples to gate responses
-- Keep only architectural guidance in skills
+- Keep only architectural guidance in protocols
 
 ---
 
@@ -847,9 +855,9 @@ main (merge when validated)
 - [ ] Tag v1.0
 
 ### Success Criteria
-- Gates provide structured fix data on failure
+- Gates provide explicit patterns on failure
 - AI retry success rate increases
-- Skill files reduced by 50%
+- Protocol (skill) files reduced by 50%
 - No increase in "BLOCKED" states
 
 ---
@@ -899,7 +907,7 @@ main (merge when validated)
 | Date | Change |
 |------|--------|
 | 2026-01-07 | Initial PRD created from architecture audit session |
-| 2026-01-07 | Updated with accurate skill/gate analysis after code review |
+| 2026-01-07 | Updated with accurate protocol/gate analysis after code review |
 | 2026-01-07 | Removed Suggester pattern - gates already modular |
 | 2026-01-07 | Added implementation priority based on gap analysis |
 | 2026-01-07 | Added Analysis Methodology section - repeatable process for step dissection |
@@ -907,6 +915,8 @@ main (merge when validated)
 | 2026-01-07 | Added Architecture Evolution (v1→v2) with comprehensive visuals |
 | 2026-01-07 | Added Metadata Flow showing bottom-up code construction |
 | 2026-01-07 | Added Self-Healing Loop and Persona Responsibilities |
+| 2026-01-07 | Terminology update: Skills → Protocols (Skills) throughout |
+| 2026-01-07 | Added Platform Definition: Protocols + Smart Gates |
 
 ---
 
