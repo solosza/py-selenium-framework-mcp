@@ -420,11 +420,20 @@
 
 ---
 
-- [ ] **14.0 Refactor: qg_discovery_complete** [CORE]
-  - [ ] 14.1 **Impact Assessment**
-  - [ ] 14.2 Update to use `StateManager(run_id=...)`
-  - [ ] 14.3 Run gate tests (if exist)
-  - [ ] 14.4 Commit: `refactor: qg_discovery_complete uses per-run state (Task 14.0)`
+- [x] **14.0 Refactor: qg_discovery_complete** [CORE] ✓ COMMITTED (88ecba7)
+  - [x] 14.1 **Impact Assessment**
+  - [x] 14.1b **Invoke `testing` skill** - Read all 5 reference files
+    - Read test-case-structure.md ✓
+    - Read test-matrix.md ✓
+    - Read test-coverage.md ✓
+    - Read conventions.md ✓
+    - Read failure-handling.md ✓
+  - [x] 14.2 Update to use `StateManager(run_id=...)`
+  - [x] 14.3 Run gate tests: `pytest test_gates/test_qg_discovery_complete.py`
+    - **Results:** 16/16 tests PASSED ✓
+  - [x] 14.4 Commit: `refactor: qg_discovery_complete uses per-run state (Task 14.0)` ✓
+
+**Tasks 9.0-14.0 Complete:** All Steps 1-5 gates refactored to per-run state (182 tests passed)
 
 ---
 
