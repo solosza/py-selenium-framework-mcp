@@ -90,7 +90,8 @@ class AuthTasks:
         Complete login operation.
         NO return value - test asserts via POM.
         """
-        self.web.navigate_to(f"{self.base_url}/login")
+        # DD-49: Tasks call POM navigate() method
+        self.login_page.navigate()
 
         (self.login_page
             .enter_email(email)
