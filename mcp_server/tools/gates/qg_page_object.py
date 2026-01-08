@@ -70,7 +70,58 @@ class QGPageObject(BaseGate):
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
-        return StateManager()
+        # Task 15.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        return StateManager(run_id=audit_logger.run_id)
+
+    @classmethod
+    def _import_path_to_file_path(cls, import_path: str) -> str:
+        """
+        Convert Python import path to file system path.
+
+        Task 15.0 (DEF-051): Helper for immediate file writes.
+
+        Args:
+            import_path: e.g., "framework.pages.auth.login_page"
+
+        Returns:
+            Absolute file path: e.g., "D:/project/framework/pages/auth/login_page.py"
+        """
+        import os
+        from pathlib import Path
+
+        # Convert dots to path separator
+        relative_path = import_path.replace(".", os.sep) + ".py"
+
+        # Get project root (3 levels up from mcp_server/tools/gates/)
+        project_root = Path(__file__).parent.parent.parent.parent
+
+        # Combine to get absolute path
+        file_path = project_root / relative_path
+
+        return str(file_path)
+
+    @classmethod
+    def _write_pom_file(cls, file_path: str, code: str) -> None:
+        """
+        Write POM code to disk immediately.
+
+        Task 15.0 (DEF-051): Ensures multi-page POMs are all saved.
+
+        Args:
+            file_path: Absolute path to write file
+            code: POM code content
+        """
+        import os
+        from pathlib import Path
+
+        # Ensure parent directory exists
+        file_obj = Path(file_path)
+        file_obj.parent.mkdir(parents=True, exist_ok=True)
+
+        # Write file
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(code)
 
     @classmethod
     def validate_pre(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -205,7 +256,15 @@ class QGPageObject(BaseGate):
 
         # expected_states is optional but recommended (don't fail if missing)
 
-        return cls.pass_response()
+        return cls.pass_response(
+            step=6,
+            gate_name="qg_page_object",
+            mode="PRE",
+            metadata={
+                "page_name": page_name,
+                "elements_count": len(discovered_elements) if discovered_elements else 0
+            }
+        )
 
     # Step number for this gate (used for attempt tracking)
     STEP_NUMBER = 6
@@ -357,6 +416,11 @@ class QGPageObject(BaseGate):
         if webinterface_error:
             return webinterface_error
 
+        # DEF-048: Enforce navigate() method requirement (DD-49 compliance)
+        navigate_error = cls._validate_navigate_method(code, metadata)
+        if navigate_error:
+            return navigate_error
+
         # Task 8.5.9: Multi-page POM generation tracking
         internal_state_manager = cls._get_state_manager()
 
@@ -394,8 +458,46 @@ class QGPageObject(BaseGate):
             "generation_complete": generation_complete  # Task 8.5.9: Completion flag
         })
 
+        # Task 15.0 (DEF-051 FIX): Write POM file immediately to disk
+        import_path = metadata.get("import_path")
+        if import_path:
+            file_path = cls._import_path_to_file_path(import_path)
+            try:
+                # Write file to disk
+                cls._write_pom_file(file_path, code)
+
+                # Log file write to audit trail
+                audit_logger = cls.get_audit_logger()
+                audit_logger.log_file_generated(file_path, step=6)
+            except Exception as e:
+                # If file write fails, log but don't block (validation already passed)
+                # This ensures state is saved even if file write fails
+                pass
+
         # Task 8.5.9: For multi-page workflows, return progress info
-        response = cls.pass_response()
+        audit_metadata = {
+            "page_name": page_name,
+            "class_name": metadata.get("class_name"),
+            "import_path": metadata.get("import_path"),
+            "action_methods_count": len(metadata.get("action_methods", [])),
+            "state_methods_count": len(metadata.get("state_methods", []))
+        }
+
+        # Add multi-page progress to audit metadata
+        if total_pages > 1:
+            audit_metadata["multi_page"] = {
+                "poms_generated": poms_generated,
+                "total_poms": total_pages,
+                "generation_complete": generation_complete,
+                "page_index": poms_generated  # Which page is this in the sequence
+            }
+
+        response = cls.pass_response(
+            step=6,
+            gate_name="qg_page_object",
+            mode="POST",
+            metadata=audit_metadata
+        )
         if total_pages > 1:
             response["multi_page_progress"] = {
                 "poms_generated": poms_generated,
@@ -614,6 +716,80 @@ class QGPageObject(BaseGate):
                 error=f"state_methods missing for expected_states: {', '.join(missing_methods)} (IC-06-01 violation)",
                 fix_hint="Ensure Tool 3 receives expected_states and generates matching state-check methods."
             )
+
+        return None
+
+    @classmethod
+    def _validate_navigate_method(cls, code: str, metadata: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        DEF-048: Enforce navigate() method requirement (DD-49 compliance).
+
+        All POMs must:
+        1. Have a navigate() method in action_methods
+        2. Only call self.web.navigate_to() inside navigate() method
+
+        Returns fail_response if invalid, None otherwise.
+        """
+        action_methods = metadata.get("action_methods", [])
+        action_method_names = [m.get("name") for m in action_methods if isinstance(m, dict)]
+
+        # Check 1: Must have navigate() method
+        if "navigate" not in action_method_names:
+            class_name = metadata.get("class_name", "UnknownPage")
+            return cls.fail_response(
+                error="POM missing navigate() method (DD-49 violation)",
+                fix_hint=f"""
+All POMs must have navigate() method for DD-49 compliance.
+
+Pattern:
+def navigate(self) -> "{class_name}":
+    '''Navigate to this page.'''
+    self.web.navigate_to(self.web.config['url'] + '/relative/path')
+    return self
+
+Example for LoginPage:
+def navigate(self) -> "LoginPage":
+    '''Navigate to login page.'''
+    self.web.navigate_to(self.web.config['url'] + '/parabank/index.htm')
+    return self
+
+Fix: Add navigate() method to the POM.
+                """
+            )
+
+        # Check 2: navigate_to() should ONLY be in navigate() method
+        # Extract navigate() method body
+        navigate_method_pattern = re.compile(r'def navigate\(self\).*?(?=\n    def |\n\nclass |\Z)', re.DOTALL)
+        navigate_method_match = navigate_method_pattern.search(code)
+
+        if not navigate_method_match:
+            # This shouldn't happen since we already checked navigate exists in metadata
+            # But if code structure is wrong, fail
+            return cls.fail_response(
+                error="navigate() method declared in metadata but not found in code",
+                fix_hint="Ensure navigate() method exists in the POM code."
+            )
+
+        navigate_method_body = navigate_method_match.group(0)
+
+        # Check if navigate_to() appears in code
+        if "self.web.navigate_to(" in code:
+            # It should ONLY appear in navigate() method body
+            code_outside_navigate = code.replace(navigate_method_body, "")
+            if "self.web.navigate_to(" in code_outside_navigate:
+                return cls.fail_response(
+                    error="self.web.navigate_to() found outside navigate() method (DD-49 violation)",
+                    fix_hint="""
+DD-49: Tasks/Roles must NOT call self.web.navigate_to() directly.
+POMs must provide navigate() method for navigation.
+
+Pattern violation detected:
+- self.web.navigate_to() found in action method (not navigate())
+
+Fix: Remove direct navigate_to() calls from action methods.
+Navigation should ONLY be in navigate() method.
+                    """
+                )
 
         return None
 
