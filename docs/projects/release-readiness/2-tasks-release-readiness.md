@@ -569,9 +569,9 @@
 
 ---
 
-- [ ] **22.0 Smart Gates: qg_task Pattern Enforcement** [CORE]
-  - [ ] 22.1 Create branch `feature/22.0-qg-task-pattern-enforcement`
-  - [ ] 22.2 **Invoke `testing` skill** - TDD for pattern-based Smart Gate
+- [x] **22.0 Smart Gates: qg_task Pattern Enforcement** [CORE]
+  - [x] 22.1 Create branch `feature/22.0-qg-task-pattern-enforcement`
+  - [x] 22.2 **Invoke `testing` skill** - TDD for pattern-based Smart Gate
     - Read test-case-structure.md
     - Read test-matrix.md
     - Read test-coverage.md
@@ -602,7 +602,7 @@
   - [x] 22.8 Manual validation: Run /framework-check on parabank3
     - Verify unused parameter detection works ✓
     - Verify pattern matches step-07.md ✓
-  - [ ] 22.9 Commit: `feat: qg_task pattern enforcement (Task 22.0)`
+  - [x] 22.9 Commit: `feat: qg_task pattern enforcement (Task 22.0)` (9e0c9e4)
 
   **Done When:**
   - qg_task detects unused params, provides correct pattern ✓
