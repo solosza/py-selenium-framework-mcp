@@ -403,11 +403,20 @@
 
 ---
 
-- [ ] **13.0 Refactor: qg_discovered_elements** [CORE]
-  - [ ] 13.1 **Impact Assessment**
-  - [ ] 13.2 Update to use `StateManager(run_id=...)`
-  - [ ] 13.3 Run gate tests: `pytest test_gates/test_qg_discovered_elements.py`
-  - [ ] 13.4 Commit: `refactor: qg_discovered_elements uses per-run state (Task 13.0)`
+- [x] **13.0 Refactor: qg_discovered_elements** [CORE] ✓ COMMITTED (1fa625d)
+  - [x] 13.1 **Impact Assessment**
+  - [x] 13.1b **Invoke `testing` skill** - Read all 5 reference files
+    - Read test-case-structure.md ✓
+    - Read test-matrix.md ✓
+    - Read test-coverage.md ✓
+    - Read conventions.md ✓
+    - Read failure-handling.md ✓
+  - [x] 13.2 Update to use `StateManager(run_id=...)`
+  - [x] 13.3 Run gate tests: `pytest test_gates/test_qg_discovered_elements.py`
+    - **Initial Results:** 59/62 tests PASSED (3 failures)
+    - **Fixed:** Production bug (bool wrapper) + test bug (missing del)
+    - **Final Results:** 62/62 tests PASSED ✓
+  - [x] 13.4 Commit: `refactor: qg_discovered_elements uses per-run state (Task 13.0)` ✓
 
 ---
 
