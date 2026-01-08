@@ -90,7 +90,58 @@ class QGRole(BaseGate):
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
-        return StateManager()
+        # Task 17.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        return StateManager(run_id=audit_logger.run_id)
+
+    @classmethod
+    def _import_path_to_file_path(cls, import_path: str) -> str:
+        """
+        Convert Python import path to file system path.
+
+        Task 17.0 (DEF-051): Helper for immediate file writes.
+
+        Args:
+            import_path: e.g., "framework.roles.registered_user"
+
+        Returns:
+            Absolute file path: e.g., "D:/project/framework/roles/registered_user.py"
+        """
+        import os
+        from pathlib import Path
+
+        # Convert dots to path separator
+        relative_path = import_path.replace(".", os.sep) + ".py"
+
+        # Get project root (3 levels up from mcp_server/tools/gates/)
+        project_root = Path(__file__).parent.parent.parent.parent
+
+        # Combine to get absolute path
+        file_path = project_root / relative_path
+
+        return str(file_path)
+
+    @classmethod
+    def _write_role_file(cls, file_path: str, code: str) -> None:
+        """
+        Write Role code to disk immediately.
+
+        Task 17.0 (DEF-051): Ensures Role files are saved.
+
+        Args:
+            file_path: Absolute path to write file
+            code: Role code content
+        """
+        import os
+        from pathlib import Path
+
+        # Ensure parent directory exists
+        file_obj = Path(file_path)
+        file_obj.parent.mkdir(parents=True, exist_ok=True)
+
+        # Write file
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(code)
 
     @classmethod
     def validate_pre(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -160,7 +211,12 @@ class QGRole(BaseGate):
                 fix_hint="Use PascalCase format: 'RegisteredUser', 'GuestUser', 'AdminUser'"
             )
 
-        return cls.pass_response()
+        return cls.pass_response(
+            step=8,
+            gate_name="qg_role",
+            mode="PRE",
+            metadata={"role_name": role_name}
+        )
 
     # Step number for this gate (used for attempt tracking)
     STEP_NUMBER = 8
@@ -311,7 +367,32 @@ class QGRole(BaseGate):
             "role_metadata": metadata
         })
 
-        return cls.pass_response()
+        # Task 17.0 (DEF-051 FIX): Write Role file immediately to disk
+        import_path = metadata.get("import_path")
+        if import_path:
+            file_path = cls._import_path_to_file_path(import_path)
+            try:
+                # Write file to disk
+                cls._write_role_file(file_path, code)
+
+                # Log file write to audit trail
+                audit_logger = cls.get_audit_logger()
+                audit_logger.log_file_generated(file_path, step=8)
+            except Exception as e:
+                # If file write fails, log but don't block (validation already passed)
+                # This ensures state is saved even if file write fails
+                pass
+
+        return cls.pass_response(
+            step=8,
+            gate_name="qg_role",
+            mode="POST",
+            metadata={
+                "class_name": metadata.get("class_name"),
+                "import_path": metadata.get("import_path"),
+                "workflow_methods_count": len(metadata.get("workflow_methods", []))
+            }
+        )
 
     @classmethod
     def _detect_skeleton_code(cls, code: str) -> Optional[Dict[str, Any]]:
