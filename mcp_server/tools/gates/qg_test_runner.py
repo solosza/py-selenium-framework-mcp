@@ -13,12 +13,14 @@ POST Validation:
 - code field present and not empty
 - No skeleton code (DD-25): pass, # TODO, placeholder, NotImplementedError
 - At least one role method call (IC-09-03)
+- No test orchestration: tests call ONE workflow method (Pattern-based Smart Gate)
 - POM state assertions used, no return value assertions (IC-09-04, DD-15)
 - @autologger.automation_logger("Test") decorator present (IC-09-05)
+- Import paths match metadata (DD-18): validates Role and POM imports
 - No redundant tests (DEF-046): one test's role calls cannot be subset of another
 - metadata present with class_name and file_path
 
-Enforces: DD-15, DD-25, DEF-046, IC-09-01 through IC-09-05
+Enforces: DD-15, DD-18, DD-25, DEF-046, IC-09-01 through IC-09-05
 """
 
 import re
@@ -337,6 +339,17 @@ class QGTestRunner(BaseGate):
         if role_call_error:
             return role_call_error
 
+        # DEF-046: Check for redundant tests FIRST (more specific than orchestration)
+        redundancy_error = cls._detect_redundant_tests(code)
+        if redundancy_error:
+            return redundancy_error
+
+        # Check for test orchestration (Pattern-based Smart Gate)
+        # Runs after redundancy to avoid flagging redundancy test scenarios
+        orchestration_response = cls._check_test_orchestration(code, input_data)
+        if orchestration_response:
+            return orchestration_response
+
         # Check for Task method calls (bypasses Role layer)
         task_call_error = cls._check_task_calls(code)
         if task_call_error:
@@ -352,10 +365,10 @@ class QGTestRunner(BaseGate):
         if assertion_error:
             return assertion_error
 
-        # DEF-046: Check for redundant tests (subset redundancy)
-        redundancy_error = cls._detect_redundant_tests(code)
-        if redundancy_error:
-            return redundancy_error
+        # DD-18: Validate import paths match metadata
+        import_error = cls._check_imports(code, input_data)
+        if import_error:
+            return import_error
 
         # Validate metadata field
         metadata = input_data.get("metadata")
@@ -490,6 +503,103 @@ class QGTestRunner(BaseGate):
         return None
 
     @classmethod
+    def _check_test_orchestration(cls, code: str, input_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Check for test orchestration - tests should call ONE workflow method (Pattern-based Smart Gate).
+
+        Architecture rule (step-09.md lines 509-515):
+        - Tests should call ONE Role workflow method
+        - Tests should NOT orchestrate by calling multiple Role methods on SAME persona
+        - Exception: Multi-persona scenarios (different roles) are valid
+
+        Pattern-based Smart Gate (Layer 2):
+        - Detects multiple Role method calls on same persona
+        - Provides correct pattern from step-09.md
+        - AI generates fix from pattern
+
+        Returns NEEDS_RETRY response with pattern if orchestration detected, None otherwise.
+        """
+        # Extract role class name from metadata for pattern
+        metadata = input_data.get("metadata", {})
+        role_used = metadata.get("role_used", "RoleClass")
+
+        # Find all test methods
+        test_methods = re.findall(
+            r'def\s+(test_\w+)\s*\([^)]*\):(.*?)(?=\n    def\s+|\n\nclass\s+|\Z)',
+            code,
+            re.DOTALL
+        )
+
+        for test_name, test_body in test_methods:
+            # Find all Role instantiations (variable = RoleClass(...))
+            role_instances = re.findall(
+                r'(\w+)\s*=\s*(\w+)\s*\(',
+                test_body
+            )
+
+            # Count Role method calls per instance variable
+            role_calls_by_instance = {}
+            for var_name, _ in role_instances:
+                # Find calls like: var_name.method_name(...)
+                calls = re.findall(
+                    rf'{var_name}\.(\w+)\s*\(',
+                    test_body
+                )
+                if calls:
+                    role_calls_by_instance[var_name] = calls
+
+            # Check for orchestration: SINGLE persona with MULTIPLE method calls
+            for var_name, method_calls in role_calls_by_instance.items():
+                if len(method_calls) > 1:
+                    # Check if this is multi-persona scenario (valid exception)
+                    # If there are multiple different role variables, it's multi-persona
+                    if len(role_calls_by_instance) > 1:
+                        # Multi-persona: multiple different roles - VALID
+                        continue
+
+                    # Single persona orchestration detected
+                    # Provide pattern from step-09.md (lines 529-540)
+                    pattern = f"""# ❌ WRONG: Orchestrating workflow in test
+def {test_name}(self):
+    {var_name}.{method_calls[0]}()  # Multiple calls that should be
+    {var_name}.{method_calls[1]}()  # ONE Role method like
+    ...                             # {var_name}.complete_workflow()
+
+# ✅ CORRECT PATTERN (from step-09.md):
+
+# IN ROLE: Create workflow method
+class {role_used}:
+    @autologger.automation_logger("Role")
+    def complete_workflow(self, ...params...) -> None:
+        \"\"\"Complete workflow: orchestrates MULTIPLE tasks.\"\"\"
+        self.task1()
+        self.task2()
+        self.task3()
+        # NO return - test asserts via POM
+
+# IN TEST: Call ONE workflow method
+@autologger.automation_logger("Test")
+def {test_name}(self):
+    # Arrange
+    {var_name} = {role_used}(self.web, data, self.base_url)
+
+    # Act - ONE Role call
+    {var_name}.complete_workflow(params)
+
+    # Assert - Via POM state methods
+    assert self.page.is_success()
+"""
+
+                    return {
+                        "status": "NEEDS_RETRY",
+                        "pattern": pattern,
+                        "error": f"Test orchestration detected: {len(method_calls)} Role method calls on single persona (violates architecture)",
+                        "message": f"Tests should call ONE workflow method, not orchestrate multiple calls. Create workflow method in Role that orchestrates these operations."
+                    }
+
+        return None
+
+    @classmethod
     def _check_task_calls(cls, code: str) -> Optional[Dict[str, Any]]:
         """
         Check for Task method calls in test code (architecture violation).
@@ -557,6 +667,69 @@ class QGTestRunner(BaseGate):
                 error="No POM state assertions found",
                 fix_hint="Tests must assert via POM state methods. Add assertions like 'assert self.page.is_logged_in()'."
             )
+
+        return None
+
+    @classmethod
+    def _check_imports(cls, code: str, input_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Validate import paths match metadata (DD-18) - Smart Gate Layer 2.
+
+        Checks that:
+        - Role imports match role_metadata.import_path
+        - POM imports match pom_metadata.*.import_path
+
+        Smart Gate Pattern:
+        - Detects wrong imports
+        - Automatically fixes them
+        - Returns corrected code for retry
+
+        Returns NEEDS_RETRY response with corrected code if mismatch detected, None otherwise.
+        """
+        # Extract role_metadata and pom_metadata from input_data
+        role_metadata = input_data.get("role_metadata", {})
+        pom_metadata = input_data.get("pom_metadata", {})
+
+        # Extract all import statements from code
+        import_pattern = re.compile(r'^from\s+([\w.]+)\s+import\s+(\w+)', re.MULTILINE)
+        imports = import_pattern.findall(code)
+
+        # Build expected imports map
+        expected_imports = {}
+
+        # Add expected role import
+        if role_metadata and isinstance(role_metadata, dict):
+            role_class = role_metadata.get("class_name")
+            role_import_path = role_metadata.get("import_path")
+            if role_class and role_import_path:
+                expected_imports[role_class] = role_import_path
+
+        # Add expected POM imports
+        if pom_metadata and isinstance(pom_metadata, dict):
+            for pom_key, pom_data in pom_metadata.items():
+                if isinstance(pom_data, dict):
+                    pom_class = pom_data.get("class_name")
+                    pom_import_path = pom_data.get("import_path")
+                    if pom_class and pom_import_path:
+                        expected_imports[pom_class] = pom_import_path
+
+        # Check each import in code against expected
+        for import_path, class_name in imports:
+            if class_name in expected_imports:
+                expected_path = expected_imports[class_name]
+                if import_path != expected_path:
+                    # Smart Gate Layer 2: Fix the import and provide corrected code
+                    wrong_import = f"from {import_path} import {class_name}"
+                    correct_import = f"from {expected_path} import {class_name}"
+                    fixed_code = code.replace(wrong_import, correct_import)
+
+                    return {
+                        "status": "NEEDS_RETRY",
+                        "fix_applied": "import_path_corrected",
+                        "corrected_code": fixed_code,
+                        "error": f"DD-18: Wrong import path for {class_name}",
+                        "message": f"Import path corrected from '{import_path}' to '{expected_path}'. Retry with corrected code."
+                    }
 
         return None
 

@@ -392,37 +392,40 @@ class TestAdminCreatesUser:
 
         assert result["status"] == "pass"
 
-    def test_post_valid_multiple_method_calls(self):
-        """POST passes with multiple role method calls in one test."""
+    def test_post_valid_multiple_method_calls_multi_persona(self):
+        """POST passes with multiple role method calls across DIFFERENT personas (multi-persona exception)."""
         from tools.gates.qg_test_runner import QGTestRunner
 
-        complex_test_code = '''"""Complex workflow test."""
+        multi_persona_test_code = '''"""Multi-persona workflow test."""
 import pytest
 from resources.utilities import autologger
+from roles.admin_user import AdminUser
 from roles.registered_user import RegisteredUser
-from pages.checkout.confirmation_page import ConfirmationPage
+from pages.user.profile_page import ProfilePage
 
 
-class TestPurchaseFlow:
-    @pytest.mark.checkout
+class TestUserManagement:
+    @pytest.mark.admin
     @autologger.automation_logger("Test")
-    def test_complete_purchase(self):
-        """Test complete purchase flow."""
+    def test_admin_creates_user_and_user_logs_in(self):
+        """Test admin creates user, then new user logs in."""
         # Arrange
-        user = RegisteredUser(self.web, user_data, self.base_url)
+        admin = AdminUser(self.web, admin_data, self.base_url)
+        new_user = RegisteredUser(self.web, user_data, self.base_url)
+        profile_page = ProfilePage(self.web)
 
-        # Act - Multiple method calls allowed
-        user.login()
-        user.add_to_cart(product)
-        user.checkout()
+        # Act - Multiple calls across DIFFERENT personas (VALID multi-persona)
+        admin.create_user(user_data)
+        admin.logout()
+        new_user.login()
 
         # Assert
-        assert self.confirmation_page.is_order_confirmed()
+        assert profile_page.is_logged_in()
 '''
         result = QGTestRunner.validate_post({
             "mode": "POST",
-            "code": complex_test_code,
-            "metadata": {"class_name": "TestPurchaseFlow", "file_path": "tests/checkout/test_purchase.py"}
+            "code": multi_persona_test_code,
+            "metadata": {"class_name": "TestUserManagement", "file_path": "tests/admin/test_user_management.py"}
         })
 
         assert result["status"] == "pass"
@@ -586,6 +589,215 @@ class TestNoRoleCall:
         })
 
         assert result["status"] == "pass"
+
+
+# =============================================================================
+# POST-VALIDATION: TEST ORCHESTRATION (Pattern-based Smart Gate)
+# =============================================================================
+
+class TestPostValidationOrchestration:
+    """Test orchestration detection - tests should call ONE workflow method (Pattern-based Smart Gate)."""
+
+    @pytest.mark.unit
+    def test_post_multiple_role_calls_single_persona_fails(self, valid_test_metadata):
+        """
+        P0: Detects multiple Role method calls for SINGLE persona (orchestration violation).
+
+        Pattern-based Smart Gate: Returns NEEDS_RETRY with correct pattern.
+
+        # Arrange
+        """
+        from tools.gates.qg_test_runner import QGTestRunner
+        orchestration_code = '''"""Test with orchestration violation."""
+import pytest
+from resources.utilities import autologger
+from roles.existing_customer import ExistingCustomer
+from pages.open_new_account_page import OpenNewAccountPage
+from pages.transfer_funds_page import TransferFundsPage
+
+
+class TestBankingWorkflow:
+    @pytest.mark.banking
+    @autologger.automation_logger("Test")
+    def test_complete_workflow(self):
+        """Test orchestrates workflow."""
+        # Arrange
+        customer = ExistingCustomer(self.web, user_data, self.base_url)
+
+        # Act - ORCHESTRATION VIOLATION: Multiple Role method calls
+        customer.open_new_account("SAVINGS", "12345")
+        customer.transfer_funds("100", "12345", "54321")
+        customer.navigate_to_account_activity()
+
+        # Assert
+        assert self.activity_page.is_transaction_visible()
+'''
+        input_data = {
+            "mode": "POST",
+            "code": orchestration_code,
+            "metadata": valid_test_metadata
+        }
+
+        # Act
+        result = QGTestRunner.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY for pattern-based fix"
+        assert "orchestrat" in result["error"].lower() or "multiple" in result["error"].lower()
+        assert "role" in result["error"].lower() and "method" in result["error"].lower()
+
+    @pytest.mark.unit
+    def test_post_orchestration_provides_pattern(self, valid_test_metadata):
+        """
+        P0: Returns correct pattern from step-09.md when orchestration detected.
+
+        # Arrange
+        """
+        from tools.gates.qg_test_runner import QGTestRunner
+        orchestration_code = '''
+class TestWorkflow:
+    @autologger.automation_logger("Test")
+    def test_workflow(self):
+        customer = ExistingCustomer(self.web, user_data, self.base_url)
+        customer.open_new_account("SAVINGS", "12345")
+        customer.transfer_funds("100", "12345", "54321")
+        customer.view_activity()
+'''
+        input_data = {
+            "mode": "POST",
+            "code": orchestration_code,
+            "metadata": valid_test_metadata
+        }
+
+        # Act
+        result = QGTestRunner.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY"
+        assert "pattern" in result, "Should include pattern key"
+
+        # Pattern should show ONE workflow method call
+        pattern = result["pattern"]
+        assert "# ✅ CORRECT" in pattern or "CORRECT PATTERN" in pattern
+        assert "ONE" in pattern or "single" in pattern.lower()
+
+        # Pattern should mention Role workflow method
+        assert "workflow" in pattern.lower() or "role" in pattern.lower()
+
+    @pytest.mark.unit
+    def test_post_pattern_includes_role_and_test_example(self, valid_test_metadata):
+        """
+        P0: Pattern includes workflow method in Role + test calling it.
+
+        # Arrange
+        """
+        from tools.gates.qg_test_runner import QGTestRunner
+        orchestration_code = '''
+class TestWorkflow:
+    @autologger.automation_logger("Test")
+    def test_workflow(self):
+        customer = ExistingCustomer(self.web, user_data, self.base_url)
+        customer.method1()
+        customer.method2()
+        customer.method3()
+'''
+        input_data = {
+            "mode": "POST",
+            "code": orchestration_code,
+            "metadata": valid_test_metadata
+        }
+
+        # Act
+        result = QGTestRunner.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY"
+        assert "pattern" in result
+
+        pattern = result["pattern"]
+        # Should show Role workflow method definition
+        assert "def " in pattern and "self" in pattern, "Should show Role method definition"
+
+        # Should show test calling ONE method
+        assert "# Act" in pattern or "ACT" in pattern
+        assert ".complete_" in pattern or "workflow" in pattern.lower()
+
+    @pytest.mark.unit
+    def test_post_multi_persona_not_flagged(self, valid_test_metadata):
+        """
+        P0: Multi-persona scenarios ARE valid (different roles).
+
+        # Arrange
+        """
+        from tools.gates.qg_test_runner import QGTestRunner
+        multi_persona_code = '''"""Multi-persona test (VALID)."""
+import pytest
+from resources.utilities import autologger
+from roles.admin_user import AdminUser
+from roles.registered_user import RegisteredUser
+from pages.admin_page import AdminPage
+
+
+class TestAdminCreatesUser:
+    @pytest.mark.admin
+    @autologger.automation_logger("Test")
+    def test_admin_created_user_can_login(self):
+        """Admin creates user, user logs in (multi-persona - VALID)."""
+        # Arrange
+        admin = AdminUser(self.web, admin_data, self.base_url)
+        new_user = RegisteredUser(self.web, user_data, self.base_url)
+
+        # Act - Multiple Role calls (VALID: different personas)
+        admin.create_user(user_data)
+        admin.logout()
+        new_user.login()
+
+        # Assert
+        assert self.admin_page.is_user_created()
+        assert self.login_page.is_logged_in()
+'''
+        input_data = {
+            "mode": "POST",
+            "code": multi_persona_code,
+            "metadata": valid_test_metadata
+        }
+
+        # Act
+        result = QGTestRunner.validate_post(input_data)
+
+        # Assert
+        # Should NOT flag as orchestration (multi-persona is valid)
+        if result["status"] == "NEEDS_RETRY":
+            assert "orchestrat" not in result.get("error", "").lower(), \
+                "Should NOT flag multi-persona scenarios as orchestration"
+
+    @pytest.mark.unit
+    def test_post_single_role_call_passes(self, valid_test_code, valid_test_metadata):
+        """
+        P0: No false positives - tests with ONE role call pass.
+
+        # Arrange
+        """
+        from tools.gates.qg_test_runner import QGTestRunner
+
+        # valid_test_code has ONE role call: user.login()
+        input_data = {
+            "mode": "POST",
+            "code": valid_test_code,
+            "metadata": valid_test_metadata
+        }
+
+        # Act
+        result = QGTestRunner.validate_post(input_data)
+
+        # Assert
+        # Should pass orchestration check (may fail other checks, but not this one)
+        if result["status"] == "NEEDS_RETRY":
+            assert "orchestrat" not in result.get("error", "").lower(), \
+                "Should NOT flag tests with ONE role call"
+            assert "multiple" not in result.get("message", "").lower() or \
+                   "role" not in result.get("message", "").lower(), \
+                "Should NOT flag single role call as orchestration"
 
 
 # =============================================================================
