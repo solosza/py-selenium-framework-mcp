@@ -560,11 +560,12 @@
 
 ---
 
-- [ ] **21.0 Documentation Update** [GLUE]
-  - [ ] 21.1 Update `.claude/skills/qa-guidance-layer/references/step-06.md` - Document immediate write
-  - [ ] 21.2 Update step-07.md, step-08.md, step-09.md - Document immediate write
-  - [ ] 21.3 Update step-10.md - Document file validation
-  - [ ] 21.4 Commit: `docs: update step skills for immediate file writes (Task 21.0)`
+- [x] **21.0 Documentation Update** [GLUE] ✓ (a3ed0eb)
+  - [x] 21.1 Updated `step-06.md` - Document immediate POM file write (DEF-051)
+  - [x] 21.2 Updated `step-07.md`, `step-08.md`, `step-09.md` - Document immediate Task/Role/Test file writes (DEF-051)
+  - [x] 21.3 Updated `step-10.md` - Document file existence validation (Task 19.0)
+  - [x] 21.4 Corrected "Who Saves" in steps 8-9 (operation tool → quality gate for consistency)
+  - [x] 21.5 Commit: `docs: update step skills for immediate file writes (Task 21.0)` ✓
 
 ---
 
