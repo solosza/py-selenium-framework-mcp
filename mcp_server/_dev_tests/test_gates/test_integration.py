@@ -138,7 +138,12 @@ def valid_step_5_post_data():
             "locator_css": "#email",
             "locator_xpath": "",
             "locator_id": "email"
-        }]
+        }],
+        "validation_results": {
+            "valid_count": 1,
+            "error_count": 0,
+            "elements": []
+        }
     }
 
 
