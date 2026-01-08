@@ -569,22 +569,132 @@
 
 ---
 
-- [ ] **22.0 Production E2E Test** [VALIDATION]
-  - [ ] 22.1 Clear all state: Delete `tests/_state/`, `tests/_audit/`
-  - [ ] 22.2 Run ParaBank production test (same as before)
-  - [ ] 22.3 Verify:
-    - Multiple audit files created (one per run)
-    - State directories per run_id
-    - ALL 6 POMs saved to disk
-    - Task, Role, Test files saved
-  - [ ] 22.4 Document results in SESSION.md
-  - [ ] 22.5 If PASS → Merge to main
-  - [ ] 22.6 If FAIL → Create DEF-052+, iterate
+- [ ] **22.0 Smart Gates: qg_task Pattern Enforcement** [CORE]
+  - [ ] 22.1 Create branch `feature/22.0-qg-task-pattern-enforcement`
+  - [ ] 22.2 **Invoke `testing` skill** - TDD for pattern-based Smart Gate
+    - Read test-case-structure.md
+    - Read test-matrix.md
+    - Read test-coverage.md
+    - Read conventions.md
+    - Read failure-handling.md
+  - [x] 22.3 **Read Skills for Protocol Definition**
+    - Read `.claude/skills/qa-guidance-layer/references/step-07.md` (Task patterns)
+    - Extract: Pattern for Task constructor (NO base_url rule - line 395)
+    - Extract: Constructor example, Role instantiation example
+  - [x] 22.4 **Impact Assessment: Unused Parameters Detection**
+    - Who calls Task constructors? → Grep all Roles for Task instantiation
+    - What depends on current signatures? → Check all existing Tasks
+    - What will break? → Roles passing unused parameters (parabank3)
+    - Migration path? → Gate provides correct pattern, AI generates fix
+  - [x] 22.5 Write failing tests for qg_task validation (5 tests):
+    - Test: Detects unused `base_url` parameter
+    - Test: Returns NEEDS_RETRY with correct pattern from step-07.md
+    - Test: Pattern includes constructor signature + Role instantiation
+    - Test: Detects parameter mismatch with Role call
+    - Test: Verifies no false positives (existing correct Tasks)
+  - [x] 22.6 Implement Pattern-Based Smart Gate in qg_task:
+    - Add `_check_unused_parameters()` method
+    - Parse constructor signature and method usage
+    - Detect unused parameters in constructor
+    - Return NEEDS_RETRY with correct pattern from step-07.md
+    - Pattern shows: constructor signature + Role instantiation example
+  - [x] 22.7 Run tests: `pytest test_gates/test_qg_task.py` (43/43 pass)
+  - [x] 22.8 Manual validation: Run /framework-check on parabank3
+    - Verify unused parameter detection works ✓
+    - Verify pattern matches step-07.md ✓
+  - [ ] 22.9 Commit: `feat: qg_task pattern enforcement (Task 22.0)`
 
   **Done When:**
-  - Production test passes end-to-end
-  - All 3 critical bugs fixed (DEF-049, DEF-050, DEF-051)
-  - Ready for release readiness validation
+  - qg_task detects unused params, provides correct pattern ✓
+  - Pattern extracted from step-07.md, not defined in gate ✓
+  - Tests pass ✓
+  - /framework-check detects parabank3 violation ✓
+
+  **Architecture Pattern:**
+  - **Light Skill (step-07.md)** - Defines rule: "NO base_url parameter"
+  - **Heavy Gate (qg_task)** - Detects violation, provides pattern from skill
+  - **AI** - Reads pattern, generates corrected code
+
+  **Design Reference:**
+  - `.business/architecture/execution_patterns.md` - "provide explicit patterns on failure"
+
+---
+
+- [ ] **23.0 Smart Gates: qg_test_runner Pattern Enforcement** [CORE]
+  - [ ] 23.1 Create branch `feature/23.0-qg-test-runner-pattern-enforcement`
+  - [ ] 23.2 **Invoke `testing` skill** - TDD for pattern-based Smart Gate
+    - Read test-case-structure.md
+    - Read test-matrix.md
+    - Read test-coverage.md
+    - Read conventions.md
+    - Read failure-handling.md
+  - [ ] 23.3 **Read Skills for Protocol Definition**
+    - Read `.claude/skills/qa-guidance-layer/references/step-09.md` (Test patterns)
+    - Extract: Pattern for single workflow method call (line 413-431)
+    - Extract: Multi-persona exception pattern (line 440-471)
+    - Extract: Test orchestration anti-pattern (line 509+)
+  - [ ] 23.4 **Impact Assessment: Test Orchestration Detection**
+    - Who calls Role methods? → Grep all tests for Role usage
+    - What depends on current pattern? → Check all existing tests
+    - What will break? → Tests orchestrating multiple Role calls (parabank3)
+    - Migration path? → Gate provides correct pattern, AI generates fix
+  - [ ] 23.5 Write failing tests for qg_test_runner validation (5 tests):
+    - Test: Detects multiple Role method calls (single persona)
+    - Test: Returns NEEDS_RETRY with correct pattern from step-09.md
+    - Test: Pattern includes workflow method in Role + test call
+    - Test: Does NOT flag multi-persona scenarios (valid pattern)
+    - Test: Verifies no false positives (existing correct tests)
+  - [ ] 23.6 Implement Pattern-Based Smart Gate in qg_test_runner:
+    - Add `_check_test_orchestration()` method
+    - Parse test code for Role method calls
+    - Detect multiple Role calls for SINGLE persona (orchestration violation)
+    - Return NEEDS_RETRY with correct pattern from step-09.md
+    - Pattern shows: workflow method in Role + test calling single method
+    - Allow multiple calls for multi-persona scenarios (valid)
+  - [ ] 23.7 Run tests: `pytest test_gates/test_qg_test_runner.py`
+  - [ ] 23.8 Manual validation: Run /framework-check on parabank3
+    - Verify test orchestration detection works
+    - Verify pattern matches step-09.md
+    - Verify multi-persona tests NOT flagged
+  - [ ] 23.9 Commit: `feat: qg_test_runner pattern enforcement (Task 23.0)`
+
+  **Done When:**
+  - qg_test_runner detects orchestration, provides correct pattern ✓
+  - Pattern extracted from step-09.md, not defined in gate ✓
+  - Multi-persona scenarios allowed ✓
+  - Tests pass ✓
+  - /framework-check detects parabank3 violation ✓
+
+  **Architecture Pattern:**
+  - **Light Skill (step-09.md)** - Defines rule: "ONE workflow method call"
+  - **Heavy Gate (qg_test_runner)** - Detects violation, provides pattern from skill
+  - **AI** - Reads pattern, generates corrected code
+
+  **Design Reference:**
+  - `.business/architecture/execution_patterns.md` - "provide explicit patterns on failure"
+
+---
+
+- [ ] **24.0 Production E2E Test** [VALIDATION]
+  - [ ] 24.1 Clear all state: Delete `tests/_state/`, `tests/_audit/`
+  - [ ] 24.2 Run ParaBank production test (workflow: parabank4)
+  - [ ] 24.3 Verify:
+    - Multiple audit files created (one per run)
+    - State directories per run_id
+    - ALL files saved to disk (POMs, Task, Role, Test)
+    - Smart Gates detected violations (qg_task, qg_test_runner)
+    - Smart Gates provided patterns
+    - AI generated fixes from patterns
+    - Test executes without failures
+  - [ ] 24.4 Document results in SESSION.md
+  - [ ] 24.5 If PASS → Merge to main
+  - [ ] 24.6 If FAIL → Create DEF-052+, iterate
+
+  **Done When:**
+  - Production test passes end-to-end ✓
+  - All bugs fixed (DEF-049, DEF-050, DEF-051) ✓
+  - Pattern-based Smart Gates validated in production ✓
+  - Ready for release readiness validation ✓
 
 ---
 

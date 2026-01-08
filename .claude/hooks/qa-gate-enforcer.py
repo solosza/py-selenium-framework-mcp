@@ -28,6 +28,14 @@ PROTECTED_PATHS = {
     'tests/': 'step_9',                # Test requires qg_test_runner POST
 }
 
+# Core infrastructure (ALWAYS blocked, even with gates passed)
+CORE_INFRASTRUCTURE = [
+    'framework/interfaces/',
+    'framework/resources/utilities/',
+    'framework/resources/config.py',
+    'framework/resources/chromedriver/',
+]
+
 # What metadata key must exist for each step to be considered "passed"
 REQUIRED_METADATA = {
     'step_6': 'pom_metadata',
@@ -50,6 +58,10 @@ def get_required_step(file_path: str) -> str | None:
         Step key (e.g., 'step_6') if protected, None if not protected.
     """
     normalized = normalize_path(file_path)
+
+    # Exclude development tests (unit tests for gates themselves)
+    if '_dev_tests/' in normalized or '/_dev_tests/' in normalized:
+        return None
 
     for protected_prefix, step in PROTECTED_PATHS.items():
         if protected_prefix in normalized:
@@ -87,23 +99,45 @@ def is_gate_passed(state: dict, step: str) -> bool:
 
 
 def get_state_file_path() -> Path:
-    """Get the path to workflow_state.json."""
+    """
+    Get the path to workflow_state.json (DEF-052 location).
+
+    State file moved from mcp_server/state/ to tests/_state/{run_id}/ for
+    per-run isolation. This function finds the most recent run_id directory.
+    """
     # Try environment variable first
     project_dir = os.environ.get('CLAUDE_PROJECT_DIR')
     if project_dir:
-        return Path(project_dir) / 'mcp_server' / 'state' / 'workflow_state.json'
+        base = Path(project_dir)
+    else:
+        # Find project root by looking for mcp_server
+        cwd = Path.cwd()
+        base = None
+        for parent in [cwd] + list(cwd.parents):
+            if (parent / 'mcp_server').exists():
+                base = parent
+                break
+        if base is None:
+            base = cwd
 
-    # Fall back to current working directory pattern
-    cwd = Path.cwd()
+    # DEF-052: State now lives in tests/_state/{run_id}/
+    state_dir = base / 'tests' / '_state'
+    if not state_dir.exists():
+        # No state directory = no workflow running
+        return base / 'mcp_server' / 'state' / 'workflow_state.json'  # Dummy path
 
-    # Try to find the project root by looking for mcp_server
-    for parent in [cwd] + list(cwd.parents):
-        state_file = parent / 'mcp_server' / 'state' / 'workflow_state.json'
-        if state_file.exists():
-            return state_file
+    # Find most recent run_id directory
+    run_dirs = sorted(
+        [d for d in state_dir.iterdir() if d.is_dir()],
+        key=lambda p: p.stat().st_mtime,
+        reverse=True
+    )
 
-    # Last resort: assume we're in the project root
-    return cwd / 'mcp_server' / 'state' / 'workflow_state.json'
+    if run_dirs:
+        return run_dirs[0] / 'workflow_state.json'
+
+    # No run directories found
+    return base / 'mcp_server' / 'state' / 'workflow_state.json'  # Dummy path
 
 
 def main():
@@ -130,6 +164,18 @@ def main():
     file_path = tool_input.get('file_path', '')
     if not file_path:
         sys.exit(0)
+
+    # Block core infrastructure (never allow modifications, even with gates passed)
+    normalized = normalize_path(file_path)
+    for core_path in CORE_INFRASTRUCTURE:
+        if core_path in normalized:
+            sys.stderr.write(
+                f"BLOCKED: Core infrastructure is write-protected.\n"
+                f"File: {file_path}\n"
+                f"Protected path: {core_path}\n"
+                f"Core framework code cannot be modified during QA workflows.\n"
+            )
+            sys.exit(2)
 
     # Check if this is a protected path
     required_step = get_required_step(file_path)

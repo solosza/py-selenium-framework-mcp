@@ -17,6 +17,7 @@ POST Validation:
 - No direct navigation (DD-49): self.web.navigate_to() - must use POM navigate()
 - No return values except bare return/return None (IC-07-02)
 - @autologger.automation_logger("Task") decorator present (IC-07-04)
+- No unused parameters: base_url forbidden (Pattern-based Smart Gate)
 - metadata present with class_name and import_path (DD-26)
 
 Enforces: DD-12, DD-25, DD-26, DD-27, DD-49, IC-07-01 through IC-07-05
@@ -311,6 +312,12 @@ class QGTask(BaseGate):
         if locator_error:
             return locator_error
 
+        # Check for unused parameters BEFORE navigation (Pattern-based Smart Gate)
+        # Must run early to catch base_url before DD-49 navigation check
+        unused_param_response = cls._check_unused_parameters(code, input_data)
+        if unused_param_response:
+            return unused_param_response
+
         # Check for direct navigation (DD-49)
         navigation_error = cls._detect_navigation(code)
         if navigation_error:
@@ -481,6 +488,58 @@ class QGTask(BaseGate):
                 error="Missing @autologger.automation_logger(\"Task\") decorator (IC-07-04 violation)",
                 fix_hint="Add @autologger.automation_logger(\"Task\") decorator to each Task method."
             )
+
+        return None
+
+    @classmethod
+    def _check_unused_parameters(cls, code: str, input_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Check for unused parameters in Task constructor (Pattern-based Smart Gate).
+
+        Architecture rule (step-07.md line 395):
+        - Tasks should NOT have base_url parameter
+        - POMs get URL from self.web.config
+        - Tasks compose POMs with only WebInterface
+
+        Pattern-based Smart Gate (Layer 2):
+        - Detects base_url parameter (whether used or unused)
+        - Provides correct pattern from step-07.md
+        - AI generates fix from pattern
+
+        Returns NEEDS_RETRY response with pattern if base_url detected, None otherwise.
+        """
+        # Extract class_name from metadata for pattern
+        metadata = input_data.get("metadata", {})
+        class_name = metadata.get("class_name", "TasksClass")
+
+        # Detect base_url parameter in __init__ signature
+        # Pattern matches: def __init__(self, web: WebInterface, base_url: str):
+        base_url_pattern = re.compile(
+            r'def\s+__init__\s*\([^)]*\bbase_url\s*:',
+            re.MULTILINE
+        )
+
+        if base_url_pattern.search(code):
+            # Provide pattern from step-07.md (lines 337-343) and step-08.md (line 341)
+            pattern = f"""# CORRECT PATTERN (from step-07.md):
+
+class {class_name}:
+    def __init__(self, web: WebInterface):
+        self.web = web
+        # Compose page objects - they get URL from self.web.config
+        self.login_page = LoginPage(web)
+        # NO base_url parameter
+
+# Role instantiation (from step-08.md):
+self.auth_tasks = AuthTasks(web)  # Only passes web, not base_url
+"""
+
+            return {
+                "status": "NEEDS_RETRY",
+                "pattern": pattern,
+                "error": "Task constructor has unused base_url parameter (violates architecture)",
+                "message": "base_url parameter should not be used in Tasks. POMs get URL from self.web.config. Use pattern above."
+            }
 
         return None
 

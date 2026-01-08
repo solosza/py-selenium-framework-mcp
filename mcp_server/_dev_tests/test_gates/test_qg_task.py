@@ -19,11 +19,12 @@ Test Categories:
 - POST-Return: IC-07-02 return value detection (2 tests)
 - POST-Decorator: IC-07-04 decorator check (2 tests)
 - POST-Metadata: DD-26 metadata validation (5 tests)
+- POST-UnusedParams: Unused parameter detection (5 tests)
 - Route: Mode routing (5 tests)
 - Edge: Edge cases (2 tests)
 - Hints: Fix hint messages (2 tests)
 
-Total: 38 tests
+Total: 43 tests
 """
 
 import pytest
@@ -65,7 +66,7 @@ def valid_pre_input(valid_pom_metadata):
 
 @pytest.fixture
 def valid_task_code():
-    """Valid Task code with no skeleton, no locators, proper decorator."""
+    """Valid Task code with no skeleton, no locators, proper decorator, no base_url."""
     return '''"""
 AuthTasks - Task module for Authentication workflows.
 """
@@ -78,10 +79,9 @@ from pages.auth.login_page import LoginPage
 class AuthTasks:
     """Task module for authentication operations."""
 
-    def __init__(self, web: WebInterface, base_url: str):
-        """Compose Page Objects - NO decorator on constructor."""
+    def __init__(self, web: WebInterface):
+        """Compose Page Objects - NO decorator on constructor, NO base_url."""
         self.web = web
-        self.base_url = base_url
         self.login_page = LoginPage(web)
 
     @autologger.automation_logger("Task")
@@ -1103,3 +1103,208 @@ class AuthTasks:
         assert result["status"] == "fail"
         assert "fix_hint" in result, "Should include fix_hint"
         assert "pom" in result["fix_hint"].lower() or "page object" in result["fix_hint"].lower()
+
+
+# =============================================================================
+# POST-UNUSED-PARAMS: Unused parameter detection (Pattern-based Smart Gate)
+# =============================================================================
+
+class TestPostUnusedParameters:
+    """POST validation unused parameter detection (Smart Gate Layer 2 - Pattern-based)."""
+
+    @pytest.mark.unit
+    def test_post_unused_base_url_fails(self, valid_task_metadata):
+        """
+        P0: Detects unused base_url parameter in Task constructor.
+
+        Pattern-based Smart Gate: Returns NEEDS_RETRY with correct pattern.
+
+        # Arrange
+        """
+        from tools.gates.qg_task import QGTask
+        code_with_unused_param = '''
+from interfaces.web_interface import WebInterface
+from resources.utilities import autologger
+from pages.auth.login_page import LoginPage
+
+
+class AuthTasks:
+    def __init__(self, web: WebInterface, base_url: str):
+        """Compose Page Objects."""
+        self.web = web
+        self.base_url = base_url  # Declared but never used
+        self.login_page = LoginPage(web)
+
+    @autologger.automation_logger("Task")
+    def log_in(self, email: str, password: str) -> None:
+        self.login_page.navigate()
+        (self.login_page
+            .enter_email(email)
+            .enter_password(password)
+            .click_submit())
+'''
+        input_data = {
+            "mode": "POST",
+            "code": code_with_unused_param,
+            "metadata": valid_task_metadata
+        }
+
+        # Act
+        result = QGTask.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY for pattern-based fix"
+        assert "base_url" in result["error"].lower(), "Should mention base_url parameter"
+        assert "unused" in result["error"].lower() or "not used" in result["message"].lower()
+
+    @pytest.mark.unit
+    def test_post_unused_param_provides_pattern(self, valid_task_metadata):
+        """
+        P0: Returns correct pattern from step-07.md when unused parameter detected.
+
+        # Arrange
+        """
+        from tools.gates.qg_task import QGTask
+        code_with_unused_param = '''
+class AuthTasks:
+    def __init__(self, web: WebInterface, base_url: str):
+        self.web = web
+        self.base_url = base_url
+        self.login_page = LoginPage(web)
+'''
+        input_data = {
+            "mode": "POST",
+            "code": code_with_unused_param,
+            "metadata": valid_task_metadata
+        }
+
+        # Act
+        result = QGTask.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY"
+        assert "pattern" in result, "Should include pattern key"
+
+        # Pattern should show correct constructor signature
+        pattern = result["pattern"]
+        assert "def __init__(self, web: WebInterface):" in pattern, "Pattern should show correct signature"
+        assert "self.web = web" in pattern
+        assert "LoginPage(web)" in pattern or "PageObject(web)" in pattern
+
+        # Pattern should NOT include base_url
+        assert "base_url" not in pattern.lower() or "NO base_url" in pattern
+
+    @pytest.mark.unit
+    def test_post_pattern_includes_role_usage(self, valid_task_metadata):
+        """
+        P0: Pattern includes Role instantiation example showing correct usage.
+
+        # Arrange
+        """
+        from tools.gates.qg_task import QGTask
+        code_with_unused_param = '''
+class AuthTasks:
+    def __init__(self, web: WebInterface, base_url: str):
+        self.web = web
+        self.base_url = base_url
+'''
+        input_data = {
+            "mode": "POST",
+            "code": code_with_unused_param,
+            "metadata": valid_task_metadata
+        }
+
+        # Act
+        result = QGTask.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY"
+        assert "pattern" in result
+
+        pattern = result["pattern"]
+        # Should show how Role instantiates Task (from step-08.md line 341)
+        assert "AuthTasks(web)" in pattern or "Tasks(web)" in pattern, \
+            "Pattern should show Role instantiation without base_url"
+
+    @pytest.mark.unit
+    def test_post_used_base_url_still_fails(self, valid_task_metadata):
+        """
+        P1: Detects base_url even when used in methods (architecture forbids it).
+
+        Rule: NO base_url parameter period, even if used.
+
+        # Arrange
+        """
+        from tools.gates.qg_task import QGTask
+        code_with_used_base_url = '''
+from interfaces.web_interface import WebInterface
+from resources.utilities import autologger
+
+
+class AuthTasks:
+    def __init__(self, web: WebInterface, base_url: str):
+        self.web = web
+        self.base_url = base_url
+
+    @autologger.automation_logger("Task")
+    def navigate_to_login(self) -> None:
+        # Uses base_url - still wrong per architecture
+        self.web.navigate_to(f"{self.base_url}/login")
+'''
+        input_data = {
+            "mode": "POST",
+            "code": code_with_used_base_url,
+            "metadata": valid_task_metadata
+        }
+
+        # Act
+        result = QGTask.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "base_url forbidden even if used"
+        assert "base_url" in result["error"].lower()
+        assert "pattern" in result, "Should provide correct pattern"
+
+    @pytest.mark.unit
+    def test_post_no_base_url_passes(self, valid_task_metadata):
+        """
+        P0: No false positives - Tasks without base_url parameter pass.
+
+        # Arrange
+        """
+        from tools.gates.qg_task import QGTask
+        correct_code = '''
+from interfaces.web_interface import WebInterface
+from resources.utilities import autologger
+from pages.auth.login_page import LoginPage
+
+
+class AuthTasks:
+    def __init__(self, web: WebInterface):
+        """Compose Page Objects - NO base_url."""
+        self.web = web
+        self.login_page = LoginPage(web)
+
+    @autologger.automation_logger("Task")
+    def log_in(self, email: str, password: str) -> None:
+        self.login_page.navigate()
+        (self.login_page
+            .enter_email(email)
+            .enter_password(password)
+            .click_submit())
+'''
+        input_data = {
+            "mode": "POST",
+            "code": correct_code,
+            "metadata": valid_task_metadata
+        }
+
+        # Act
+        result = QGTask.validate_post(input_data)
+
+        # Assert
+        # Should pass unused param check (may fail other checks, but not this one)
+        if result["status"] == "NEEDS_RETRY":
+            assert "base_url" not in result.get("error", "").lower(), \
+                "Should not flag base_url when not present"
+        # If status is pass, that's fine - no base_url to flag
