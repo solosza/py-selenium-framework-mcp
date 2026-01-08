@@ -43,7 +43,9 @@ class QGTestScenarios(BaseGate):
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
-        return StateManager()
+        # Task 12.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        return StateManager(run_id=audit_logger.run_id)
 
     @classmethod
     def validate_pre(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -94,7 +96,12 @@ class QGTestScenarios(BaseGate):
                 fix_hint="Provide workflow value (e.g., 'auth', 'catalog', 'checkout', or any custom workflow name)."
             )
 
-        return cls.pass_response()
+        return cls.pass_response(
+            step=4,
+            gate_name="qg_test_scenarios",
+            mode="PRE",
+            metadata={"workflow": workflow}
+        )
 
     @classmethod
     def validate_post(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -204,7 +211,12 @@ class QGTestScenarios(BaseGate):
         state_manager = cls._get_state_manager()
         state_manager.save(step=4, data={"test_scenarios": test_scenarios})
 
-        response = cls.pass_response()
+        response = cls.pass_response(
+            step=4,
+            gate_name="qg_test_scenarios",
+            mode="POST",
+            metadata={"scenarios_count": len(test_scenarios)}
+        )
         response["test_scenarios"] = test_scenarios
         return response
 
