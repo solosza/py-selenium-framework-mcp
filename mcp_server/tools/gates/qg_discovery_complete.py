@@ -30,7 +30,9 @@ class QGDiscoveryComplete(BaseGate):
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
-        return StateManager()
+        # Task 14.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        return StateManager(run_id=audit_logger.run_id)
 
     @classmethod
     def validate_pre(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -60,6 +62,13 @@ class QGDiscoveryComplete(BaseGate):
         # Get Step 5 state
         step_5_state = state_manager.get_step(5) or {}
         discovered_pages = step_5_state.get("discovered_pages", {})
+
+        # Guard against corrupted state (from mixed workflows or old format)
+        if not isinstance(discovered_pages, dict):
+            return cls.fail_response(
+                error="State corruption detected: discovered_pages is not a dict.",
+                fix_hint="Clear state and restart workflow from Step 1. Run: StateManager().clear()"
+            )
 
         # Validate discovered_pages exists and is not empty
         if not discovered_pages:
