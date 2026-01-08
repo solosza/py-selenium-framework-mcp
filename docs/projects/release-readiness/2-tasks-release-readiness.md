@@ -369,7 +369,7 @@
 
 ---
 
-- [ ] **11.0 Refactor: qg_ai_processing** [CORE]
+- [x] **11.0 Refactor: qg_ai_processing** [CORE] ✓ COMMITTED (6f6bdd8)
   - [x] 11.1 **Impact Assessment**
     - Who calls? → Step 3 workflows
     - What depends? → Line 77: StateManager().save(step=3, ...)
@@ -384,15 +384,22 @@
   - [x] 11.2 Update to use `StateManager(run_id=...)`
   - [x] 11.3 Run gate tests: `pytest test_gates/test_qg_ai_processing.py`
     - **Results:** 27/27 tests PASSED ✓
-  - [ ] 11.4 Commit: `refactor: qg_ai_processing uses per-run state (Task 11.0)`
+  - [x] 11.4 Commit: `refactor: qg_ai_processing uses per-run state (Task 11.0)` ✓
 
 ---
 
-- [ ] **12.0 Refactor: qg_test_scenarios** [CORE]
-  - [ ] 12.1 **Impact Assessment**
-  - [ ] 12.2 Update to use `StateManager(run_id=...)`
-  - [ ] 12.3 Run gate tests: `pytest test_gates/test_qg_test_scenarios.py`
-  - [ ] 12.4 Commit: `refactor: qg_test_scenarios uses per-run state (Task 12.0)`
+- [x] **12.0 Refactor: qg_test_scenarios** [CORE] ✓ COMMITTED (91445ff)
+  - [x] 12.1 **Impact Assessment**
+  - [x] 12.1b **Invoke `testing` skill** - Read all 5 reference files
+    - Read test-case-structure.md ✓
+    - Read test-matrix.md ✓
+    - Read test-coverage.md ✓
+    - Read conventions.md ✓
+    - Read failure-handling.md ✓
+  - [x] 12.2 Update to use `StateManager(run_id=...)`
+  - [x] 12.3 Run gate tests: `pytest test_gates/test_qg_test_scenarios.py`
+    - **Results:** 33/33 tests PASSED ✓
+  - [x] 12.4 Commit: `refactor: qg_test_scenarios uses per-run state (Task 12.0)` ✓
 
 ---
 
