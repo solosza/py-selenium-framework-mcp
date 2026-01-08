@@ -510,17 +510,17 @@
 
 ---
 
-- [ ] **18.0 Refactor + Feature: qg_test_runner** [CORE] - DEF-051 FIX
-  - [ ] 18.1 **Impact Assessment**
-  - [ ] 18.2 **Invoke `testing` skill** - TDD for immediate write
+- [x] **18.0 Refactor + Feature: qg_test_runner** [CORE] - DEF-051 FIX ✓ (ce73972)
+  - [x] 18.1 **Impact Assessment** ✓
+  - [x] 18.2 **Invoke `testing` skill** - TDD for immediate write ✓
     - Read ALL testing skill references
-  - [ ] 18.3 Write failing test (1 test: Test file written)
-  - [ ] 18.4 Update `qg_test_runner.validate_post()`:
+  - [x] 18.3 Write failing test (1 test: Test file written) ✓ (Tests pre-existing)
+  - [x] 18.4 Update `qg_test_runner.validate_post()`: ✓
     - Change to `StateManager(run_id=...)`
     - After validation passes, write Test file immediately
     - Log file write to audit
-  - [ ] 18.5 Run tests
-  - [ ] 18.6 Commit: `fix: qg_test_runner writes file immediately (DEF-051, Task 18.0)`
+  - [x] 18.5 Run tests ✓ (49/49 tests passed)
+  - [x] 18.6 Commit: `feat: qg_test_runner writes file immediately (DEF-051, Task 18.0)` ✓ (ce73972)
 
 ---
 
