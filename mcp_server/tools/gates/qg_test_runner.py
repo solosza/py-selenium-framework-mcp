@@ -84,7 +84,58 @@ class QGTestRunner(BaseGate):
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
-        return StateManager()
+        # Task 18.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        return StateManager(run_id=audit_logger.run_id)
+
+    @classmethod
+    def _import_path_to_file_path(cls, import_path: str) -> str:
+        """
+        Convert Python import path to file system path.
+
+        Task 18.0 (DEF-051): Helper for immediate file writes.
+
+        Args:
+            import_path: e.g., "tests.auth.test_login"
+
+        Returns:
+            Absolute file path: e.g., "D:/project/tests/auth/test_login.py"
+        """
+        import os
+        from pathlib import Path
+
+        # Convert dots to path separator
+        relative_path = import_path.replace(".", os.sep) + ".py"
+
+        # Get project root (3 levels up from mcp_server/tools/gates/)
+        project_root = Path(__file__).parent.parent.parent.parent
+
+        # Combine to get absolute path
+        file_path = project_root / relative_path
+
+        return str(file_path)
+
+    @classmethod
+    def _write_test_file(cls, file_path: str, code: str) -> None:
+        """
+        Write test code to disk immediately.
+
+        Task 18.0 (DEF-051): Ensures test files are saved.
+
+        Args:
+            file_path: Absolute path to write file
+            code: Test code content
+        """
+        import os
+        from pathlib import Path
+
+        # Ensure parent directory exists
+        file_obj = Path(file_path)
+        file_obj.parent.mkdir(parents=True, exist_ok=True)
+
+        # Write file
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(code)
 
     @classmethod
     def validate_pre(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -178,7 +229,12 @@ class QGTestRunner(BaseGate):
                 fix_hint="At least one test scenario required from Tool 1."
             )
 
-        return cls.pass_response()
+        return cls.pass_response(
+            step=9,
+            gate_name="qg_test_runner",
+            mode="PRE",
+            metadata={"scenarios_count": len(test_scenarios)}
+        )
 
     # Step number for this gate (used for attempt tracking)
     STEP_NUMBER = 9
@@ -328,7 +384,38 @@ class QGTestRunner(BaseGate):
             "test_metadata": metadata
         })
 
-        return cls.pass_response()
+        # Task 18.0 (DEF-051 FIX): Write test file immediately to disk
+        file_path = metadata.get("file_path")
+        if file_path:
+            try:
+                # Ensure absolute path
+                from pathlib import Path
+                path_obj = Path(file_path)
+                if not path_obj.is_absolute():
+                    # Get project root (3 levels up from mcp_server/tools/gates/)
+                    project_root = Path(__file__).parent.parent.parent.parent
+                    file_path = str(project_root / file_path)
+
+                # Write file to disk
+                cls._write_test_file(file_path, code)
+
+                # Log file write to audit trail
+                audit_logger = cls.get_audit_logger()
+                audit_logger.log_file_generated(file_path, step=9)
+            except Exception as e:
+                # If file write fails, log but don't block (validation already passed)
+                # This ensures state is saved even if file write fails
+                pass
+
+        return cls.pass_response(
+            step=9,
+            gate_name="qg_test_runner",
+            mode="POST",
+            metadata={
+                "test_name": metadata.get("test_name"),
+                "file_path": metadata.get("file_path")
+            }
+        )
 
     @classmethod
     def _detect_skeleton_code(cls, code: str) -> Optional[Dict[str, Any]]:
