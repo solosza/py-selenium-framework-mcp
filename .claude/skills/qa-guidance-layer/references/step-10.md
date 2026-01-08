@@ -38,19 +38,23 @@ PRE-CHECK:
 - Verify all code from Steps 6-9 is present and complete
 
 ACTION:
-- CALL qg_save_run (PRE-VALIDATE all code present)
-- SAVE files to disk:
-  - POM → framework/pages/{domain}/{page_name}.py
-  - Task → framework/tasks/{domain}/{task_name}.py
-  - Role → framework/roles/{role_name}.py
-  - Test → tests/{domain}/test_{intent}.py
+- CALL qg_save_run (PRE-VALIDATE all code present + FILES EXIST)
+- **NOTE:** Files already written in Steps 6-9 (DEF-051 immediate write)
+- qg_save_run validates all generated files exist on disk:
+  - POM files (may be multiple) → framework/pages/{workflow}/*.py
+  - Task file → framework/tasks/{workflow}/{task_name}.py
+  - Role file → framework/roles/{workflow}/{role_name}.py
+  - Test file → tests/{workflow}/test_{scenario}.py
 - ASK user: "Ready to run the test?"
 - IF yes: RUN pytest
 - REPORT results
 
 VALIDATE:
-- PRE: All code present, no skeleton code
-- POST: Files saved successfully, test executed
+- PRE:
+  - All code present (input_data or fallback to state)
+  - No skeleton code
+  - **ALL FILES EXIST ON DISK** (Task 19.0 - DEF-051 validation)
+- POST: N/A (PRE-only gate)
 
 ON TEST FAILURE (DD-22):
 - STOP → REPORT failure details

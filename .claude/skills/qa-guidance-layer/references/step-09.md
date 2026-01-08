@@ -76,9 +76,17 @@ RETRY:
 | Field | Value |
 |-------|-------|
 | **State Saved** | `test_code`, `test_metadata` (file path, test names, assertions) |
-| **Who Saves** | Operation tool (`generate_test_runner`) |
-| **When Saved** | On operation SUCCESS (after POST-VALIDATE passes) |
+| **Who Saves** | Quality gate (`qg_test_runner` POST) |
+| **When Saved** | On POST-VALIDATE pass |
+| **File Written** | **YES - Immediately after POST validation passes** (DEF-051 fix) |
 | **State Schema** | See below |
+
+**DEF-051: Immediate File Write:**
+
+After POST validation passes, `qg_test_runner` immediately writes the Test file to disk:
+- File path: `tests/{workflow}/test_{scenario_name}.py`
+- Example: `tests/auth/test_login.py`
+- Logged to audit trail with step number
 
 ```json
 {

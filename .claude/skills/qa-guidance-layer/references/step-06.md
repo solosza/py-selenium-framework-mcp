@@ -74,7 +74,16 @@ RETRY:
 | **State Saved** | `pom_code`, `pom_metadata`, `generated_poms`, `poms_generated`, `total_poms`, `generation_complete` |
 | **Who Saves** | Quality gate (`qg_page_object` POST) |
 | **When Saved** | On POST-VALIDATE pass (for each page) |
+| **File Written** | **YES - Immediately after POST validation passes** (DEF-051 fix) |
 | **State Schema** | See below |
+
+**DEF-051: Immediate File Write:**
+
+After POST validation passes, `qg_page_object` immediately writes the POM file to disk:
+- File path: `framework/pages/{workflow}/{page_name_snake_case}.py`
+- Example: `framework/pages/auth/login_page.py`
+- Logged to audit trail with step number
+- Ensures ALL POMs saved in multi-page workflows (not just the last one)
 
 **DEF-045: Dual Elements (NEW - Preferred):**
 

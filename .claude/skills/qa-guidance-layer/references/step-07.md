@@ -74,7 +74,15 @@ RETRY:
 | **State Saved** | `task_code`, `task_metadata` |
 | **Who Saves** | Quality gate (`qg_task` POST) |
 | **When Saved** | On POST-VALIDATE pass |
+| **File Written** | **YES - Immediately after POST validation passes** (DEF-051 fix) |
 | **State Schema** | See below |
+
+**DEF-051: Immediate File Write:**
+
+After POST validation passes, `qg_task` immediately writes the Task file to disk:
+- File path: `framework/tasks/{workflow}/{task_name_snake_case}.py`
+- Example: `framework/tasks/auth/auth_tasks.py`
+- Logged to audit trail with step number
 
 **Note:** Unlike Step 6 (POMs), Tasks do NOT use multi-page loop tracking.
 Tasks are per-domain (e.g., AuthTasks, CatalogTasks), not per-page.

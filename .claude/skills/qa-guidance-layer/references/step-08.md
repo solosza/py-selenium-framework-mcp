@@ -73,9 +73,17 @@ RETRY:
 | Field | Value |
 |-------|-------|
 | **State Saved** | `role_code`, `role_metadata` (class name, workflow methods, composed Tasks) |
-| **Who Saves** | Operation tool (`generate_role`) |
-| **When Saved** | On operation SUCCESS (after POST-VALIDATE passes) |
+| **Who Saves** | Quality gate (`qg_role` POST) |
+| **When Saved** | On POST-VALIDATE pass |
+| **File Written** | **YES - Immediately after POST validation passes** (DEF-051 fix) |
 | **State Schema** | See below |
+
+**DEF-051: Immediate File Write:**
+
+After POST validation passes, `qg_role` immediately writes the Role file to disk:
+- File path: `framework/roles/{workflow}/{role_name_snake_case}.py`
+- Example: `framework/roles/auth/registered_user.py`
+- Logged to audit trail with step number
 
 ```json
 {
