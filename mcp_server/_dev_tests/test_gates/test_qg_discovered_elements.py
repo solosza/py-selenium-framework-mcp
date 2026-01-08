@@ -1439,7 +1439,7 @@ class TestDD46ValidationResults:
         """
         # Arrange
         input_data = valid_post_input.copy()
-        # No validation_results
+        del input_data["validation_results"]  # Remove validation_results to test missing case
 
         # Act
         result = QGDiscoveredElements.validate_post(input_data)

@@ -52,7 +52,9 @@ class QGDiscoveredElements(BaseGate):
     @classmethod
     def _get_state_manager(cls) -> StateManager:
         """Get StateManager instance. Extracted for testing."""
-        return StateManager()
+        # Task 13.0: Use per-run state isolation
+        audit_logger = cls.get_audit_logger()
+        return StateManager(run_id=audit_logger.run_id)
 
     @classmethod
     def validate_pre(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -156,10 +158,21 @@ class QGDiscoveredElements(BaseGate):
         detected_page_count = cls._detect_page_count_from_bdd(state_manager)
 
         if detected_page_count > 1 and scope_result is None:
-            return cls.fail_response(
-                error=f"Multi-page workflow detected ({detected_page_count} pages) but scope_result not provided (DD-44)",
-                fix_hint="Call scope_discovery.analyze_workflow(bdd_scenarios) first, then pass scope_result to this gate."
-            )
+            # SELF-HEALING: Calculate scope_result and provide it to AI
+            calculated_scope = cls._calculate_scope_result_from_bdd(state_manager)
+            if calculated_scope is not None:
+                return {
+                    "status": "fail",
+                    "error": f"Multi-page workflow detected ({detected_page_count} pages) but scope_result not provided (DD-44)",
+                    "fix_hint": "Retry with the provided scope_result included in your next call.",
+                    "scope_result": calculated_scope  # ← Self-healing: provide the fix
+                }
+            else:
+                # Fallback if calculation fails
+                return cls.fail_response(
+                    error=f"Multi-page workflow detected ({detected_page_count} pages) but scope_result not provided (DD-44)",
+                    fix_hint="Call scope_discovery.analyze_workflow(bdd_scenarios) first, then pass scope_result to this gate."
+                )
 
         # Task 2.0: Validate scope_result if provided (for multi-page workflows)
         if scope_result is not None:
@@ -167,7 +180,17 @@ class QGDiscoveredElements(BaseGate):
             if scope_validation is not None:
                 return scope_validation
 
-        return cls.pass_response()
+        return cls.pass_response(
+            step=5,
+            gate_name="qg_discovered_elements",
+            mode="PRE",
+            metadata={
+                "page_name": page_name,
+                "url": url,
+                "multi_page": scope_result is not None,
+                "total_pages": scope_result.get("total_pages") if scope_result else 1
+            }
+        )
 
     @classmethod
     def _validate_scope_result(cls, scope_result: Dict[str, Any], page_name: str) -> Optional[Dict[str, Any]]:
@@ -278,6 +301,51 @@ class QGDiscoveredElements(BaseGate):
         except Exception:
             # If anything fails, default to single page (don't block workflow)
             return 1
+
+    @classmethod
+    def _calculate_scope_result_from_bdd(cls, state_manager: StateManager) -> Optional[Dict[str, Any]]:
+        """
+        SELF-HEALING: Calculate full scope_result from BDD scenarios.
+
+        This method provides the AI with scope_result when it's missing,
+        enabling self-healing workflow continuation.
+
+        Args:
+            state_manager: StateManager instance to read state
+
+        Returns:
+            scope_result dict with page_count and pages, or None if calculation fails
+        """
+        try:
+            step_4_state = state_manager.get_step(4)
+            if not step_4_state:
+                return None
+
+            test_scenarios = step_4_state.get("test_scenarios", [])
+            if not test_scenarios:
+                return None
+
+            # Use ScopeDiscovery to analyze BDD
+            discovery = ScopeDiscovery()
+            result = discovery.analyze_workflow(test_scenarios)
+
+            # Convert ScopeResult to dict for JSON serialization
+            return {
+                "page_count": result.page_count,
+                "pages": [
+                    {
+                        "name": page.name,
+                        "order": page.order,
+                        "url": page.url,
+                        "depends_on": page.depends_on
+                    }
+                    for page in result.pages
+                ]
+            }
+
+        except Exception:
+            # If calculation fails, return None (fallback to original error)
+            return None
 
     @classmethod
     def get_discovery_progress(cls) -> Dict[str, Any]:
@@ -456,10 +524,20 @@ class QGDiscoveredElements(BaseGate):
         existing_state = state_manager.get_step(5) or {}
         discovered_pages = existing_state.get("discovered_pages", {})
 
+        # Guard against corrupted state (from mixed workflows or old format)
+        # This self-heals state by overwriting with clean structure on next save
+        if not isinstance(discovered_pages, dict):
+            discovered_pages = {}
+
         # DEF-045: Nested structure for two-pass discovery
-        # Initialize page structure if first time
+        # Initialize page structure if first time OR migrate old flat structure
         if page_name not in discovered_pages:
             discovered_pages[page_name] = {}
+        elif isinstance(discovered_pages[page_name], list):
+            # MIGRATION: Convert old flat structure (list) to new nested structure (dict)
+            # Old structure was just a list of elements, preserve as input elements
+            old_elements = discovered_pages[page_name]
+            discovered_pages[page_name] = {"input_elements": old_elements}
 
         # Add elements to appropriate type key
         if element_type == "input":
@@ -483,7 +561,7 @@ class QGDiscoveredElements(BaseGate):
             # Single page: check if both types present
             page_data = discovered_pages.get(page_name, {})
             if isinstance(page_data, dict):
-                has_both = page_data.get("input_elements") and page_data.get("output_elements")
+                has_both = bool(page_data.get("input_elements") and page_data.get("output_elements"))
             else:
                 # Backward compat: old flat structure
                 has_both = bool(page_data)
@@ -503,7 +581,18 @@ class QGDiscoveredElements(BaseGate):
         # DD-44: For multi-page workflows, return progress info (don't block yet)
         # AI is responsible for calling PRE/POST for each page
         # Final check happens before Step 6 via is_discovery_complete()
-        response = cls.pass_response()
+        response = cls.pass_response(
+            step=5,
+            gate_name="qg_discovered_elements",
+            mode="POST",
+            metadata={
+                "page_name": page_name,
+                "elements_count": len(elements),
+                "pages_discovered": pages_discovered,
+                "total_pages": total_pages,
+                "discovery_complete": discovery_complete
+            }
+        )
         if total_pages > 1:
             response["multi_page_progress"] = {
                 "pages_discovered": pages_discovered,
