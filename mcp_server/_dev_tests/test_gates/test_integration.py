@@ -162,7 +162,7 @@ def valid_step_6_pre_data():
 
 
 def valid_step_6_post_data():
-    """Valid page object POST data (Step 6)."""
+    """Valid page object POST data (Step 6). DD-49: includes navigate() method."""
     return {
         "mode": "POST",
         "code": '''
@@ -175,6 +175,10 @@ class LoginPage:
     def __init__(self, web: WebInterface):
         self.web = web
 
+    def navigate(self) -> "LoginPage":
+        self.web.navigate_to(self.web.config["url"] + "/login")
+        return self
+
     def enter_email(self, text: str) -> "LoginPage":
         self.web.type_text(*self.EMAIL, text)
         return self
@@ -185,9 +189,12 @@ class LoginPage:
         "metadata": {
             "class_name": "LoginPage",
             "import_path": "pages.auth.login_page",
-            "locators": ["EMAIL"],
-            "action_methods": ["enter_email"],
-            "state_methods": ["is_logged_in"]
+            "locators": [{"name": "EMAIL", "by": "CSS_SELECTOR", "value": "#email"}],
+            "action_methods": [
+                {"name": "navigate", "params": [], "returns": "self"},
+                {"name": "enter_email", "params": ["text: str"], "returns": "self"}
+            ],
+            "state_methods": [{"name": "is_logged_in", "params": [], "returns": "bool"}]
         }
     }
 
@@ -207,7 +214,7 @@ def valid_step_7_pre_data():
 
 
 def valid_step_7_post_data():
-    """Valid task POST data (Step 7)."""
+    """Valid task POST data (Step 7). DD-49: Tasks don't have base_url; POMs use self.web.config."""
     return {
         "mode": "POST",
         "code": '''
@@ -216,19 +223,18 @@ from pages.auth.login_page import LoginPage
 from resources.utilities import autologger
 
 class AuthTasks:
-    def __init__(self, web: WebInterface, base_url: str):
+    def __init__(self, web: WebInterface):
         self.web = web
-        self.base_url = base_url
         self.login_page = LoginPage(web)
 
     @autologger.automation_logger("Task")
     def log_in(self, email: str, password: str):
-        self.login_page.enter_email(email).enter_password(password).click_submit()
+        self.login_page.navigate().enter_email(email).enter_password(password).click_submit()
 ''',
         "metadata": {
             "class_name": "AuthTasks",
             "import_path": "tasks.auth.auth_tasks",
-            "workflow_methods": ["log_in"]
+            "task_methods": [{"name": "log_in", "params": ["email: str", "password: str"]}]
         }
     }
 
@@ -247,7 +253,7 @@ def valid_step_8_pre_data():
 
 
 def valid_step_8_post_data():
-    """Valid role POST data (Step 8)."""
+    """Valid role POST data (Step 8). DD-49: Task instantiation without base_url."""
     return {
         "mode": "POST",
         "code": '''
@@ -258,10 +264,10 @@ from resources.utilities import autologger
 
 class RegisteredUser:
     @autologger.automation_logger("Role Constructor")
-    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any], base_url: str):
+    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any]):
         self.web = web_interface
         self.user_data = user_data
-        self.auth_tasks = AuthTasks(web_interface, base_url)
+        self.auth_tasks = AuthTasks(web_interface)
 
     @autologger.automation_logger("Role")
     def login(self):
@@ -270,7 +276,7 @@ class RegisteredUser:
         "metadata": {
             "class_name": "RegisteredUser",
             "import_path": "roles.registered_user",
-            "workflow_methods": ["login"]
+            "workflow_methods": [{"name": "login", "params": []}]
         }
     }
 
@@ -996,9 +1002,16 @@ class TestE2EWorkflow:
 
         result = QGPageObject.validate(valid_step_6_post_data())
         assert result["status"] == "pass", f"Step 6 POST failed: {result}"
+        # Save state in format expected by DEF-048: generated_poms structure
         mock_state_manager.save(6, {
-            "code": valid_step_6_post_data()["code"],
-            "metadata": valid_step_6_post_data()["metadata"]
+            "generated_poms": {
+                "LoginPage": {
+                    "code": valid_step_6_post_data()["code"],
+                    "metadata": valid_step_6_post_data()["metadata"],
+                    "import_path": valid_step_6_post_data()["metadata"]["import_path"]
+                }
+            },
+            "pom_code": valid_step_6_post_data()["code"]
         })
 
         # Step 7: Task (PRE + POST)
@@ -1008,8 +1021,8 @@ class TestE2EWorkflow:
         result = QGTask.validate(valid_step_7_post_data())
         assert result["status"] == "pass", f"Step 7 POST failed: {result}"
         mock_state_manager.save(7, {
-            "code": valid_step_7_post_data()["code"],
-            "metadata": valid_step_7_post_data()["metadata"]
+            "task_code": valid_step_7_post_data()["code"],
+            "task_metadata": valid_step_7_post_data()["metadata"]
         })
 
         # Step 8: Role (PRE + POST)
@@ -1019,8 +1032,8 @@ class TestE2EWorkflow:
         result = QGRole.validate(valid_step_8_post_data())
         assert result["status"] == "pass", f"Step 8 POST failed: {result}"
         mock_state_manager.save(8, {
-            "code": valid_step_8_post_data()["code"],
-            "metadata": valid_step_8_post_data()["metadata"]
+            "role_code": valid_step_8_post_data()["code"],
+            "role_metadata": valid_step_8_post_data()["metadata"]
         })
 
         # Step 9: Test Runner (PRE + POST)
@@ -1030,8 +1043,8 @@ class TestE2EWorkflow:
         result = QGTestRunner.validate(valid_step_9_post_data())
         assert result["status"] == "pass", f"Step 9 POST failed: {result}"
         mock_state_manager.save(9, {
-            "code": valid_step_9_post_data()["code"],
-            "metadata": valid_step_9_post_data()["metadata"]
+            "test_code": valid_step_9_post_data()["code"],
+            "test_metadata": valid_step_9_post_data()["metadata"]
         })
 
         # Step 10: Save Run (PRE only)

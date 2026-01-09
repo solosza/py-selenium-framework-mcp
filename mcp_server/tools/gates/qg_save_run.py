@@ -239,6 +239,40 @@ Fix: Validate reconstructed {layer} code through POST gate first.
         return None
 
     @classmethod
+    def _import_path_to_file_path(cls, import_path: str) -> str:
+        """
+        Convert Python import path to file system path.
+
+        DEF-054 FIX: Prepend framework/ for pages/tasks/roles paths.
+        Same fix as DEF-055a in other gates.
+
+        Args:
+            import_path: e.g., "pages.auth.login_page"
+
+        Returns:
+            Absolute file path: e.g., "D:/project/framework/pages/auth/login_page.py"
+        """
+        import os
+        from pathlib import Path
+
+        # Convert dots to path separator
+        relative_path = import_path.replace(".", os.sep) + ".py"
+
+        # DEF-054 FIX: Prepend framework/ for pages/tasks/roles paths
+        framework_prefixes = (
+            'pages' + os.sep,
+            'tasks' + os.sep,
+            'roles' + os.sep,
+        )
+        if relative_path.startswith(framework_prefixes):
+            relative_path = 'framework' + os.sep + relative_path
+
+        # Get project root (3 levels up from mcp_server/tools/gates/)
+        project_root = Path(__file__).parent.parent.parent.parent
+
+        return str(project_root / relative_path)
+
+    @classmethod
     def _validate_files_exist(cls, state_manager: StateManager) -> Optional[Dict[str, Any]]:
         """
         Task 19.0: Validate that all generated files exist on disk.
@@ -277,9 +311,8 @@ Fix: Validate reconstructed {layer} code through POST gate first.
                     if isinstance(pom_data, dict):
                         import_path = pom_data.get("import_path")
                         if import_path:
-                            # Convert import path to file path
-                            relative_path = import_path.replace(".", os.sep) + ".py"
-                            file_path = project_root / relative_path
+                            # DEF-054 FIX: Use helper that prepends framework/
+                            file_path = Path(cls._import_path_to_file_path(import_path))
                             if not file_path.exists():
                                 missing_files.append({
                                     "step": 6,
@@ -296,8 +329,8 @@ Fix: Validate reconstructed {layer} code through POST gate first.
                 has_any_metadata = True
                 import_path = task_metadata.get("import_path")
                 if import_path:
-                    relative_path = import_path.replace(".", os.sep) + ".py"
-                    file_path = project_root / relative_path
+                    # DEF-054 FIX: Use helper that prepends framework/
+                    file_path = Path(cls._import_path_to_file_path(import_path))
                     if not file_path.exists():
                         missing_files.append({
                             "step": 7,
@@ -314,8 +347,8 @@ Fix: Validate reconstructed {layer} code through POST gate first.
                 has_any_metadata = True
                 import_path = role_metadata.get("import_path")
                 if import_path:
-                    relative_path = import_path.replace(".", os.sep) + ".py"
-                    file_path = project_root / relative_path
+                    # DEF-054 FIX: Use helper that prepends framework/
+                    file_path = Path(cls._import_path_to_file_path(import_path))
                     if not file_path.exists():
                         missing_files.append({
                             "step": 8,
@@ -408,6 +441,9 @@ Fix: Check that Steps 6-9 gates write files immediately after POST validation pa
         file_validation_error = cls._validate_files_exist(state_manager)
         if file_validation_error:
             return file_validation_error
+
+        # DEF-052: Clear session marker - workflow complete
+        cls._clear_session_marker()
 
         return cls.pass_response(
             step=10,

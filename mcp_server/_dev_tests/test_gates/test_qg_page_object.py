@@ -68,6 +68,10 @@ def valid_post_input():
         "code": '''class LoginPage:
     EMAIL = (By.CSS_SELECTOR, "#email")
 
+    def navigate(self) -> "LoginPage":
+        self.web.navigate_to(self.web.config["url"] + "/login")
+        return self
+
     def enter_email(self, email: str) -> "LoginPage":
         self.web.type_text(*self.EMAIL, text=email)
         return self
@@ -82,6 +86,7 @@ def valid_post_input():
                 {"name": "EMAIL", "by": "CSS_SELECTOR", "value": "#email"}
             ],
             "action_methods": [
+                {"name": "navigate", "params": [], "returns": "self"},
                 {"name": "enter_email", "params": ["email: str"], "returns": "self"}
             ],
             "state_methods": [
@@ -949,11 +954,16 @@ class TestWebInterfaceMethodValidation:
         P1: POST validation passes for POMs with no WebInterface calls.
 
         Some POMs may only have state-check methods that access attributes.
+        DD-49: Still requires navigate() method.
         """
         # Arrange
         from tools.gates.qg_page_object import QGPageObject
         valid_post_input["code"] = '''class StaticPage:
     TITLE = "Static Page"
+
+    def navigate(self) -> "StaticPage":
+        self.web.navigate_to(self.web.config["url"] + "/static")
+        return self
 
     def get_title(self) -> str:
         return self.TITLE
@@ -961,12 +971,16 @@ class TestWebInterfaceMethodValidation:
     def is_valid(self) -> bool:
         return True
 '''
+        # Update action_methods to include navigate (DD-49)
+        valid_post_input["metadata"]["action_methods"] = [
+            {"name": "navigate", "params": [], "returns": "self"}
+        ]
 
         # Act
         result = QGPageObject.validate_post(valid_post_input)
 
         # Assert
-        assert result["status"] == "pass", "POMs without WebInterface calls should pass"
+        assert result["status"] == "pass", f"POMs with navigate() should pass: {result.get('error', '')}"
 
     def test_post_private_webinterface_method_fails(self, valid_post_input):
         """
@@ -996,6 +1010,7 @@ class TestWebInterfaceMethodValidation:
     def test_post_common_webinterface_methods_pass(self, valid_post_input):
         """
         P1: POST validation passes for common WebInterface methods.
+        DD-49: Must have navigate() method using self.web.config["url"].
         """
         # Arrange
         from tools.gates.qg_page_object import QGPageObject
@@ -1003,6 +1018,10 @@ class TestWebInterfaceMethodValidation:
     EMAIL = (By.CSS_SELECTOR, "#email")
     PASSWORD = (By.CSS_SELECTOR, "#passwd")
     SUBMIT = (By.CSS_SELECTOR, "#SubmitLogin")
+
+    def navigate(self) -> "LoginPage":
+        self.web.navigate_to(self.web.config["url"] + "/login")
+        return self
 
     def enter_email(self, email: str) -> "LoginPage":
         self.web.type_text(*self.EMAIL, text=email)
@@ -1012,16 +1031,18 @@ class TestWebInterfaceMethodValidation:
         self.web.click(*self.SUBMIT)
         return self
 
-    def navigate_to_login(self) -> "LoginPage":
-        self.web.navigate_to(self.url)
-        return self
-
     def is_logged_in(self) -> bool:
         return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
 
     def get_error_text(self) -> str:
         return self.web.get_text(*self.ERROR_MESSAGE)
 '''
+        # Update action_methods to include navigate (DD-49)
+        valid_post_input["metadata"]["action_methods"] = [
+            {"name": "navigate", "params": [], "returns": "self"},
+            {"name": "enter_email", "params": ["email: str"], "returns": "self"},
+            {"name": "click_submit", "params": [], "returns": "self"}
+        ]
 
         # Act
         result = QGPageObject.validate_post(valid_post_input)
