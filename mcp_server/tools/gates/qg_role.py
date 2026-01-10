@@ -16,9 +16,10 @@ POST Validation:
 - No return values except bare return/return None
 - @autologger.automation_logger("Role") decorator present (IC-08-04)
 - At least one task method call (IC-08-06)
+- Semantic validation (FR-14.2): credential strategy enforcement via pluggable rules
 - metadata present with class_name and import_path (DD-26)
 
-Enforces: DD-12, DD-25, DD-26, DD-27, IC-08-01 through IC-08-06
+Enforces: DD-12, DD-25, DD-26, DD-27, FR-14.2, IC-08-01 through IC-08-06
 """
 
 import re
@@ -26,6 +27,7 @@ from typing import Any, Dict, Optional
 
 from .base_gate import BaseGate
 from utils.state_manager import StateManager
+from .semantic_rules.registry import SEMANTIC_RULES
 
 
 class QGRole(BaseGate):
@@ -100,9 +102,10 @@ class QGRole(BaseGate):
         Convert Python import path to file system path.
 
         Task 17.0 (DEF-051): Helper for immediate file writes.
+        Task 25.0 (DEF-055a FIX): Prepend framework/ for pages/tasks/roles paths.
 
         Args:
-            import_path: e.g., "framework.roles.registered_user"
+            import_path: e.g., "roles.registered_user"
 
         Returns:
             Absolute file path: e.g., "D:/project/framework/roles/registered_user.py"
@@ -112,6 +115,16 @@ class QGRole(BaseGate):
 
         # Convert dots to path separator
         relative_path = import_path.replace(".", os.sep) + ".py"
+
+        # DEF-055a FIX: Prepend framework/ for pages/tasks/roles paths
+        # These paths live under framework/ directory, not project root
+        framework_prefixes = (
+            'pages' + os.sep,
+            'tasks' + os.sep,
+            'roles' + os.sep,
+        )
+        if relative_path.startswith(framework_prefixes):
+            relative_path = 'framework' + os.sep + relative_path
 
         # Get project root (3 levels up from mcp_server/tools/gates/)
         project_root = Path(__file__).parent.parent.parent.parent
@@ -340,6 +353,11 @@ class QGRole(BaseGate):
         if task_call_error:
             return task_call_error
 
+        # FR-14.2: Run pluggable semantic rules
+        semantic_error = cls._check_semantic_rules(code, input_data)
+        if semantic_error:
+            return semantic_error
+
         # Validate metadata field (DD-26)
         metadata = input_data.get("metadata")
 
@@ -379,9 +397,16 @@ class QGRole(BaseGate):
                 audit_logger = cls.get_audit_logger()
                 audit_logger.log_file_generated(file_path, step=8)
             except Exception as e:
-                # If file write fails, log but don't block (validation already passed)
-                # This ensures state is saved even if file write fails
-                pass
+                # DEF-055b FIX: Log file write failure instead of silently swallowing
+                # Don't block (validation already passed) but DO log the error
+                audit_logger = cls.get_audit_logger()
+                audit_logger.log_gate(
+                    step=8,
+                    gate_name="qg_role",
+                    mode="POST",
+                    result="warning",
+                    error=f"FILE_WRITE_FAILED: {file_path} - {str(e)}"
+                )
 
         return cls.pass_response(
             step=8,
@@ -537,6 +562,36 @@ class QGRole(BaseGate):
                 error="No task method calls found in Role (IC-08-06 violation)",
                 fix_hint="Role workflow methods must call task methods. Add self.xxx_tasks.method_name() calls."
             )
+
+        return None
+
+    @classmethod
+    def _check_semantic_rules(cls, code: str, input_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Run pluggable semantic validation rules (FR-14.2).
+
+        Semantic rules validate MEANING and LOGIC in generated code,
+        not just structure (syntax, imports, patterns).
+
+        For Role generation, validates:
+        - Credential strategy enforcement (matches Step 1 choice)
+
+        Returns NEEDS_RETRY response if any semantic rule fails, None otherwise.
+        """
+        # Build context for semantic rules
+        state_manager = cls._get_state_manager()
+        step_1_data = state_manager.get_step(1) or {}
+
+        context = {
+            "step_1_config": step_1_data,
+            "task_metadata": input_data.get("task_metadata"),
+        }
+
+        # Run all registered semantic rules
+        result = SEMANTIC_RULES.check_all(code, context)
+        if result:
+            # Semantic rule failed - propagate error
+            return result
 
         return None
 

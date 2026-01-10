@@ -16,11 +16,12 @@ POST Validation:
 - No test orchestration: tests call ONE workflow method (Pattern-based Smart Gate)
 - POM state assertions used, no return value assertions (IC-09-04, DD-15)
 - @autologger.automation_logger("Test") decorator present (IC-09-05)
+- Semantic validation (FR-14.1, FR-14.3): via pluggable semantic rules
 - Import paths match metadata (DD-18): validates Role and POM imports
 - No redundant tests (DEF-046): one test's role calls cannot be subset of another
 - metadata present with class_name and file_path
 
-Enforces: DD-15, DD-18, DD-25, DEF-046, IC-09-01 through IC-09-05
+Enforces: DD-15, DD-18, DD-25, DEF-046, FR-14.1, FR-14.3, IC-09-01 through IC-09-05
 """
 
 import re
@@ -28,6 +29,7 @@ from typing import Any, Dict, Optional
 
 from .base_gate import BaseGate
 from utils.state_manager import StateManager
+from .semantic_rules.registry import SEMANTIC_RULES
 
 
 class QGTestRunner(BaseGate):
@@ -365,6 +367,11 @@ class QGTestRunner(BaseGate):
         if assertion_error:
             return assertion_error
 
+        # FR-14.1, FR-14.3: Run pluggable semantic rules
+        semantic_error = cls._check_semantic_rules(code, input_data)
+        if semantic_error:
+            return semantic_error
+
         # DD-18: Validate import paths match metadata
         import_error = cls._check_imports(code, input_data)
         if import_error:
@@ -416,9 +423,16 @@ class QGTestRunner(BaseGate):
                 audit_logger = cls.get_audit_logger()
                 audit_logger.log_file_generated(file_path, step=9)
             except Exception as e:
-                # If file write fails, log but don't block (validation already passed)
-                # This ensures state is saved even if file write fails
-                pass
+                # DEF-055b FIX: Log file write failure instead of silently swallowing
+                # Don't block (validation already passed) but DO log the error
+                audit_logger = cls.get_audit_logger()
+                audit_logger.log_gate(
+                    step=9,
+                    gate_name="qg_test_runner",
+                    mode="POST",
+                    result="warning",
+                    error=f"FILE_WRITE_FAILED: {file_path} - {str(e)}"
+                )
 
         return cls.pass_response(
             step=9,
@@ -667,6 +681,40 @@ def {test_name}(self):
                 error="No POM state assertions found",
                 fix_hint="Tests must assert via POM state methods. Add assertions like 'assert self.page.is_logged_in()'."
             )
+
+        return None
+
+    @classmethod
+    def _check_semantic_rules(cls, code: str, input_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Run pluggable semantic validation rules (FR-14.1, FR-14.3).
+
+        Semantic rules validate MEANING and LOGIC in generated code,
+        not just structure (syntax, imports, patterns).
+
+        Examples:
+        - Parameter contradictions (from_account == to_account)
+        - Test data location violations (imports from wrong location)
+        - Strategy violations (Role uses wrong credential strategy)
+
+        Returns NEEDS_RETRY response if any semantic rule fails, None otherwise.
+        """
+        # Build context for semantic rules
+        state_manager = cls._get_state_manager()
+        step_1_data = state_manager.get_step(1) or {}
+
+        context = {
+            "step_1_config": step_1_data,
+            "role_metadata": input_data.get("role_metadata"),
+            "pom_metadata": input_data.get("pom_metadata"),
+            "test_scenarios": input_data.get("test_scenarios"),
+        }
+
+        # Run all registered semantic rules
+        result = SEMANTIC_RULES.check_all(code, context)
+        if result:
+            # Semantic rule failed - propagate error
+            return result
 
         return None
 

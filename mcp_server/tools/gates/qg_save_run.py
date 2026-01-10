@@ -8,10 +8,11 @@ PRE Validation:
 - All 4 code blocks present (pom_code, task_code, role_code, test_code)
 - No skeleton code in any layer (DD-25 final sweep)
 - Primary: code from input_data; Fallback: code from state (IC-10-01)
+- FR-14.4: Required test data files exist (tests/data/test_users.json for static)
 
 No POST Validation (PRE-only gate per IC-10-02).
 
-Enforces: DD-22, DD-25, IC-10-01 through IC-10-05
+Enforces: DD-22, DD-25, FR-14.4, IC-10-01 through IC-10-05
 """
 
 import re
@@ -401,6 +402,87 @@ Fix: Check that Steps 6-9 gates write files immediately after POST validation pa
         return None
 
     @classmethod
+    def _validate_test_data_files_exist(cls, state_manager: StateManager) -> Optional[Dict[str, Any]]:
+        """
+        FR-14.4: Validate that required test data files exist before workflow completion.
+
+        Checks for required data files based on Step 1 strategies:
+        - credential_strategy="static" → tests/data/test_users.json required
+        - test_data_location="workflow" → tests/{workflow}/data/ directory should exist
+
+        Args:
+            state_manager: StateManager instance to use for reading state
+
+        Returns:
+            fail_response if required files missing, None if all exist
+        """
+        import os
+        from pathlib import Path
+
+        # Get project root (3 levels up from mcp_server/tools/gates/)
+        project_root = Path(__file__).parent.parent.parent.parent
+
+        # Get Step 1 strategies
+        step1_data = state_manager.get_step(1)
+        if not step1_data or not isinstance(step1_data, dict):
+            # No Step 1 data - skip validation
+            return None
+
+        credential_strategy = step1_data.get("credential_strategy", "").lower().strip()
+        test_data_location = step1_data.get("test_data_location", "").lower().strip()
+
+        missing_files = []
+
+        # Check credential file (if static strategy)
+        if credential_strategy == "static":
+            users_file = project_root / "tests" / "data" / "test_users.json"
+            if not users_file.exists():
+                missing_files.append({
+                    "file": str(users_file),
+                    "reason": "Step 1 credential_strategy='static' requires pre-existing test users file",
+                    "fix": "Create tests/data/test_users.json with test user accounts"
+                })
+
+        # Check workflow data directory (if workflow-specific location)
+        if test_data_location == "workflow":
+            # Try to determine workflow from Step 2
+            step2_data = state_manager.get_step(2)
+            if step2_data and isinstance(step2_data, dict):
+                workflow = step2_data.get("workflow", "").strip()
+                if workflow:
+                    workflow_data_dir = project_root / "tests" / workflow / "data"
+                    # Only warn if directory doesn't exist - not a hard failure
+                    # (workflow data might be optional)
+                    if not workflow_data_dir.exists():
+                        missing_files.append({
+                            "file": str(workflow_data_dir),
+                            "reason": f"Step 1 test_data_location='workflow' suggests workflow-specific data directory",
+                            "fix": f"Create tests/{workflow}/data/ directory for workflow-specific test data (if needed)"
+                        })
+
+        # Return error if required files missing
+        if missing_files:
+            error_lines = ["Required test data files missing:"]
+            for missing in missing_files:
+                error_lines.append(f"\n  File: {missing['file']}")
+                error_lines.append(f"  Reason: {missing['reason']}")
+                error_lines.append(f"  Fix: {missing['fix']}")
+
+            return cls.fail_response(
+                error="\n".join(error_lines),
+                fix_hint="""Test data files required by Step 1 strategies are missing.
+
+This validation ensures test data infrastructure matches Step 1 choices:
+- credential_strategy='static' → tests/data/test_users.json must exist
+- test_data_location='workflow' → tests/{workflow}/data/ should exist
+
+Fix: Create the missing files/directories before running tests.
+"""
+            )
+
+        return None
+
+    @classmethod
     def validate_pre(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         PRE validation before file save.
@@ -441,6 +523,11 @@ Fix: Check that Steps 6-9 gates write files immediately after POST validation pa
         file_validation_error = cls._validate_files_exist(state_manager)
         if file_validation_error:
             return file_validation_error
+
+        # FR-14.4: Validate that required test data files exist
+        test_data_validation_error = cls._validate_test_data_files_exist(state_manager)
+        if test_data_validation_error:
+            return test_data_validation_error
 
         # DEF-052: Clear session marker - workflow complete
         cls._clear_session_marker()

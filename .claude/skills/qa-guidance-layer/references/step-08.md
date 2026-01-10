@@ -50,6 +50,7 @@ VALIDATE (DD-25 - Skeleton Code Quality Gate):
 - POST: Verify NO return values (roles return None)
 - POST: Verify Task composition in constructor
 - POST: Verify workflow methods call MULTIPLE task methods (not just one)
+- POST: FR-14.2 - Verify credential strategy matches Step 1 configuration
 
 RETRY:
 - If POST-VALIDATE fails: AI completes the code (max 3 attempts)
@@ -129,6 +130,7 @@ After POST validation passes, `qg_role` immediately writes the Role file to disk
 | Return value | Methods return None |
 | Workflow | Each method calls MULTIPLE task methods (not single operation) |
 | No skeleton | No `pass`, no `# Add...`, no empty bodies |
+| FR-14.2 | Credential strategy matches Step 1 config (static/dynamic/self-contained/none) |
 
 ---
 
@@ -305,9 +307,10 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 | IC-08-04 | `@autologger.automation_logger("Role")` required on workflow methods | Missing decorator = incomplete code. Constructor uses "Role Constructor". | `validate_post()` |
 | IC-08-05 | `task_metadata` in PRE must have `class_name` and `task_methods` | Validates Tool 4 output was passed correctly. Empty `task_methods` may produce skeleton. | `validate_pre()` |
 | IC-08-06 | Workflow methods must contain at least one task method call | Methods with only `pass` or no `self.xxx_tasks.method()` calls = skeleton code. | `validate_post()` |
+| IC-08-07 | FR-14.2: Credential strategy must match Step 1 config | Validates that Role's credential handling (user_data param vs hardcoded) matches the strategy chosen in Step 1. Prevents semantic mismatch between configuration and implementation. | `validate_post()` via semantic rules |
 
-**Date Added:** 2025-12-21
-**Task Reference:** Task 11.0 (qg_role)
+**Date Added:** 2025-12-21 (IC-08-01 to IC-08-06), 2026-01-10 (IC-08-07)
+**Task Reference:** Task 11.0 (qg_role), Task 36.0 (FR-14.2 semantic validation)
 
 ---
 

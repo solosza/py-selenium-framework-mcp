@@ -53,6 +53,8 @@ VALIDATE (DD-25 - Skeleton Code Quality Gate):
 - POST: Verify AAA pattern (Arrange, Act, Assert)
 - POST: Verify assertions use POM state methods (not return values)
 - POST: Verify correct imports
+- POST: FR-14.1 - Detect parameter contradictions (opposite-semantic pairs with same value)
+- POST: FR-14.3 - Verify test data location matches Step 1 configuration
 
 RETRY:
 - If POST-VALIDATE fails: AI fixes the code (max 3 attempts)
@@ -133,6 +135,8 @@ After POST validation passes, `qg_test_runner` immediately writes the Test file 
 | File path | Correct tests/{workflow}/ location |
 | No skeleton | No placeholder tests, no `pass`, no `# TODO` |
 | **No redundancy** | **One user story = ONE E2E test (MVP constraint)** |
+| FR-14.1 | No parameter contradictions (from_account != to_account, sender != receiver) |
+| FR-14.3 | Test data imports match Step 1 location (shared vs workflow-specific) |
 
 **DEF-046: Test Redundancy Detection (MVP Constraint)**
 
@@ -371,9 +375,11 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 | IC-09-03 | At least 1 role method call required; no max limit; multi-role allowed | Complex e2e scenarios (admin+user, buyer+seller) are legitimate | `validate_post()` |
 | IC-09-04 | Assertions must use POM state methods (DD-15), not return values | Framework architecture: roles return None, tests assert via POM | `validate_post()` |
 | IC-09-05 | @autologger.automation_logger("Test") required on test methods | Framework pattern consistency | `validate_post()` |
+| IC-09-06 | FR-14.1: Parameter contradictions are semantic errors | Detects meaningless operations like `transfer_funds(from_account="123", to_account="123")`. Validates opposite-semantic parameter pairs (from/to, sender/receiver, source/dest, old/new, etc.) don't have identical values. | `validate_post()` via semantic rules |
+| IC-09-07 | FR-14.3: Test data imports must match Step 1 location strategy | Enforces that test imports data from correct location (tests.data vs tests.{workflow}.data) based on Step 1 test_data_location config. Prevents configuration-implementation mismatch. | `validate_post()` via semantic rules |
 
-**Date Added:** 2025-12-21
-**Task Reference:** Task 12.0 (qg_test_runner)
+**Date Added:** 2025-12-21 (IC-09-01 to IC-09-05), 2026-01-10 (IC-09-06 to IC-09-07)
+**Task Reference:** Task 12.0 (qg_test_runner), Task 36.0 (FR-14.1, FR-14.3 semantic validation)
 
 ---
 
