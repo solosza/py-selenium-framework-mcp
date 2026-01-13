@@ -64,6 +64,7 @@ from tools.gates.qg_role import QGRole
 from tools.gates.qg_test_runner import QGTestRunner
 from tools.gates.qg_save_run import QGSaveRun
 from tools.gates.qg_execution import QGExecution
+from tools.gates.qg_workflow_complete import QGWorkflowComplete
 
 # Import operations (Tool 9: run_test)
 from tools.operations.run_test import run_test_async
@@ -153,6 +154,12 @@ async def qg_save_run(arguments: dict) -> str:
 async def qg_execution(arguments: dict) -> str:
     """Step 11: Execution validation with HITL triage (POST-only)."""
     result = QGExecution.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_workflow_complete(arguments: dict) -> str:
+    """Step 11: Workflow completion validation - 8 cross-step consistency checks."""
+    result = QGWorkflowComplete.validate(arguments)
     return json.dumps(result, indent=2)
 
 
@@ -798,6 +805,7 @@ async def call_tool_handler(name: str, arguments: dict) -> list[TextContent]:
         "qg_test_runner": qg_test_runner,                 # Step 9
         "qg_save_run": qg_save_run,                       # Step 10
         "qg_execution": qg_execution,                     # Step 11
+        "qg_workflow_complete": qg_workflow_complete,     # Step 11 (meta-gate)
     }
 
     if name not in handlers:

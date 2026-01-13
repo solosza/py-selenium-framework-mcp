@@ -13,6 +13,7 @@ from .qg_role import QGRole
 from .qg_test_runner import QGTestRunner
 from .qg_save_run import QGSaveRun
 from .qg_execution import QGExecution
+from .qg_workflow_complete import QGWorkflowComplete
 
 __all__ = [
     "BaseGate",
@@ -28,4 +29,5 @@ __all__ = [
     "QGTestRunner",
     "QGSaveRun",
     "QGExecution",
+    "QGWorkflowComplete",
 ]
