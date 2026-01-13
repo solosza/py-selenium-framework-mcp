@@ -36,7 +36,7 @@ class ParabankLoginPage:
 
     def navigate(self) -> "ParabankLoginPage":
         """Navigate to login page."""
-        self.web.navigate_to(self.web.config['url'] + '/parabank/index.htm')
+        self.web.navigate_to(self.web.config['url'] + '/index.htm')
         return self
 
     # ==================== ATOMIC METHODS (One UI Action) ====================

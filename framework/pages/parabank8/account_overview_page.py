@@ -35,7 +35,7 @@ class AccountOverviewPage:
 
     def navigate(self) -> "AccountOverviewPage":
         """Navigate to account overview page."""
-        self.web.navigate_to(self.web.config['url'] + '/parabank/overview.htm')
+        self.web.navigate_to(self.web.config['url'] + '/overview.htm')
         return self
 
     # ==================== ATOMIC METHODS (One UI Action) ====================
