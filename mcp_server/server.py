@@ -52,7 +52,7 @@ from tools.tool_04_generate_task import generate_task
 from tools.tool_05_generate_role import generate_role
 from tools.tool_06_generate_test_runner import generate_test_runner
 
-# Import quality gates (Steps 1-10)
+# Import quality gates (Steps 1-11)
 from tools.gates.qg_preflight import QGPreflight
 from tools.gates.qg_user_input import QGUserInput
 from tools.gates.qg_ai_processing import QGAIProcessing
@@ -63,6 +63,7 @@ from tools.gates.qg_task import QGTask
 from tools.gates.qg_role import QGRole
 from tools.gates.qg_test_runner import QGTestRunner
 from tools.gates.qg_save_run import QGSaveRun
+from tools.gates.qg_execution import QGExecution
 
 # Import operations (Tool 9: run_test)
 from tools.operations.run_test import run_test_async
@@ -146,6 +147,12 @@ async def qg_test_runner(arguments: dict) -> str:
 async def qg_save_run(arguments: dict) -> str:
     """Step 10: Final save/run validation (PRE-only)."""
     result = QGSaveRun.validate(arguments)
+    return json.dumps(result, indent=2)
+
+
+async def qg_execution(arguments: dict) -> str:
+    """Step 11: Execution validation with HITL triage (POST-only)."""
+    result = QGExecution.validate(arguments)
     return json.dumps(result, indent=2)
 
 
@@ -779,7 +786,7 @@ async def call_tool_handler(name: str, arguments: dict) -> list[TextContent]:
         "run_test": run_test,
         "analyze_failure": analyze_failure,
         "get_test_coverage": get_test_coverage,
-        # Quality Gates (Steps 1-10)
+        # Quality Gates (Steps 1-11)
         "qg_preflight": qg_preflight,                     # Step 1
         "qg_user_input": qg_user_input,                   # Step 2
         "qg_ai_processing": qg_ai_processing,             # Step 3
@@ -790,6 +797,7 @@ async def call_tool_handler(name: str, arguments: dict) -> list[TextContent]:
         "qg_role": qg_role,                               # Step 8
         "qg_test_runner": qg_test_runner,                 # Step 9
         "qg_save_run": qg_save_run,                       # Step 10
+        "qg_execution": qg_execution,                     # Step 11
     }
 
     if name not in handlers:
