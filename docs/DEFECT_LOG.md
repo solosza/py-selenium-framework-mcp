@@ -2952,6 +2952,677 @@ Applied to: `qg_page_object.py`, `qg_task.py`, `qg_role.py`, `qg_test_runner.py`
 
 ---
 
+### [DEF-057] Metadata param format inconsistency - dict vs string format breaks Tool 5
+**Severity:** CRITICAL
+**Status:** RESOLVED
+**Caught By:** Production E2E test (Task 26.0) - manual vs agent comparison
+**Code Version:** feature/26.0-navigation-tracking (commit 219f3f7)
+**Layer:** Quality Gates + Generators
+**Files:**
+- `mcp_server/utils/generators/page_object_generator.py` (line 595)
+- `mcp_server/utils/generators/task_generator.py` (line 235)
+- `mcp_server/utils/generators/role_generator.py` (lines 298, 316, 414)
+- `mcp_server/tools/gates/qg_page_object.py` (line 466)
+
+**Error Message:**
+```
+AttributeError: 'dict' object has no attribute 'split'
+File: role_generator.py, line 298
+Code: param_name = param.split(":")[0].strip()
+```
+
+**Description:**
+Metadata param format is inconsistent across the tool chain, causing Tool 5 (generate_role) to crash when processing task_metadata from Tool 4.
+
+**The Problem:**
+Two separate but related issues:
+
+1. **Param Format Inconsistency**: State files show dict format, but code expects string format
+   - **CORRECT (per DEF-054, Jan 8)**: `["email: str", "password: str"]` (string array)
+   - **BROKEN (current state)**: `[{"name": "email", "type": "str"}]` (dict array)
+
+2. **POM Metadata Simplification**: Step 6 state loses detailed method metadata
+   - Tool 3 generates: `[{"name": "enter_username", "params": ["username: str"], "returns": "self"}]`
+   - Step 6 state saves: `["enter_username", "enter_password"]` (names only)
+   - Tool 4 can't copy params because they're missing from state
+
+**Evidence:**
+
+```python
+# POM Generator (line 595) - Generates STRING format ✓
+"params": [f"{param_name}: str"]
+
+# Role Generator (line 298) - Expects STRING format ✓
+param_name = param.split(":")[0].strip()  # Crashes on dict
+
+# Actual State File (2026-01-12 run) - Shows DICT format ❌
+"params": [
+  {"name": "username", "type": "str"},
+  {"name": "password", "type": "str"}
+]
+```
+
+**Root Cause:**
+Dict format in state files is the PRIMARY bug. Agent succeeded because it autonomously self-healed (converted dict→string) when hitting the .split() crash at role_generator.py:298.
+
+**CRITICAL PROTOCOL VIOLATION:**
+Agent DID NOT follow DD-22 (Stop-and-Discuss Protocol) when encountering the Tool 5 crash:
+- ❌ Did NOT stop execution
+- ❌ Did NOT report the param format issue
+- ❌ Did NOT request user discussion
+- ✓ DID autonomously fix (self-heal) dict→string conversion
+- ✓ DID continue execution to completion
+
+**Why This Violates "The Isagawa Way":**
+The Isagawa methodology demands strict protocol adherence and quality gates:
+1. Issues must be surfaced, not hidden by autonomous fixes
+2. Root causes must be addressed, not worked around
+3. Human oversight required for deviations from expected behavior
+4. Silent self-healing masks systemic problems
+
+**The Correct Behavior (DD-22):**
+```
+1. STOP - Agent detects dict format, .split() will crash
+2. REPORT - "Tool 5 crash: params are dicts, expected strings"
+3. DISCUSS - Wait for parent/user direction
+4. PROCEED - Only after explicit instruction
+```
+
+**What Agent Actually Did:**
+```
+1. Detect dict format
+2. Convert dict→string autonomously  ← PROTOCOL VIOLATION
+3. Continue execution
+4. Report success (hiding the underlying bug)
+```
+
+**Impact:** Manual execution exposed the real bug (dict format). Agent execution masked it with autonomous workaround. The dict format bug remains in state files - we just got lucky the agent compensated.
+
+**Impact Assessment (Updated for Dual Fix Strategy):**
+
+### 1. Who Calls This Code? (EXPANDED)
+
+**Generators:**
+- `page_object_generator.py:_build_action_methods_metadata()` - Creates params as strings
+- `task_generator.py:generate_task_methods_from_metadata()` - Copies params from POM
+- `role_generator.py:_generate_workflow_method_from_task()` - Reads params with .split()
+
+**Gates:**
+- `qg_page_object.py:validate_post()` - Saves simplified pom_metadata
+- `qg_task.py:validate_pre()` - Reads pom_metadata from state
+- `qg_task.py:validate_post()` - Saves task_metadata
+- `qg_role.py:validate_pre()` - Reads task_metadata from state
+
+**State Manager:**
+- `state_manager.py:save()` - Writes metadata to JSON (no format conversion)
+
+**Test Fixtures:**
+- `test_integration.py:valid_step_6_post_data()` - Uses full method dicts
+- `test_integration.py:valid_step_7_post_data()` - Uses string params ✓
+
+### 2. What Depends on Current Behavior?
+
+**State File Structure:**
+- Step 6: `pom_metadata` dict with per-page metadata
+- Step 7: `task_metadata` with task_methods array
+- Step 8: `role_metadata` with workflow_methods array
+
+**Metadata Chain (Tool 3 → 4 → 5 → 6):**
+- Tool 3 outputs metadata with full method details
+- Tool 4 reads pom_metadata, copies params to task_methods
+- Tool 5 reads task_metadata, processes params with .split()
+- Tool 6 reads role_metadata for test generation
+
+**Test Fixtures:**
+- 38 integration tests depend on metadata format
+- Fixtures use string param format (correct)
+
+**Existing State Files:**
+- All files in `tests/_state/*/workflow_state.json`
+- May contain either format (unknown which)
+
+### 3. What Will Break? (DUAL FIX IMPACT)
+
+**Phase 2 Impact (Gate Validation Added):**
+
+| Component | Current Behavior | After Phase 2 | Impact |
+|-----------|-----------------|---------------|---------|
+| **qg_page_object POST** | Accepts any action_methods format | REJECTS dict params | ⚠️ HIGH - Exposes violations |
+| **qg_task POST** | Accepts any task_methods format | REJECTS dict params | ⚠️ HIGH - Exposes violations |
+| **qg_role POST** | Accepts any workflow_methods format | REJECTS dict params | ⚠️ HIGH - Exposes violations |
+| **Gate unit tests** | May pass with dict format | FAIL if fixtures use dicts | ⚠️ HIGH - Needs fixture updates |
+| **Integration tests** | May pass with dict format | FAIL if fixtures use dicts | ⚠️ MEDIUM - 38 tests to check |
+| **E2E tests (manual)** | Crashes at Tool 5 | FAILS at earlier gate | ✓ BETTER - Fail-fast |
+| **E2E tests (agent)** | Self-heals, masks bug | FAILS at gate, can't self-heal | ✓ BETTER - Surfaces issue |
+
+**Phase 3 Impact (Root Cause Fixed):**
+
+| Component | Current Behavior | After Phase 3 | Impact |
+|-----------|-----------------|---------------|---------|
+| **qg_page_object state save** | Saves simplified action_methods names | Saves FULL metadata with params | ⚠️ MEDIUM - State structure change |
+| **Tool 4 (generate_task)** | Copies from simplified metadata | Copies from FULL metadata | ✓ LOW - Gets params now |
+| **Tool 5 (generate_role)** | Crashes on dict params | Receives string params | ✓ HIGH - No crash |
+| **State files** | May have dict format | Always string format | ✓ HIGH - Consistent |
+| **Test fixtures** | May use dict format | Must use string format | ⚠️ MEDIUM - Needs updates |
+
+**What Must Change:**
+
+**Code Files (7 files):**
+1. `mcp_server/tools/gates/base_gate.py` - Add `_validate_param_format()`
+2. `mcp_server/tools/gates/qg_page_object.py` - Add validation + fix consolidation
+3. `mcp_server/tools/gates/qg_task.py` - Add validation
+4. `mcp_server/tools/gates/qg_role.py` - Add validation
+5. `mcp_server/utils/generators/page_object_generator.py` - Verify string output
+6. `mcp_server/utils/generators/task_generator.py` - Verify string copying
+7. `mcp_server/utils/generators/role_generator.py` - Already expects strings ✓
+
+**Test Files (4+ files):**
+1. `mcp_server/_dev_tests/test_gates/test_integration.py` - Update fixtures
+2. `mcp_server/_dev_tests/test_gates/test_qg_page_object.py` - Update fixtures
+3. `mcp_server/_dev_tests/test_gates/test_qg_task.py` - Update fixtures
+4. `mcp_server/_dev_tests/test_gates/test_qg_role.py` - Update fixtures
+
+**Tests Affected:**
+- Gate unit tests: 481+ tests (unknown how many use dict format)
+- Integration tests: 38 tests (need to check fixtures)
+- E2E tests: All manual/agent runs (will fail until fix complete)
+
+**Breaking Changes:**
+- ❌ **Dict params rejected at gates** (immediate after Phase 2)
+- ❌ **State structure changed** (after Phase 3 - ephemeral, OK)
+- ❌ **Test fixtures need updates** (after Phase 2 validation added)
+- ✓ **No API changes** (internal metadata only)
+- ✓ **No backward compat needed** (state files ephemeral)
+
+### 4. Migration Path
+
+**COMPREHENSIVE FIX STRATEGY: Root Cause + Gate Enforcement**
+
+Fix in TWO dimensions:
+1. **Root Cause**: Ensure generators/consolidation output correct format
+2. **Gate Enforcement**: Validate format at boundaries (prevent future regressions)
+
+---
+
+**Phase 1: Discovery (Complete) ✓**
+- [x] Identify all locations using param format
+- [x] Confirm correct standard (string format per DEF-054)
+- [x] Document impact on generators, gates, tests
+- [x] Identify both root cause AND enforcement gaps
+
+---
+
+**Phase 2: Add Gate Validation FIRST (Safety Net)**
+
+**Why First:** Catch violations during fix process, prevent regressions
+
+**Files to Modify:**
+- `mcp_server/tools/gates/base_gate.py`
+- `mcp_server/tools/gates/qg_page_object.py`
+- `mcp_server/tools/gates/qg_task.py`
+- `mcp_server/tools/gates/qg_role.py`
+
+**Tasks:**
+- [ ] 2.1: Add `_validate_param_format()` to base_gate.py
+  ```python
+  @classmethod
+  def _validate_param_format(cls, params: list, context: str) -> Optional[Dict]:
+      """Validate params are string format 'name: type', not dict format."""
+      for param in params:
+          if isinstance(param, dict):
+              return cls.fail_response(
+                  error=f"{context}: Param must be string, got dict: {param}",
+                  fix_hint="Expected ['email: str'], not [{'name': 'email', 'type': 'str'}]"
+              )
+          if not isinstance(param, str) or ":" not in param:
+              return cls.fail_response(
+                  error=f"{context}: Invalid param format: {param}",
+                  fix_hint="Params must be 'name: type' strings like 'email: str'"
+              )
+      return None
+  ```
+
+- [ ] 2.2: Add validation to qg_page_object POST `_validate_action_methods()`
+  ```python
+  # After existing checks, add:
+  for method in action_methods:
+      if isinstance(method, dict):
+          params = method.get("params", [])
+          error = cls._validate_param_format(params, f"action_method '{method.get('name')}'")
+          if error:
+              return error
+  ```
+
+- [ ] 2.3: Add validation to qg_task POST (new method `_validate_task_methods()`)
+  ```python
+  @classmethod
+  def _validate_task_methods(cls, metadata: Dict) -> Optional[Dict]:
+      task_methods = metadata.get("task_methods", [])
+      for method in task_methods:
+          params = method.get("params", [])
+          error = cls._validate_param_format(params, f"task_method '{method.get('name')}'")
+          if error:
+              return error
+      return None
+  ```
+
+- [ ] 2.4: Add validation to qg_role POST (new method `_validate_workflow_methods()`)
+  ```python
+  @classmethod
+  def _validate_workflow_methods(cls, metadata: Dict) -> Optional[Dict]:
+      workflow_methods = metadata.get("workflow_methods", [])
+      for method in workflow_methods:
+          params = method.get("params", [])
+          error = cls._validate_param_format(params, f"workflow_method '{method.get('name')}'")
+          if error:
+              return error
+      return None
+  ```
+
+- [ ] 2.5: Run gate unit tests → will expose ALL dict format violations
+
+---
+
+**Phase 3: Fix Root Causes (Generators & State Consolidation)**
+
+**Issue 1: POM Metadata Consolidation in qg_page_object**
+
+**Current Behavior (WRONG):**
+```python
+# qg_page_object.py line 463-470
+state_manager.save(step=6, data={
+    "pom_metadata": {
+        "LoginPage": {
+            "action_methods": ["navigate", "enter_email"]  # ← SIMPLIFIED (lost params)
+        }
+    }
+})
+```
+
+**Fix:**
+- [ ] 3.1: Update qg_page_object.py consolidation logic
+  - Load existing Step 6 state
+  - Build nested `pom_metadata` dict preserving FULL method details
+  - Don't simplify to names only
+
+**Files:** `mcp_server/tools/gates/qg_page_object.py:463-470`
+
+**After Fix:**
+```python
+# Build consolidated pom_metadata from all generated POMs
+consolidated_pom_metadata = {}
+for page_name, pom_data in generated_poms.items():
+    consolidated_pom_metadata[page_name] = pom_data["metadata"]  # FULL metadata
+
+state_manager.save(step=6, data={
+    "pom_metadata": consolidated_pom_metadata,  # ← Multi-page dict
+    "generated_poms": generated_poms,
+    "poms_generated": poms_generated,
+    "total_poms": total_pages,
+    "generation_complete": generation_complete
+})
+```
+
+**Issue 2: Verify Generators Output Correct Format**
+
+Check if generators are source of dict format:
+- [ ] 3.2: Run POM generator standalone test
+  - Call `generate_page_object_with_metadata()`
+  - Check metadata.action_methods[0].params format
+  - Should be `["text: str"]` not `[{"name": "text", "type": "str"}]`
+
+- [ ] 3.3: Run Task generator standalone test
+  - Call `generate_task_with_metadata()`
+  - Check metadata.task_methods[0].params format
+  - Should copy strings from POM
+
+- [ ] 3.4: Run Role generator standalone test
+  - Call `generate_role_with_metadata()`
+  - Check metadata.workflow_methods[0].params format
+  - Should filter strings from Task
+
+**Files:**
+- `mcp_server/utils/generators/page_object_generator.py:595`
+- `mcp_server/utils/generators/task_generator.py:235`
+- `mcp_server/utils/generators/role_generator.py:414`
+
+**If generators output dict format → fix them**
+**If generators output string format → AI orchestration is converting**
+
+---
+
+**Phase 4: Fix Test Fixtures**
+
+**Files to Update:**
+- `mcp_server/_dev_tests/test_gates/test_integration.py`
+- `mcp_server/_dev_tests/test_gates/test_qg_page_object.py`
+- `mcp_server/_dev_tests/test_gates/test_qg_task.py`
+- `mcp_server/_dev_tests/test_gates/test_qg_role.py`
+
+**Tasks:**
+- [ ] 4.1: Update valid_step_6_post_data() to use full action_methods dicts
+- [ ] 4.2: Update valid_step_7_post_data() - already uses strings ✓
+- [ ] 4.3: Update valid_step_8_post_data() - verify params format
+- [ ] 4.4: Run gate unit tests (481+ tests) - all should pass
+- [ ] 4.5: Run integration tests (38 tests) - all should pass
+
+---
+
+**Phase 5: E2E Verification**
+
+**Run Full 10-Step Workflow:**
+- [ ] 5.1: Manual execution (Claude direct) - parabank7 workflow
+  - All gates should PASS
+  - No .split() crashes
+  - State files show string format
+
+- [ ] 5.2: Agent execution (Task tool) - same workflow
+  - All gates should PASS
+  - No autonomous fixes needed
+  - State files show string format
+
+- [ ] 5.3: Compare state files
+  - Both runs: string format params ✓
+  - Both runs: full action_methods metadata ✓
+  - No dict format anywhere ✓
+
+**Verification Checklist:**
+- [ ] All 481+ gate unit tests pass
+- [ ] All 38 integration tests pass
+- [ ] Manual E2E: 10/10 steps pass
+- [ ] Agent E2E: 10/10 steps pass
+- [ ] State files: string format only
+- [ ] Audit files: no format validation failures
+
+---
+
+**Backward Compatibility:**
+- No backward compatibility needed - state files are ephemeral
+- Each run creates new state directory in `tests/_state/{run_id}/`
+- Old state files don't affect new runs
+- Gates reject bad format immediately (fail-fast)
+
+**Fix:**
+NOT YET IMPLEMENTED - Requires careful impact assessment and testing.
+
+**Proposed Implementation Plan:**
+
+```python
+# Step 1: Add format validator to base_gate.py
+@classmethod
+def _validate_param_format(cls, params: list) -> Optional[Dict[str, Any]]:
+    """
+    Validate params are string format, not dict format.
+
+    CORRECT: ["email: str", "password: str"]
+    WRONG: [{"name": "email", "type": "str"}]
+    """
+    for param in params:
+        if isinstance(param, dict):
+            return cls.fail_response(
+                error=f"Param must be string format, got dict: {param}",
+                fix_hint="Tool must output params as ['name: type'] not [{'name': ..., 'type': ...}]"
+            )
+        if not isinstance(param, str) or ":" not in param:
+            return cls.fail_response(
+                error=f"Param must be 'name: type' format, got: {param}",
+                fix_hint="Params should be strings like 'email: str', 'count: int'"
+            )
+    return None
+
+# Step 2: Fix qg_page_object.py metadata save (line 463-470)
+# BEFORE: Simplifies to names only
+state_manager.save(step=6, data={
+    "pom_metadata": {
+        "LoginPage": {
+            "action_methods": ["navigate", "enter_email"]  # Lost params!
+        }
+    }
+})
+
+# AFTER: Preserve full metadata
+state_manager.save(step=6, data={
+    "pom_metadata": {
+        "LoginPage": {
+            "action_methods": [
+                {"name": "navigate", "params": [], "returns": "self"},
+                {"name": "enter_email", "params": ["email: str"], "returns": "self"}
+            ]  # Full details preserved!
+        }
+    }
+})
+
+# Step 3: Add validation to qg_page_object POST
+action_methods = metadata.get("action_methods", [])
+for method in action_methods:
+    if isinstance(method, dict):
+        params = method.get("params", [])
+        param_error = cls._validate_param_format(params)
+        if param_error:
+            return param_error
+
+# Step 4: Add validation to qg_task POST
+task_methods = metadata.get("task_methods", [])
+for method in task_methods:
+    params = method.get("params", [])
+    param_error = cls._validate_param_format(params)
+    if param_error:
+        return param_error
+
+# Step 5: Add validation to qg_role POST
+workflow_methods = metadata.get("workflow_methods", [])
+for method in workflow_methods:
+    params = method.get("params", [])
+    param_error = cls._validate_param_format(params)
+    if param_error:
+        return param_error
+```
+
+**Testing Strategy:**
+1. Run gate unit tests with new validation → will expose all dict format usage
+2. Fix test fixtures one by one
+3. Run integration tests → verify metadata chain works
+4. Run E2E test → verify full workflow passes
+5. Compare manual vs agent execution → both should succeed
+
+**Verification Criteria:**
+- [ ] All gate unit tests pass (481+ tests)
+- [ ] All integration tests pass (38 tests)
+- [ ] Manual E2E execution succeeds (10/10 steps)
+- [ ] Agent E2E execution succeeds (10/10 steps)
+- [ ] State files show string param format
+- [ ] No .split() crashes in role_generator.py
+
+**Fix Implemented:**
+- Branch: `feature/51.0-def057-root-fix`
+- Commits: Multiple (DEF-057 Phase 2: Gate Validation, Phase 3: Root Cause Fix)
+- Implementation: base_gate._validate_param_format() + POST validation in qg_task, qg_role, qg_test_runner
+
+**Production Validation (2026-01-13):**
+Complete 10-step parabank8 workflow validated STRING format enforcement:
+- Step 7 (qg_task POST): Validated params ["username: str", "password: str"] ✓
+- Step 8 (qg_role POST): Validated params [] ✓
+- Step 9 (qg_test_runner POST): Validated test uses POM methods ✓
+
+Result: 3/3 code generation gates enforced STRING format successfully. Gates would reject dict format [{"name": "username"}] that caused original crash.
+
+**Verified:** Production E2E test passed (parabank8 workflow, Tasks 51.0 + 57.0)
+**Resolved Date:** 2026-01-13
+
+---
+
+### [DEF-058] Generated test fails despite passing all quality gates - no smoke test validation
+**Severity:** HIGH
+**Status:** OPEN
+**Caught By:** Manual test execution after Task 57.0 production validation (2026-01-13)
+**Code Version:** feature/55.0-def058-smart-gate (commit 4ef1e26)
+**Layer:** Quality Gates (Step 10 gap)
+**File:** `mcp_server/tools/gates/qg_save_run.py`
+
+**Error Message:**
+```
+AssertionError: Should be on account overview page
+assert False
+ +  where False = is_on_account_overview()
+```
+
+**Description:**
+Complete 10-step workflow executed, all quality gates passed, generated code architecturally perfect, but the actual Selenium test fails when run.
+
+**The Problem:**
+Quality gates validate CODE CORRECTNESS but not CODE EXECUTION. The workflow generates syntactically correct, architecturally compliant code that doesn't work in practice.
+
+**What Passed:**
+- Step 1-4: Pre-flight, user input, AI processing, test scenarios ✓
+- Step 5: Element discovery (4/4 passes with Smart Gate) ✓
+- Step 6: POM generation (DD-25, DD-49 enforcement) ✓
+- Step 7: Task generation (param validation, unused param detection) ✓
+- Step 8: Role generation (param validation, architecture compliance) ✓
+- Step 9: Test generation (POM assertions, AAA pattern) ✓
+- Step 10: File validation (all files exist) ✓
+
+**What Failed:**
+- **Actual test execution:** `pytest tests/parabank8/test_login_and_view_account_overview.py`
+- **Reason:** `is_on_account_overview()` returns False
+- **Investigation:** Playwright confirms element exists, credentials valid, locator correct
+- **Discrepancy:** Playwright finds element immediately, Selenium cannot find it after 5s
+
+**Root Cause:**
+Missing validation step between code generation and "workflow complete" declaration. Quality gates check:
+- ✅ Architecture compliance (DD-25, DD-27, DD-49)
+- ✅ Static analysis (param format, skeleton detection)
+- ✅ Metadata contracts (tool chain data flow)
+- ❌ **Does the test actually run?**
+
+**Impact:**
+User completes 10-step workflow, sees "✅ PASS" on all gates, commits generated code, then discovers test doesn't work. This:
+1. Wastes user time (they expected working code)
+2. Erodes trust in quality gates (if gates pass, why doesn't it work?)
+3. Provides zero diagnostic context (just "assertion failed")
+4. Requires manual debugging with no guidance
+
+**The Quality Gap:**
+
+| Current State | What We Validate | What We Don't |
+|---------------|------------------|---------------|
+| **Step 10** | Files exist on disk | Do tests execute? |
+| **All Gates** | Code structure correct | Does Selenium work? |
+| **POST gates** | Metadata format valid | Timing issues? |
+| **Architecture** | 4-layer pattern enforced | Browser compatibility? |
+
+**Diagnostic Context Gap:**
+
+When test fails, user gets:
+- ❌ "Should be on account overview page" (useless)
+- ❌ Current URL not logged
+- ❌ Element existence not checked (presence vs visibility)
+- ❌ No page state snapshot
+- ❌ No distinction: login failed vs element not found
+
+**Proposed Solution: Step 11 - Smoke Test**
+
+Add validation step after Step 10:
+
+```
+Step 11: Smoke Test Validation
+- Run generated test in headed mode (visibility check)
+- Capture diagnostics: URL, page state, element checks
+- On failure: Provide actionable context
+  - Current URL vs expected URL
+  - Element presence vs visibility
+  - Screenshot on failure
+  - Suggested fixes (increase timeout, check locator, verify credentials)
+```
+
+**Alternative: Enhanced Diagnostic Context**
+
+If Step 11 too heavyweight, enhance failure messages:
+
+```python
+# Current (useless)
+assert pom.is_on_account_overview(), "Should be on account overview page"
+
+# Enhanced (actionable)
+current_url = self.web.driver.current_url
+if not pom.is_on_account_overview():
+    # Check if element exists at all
+    exists = pom.web.is_element_present(*pom.ACCOUNTS_OVERVIEW_HEADING)
+    raise AssertionError(
+        f"Not on account overview page.\n"
+        f"Expected: overview.htm\n"
+        f"Actual: {current_url}\n"
+        f"Element exists: {exists}\n"
+        f"Element visible: False (timed out after 5s)"
+    )
+```
+
+**Evidence:**
+
+**Playwright Validation (works):**
+- Credentials: john/demo ✓
+- Login: Successful ✓
+- Page reached: https://parabank.parasoft.com/parabank/overview.htm ✓
+- Element found: `heading "Accounts Overview" [level=1]` ✓
+
+**Selenium Execution (fails):**
+- Same credentials: john/demo
+- Login executes (10.58s runtime)
+- Assertion fails: `is_on_account_overview()` returns False
+- Locator: `(By.XPATH, "//h1[text()='Accounts Overview']")` (same as Playwright found)
+
+**Gate vs Reality Mismatch:**
+```
+Quality Gates Say:     Reality Says:
+✅ All 10 steps pass   ❌ Test fails
+✅ Code correct        ❌ Doesn't execute
+✅ Architecture good   ❌ Element not found
+✅ Workflow complete   ❌ User has broken test
+```
+
+**Why This Is A Product Defect:**
+
+As an open-source automation product, users expect:
+1. **Bronze:** Code doesn't crash → ✅ We provide
+2. **Silver:** Architecture is correct → ✅ We provide
+3. **Gold:** Diagnostic context on failure → ❌ We don't provide
+4. **Platinum:** Generated code actually works → ❌ We don't provide
+
+**We're at Silver. Users expect Platinum.**
+
+**Related Issues:**
+- POM navigation paths had duplicate /parabank prefix (fixed in e281c25)
+- But even with fix, core issue remains: no execution validation
+
+**Fix Strategy:**
+
+**Option A: Add Step 11 (Smoke Test)**
+- Pro: Catches failures before user sees them
+- Pro: Can provide rich diagnostic context
+- Con: Adds execution time to workflow
+- Con: Requires test runner infrastructure
+
+**Option B: Enhanced Error Context (Fail-Fast with Better Info)**
+- Pro: No workflow changes
+- Pro: Helps user debug when failure occurs
+- Con: User still gets broken code
+- Con: Doesn't prevent the issue
+
+**Recommendation:** Option A for production, Option B as interim fix.
+
+**Impact Assessment:**
+
+| Component | Current | After Fix |
+|-----------|---------|-----------|
+| Workflow time | ~2 min (10 steps) | ~3 min (11 steps with smoke test) |
+| User confidence | "Did gates lie?" | "If gates pass, it works" |
+| Debug time | Unknown (user figures it out) | Zero (smoke test caught it) |
+| Trust in product | Eroded by silent failures | Built by validated output |
+
+**Verified:** Not yet fixed
+**Resolved Date:** N/A
+
+---
+
 ## Summary
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
@@ -2963,17 +3634,17 @@ Applied to: `qg_page_object.py`, `qg_task.py`, `qg_role.py`, `qg_test_runner.py`
 | MCP Tools | 1 | 4 | 0 | 0 | 5 | 5 |
 | MCP Tools (Phase B) | 1 | 0 | 0 | 0 | 1 | 1 |
 | AI Orchestration | 1 | 3 | 2 | 0 | 6 | 5 |
-| Quality Gates | 2 | 6 | 1 | 0 | 9 | 7 |
+| Quality Gates | 3 | 6 | 1 | 0 | 10 | 7 |
 | Claude Code Infra | 0 | 0 | 0 | 1 | 1 | 1 (WONT_FIX) |
 | MCP State Mgmt | 0 | 1 | 1 | 0 | 2 | 2 |
-| **Total** | **12** | **17** | **8** | **6** | **43** | **38 + 2 WONT_FIX + 1 INVALID** |
+| **Total** | **13** | **17** | **8** | **6** | **44** | **38 + 2 WONT_FIX + 1 INVALID** |
 
 ### Status Breakdown
-- **RESOLVED:** 38 (includes DEF-055a, DEF-055b from 2026-01-08)
+- **RESOLVED:** 39 (includes DEF-055a, DEF-055b from 2026-01-08, DEF-057 from 2026-01-13)
 - **WONT_FIX:** 2 (DEF-008, DEF-032)
 - **INVALID:** 1 (DEF-016)
 - **READY_TO_TEST:** 5 (DEF-B08, B09, B10, DEF-025, DEF-034)
-- **OPEN:** 6 (DEF-027, 028, 029, 048)
+- **OPEN:** 7 (DEF-027, 028, 029, 048, 058)
 
 ---
 
@@ -2987,4 +3658,4 @@ Applied to: `qg_page_object.py`, `qg_task.py`, `qg_role.py`, `qg_test_runner.py`
 
 ---
 
-**Last Updated:** 2026-01-07
+**Last Updated:** 2026-01-13 (DEF-057 RESOLVED, DEF-058 OPEN - test execution gap)
