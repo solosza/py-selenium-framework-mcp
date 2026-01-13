@@ -64,6 +64,9 @@ from tools.gates.qg_role import QGRole
 from tools.gates.qg_test_runner import QGTestRunner
 from tools.gates.qg_save_run import QGSaveRun
 
+# Import operations (Tool 9: run_test)
+from tools.operations.run_test import run_test_async
+
 # Tools 7-11 not yet implemented - stub functions
 async def list_tests(arguments: dict) -> str:
     return '{"status": "not_implemented", "message": "Tool 7 (list_tests) is planned but not yet implemented"}'
@@ -72,7 +75,8 @@ async def get_framework_structure(arguments: dict) -> str:
     return '{"status": "not_implemented", "message": "Tool 8 (get_framework_structure) is planned but not yet implemented"}'
 
 async def run_test(arguments: dict) -> str:
-    return '{"status": "not_implemented", "message": "Tool 9 (run_test) is planned but not yet implemented"}'
+    """Tool 9: Execute pytest test with standard flags and capture results."""
+    return await run_test_async(arguments)
 
 async def analyze_failure(arguments: dict) -> str:
     return '{"status": "not_implemented", "message": "Tool 10 (analyze_failure) is planned but not yet implemented"}'
