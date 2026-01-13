@@ -770,6 +770,54 @@ async def list_available_tools() -> list[Tool]:
                 },
                 "required": ["mode"]
             }
+        ),
+
+        # Step 11: Execution (POST-only)
+        Tool(
+            name="qg_execution",
+            description="Step 11 quality gate: Execution validation with HITL triage (POST-only). Validates test execution results and provides diagnostic data for failures.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "test_result": {
+                        "type": "object",
+                        "description": "Test result from run_test operation (status, exit_code, output, duration, failure_data)"
+                    },
+                    "test_path": {
+                        "type": "string",
+                        "description": "Test path that was executed"
+                    },
+                    "workflow": {
+                        "type": "string",
+                        "description": "Optional workflow/domain name"
+                    }
+                },
+                "required": ["test_result", "test_path"]
+            }
+        ),
+
+        # Step 11: Workflow Complete (Meta-Gate)
+        Tool(
+            name="qg_workflow_complete",
+            description="Step 11 meta-gate: Workflow completion validation with 8 cross-step consistency checks. Validates 11-step workflow integrity.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "workflow_id": {
+                        "type": "string",
+                        "description": "Workflow identifier from workflow state"
+                    },
+                    "test_path": {
+                        "type": "string",
+                        "description": "Test path from Step 11 execution"
+                    },
+                    "test_result": {
+                        "type": "object",
+                        "description": "Test result from run_test operation"
+                    }
+                },
+                "required": ["workflow_id", "test_path", "test_result"]
+            }
         )
     ]
 
