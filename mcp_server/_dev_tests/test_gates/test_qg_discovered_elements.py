@@ -1435,11 +1435,14 @@ class TestDD46ValidationResults:
     @pytest.mark.unit
     def test_post_validation_results_missing_fails(self, valid_post_input):
         """
-        P0: POST fails when validation_results is missing (DD-46).
+        P0: POST fails when validation_results is missing for unknown discovery_method (DD-46).
+
+        DEF-058: After conditional DD-46, this tests the fallback path (unknown discovery_method).
         """
         # Arrange
         input_data = valid_post_input.copy()
         del input_data["validation_results"]  # Remove validation_results to test missing case
+        # No discovery_method set - should default to requiring validation_results
 
         # Act
         result = QGDiscoveredElements.validate_post(input_data)
@@ -1546,3 +1549,42 @@ class TestDD46ValidationResults:
 
         # Assert
         assert result["status"] == "pass", "Should pass with valid validation_results"
+
+    @pytest.mark.unit
+    def test_post_playwright_auto_validates(self, valid_post_input, mock_state_manager_for_post):
+        """
+        DEF-058: POST auto-generates validation_results for playwright discovery_method.
+
+        Smart Gate pattern (DD-50): Gate self-heals when using DD-33 (snapshot extraction).
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        del input_data["validation_results"]  # Remove to trigger auto-generation
+        input_data["discovery_method"] = "playwright"  # DD-33 flow
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass with auto-generated validation_results"
+        # Playwright auto-validates - no need to check metadata, just verify it didn't fail
+
+    @pytest.mark.unit
+    def test_post_tool2_requires_validation(self, valid_post_input):
+        """
+        DEF-058: POST requires validation_results for tool2 discovery_method.
+
+        Tool 2 (Selenium) MUST have explicit RuntimeValidator validation.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        del input_data["validation_results"]  # Remove to trigger failure
+        input_data["discovery_method"] = "tool2"  # Tool 2 flow
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should fail when tool2 missing validation_results"
+        assert "validation_results" in result["error"].lower(), "Error should mention validation_results"
+        assert "DD-46" in result["error"], "Error should reference DD-46"

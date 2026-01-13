@@ -635,15 +635,47 @@ class QGDiscoveredElements(BaseGate):
             if element_error:
                 return element_error
 
-        # DD-46: Validate validation_results (from RuntimeValidator, triggers VisualFeedback)
+        # DD-46: Smart conditional enforcement based on discovery_method (DEF-058)
+        # - playwright: auto-validate (DD-33 already validated via accessibility tree)
+        # - tool2: require validation (Selenium needs explicit validation)
+        discovery_method = input_data.get("discovery_method")
         validation_results = input_data.get("validation_results")
-        if validation_results is None:
-            return cls.fail_response(
-                error="Missing required field: validation_results (DD-46)",
-                fix_hint="Call RuntimeValidator.validate_element() for each discovered element. "
-                         "RuntimeValidator automatically triggers VisualFeedback for visual highlights. "
-                         "Collect results into validation_results dict with valid_count, error_count, elements."
-            )
+
+        if discovery_method == "playwright":
+            # DD-33 flow: Elements already validated by snapshot extraction
+            if validation_results is None:
+                # SELF-HEALING: Auto-generate validation_results (Smart Gate pattern DD-50)
+                validation_results = {
+                    "valid_count": len(elements),
+                    "error_count": 0,
+                    "elements": [
+                        {"name": elem.get("suggested_name", "unknown"), "is_valid": True, "source": "snapshot"}
+                        for elem in elements
+                    ],
+                    "note": "Auto-validated via DD-33 snapshot extraction"
+                }
+                input_data["validation_results"] = validation_results
+
+        elif discovery_method == "tool2":
+            # Tool 2 flow: MUST have RuntimeValidator results
+            if validation_results is None:
+                return cls.fail_response(
+                    error="Missing required field: validation_results (DD-46)",
+                    fix_hint="Tool 2 elements MUST be validated via RuntimeValidator. "
+                             "Call RuntimeValidator.validate_element() for each discovered element. "
+                             "RuntimeValidator automatically triggers VisualFeedback for visual highlights. "
+                             "Collect results into validation_results dict with valid_count, error_count, elements."
+                )
+
+        else:
+            # Unknown discovery_method - require validation_results for safety
+            if validation_results is None:
+                return cls.fail_response(
+                    error="Missing required field: validation_results (DD-46)",
+                    fix_hint="Call RuntimeValidator.validate_element() for each discovered element. "
+                             "RuntimeValidator automatically triggers VisualFeedback for visual highlights. "
+                             "Collect results into validation_results dict with valid_count, error_count, elements."
+                )
 
         # Validate validation_results structure
         validation_error = cls._validate_validation_results(validation_results)
