@@ -378,6 +378,11 @@ class QGRole(BaseGate):
         if metadata_error:
             return metadata_error
 
+        # DEF-057: Validate workflow_methods param format
+        workflow_methods_error = cls._validate_workflow_methods(metadata)
+        if workflow_methods_error:
+            return workflow_methods_error
+
         # Save Step 8 state on POST-VALIDATE pass
         state_manager = cls._get_state_manager()
         state_manager.save(step=8, data={
@@ -617,6 +622,40 @@ class QGRole(BaseGate):
                 error="Missing or invalid import_path in metadata",
                 fix_hint="Tool 5 must include import_path in metadata."
             )
+
+        return None
+
+    @classmethod
+    def _validate_workflow_methods(cls, metadata: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        DEF-057: Validate workflow_methods param format (string, not dict).
+
+        Returns fail_response if invalid, None otherwise.
+        """
+        workflow_methods = metadata.get("workflow_methods")
+
+        if workflow_methods is None:
+            # workflow_methods is optional in metadata, so None is OK
+            return None
+
+        if not isinstance(workflow_methods, list):
+            return cls.fail_response(
+                error="workflow_methods must be a list",
+                fix_hint="Tool 5 should return workflow_methods as an array."
+            )
+
+        # DEF-057: Validate param format (string, not dict) for each workflow_method
+        for method in workflow_methods:
+            method_name = method.get("name", "<unknown>")
+            params = method.get("params", [])
+
+            # Validate params are string format per DEF-054 standard
+            param_error = cls._validate_param_format(
+                params,
+                context=f"workflow_method '{method_name}'"
+            )
+            if param_error:
+                return param_error
 
         return None
 

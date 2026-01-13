@@ -159,7 +159,12 @@ class QGDiscoveredElements(BaseGate):
 
         if detected_page_count > 1 and scope_result is None:
             # SELF-HEALING: Calculate scope_result and provide it to AI
-            calculated_scope = cls._calculate_scope_result_from_bdd(state_manager)
+            # Task 26.0: Try navigation-first (PASS 0), fallback to BDD
+            calculated_scope = cls._calculate_scope_from_navigation()
+            if calculated_scope is None:
+                # Fallback to BDD detection
+                calculated_scope = cls._calculate_scope_result_from_bdd(state_manager)
+
             if calculated_scope is not None:
                 return {
                     "status": "fail",
@@ -168,7 +173,7 @@ class QGDiscoveredElements(BaseGate):
                     "scope_result": calculated_scope  # ← Self-healing: provide the fix
                 }
             else:
-                # Fallback if calculation fails
+                # Fallback if both navigation and BDD calculations fail
                 return cls.fail_response(
                     error=f"Multi-page workflow detected ({detected_page_count} pages) but scope_result not provided (DD-44)",
                     fix_hint="Call scope_discovery.analyze_workflow(bdd_scenarios) first, then pass scope_result to this gate."
@@ -345,6 +350,157 @@ class QGDiscoveredElements(BaseGate):
 
         except Exception:
             # If calculation fails, return None (fallback to original error)
+            return None
+
+    @classmethod
+    def _read_audit_log_entries(cls) -> Optional[List[Dict[str, Any]]]:
+        """
+        Task 26.0: Read entries from the audit log JSON file.
+
+        Returns:
+            List of audit log entries from "steps" field, or None if read fails
+        """
+        try:
+            audit_logger = cls.get_audit_logger()
+            audit_file_path = audit_logger._audit_file
+
+            if not audit_file_path.exists():
+                return None
+
+            with open(audit_file_path, 'r') as f:
+                import json
+                data = json.load(f)
+
+            return data.get("steps", [])
+
+        except Exception:
+            # If read fails, return None (fallback to BDD detection)
+            return None
+
+    @classmethod
+    def _infer_page_name_from_url(cls, url: str) -> str:
+        """
+        Task 26.0: Infer PascalCase page name from URL.
+
+        Examples:
+        - https://example.com/login.htm → LoginPage
+        - https://example.com/transfer → TransferPage
+        - https://example.com/accounts/overview → AccountsOverviewPage
+        - https://example.com/ → HomePage
+
+        Args:
+            url: Full URL string
+
+        Returns:
+            PascalCase page name with "Page" suffix
+        """
+        try:
+            from urllib.parse import urlparse
+
+            parsed = urlparse(url)
+            path = parsed.path.strip('/')
+
+            if not path:
+                # Root path
+                return "HomePage"
+
+            # Extract segments (e.g., ["accounts", "overview"] or ["login.htm"])
+            segments = path.split('/')
+
+            # For multi-segment paths, combine meaningful segments
+            # Skip generic segments like "page", "view"
+            skip_segments = {"page", "view", "index"}
+            meaningful_segments = [s for s in segments if s.lower() not in skip_segments]
+
+            # If only one segment, use it; otherwise combine last 2-3 segments
+            if len(meaningful_segments) == 1:
+                name_parts = meaningful_segments[0]
+            elif len(meaningful_segments) >= 2:
+                # Take last 2 segments (e.g., "accounts/overview" → "accounts_overview")
+                name_parts = '_'.join(meaningful_segments[-2:])
+            else:
+                name_parts = "unknown"
+
+            # Remove file extension if present
+            name_without_ext = name_parts.split('.')[0]
+
+            # Convert to PascalCase
+            words = name_without_ext.replace('_', ' ').replace('-', ' ').split()
+            pascal_case = ''.join(word.capitalize() for word in words)
+
+            # Add "Page" suffix if not already present
+            if not pascal_case.endswith("Page"):
+                pascal_case += "Page"
+
+            return pascal_case
+
+        except Exception:
+            # Fallback to generic name
+            return "UnknownPage"
+
+    @classmethod
+    def _calculate_scope_from_navigation(cls) -> Optional[Dict[str, Any]]:
+        """
+        Task 26.0: Calculate scope_result from navigation calls in audit log.
+
+        PASS 0: Navigation-first detection (more reliable than BDD).
+
+        Reads audit log for browser_navigate calls, extracts URLs,
+        deduplicates, and builds PageInfo objects.
+
+        Returns:
+            scope_result dict with page_count and pages, or None if no navigation calls
+        """
+        try:
+            # Read audit log
+            entries = cls._read_audit_log_entries()
+            if not entries:
+                return None
+
+            # Filter for browser_navigate calls
+            navigate_calls = [
+                e for e in entries
+                if e.get("type") == "mcp_tool" and e.get("tool_name") == "browser_navigate"
+            ]
+
+            if not navigate_calls:
+                return None
+
+            # Extract URLs and deduplicate
+            urls = []
+            seen_urls = set()
+            for call in navigate_calls:
+                args = call.get("args", {})
+                url = args.get("url")
+                if url and url not in seen_urls:
+                    urls.append(url)
+                    seen_urls.add(url)
+
+            if not urls:
+                return None
+
+            # Build PageInfo objects
+            pages = []
+            for i, url in enumerate(urls):
+                page_name = cls._infer_page_name_from_url(url)
+                pages.append({
+                    "name": page_name,
+                    "page_name": page_name,  # Add both fields for compatibility
+                    "order": i + 1,
+                    "url": url,
+                    "depends_on": [],
+                    "reason": "navigation detected"  # Distinguish from BDD detection
+                })
+
+            # Return scope_result
+            return {
+                "page_count": len(pages),
+                "total_pages": len(pages),  # Add both fields for compatibility
+                "pages": pages
+            }
+
+        except Exception:
+            # If navigation detection fails, return None (fallback to BDD)
             return None
 
     @classmethod

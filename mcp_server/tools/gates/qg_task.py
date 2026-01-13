@@ -90,9 +90,10 @@ class QGTask(BaseGate):
         Convert Python import path to file system path.
 
         Task 16.0 (DEF-051): Helper for immediate file writes.
+        Task 25.0 (DEF-055a FIX): Prepend framework/ for pages/tasks/roles paths.
 
         Args:
-            import_path: e.g., "framework.tasks.auth.auth_tasks"
+            import_path: e.g., "tasks.auth.auth_tasks"
 
         Returns:
             Absolute file path: e.g., "D:/project/framework/tasks/auth/auth_tasks.py"
@@ -102,6 +103,16 @@ class QGTask(BaseGate):
 
         # Convert dots to path separator
         relative_path = import_path.replace(".", os.sep) + ".py"
+
+        # DEF-055a FIX: Prepend framework/ for pages/tasks/roles paths
+        # These paths live under framework/ directory, not project root
+        framework_prefixes = (
+            'pages' + os.sep,
+            'tasks' + os.sep,
+            'roles' + os.sep,
+        )
+        if relative_path.startswith(framework_prefixes):
+            relative_path = 'framework' + os.sep + relative_path
 
         # Get project root (3 levels up from mcp_server/tools/gates/)
         project_root = Path(__file__).parent.parent.parent.parent
@@ -353,6 +364,11 @@ class QGTask(BaseGate):
         if metadata_error:
             return metadata_error
 
+        # DEF-057: Validate task_methods param format
+        task_methods_error = cls._validate_task_methods(metadata)
+        if task_methods_error:
+            return task_methods_error
+
         # Save Step 7 state (basic - Tasks are per-domain, not per-page)
         # Note: Multi-page loop tracking only applies to Step 6 (POMs)
         # Tasks are per-domain (e.g., AuthTasks, CatalogTasks), not per-page
@@ -374,9 +390,16 @@ class QGTask(BaseGate):
                 audit_logger = cls.get_audit_logger()
                 audit_logger.log_file_generated(file_path, step=7)
             except Exception as e:
-                # If file write fails, log but don't block (validation already passed)
-                # This ensures state is saved even if file write fails
-                pass
+                # DEF-055b FIX: Log file write failure instead of silently swallowing
+                # Don't block (validation already passed) but DO log the error
+                audit_logger = cls.get_audit_logger()
+                audit_logger.log_gate(
+                    step=7,
+                    gate_name="qg_task",
+                    mode="POST",
+                    result="warning",
+                    error=f"FILE_WRITE_FAILED: {file_path} - {str(e)}"
+                )
 
         return cls.pass_response(
             step=7,
@@ -565,6 +588,40 @@ self.auth_tasks = AuthTasks(web)  # Only passes web, not base_url
                 error="Missing or invalid import_path in metadata",
                 fix_hint="Tool 4 must include import_path in metadata."
             )
+
+        return None
+
+    @classmethod
+    def _validate_task_methods(cls, metadata: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        DEF-057: Validate task_methods param format (string, not dict).
+
+        Returns fail_response if invalid, None otherwise.
+        """
+        task_methods = metadata.get("task_methods")
+
+        if task_methods is None:
+            # task_methods is optional in metadata, so None is OK
+            return None
+
+        if not isinstance(task_methods, list):
+            return cls.fail_response(
+                error="task_methods must be a list",
+                fix_hint="Tool 4 should return task_methods as an array."
+            )
+
+        # DEF-057: Validate param format (string, not dict) for each task_method
+        for method in task_methods:
+            method_name = method.get("name", "<unknown>")
+            params = method.get("params", [])
+
+            # Validate params are string format per DEF-054 standard
+            param_error = cls._validate_param_format(
+                params,
+                context=f"task_method '{method_name}'"
+            )
+            if param_error:
+                return param_error
 
         return None
 

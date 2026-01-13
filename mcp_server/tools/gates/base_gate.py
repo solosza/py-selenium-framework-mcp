@@ -87,11 +87,103 @@ class BaseGate:
         if cls._audit_logger is None:
             from utils.audit_logger import AuditLogger
 
-            # DEF-049 FIX: Always create fresh audit logger (never reuse)
-            # Each workflow gets its own audit trail
-            cls._audit_logger = AuditLogger()
+            # DEF-052 FIX: Reuse run_id from session if active
+            # This allows multiple MCP tool calls (separate Python processes)
+            # to share the same run_id within a workflow session
+            session_run_id = cls._get_session_run_id()
+            if session_run_id:
+                # Continuing existing workflow session
+                cls._audit_logger = AuditLogger(run_id=session_run_id)
+            else:
+                # Starting new workflow session
+                cls._audit_logger = AuditLogger()  # Fresh run_id
+                cls._save_session_run_id(cls._audit_logger.run_id)
 
         return cls._audit_logger
+
+    @classmethod
+    def _get_session_run_id(cls) -> Optional[str]:
+        """
+        Get run_id from session marker if active (DEF-052 fix).
+
+        Session marker pattern:
+        - File: mcp_server/state/.run_session
+        - Format: "run_id|timestamp"
+        - Timeout: 5 minutes (configurable)
+
+        Returns:
+            run_id if session is active and recent, None otherwise.
+        """
+        from pathlib import Path
+        from datetime import datetime, timezone, timedelta
+
+        session_file = Path(__file__).parent.parent.parent / "state" / ".run_session"
+        if not session_file.exists():
+            return None
+
+        try:
+            content = session_file.read_text().strip()
+            if '|' not in content:
+                # Invalid format, remove
+                session_file.unlink()
+                return None
+
+            run_id, timestamp_str = content.split('|', 1)
+
+            # Check if session is recent (< 30 minutes) - DEF-052A fix
+            timestamp = datetime.fromisoformat(timestamp_str)
+            now = datetime.now(timezone.utc)
+            if (now - timestamp) > timedelta(minutes=30):
+                # Session expired, remove marker
+                session_file.unlink()
+                return None
+
+            return run_id
+        except Exception:
+            # Corrupted marker, remove it
+            try:
+                session_file.unlink()
+            except Exception:
+                pass
+            return None
+
+    @classmethod
+    def _save_session_run_id(cls, run_id: str) -> None:
+        """
+        Save run_id to session marker (DEF-052 fix).
+
+        Creates or updates session marker file with current run_id and timestamp.
+        This allows multiple MCP tool calls (separate Python processes) to share
+        the same run_id within a workflow session.
+
+        Args:
+            run_id: Run ID to save to session marker.
+        """
+        from pathlib import Path
+        from datetime import datetime, timezone
+
+        session_file = Path(__file__).parent.parent.parent / "state" / ".run_session"
+        session_file.parent.mkdir(parents=True, exist_ok=True)
+
+        timestamp = datetime.now(timezone.utc).isoformat()
+        session_file.write_text(f"{run_id}|{timestamp}")
+
+    @classmethod
+    def _clear_session_marker(cls) -> None:
+        """
+        Clear session marker (DEF-052 fix).
+
+        Called after Step 10 completes (workflow done) or when starting
+        a new workflow explicitly.
+        """
+        from pathlib import Path
+
+        session_file = Path(__file__).parent.parent.parent / "state" / ".run_session"
+        if session_file.exists():
+            try:
+                session_file.unlink()
+            except Exception:
+                pass
 
     @classmethod
     def _enforce_audit_write(
@@ -500,3 +592,72 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
                     return False
 
         return True
+
+    @classmethod
+    def _validate_param_format(cls, params: List, context: str) -> Optional[dict]:
+        """
+        DEF-057: Validate params are string format 'name: type', not dict format.
+
+        Per DEF-054 standard, params must be string arrays like:
+        ["email: str", "password: str"]
+
+        NOT dict arrays like:
+        [{"name": "email", "type": "str"}]
+
+        Args:
+            params: List of param strings or dicts to validate
+            context: Context string for error message (e.g., "action_method 'enter_email'")
+
+        Returns:
+            fail_response dict if invalid format detected, None if valid
+        """
+        if not params:
+            return None  # Empty params list is valid
+
+        for param in params:
+            # Check for dict format (WRONG)
+            if isinstance(param, dict):
+                return cls.fail_response(
+                    error=f"{context}: Param must be string format, got dict: {param}",
+                    fix_hint="""
+Params must be string format per DEF-054 standard.
+
+CORRECT: ["email: str", "password: str"]
+WRONG:   [{"name": "email", "type": "str"}]
+
+Pattern:
+- Each param is a string with format "name: type"
+- NOT a dict with "name" and "type" keys
+
+Fix:
+Convert dict format to string format:
+  {"name": "email", "type": "str"} → "email: str"
+                    """
+                )
+
+            # Check for invalid string format
+            if not isinstance(param, str):
+                return cls.fail_response(
+                    error=f"{context}: Param must be string, got {type(param).__name__}: {param}",
+                    fix_hint="Params must be strings with format 'name: type' like 'email: str'"
+                )
+
+            # Check for colon separator (required format: "name: type")
+            if ":" not in param:
+                return cls.fail_response(
+                    error=f"{context}: Param missing colon separator: '{param}'",
+                    fix_hint="""
+Params must have format 'name: type' with colon separator.
+
+Examples:
+- "email: str"
+- "password: str"
+- "product_name: str"
+
+NOT:
+- "email"  ← missing type
+- "email str"  ← missing colon
+                    """
+                )
+
+        return None  # All params valid

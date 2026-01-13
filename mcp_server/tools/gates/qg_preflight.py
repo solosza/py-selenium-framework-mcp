@@ -30,6 +30,10 @@ class QGPreflight(BaseGate):
         """
         Validate pre-flight configuration.
 
+        DEF-052A FIX: Clear stale class variable and session marker from previous
+        workflow to ensure fresh run_id for each new workflow. This prevents
+        long-running MCP server from reusing old logger across workflows.
+
         Args:
             input_data: Dict with credential_strategy and test_data_location
 
@@ -37,6 +41,10 @@ class QGPreflight(BaseGate):
             {"status": "pass"} on success
             {"status": "fail", "error": "...", "fix_hint": "..."} on failure
         """
+        # DEF-052A: Clear stale session from previous workflow
+        cls._audit_logger = None
+        cls._clear_session_marker()
+
         # Check required fields
         missing = cls.validate_required_fields(
             input_data,
