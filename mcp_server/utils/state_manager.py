@@ -6,7 +6,7 @@ Task 2.5 - Adds execution mode management.
 
 Features:
 - Atomic writes to prevent corruption
-- Step validation (1-10 range)
+- Step validation (1-11 range)
 - Graceful handling of missing/corrupted files
 - Execution mode get/set with env var default
 """
@@ -22,8 +22,8 @@ from typing import Optional
 VALID_EXECUTION_MODES = {"mixed", "skills_only"}
 
 
-# Valid step range for the 10-step workflow
-VALID_STEPS = range(1, 11)  # 1-10 inclusive
+# Valid step range for the 11-step workflow
+VALID_STEPS = range(1, 12)  # 1-11 inclusive
 
 
 class StateManager:
@@ -74,7 +74,7 @@ class StateManager:
         Save step data to state file using atomic write.
 
         Args:
-            step: Step number (1-10)
+            step: Step number (1-11)
             data: Dictionary of step data to save
         """
         # Load existing state
@@ -128,12 +128,12 @@ class StateManager:
         Get data for a specific step.
 
         Args:
-            step: Step number (1-10)
+            step: Step number (1-11)
 
         Returns:
             Step data dict, or None if step not found or invalid.
         """
-        # Validate step range (1-10)
+        # Validate step range (1-11)
         if step not in VALID_STEPS:
             return None
 
@@ -146,7 +146,7 @@ class StateManager:
         Check if a step has been completed (has data saved).
 
         Args:
-            step: Step number (1-10)
+            step: Step number (1-11)
 
         Returns:
             True if step exists with data, False otherwise.
@@ -177,7 +177,7 @@ class StateManager:
         Get current attempt count for a step.
 
         Args:
-            step: Step number (1-10)
+            step: Step number (1-11)
 
         Returns:
             Current attempt count (0 if no attempts yet).
@@ -191,7 +191,7 @@ class StateManager:
         Increment attempt count for a step and persist to disk.
 
         Args:
-            step: Step number (1-10)
+            step: Step number (1-11)
 
         Returns:
             New attempt count after increment.
@@ -218,7 +218,7 @@ class StateManager:
         Reset attempt count for a step to zero.
 
         Args:
-            step: Step number (1-10)
+            step: Step number (1-11)
         """
         state = self.load()
 
