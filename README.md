@@ -303,7 +303,7 @@ You should see both `qa-automation` and `playwright` listed and enabled.
 
 #### Step 4: Install Skills (Required for AI-Guided Workflow)
 
-The framework includes **Claude Code skills** that guide AI through the 10-step test generation workflow with quality gates. Copy them to your project:
+The framework includes **Claude Code skills** that guide AI through the 11-step test generation workflow with quality gates. Copy them to your project:
 
 ```bash
 # Copy skills directory to your project
@@ -316,13 +316,13 @@ xcopy /E /I .claude\skills C:\path\to\your\project\.claude\skills
 ```
 
 The skills include:
-- **qa-guidance-layer** - 10-step workflow with quality gates
+- **qa-guidance-layer** - 11-step workflow with quality gates
 - **testing** - TDD and test conventions
 - **design-decisions** - Architecture decision recording
 - **documentation** - Documentation conventions
 
 These skills enable AI to:
-- Follow the correct 10-step workflow sequence
+- Follow the correct 11-step workflow sequence
 - Validate generated code through quality gates
 - Self-heal when tool output is incomplete
 - Block progression until quality standards are met

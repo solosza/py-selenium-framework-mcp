@@ -31,7 +31,7 @@
    - [8.7 Step 6: Tool 4](#87-step-6-tool-4-generate_task)
    - [8.8 Step 7: Tool 5](#88-step-7-tool-5-generate_role)
    - [8.9 Step 8: Tool 6](#89-step-8-tool-6-generate_test_runner)
-   - [8.10 Step 9: Save & Report](#810-step-9-ai-saves--reports)
+   - [8.10 Step 9: Save & Report](#811-step-9-ai-saves--reports)
    - [8.11 Design Decisions (DD-01 to DD-28)](#811-design-decisions)
    - [8.12 DD-16, DD-17, DD-18: AI Post-Processing](#812-dd-16-dd-17-dd-18-ai-post-processing-rules)
    - [8.13 DD-19: Tool Invocation Pattern](#813-dd-19-tool-invocation-pattern)
@@ -49,7 +49,7 @@
    - [8.25 DD-44: Multi-Page Scope Discovery](#825-dd-44-multi-page-scope-discovery)
    - [8.26 DD-46: Visual Feedback Enforcement](#826-dd-46-visual-feedback-enforcement)
    - [8.27 DD-50: Smart Gate Pattern](#827-dd-50-smart-gate-pattern)
-9. [10-Step Workflow with Quality Gates (v2)](#9-10-step-workflow-with-quality-gates-v2)
+9. [11-Step Workflow with Quality Gates (v2)](#9-11-step-workflow-with-quality-gates-v2)
    - [9.1 Step 1: Pre-flight Configuration](#91-step-1-pre-flight-configuration)
    - [9.2 Step 2: User Input](#92-step-2-user-input)
    - [9.3 Step 3: AI Processing](#93-step-3-ai-processing)
@@ -59,8 +59,9 @@
    - [9.7 Step 7: Tool 4](#97-step-7-tool-4)
    - [9.8 Step 8: Tool 5](#98-step-8-tool-5)
    - [9.9 Step 9: Tool 6](#99-step-9-tool-6)
-   - [9.10 Step 10: Save & Run](#910-step-10-save--run)
-   - [9.11 Context Reconstruction from Audit Trail](#911-context-reconstruction-from-audit-trail)
+   - [9.10 Step 10: Save & Run](#911-step-10-save--run)
+   - [9.11 Step 11: Execution & Validation](#911-step-11-execution--validation)
+   - [9.12 Context Reconstruction from Audit Trail](#912-context-reconstruction-from-audit-trail)
 
 ---
 
@@ -2064,7 +2065,7 @@ Test data can be shared or workflow-specific. AI must ask which strategy.
 
 ### 8.22 DD-29: Slash Command Modes (Workflow Entry Point)
 
-Two slash commands provide controlled entry to the 10-step workflow:
+Two slash commands provide controlled entry to the 11-step workflow:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -2079,7 +2080,7 @@ Two slash commands provide controlled entry to the 10-step workflow:
 │ FLOW:                                                                       │
 │   1. Slash command reads qa-guidance-layer protocol (skill)                 │
 │   2. AI prompts user for requirement (persona + URL)                        │
-│   3. 10-step workflow executes with proper guidance                         │
+│   3. 11-step workflow executes with proper guidance                         │
 │                                                                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
@@ -2514,7 +2515,7 @@ Gates don't just block - they provide the data needed for AI to succeed.
 
 ---
 
-## 9. 10-Step Workflow with Quality Gates (v2)
+## 9. 11-Step Workflow with Quality Gates (v2)
 
 > **Note:** This section documents the updated workflow with explicit quality gates. Section 8 is preserved for reference during transition.
 
@@ -2524,12 +2525,14 @@ Gates don't just block - they provide the data needed for AI to succeed.
 
 The v2 workflow adds:
 - Step 1: Pre-flight Configuration (new)
+- Step 11: Execution & Validation with HITL triage (new)
 - Explicit quality gates at each step
 - Gate enforcement: Cannot proceed until checks pass
 - Six-layer architecture: Slash Command → Protocol (Skill) → Smart Gates → Operations → State → Audit
 - DD-29: Slash command entry point controls AI modification permissions
 - DD-30: Progressive audit trail via PostToolUse hook for compliance
 - **Audit Metadata Capture:** Each quality gate logs lightweight validation metadata to enable context reconstruction
+- **HITL Triage:** Step 11 requires human-in-the-loop decision on test failures (app bug vs test issue)
 
 > **Template Reference:** See `.claude/skills/design-execution-engine/SKILL.md` for the complete step template that applies to all verticals.
 
@@ -3471,7 +3474,59 @@ tests/{domain}/test_{intent}.py
 
 ---
 
-### 9.11 Context Reconstruction from Audit Trail
+### 9.11 Step 11: Execution & Validation
+
+> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-11.md`
+
+| Field | Value |
+|-------|-------|
+| **Operation Tool** | `run_test` (pytest subprocess execution) |
+| **Quality Gates** | `qg_execution`, `qg_workflow_complete` |
+| **Gate Mode** | POST-only (validates execution results) |
+| **Who Saves** | Operation tool (after execution + gate validation) |
+| **Audit Metadata (POST)** | `{ test_result, triage_decision, workflow_integrity, retry_count }` |
+| **Key Rules** | HITL triage (3 options), 8 consistency checks, retry policy (max 3 per error signature) |
+
+**Three-Tool Sequence:**
+```
+1. run_test → Execute pytest, capture test_result
+2. qg_execution → Validate results, HITL triage on failure
+3. qg_workflow_complete → 8 consistency checks, workflow integrity validation
+```
+
+**HITL Triage Options (on test failure):**
+1. **Application Defect** - Log to DEFECT_LOG.md, block workflow (user fixes app)
+2. **Test Issue** - AI investigates + fixes test code, re-runs test
+3. **Investigate** - Show full diagnostic data, user analyzes
+
+**Diagnostic Data Captured (7 types):**
+- Test execution (pytest output, stack trace)
+- Page state (URL, page source)
+- Browser context (console errors, network failures)
+- Expected vs actual (assertion comparison)
+- Test context (fixtures, test setup)
+- Test data (credentials, inputs)
+- Execution flow (POM/Task/Role method calls)
+
+**8 Consistency Checks (qg_workflow_complete):**
+1. Test path consistency (Step 9 path matches Step 11 execution)
+2. File existence (all generated files exist on disk)
+3. Import path validity (all imports resolve)
+4. Workflow ID consistency (same ID across all steps)
+5. Audit trail complete (all 11 steps logged)
+6. State completeness (all required metadata present)
+7. Code modifications tracked (post-generation changes logged)
+8. No orphaned state (no fragments from incomplete workflows)
+
+**Retry Policy:**
+- Error signature tracking (MD5 hash of error location + message)
+- Max 3 retries per unique error signature
+- Flaky test detection (passes after retry)
+- 4th+ occurrence of same error → mandatory HITL triage
+
+---
+
+### 9.12 Context Reconstruction from Audit Trail
 
 When context window overflows, use audit trail metadata to reconstruct workflow state and resume from any completed step.
 

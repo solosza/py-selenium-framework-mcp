@@ -1,4 +1,4 @@
-# Phase 0: Design Discussion
+# Phase 1: Design Discussion
 
 ## Goal
 
@@ -6,26 +6,29 @@ To guide conversational design discussions between user and AI before creating P
 
 ## When to Use This Phase
 
-**Use Phase 0 for:**
+**Use Phase 1 (Design) for:**
 - New features or modules that need architectural decisions
 - Features with multiple design approaches to evaluate
 - User-facing changes where UX/UI matters significantly
 - Complex features where discussing options before writing PRD saves time
 - Features that integrate with existing modules (discuss integration patterns first)
 
-**Skip Phase 0 for:**
+**Skip Phase 1 (Design) for:**
 - Trivial features with obvious implementation (go straight to PRD)
 - Bug fixes or minor enhancements (no design discussion needed)
 - Features where requirements are crystal clear and unambiguous
 
 **Advanced Use Case:**
-For large features with multiple interdependent modules/components, consider designing them TOGETHER as a system (one Phase 0 discussion) before building individually. This prevents integration issues by ensuring data flow and interfaces align.
+For large features with multiple interdependent modules/components, consider designing them TOGETHER as a system (one Phase 1 discussion) before building individually. This prevents integration issues by ensuring data flow and interfaces align.
 
-## Phase 0 Output
+## Phase 1 Output
 
-**Format:** Conversational discussion in Claude Code chat (NO separate markdown file created)
+**Format:** Conversational discussion in Claude Code chat OR design document (project-specific)
 
-**Outcome:** Design decisions documented in chat, ready to feed into Phase 1 (PRD creation)
+**Outcome:**
+- Design decisions documented
+- Impact assessment completed (if required)
+- Ready to feed into Phase 2 (PRD creation)
 
 ## Process
 
@@ -90,32 +93,82 @@ Once discussion is complete, AI summarizes:
 - User workflows agreed upon
 - Any constraints or risks
 
-### Step 4: User Approval
+### Step 4: Impact Assessment (For Technical Features)
 
-User responds with "approved" or "go" → Proceed to Phase 1 (PRD creation)
+**When Required:**
+- Features that modify existing code (refactors, enhancements)
+- Features that extend existing systems (new step in workflow, new layer)
+- Features with potential breaking changes
+- Features that integrate with multiple existing components
 
-## Integration with 3-Step Feature Development Process
+**Skip Impact Assessment for:**
+- Net-new features with no integration points
+- UI-only changes (no backend impact)
+- Documentation or content-only changes
+
+**Impact Assessment Checklist:**
+
+1. **Who Calls This Code?**
+   - Identify all components that depend on code being modified
+   - List entry points, APIs, functions that interact with changed code
+
+2. **What Depends on Current Behavior?**
+   - Existing tests that validate current behavior
+   - Other components that assume specific behavior
+   - External integrations or contracts
+
+3. **What Will Break?**
+   - Breaking changes (API changes, removed functions, changed contracts)
+   - Non-breaking updates (new parameters, extended functionality)
+   - Test updates required
+   - Documentation updates required
+
+4. **Migration Path**
+   - How to update existing code to work with changes
+   - Backward compatibility strategy (if applicable)
+   - Phased rollout approach (if needed)
+   - Success criteria for validating migration
+
+**AI Deliverable:**
+- Create `impact-assessment.md` in project directory
+- Document all 4 checklist items with specific file paths, line numbers, and affected components
+- Provide risk assessment (LOW/MODERATE/HIGH)
+- Include backward compatibility analysis
+- Outline migration strategy with phases
+
+**User Review:**
+User reviews impact assessment → If approved, proceed to Step 5 (PRD creation)
+
+### Step 5: User Approval
+
+User responds with "approved" or "go" → Proceed to Phase 2 (PRD creation)
+
+## Integration with 4D Framework
 
 ```
-Phase 0: Design Discussion (NEW - conversational, no file)
+Phase 1: Design Discussion (conversational or documented)
+    ↓
+    Design decisions made
+    ↓
+    Impact Assessment (if required)
     ↓
     User says "approved"
     ↓
-Phase 1: PRD Generation (docs/create-prd-v2.md)
+Phase 2: PRD Generation (docs/2-define-create-prd-v2.md)
     ↓
-Phase 2: Task Generation (docs/generate-tasks-v2.md)
+Phase 3: Task Generation (docs/3-divide-generate-tasks-v2.md)
     ↓
-Phase 3: Task Execution (docs/process-task-list-v2.md)
+Phase 4: Task Execution (docs/4-deliver-execute-tasks-v2.md)
 ```
 
-**How Phase 0 feeds into Phase 1:**
-- PRD captures design decisions from Phase 0 conversation
+**How Phase 1 feeds into Phase 2:**
+- PRD captures design decisions from Phase 1 conversation
 - PRD clarifying questions focus on requirements (NOT architecture - already decided)
-- No redundant documentation needed
+- Impact assessment informs implementation approach and risk mitigation
 
 ## Advanced Use Case: System Design (Multiple Related Components)
 
-When building a feature with multiple interdependent modules/components, design them as a complete system in ONE Phase 0 discussion before building individually.
+When building a feature with multiple interdependent modules/components, design them as a complete system in ONE Phase 1 discussion before building individually.
 
 **Example:** Building a data processing pipeline with 4 components:
 1. Data Ingestion Module (foundation)
@@ -136,9 +189,9 @@ When building a feature with multiple interdependent modules/components, design 
 - How different parts of the system interact
 
 **After system design is approved:**
-Build each module individually using full 4-phase process (Phase 0 → Phase 1 → Phase 2 → Phase 3 per module)
+Build each module individually using full 4-phase process (Phase 1 → Phase 2 → Phase 3 → Phase 4 per module)
 
-## Example: Phase 0 for User Dashboard Feature
+## Example: Phase 1 for User Dashboard Feature
 
 ### AI Proposal:
 
@@ -179,11 +232,11 @@ Design decisions:
 
 User: "approved"
 
-→ Proceed to Phase 1 (PRD creation for User Dashboard)
+→ Proceed to Phase 2 (PRD creation for User Dashboard)
 
 ## AI Instructions
 
-When conducting Phase 0 design discussions:
+When conducting Phase 1 design discussions:
 
 1. **Present designs visually** - Use text diagrams, bullet points, clear structure
 2. **Focus 80% on UX/UI** - User cares about what they see and interact with
@@ -192,7 +245,8 @@ When conducting Phase 0 design discussions:
 5. **No separate files** - Keep discussion in chat, capture decisions in PRD later
 6. **For system design** - Design related components as integrated system in one discussion
 7. **For single features** - Design one at a time
-8. **Wait for approval** - Don't proceed to PRD until user says "approved" or "go"
+8. **Conduct impact assessment** - For features that modify existing code, complete impact assessment before approval
+9. **Wait for approval** - Don't proceed to PRD until user says "approved" or "go"
 
 ## Target Audience
 

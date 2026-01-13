@@ -97,7 +97,7 @@
 - `mcp_server/_dev_tests/test_integration/` - NEW: Integration tests directory
 - `mcp_server/_dev_tests/test_integration/test_file_writes.py` - NEW: Real filesystem tests
 - `mcp_server/_dev_tests/test_e2e/` - NEW: E2E tests directory
-- `mcp_server/_dev_tests/test_e2e/test_workflow_smoke.py` - NEW: Full 10-step workflow test
+- `mcp_server/_dev_tests/test_e2e/test_workflow_smoke.py` - NEW: Full 11-step workflow test
 
 ### Skeleton-Only Architecture (Tasks 28-35)
 - `FRAMEWORK.md` - UPDATE: Document skeleton-only architecture, DD-57
@@ -244,21 +244,21 @@
   - [ ] 4.1 Select 2 additional test sites (criteria: public, stable, different UI)
     - Candidate 1: saucedemo.com (Swag Labs - React-based)
     - Candidate 2: demoqa.com (more complex forms)
-  - [ ] 4.2 **Invoke `qa-guidance-layer` skill** - Follow 10-step workflow for each test
+  - [ ] 4.2 **Invoke `qa-guidance-layer` skill** - Follow 11-step workflow for each test
   - [ ] 4.3 Site 1 - Simple workflow: Login test
-    - Run 10-step workflow
+    - Run 11-step workflow
     - Document: all gates pass? any self-heals?
   - [ ] 4.4 Site 1 - Medium workflow: Add to cart
-    - Run 10-step workflow
+    - Run 11-step workflow
     - Document results
   - [ ] 4.5 Site 2 - Simple workflow: Form submission
-    - Run 10-step workflow
+    - Run 11-step workflow
     - Document results
   - [ ] 4.6 Site 2 - Medium workflow: Multi-step form
-    - Run 10-step workflow
+    - Run 11-step workflow
     - Document results
   - [ ] 4.7 Complex workflow (either site): Multi-page checkout or registration flow
-    - Run 10-step workflow
+    - Run 11-step workflow
     - Document results
   - [ ] 4.8 Update SESSION.md with validation matrix results
   - [ ] 4.9 Log any defects to DEFECT_LOG.md
@@ -271,7 +271,7 @@
 ---
 
 - [ ] **5.0 Adversarial Input Validation** [VALIDATION]
-  - [ ] 5.1 **Invoke `qa-guidance-layer` skill** - Follow 10-step workflow for each test case
+  - [ ] 5.1 **Invoke `qa-guidance-layer` skill** - Follow 11-step workflow for each test case
   - [ ] 5.2 Test Case 1: Ambiguous requirement
     - Input: "register user" (no details)
     - Expected: Gate asks for missing details or fails with helpful message
@@ -304,10 +304,10 @@
 
 - [ ] **6.0 E2E Integration Verification** [INTEGRATION]
   - [ ] 6.1 Create branch `feature/6.0-e2e-verification`
-  - [ ] 6.2 **Invoke `qa-guidance-layer` skill** - Follow 10-step workflow
+  - [ ] 6.2 **Invoke `qa-guidance-layer` skill** - Follow 11-step workflow
   - [ ] 6.3 **Invoke `testing` skill** - For verification assertions
   - [ ] 6.4 Clear workflow state: `mcp_server/state/workflow_state.json`
-  - [ ] 6.5 Run full 10-step workflow on automationpractice.pl (new test)
+  - [ ] 6.5 Run full 11-step workflow on automationpractice.pl (new test)
   - [ ] 6.6 Verify audit log created: `audit_log_{timestamp}.json`
     - Contains all 10 steps
     - Shows execution source per step
@@ -607,7 +607,7 @@
     - **18 WebInterface validation failures:** Pre-existing test environment limitation (validator can't load WebInterface class in test env)
     - **1 qg_save_run fallback test failure:** Known from Task 19.0 (test mock needs adjustment, production unaffected)
     - **0 NEW failures** introduced by refactoring ✓
-  - [x] 20.4 All refactored gates (Steps 1-10) work together correctly ✓
+  - [x] 20.4 All refactored gates (Steps 1-11) work together correctly ✓
   - [x] 20.5 Per-run state isolation verified across all gates ✓
 
   **Note:** WebInterface validation works in production (framework/interfaces/web_interface.py exists). Test failures are test environment limitation only. Task 22.0 will validate production functionality.
@@ -1508,7 +1508,7 @@
   - [ ] 44.27 Run integration tests
 
   ### 🧪 PROD TEST: Gate Pattern Provision (Interactive)
-  - [ ] 44.28 **Run 10-step workflow interactively**
+  - [ ] 44.28 **Run 11-step workflow interactively**
     - Target: Simple scenario that triggers skeleton detection
     - Verify: Gates return NEEDS_RETRY with patterns (not FAIL)
     - Verify: AI receives pattern from protocol and fills implementation
@@ -1557,7 +1557,7 @@
   - [ ] 45.8 Run integration test (file write)
 
   ### 🧪 PROD TEST: Tool 3 Skeleton Output (Interactive)
-  - [ ] 45.9 **Run 10-step workflow through Step 6**
+  - [ ] 45.9 **Run 11-step workflow through Step 6**
     - Verify: POM output is skeleton (class + method signatures + `pass`)
     - Verify: Locator constants have values from discovery
     - Verify: Gate returns NEEDS_RETRY with pattern
@@ -1603,7 +1603,7 @@
   - [ ] 46.8 Run integration test (file write)
 
   ### 🧪 PROD TEST: Tool 4 Skeleton Output (Interactive)
-  - [ ] 46.9 **Run 10-step workflow through Step 7**
+  - [ ] 46.9 **Run 11-step workflow through Step 7**
     - Verify: Task output is skeleton (class + constructor + method signatures)
     - Verify: Constructor has POM composition from pom_metadata
     - Verify: Gate returns NEEDS_RETRY with pattern
@@ -1647,7 +1647,7 @@
   - [ ] 47.8 Run integration test (file write)
 
   ### 🧪 PROD TEST: Tool 5 Skeleton Output (Interactive)
-  - [ ] 47.9 **Run 10-step workflow through Step 8**
+  - [ ] 47.9 **Run 11-step workflow through Step 8**
     - Verify: Role output is skeleton (class + constructor + method signatures)
     - Verify: Constructor has Task composition from task_metadata
     - Verify: Gate returns NEEDS_RETRY with pattern
@@ -1691,7 +1691,7 @@
   - [ ] 48.8 Run integration test (file write)
 
   ### 🧪 PROD TEST: Tool 6 Skeleton Output (Interactive)
-  - [ ] 48.9 **Run complete 10-step workflow**
+  - [ ] 48.9 **Run complete 11-step workflow**
     - Verify: Test output is skeleton (class + test methods + `pass`)
     - Verify: Imports include Role, POM, fixtures
     - Verify: Gate returns NEEDS_RETRY with pattern
@@ -1728,7 +1728,7 @@
 
   ### Production Workflow Validation
   - [ ] 49.4 Clear all state
-  - [ ] 49.5 Run full 10-step workflow on test site
+  - [ ] 49.5 Run full 11-step workflow on test site
   - [ ] 49.6 Verify each step flow:
     - Step 6: Tool 3 → skeleton → qg_page_object → pattern → AI fills → passes
     - Step 7: Tool 4 → skeleton → qg_task → pattern → AI fills → passes
@@ -1745,7 +1745,7 @@
   - [ ] 49.9 Document results in SESSION.md
   - [ ] 49.10 Update DEFECT_LOG.md if issues found
   - [ ] 49.11 **Audit: Comprehensive Quality Gate Validation**
-    - **Bypass Gap Checks:** ✓ Full E2E test validates no bypass scenarios exist, audit trail logs all gate calls (Steps 1-10), state saved only after each gate passes, files written only after POST gates pass
+    - **Bypass Gap Checks:** ✓ Full E2E test validates no bypass scenarios exist, audit trail logs all gate calls (Steps 1-11), state saved only after each gate passes, files written only after POST gates pass
     - **Code Logic Gaps:** ✓ All 4 layers follow architecture patterns (POM/Task/Role/Test), no locators in Tasks/Roles (DD-27 enforced), no return values in Tasks/Roles, tests call ONE workflow method (step-09.md enforced), edge cases handled throughout workflow
     - **Protocol Compliance:** ✓ All steps follow protocol references (step-01 through step-10), metadata contracts validated (DD-26), architecture rules enforced (DD-27, DD-49, etc.), credential strategy + test data location enforced from Step 1
     - **Smart Gate Compliance (Both Layers):** ✓ Layer 1 validates across all 10 gates (data/pattern provision), Layer 2 validates across Steps 6-9 (skeleton → pattern → AI fill → validate), NEEDS_RETRY loop enforced (no bypass), max attempts tracked (3 max), dynamic templates work for ANY site (no hardcoded)
@@ -1777,7 +1777,7 @@
   - [ ] 50.1 See original task content (will be moved here during v0.3 execution)
   - [ ] 50.2 Contract tests for gate metadata flow
   - [ ] 50.3 Integration tests with real filesystem
-  - [ ] 50.4 E2E smoke test (full 10-step workflow)
+  - [ ] 50.4 E2E smoke test (full 11-step workflow)
 
   **Done When:**
   - Test pyramid complete (unit, contract, integration, E2E)
@@ -2072,7 +2072,7 @@ Phase 3: Shift-Left & Skeleton-Only Architecture
 ---
 
 - [ ] **53.0 DEF-057 Phase 5: E2E Verification** [VALIDATION]
-  - [ ] 53.1 **Invoke `qa-guidance-layer` skill** - Run full 10-step workflow
+  - [ ] 53.1 **Invoke `qa-guidance-layer` skill** - Run full 11-step workflow
   - [ ] 53.2 Manual execution: parabank7 workflow
     - All 10 steps pass without crashes
     - No param format errors
@@ -2304,7 +2304,7 @@ Phase 3: Shift-Left & Skeleton-Only Architecture
   - [x] 57.2 Verify auto-validation in audit log ✓
     - Confirmed validation_results with "Auto-validated via DD-33 snapshot extraction" ✓
     - No RuntimeValidator import errors (playwright method works standalone) ✓
-  - [x] 57.3 Complete full 10-step workflow ✓
+  - [x] 57.3 Complete full 11-step workflow ✓
     - All 10 steps passed ✓
     - DEF-057 param validation tested at Steps 7-9 (3/3 gates passed) ✓
   - [ ] 57.4 Compare with manual /qa-workflow-dev run
@@ -2330,7 +2330,7 @@ Phase 3: Shift-Left & Skeleton-Only Architecture
   cat tests/_state/{run_id}/workflow_state.json | jq '.step_5.discovered_pages'
 
   # Check test pass
-  # Full 10-step workflow via /qa-workflow
+  # Full 11-step workflow via /qa-workflow
   ```
 
   **Results:**

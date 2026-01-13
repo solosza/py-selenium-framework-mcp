@@ -1,7 +1,7 @@
 # 10-Step End-to-End Workflow Testing Protocol (Universal) v1.1
 
 **Version:** 1.1
-**Purpose:** Generalized testing protocol for validating complete 10-step workflow for ANY site/workflow
+**Purpose:** Generalized testing protocol for validating complete 11-step workflow for ANY site/workflow
 **Audience:** Testing sub-agents, QA validation agents
 **Last Updated:** 2026-01-11
 **Changes from v1.0:** Added sub-agent execution rules based on production test run
@@ -10,7 +10,7 @@
 
 ## Protocol Overview
 
-This protocol defines the STRUCTURE and PROCESS for testing the complete 10-step QA workflow end-to-end. This protocol is **site-agnostic** and **workflow-agnostic**.
+This protocol defines the STRUCTURE and PROCESS for testing the complete 11-step QA workflow end-to-end. This protocol is **site-agnostic** and **workflow-agnostic**.
 
 **Critical Rules:**
 1. **Execute ALL 10 steps** - No shortcuts, no stopping early
@@ -94,7 +94,7 @@ Before starting, verify:
 **Purpose:** Ensure comprehensive audit logging for compliance and debugging
 
 **Requirements:**
-- Log ALL 20 gate calls (PRE/POST for Steps 1-10 where applicable)
+- Log ALL 20 gate calls (PRE/POST for Steps 1-11 where applicable)
 - Log browser_navigate calls for navigation tracking validation
 - Log Step 10 test execution: command, duration, result (PASS/FAIL), errors
 - Include pytest output in audit metadata
@@ -231,7 +231,7 @@ After each step, agent MUST verify:
 **Before executing workflow, agent MUST:**
 
 1. **Confirm protocol read**
-   - State: "I have read testing-protocol-10-step-e2e-v1.1.md"
+   - State: "I have read testing-protocol-11-step-e2e-v1.1.md"
    - List: "I will execute steps 1-10 as defined"
 
 2. **List the 10 steps**

@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-Design for a 10-step workflow execution engine with quality gates that enforces design decisions during test automation code generation.
+Design for a 11-step workflow execution engine with quality gates that enforces design decisions during test automation code generation.
 
 **Problem:** MCP tools generate code but lack enforcement. AI can skip steps, pass incomplete data, and ignore design decisions.
 

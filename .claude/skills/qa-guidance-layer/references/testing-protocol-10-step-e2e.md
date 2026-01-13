@@ -1,7 +1,7 @@
 # 10-Step End-to-End Workflow Testing Protocol (Universal)
 
 **Version:** 1.0
-**Purpose:** Generalized testing protocol for validating complete 10-step workflow for ANY site/workflow
+**Purpose:** Generalized testing protocol for validating complete 11-step workflow for ANY site/workflow
 **Audience:** Testing sub-agents, QA validation agents
 **Last Updated:** 2026-01-11
 
@@ -9,7 +9,7 @@
 
 ## Protocol Overview
 
-This protocol defines the STRUCTURE and PROCESS for testing the complete 10-step QA workflow end-to-end. This protocol is **site-agnostic** and **workflow-agnostic**.
+This protocol defines the STRUCTURE and PROCESS for testing the complete 11-step QA workflow end-to-end. This protocol is **site-agnostic** and **workflow-agnostic**.
 
 **Critical Rules:**
 1. **Execute ALL 10 steps** - No shortcuts, no stopping early

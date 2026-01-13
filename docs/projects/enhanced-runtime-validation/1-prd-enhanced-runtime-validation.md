@@ -971,7 +971,7 @@ Tests should assert:
 ```
 GIVEN all enhanced flags are set to false
 WHEN I run /qa-workflow
-THEN existing 10-step flow works as before
+THEN existing 11-step flow works as before
 AND no enhanced validation runs
 AND structural gates still function
 ```

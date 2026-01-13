@@ -80,7 +80,10 @@
       "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/50.0-def057-gate-validation)",
       "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/51.0-def057-root-fix)",
       "mcp__playwright__browser_type",
-      "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" remote -v)"
+      "Bash(git -C \"D:/my_ai_projects/py_sel_framework_mcp\" remote -v)",
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add mcp_server/tools/operations/ mcp_server/_dev_tests/test_operations/ mcp_server/server.py)",
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" checkout -b feature/60.0-qg-execution-gate)",
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add mcp_server/tools/gates/qg_execution.py mcp_server/tools/gates/__init__.py mcp_server/_dev_tests/test_gates/test_qg_execution.py mcp_server/server.py)"
     ],
     "deny": [],
     "ask": []

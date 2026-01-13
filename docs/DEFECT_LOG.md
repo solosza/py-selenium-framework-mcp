@@ -1408,7 +1408,7 @@ test_scenario = {
 **File:** `.claude/skills/qa-guidance-layer/` (workflow behavior)
 
 **Description:**
-When a gate validation fails during the 10-step workflow, AI follows the testing skill's failure-handling protocol (STOP → REPORT → FIX OPTIONS → DISCUSS). However, the testing skill is designed for **test execution failures**, not **tool chain gate failures**.
+When a gate validation fails during the 11-step workflow, AI follows the testing skill's failure-handling protocol (STOP → REPORT → FIX OPTIONS → DISCUSS). However, the testing skill is designed for **test execution failures**, not **tool chain gate failures**.
 
 For gate failures within the workflow:
 - AI should auto-fix (transform data, retry) without prompting user
@@ -1600,7 +1600,7 @@ Update AI response format to hide gate implementation details from user output.
 **File:** N/A (Claude Code CLI capability)
 
 **Description:**
-During long-running workflows (like the 10-step QA workflow), context window fills up and user must manually invoke `/compact`. There's no automatic mechanism to:
+During long-running workflows (like the 11-step QA workflow), context window fills up and user must manually invoke `/compact`. There's no automatic mechanism to:
 1. Monitor context window token usage
 2. Auto-compact before context runs out
 3. Continue workflow seamlessly after compaction
@@ -2322,7 +2322,7 @@ Multi-Page Scope Discovery Enforcement:
 - Test Generation: Test successfully uses all POMs
 - Framework Check: All 7 files passed validation
 
-**Verified:** 2026-01-07 - ParaBank E2E workflow completed Steps 1-10 successfully
+**Verified:** 2026-01-07 - ParaBank E2E workflow completed Steps 1-11 successfully
 **Resolved Date:** 2026-01-07
 
 ---
@@ -2344,7 +2344,7 @@ assert False
 ```
 
 **Description:**
-During the 10-step QA workflow, AI generates POM state-check methods (`is_*`, `has_*`) based on assumptions rather than verified page observation. The state methods are meant to verify OUTPUT states (confirmation pages, success messages) but AI only sees INPUT pages (forms, buttons).
+During the 11-step QA workflow, AI generates POM state-check methods (`is_*`, `has_*`) based on assumptions rather than verified page observation. The state methods are meant to verify OUTPUT states (confirmation pages, success messages) but AI only sees INPUT pages (forms, buttons).
 
 **Example of guessed code:**
 ```python
@@ -2358,7 +2358,7 @@ def is_registration_confirmed(self) -> bool:
 ```
 
 **Root Cause:**
-The 10-step workflow has a fundamental gap:
+The 11-step workflow has a fundamental gap:
 - **Step 5 (Element Discovery)** captured elements on ENTRY pages only (forms, buttons)
 - **State-check methods** verify EXIT pages (confirmations, success messages)
 - AI generated EXIT verification without ever seeing the EXIT page
@@ -2747,7 +2747,7 @@ After fix, test by:
 **Line(s):** 87-102
 
 **Rule Violated:**
-- State accumulation across Steps 1-10
+- State accumulation across Steps 1-11
 - Single run_id per workflow
 
 **Description:**
@@ -2819,7 +2819,7 @@ Also increased session timeout from 5 minutes to 30 minutes to support manual E2
 **Verification:**
 - Tests pass (no breaking changes - tests already clear manually)
 - Workflow 1 → Workflow 2 (no MCP restart) → separate run_ids
-- E2E test completes Steps 1-10 with single run_id
+- E2E test completes Steps 1-11 with single run_id
 
 **Resolved Date:** 2026-01-08
 
@@ -3439,7 +3439,7 @@ for method in workflow_methods:
 - Implementation: base_gate._validate_param_format() + POST validation in qg_task, qg_role, qg_test_runner
 
 **Production Validation (2026-01-13):**
-Complete 10-step parabank8 workflow validated STRING format enforcement:
+Complete 11-step parabank8 workflow validated STRING format enforcement:
 - Step 7 (qg_task POST): Validated params ["username: str", "password: str"] ✓
 - Step 8 (qg_role POST): Validated params [] ✓
 - Step 9 (qg_test_runner POST): Validated test uses POM methods ✓
@@ -3467,7 +3467,7 @@ assert False
 ```
 
 **Description:**
-Complete 10-step workflow executed, all quality gates passed, generated code architecturally perfect, but the actual Selenium test fails when run.
+Complete 11-step workflow executed, all quality gates passed, generated code architecturally perfect, but the actual Selenium test fails when run.
 
 **The Problem:**
 Quality gates validate CODE CORRECTNESS but not CODE EXECUTION. The workflow generates syntactically correct, architecturally compliant code that doesn't work in practice.
@@ -3495,7 +3495,7 @@ Missing validation step between code generation and "workflow complete" declarat
 - ❌ **Does the test actually run?**
 
 **Impact:**
-User completes 10-step workflow, sees "✅ PASS" on all gates, commits generated code, then discovers test doesn't work. This:
+User completes 11-step workflow, sees "✅ PASS" on all gates, commits generated code, then discovers test doesn't work. This:
 1. Wastes user time (they expected working code)
 2. Erodes trust in quality gates (if gates pass, why doesn't it work?)
 3. Provides zero diagnostic context (just "assertion failed")

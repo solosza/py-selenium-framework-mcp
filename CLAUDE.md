@@ -42,7 +42,7 @@ See `.claude/skills/dialogue-engine/` for complete protocol and references.
 
 **Key Features:**
 - Production-grade 4-layer architecture (Role → Task → Page → WebInterface)
-- 10-step workflow with mandatory quality gates (v2.0)
+- 11-step workflow with mandatory quality gates (v2.0)
 - 28 Design Decisions enforced via MCP validation tools
 - Hybrid architecture: Protocols (Skills for guidance) + Smart Gates (MCP Tools for enforcement)
 - Progressive audit trail and state management
@@ -121,7 +121,7 @@ Step 10: Save & Run                → files saved, test executed
 
 ### QA Guidance Layer (Protocol)
 
-For guided 10-step workflow with quality gates:
+For guided 11-step workflow with quality gates:
 ```
 .claude/skills/qa-guidance-layer/
 ├── SKILL.md              ← Overview and rules

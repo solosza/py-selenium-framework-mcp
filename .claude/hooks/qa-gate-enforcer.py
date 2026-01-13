@@ -4,7 +4,7 @@ QA Gate Enforcer Hook - Prevents writes to protected paths without gate validati
 
 This PreToolUse hook intercepts Write/Edit tool calls and blocks them if the
 required quality gate has not passed. This ensures AI cannot bypass the
-10-step QA workflow validation.
+11-step QA workflow validation.
 
 Architecture:
   AI generates code -> AI tries Write -> Hook intercepts -> Checks state -> Block/Allow
@@ -190,7 +190,7 @@ def main():
         sys.stderr.write(
             f"BLOCKED: No QA workflow state found.\n"
             f"Cannot write to protected path: {file_path}\n"
-            f"Run the 10-step QA workflow with quality gates first.\n"
+            f"Run the 11-step QA workflow with quality gates first.\n"
             f"Expected state file: {state_file}\n"
         )
         sys.exit(2)

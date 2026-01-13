@@ -1,6 +1,6 @@
 # Test Run Monitoring Checklist
 
-**Purpose:** Systematic validation checklist for every 10-step workflow test run
+**Purpose:** Systematic validation checklist for every 11-step workflow test run
 **Audience:** Test observers, QA validators, protocol improvement team
 **Version:** 1.0
 **Last Updated:** 2026-01-11

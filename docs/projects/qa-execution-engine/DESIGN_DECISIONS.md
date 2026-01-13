@@ -55,7 +55,7 @@ def qg_page_object(pom_output):
 Original 9-step workflow lacked explicit quality gates. Steps could be skipped or executed out of order.
 
 **Decision:**
-Expand to **10-step workflow** with quality gates at every step:
+Expand to **11-step workflow** with quality gates at every step:
 - Steps 1-3: Configuration (POST-only gates)
 - Steps 4-9: Operations (PRE+POST gates)
 - Step 10: Final validation (PRE-only gate)

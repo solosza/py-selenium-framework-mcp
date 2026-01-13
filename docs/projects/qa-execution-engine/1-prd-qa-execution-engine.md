@@ -8,7 +8,7 @@
 
 ## 1. Introduction/Overview
 
-Implement the QA Execution Engine - quality gates and state management that enforce design decisions during the 10-step test automation workflow.
+Implement the QA Execution Engine - quality gates and state management that enforce design decisions during the 11-step test automation workflow.
 
 **Terminology:**
 - **QA Guidance Layer** = Skill that guides AI (already exists)

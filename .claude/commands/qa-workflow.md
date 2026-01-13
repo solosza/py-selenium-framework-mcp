@@ -1,10 +1,10 @@
 ---
-description: Start 10-step QA test generation workflow (Production mode - restricted permissions)
+description: Start 11-step QA test generation workflow (Production mode - restricted permissions)
 ---
 
 # QA Test Generation Workflow (Production)
 
-You are starting the 10-step QA test generation workflow.
+You are starting the 11-step QA test generation workflow.
 
 ## Instructions
 
@@ -26,7 +26,7 @@ You are starting the 10-step QA test generation workflow.
    Example: "As a guest, I want to browse products on https://saucedemo.com"
    ```
 
-3. **Execute the 10-step workflow** following the skill guidance, reading each step reference before executing that step.
+3. **Execute the 11-step workflow** following the skill guidance, reading each step reference before executing that step.
 
 ---
 

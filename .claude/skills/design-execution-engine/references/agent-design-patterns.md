@@ -69,7 +69,7 @@ Problems:
 ### ✅ Pattern (The Isagawa Way)
 
 ```markdown
-Task: "Execute complete 10-step workflow for ANY test requirement"
+Task: "Execute complete 11-step workflow for ANY test requirement"
 
 ## Input Parameters
 test_requirement: "[requirement]"
@@ -79,7 +79,7 @@ credential_strategy: "[strategy]"
 test_data_location: "[location]"
 
 ## Protocol
-Follow: .claude/skills/qa-guidance-layer/references/testing-protocol-10-step-e2e.md
+Follow: .claude/skills/qa-guidance-layer/references/testing-protocol-11-step-e2e.md
 
 ## Execution Rules
 1. Execute ALL 10 steps (no shortcuts)
@@ -209,7 +209,7 @@ Success: All steps pass
 ```markdown
 Task: "Execute Steps 1-5: Setup and Discovery"
 
-Protocol: .claude/skills/qa-guidance-layer/references/testing-protocol-10-step-e2e.md
+Protocol: .claude/skills/qa-guidance-layer/references/testing-protocol-11-step-e2e.md
 
 Steps:
 1. Step 1: Pre-flight → checkpoint: status="pass"
@@ -254,7 +254,7 @@ Report: Full validation report
 
 **Example:**
 ```markdown
-Task: "Execute complete 10-step QA workflow"
+Task: "Execute complete 11-step QA workflow"
 
 ## Input Parameters
 test_requirement: "As a registered user, I want to login and view dashboard"
@@ -264,7 +264,7 @@ credential_strategy: "static"
 test_data_location: "shared"
 
 ## Protocol
-Follow: .claude/skills/qa-guidance-layer/references/testing-protocol-10-step-e2e.md
+Follow: .claude/skills/qa-guidance-layer/references/testing-protocol-11-step-e2e.md
 
 ## Execution Rules
 1. Execute ALL 10 steps
@@ -321,7 +321,7 @@ Report: Complete validation report with all results
 
 ```markdown
 ❌ BAD:
-Execute Steps 1-10
+Execute Steps 1-11
 Check if all passed
 
 ✅ GOOD:
@@ -495,7 +495,7 @@ Total: 100K tokens
 
 ✅ **EFFICIENT (1 agent):**
 ```markdown
-ONE agent executes Steps 1-10 (context: 20K tokens)
+ONE agent executes Steps 1-11 (context: 20K tokens)
 Total: 20K tokens
 Savings: 80K tokens (80% reduction)
 ```
@@ -505,7 +505,7 @@ Savings: 80K tokens (80% reduction)
 2. **Massive parallelization benefit** (e.g., 100 independent test cases, 10 agents = 10x faster)
 3. **Failure isolation required** (e.g., critical workflow must not block others)
 
-**For 10-step QA workflow:** ALWAYS use ONE E2E-Task agent.
+**For 11-step QA workflow:** ALWAYS use ONE E2E-Task agent.
 
 ---
 

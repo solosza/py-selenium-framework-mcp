@@ -1,10 +1,10 @@
 ---
-description: Start 10-step QA test generation workflow (Development mode - full access with approval)
+description: Start 11-step QA test generation workflow (Development mode - full access with approval)
 ---
 
 # QA Test Generation Workflow (Development)
 
-You are starting the 10-step QA test generation workflow in **DEVELOPMENT** mode.
+You are starting the 11-step QA test generation workflow in **DEVELOPMENT** mode.
 
 ## Instructions
 
@@ -26,7 +26,7 @@ You are starting the 10-step QA test generation workflow in **DEVELOPMENT** mode
    Example: "As a guest, I want to browse products on https://saucedemo.com"
    ```
 
-3. **Execute the 10-step workflow** following the skill guidance, reading each step reference before executing that step.
+3. **Execute the 11-step workflow** following the skill guidance, reading each step reference before executing that step.
 
 ---
 

@@ -222,7 +222,7 @@ Prepare the Isagawa QA Execution Engine for public release by closing architectu
 | `tests/_audit/` | New `audit_log_{timestamp}.json` per run | ✅ DONE |
 | `utils/audit_logger.py` | Added `metadata` parameter to `log_gate()` | ✅ DONE |
 | `tools/gates/base_gate.py` | Added `metadata` parameter to `pass_response()`, `fail_response()`, `blocked_response()` | ✅ DONE |
-| All gates (Steps 1-10) | Extract and pass metadata summaries to audit logger | ✅ DONE |
+| All gates (Steps 1-11) | Extract and pass metadata summaries to audit logger | ✅ DONE |
 | `qg_save_run` | Write final summary, close audit log | ✅ DONE |
 | `utils/context_reconstructor.py` | Utility to rebuild workflow state from audit metadata | ✅ DONE |
 | CLI (future) | `isagawa audit --run <id>` to view/summarize | PENDING |
@@ -322,12 +322,12 @@ Step 6: POM generation
 **Decision:** NOT A DESIGN TOPIC - moved to QA task list
 
 **Rationale:**
-- Adversarial inputs go through same 10-step workflow
+- Adversarial inputs go through same 11-step workflow
 - Existing gates already validate each step
 - This is a testing task, not a design decision
 
 **QA Task (for task list):**
-> Run 5 adversarial inputs through 10-step workflow, verify gates block with helpful errors
+> Run 5 adversarial inputs through 11-step workflow, verify gates block with helpful errors
 
 **Example inputs to test:**
 1. Ambiguous: "register user" (no details)
@@ -381,7 +381,7 @@ No implementation needed.
 | Sites | 2-3 different sites (proves not overfitted) |
 | Complexity | Must include at least one complex multi-page workflow |
 | Browser | Chrome only (browser compat is Selenium's job, not ours) |
-| Pass criteria | 10-step workflow completes with all gates passing |
+| Pass criteria | 11-step workflow completes with all gates passing |
 
 **MVP Validation Bar:**
 
@@ -396,7 +396,7 @@ No implementation needed.
 
 **No Implementation Needed:**
 - This is a validation activity, not code change
-- Run 10-step workflow on additional sites
+- Run 11-step workflow on additional sites
 - Document pass/fail in SESSION.md
 
 ---
@@ -542,7 +542,7 @@ Dog-whistle to the right people without naming the category:
 **Why This Wins:**
 
 1. **Copycats can't replicate enforcement speed**
-   - They won't have the 10-step workflow
+   - They won't have the 11-step workflow
    - They won't have the quality gate architecture
    - They won't have the domain-encoding discipline
    - Words don't matter without machinery
@@ -616,7 +616,7 @@ Dog-whistle to the right people without naming the category:
 **Implementation:**
 - ✅ Enhanced `AuditLogger.log_gate()` with metadata parameter
 - ✅ Updated `BaseGate.pass_response/fail_response/blocked_response()` with metadata parameter
-- ✅ All gates (Steps 1-10) extract and pass metadata summaries
+- ✅ All gates (Steps 1-11) extract and pass metadata summaries
 - ✅ Created `utils/context_reconstructor.py` utility
 - ✅ Created `docs/CONTEXT_RECONSTRUCTION.md` documentation
 - ✅ Demonstration test: `_dev_tests/test_context_reconstruction.py`

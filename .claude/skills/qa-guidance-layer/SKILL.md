@@ -5,12 +5,12 @@
 
 ---
 name: qa-guidance-layer
-description: Guide AI through 10-step QA test generation workflow with quality gates. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
+description: Guide AI through 11-step QA test generation workflow with quality gates and HITL execution validation. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
 ---
 
 # QA Guidance Layer
 
-**Purpose:** Guide AI through the 10-step QA test generation workflow with enforced quality gates.
+**Purpose:** Guide AI through the 11-step QA test generation workflow with enforced quality gates and HITL execution validation.
 
 **Applies to:** QA test automation generation using MCP tools.
 
@@ -23,7 +23,7 @@ description: Guide AI through 10-step QA test generation workflow with quality g
 Use when:
 - User wants to generate test automation code
 - User provides a user story or test requirement
-- Starting the 10-step workflow from Step 1
+- Starting the 11-step workflow from Step 1
 
 ---
 
@@ -45,7 +45,7 @@ Use when:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         10-STEP QA WORKFLOW                                  │
+│                         11-STEP QA WORKFLOW                                  │
 └─────────────────────────────────────────────────────────────────────────────┘
 
   Step 1: Pre-flight Config    ──► credential_strategy, test_data_location
@@ -75,7 +75,10 @@ Use when:
   Step 9: Generate Test Runner ──► test_code (Tool 6)
       │
       ▼
-  Step 10: Save & Run          ──► files saved, test executed
+  Step 10: Save & Run          ──► files saved
+      │
+      ▼
+  Step 11: Execution & Validation ──► test executed, HITL triage, workflow integrity
 ```
 
 ---
@@ -94,6 +97,7 @@ Use when:
 | 8 | `references/step-08.md` | `qg_role` | PRE+POST | Generate Role (Tool 5) |
 | 9 | `references/step-09.md` | `qg_test_runner` | PRE+POST | Generate Test Runner (Tool 6) |
 | 10 | `references/step-10.md` | `qg_save_run` | PRE-only | Save & Run |
+| 11 | `references/step-11.md` | `qg_execution`, `qg_workflow_complete` | POST-only | Execution & Validation |
 
 ---
 
