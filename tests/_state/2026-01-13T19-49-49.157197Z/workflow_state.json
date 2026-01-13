@@ -1,0 +1,81 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "EMAIL_INPUT",
+        "element_type": "textbox",
+        "locator_id": "#email",
+        "locator_css": "",
+        "locator_xpath": ""
+      }
+    ],
+    "page_name": "LoginPage",
+    "discovered_pages": {
+      "LoginPage": {
+        "input_elements": [
+          {
+            "suggested_name": "EMAIL_INPUT",
+            "element_type": "textbox",
+            "locator_id": "#email",
+            "locator_css": "",
+            "locator_xpath": ""
+          }
+        ]
+      },
+      "CartModal": {
+        "input_elements": [
+          {
+            "suggested_name": "EMAIL_INPUT",
+            "element_type": "textbox",
+            "locator_id": "#email",
+            "locator_css": "",
+            "locator_xpath": ""
+          }
+        ]
+      },
+      "OAuth2Page": {
+        "input_elements": [
+          {
+            "suggested_name": "EMAIL_INPUT",
+            "element_type": "textbox",
+            "locator_id": "#email",
+            "locator_css": "",
+            "locator_xpath": ""
+          }
+        ]
+      },
+      "CheckoutForm": {
+        "input_elements": [
+          {
+            "suggested_name": "EMAIL_INPUT",
+            "element_type": "textbox",
+            "locator_id": "#email",
+            "locator_css": "",
+            "locator_xpath": ""
+          }
+        ]
+      }
+    },
+    "pages_discovered": 0,
+    "total_pages": 1,
+    "discovery_complete": false
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_valid",
+        "given": "Valid precondition",
+        "when": [
+          "Valid action"
+        ],
+        "then": [
+          "Valid assertion"
+        ]
+      }
+    ]
+  }
+}

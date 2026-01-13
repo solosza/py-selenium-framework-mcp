@@ -1,0 +1,152 @@
+{
+  "run_id": "2026-01-13T19:49:50.648273Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:49:50.650273Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    },
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:49:50.656354Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    },
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:49:50.662384Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    },
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:49:50.670893Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    },
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:49:50.676987Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    },
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:49:50.682987Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    },
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:49:50.715570Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    },
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:49:50.726540Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 8,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

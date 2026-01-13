@@ -1,0 +1,222 @@
+{
+  "run_id": "2026-01-13T19:48:26.254084Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:26.259087Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:26.293851Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:26.835698Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:26.949607Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:28.981996Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://automationpractice.pl/index.php",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:28.991529Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://example.com/page",
+        "role_name": "Guest",
+        "workflow": "catalog"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.002035Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "https://secure.example.com/checkout",
+        "role_name": "Customer",
+        "workflow": "checkout"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.012154Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://example.com/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.022668Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://example.com/browse",
+        "role_name": "Guest",
+        "workflow": "catalog"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.032177Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://example.com/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.042684Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://example.com/products",
+        "role_name": "Guest",
+        "workflow": "catalog"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.048881Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://example.com/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.059974Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "http://example.com/login",
+        "role_name": "Customer",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.075097Z",
+      "metadata": {
+        "persona": "developer",
+        "URL": "http://localhost:3000/app",
+        "role_name": "Developer",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.084097Z",
+      "metadata": {
+        "persona": "tester",
+        "URL": "http://staging.example.com:8080/login",
+        "role_name": "Tester",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T19:48:29.093651Z",
+      "metadata": {
+        "persona": "premium registered user with subscription",
+        "URL": "http://example.com/premium",
+        "role_name": "PremiumUser",
+        "workflow": "catalog"
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 2,
+    "gates_passed": 16,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}
