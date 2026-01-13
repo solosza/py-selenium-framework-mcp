@@ -1047,7 +1047,7 @@ git commit -m "feat: implement Step 5b-5c element validation"
 | Document | Location |
 |----------|----------|
 | Existing QA Execution Engine PRD | `docs/projects/qa-execution-engine/1-prd-qa-execution-engine.md` |
-| Step definitions | `.claude/skills/qa-guidance-layer/references/step-*.md` |
+| Step definitions | `.claude/skills/qa-management-layer/references/step-*.md` |
 | Design decisions | `CLAUDE.md` (DD-01 through DD-33) |
 | Knowledge Base | `docs/KNOWLEDGE_BASE.md` |
 | Testing Skill | `.claude/skills/testing/SKILL.md` |

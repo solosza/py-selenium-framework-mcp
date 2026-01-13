@@ -123,7 +123,7 @@ Step 10: Save & Run                → files saved, test executed
 
 For guided 11-step workflow with quality gates:
 ```
-.claude/skills/qa-guidance-layer/
+.claude/skills/qa-management-layer/
 ├── SKILL.md              ← Overview and rules
 └── references/
     ├── step-01.md        ← Per-step guidance

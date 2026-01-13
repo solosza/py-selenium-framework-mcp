@@ -316,7 +316,7 @@ xcopy /E /I .claude\skills C:\path\to\your\project\.claude\skills
 ```
 
 The skills include:
-- **qa-guidance-layer** - 11-step workflow with quality gates
+- **qa-management-layer** - 11-step workflow with quality gates
 - **testing** - TDD and test conventions
 - **design-decisions** - Architecture decision recording
 - **documentation** - Documentation conventions

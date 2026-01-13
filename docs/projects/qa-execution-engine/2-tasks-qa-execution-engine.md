@@ -52,7 +52,7 @@
 | File | Description |
 |------|-------------|
 | `mcp_server/server.py` | Register gate tools as MCP endpoints |
-| `.claude/skills/qa-guidance-layer/SKILL.md` | Update to reference gates |
+| `.claude/skills/qa-management-layer/SKILL.md` | Update to reference gates |
 | `.gitignore` | Add state file exclusion |
 
 ---
@@ -938,7 +938,7 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 #### 14.0 Skill Update [GLUE] ✅ COMPLETE
 
 - [x] 14.1 Create branch `feature/14.0-skill-update`
-- [x] 14.2 Update `.claude/skills/qa-guidance-layer/SKILL.md`
+- [x] 14.2 Update `.claude/skills/qa-management-layer/SKILL.md`
   - [x] 14.2.1 Add gate tool references for each step
   - [x] 14.2.2 Update workflow to include gate calls (kept generic, added mode table)
   - [x] 14.2.3 Add gate return format documentation
@@ -947,7 +947,7 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
   - [x] 14.3.2 Verify gate mode documented correctly (already done)
 - [x] 14.4 Manual test: Read skill, verify gates are documented
 - [x] 14.5 Record results
-- [x] 14.6 Commit: `docs: update qa-guidance-layer skill with gates (Task 14.0)`
+- [x] 14.6 Commit: `docs: update qa-management-layer skill with gates (Task 14.0)`
 
 **Done When:**
 - SKILL.md references all qg_* gates ✅

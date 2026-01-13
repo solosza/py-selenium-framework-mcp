@@ -1237,7 +1237,7 @@ mcp_server/_dev_tests/test_gates/test_qg_workflow_complete.py
 
 **Documentation:**
 ```
-.claude/skills/qa-guidance-layer/references/step-11.md
+.claude/skills/qa-management-layer/references/step-11.md
 ```
 
 ### Files To Update (5 Files)
@@ -1247,7 +1247,7 @@ mcp_server/_dev_tests/test_gates/test_qg_workflow_complete.py
 - `mcp_server/tools/gates/__init__.py` - Export 2 new gates
 
 **Documentation:**
-- `.claude/skills/qa-guidance-layer/SKILL.md` - Add Step 11 reference
+- `.claude/skills/qa-management-layer/SKILL.md` - Add Step 11 reference
 - `FRAMEWORK.md` - Update Section 9 workflow diagram
 - Multiple files - Change "11-step" to "11-step" references
 

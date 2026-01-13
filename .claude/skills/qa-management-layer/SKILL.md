@@ -4,7 +4,7 @@
 <!-- See LICENSE.md for full terms. -->
 
 ---
-name: qa-guidance-layer
+name: qa-management-layer
 description: Guide AI through 11-step QA test generation workflow with quality gates and HITL execution validation. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
 ---
 

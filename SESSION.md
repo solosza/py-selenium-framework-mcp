@@ -307,7 +307,7 @@ SESSION.md (UPDATED - this file)
 ```
 mcp_server/server.py                          (Register new tools)
 mcp_server/tools/gates/__init__.py            (Export new gates)
-.claude/skills/qa-guidance-layer/SKILL.md    (Add Step 11 reference)
+.claude/skills/qa-management-layer/SKILL.md    (Add Step 11 reference)
 FRAMEWORK.md                                  (Update Section 9 workflow)
 ```
 
@@ -316,7 +316,7 @@ FRAMEWORK.md                                  (Update Section 9 workflow)
 mcp_server/tools/operations/run_test.py
 mcp_server/tools/gates/qg_execution.py
 mcp_server/tools/gates/qg_workflow_complete.py
-.claude/skills/qa-guidance-layer/references/step-11.md
+.claude/skills/qa-management-layer/references/step-11.md
 mcp_server/_dev_tests/test_gates/test_qg_execution.py
 mcp_server/_dev_tests/test_gates/test_qg_workflow_complete.py
 ```

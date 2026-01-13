@@ -1,10 +1,9 @@
-# 10-Step End-to-End Workflow Testing Protocol (Universal) v1.1
+# 10-Step End-to-End Workflow Testing Protocol (Universal)
 
-**Version:** 1.1
+**Version:** 1.0
 **Purpose:** Generalized testing protocol for validating complete 11-step workflow for ANY site/workflow
 **Audience:** Testing sub-agents, QA validation agents
 **Last Updated:** 2026-01-11
-**Changes from v1.0:** Added sub-agent execution rules based on production test run
 
 ---
 
@@ -64,204 +63,8 @@ Before starting, verify:
 □ Playwright MCP server running (if using browser tools)
 □ Python environment has all dependencies
 □ Working directory: D:\my_ai_projects\py_sel_framework_mcp
-□ Review testing skill protocol: .claude/skills/testing/SKILL.md
-□ Workflow name is unique (or intentionally reusing)
+□ No stale audit logs in tests/_audit/ (or use fresh run_id)
 ```
-
----
-
-## Sub-Agent Execution Rules (v1.1)
-
-### Rule 1: Unique Workflow Names (RECOMMENDED)
-
-**Purpose:** Prevent accidental file overwrites from previous test runs
-
-**Implementation:**
-- Before starting, check if `framework/pages/{workflow_name}/` exists
-- If exists AND you don't want to overwrite, use incremented name:
-  - First test: `workflow_name: "parabank"`
-  - Subsequent: `workflow_name: "parabank2"`, `"parabank3"`, etc.
-- If intentionally reusing (e.g., updating existing tests), document this
-
-**User typically specifies workflow name** - respect their choice, but warn if overwriting.
-
-**For MVP:** README documentation is sufficient. See project README for naming conventions.
-
----
-
-### Rule 3: Complete Audit Trail
-
-**Purpose:** Ensure comprehensive audit logging for compliance and debugging
-
-**Requirements:**
-- Log ALL 20 gate calls (PRE/POST for Steps 1-11 where applicable)
-- Log browser_navigate calls for navigation tracking validation
-- Log Step 10 test execution: command, duration, result (PASS/FAIL), errors
-- Include pytest output in audit metadata
-
-**Audit entries must include:**
-- All quality gate results (qg_preflight, qg_user_input, etc.)
-- All tool executions (Tool 1-6)
-- Test execution result (Step 10)
-- Files generated (complete list with timestamps)
-
-**Post-Commercial:** Will include browser_navigate tool calls in audit trail
-
----
-
-### Rule 4: Checkpoint Validation
-
-**Purpose:** Validate each step completion before proceeding to next
-
-**Implementation:**
-
-After each step, agent MUST verify:
-- ✓ Step N: All gates passed (check status="pass")
-- ✓ Step N: Required files generated (if applicable)
-- ✓ Step N: Audit trail updated
-- ✓ Step N: No errors in output
-
-**If ANY check fails:**
-1. STOP immediately
-2. Report exact failure
-3. Wait for user direction (do NOT auto-continue)
-
-**Example checkpoint (Step 6):**
-```
-✓ PRE gate passed for both POMs
-✓ Tool 3 generated code for both POMs
-✓ POST gate passed for both POMs
-✓ Files exist on disk
-✓ No skeleton code detected
-→ Proceed to Step 7
-```
-
-**Checkpoint Report Format:**
-```
-**CHECKPOINT [N]: [PASSED/FAILED]**
-- [Check 1]: [status]
-- [Check 2]: [status]
-- [Check 3]: [status]
-
-**STEP [N] COMPLETE** (if all checks pass)
-```
-
----
-
-### Rule 5: Explicit Completion Criteria
-
-**Purpose:** Agent completes workflow ONLY when ALL criteria met
-
-**Required for completion:**
-```
-□ All 10 steps executed (not partial)
-□ All 20 gates passed (or applicable PRE/POST gates)
-□ All files generated (POMs, Task, Role, Test)
-□ Test executed via pytest
-□ Test result: PASSED (not FAILED, not SKIPPED)
-□ Audit trail created (one or more files if resumed)
-□ HTML report generated
-□ Navigation tracking validated (if multi-page)
-```
-
-**Agent MUST report:**
-- Steps completed: X/10
-- Gates passed: X/20
-- Test result: PASSED/FAILED
-- Audit files: [list with run_ids]
-- Generated files: [list with sizes]
-
-**Partial completion is NOT success.** All criteria must be met.
-
----
-
-### Rule 6: Error Handling Protocol (Testing Skill)
-
-**Purpose:** Standardized error handling across all test runs
-
-**CRITICAL:** Before executing any test run, agent MUST review:
-- `.claude/skills/testing/SKILL.md` - Core testing protocol
-- `.claude/skills/testing/references/failure-handling.md` - Detailed failure protocol
-
-**Failure Protocol (9-Step Process):**
-
-| Step | Action |
-|------|--------|
-| 1. STOP | Halt work, do not auto-fix |
-| 2. REPORT | Show: test name, error, location |
-| 3. ANALYZE | Explain: expected vs actual, likely cause |
-| 4. DISCUSS DEFECT | Ask user: "Create defect entry?" |
-| 5. FIX OPTIONS | Present 2-3 fix approaches with tradeoffs |
-| 6. DISCUSS FIX | Ask user: "Which fix approach? Proceed?" |
-| 7. FIX | Implement approved fix only |
-| 8. RE-TEST | Run same tests again |
-| 9. RESOLVE | Update defect status if tracked |
-
-**Failures include:**
-- Gate returns status="fail"
-- Tool throws exception
-- File write fails
-- Import error
-- Test fails (FAILED or ERROR)
-- Skeleton code detected
-- Locator in Task/Role
-
-**On failure:**
-1. STOP immediately (do not proceed to next step)
-2. Capture context:
-   - Which step/phase failed
-   - Exact error message
-   - Input parameters
-   - Expected vs Actual
-3. Report to user using error template from protocol
-4. WAIT for user direction
-5. Do NOT attempt auto-fixes
-
-**Never say:** "Continuing despite error..."
-**Always say:** "Step X failed. Stopping. Awaiting direction."
-
-**Reference:** See `.claude/skills/testing/SKILL.md` lines 240-269 for complete protocol
-
----
-
-### Rule 10: Protocol Adherence Validation
-
-**Purpose:** Agent confirms protocol compliance before starting
-
-**Before executing workflow, agent MUST:**
-
-1. **Confirm protocol read**
-   - State: "I have read testing-protocol-11-step-e2e-v1.1.md"
-   - List: "I will execute steps 1-10 as defined"
-
-2. **List the 10 steps**
-   ```
-   Step 1: Pre-flight Configuration
-   Step 2: User Input
-   Step 3: AI Processing
-   Step 4: Generate Test Scenarios (Tool 1)
-   Step 5: Discover Page Elements (Tool 2)
-   Step 6: Generate Page Objects (Tool 3)
-   Step 7: Generate Task (Tool 4)
-   Step 8: Generate Role (Tool 5)
-   Step 9: Generate Test Runner (Tool 6)
-   Step 10: Save & Run Test
-   ```
-
-3. **State critical requirements**
-   - ✓ ALL 10 steps (not partial)
-   - ✓ REAL tools (no synthetic data)
-   - ✓ Audit trail logging
-   - ✓ Complete checkpoint validation
-   - ✓ Test execution (actual pytest)
-
-4. **Acknowledge error handling**
-   - ✓ STOP on failure (do not continue)
-   - ✓ Report to user
-   - ✓ Wait for direction
-   - ✓ Follow testing skill protocol
-
-**This prevents premature completion or partial execution.**
 
 ---
 
@@ -269,7 +72,7 @@ After each step, agent MUST verify:
 
 ### STEP 1: Pre-flight Configuration
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-01.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-01.md`
 
 **Input:**
 ```python
@@ -314,7 +117,7 @@ STOP. Report:
 
 ### STEP 2: User Input
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-02.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-02.md`
 
 **Input Extraction:**
 
@@ -372,7 +175,7 @@ STOP. Report:
 
 ### STEP 3: AI Processing
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-03.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-03.md`
 
 **Input Construction:**
 
@@ -456,7 +259,7 @@ STOP. Report:
 
 ### STEP 4: Generate Test Scenarios (Tool 1)
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-04.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-04.md`
 
 **Input Construction:**
 
@@ -538,7 +341,7 @@ STOP. Report:
 
 ### STEP 5: Discover Page Elements (Tool 2)
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-05.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-05.md`
 
 **CRITICAL: This step validates navigation tracking (Task 26.0)**
 
@@ -705,7 +508,7 @@ STOP. Report:
 
 ### STEP 6: Generate Page Objects (Tool 3)
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-06.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-06.md`
 
 **Action:**
 
@@ -783,7 +586,7 @@ STOP. Report:
 
 ### STEP 7: Generate Task Workflow (Tool 4)
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-07.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-07.md`
 
 **Action:**
 
@@ -850,7 +653,7 @@ STOP. Report:
 
 ### STEP 8: Generate Role (Tool 5)
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-08.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-08.md`
 
 **Action:**
 
@@ -922,7 +725,7 @@ STOP. Report:
 
 ### STEP 9: Generate Test Runner (Tool 6)
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-09.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-09.md`
 
 **Action:**
 
@@ -997,7 +800,7 @@ STOP. Report:
 
 ### STEP 10: Save & Run Test
 
-**Protocol Reference:** `.claude/skills/qa-guidance-layer/references/step-10.md`
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-10.md`
 
 **Part A: PRE-Save Validation**
 
@@ -1112,7 +915,7 @@ After completing all 10 steps, generate this report:
 **Test Requirement:** [test_requirement]
 **Target Site:** [target_site]
 **Workflow:** [workflow_name]
-**Run ID:** [audit log run_id(s)]
+**Run ID:** [audit log run_id]
 
 ## Input Parameters
 
@@ -1191,7 +994,7 @@ tests/[workflow_name]/
 
 ## Artifacts Saved
 
-- Audit log: tests/_audit/audit_log_[run_id].json (or multiple files if resumed)
+- Audit log: tests/_audit/audit_log_[run_id].json
 - Test report: tests/_reports/report_[timestamp].html
 - Screenshots (if any): [list]
 - Generated code: [list all files]
@@ -1232,10 +1035,10 @@ tests/[workflow_name]/
    - Site: [target_site]
    - Step completed: [N-1]
    ```
-4. **Reference testing skill:**
-   - Follow `.claude/skills/testing/SKILL.md` failure protocol (lines 240-269)
-   - Present 2-3 fix options with tradeoffs
-   - Do NOT implement first solution that comes to mind
+4. **Suggest fix:**
+   - Analyze root cause
+   - Propose 2-3 fix options with pros/cons
+   - Recommend preferred fix
 5. **WAIT for user direction** - Do not auto-fix
 
 ---
@@ -1314,29 +1117,3 @@ Derived:
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-01-11 | Initial generalized protocol (site-agnostic, workflow-agnostic) |
-| 1.1 | 2026-01-11 | Added sub-agent execution rules 1, 3-6, 10 based on production test findings |
-
----
-
-## Notes
-
-**Session Fragmentation (Expected):**
-- If agent stops mid-workflow and is resumed, a new audit file will be created
-- This is EXPECTED behavior, not a bug
-- Use run_ids to link audit file segments
-- For continuous execution (no stops), one audit file is created
-
-**Workflow Naming:**
-- Users typically specify unique workflow names to differentiate test runs
-- Reusing workflow names will overwrite existing files
-- See project README for naming conventions
-- For MVP: README documentation sufficient
-- Post-MVP: Consider adding validation logic
-
-**Audit Trail (Competitive Differentiator):**
-- Comprehensive audit logging is a key competitive advantage
-- Pre-commercial improvements planned:
-  - Include browser_navigate tool calls in audit
-  - Fix Step 5 POST gate metadata accuracy
-  - Log Step 10 test execution results
-- Not MVP blocking but high priority for commercial release

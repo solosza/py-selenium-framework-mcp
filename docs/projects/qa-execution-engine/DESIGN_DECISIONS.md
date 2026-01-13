@@ -67,7 +67,7 @@ Expand to **11-step workflow** with quality gates at every step:
 - Clear separation: config → operations → save/run
 
 **Implementation:**
-See `FRAMEWORK.md` Section 9 and step definition files in `.claude/skills/qa-guidance-layer/references/`.
+See `FRAMEWORK.md` Section 9 and step definition files in `.claude/skills/qa-management-layer/references/`.
 
 **Alternatives Considered:**
 - Keep 9 steps, add inline validation: Less clear separation

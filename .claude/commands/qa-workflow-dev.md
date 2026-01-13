@@ -9,8 +9,8 @@ You are starting the 11-step QA test generation workflow in **DEVELOPMENT** mode
 ## Instructions
 
 1. **Read the skill first:**
-   - Read `.claude/skills/qa-guidance-layer/SKILL.md` completely
-   - Read `.claude/skills/qa-guidance-layer/references/step-01.md` for Step 1 guidance
+   - Read `.claude/skills/qa-management-layer/SKILL.md` completely
+   - Read `.claude/skills/qa-management-layer/references/step-01.md` for Step 1 guidance
 
 2. **Prompt user for requirement:**
 

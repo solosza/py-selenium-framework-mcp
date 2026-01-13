@@ -28,8 +28,8 @@
 - `mcp_server/server.py` - Register 3 new tools (run_test, qg_execution, qg_workflow_complete)
 
 **Documentation:**
-- `.claude/skills/qa-guidance-layer/references/step-11.md` - Step 11 protocol reference (NEW)
-- `.claude/skills/qa-guidance-layer/SKILL.md` - Add Step 11 to workflow overview
+- `.claude/skills/qa-management-layer/references/step-11.md` - Step 11 protocol reference (NEW)
+- `.claude/skills/qa-management-layer/SKILL.md` - Add Step 11 to workflow overview
 - `FRAMEWORK.md` - Update Section 9 workflow diagram (11-step → 11-step)
 
 ### Test Files
@@ -268,7 +268,7 @@
 
 - [ ] **63.0 Documentation Updates** [GLUE]
   - [ ] 63.1 Create branch `feature/63.0-step11-documentation`
-  - [ ] 63.2 Create file `.claude/skills/qa-guidance-layer/references/step-11.md`
+  - [ ] 63.2 Create file `.claude/skills/qa-management-layer/references/step-11.md`
   - [ ] 63.3 Write Step 11 protocol sections: Identity & Flow, Persona Map, Skill Instruction
   - [ ] 63.4 Document run_test operation tool usage
   - [ ] 63.5 Document qg_execution gate validation rules
@@ -276,7 +276,7 @@
   - [ ] 63.7 Document qg_workflow_complete validation (8 checks)
   - [ ] 63.8 Document state management (Step 11 data structure)
   - [ ] 63.9 Document enforcement rules (retry limits, error handling)
-  - [ ] 63.10 Open `.claude/skills/qa-guidance-layer/SKILL.md`
+  - [ ] 63.10 Open `.claude/skills/qa-management-layer/SKILL.md`
   - [ ] 63.11 Update workflow overview (add Step 11 summary)
   - [ ] 63.12 Update step list (Steps 1-11 → Steps 1-11)
   - [ ] 63.13 Open `FRAMEWORK.md`
@@ -299,8 +299,8 @@
 - Documentation follows existing format/style
 
 **Relevant Files:**
-- `.claude/skills/qa-guidance-layer/references/step-11.md` (new, ~400+ lines)
-- `.claude/skills/qa-guidance-layer/SKILL.md` (modified, Step 11 added)
+- `.claude/skills/qa-management-layer/references/step-11.md` (new, ~400+ lines)
+- `.claude/skills/qa-management-layer/SKILL.md` (modified, Step 11 added)
 - `FRAMEWORK.md` (modified, Section 9 updated)
 - Multiple doc files (search/replace "11-step" → "11-step")
 

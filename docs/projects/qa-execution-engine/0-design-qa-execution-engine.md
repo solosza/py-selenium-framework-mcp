@@ -15,7 +15,7 @@ Design for a 11-step workflow execution engine with quality gates that enforces 
 **Solution:** Quality gates (qg_*) at each step boundary that validate, block on failure, and persist state.
 
 **Terminology:**
-- **QA Guidance Layer** = Skill that guides AI (`.claude/skills/qa-guidance-layer/`)
+- **QA Guidance Layer** = Skill that guides AI (`.claude/skills/qa-management-layer/`)
 - **QA Execution Engine** = Implementation (quality gates, state manager) - THIS PROJECT
 
 ---
@@ -26,9 +26,9 @@ Design for a 11-step workflow execution engine with quality gates that enforces 
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│ SKILL (qa-guidance-layer)                                            │
+│ SKILL (qa-management-layer)                                            │
 │ - Guides AI through workflow                                         │
-│ - Step references in .claude/skills/qa-guidance-layer/references/   │
+│ - Step references in .claude/skills/qa-management-layer/references/   │
 └─────────────────────────────────────────────────────────────────────┘
       │
       ▼
@@ -205,16 +205,16 @@ Also pass pom_metadata from Step 6 for assertions.
 
 | File | Purpose |
 |------|---------|
-| `.claude/skills/qa-guidance-layer/references/step-01.md` | Pre-flight Configuration |
-| `.claude/skills/qa-guidance-layer/references/step-02.md` | User Input |
-| `.claude/skills/qa-guidance-layer/references/step-03.md` | AI Processing |
-| `.claude/skills/qa-guidance-layer/references/step-04.md` | Generate Tests (Tool 1) |
-| `.claude/skills/qa-guidance-layer/references/step-05.md` | Discover Elements (Tool 2) |
-| `.claude/skills/qa-guidance-layer/references/step-06.md` | Generate POM (Tool 3) |
-| `.claude/skills/qa-guidance-layer/references/step-07.md` | Generate Task (Tool 4) |
-| `.claude/skills/qa-guidance-layer/references/step-08.md` | Generate Role (Tool 5) |
-| `.claude/skills/qa-guidance-layer/references/step-09.md` | Generate Test Runner (Tool 6) |
-| `.claude/skills/qa-guidance-layer/references/step-10.md` | Save & Run |
+| `.claude/skills/qa-management-layer/references/step-01.md` | Pre-flight Configuration |
+| `.claude/skills/qa-management-layer/references/step-02.md` | User Input |
+| `.claude/skills/qa-management-layer/references/step-03.md` | AI Processing |
+| `.claude/skills/qa-management-layer/references/step-04.md` | Generate Tests (Tool 1) |
+| `.claude/skills/qa-management-layer/references/step-05.md` | Discover Elements (Tool 2) |
+| `.claude/skills/qa-management-layer/references/step-06.md` | Generate POM (Tool 3) |
+| `.claude/skills/qa-management-layer/references/step-07.md` | Generate Task (Tool 4) |
+| `.claude/skills/qa-management-layer/references/step-08.md` | Generate Role (Tool 5) |
+| `.claude/skills/qa-management-layer/references/step-09.md` | Generate Test Runner (Tool 6) |
+| `.claude/skills/qa-management-layer/references/step-10.md` | Save & Run |
 
 ### Architecture References
 

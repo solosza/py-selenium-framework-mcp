@@ -34,8 +34,8 @@
 - `mcp_server/_dev_tests/test_execution_mode.py` - NEW: Unit tests for execution mode
 
 ### License & Documentation (Task 3.0)
-- `.claude/skills/qa-guidance-layer/SKILL.md` - Add license header
-- `.claude/skills/qa-guidance-layer/references/*.md` - Add license headers
+- `.claude/skills/qa-management-layer/SKILL.md` - Add license header
+- `.claude/skills/qa-management-layer/references/*.md` - Add license headers
 - `.claude/skills/*/SKILL.md` - Add license headers to all skills
 - `LICENSE.md` - NEW: Skills license terms
 - `README.md` - Add installation guide section
@@ -52,11 +52,11 @@
 - `mcp_server/tools/gates/qg_role.py` - Add immediate file write
 - `mcp_server/tools/gates/qg_test_runner.py` - Add immediate file write
 - `mcp_server/tools/gates/qg_save_run.py` - Add file existence validation
-- `.claude/skills/qa-guidance-layer/references/step-06.md` - Update docs
-- `.claude/skills/qa-guidance-layer/references/step-07.md` - Update docs
-- `.claude/skills/qa-guidance-layer/references/step-08.md` - Update docs
-- `.claude/skills/qa-guidance-layer/references/step-09.md` - Update docs
-- `.claude/skills/qa-guidance-layer/references/step-10.md` - Update docs
+- `.claude/skills/qa-management-layer/references/step-06.md` - Update docs
+- `.claude/skills/qa-management-layer/references/step-07.md` - Update docs
+- `.claude/skills/qa-management-layer/references/step-08.md` - Update docs
+- `.claude/skills/qa-management-layer/references/step-09.md` - Update docs
+- `.claude/skills/qa-management-layer/references/step-10.md` - Update docs
 - `tests/_state/{run_id}/` - NEW: Per-run state directories
 - `mcp_server/_dev_tests/test_production_fixes.py` - NEW: Unit tests for fixes
 
@@ -101,10 +101,10 @@
 
 ### Skeleton-Only Architecture (Tasks 28-35)
 - `FRAMEWORK.md` - UPDATE: Document skeleton-only architecture, DD-57
-- `.claude/skills/qa-guidance-layer/references/step-06.md` - UPDATE: Add AI fill patterns for POM
-- `.claude/skills/qa-guidance-layer/references/step-07.md` - UPDATE: Add AI fill patterns for Task
-- `.claude/skills/qa-guidance-layer/references/step-08.md` - UPDATE: Add AI fill patterns for Role
-- `.claude/skills/qa-guidance-layer/references/step-09.md` - UPDATE: Add AI fill patterns for Test
+- `.claude/skills/qa-management-layer/references/step-06.md` - UPDATE: Add AI fill patterns for POM
+- `.claude/skills/qa-management-layer/references/step-07.md` - UPDATE: Add AI fill patterns for Task
+- `.claude/skills/qa-management-layer/references/step-08.md` - UPDATE: Add AI fill patterns for Role
+- `.claude/skills/qa-management-layer/references/step-09.md` - UPDATE: Add AI fill patterns for Test
 - `mcp_server/tools/gates/qg_page_object.py` - UPDATE: Enhanced pattern provision on skeleton
 - `mcp_server/tools/gates/qg_task.py` - UPDATE: Enhanced pattern provision on skeleton
 - `mcp_server/tools/gates/qg_role.py` - UPDATE: Enhanced pattern provision on skeleton
@@ -221,8 +221,8 @@
     <!-- You may NOT redistribute, modify, or create derivative works. -->
     <!-- See LICENSE.md for full terms. -->
     ```
-  - [x] 3.4 Add header to `.claude/skills/qa-guidance-layer/SKILL.md`
-  - [x] 3.5 Add header to all files in `.claude/skills/qa-guidance-layer/references/`
+  - [x] 3.4 Add header to `.claude/skills/qa-management-layer/SKILL.md`
+  - [x] 3.5 Add header to all files in `.claude/skills/qa-management-layer/references/`
   - [x] 3.6 Add header to all other skill directories (`dialogue-engine`, `testing`, etc.)
   - [x] 3.7 Create `LICENSE.md` with full terms:
     - Grant: Use with Claude Code
@@ -244,7 +244,7 @@
   - [ ] 4.1 Select 2 additional test sites (criteria: public, stable, different UI)
     - Candidate 1: saucedemo.com (Swag Labs - React-based)
     - Candidate 2: demoqa.com (more complex forms)
-  - [ ] 4.2 **Invoke `qa-guidance-layer` skill** - Follow 11-step workflow for each test
+  - [ ] 4.2 **Invoke `qa-management-layer` skill** - Follow 11-step workflow for each test
   - [ ] 4.3 Site 1 - Simple workflow: Login test
     - Run 11-step workflow
     - Document: all gates pass? any self-heals?
@@ -271,7 +271,7 @@
 ---
 
 - [ ] **5.0 Adversarial Input Validation** [VALIDATION]
-  - [ ] 5.1 **Invoke `qa-guidance-layer` skill** - Follow 11-step workflow for each test case
+  - [ ] 5.1 **Invoke `qa-management-layer` skill** - Follow 11-step workflow for each test case
   - [ ] 5.2 Test Case 1: Ambiguous requirement
     - Input: "register user" (no details)
     - Expected: Gate asks for missing details or fails with helpful message
@@ -304,7 +304,7 @@
 
 - [ ] **6.0 E2E Integration Verification** [INTEGRATION]
   - [ ] 6.1 Create branch `feature/6.0-e2e-verification`
-  - [ ] 6.2 **Invoke `qa-guidance-layer` skill** - Follow 11-step workflow
+  - [ ] 6.2 **Invoke `qa-management-layer` skill** - Follow 11-step workflow
   - [ ] 6.3 **Invoke `testing` skill** - For verification assertions
   - [ ] 6.4 Clear workflow state: `mcp_server/state/workflow_state.json`
   - [ ] 6.5 Run full 11-step workflow on automationpractice.pl (new test)
@@ -632,7 +632,7 @@
     - Read conventions.md
     - Read failure-handling.md
   - [x] 22.3 **Read Skills for Protocol Definition**
-    - Read `.claude/skills/qa-guidance-layer/references/step-07.md` (Task patterns)
+    - Read `.claude/skills/qa-management-layer/references/step-07.md` (Task patterns)
     - Extract: Pattern for Task constructor (NO base_url rule - line 395)
     - Extract: Constructor example, Role instantiation example
   - [x] 22.4 **Impact Assessment: Unused Parameters Detection**
@@ -683,7 +683,7 @@
     - Read conventions.md
     - Read failure-handling.md
   - [x] 23.3 **Read Skills for Protocol Definition**
-    - Read `.claude/skills/qa-guidance-layer/references/step-09.md` (Test patterns)
+    - Read `.claude/skills/qa-management-layer/references/step-09.md` (Test patterns)
     - Extract: Pattern for single workflow method call (line 413-431)
     - Extract: Multi-persona exception pattern (line 440-471)
     - Extract: Test orchestration anti-pattern (line 509+)
@@ -1014,8 +1014,8 @@
   # Commit
   git add mcp_server/tools/gates/semantic_rules/ mcp_server/tools/gates/qg_*.py
   git add mcp_server/_dev_tests/test_semantic*.py mcp_server/_dev_tests/test_fr14*.py
-  git add .claude/skills/qa-guidance-layer/references/step-08.md
-  git add .claude/skills/qa-guidance-layer/references/step-09.md
+  git add .claude/skills/qa-management-layer/references/step-08.md
+  git add .claude/skills/qa-management-layer/references/step-09.md
   git commit -m "feat: Implement Pluggable Semantic Rules Framework (Task 36.0)"
   ```
 
@@ -2072,7 +2072,7 @@ Phase 3: Shift-Left & Skeleton-Only Architecture
 ---
 
 - [ ] **53.0 DEF-057 Phase 5: E2E Verification** [VALIDATION]
-  - [ ] 53.1 **Invoke `qa-guidance-layer` skill** - Run full 11-step workflow
+  - [ ] 53.1 **Invoke `qa-management-layer` skill** - Run full 11-step workflow
   - [ ] 53.2 Manual execution: parabank7 workflow
     - All 10 steps pass without crashes
     - No param format errors
@@ -2128,7 +2128,7 @@ Phase 3: Shift-Left & Skeleton-Only Architecture
 **Relevant Files:**
 - `mcp_server/tools/gates/qg_discovered_elements.py` - Gate with DD-46 enforcement
 - `mcp_server/utils/element_discovery.py` - Tool 2 implementation (Selenium)
-- `.claude/skills/qa-guidance-layer/references/step-05.md` - Protocol documentation
+- `.claude/skills/qa-management-layer/references/step-05.md` - Protocol documentation
 - `mcp_server/_dev_tests/test_gates/test_qg_discovered_elements.py` - Gate tests (6 DD-46 tests)
 - `FRAMEWORK.md` Section 8.26 - DD-46 documentation
 
@@ -2286,7 +2286,7 @@ Phase 3: Shift-Left & Skeleton-Only Architecture
   **Commands:**
   ```bash
   # Verify doc updates
-  grep -A 10 "DD-46 Smart Enforcement" .claude/skills/qa-guidance-layer/references/step-05.md
+  grep -A 10 "DD-46 Smart Enforcement" .claude/skills/qa-management-layer/references/step-05.md
   grep -A 10 "8.26 DD-46" FRAMEWORK.md
   ```
 

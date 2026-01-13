@@ -482,7 +482,7 @@ We do:
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │  1. READ PROTOCOL (SKILL) FILE                                              │
-│     └── .claude/skills/qa-guidance-layer/references/step-XX.md              │
+│     └── .claude/skills/qa-management-layer/references/step-XX.md              │
 │         • What rules does protocol teach?                                   │
 │         • What code examples are provided?                                  │
 │         • What decision guidance exists?                                    │

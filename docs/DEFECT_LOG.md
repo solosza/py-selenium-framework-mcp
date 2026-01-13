@@ -1405,7 +1405,7 @@ test_scenario = {
 **Caught By:** Step 4 POST-VALIDATE (Registration Test)
 **Code Version:** main
 **Layer:** AI Orchestration / Skill Design
-**File:** `.claude/skills/qa-guidance-layer/` (workflow behavior)
+**File:** `.claude/skills/qa-management-layer/` (workflow behavior)
 
 **Description:**
 When a gate validation fails during the 11-step workflow, AI follows the testing skill's failure-handling protocol (STOP → REPORT → FIX OPTIONS → DISCUSS). However, the testing skill is designed for **test execution failures**, not **tool chain gate failures**.
@@ -1437,7 +1437,7 @@ AI conflated two different failure protocols:
 2. **QA Guidance Layer** - For gate failures (AI retries up to 3x, then user decides)
 
 **Fix Required:**
-Clarify in qa-guidance-layer skill that gate failures follow retry protocol, not testing skill's discuss-first protocol.
+Clarify in qa-management-layer skill that gate failures follow retry protocol, not testing skill's discuss-first protocol.
 
 **Fix Applied:**
 All step skills (step-01 through step-09) now have RETRY sections with "I've attempted 3 times" messaging. AI retries up to 3 times before escalating to user.
@@ -1470,7 +1470,7 @@ Question 1 of 2: Credential Strategy
 ```
 
 **Fix Required:**
-Update AI prompt templates in qa-guidance-layer step references to omit DD-XX codes when presenting to user.
+Update AI prompt templates in qa-management-layer step references to omit DD-XX codes when presenting to user.
 
 **Fix Applied:**
 Removed DD-24 and DD-28 references from step-01.md ACTION section. Users now see "Question 1 (credential strategy)" instead of "Question 1 (DD-24: credential strategy)".
@@ -1788,7 +1788,7 @@ RADIO_METHOD_TEMPLATE = '''
 **Caught By:** Comparison with old framework reference
 **Code Version:** main
 **Layer:** Skill / Documentation
-**File:** `.claude/skills/qa-guidance-layer/references/step-07.md`
+**File:** `.claude/skills/qa-management-layer/references/step-07.md`
 
 **Description:**
 The step-07.md skill teaches a Task pattern that differs from the established old framework pattern:
@@ -1927,7 +1927,7 @@ AI generated RegistrationPage POM with assumed locators (`#address1`, `#city`, e
 - Never assume page structure without discovery
 
 **Root Cause:**
-AI skipped element discovery (Step 5) and proceeded directly to POM generation with assumed locators. The qa-guidance-layer skill mandates Playwright discovery but AI did not follow it.
+AI skipped element discovery (Step 5) and proceeded directly to POM generation with assumed locators. The qa-management-layer skill mandates Playwright discovery but AI did not follow it.
 
 **Fix Required:**
 1. Navigate to registration page using Playwright
@@ -2219,7 +2219,7 @@ def get_audit_logger(cls) -> "AuditLogger":
 **Files:**
 - `mcp_server/tools/gates/qg_discovered_elements.py`
 - `mcp_server/utils/scope_discovery.py`
-- `.claude/skills/qa-guidance-layer/references/step-05.md`
+- `.claude/skills/qa-management-layer/references/step-05.md`
 
 **Description:**
 During live test of 4-step Customer creation wizard (Search → Customer → Contacts → Address), Step 5 quality gate passed after discovering elements from only 1 of 4 pages. The BDD scenario clearly had 12 "When" steps spanning 4 wizard pages, but the gate did not enforce multi-page scope discovery.
@@ -2395,8 +2395,8 @@ Extended Step 5 with two-pass element discovery loop per page:
    - 8 new tests (66/66 passing - 100%)
 
 **Files Modified:**
-- `.claude/skills/qa-guidance-layer/references/step-05.md`
-- `.claude/skills/qa-guidance-layer/references/step-06.md`
+- `.claude/skills/qa-management-layer/references/step-05.md`
+- `.claude/skills/qa-management-layer/references/step-06.md`
 - `mcp_server/tools/gates/qg_discovered_elements.py`
 - `mcp_server/tools/gates/qg_discovery_complete.py` (NEW)
 - `mcp_server/tools/gates/qg_page_object.py`
@@ -2601,7 +2601,7 @@ def test_login_and_browse():  # Role calls: ['login', 'browse_category']
 
 **Files Modified:**
 - `mcp_server/tools/gates/qg_test_runner.py` (+110 lines)
-- `.claude/skills/qa-guidance-layer/references/step-09.md` (+30 lines)
+- `.claude/skills/qa-management-layer/references/step-09.md` (+30 lines)
 - `mcp_server/_dev_tests/test_gates/test_qg_test_runner.py` (+324 lines)
 
 **Test Results:**
@@ -2721,7 +2721,7 @@ if skeleton_error:
 
 **Files to Modify:**
 - `mcp_server/tools/gates/qg_save_run.py` (add reconstruction detection)
-- `.claude/skills/qa-guidance-layer/references/step-10.md` (minimal pointer)
+- `.claude/skills/qa-management-layer/references/step-10.md` (minimal pointer)
 - `mcp_server/_dev_tests/test_gates/test_qg_save_run.py` (add tests)
 
 **Verification:**

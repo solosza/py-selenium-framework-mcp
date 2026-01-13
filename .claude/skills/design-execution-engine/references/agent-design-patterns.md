@@ -39,7 +39,7 @@ Agent Task = Protocol Reference + Explicit Steps + Validation Checkpoints + Erro
 
 | Component | Purpose | Example |
 |-----------|---------|---------|
-| **Protocol Reference** | Points to authoritative how-to guide | "Follow .claude/skills/qa-guidance-layer/references/step-01.md" |
+| **Protocol Reference** | Points to authoritative how-to guide | "Follow .claude/skills/qa-management-layer/references/step-01.md" |
 | **Explicit Steps** | Numbered sequence of actions | "1. Call qg_preflight 2. Verify status=pass 3. Report result" |
 | **Validation Checkpoints** | Stop points to verify correctness | "After Step 5, verify: navigation tracking detected 2 pages" |
 | **Error Handling** | What to do when things fail | "If any step fails: STOP, REPORT error, WAIT for user" |
@@ -79,7 +79,7 @@ credential_strategy: "[strategy]"
 test_data_location: "[location]"
 
 ## Protocol
-Follow: .claude/skills/qa-guidance-layer/references/testing-protocol-11-step-e2e.md
+Follow: .claude/skills/qa-management-layer/references/testing-protocol-11-step-e2e.md
 
 ## Execution Rules
 1. Execute ALL 10 steps (no shortcuts)
@@ -172,7 +172,7 @@ Success: All 3 phases pass
 ```markdown
 Task: "Execute Step 4: Generate Test Scenarios"
 
-Protocol: .claude/skills/qa-guidance-layer/references/step-04.md
+Protocol: .claude/skills/qa-management-layer/references/step-04.md
 
 Steps:
 1. PRE: qg_test_scenarios.validate_pre(metadata_context, workflow)
@@ -209,7 +209,7 @@ Success: All steps pass
 ```markdown
 Task: "Execute Steps 1-5: Setup and Discovery"
 
-Protocol: .claude/skills/qa-guidance-layer/references/testing-protocol-11-step-e2e.md
+Protocol: .claude/skills/qa-management-layer/references/testing-protocol-11-step-e2e.md
 
 Steps:
 1. Step 1: Pre-flight → checkpoint: status="pass"
@@ -264,7 +264,7 @@ credential_strategy: "static"
 test_data_location: "shared"
 
 ## Protocol
-Follow: .claude/skills/qa-guidance-layer/references/testing-protocol-11-step-e2e.md
+Follow: .claude/skills/qa-management-layer/references/testing-protocol-11-step-e2e.md
 
 ## Execution Rules
 1. Execute ALL 10 steps
@@ -310,7 +310,7 @@ Report: Complete validation report with all results
  then check if status is pass, if not then report error..."
 
 ✅ GOOD:
-"Protocol: .claude/skills/qa-guidance-layer/references/step-01.md
+"Protocol: .claude/skills/qa-management-layer/references/step-01.md
  Follow Step 1 protocol exactly"
 ```
 

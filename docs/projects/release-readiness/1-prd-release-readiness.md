@@ -440,7 +440,7 @@ pip install -r requirements.txt
 pip install -r mcp_server/requirements.txt
 
 # 3. Copy skills to your project
-cp -r .claude/skills/qa-guidance-layer /your-project/.claude/skills/
+cp -r .claude/skills/qa-management-layer /your-project/.claude/skills/
 
 # 4. Configure Claude Code to use MCP server
 # (instructions in README)
@@ -1291,7 +1291,7 @@ Each task implementation must include comprehensive audit subtask:
 - ✓ No race conditions (sequential operations enforced)
 
 **Protocol Compliance:**
-- ✓ Follows step protocol in `.claude/skills/qa-guidance-layer/references/step-XX.md`
+- ✓ Follows step protocol in `.claude/skills/qa-management-layer/references/step-XX.md`
 - ✓ Calls tools in correct order (Tool → PRE gate → AI fill → POST gate)
 - ✓ Uses correct metadata contract (DD-26)
 - ✓ Respects architecture rules (DD-27, DD-49, etc.)

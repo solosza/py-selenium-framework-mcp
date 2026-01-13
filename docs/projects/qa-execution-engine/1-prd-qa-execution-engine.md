@@ -115,7 +115,7 @@ All four layers together form the **QA Execution Engine**:
 │                      QA EXECUTION ENGINE                             │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
-│   SKILL (qa-guidance-layer)        ← Guides AI through workflow     │
+│   SKILL (qa-management-layer)        ← Guides AI through workflow     │
 │       │                                                             │
 │       ▼                                                             │
 │   QUALITY GATES (qg_*)             ← Validates at step boundaries   │
@@ -169,7 +169,7 @@ mcp_server/
 
 | Document | Location |
 |----------|----------|
-| Step definitions | `.claude/skills/qa-guidance-layer/references/step-*.md` |
+| Step definitions | `.claude/skills/qa-management-layer/references/step-*.md` |
 | Design decisions | `CLAUDE.md` (DD-01 through DD-28) |
 | Architecture | `FRAMEWORK.md` Section 9 |
 | Meta-template | `.claude/skills/design-execution-engine/SKILL.md` |
@@ -530,7 +530,7 @@ AND error mentions "pom_metadata missing action_methods"
 ## 13. Rollout Plan
 
 1. **Local dev:** Implement and test locally
-2. **Skill update:** Update qa-guidance-layer skill to reference gates
+2. **Skill update:** Update qa-management-layer skill to reference gates
 3. **Documentation:** Update FRAMEWORK.md with gate usage
 4. **Validation:** Run full E2E workflow with gates enabled
 

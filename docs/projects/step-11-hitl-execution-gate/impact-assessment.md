@@ -25,8 +25,8 @@
 | Component | Current State | Step 11 Impact |
 |-----------|---------------|----------------|
 | **Slash Command** | `/qa-workflow` and `/qa-workflow-dev` invoke 11-step workflow | ✅ No change - remains entry point |
-| **QA Guidance Layer Skill** | `.claude/skills/qa-guidance-layer/SKILL.md` references Steps 1-11 | ⚠️ UPDATE: Add Step 11 reference |
-| **Step References** | `.claude/skills/qa-guidance-layer/references/step-01.md` through `step-10.md` | ➕ ADD: Create `step-11.md` |
+| **QA Guidance Layer Skill** | `.claude/skills/qa-management-layer/SKILL.md` references Steps 1-11 | ⚠️ UPDATE: Add Step 11 reference |
+| **Step References** | `.claude/skills/qa-management-layer/references/step-01.md` through `step-10.md` | ➕ ADD: Create `step-11.md` |
 | **MCP Server** | `mcp_server/server.py` registers tools for Steps 1-11 gates | ➕ ADD: Register Step 11 tools (`run_test`, `qg_execution`, `qg_workflow_complete`) |
 | **StateManager** | `mcp_server/utils/state_manager.py` validates steps 1-10 | ⚠️ BREAKING: Extend `VALID_STEPS` to include 11 |
 | **AuditLogger** | `mcp_server/utils/audit_logger.py` logs gate results | ✅ No change - extensible by design |
@@ -50,7 +50,7 @@
 - Does NOT enable HITL triage
 
 **Current documentation:**
-- `.claude/skills/qa-guidance-layer/references/step-10.md` describes ASK user "Ready to run?" then RUN pytest
+- `.claude/skills/qa-management-layer/references/step-10.md` describes ASK user "Ready to run?" then RUN pytest
 - Documentation implies test execution happens, but gate doesn't enforce it
 - **GAP:** Test execution is optional and unvalidated (DEF-058 root cause)
 
@@ -105,8 +105,8 @@ Step 10: qg_save_run (PRE) validates code ready
 
 | Component | File | Change Type | Risk |
 |-----------|------|-------------|------|
-| **Skill Documentation** | `.claude/skills/qa-guidance-layer/SKILL.md` | Add Step 11 reference | LOW - Documentation only |
-| **Step Reference** | `.claude/skills/qa-guidance-layer/references/step-11.md` | Create new file | LOW - New file, no dependencies |
+| **Skill Documentation** | `.claude/skills/qa-management-layer/SKILL.md` | Add Step 11 reference | LOW - Documentation only |
+| **Step Reference** | `.claude/skills/qa-management-layer/references/step-11.md` | Create new file | LOW - New file, no dependencies |
 | **MCP Server** | `mcp_server/server.py` | Register 3 new tools | LOW - Additive, existing tools unchanged |
 | **Gate Module** | `mcp_server/tools/gates/__init__.py` | Export 2 new gates | LOW - Additive import |
 | **Dev Tests** | `mcp_server/_dev_tests/test_gates/` | Create test files | LOW - New tests, existing tests unchanged |
@@ -139,7 +139,7 @@ Step 10: qg_save_run (PRE) validates code ready
 mcp_server/tools/operations/run_test.py              (Operation tool)
 mcp_server/tools/gates/qg_execution.py               (Step 11 gate)
 mcp_server/tools/gates/qg_workflow_complete.py       (Meta-gate)
-.claude/skills/qa-guidance-layer/references/step-11.md
+.claude/skills/qa-management-layer/references/step-11.md
 mcp_server/_dev_tests/test_gates/test_qg_execution.py
 mcp_server/_dev_tests/test_gates/test_qg_workflow_complete.py
 ```
@@ -175,7 +175,7 @@ VALID_STEPS = range(1, 12)  # 1-11 inclusive
 
 **Files:**
 ```
-.claude/skills/qa-guidance-layer/SKILL.md            (Add Step 11 overview)
+.claude/skills/qa-management-layer/SKILL.md            (Add Step 11 overview)
 FRAMEWORK.md                                         (Update Section 9 workflow diagram)
 docs/projects/release-readiness/                     (Update release checklist)
 ```
@@ -327,14 +327,14 @@ def log_gate(self, step: int, gate_name: str, mode: str, result: str):
 
 | File | Line(s) | Reference | Update |
 |------|---------|-----------|--------|
-| `.claude/skills/qa-guidance-layer/SKILL.md` | Multiple | "11-step workflow" | Change to "11-step workflow" |
+| `.claude/skills/qa-management-layer/SKILL.md` | Multiple | "11-step workflow" | Change to "11-step workflow" |
 | `FRAMEWORK.md` | Section 9 | Workflow diagram shows Steps 1-11 | Add Step 11 to diagram |
 | `README.md` | Overview | "11-step QA workflow" | Change to "11-step workflow" |
 | `docs/projects/release-readiness/1-prd-release-readiness.md` | Multiple | References 10 steps | Add Step 11 |
 
 **New Documentation Required:**
 ```
-.claude/skills/qa-guidance-layer/references/step-11.md
+.claude/skills/qa-management-layer/references/step-11.md
 docs/projects/step-11-hitl-execution-gate/2-prd-step-11-hitl-execution-gate.md
 docs/projects/step-11-hitl-execution-gate/3-tasks-step-11-hitl-execution-gate.md
 ```

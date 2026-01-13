@@ -9,7 +9,7 @@
 ## Relevant Files
 
 ### Step 5 (Two-Pass Discovery)
-- `.claude/skills/qa-guidance-layer/references/step-05.md` - Add PASS 2 (output discovery) guidance
+- `.claude/skills/qa-management-layer/references/step-05.md` - Add PASS 2 (output discovery) guidance
 - `mcp_server/tools/gates/qg_discovered_elements.py` - Add type parameter support ("input" vs "output")
 - `mcp_server/_dev_tests/test_gates/test_qg_discovered_elements.py` - Tests for type-aware validation
 
@@ -18,13 +18,13 @@
 - `mcp_server/_dev_tests/test_gates/test_qg_discovery_complete.py` - NEW tests for checkpoint gate
 
 ### Step 6 (POM Generation)
-- `.claude/skills/qa-guidance-layer/references/step-06.md` - Update guidance for dual element types
+- `.claude/skills/qa-management-layer/references/step-06.md` - Update guidance for dual element types
 - `mcp_server/tools/gates/qg_page_object.py` - Update PRE to check both input + output elements
 - `mcp_server/tools/operations/generate_page_object.py` - Use both element types (action + state methods)
 - `mcp_server/_dev_tests/test_gates/test_qg_page_object.py` - Update tests for dual element validation
 
 ### Test Redundancy Detection (DEF-046)
-- `.claude/skills/qa-guidance-layer/references/step-09.md` - Add "one test per requirement" guidance
+- `.claude/skills/qa-management-layer/references/step-09.md` - Add "one test per requirement" guidance
 - `mcp_server/tools/gates/qg_test_runner.py` - Add redundant test detection in POST-VALIDATE
 - `mcp_server/_dev_tests/test_gates/test_qg_test_runner.py` - Tests for redundancy detection
 
@@ -39,7 +39,7 @@
 
 ### Task 1.1: Current DD-44 Multi-Page Loop Analysis
 
-**File Analyzed:** `.claude/skills/qa-guidance-layer/references/step-05.md` (lines 280-370)
+**File Analyzed:** `.claude/skills/qa-management-layer/references/step-05.md` (lines 280-370)
 
 **Current Implementation:**
 

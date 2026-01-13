@@ -2078,7 +2078,7 @@ Two slash commands provide controlled entry to the 11-step workflow:
 │           or: /qa-workflow-dev  (development)                               │
 │                                                                             │
 │ FLOW:                                                                       │
-│   1. Slash command reads qa-guidance-layer protocol (skill)                 │
+│   1. Slash command reads qa-management-layer protocol (skill)                 │
 │   2. AI prompts user for requirement (persona + URL)                        │
 │   3. 11-step workflow executes with proper guidance                         │
 │                                                                             │
@@ -2550,7 +2550,7 @@ The v2 workflow adds:
 ┌─────────────────────────────────────────────────────────────────────┐
 │ SKILL (guidance-layer)                                               │
 │ - Guides AI through workflow                                         │
-│ - .claude/skills/qa-guidance-layer/                                  │
+│ - .claude/skills/qa-management-layer/                                  │
 └─────────────────────────────────────────────────────────────────────┘
       │
       ▼
@@ -2656,7 +2656,7 @@ Each step definition must include these sections:
 | **F. Enforcement** | Rules That Apply, Validation Checks, Gate Enforcement |
 | **G. Error Handling** | Failure Behavior, Error Message Templates, Known Defects |
 
-**Protocol Reference:** Each step has a corresponding file in `.claude/skills/qa-guidance-layer/references/step-NN.md`
+**Protocol Reference:** Each step has a corresponding file in `.claude/skills/qa-management-layer/references/step-NN.md`
 
 ---
 
@@ -2741,7 +2741,7 @@ This flow applies to ALL tool steps (Steps 4-9). When any tool validation fails:
 | Aspect | Details |
 |--------|---------|
 | **Step** | 1 - Pre-flight Configuration |
-| **Protocol Reference** | `qa-guidance-layer/references/step-01.md` |
+| **Protocol Reference** | `qa-management-layer/references/step-01.md` |
 | **Operation Tool** | - (none, AI asks user) |
 | **Quality Gate** | `qg_preflight` |
 | **Input** | None (first step) |
@@ -2887,7 +2887,7 @@ TBD (decide after all steps analyzed)
 | Aspect | Details |
 |--------|---------|
 | **Step** | 2 - User Input |
-| **Protocol Reference** | `qa-guidance-layer/references/step-02.md` |
+| **Protocol Reference** | `qa-management-layer/references/step-02.md` |
 | **Operation Tool** | - (none, AI extracts from user input) |
 | **Quality Gate** | `qg_user_input` |
 | **Input** | User's natural language requirement |
@@ -3042,7 +3042,7 @@ TBD
 | Aspect | Details |
 |--------|---------|
 | **Step** | 3 - AI Processing |
-| **Protocol Reference** | `qa-guidance-layer/references/step-03.md` |
+| **Protocol Reference** | `qa-management-layer/references/step-03.md` |
 | **Operation Tool** | - (none, AI processes) |
 | **Quality Gate** | `qg_ai_processing` |
 | **Input** | Step 2 output: `persona`, `URL`, `role_name`, `domain` + original requirement |
@@ -3186,7 +3186,7 @@ How should we proceed?
 | Aspect | Details |
 |--------|---------|
 | **Step** | 4 - Tool 1 |
-| **Protocol Reference** | `qa-guidance-layer/references/step-04.md` |
+| **Protocol Reference** | `qa-management-layer/references/step-04.md` |
 | **Operation Tool** | `generate_tests_from_user_story` |
 | **Quality Gate** | `qg_test_scenarios` (pre + post validation) |
 | **Input** | `metadata_context` from Step 3 |
@@ -3305,7 +3305,7 @@ How should we proceed?
 
 ### 9.5 Step 5: Discover Elements (Tool 2)
 
-> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-05.md`
+> **Full Details:** `.claude/skills/qa-management-layer/references/step-05.md`
 
 | Field | Value |
 |-------|-------|
@@ -3350,7 +3350,7 @@ if scope_result is None:
 
 ### 9.6 Step 6: Generate POM (Tool 3)
 
-> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-06.md`
+> **Full Details:** `.claude/skills/qa-management-layer/references/step-06.md`
 
 | Field | Value |
 |-------|-------|
@@ -3379,7 +3379,7 @@ For workflows with multiple POMs, each POST creates a separate audit entry with 
 
 ### 9.7 Step 7: Generate Task (Tool 4)
 
-> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-07.md`
+> **Full Details:** `.claude/skills/qa-management-layer/references/step-07.md`
 
 | Field | Value |
 |-------|-------|
@@ -3400,7 +3400,7 @@ For workflows with multiple POMs, each POST creates a separate audit entry with 
 
 ### 9.8 Step 8: Generate Role (Tool 5)
 
-> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-08.md`
+> **Full Details:** `.claude/skills/qa-management-layer/references/step-08.md`
 
 | Field | Value |
 |-------|-------|
@@ -3420,7 +3420,7 @@ For workflows with multiple POMs, each POST creates a separate audit entry with 
 
 ### 9.9 Step 9: Generate Test Runner (Tool 6)
 
-> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-09.md`
+> **Full Details:** `.claude/skills/qa-management-layer/references/step-09.md`
 
 | Field | Value |
 |-------|-------|
@@ -3442,7 +3442,7 @@ For workflows with multiple POMs, each POST creates a separate audit entry with 
 
 ### 9.10 Step 10: Save & Run
 
-> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-10.md`
+> **Full Details:** `.claude/skills/qa-management-layer/references/step-10.md`
 
 | Field | Value |
 |-------|-------|
@@ -3476,7 +3476,7 @@ tests/{domain}/test_{intent}.py
 
 ### 9.11 Step 11: Execution & Validation
 
-> **Full Details:** `.claude/skills/qa-guidance-layer/references/step-11.md`
+> **Full Details:** `.claude/skills/qa-management-layer/references/step-11.md`
 
 | Field | Value |
 |-------|-------|
