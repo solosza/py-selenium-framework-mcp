@@ -1,0 +1,67 @@
+{
+  "run_id": "test_fr14_2_option2",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T22:19:30.594859Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T22:19:30.600376Z",
+      "source": "test_fr14_2_option2_positive"
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T22:19:48.094580Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T22:19:48.101587Z",
+      "source": "test_fr14_2_option2_positive"
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    }
+  ],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 4,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {
+      "test_fr14_2_option2_positive": 2
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "run_id": "2026-01-09T00:09:07.757422Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:09:07.763947Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:09:07.775457Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:09:07.787970Z",
+      "metadata": {
+        "intent": "login",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:09:08.474353Z",
+      "metadata": {
+        "intent": "login",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:09:08.607859Z",
+      "metadata": {
+        "intent": "login",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 3,
+    "gates_passed": 5,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

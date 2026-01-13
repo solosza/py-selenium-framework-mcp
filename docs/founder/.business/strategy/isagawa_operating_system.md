@@ -1,5 +1,5 @@
 # Isagawa Operating System
-*The Complete Model for Scaling Execution Engines*
+*One Platform, Infinite Packs, Zero Headcount*
 
 **Document Type:** Internal Strategy / Master Reference
 **Audience:** Founder, Strategic Advisors, Future Investors
@@ -12,13 +12,14 @@
 
 This document defines **how Isagawa scales across infinite verticals without scaling headcount, equity dilution, or operational complexity**.
 
-It unifies three interlocking strategies into a single operating system:
+It unifies four interlocking strategies into a single operating system:
 
 | Strategy | Question It Answers | Detailed Doc |
 |----------|---------------------|--------------|
 | **Knowledge Acquisition** | How do we get domain expertise fast and cheap? | This document |
-| **Expert Partnerships** | How do we add depth without hiring? | `isagawa_domain_expansion_model.md` |
+| **Expert Partnerships** | How do we add depth without hiring? | `Isagawa Domain Expansion Model.md` |
 | **Agent-First Organization** | How do we operate without a team? | `isagawa_agent_first_organization_operating_model.md` |
+| **Platform & Pack Architecture** | How do we structure product and revenue? | `.business/architecture/Isagawa_Platform_Pack_Architecture.md` |
 
 Together, these form the complete Isagawa Operating System.
 
@@ -36,12 +37,63 @@ Only the domain rules change.
 
 ---
 
+## Product Architecture: Platform / Pack / Config
+
+**Core Invariant:** Isagawa is **never multiple engines**. It is:
+
+> **One enforcement platform** + **Domain Packs** + **Constrained configuration**
+
+```
+┌─────────────────────────────────────────────┐
+│ ISAGAWA CORE PLATFORM                       │
+│ • Quality Gates Engine                      │
+│ • Enforcement runtime                       │
+│ • Escalation & human handoff                │
+│ • Audit & traceability                      │
+│ • Policy / config layer                     │
+│ • Pack runtime & versioning                 │
+└─────────────────────────────────────────────┘
+                ▲
+                │
+┌─────────────────────────────────────────────┐
+│ PACKS (DOMAIN OR PERSONA)                   │
+│ • Enforced workflows                        │
+│ • Rules & validation logic                  │
+│ • Approved variants                         │
+│ • SME-validated content                     │
+└─────────────────────────────────────────────┘
+                ▲
+                │
+┌─────────────────────────────────────────────┐
+│ CONFIGURATION (SAFE VARIANCE ONLY)          │
+│ • Thresholds                                │
+│ • Terminology                               │
+│ • Timing & escalation tuning                │
+│ • Local policy alignment                    │
+└─────────────────────────────────────────────┘
+```
+
+### Customization Policy (Non-Negotiable Guardrails)
+
+| Category | What's Allowed | Examples |
+|----------|----------------|----------|
+| **Allowed (sell early)** | Safe variance that doesn't weaken enforcement | Threshold tuning, role naming, escalation timing, policy mappings |
+| **Controlled (sell later)** | Published Variant Packs only | Enterprise QA vs Startup QA, Acute Care vs Outpatient |
+| **Forbidden (never)** | Anything that weakens enforcement | Removing gates, bypassing enforcement, one-off logic forks, "just for us" exceptions |
+
+**Golden Rule:**
+> No customer can remove a gate. They can only add stricter ones.
+
+**Detailed architecture:** See `Isagawa_Platform_Pack_Architecture.md`
+
+---
+
 ## The Complete System (Master Visual)
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════╗
 ║                              ISAGAWA OPERATING SYSTEM                                  ║
-║                         "Scale Execution Engines, Not Headcount"                       ║
+║                         "One Platform, Infinite Packs, Zero Headcount"                 ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                        ║
 ║                              ┌─────────────────────┐                                   ║
@@ -128,10 +180,11 @@ Only the domain rules change.
 ╠════════════════════════════════════════════════════════════════════════════════════════╣
 ║  SCALING MATH                                                                          ║
 ║  ─────────────                                                                         ║
-║  New vertical    = Public docs (free) + Expert partner (rev share) + Agents (scale)    ║
+║  New vertical    = New pack(s) on same platform (never a new engine)                   ║
+║  Pack creation   = Public docs (free) + Pack Contributor SME (rev share) + Agents      ║
 ║  Headcount       = 0 (humans optional, scoped, no equity)                              ║
 ║  Founder role    = Orchestrator only                                                   ║
-║  Moat            = Enforcement architecture + Agent organization + Category ownership  ║
+║  Moat            = Platform ownership + Pack library + Category ownership              ║
 ╚════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
@@ -209,7 +262,7 @@ TIER 2: EXPERT PARTNERSHIPS                     COST: Revenue Share
 
 Coverage: ~15% of domain rules
 Speed: Partnership timeline
-Dependency: Vertical-scoped rev share (no equity)
+Dependency: Pack-scoped rev share (no equity)
 
 
 TIER 3: CUSTOMER CUSTOMIZATION                  COST: They Pay You
@@ -261,15 +314,15 @@ Isagawa's value is not knowledge. Isagawa's value is:
 
 ---
 
-## Part 2: Expert Partnership Model
+## Part 2: Pack Contributor SME Model
 
 **Question:** How do we add domain depth without hiring or equity dilution?
 
-**Answer:** Vertical-scoped revenue participation with non-technical domain experts.
+**Answer:** Pack-scoped revenue participation with non-technical domain experts.
 
-### 2.1 What Partners Contribute
+### 2.1 What Pack Contributors Provide
 
-Partners contribute **expertise artifacts**, not software:
+Pack Contributors provide **expertise artifacts**, not software:
 
 | Contribution | Description |
 |--------------|-------------|
@@ -292,18 +345,24 @@ Partners contribute **expertise artifacts**, not software:
 | Customer relationships and billing | Isagawa only |
 | All derivative works | Isagawa only |
 
-Partners **license expertise**. They never own technology.
+Pack Contributors **license expertise**. They never own technology.
 
 ### 2.3 Incentive Structure
 
+| Revenue Stream | Ownership |
+|----------------|-----------|
+| Platform license | 100% Isagawa |
+| Pack revenue | Shared with contributing SME(s) |
+| Custom services | Isagawa-led, SME optional |
+
 | Principle | Implementation |
 |-----------|----------------|
-| Compensation tied to vertical only | No claim on company-wide revenue |
-| No governance rights | Partners advise, never decide |
+| Compensation tied to pack(s) only | No claim on platform revenue |
+| No governance rights | Contributors advise, never decide |
 | No perpetual obligations | Scoped and time-bound |
-| Scales with adoption | Aligned incentives |
+| Scales with pack adoption | Aligned incentives |
 
-**Detailed terms:** See `isagawa_domain_expansion_model.md`
+**Detailed terms:** See `Isagawa Domain Expansion Model.md`
 
 ---
 
@@ -374,7 +433,9 @@ If humans are ever added:
 
 ## Part 4: How It All Works Together
 
-### 4.1 New Vertical Launch Sequence
+### 4.1 New Pack Launch Sequence
+
+> **Remember:** New vertical = new pack(s) on the same platform. Never a new engine.
 
 ```
 PHASE 1: RESEARCH (Days)
@@ -382,40 +443,46 @@ PHASE 1: RESEARCH (Days)
 Domain Research Agent:
   • Gather public documentation (Tier 1)
   • Identify standards, regulations, checklists
-  • Output: Candidate workflows, decision points
+  • Output: Candidate workflows, decision points, pack boundaries
 
 PHASE 2: MODELING (Days)
 ─────────────────────────
 Domain Modeling Agent:
   • Convert docs to execution graphs
   • Identify enforcement boundaries
-  • Output: Step structure, validation checkpoints
+  • Define what's safe to configure vs what's locked
+  • Output: Step structure, validation checkpoints, config schema
 
 PHASE 3: BUILDING (Weeks)
 ─────────────────────────
 Skill Authoring Agent + Validation Toolsmith Agent:
   • Create skills (guidance)
-  • Create MCP tools (enforcement)
+  • Create quality gates (enforcement)
+  • Define variant policy (what variants are allowed)
   • Adversarial Breaker tests
+  • Output: Core pack + variant definitions
 
 PHASE 4: REFINEMENT (Optional)
 ─────────────────────────
-Expert Partner (if engaged):
+Pack Contributor SME (if engaged):
   • Validate edge cases
   • Add practitioner nuance
-  • Provide credibility
+  • Approve what is safe to automate
+  • Define escalation boundaries
 
 PHASE 5: LAUNCH
 ─────────────────────────
 Release Packaging Agent:
-  • Package for distribution
+  • Package: Core pack + variant policy + config schema
+  • Validate: No gates can be removed, only tightened
   • Business Factory activates
 
 PHASE 6: SCALE
 ─────────────────────────
-Customer Customization:
-  • Org-specific rules (paid tier)
-  • Feedback improves base product
+Customer Configuration (within guardrails):
+  • Threshold tuning, terminology, escalation timing
+  • Variant Pack selection (if available)
+  • Feedback improves base pack
 ```
 
 ### 4.2 The Flywheel
@@ -428,7 +495,7 @@ Customer Customization:
 │        │              ┌─────────────────────────────┘           │
 │        │              │                                         │
 │        │              ▼                                         │
-│        │    Expert Partner validates & refines                  │
+│        │    Pack Contributor SME validates & refines             │
 │        │              │                                         │
 │        │              │                                         │
 │        └──────────────┴──▶ Better Product ──▶ More Customers    │
@@ -440,12 +507,14 @@ Customer Customization:
 
 | Dimension | Traditional | Isagawa |
 |-----------|-------------|---------|
-| New vertical | Hire experts | Encode public docs |
-| Add depth | More headcount | Expert partner (rev share) |
+| New vertical | Build new system | New pack on same platform |
+| Domain expertise | Hire experts | Encode public docs + Pack Contributor SME |
+| Add depth | More headcount | Pack variants (controlled) |
 | Operations | Build team | Deploy agents |
 | Founder role | Operator | Orchestrator |
 | Scaling cost | Linear (people) | Near-zero (agents) |
 | Equity dilution | High | None |
+| Customization | Bespoke per customer | Config layer (constrained) |
 
 ---
 
@@ -519,10 +588,12 @@ By the time they figure it out, Isagawa owns the category.
 
 ---
 
-### 8.1 How to Build a New Vertical (End-to-End)
+### 8.1 How to Build a New Pack (End-to-End)
 
 **Prompt to AI:**
-> "I want to build an execution engine for [VERTICAL]. Follow the Isagawa Operating System in `isagawa_operating_system.md`."
+> "I want to build a pack for [DOMAIN]. Follow the Isagawa Operating System in `isagawa_operating_system.md`."
+
+**Remember:** New vertical = new pack(s) on the same platform. Never a new engine.
 
 **AI should execute:**
 
@@ -534,7 +605,8 @@ STEP 1: KNOWLEDGE ACQUISITION
   - Professional body guidelines
   - Published best practices
   - Open-source checklists/SOPs
-□ Output: List of sources + extracted rules
+□ Identify pack boundaries (what's in vs out of scope)
+□ Output: List of sources + extracted rules + pack scope
 
 STEP 2: DOMAIN MODELING
 ─────────────────────────────
@@ -542,20 +614,21 @@ STEP 2: DOMAIN MODELING
 □ Identify decision points
 □ Map validation checkpoints
 □ Define what MUST happen vs. SHOULD happen
-□ Output: Step graph + enforcement boundaries
+□ Define what's safe to configure vs. what's locked
+□ Output: Step graph + enforcement boundaries + config schema
 
 STEP 3: SKILL AUTHORING
 ─────────────────────────────
-□ Create skill file: `.claude/skills/[vertical]/SKILL.md`
-□ Create step references: `.claude/skills/[vertical]/references/step-XX.md`
+□ Create skill file: `.claude/skills/[pack-name]/SKILL.md`
+□ Create step references: `.claude/skills/[pack-name]/references/step-XX.md`
 □ Follow existing skill patterns in codebase
 □ Output: Complete skill with steps
 
 STEP 4: QUALITY GATE BUILDING
 ─────────────────────────────
-□ Create MCP tools: `mcp_server/tools/[vertical]/`
+□ Create MCP tools: `mcp_server/tools/[pack-name]/`
 □ Implement validation logic
-□ Define pass/fail criteria
+□ Define pass/fail criteria (gates BLOCK, never advise)
 □ Add escalation triggers
 □ Output: Working quality gates
 
@@ -565,14 +638,17 @@ STEP 5: ADVERSARIAL TESTING
 □ Test edge cases
 □ Document loopholes found
 □ Harden enforcement
+□ Verify: No gate can be removed, only tightened
 □ Output: Test results + fixes
 
 STEP 6: PACKAGING
 ─────────────────────────────
 □ Create test suite
 □ Document usage
+□ Define variant policy (what variants are allowed)
+□ Define config schema (what customers can tune)
 □ Package for distribution
-□ Output: Shippable vertical
+□ Output: Shippable pack + variant policy + config schema
 ```
 
 ---
@@ -753,11 +829,12 @@ def gate_[name](input_data: dict) -> dict:
 
 | I want to build... | Location | Template |
 |--------------------|----------|----------|
-| New vertical | Follow Section 8.1 | End-to-end steps |
+| New pack | Follow Section 8.1 | End-to-end steps |
 | New agent | `.claude/skills/[agent]/` | Section 8.3 |
 | New quality gate | `mcp_server/tools/gates/` | Section 8.4 |
-| New skill | `.claude/skills/[vertical]/` | Existing skill patterns |
-| New MCP tool | `mcp_server/tools/[vertical]/` | Existing tool patterns |
+| New skill | `.claude/skills/[pack-name]/` | Existing skill patterns |
+| New MCP tool | `mcp_server/tools/[pack-name]/` | Existing tool patterns |
+| Variant pack | Same as new pack, scoped variant | Section 8.1 + variant policy |
 
 ---
 
@@ -768,10 +845,13 @@ Before any component is complete:
 ```
 □ Follows operating system architecture?
 □ Has quality gates that block bad output?
+□ Gates can only be tightened, never removed?
+□ Config layer preserves enforcement integrity?
 □ Documented in correct location?
 □ Tested adversarially?
 □ Reviewed against thesis (not diluting category)?
 □ No scope creep beyond defined boundaries?
+□ Variant policy defined (if applicable)?
 ```
 
 ---
@@ -781,7 +861,8 @@ Before any component is complete:
 | Document | Purpose | When to Use |
 |----------|---------|-------------|
 | `isagawa_corp_thesis_v3.0.md` | External positioning | Validating category alignment |
-| `isagawa_domain_expansion_model.md` | Expert partnership details | Engaging domain partners |
+| `Isagawa Domain Expansion Model.md` | Pack Contributor SME partnerships | Engaging domain partners |
+| `Isagawa_Platform_Pack_Architecture.md` | Platform vs Pack structure, revenue model | Structuring product/commercial decisions |
 | `isagawa_agent_first_organization_operating_model.md` | Agent specs | Building specific agents |
 | `isagawa_marketing_brief_v3.0.md` | Market-facing messaging | Creating content |
 
@@ -789,8 +870,8 @@ Before any component is complete:
 
 ## How to Use This Document
 
-**When starting a new vertical:**
-> "Follow `isagawa_operating_system.md` Section 8.1 to build an execution engine for [X]."
+**When starting a new pack:**
+> "Follow `isagawa_operating_system.md` Section 8.1 to build a pack for [DOMAIN]."
 
 **When building an agent:**
 > "Build the [Agent Name] following `isagawa_operating_system.md` Section 8.2 and 8.3."
@@ -799,10 +880,13 @@ Before any component is complete:
 > "Create a quality gate for [X] following `isagawa_operating_system.md` Section 8.4."
 
 **When acquiring domain knowledge:**
-> "Use the prompts in `isagawa_operating_system.md` Section 8.5 to research [VERTICAL]."
+> "Use the prompts in `isagawa_operating_system.md` Section 8.5 to research [DOMAIN]."
+
+**When defining customization boundaries:**
+> "Reference the Customization Policy in `isagawa_operating_system.md` to determine what's allowed vs forbidden."
 
 ---
 
-*This is the operating system for building execution engines at scale.*
+*This is the operating system for building packs on a single enforcement platform.*
 
 *End of Document*

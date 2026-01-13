@@ -221,12 +221,14 @@ class TestBaseGateAuditRunID:
     @pytest.mark.unit
     def test_fresh_run_id_each_workflow(self):
         """
-        P0: Each get_audit_logger() call creates fresh run_id.
+        P0: Each workflow (after session clear) gets fresh run_id.
 
         AAA Pattern:
         1. Arrange - Clean BaseGate state
-        2. Act - Call get_audit_logger() twice
+        2. Act - Call get_audit_logger() twice with session clear between
         3. Assert - Two different run_ids generated
+
+        DEF-052: Updated to clear session marker instead of just class variable
         """
         # Arrange
         from tools.gates.base_gate import BaseGate
@@ -237,7 +239,9 @@ class TestBaseGateAuditRunID:
         run_id_1 = logger_1.run_id
 
         time.sleep(0.01)  # Ensure timestamp difference
-        BaseGate._audit_logger = None  # Simulate new workflow
+        # DEF-052: Clear session marker (simulates new workflow)
+        BaseGate._clear_session_marker()
+        BaseGate._audit_logger = None
 
         logger_2 = BaseGate.get_audit_logger()
         run_id_2 = logger_2.run_id
@@ -282,6 +286,8 @@ class TestBaseGateAuditRunID:
         1. Arrange - Two separate workflow runs
         2. Act - Call get_audit_logger() for each run, finalize both
         3. Assert - Two different audit files exist
+
+        DEF-052: Updated to clear session marker between workflows
         """
         # Arrange
         from tools.gates.base_gate import BaseGate
@@ -293,7 +299,9 @@ class TestBaseGateAuditRunID:
         logger_1.finalize()  # Write audit file
 
         time.sleep(0.01)  # Ensure timestamp difference
-        BaseGate._audit_logger = None  # New workflow
+        # DEF-052: Clear session marker (new workflow)
+        BaseGate._clear_session_marker()
+        BaseGate._audit_logger = None
 
         logger_2 = BaseGate.get_audit_logger()
         run_id_2 = logger_2.run_id

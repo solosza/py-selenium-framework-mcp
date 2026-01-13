@@ -1,5 +1,8 @@
 {
   "DEFAULT": {
     "url": "http://www.automationpractice.pl/index.php"
+  },
+  "parabank": {
+    "url": "https://parabank.parasoft.com/parabank"
   }
 }

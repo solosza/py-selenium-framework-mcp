@@ -1,0 +1,6 @@
+{
+  "step_1": {
+    "credential_strategy": "self-contained",
+    "test_data_location": "workflow"
+  }
+}

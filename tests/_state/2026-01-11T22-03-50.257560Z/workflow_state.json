@@ -1,0 +1,313 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_2": {
+    "persona": "As a registered user",
+    "URL": "https://parabank.parasoft.com/parabank",
+    "role_name": "RegisteredUser",
+    "workflow": "parabank",
+    "raw_requirement": "As a registered user, I want to login to ParaBank and view my account overview"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am a registered user on the ParaBank login page",
+        "when": [
+          "I enter my username",
+          "I enter my password",
+          "I click the login button"
+        ],
+        "then": [
+          "I should be logged in",
+          "I should see the account overview page"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_logged_in",
+      "is_account_overview_visible"
+    ],
+    "intent": "login_and_view_account_overview"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_registered_user_logs_in_successfully",
+        "given": "I am a registered user on the ParaBank login page",
+        "when": [
+          "I enter my username",
+          "I enter my password",
+          "I click the login button"
+        ],
+        "then": [
+          "I should be logged in",
+          "I should see the account overview page"
+        ],
+        "workflow": "parabank"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "USERNAME",
+        "element_type": "inputs",
+        "locator_css": "input[name='username']",
+        "locator_xpath": "//input[@name='username']"
+      },
+      {
+        "suggested_name": "PASSWORD",
+        "element_type": "inputs",
+        "locator_css": "input[name='password']",
+        "locator_xpath": "//input[@name='password']"
+      },
+      {
+        "suggested_name": "LOG_IN",
+        "element_type": "buttons",
+        "locator_css": "input.button",
+        "locator_xpath": "//input[contains(@class, 'button')]"
+      }
+    ],
+    "page_name": "ParabankIndexPage",
+    "discovered_pages": {
+      "ParabankIndexPage": {
+        "input_elements": [
+          {
+            "suggested_name": "USERNAME",
+            "element_type": "inputs",
+            "locator_css": "input[name='username']",
+            "locator_xpath": "//input[@name='username']"
+          },
+          {
+            "suggested_name": "PASSWORD",
+            "element_type": "inputs",
+            "locator_css": "input[name='password']",
+            "locator_xpath": "//input[@name='password']"
+          },
+          {
+            "suggested_name": "LOG_IN",
+            "element_type": "buttons",
+            "locator_css": "input.button",
+            "locator_xpath": "//input[contains(@class, 'button')]"
+          }
+        ]
+      }
+    },
+    "pages_discovered": 0,
+    "total_pages": 1,
+    "discovery_complete": false
+  },
+  "step_6": {
+    "pom_code": "\"\"\"\nParabankOverviewPage - Page Object Model\n\nPage Object representing a single page in the application.\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass ParabankOverviewPage:\n    \"\"\"\n    Page Object for Parabank Overview Page.\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # ==================== LOCATORS (Class Constants) ====================\n    LOG_OUT_LINK = (By.XPATH, \"//a[contains(text(), 'Log Out')]\")\n    ACCOUNTS_OVERVIEW_LINK = (By.XPATH, \"//a[contains(text(), 'Accounts Overview')]\")\n    ACCOUNT_TABLE = (By.CSS_SELECTOR, \"#accountTable\")\n\n    # ==================== NAVIGATION ====================\n    \n    def navigate(self) -> \"ParabankOverviewPage\":\n        \"\"\"Navigate to Parabank Overview page.\"\"\"\n        self.web.navigate_to(self.web.config['url'] + '/overview.htm')\n        return self\n\n    # ==================== ATOMIC METHODS (One UI Action) ====================\n\n    def click_log_out_link(self) -> \"ParabankOverviewPage\":\n        \"\"\"Click log out link.\"\"\"\n        self.web.click(*self.LOG_OUT_LINK)\n        return self\n\n    def click_accounts_overview_link(self) -> \"ParabankOverviewPage\":\n        \"\"\"Click accounts overview link.\"\"\"\n        self.web.click(*self.ACCOUNTS_OVERVIEW_LINK)\n        return self\n\n    # ==================== STATE-CHECK METHODS (For Assertions) ====================\n\n    def is_logged_in(self) -> bool:\n        \"\"\"Check if is logged in by verifying Log Out link is visible.\"\"\"\n        return self.web.is_element_displayed(*self.LOG_OUT_LINK, timeout=5)\n\n    def is_account_overview_visible(self) -> bool:\n        \"\"\"Check if is account overview visible by verifying account table is displayed.\"\"\"\n        return self.web.is_element_displayed(*self.ACCOUNT_TABLE, timeout=5)\n",
+    "pom_metadata": {
+      "class_name": "ParabankOverviewPage",
+      "import_path": "pages.parabank.parabank_overview_page",
+      "locators": [
+        {
+          "name": "LOG_OUT_LINK",
+          "by": "XPATH",
+          "value": "//a[contains(text(), 'Log Out')]"
+        },
+        {
+          "name": "ACCOUNTS_OVERVIEW_LINK",
+          "by": "XPATH",
+          "value": "//a[contains(text(), 'Accounts Overview')]"
+        },
+        {
+          "name": "ACCOUNT_TABLE",
+          "by": "CSS_SELECTOR",
+          "value": "#accountTable"
+        }
+      ],
+      "action_methods": [
+        {
+          "name": "navigate",
+          "params": [],
+          "returns": "self"
+        },
+        {
+          "name": "click_log_out_link",
+          "params": [],
+          "returns": "self",
+          "element_type": "links",
+          "locator_name": "LOG_OUT_LINK"
+        },
+        {
+          "name": "click_accounts_overview_link",
+          "params": [],
+          "returns": "self",
+          "element_type": "links",
+          "locator_name": "ACCOUNTS_OVERVIEW_LINK"
+        }
+      ],
+      "state_methods": [
+        {
+          "name": "is_logged_in",
+          "params": [],
+          "returns": "bool"
+        },
+        {
+          "name": "is_account_overview_visible",
+          "params": [],
+          "returns": "bool"
+        }
+      ]
+    },
+    "generated_poms": {
+      "ParabankIndexPage": {
+        "code": "\"\"\"\nParabankIndexPage - Page Object Model\n\nPage Object representing a single page in the application.\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass ParabankIndexPage:\n    \"\"\"\n    Page Object for Parabank Index Page.\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # ==================== LOCATORS (Class Constants) ====================\n    USERNAME = (By.CSS_SELECTOR, \"input[name='username']\")\n    PASSWORD = (By.CSS_SELECTOR, \"input[name='password']\")\n    LOG_IN = (By.CSS_SELECTOR, \"input.button\")\n    LOG_OUT_LINK = (By.XPATH, \"//a[contains(text(), 'Log Out')]\")\n    ACCOUNTS_OVERVIEW_LINK = (By.XPATH, \"//a[contains(text(), 'Accounts Overview')]\")\n\n    # ==================== NAVIGATION ====================\n    \n    def navigate(self) -> \"ParabankIndexPage\":\n        \"\"\"Navigate to Parabank Index page.\"\"\"\n        self.web.navigate_to(self.web.config['url'] + '/index.htm')\n        return self\n\n    # ==================== ATOMIC METHODS (One UI Action) ====================\n\n    def enter_username(self, username: str) -> \"ParabankIndexPage\":\n        \"\"\"Enter username.\"\"\"\n        self.web.type_text(*self.USERNAME, text=username)\n        return self  # Fluent API\n\n    def enter_password(self, password: str) -> \"ParabankIndexPage\":\n        \"\"\"Enter password.\"\"\"\n        self.web.type_text(*self.PASSWORD, text=password)\n        return self  # Fluent API\n\n    def click_log_in(self) -> \"ParabankIndexPage\":\n        \"\"\"Click log in button.\"\"\"\n        self.web.click(*self.LOG_IN)\n        return self\n\n    def click_log_out_link(self) -> \"ParabankIndexPage\":\n        \"\"\"Click log out link.\"\"\"\n        self.web.click(*self.LOG_OUT_LINK)\n        return self\n\n    def click_accounts_overview_link(self) -> \"ParabankIndexPage\":\n        \"\"\"Click accounts overview link.\"\"\"\n        self.web.click(*self.ACCOUNTS_OVERVIEW_LINK)\n        return self\n\n    # ==================== STATE-CHECK METHODS (For Assertions) ====================\n\n    def is_logged_in(self) -> bool:\n        \"\"\"Check if is logged in by verifying Log Out link is visible.\"\"\"\n        return self.web.is_element_displayed(*self.LOG_OUT_LINK, timeout=5)\n\n    def is_account_overview_visible(self) -> bool:\n        \"\"\"Check if is account overview visible by verifying Accounts Overview link is present.\"\"\"\n        return self.web.is_element_displayed(*self.ACCOUNTS_OVERVIEW_LINK, timeout=5)\n",
+        "metadata": {
+          "class_name": "ParabankIndexPage",
+          "import_path": "pages.parabank.parabank_index_page",
+          "locators": [
+            {
+              "name": "USERNAME",
+              "by": "CSS_SELECTOR",
+              "value": "input[name='username']"
+            },
+            {
+              "name": "PASSWORD",
+              "by": "CSS_SELECTOR",
+              "value": "input[name='password']"
+            },
+            {
+              "name": "LOG_IN",
+              "by": "CSS_SELECTOR",
+              "value": "input.button"
+            },
+            {
+              "name": "LOG_OUT_LINK",
+              "by": "XPATH",
+              "value": "//a[contains(text(), 'Log Out')]"
+            },
+            {
+              "name": "ACCOUNTS_OVERVIEW_LINK",
+              "by": "XPATH",
+              "value": "//a[contains(text(), 'Accounts Overview')]"
+            }
+          ],
+          "action_methods": [
+            {
+              "name": "navigate",
+              "params": [],
+              "returns": "self"
+            },
+            {
+              "name": "enter_username",
+              "params": [
+                "username: str"
+              ],
+              "returns": "self",
+              "element_type": "inputs",
+              "locator_name": "USERNAME"
+            },
+            {
+              "name": "enter_password",
+              "params": [
+                "password: str"
+              ],
+              "returns": "self",
+              "element_type": "inputs",
+              "locator_name": "PASSWORD"
+            },
+            {
+              "name": "click_log_in",
+              "params": [],
+              "returns": "self",
+              "element_type": "buttons",
+              "locator_name": "LOG_IN"
+            },
+            {
+              "name": "click_log_out_link",
+              "params": [],
+              "returns": "self",
+              "element_type": "links",
+              "locator_name": "LOG_OUT_LINK"
+            },
+            {
+              "name": "click_accounts_overview_link",
+              "params": [],
+              "returns": "self",
+              "element_type": "links",
+              "locator_name": "ACCOUNTS_OVERVIEW_LINK"
+            }
+          ],
+          "state_methods": [
+            {
+              "name": "is_logged_in",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "is_account_overview_visible",
+              "params": [],
+              "returns": "bool"
+            }
+          ]
+        }
+      },
+      "ParabankOverviewPage": {
+        "code": "\"\"\"\nParabankOverviewPage - Page Object Model\n\nPage Object representing a single page in the application.\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass ParabankOverviewPage:\n    \"\"\"\n    Page Object for Parabank Overview Page.\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # ==================== LOCATORS (Class Constants) ====================\n    LOG_OUT_LINK = (By.XPATH, \"//a[contains(text(), 'Log Out')]\")\n    ACCOUNTS_OVERVIEW_LINK = (By.XPATH, \"//a[contains(text(), 'Accounts Overview')]\")\n    ACCOUNT_TABLE = (By.CSS_SELECTOR, \"#accountTable\")\n\n    # ==================== NAVIGATION ====================\n    \n    def navigate(self) -> \"ParabankOverviewPage\":\n        \"\"\"Navigate to Parabank Overview page.\"\"\"\n        self.web.navigate_to(self.web.config['url'] + '/overview.htm')\n        return self\n\n    # ==================== ATOMIC METHODS (One UI Action) ====================\n\n    def click_log_out_link(self) -> \"ParabankOverviewPage\":\n        \"\"\"Click log out link.\"\"\"\n        self.web.click(*self.LOG_OUT_LINK)\n        return self\n\n    def click_accounts_overview_link(self) -> \"ParabankOverviewPage\":\n        \"\"\"Click accounts overview link.\"\"\"\n        self.web.click(*self.ACCOUNTS_OVERVIEW_LINK)\n        return self\n\n    # ==================== STATE-CHECK METHODS (For Assertions) ====================\n\n    def is_logged_in(self) -> bool:\n        \"\"\"Check if is logged in by verifying Log Out link is visible.\"\"\"\n        return self.web.is_element_displayed(*self.LOG_OUT_LINK, timeout=5)\n\n    def is_account_overview_visible(self) -> bool:\n        \"\"\"Check if is account overview visible by verifying account table is displayed.\"\"\"\n        return self.web.is_element_displayed(*self.ACCOUNT_TABLE, timeout=5)\n",
+        "metadata": {
+          "class_name": "ParabankOverviewPage",
+          "import_path": "pages.parabank.parabank_overview_page",
+          "locators": [
+            {
+              "name": "LOG_OUT_LINK",
+              "by": "XPATH",
+              "value": "//a[contains(text(), 'Log Out')]"
+            },
+            {
+              "name": "ACCOUNTS_OVERVIEW_LINK",
+              "by": "XPATH",
+              "value": "//a[contains(text(), 'Accounts Overview')]"
+            },
+            {
+              "name": "ACCOUNT_TABLE",
+              "by": "CSS_SELECTOR",
+              "value": "#accountTable"
+            }
+          ],
+          "action_methods": [
+            {
+              "name": "navigate",
+              "params": [],
+              "returns": "self"
+            },
+            {
+              "name": "click_log_out_link",
+              "params": [],
+              "returns": "self",
+              "element_type": "links",
+              "locator_name": "LOG_OUT_LINK"
+            },
+            {
+              "name": "click_accounts_overview_link",
+              "params": [],
+              "returns": "self",
+              "element_type": "links",
+              "locator_name": "ACCOUNTS_OVERVIEW_LINK"
+            }
+          ],
+          "state_methods": [
+            {
+              "name": "is_logged_in",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "is_account_overview_visible",
+              "params": [],
+              "returns": "bool"
+            }
+          ]
+        }
+      }
+    },
+    "poms_generated": 2,
+    "total_poms": 1,
+    "generation_complete": true
+  }
+}

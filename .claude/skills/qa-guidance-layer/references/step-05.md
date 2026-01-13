@@ -37,16 +37,49 @@ PRE-CHECK:
 - Verify Step 4 complete (test_scenarios exist in state)
 - READ credential_strategy from Step 1 state
 
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  INITIALIZE NAVIGATION TRACKER (MANDATORY - DD-44 ENFORCEMENT)               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+BEFORE any navigation, create tracker:
+
+from mcp_server.utils.scope_discovery import create_navigation_tracker
+
+# Create tracker with visual feedback (for Playwright)
+def eval_js(js_code):
+    return mcp__playwright__browser_evaluate(function=js_code)
+
+tracker = create_navigation_tracker(evaluate_fn=eval_js)
+
+**CRITICAL:** Call tracker.register_page(url) AFTER EVERY navigation.
+This is the ONLY reliable way to detect multi-page workflows.
+
 PREPARE (Credential Handling):
 - IF credential_strategy = "none": Skip to page navigation
-- IF credential_strategy = "static": Load creds from test_users.json, login via auth flow
-- IF credential_strategy = "dynamic": Register new user, save creds, login
-- IF credential_strategy = "self-contained": Register in-session, login (don't persist)
+- IF credential_strategy = "static":
+  - Load creds from test_users.json
+  - Navigate to login page
+  - **tracker.register_page(login_url)**  ← MANDATORY
+  - Perform login
+- IF credential_strategy = "dynamic":
+  - Navigate to registration
+  - **tracker.register_page(registration_url)**  ← MANDATORY
+  - Register user, save creds, login
+- IF credential_strategy = "self-contained":
+  - Navigate to registration
+  - **tracker.register_page(registration_url)**  ← MANDATORY
+  - Register in-session, login (don't persist)
 
 NAVIGATION:
 - NAVIGATE to target URL
+- **tracker.register_page(target_url)**  ← MANDATORY
 - PREPARE page state (click/interact to reveal dynamic elements)
 - WAIT for async content to load
+
+GET SCOPE RESULT (BEFORE DISCOVERY):
+- scope_result = tracker.get_scope_result()
+- This finalizes page tracking and provides scope_result for gate
+- **page_count = scope_result.page_count**  ← Use this for multi-page detection
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  DD-33 DECISION POINT (MANDATORY)                                            │
@@ -57,22 +90,32 @@ NAVIGATION:
       ├── YES ──► MUST use DD-33 (Playwright snapshot extraction)
       │           discovery_method = "playwright"
       │
-      │           DD-33 FLOW:
+      │           DD-33 FLOW (for EACH page in scope_result.pages):
       │           1. browser_snapshot → get accessibility tree
       │           2. AI extracts relevant elements (token-optimized)
       │           3. AI builds elements array in Tool 2 format
-      │           4. CALL qg_discovered_elements PRE with discovery_method="playwright"
+      │           4. CALL qg_discovered_elements PRE with:
+      │              - discovery_method="playwright"
+      │              - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
       │           5. SKIP Tool 2 (already have elements)
-      │           6. CALL qg_discovered_elements POST with discovery_method="playwright"
-      │           7. Proceed to Tool 3
+      │           6. CALL qg_discovered_elements POST with:
+      │              - discovery_method="playwright"
+      │              - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
+      │           7. If multi-page: repeat for next page
+      │           8. Proceed to Tool 3
       │
       └── NO ───► May use Tool 2
                   discovery_method = "tool2"
 
-                  TOOL 2 FLOW:
-                  1. CALL qg_discovered_elements PRE with discovery_method="tool2"
+                  TOOL 2 FLOW (for EACH page in scope_result.pages):
+                  1. CALL qg_discovered_elements PRE with:
+                     - discovery_method="tool2"
+                     - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
                   2. CALL discover_page_elements (OPERATION)
-                  3. CALL qg_discovered_elements POST with discovery_method="tool2"
+                  3. CALL qg_discovered_elements POST with:
+                     - discovery_method="tool2"
+                     - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
+                  4. If multi-page: repeat for next page
 
 VALIDATE:
 - PRE: Validate URL reachable, page_name provided, discovery_method declared
@@ -123,6 +166,43 @@ RETRY:
 - If PRE-VALIDATE fails: AI adjusts page state (max 3 attempts)
 - If POST-VALIDATE fails: AI re-prepares page, retries (max 3 attempts)
 - After 3 failures: STOP → REPORT → USER DECIDES
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  AUDIT-BASED NAVIGATION TRACKING (Task 26.0 - FR-14.8)                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+**PASS 0: Navigation-First Multi-Page Detection**
+
+The quality gate automatically detects multi-page workflows by reading navigation
+history from the audit log. This provides MORE RELIABLE detection than BDD-only.
+
+HOW IT WORKS (Automatic - No AI action required):
+1. Gate reads audit log for browser_navigate calls
+2. Extracts URLs, deduplicates
+3. Infers page names from URLs (e.g., /parabank/login.htm → ParabankLoginPage)
+4. Builds scope_result with detected pages
+5. Falls back to BDD detection if no navigation calls exist
+
+WHEN NAVIGATION TRACKING ACTIVATES:
+- AI used browser_navigate during workflow (login flow, multi-step form, etc.)
+- Navigation calls were logged to audit trail
+- Gate automatically reads and processes navigation history
+
+URL → PAGE NAME INFERENCE:
+- Single segment: /checkout → CheckoutPage
+- Multi-segment: /accounts/overview → AccountsOverviewPage
+- With domain: /parabank/login.htm → ParabankLoginPage
+
+BENEFIT:
+- Captures ACTUAL navigation flow (not just BDD intent)
+- More accurate page detection
+- Automatic - no explicit scope_discovery call needed
+- Backward compatible - BDD fallback ensures old workflows work
+
+AI ACTION:
+✓ Navigation tracking is AUTOMATIC - gate handles it
+✓ Continue using existing navigation tracker for consistency
+✓ Both approaches work together (audit-based + tracker-based)
 ```
 
 ---
@@ -274,6 +354,74 @@ How should we proceed?
 2. Manual element list - You provide selectors
 3. Abort workflow - Stop and log issue"
 ```
+
+---
+
+## Navigation Tracking Example (DD-44 Enforcement)
+
+**This is how AI MUST track pages during Step 5:**
+
+```python
+from mcp_server.utils.scope_discovery import create_navigation_tracker
+
+# 1. Initialize tracker BEFORE any navigation
+def eval_js(js_code):
+    return mcp__playwright__browser_evaluate(function=js_code)
+
+tracker = create_navigation_tracker(evaluate_fn=eval_js)
+
+# 2. Credential handling (static strategy example)
+login_url = "https://parabank.parasoft.com/parabank/index.htm"
+mcp__playwright__browser_navigate(url=login_url)
+tracker.register_page(login_url)  # ← Track login page
+
+# Perform login...
+# (fill username, password, click submit)
+
+# 3. Navigate to target workflow page
+transfer_url = "https://parabank.parasoft.com/parabank/transfer.htm"
+mcp__playwright__browser_navigate(url=transfer_url)
+tracker.register_page(transfer_url)  # ← Track transfer page
+
+# 4. Get scope result BEFORE calling gates
+scope_result = tracker.get_scope_result()
+# → ScopeResult(page_count=2, pages=[LoginPage, TransferFundsPage])
+
+# 5. Convert to dict for gate calls
+scope_dict = {
+    "page_count": scope_result.page_count,
+    "pages": [
+        {"name": p.name, "order": p.order, "url": p.url, "depends_on": p.depends_on}
+        for p in scope_result.pages
+    ]
+}
+
+# 6. Discover elements for EACH page
+for page_info in scope_result.pages:
+    # Navigate to page if needed (may already be there)
+    # Discover input elements (PASS 1)
+    mcp__qa-automation__qg_discovered_elements(
+        mode="PRE",
+        url=page_info.url,
+        page_name=page_info.name,
+        credential_strategy="static",
+        discovery_method="playwright",
+        type="input",
+        scope_result=scope_dict  # ← MANDATORY for multi-page
+    )
+
+    # Extract elements from snapshot...
+    # Call POST gate...
+
+    # Discover output elements (PASS 2)
+    # ... same pattern
+```
+
+**Key Points:**
+- tracker.register_page() called AFTER EVERY browser_navigate()
+- tracker.get_scope_result() called ONCE after all navigation complete
+- scope_result passed to EVERY gate call (PRE and POST)
+- Gate tracks progress: "2/2 pages discovered"
 
 ---
 

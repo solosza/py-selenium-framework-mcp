@@ -1,0 +1,32 @@
+{
+  "run_id": "2026-01-11T00:19:23.114989Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "type": "mcp_tool",
+      "tool_name": "browser_navigate",
+      "args": {
+        "url": "https://parabank.parasoft.com/parabank/index.htm"
+      },
+      "timestamp": "2026-01-11T00:19:23.134774Z"
+    },
+    {
+      "type": "mcp_tool",
+      "tool_name": "browser_navigate",
+      "args": {
+        "url": "https://parabank.parasoft.com/parabank/overview.htm"
+      },
+      "timestamp": "2026-01-11T00:19:23.134774Z"
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 0,
+    "gates_passed": 0,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "incomplete",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

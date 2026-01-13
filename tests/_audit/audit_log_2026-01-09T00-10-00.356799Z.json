@@ -1,0 +1,96 @@
+{
+  "run_id": "2026-01-09T00:10:00.356799Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:00.363312Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:00.402395Z",
+      "metadata": {
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:00.413910Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:00.427933Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:00.439453Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:00.451474Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:00.700822Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 4,
+    "gates_passed": 7,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

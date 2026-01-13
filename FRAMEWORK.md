@@ -3319,6 +3319,30 @@ How should we proceed?
 - If not "none": AI logs in before discovering elements
 - Prepares page state to reveal dynamic elements
 
+**Navigation Tracking (Task 26.0 - FR-14.8):**
+- **PASS 0**: Navigation-first multi-page detection
+- Gate reads audit log for `browser_navigate` calls
+- Extracts URLs, deduplicates, infers page names
+- **Fallback**: BDD detection if no navigation calls exist
+- **Benefit**: More reliable than BDD-only detection; captures actual navigation flow
+
+**How It Works:**
+```python
+# 1. Try navigation-first (PASS 0)
+scope_result = _calculate_scope_from_navigation()
+
+# 2. Fallback to BDD if no navigation detected
+if scope_result is None:
+    scope_result = _calculate_scope_result_from_bdd()
+
+# 3. Result: Multi-page scope regardless of detection method
+```
+
+**URL → Page Name Inference:**
+- `/parabank/login.htm` → `ParabankLoginPage`
+- `/accounts/overview` → `AccountsOverviewPage`
+- Multi-segment paths combine last 2 segments for context
+
 ---
 
 ### 9.6 Step 6: Generate POM (Tool 3)

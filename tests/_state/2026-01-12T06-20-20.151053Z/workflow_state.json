@@ -1,0 +1,237 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_2": {
+    "persona": "As a registered user",
+    "URL": "https://parabank.parasoft.com/parabank/index.htm",
+    "role_name": "RegisteredUser",
+    "workflow": "parabank7",
+    "raw_requirement": "As a registered user, I want to login to ParaBank and view my account overview"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "scenario": "Registered user logs in and views account overview",
+        "given": "User is on the ParaBank login page",
+        "when": "User enters valid credentials and clicks login",
+        "then": "User should see their account overview page"
+      }
+    ],
+    "expected_states": [
+      "is_logged_in",
+      "is_overview_displayed",
+      "has_accounts_visible"
+    ],
+    "intent": "login_and_view_overview"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_registered_user_logs_in_and_views_account_overview",
+        "given": "User is on the ParaBank login page",
+        "when": [
+          "User enters valid credentials and clicks login"
+        ],
+        "then": [
+          "User should see their account overview page"
+        ],
+        "workflow": "parabank7"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "welcome_message",
+        "element_type": "text",
+        "locator_css": "p.smallText",
+        "description": "Welcome message with user name"
+      },
+      {
+        "suggested_name": "accounts_overview_heading",
+        "element_type": "heading",
+        "locator_css": "h1.title",
+        "description": "Accounts Overview heading"
+      },
+      {
+        "suggested_name": "accounts_table",
+        "element_type": "table",
+        "locator_css": "#accountTable",
+        "description": "Accounts overview table"
+      }
+    ],
+    "page_name": "AccountOverviewPage",
+    "discovered_pages": {
+      "ParabankIndexPage": {
+        "input_elements": [
+          {
+            "suggested_name": "username_input",
+            "element_type": "textbox",
+            "locator_css": "input[name='username']",
+            "description": "Username input field"
+          },
+          {
+            "suggested_name": "password_input",
+            "element_type": "textbox",
+            "locator_css": "input[name='password']",
+            "description": "Password input field"
+          },
+          {
+            "suggested_name": "login_button",
+            "element_type": "button",
+            "locator_css": "input[value='Log In']",
+            "description": "Login button"
+          },
+          {
+            "suggested_name": "register_link",
+            "element_type": "link",
+            "locator_css": "a[href='register.htm']",
+            "description": "Register link"
+          }
+        ],
+        "output_elements": [
+          {
+            "suggested_name": "error_message",
+            "element_type": "text",
+            "locator_css": "p.error",
+            "description": "Error message for failed login"
+          },
+          {
+            "suggested_name": "customer_login_heading",
+            "element_type": "heading",
+            "locator_css": "h2",
+            "description": "Customer Login heading"
+          }
+        ]
+      },
+      "AccountOverviewPage": {
+        "input_elements": [
+          {
+            "suggested_name": "logout_link",
+            "element_type": "link",
+            "locator_css": "a[href='logout.htm']",
+            "description": "Logout link"
+          }
+        ],
+        "output_elements": [
+          {
+            "suggested_name": "welcome_message",
+            "element_type": "text",
+            "locator_css": "p.smallText",
+            "description": "Welcome message with user name"
+          },
+          {
+            "suggested_name": "accounts_overview_heading",
+            "element_type": "heading",
+            "locator_css": "h1.title",
+            "description": "Accounts Overview heading"
+          },
+          {
+            "suggested_name": "accounts_table",
+            "element_type": "table",
+            "locator_css": "#accountTable",
+            "description": "Accounts overview table"
+          }
+        ]
+      }
+    },
+    "pages_discovered": 2,
+    "total_pages": 2,
+    "discovery_complete": true
+  },
+  "step_6": {
+    "pom_metadata": {
+      "ParabankIndexPage": {
+        "class_name": "ParabankIndexPage",
+        "import_path": "pages.parabank7.parabank_index_page",
+        "action_methods": [
+          "navigate",
+          "enter_username",
+          "enter_password",
+          "click_login",
+          "click_register"
+        ],
+        "state_methods": [
+          "is_logged_in",
+          "is_error_displayed",
+          "is_page_loaded"
+        ]
+      },
+      "AccountOverviewPage": {
+        "class_name": "AccountOverviewPage",
+        "import_path": "pages.parabank7.account_overview_page",
+        "action_methods": [
+          "navigate",
+          "click_logout"
+        ],
+        "state_methods": [
+          "is_account_overview_visible",
+          "is_logged_in",
+          "is_welcome_message_displayed",
+          "get_welcome_message",
+          "is_accounts_table_displayed"
+        ]
+      }
+    },
+    "poms_generated": 2,
+    "generation_complete": true
+  },
+  "step_7": {
+    "task_metadata": {
+      "class_name": "Parabank7Tasks",
+      "import_path": "tasks.parabank7.parabank7_tasks",
+      "composed_pages": [
+        "ParabankIndexPage",
+        "AccountOverviewPage"
+      ],
+      "task_methods": [
+        {
+          "name": "login_and_view_account_overview",
+          "params": [
+            {
+              "name": "username",
+              "type": "str"
+            },
+            {
+              "name": "password",
+              "type": "str"
+            }
+          ],
+          "returns": "None"
+        }
+      ]
+    }
+  },
+  "step_8": {
+    "role_metadata": {
+      "class_name": "RegisteredUser",
+      "import_path": "roles.parabank7.registered_user",
+      "composed_tasks": [
+        "Parabank7Tasks"
+      ],
+      "workflow_methods": [
+        {
+          "name": "login_and_view_account_overview",
+          "params": [],
+          "calls": [
+            "parabank7_tasks.login_and_view_account_overview"
+          ]
+        }
+      ]
+    }
+  },
+  "step_9": {
+    "test_metadata": {
+      "test_name": "test_registered_user_logs_in_and_views_account_overview",
+      "file_path": "tests/parabank7/test_registered_user_logs_in_and_views_account_overview.py",
+      "role_used": "RegisteredUser",
+      "workflow_method_called": "login_and_view_account_overview",
+      "assertions": [
+        "overview_page.is_logged_in()",
+        "overview_page.is_account_overview_visible()"
+      ]
+    }
+  }
+}

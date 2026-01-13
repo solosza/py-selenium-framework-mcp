@@ -1,0 +1,110 @@
+{
+  "run_id": "2026-01-12T06-20-20.151053Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T06:20:20.157921Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T06:20:50.833849Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://parabank.parasoft.com/parabank",
+        "role_name": "RegisteredUser",
+        "workflow": "parabank7"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T06:20:58.762794Z",
+      "metadata": {
+        "intent": "login_and_view_account",
+        "scenarios_count": 1,
+        "expected_states_count": 3
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T06:21:04.774573Z",
+      "metadata": {
+        "workflow": "parabank7"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T06:23:08.958667Z",
+      "metadata": {
+        "workflow": "parabank7"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T06:23:21.165885Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T06:39:36.149853Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "elements_count": 3
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T06:47:38.563703Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.parabank7.registered_user",
+        "workflow_methods_count": 1
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\parabank7\\registered_user.py",
+      "step": 8
+    }
+  ],
+  "summary": {
+    "total_steps": 6,
+    "gates_passed": 8,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

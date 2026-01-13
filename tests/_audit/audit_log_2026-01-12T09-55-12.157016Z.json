@@ -1,0 +1,355 @@
+{
+  "run_id": "2026-01-12T09:55:12.157016Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:12.159016Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:12.167351Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:12.175677Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:12.514646Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:12.544191Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:12.568832Z",
+      "metadata": {
+        "page_name": "OAuth2Page",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:12.875038Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 0
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:12.893624Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 2
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:35.788202Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:35.799284Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:35.808536Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:35.884255Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:35.906555Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:35.934162Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:35.969234Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:35.982244Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:36.017653Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.538922Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.551435Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.565463Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.611672Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.637037Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.675434Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.693461Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.722265Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.760026Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T09:55:46.815564Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    }
+  ],
+  "summary": {
+    "total_steps": 3,
+    "gates_passed": 27,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

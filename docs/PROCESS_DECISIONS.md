@@ -70,7 +70,7 @@ Every parent task in task lists includes an **"Audit: Verify skill conventions f
 - Low cost, high compliance value
 
 **Implementation:**
-Updated `docs/2-dev-generate-tasks-v2.md` template.
+Updated `docs/3-divide-generate-tasks-v2.md` template.
 
 ---
 

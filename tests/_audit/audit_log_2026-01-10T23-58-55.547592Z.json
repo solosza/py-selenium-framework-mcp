@@ -1,0 +1,82 @@
+{
+  "run_id": "2026-01-10T23:58:55.547592Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:58:55.587465Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:59:00.273897Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "https://parabank.parasoft.com/parabank/index.htm",
+        "role_name": "RegisteredUser",
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:59:05.336659Z",
+      "metadata": {
+        "intent": "login and view account overview",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T00:05:52.304619Z",
+      "metadata": {
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T00:06:30.787622Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T00:11:19.957535Z",
+      "metadata": {
+        "workflow": "parabank"
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 4,
+    "gates_passed": 6,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

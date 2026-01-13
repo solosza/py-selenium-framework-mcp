@@ -1,0 +1,6 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "none"
+  }
+}

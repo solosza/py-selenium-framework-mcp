@@ -1,0 +1,28 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "workflow"
+  },
+  "step_8": {
+    "role_code": "dummy_role_code",
+    "role_metadata": {
+      "class_name": "RegisteredUser",
+      "import_path": "framework.roles.parabank.registered_user",
+      "workflow_methods": [
+        "transfer_funds_between_accounts"
+      ],
+      "workflow": "parabank"
+    }
+  },
+  "step_6": {
+    "pom_code": "dummy_pom_code",
+    "pom_metadata": {
+      "class_name": "AccountsOverviewPage",
+      "import_path": "framework.pages.parabank.accounts_overview_page",
+      "state_methods": [
+        "is_transfer_complete",
+        "get_confirmation_message"
+      ]
+    }
+  }
+}

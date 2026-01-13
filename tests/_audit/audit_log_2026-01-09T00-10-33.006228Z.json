@@ -1,0 +1,115 @@
+{
+  "run_id": "2026-01-09T00:10:33.006228Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:33.012742Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:33.058819Z",
+      "metadata": {
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:33.070847Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:33.086124Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:33.097942Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:33.111961Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:33.343777Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:10:33.398381Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    }
+  ],
+  "summary": {
+    "total_steps": 4,
+    "gates_passed": 8,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

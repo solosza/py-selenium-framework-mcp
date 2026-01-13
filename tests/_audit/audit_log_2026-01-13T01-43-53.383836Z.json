@@ -1,0 +1,98 @@
+{
+  "run_id": "2026-01-13T01:43:53.383836Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T01:43:53.389840Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "workflow"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T01:44:06.006477Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://parabank.parasoft.com/parabank",
+        "role_name": "RegisteredUser",
+        "workflow": "parabank8"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T01:44:18.216240Z",
+      "metadata": {
+        "intent": "login",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T01:44:32.232919Z",
+      "metadata": {
+        "workflow": "parabank8"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-13T01:44:41.983174Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T01:45:42.212198Z",
+      "metadata": {
+        "page_name": "ParabankLoginPage",
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "multi_page": true,
+        "total_pages": null
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-13T09:02:05.590949Z",
+      "metadata": {
+        "page_name": "ParabankLoginPage",
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "multi_page": true,
+        "total_pages": null
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 5,
+    "gates_passed": 7,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

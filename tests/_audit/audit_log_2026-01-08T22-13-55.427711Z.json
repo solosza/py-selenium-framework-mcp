@@ -1,0 +1,27 @@
+{
+  "run_id": "2026-01-08T22:13:55.427711Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:13:55.433241Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 1,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

@@ -1,0 +1,413 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_2": {
+    "persona": "As a registered user",
+    "URL": "https://parabank.parasoft.com/parabank",
+    "role_name": "RegisteredUser",
+    "workflow": "parabank7",
+    "raw_requirement": "As a registered user, I want to login to ParaBank and view my account overview"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am a registered user on the ParaBank index page",
+        "when": [
+          "I enter my username",
+          "I enter my password",
+          "I click login"
+        ],
+        "then": [
+          "I should be logged in",
+          "I should see the account overview page"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_logged_in",
+      "is_account_overview_visible"
+    ],
+    "intent": "login_and_view_account_overview"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_login_and_view_account_overview",
+        "given": "I am a registered user on the ParaBank index page",
+        "when": [
+          "I enter my username",
+          "I enter my password",
+          "I click login"
+        ],
+        "then": [
+          "I should be logged in",
+          "I should see the account overview page"
+        ],
+        "workflow": "parabank7"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "welcome_message",
+        "element_type": "text",
+        "locator_css": "p.smallText",
+        "description": "Welcome message with user name"
+      },
+      {
+        "suggested_name": "accounts_overview_heading",
+        "element_type": "heading",
+        "locator_css": "h1.title",
+        "description": "Accounts Overview heading"
+      },
+      {
+        "suggested_name": "accounts_table",
+        "element_type": "table",
+        "locator_css": "#accountTable",
+        "description": "Accounts overview table"
+      }
+    ],
+    "page_name": "AccountOverviewPage",
+    "discovered_pages": {
+      "ParabankIndexPage": {
+        "input_elements": [
+          {
+            "suggested_name": "username_input",
+            "element_type": "textbox",
+            "locator_css": "input[name='username']",
+            "description": "Username input field"
+          },
+          {
+            "suggested_name": "password_input",
+            "element_type": "textbox",
+            "locator_css": "input[name='password']",
+            "description": "Password input field"
+          },
+          {
+            "suggested_name": "login_button",
+            "element_type": "button",
+            "locator_css": "input[value='Log In']",
+            "description": "Login button"
+          },
+          {
+            "suggested_name": "register_link",
+            "element_type": "link",
+            "locator_css": "a[href='register.htm']",
+            "description": "Register link"
+          }
+        ],
+        "output_elements": [
+          {
+            "suggested_name": "error_message",
+            "element_type": "text",
+            "locator_css": "p.error",
+            "description": "Error message for failed login"
+          },
+          {
+            "suggested_name": "customer_login_heading",
+            "element_type": "heading",
+            "locator_css": "h2",
+            "description": "Customer Login heading"
+          }
+        ]
+      },
+      "AccountOverviewPage": {
+        "input_elements": [
+          {
+            "suggested_name": "logout_link",
+            "element_type": "link",
+            "locator_css": "a[href='logout.htm']",
+            "description": "Logout link"
+          }
+        ],
+        "output_elements": [
+          {
+            "suggested_name": "welcome_message",
+            "element_type": "text",
+            "locator_css": "p.smallText",
+            "description": "Welcome message with user name"
+          },
+          {
+            "suggested_name": "accounts_overview_heading",
+            "element_type": "heading",
+            "locator_css": "h1.title",
+            "description": "Accounts Overview heading"
+          },
+          {
+            "suggested_name": "accounts_table",
+            "element_type": "table",
+            "locator_css": "#accountTable",
+            "description": "Accounts overview table"
+          }
+        ]
+      }
+    },
+    "pages_discovered": 2,
+    "total_pages": 2,
+    "discovery_complete": true
+  },
+  "step_6": {
+    "pom_code": "\"\"\"\nAccountOverviewPage - Page Object Model\n\nPage Object for ParaBank account overview page (after login).\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass AccountOverviewPage:\n    \"\"\"\n    Page Object for Account Overview Page.\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # LOCATORS - Class-level constants, UPPER_SNAKE_CASE\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    LOGOUT_LINK = (By.CSS_SELECTOR, \"a[href='logout.htm']\")\n    WELCOME_MESSAGE = (By.CSS_SELECTOR, \"p.smallText\")\n    ACCOUNTS_OVERVIEW_HEADING = (By.CSS_SELECTOR, \"h1.title\")\n    ACCOUNTS_TABLE = (By.CSS_SELECTOR, \"#accountTable\")\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # CONSTRUCTOR - Compose WebInterface, NO inheritance\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # NAVIGATION - POM owns navigation, gets URL from WebInterface.config\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def navigate(self) -> \"AccountOverviewPage\":\n        \"\"\"Navigate to this page. Gets URL from WebInterface config.\"\"\"\n        url = self.web.config[\"url\"]\n        self.web.navigate_to(f\"{url}/overview.htm\")\n        return self\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # ATOMIC METHODS - One action per method, return self for chaining\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def click_logout(self) -> \"AccountOverviewPage\":\n        \"\"\"Click the logout link.\"\"\"\n        self.web.click(*self.LOGOUT_LINK)\n        return self\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # STATE-CHECK METHODS - For test assertions, return bool\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def is_account_overview_visible(self) -> bool:\n        \"\"\"Check if account overview page is visible.\"\"\"\n        return self.web.is_element_displayed(*self.ACCOUNTS_OVERVIEW_HEADING, timeout=5)\n\n    def is_logged_in(self) -> bool:\n        \"\"\"Check if user is logged in (logout link visible).\"\"\"\n        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)\n\n    def is_welcome_message_displayed(self) -> bool:\n        \"\"\"Check if welcome message is visible.\"\"\"\n        return self.web.is_element_displayed(*self.WELCOME_MESSAGE, timeout=3)\n\n    def get_welcome_message(self) -> str:\n        \"\"\"Get the welcome message text.\"\"\"\n        return self.web.get_text(*self.WELCOME_MESSAGE)\n\n    def is_accounts_table_displayed(self) -> bool:\n        \"\"\"Check if accounts table is visible.\"\"\"\n        return self.web.is_element_displayed(*self.ACCOUNTS_TABLE, timeout=5)\n",
+    "pom_metadata": {
+      "class_name": "AccountOverviewPage",
+      "import_path": "pages.parabank7.account_overview_page",
+      "locators": [
+        {
+          "name": "LOGOUT_LINK",
+          "by": "CSS_SELECTOR",
+          "value": "a[href='logout.htm']"
+        },
+        {
+          "name": "WELCOME_MESSAGE",
+          "by": "CSS_SELECTOR",
+          "value": "p.smallText"
+        },
+        {
+          "name": "ACCOUNTS_OVERVIEW_HEADING",
+          "by": "CSS_SELECTOR",
+          "value": "h1.title"
+        },
+        {
+          "name": "ACCOUNTS_TABLE",
+          "by": "CSS_SELECTOR",
+          "value": "#accountTable"
+        }
+      ],
+      "action_methods": [
+        {
+          "name": "navigate",
+          "params": [],
+          "returns": "AccountOverviewPage"
+        },
+        {
+          "name": "click_logout",
+          "params": [],
+          "returns": "AccountOverviewPage"
+        }
+      ],
+      "state_methods": [
+        {
+          "name": "is_account_overview_visible",
+          "params": [],
+          "returns": "bool"
+        },
+        {
+          "name": "is_logged_in",
+          "params": [],
+          "returns": "bool"
+        },
+        {
+          "name": "is_welcome_message_displayed",
+          "params": [],
+          "returns": "bool"
+        },
+        {
+          "name": "get_welcome_message",
+          "params": [],
+          "returns": "str"
+        },
+        {
+          "name": "is_accounts_table_displayed",
+          "params": [],
+          "returns": "bool"
+        }
+      ]
+    },
+    "generated_poms": {
+      "ParabankIndexPage": {
+        "code": "\"\"\"\nParabankIndexPage - Page Object Model\n\nPage Object for ParaBank login/index page.\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass ParabankIndexPage:\n    \"\"\"\n    Page Object for Parabank Index Page.\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # LOCATORS - Class-level constants, UPPER_SNAKE_CASE\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    USERNAME_INPUT = (By.CSS_SELECTOR, \"input[name='username']\")\n    PASSWORD_INPUT = (By.CSS_SELECTOR, \"input[name='password']\")\n    LOGIN_BUTTON = (By.CSS_SELECTOR, \"input[value='Log In']\")\n    REGISTER_LINK = (By.CSS_SELECTOR, \"a[href='register.htm']\")\n    ERROR_MESSAGE = (By.CSS_SELECTOR, \"p.error\")\n    CUSTOMER_LOGIN_HEADING = (By.CSS_SELECTOR, \"h2\")\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # CONSTRUCTOR - Compose WebInterface, NO inheritance\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # NAVIGATION - POM owns navigation, gets URL from WebInterface.config\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def navigate(self) -> \"ParabankIndexPage\":\n        \"\"\"Navigate to this page. Gets URL from WebInterface config.\"\"\"\n        url = self.web.config[\"url\"]\n        self.web.navigate_to(f\"{url}/index.htm\")\n        return self\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # ATOMIC METHODS - One action per method, return self for chaining\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def enter_username(self, text: str) -> \"ParabankIndexPage\":\n        \"\"\"Enter text into username field.\"\"\"\n        self.web.type_text(*self.USERNAME_INPUT, text)\n        return self\n\n    def enter_password(self, text: str) -> \"ParabankIndexPage\":\n        \"\"\"Enter text into password field.\"\"\"\n        self.web.type_text(*self.PASSWORD_INPUT, text)\n        return self\n\n    def click_login(self) -> \"ParabankIndexPage\":\n        \"\"\"Click the login button.\"\"\"\n        self.web.click(*self.LOGIN_BUTTON)\n        return self\n\n    def click_register(self) -> \"ParabankIndexPage\":\n        \"\"\"Click the register link.\"\"\"\n        self.web.click(*self.REGISTER_LINK)\n        return self\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # STATE-CHECK METHODS - For test assertions, return bool\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def is_logged_in(self) -> bool:\n        \"\"\"Check if user is logged in (login button no longer visible).\"\"\"\n        return not self.web.is_element_displayed(*self.LOGIN_BUTTON, timeout=2)\n\n    def is_error_displayed(self) -> bool:\n        \"\"\"Check if error message is visible.\"\"\"\n        return self.web.is_element_displayed(*self.ERROR_MESSAGE, timeout=3)\n\n    def is_page_loaded(self) -> bool:\n        \"\"\"Check if page is fully loaded.\"\"\"\n        return self.web.is_element_displayed(*self.CUSTOMER_LOGIN_HEADING, timeout=5)\n",
+        "metadata": {
+          "class_name": "ParabankIndexPage",
+          "import_path": "pages.parabank7.parabank_index_page",
+          "locators": [
+            {
+              "name": "USERNAME_INPUT",
+              "by": "CSS_SELECTOR",
+              "value": "input[name='username']"
+            },
+            {
+              "name": "PASSWORD_INPUT",
+              "by": "CSS_SELECTOR",
+              "value": "input[name='password']"
+            },
+            {
+              "name": "LOGIN_BUTTON",
+              "by": "CSS_SELECTOR",
+              "value": "input[value='Log In']"
+            },
+            {
+              "name": "REGISTER_LINK",
+              "by": "CSS_SELECTOR",
+              "value": "a[href='register.htm']"
+            },
+            {
+              "name": "ERROR_MESSAGE",
+              "by": "CSS_SELECTOR",
+              "value": "p.error"
+            },
+            {
+              "name": "CUSTOMER_LOGIN_HEADING",
+              "by": "CSS_SELECTOR",
+              "value": "h2"
+            }
+          ],
+          "action_methods": [
+            {
+              "name": "navigate",
+              "params": [],
+              "returns": "ParabankIndexPage"
+            },
+            {
+              "name": "enter_username",
+              "params": [
+                {
+                  "name": "text",
+                  "type": "str"
+                }
+              ],
+              "returns": "ParabankIndexPage"
+            },
+            {
+              "name": "enter_password",
+              "params": [
+                {
+                  "name": "text",
+                  "type": "str"
+                }
+              ],
+              "returns": "ParabankIndexPage"
+            },
+            {
+              "name": "click_login",
+              "params": [],
+              "returns": "ParabankIndexPage"
+            },
+            {
+              "name": "click_register",
+              "params": [],
+              "returns": "ParabankIndexPage"
+            }
+          ],
+          "state_methods": [
+            {
+              "name": "is_logged_in",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "is_error_displayed",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "is_page_loaded",
+              "params": [],
+              "returns": "bool"
+            }
+          ]
+        }
+      },
+      "AccountOverviewPage": {
+        "code": "\"\"\"\nAccountOverviewPage - Page Object Model\n\nPage Object for ParaBank account overview page (after login).\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass AccountOverviewPage:\n    \"\"\"\n    Page Object for Account Overview Page.\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # LOCATORS - Class-level constants, UPPER_SNAKE_CASE\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    LOGOUT_LINK = (By.CSS_SELECTOR, \"a[href='logout.htm']\")\n    WELCOME_MESSAGE = (By.CSS_SELECTOR, \"p.smallText\")\n    ACCOUNTS_OVERVIEW_HEADING = (By.CSS_SELECTOR, \"h1.title\")\n    ACCOUNTS_TABLE = (By.CSS_SELECTOR, \"#accountTable\")\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # CONSTRUCTOR - Compose WebInterface, NO inheritance\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # NAVIGATION - POM owns navigation, gets URL from WebInterface.config\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def navigate(self) -> \"AccountOverviewPage\":\n        \"\"\"Navigate to this page. Gets URL from WebInterface config.\"\"\"\n        url = self.web.config[\"url\"]\n        self.web.navigate_to(f\"{url}/overview.htm\")\n        return self\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # ATOMIC METHODS - One action per method, return self for chaining\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def click_logout(self) -> \"AccountOverviewPage\":\n        \"\"\"Click the logout link.\"\"\"\n        self.web.click(*self.LOGOUT_LINK)\n        return self\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # STATE-CHECK METHODS - For test assertions, return bool\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def is_account_overview_visible(self) -> bool:\n        \"\"\"Check if account overview page is visible.\"\"\"\n        return self.web.is_element_displayed(*self.ACCOUNTS_OVERVIEW_HEADING, timeout=5)\n\n    def is_logged_in(self) -> bool:\n        \"\"\"Check if user is logged in (logout link visible).\"\"\"\n        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)\n\n    def is_welcome_message_displayed(self) -> bool:\n        \"\"\"Check if welcome message is visible.\"\"\"\n        return self.web.is_element_displayed(*self.WELCOME_MESSAGE, timeout=3)\n\n    def get_welcome_message(self) -> str:\n        \"\"\"Get the welcome message text.\"\"\"\n        return self.web.get_text(*self.WELCOME_MESSAGE)\n\n    def is_accounts_table_displayed(self) -> bool:\n        \"\"\"Check if accounts table is visible.\"\"\"\n        return self.web.is_element_displayed(*self.ACCOUNTS_TABLE, timeout=5)\n",
+        "metadata": {
+          "class_name": "AccountOverviewPage",
+          "import_path": "pages.parabank7.account_overview_page",
+          "locators": [
+            {
+              "name": "LOGOUT_LINK",
+              "by": "CSS_SELECTOR",
+              "value": "a[href='logout.htm']"
+            },
+            {
+              "name": "WELCOME_MESSAGE",
+              "by": "CSS_SELECTOR",
+              "value": "p.smallText"
+            },
+            {
+              "name": "ACCOUNTS_OVERVIEW_HEADING",
+              "by": "CSS_SELECTOR",
+              "value": "h1.title"
+            },
+            {
+              "name": "ACCOUNTS_TABLE",
+              "by": "CSS_SELECTOR",
+              "value": "#accountTable"
+            }
+          ],
+          "action_methods": [
+            {
+              "name": "navigate",
+              "params": [],
+              "returns": "AccountOverviewPage"
+            },
+            {
+              "name": "click_logout",
+              "params": [],
+              "returns": "AccountOverviewPage"
+            }
+          ],
+          "state_methods": [
+            {
+              "name": "is_account_overview_visible",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "is_logged_in",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "is_welcome_message_displayed",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "get_welcome_message",
+              "params": [],
+              "returns": "str"
+            },
+            {
+              "name": "is_accounts_table_displayed",
+              "params": [],
+              "returns": "bool"
+            }
+          ]
+        }
+      }
+    },
+    "poms_generated": 2,
+    "total_poms": 2,
+    "generation_complete": true
+  },
+  "step_7": {
+    "task_code": "\"\"\"\nParabank7Tasks - Task Module\n\nTask module for ParaBank operations.\nOrchestrates page objects to accomplish business workflows.\n\"\"\"\n\nfrom interfaces.web_interface import WebInterface\nfrom pages.parabank7.parabank_index_page import ParabankIndexPage\nfrom pages.parabank7.account_overview_page import AccountOverviewPage\nfrom resources.utilities import autologger\n\n\nclass Parabank7Tasks:\n    \"\"\"\n    Task module for ParaBank workflow operations.\n\n    - @autologger(\"Task\") on all methods\n    - NO decorator on constructor\n    - Composes Page Objects\n    - One domain operation per method\n    - NO return values\n    - Uses fluent POM API\n    \"\"\"\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # CONSTRUCTOR - Compose WebInterface + POMs, NO inheritance, NO base_url\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    def __init__(self, web: WebInterface):\n        \"\"\"\n        Compose Page Objects - NO decorator on constructor.\n\n        Args:\n            web: WebInterface instance\n        \"\"\"\n        self.web = web\n        # Compose page objects - they get URL from self.web.config\n        self.login_page = ParabankIndexPage(web)\n        self.overview_page = AccountOverviewPage(web)\n\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    # TASK METHODS - Single domain operation, return None, use @autologger\n    # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\n    @autologger.automation_logger(\"Task\")\n    def login_and_view_account_overview(self, username: str, password: str) -> None:\n        \"\"\"\n        Single domain operation: login to ParaBank and view account overview.\n\n        NO return value - test asserts via overview_page.is_account_overview_visible()\n        \"\"\"\n        # POM handles navigation (gets URL from self.web.config)\n        (self.login_page\n            .navigate()\n            .enter_username(username)\n            .enter_password(password)\n            .click_login())\n\n        # NO return statement\n",
+    "task_metadata": {
+      "class_name": "Parabank7Tasks",
+      "import_path": "tasks.parabank7.parabank7_tasks",
+      "composed_pages": [
+        "ParabankIndexPage",
+        "AccountOverviewPage"
+      ],
+      "task_methods": [
+        {
+          "name": "login_and_view_account_overview",
+          "params": [
+            {
+              "name": "username",
+              "type": "str"
+            },
+            {
+              "name": "password",
+              "type": "str"
+            }
+          ],
+          "returns": "None"
+        }
+      ]
+    }
+  }
+}

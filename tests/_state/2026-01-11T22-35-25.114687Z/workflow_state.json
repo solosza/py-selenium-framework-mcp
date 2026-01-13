@@ -1,0 +1,66 @@
+{
+  "step_7": {
+    "task_code": "\"\"\"\nParabankTasks - Task Module\n\nOrchestrates ParaBank page objects for domain operations.\nNO return values - tests assert via POM state-check methods.\n\"\"\"\n\nfrom interfaces.web_interface import WebInterface\nfrom pages.parabank.parabank_index_page import ParabankIndexPage\nfrom pages.parabank.parabank_overview_page import ParabankOverviewPage\nfrom resources.utilities import autologger\n\n\nclass ParabankTasks:\n    \"\"\"\n    Task module for ParaBank operations.\n\n    - @autologger(\"Task\") on all methods\n    - NO decorator on constructor\n    - Composes Page Objects\n    - One domain operation per method\n    - NO return values\n    - Uses fluent POM API\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"\n        Compose Page Objects - NO decorator on constructor.\n\n        Args:\n            web: WebInterface instance\n        \"\"\"\n        self.web = web\n        self.parabank_index_page = ParabankIndexPage(web)\n        self.parabank_overview_page = ParabankOverviewPage(web)\n\n    # ==================== TASK METHODS ====================\n\n    @autologger.automation_logger(\"Task\")\n    def login_and_view_overview(self, username: str, password: str) -> None:\n        \"\"\"\n        Login to ParaBank and navigate to account overview.\n\n        Args:\n            username: User's username\n            password: User's password\n\n        NO return value - test asserts via POM.\n        \"\"\"\n        (self.parabank_index_page\n            .navigate()\n            .enter_username(username)\n            .enter_password(password)\n            .click_log_in())\n        # NO return\n",
+    "task_metadata": {
+      "class_name": "ParabankTasks",
+      "import_path": "tasks.parabank.parabank_tasks",
+      "composed_pages": [
+        "ParabankIndexPage",
+        "ParabankOverviewPage"
+      ],
+      "task_methods": [
+        {
+          "name": "login_and_view_overview",
+          "params": [
+            "username: str",
+            "password: str"
+          ],
+          "calls": [
+            "navigate",
+            "enter_username",
+            "enter_password",
+            "click_log_in"
+          ]
+        }
+      ]
+    }
+  },
+  "step_8": {
+    "role_code": "\"\"\"\nRegisteredUser - Role for orchestrating business workflows.\n\nRoles represent user personas (e.g., Admin, Customer, Guest).\nThis role orchestrates complete business workflows using Task modules.\n\"\"\"\n\nfrom typing import Dict, Any\nfrom interfaces.web_interface import WebInterface\nfrom resources.utilities import autologger\nfrom tasks.parabank.parabank_tasks import ParabankTasks\n\n\nclass RegisteredUser:\n    \"\"\"\n    RegisteredUser - orchestrates complete business workflows.\n\n    - @autologger(\"Role\") on workflow methods\n    - @autologger(\"Role Constructor\") on __init__\n    - Composes Task modules\n    - Workflow methods call MULTIPLE tasks\n    - NO return values\n    - NO locators\n    \"\"\"\n\n    @autologger.automation_logger(\"Role Constructor\")\n    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any]):\n        \"\"\"\n        Initialize with credentials and compose Task modules.\n\n        Args:\n            web_interface: WebInterface instance\n            user_data: User data dict with username/password\n        \"\"\"\n        self.web = web_interface\n        self.user_data = user_data\n        self.username = user_data.get('username')\n        self.password = user_data.get('password')\n\n        # Validate required credentials\n        if not self.username or not self.password:\n            raise ValueError(\"RegisteredUser requires username and password in user_data\")\n\n        self.parabank_tasks = ParabankTasks(web_interface)\n\n    # ==================== WORKFLOW METHODS ====================\n\n    @autologger.automation_logger(\"Role\")\n    def login_and_view_overview(self) -> None:\n        \"\"\"\n        Execute login and view overview workflow.\n\n        NO return value - test asserts via POM state-check methods.\n        \"\"\"\n        self.parabank_tasks.login_and_view_overview(self.username, self.password)\n        # NO return - test asserts via POM\n",
+    "role_metadata": {
+      "class_name": "RegisteredUser",
+      "import_path": "roles.registered_user",
+      "composed_tasks": [
+        "ParabankTasks"
+      ],
+      "workflow_methods": [
+        {
+          "name": "login_and_view_overview",
+          "params": [],
+          "calls": [
+            "parabank_tasks.login_and_view_overview"
+          ]
+        }
+      ]
+    }
+  },
+  "step_9": {
+    "test_code": "\"\"\"\nTestLoginAndViewAccountOverview - Test suite for Parabank workflows.\n\nTest suite for Parabank workflows.\nUses AAA pattern: Arrange, Act, Assert.\n\"\"\"\n\nimport pytest\nfrom resources.utilities import autologger\nfrom roles.registered_user import RegisteredUser\nfrom pages.parabank.parabank_index_page import ParabankIndexPage\n\n\nclass TestLoginAndViewAccountOverview:\n    \"\"\"\n    TestLoginAndViewAccountOverview - Test suite for Parabank.\n\n    - @autologger(\"Test\") decorator\n    - Load data from fixtures\n    - Call ONE workflow method per Role\n    - Assert via Page Object state-check methods\n    - NO orchestration (don't call multiple Role methods)\n    \"\"\"\n\n    @pytest.fixture(autouse=True)\n    def setup(self, web_interface, config):\n        \"\"\"Setup test fixtures.\"\"\"\n        self.web = web_interface\n        self.config = config\n        self.parabank_index_page = ParabankIndexPage(self.web)\n\n    # ==================== TEST METHODS ====================\n\n    @pytest.mark.parabank\n    @autologger.automation_logger(\"Test\")\n    def test_login_and_view_overview(self):\n        \"\"\"\n        Test login and view overview workflow.\n\n        AAA Pattern:\n        1. Arrange - Create role with test data\n        2. Act - Call ONE workflow method (no return value)\n        3. Assert - Use POM state-check methods\n        \"\"\"\n        # Arrange\n        user_data = {\"username\": \"john\", \"password\": \"demo\"}\n        user = RegisteredUser(self.web, user_data)\n\n        # Act - ONE workflow call, NO return value\n        user.login_and_view_overview()\n\n        # Assert - Via Page Object state-check methods (NOT return value)\n        assert self.parabank_index_page.is_logged_in(), \"User should be logged in\"\n        assert self.parabank_index_page.is_account_overview_visible(), \"Account overview should be visible\"\n",
+    "test_metadata": {
+      "class_name": "TestLoginAndViewAccountOverview",
+      "file_path": "tests/parabank/test_login_and_view_account_overview.py",
+      "role_used": "RegisteredUser",
+      "page_used": "ParabankIndexPage",
+      "test_methods": [
+        {
+          "name": "test_login_and_view_overview",
+          "workflow_method_called": "login_and_view_overview",
+          "assertions": [
+            "is_logged_in",
+            "is_account_overview_visible"
+          ]
+        }
+      ]
+    }
+  }
+}

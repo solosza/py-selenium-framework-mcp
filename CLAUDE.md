@@ -736,20 +736,26 @@ No emojis. No em dashes. Pure signal, zero noise.
 
 Structured 4-phase process. Each phase has process doc in `docs/`:
 
-- **Phase 0 (Design):** `docs/0-design-discussion-v2.md` - Conversational design discussion
-- **Phase 1 (Define):** `docs/1-create-prd-v2.md` - Create PRD
-- **Phase 2 (Divide):** `docs/2-generate-tasks-v2.md` - Break down into tasks
-- **Phase 3 (Deliver):** `docs/3-process-task-list-v2.md` - Execute and ship
+- **Phase 1 (Design):** `docs/1-design-discussion-v2.md` - Conversational design discussion
+- **Phase 2 (Define):** `docs/2-define-create-prd-v2.md` - Create PRD
+- **Phase 3 (Divide):** `docs/3-divide-generate-tasks-v2.md` - Break down into tasks
+- **Phase 4 (Deliver):** `docs/4-deliver-execute-tasks-v2.md` - Execute and ship
 
 ## Task Generation Rules
 
 ### Per-Capability Parent Task Pattern:
 
-1. **Mark Core vs Glue**:
+1. **Impact Assessment** (MANDATORY for refactors/changes):
+   - Who calls this code? (find all usage)
+   - What depends on current behavior? (existing tests, other components)
+   - What will break? (tests, integrations, assumptions)
+   - Migration path? (old data, backward compatibility)
+
+2. **Mark Core vs Glue**:
    - **Core** (logic/contracts) → TDD: write failing tests → implement → refactor
    - **Glue** (wiring/UX) → Ensure acceptance/integration coverage exists
 
-2. **Run & Record Checks** before marking parent complete:
+3. **Run & Record Checks** before marking parent complete:
    - Formatter, linter, type checker (if applicable)
    - Unit/integration tests
    - Coverage ≥ target (e.g., 80%)

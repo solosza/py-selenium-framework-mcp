@@ -300,6 +300,27 @@ Each vertical gets its own Execution Engine with domain-specific rules.
 
 ---
 
+## How Isagawa Scales: One Platform, Many Domains
+
+Isagawa is not a collection of separate products.
+
+It is:
+- **One core platform** — the enforcement runtime, quality gates, audit, and escalation logic
+- **Domain-specific packs** — the rules, workflows, and validation for each vertical
+- **Constrained configuration** — what organizations can tune without weakening enforcement
+
+This architecture means:
+- Entering a new vertical requires a new pack — not a new product
+- Domain experts contribute knowledge — not code
+- Customers configure thresholds — never remove safeguards
+
+The result is a platform company, not a consulting business.
+
+Every pack runs on the same enforcement engine.
+Every customer gets the same trust guarantees.
+
+---
+
 ## How Isagawa Fits Into Existing Workflows
 
 Isagawa does not replace tools people already use.

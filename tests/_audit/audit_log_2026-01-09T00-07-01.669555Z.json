@@ -1,0 +1,1269 @@
+{
+  "run_id": "2026-01-09T00:07:01.669555Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:01.671556Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:01.680069Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:01.686069Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:02.142213Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:02.164251Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:02.182173Z",
+      "metadata": {
+        "page_name": "OAuth2Page",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:02.356533Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 0
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:02.369577Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 2
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:59.818154Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:59.825452Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:07:59.833471Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.036750Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.057772Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.093066Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.100341Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.120127Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.131317Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.152124Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.159631Z",
+      "metadata": {
+        "page_name": "OAuth2Page",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.181661Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.214205Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.232221Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.251465Z",
+      "metadata": {
+        "page_name": "CartPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 3,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 3
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.271491Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.290497Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.308014Z",
+      "metadata": {
+        "page_name": "InventoryPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 2,
+          "total_poms": 2,
+          "generation_complete": true,
+          "page_index": 2
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.331258Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.350609Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.359113Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 0
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:00.373636Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 2
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.226847Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.236360Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.245740Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.454641Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.477255Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.523214Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.531349Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.555765Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.567265Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.590176Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.599677Z",
+      "metadata": {
+        "page_name": "OAuth2Page",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.630279Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.665945Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.687235Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.707026Z",
+      "metadata": {
+        "page_name": "CartPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 3,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 3
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.728256Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.750375Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.771502Z",
+      "metadata": {
+        "page_name": "InventoryPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 2,
+          "total_poms": 2,
+          "generation_complete": true,
+          "page_index": 2
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.798281Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.819411Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.830419Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 0
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:08.855167Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 2
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.576754Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.589792Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.601321Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.835488Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.861895Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.902743Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.914262Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.941826Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.955333Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.982099Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:50.993631Z",
+      "metadata": {
+        "page_name": "OAuth2Page",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.023787Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.055171Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 1,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.086223Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 3,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.109777Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.133451Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.156466Z",
+      "metadata": {
+        "page_name": "CartPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 3,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 3
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.179197Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.207764Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 4,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.230319Z",
+      "metadata": {
+        "page_name": "InventoryPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1,
+        "multi_page": {
+          "poms_generated": 2,
+          "total_poms": 2,
+          "generation_complete": true,
+          "page_index": 2
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.258233Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.283293Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.294804Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 0
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:08:51.312813Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 2
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    }
+  ],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 76,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

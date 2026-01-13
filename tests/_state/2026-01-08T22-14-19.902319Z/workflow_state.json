@@ -1,0 +1,21 @@
+{
+  "step_8": {
+    "role_code": "\nclass RegisteredUser:\n    @autologger.automation_logger(\"Role Constructor\")\n    def __init__(self, web, user_data, base_url):\n        self.auth_tasks = AuthTasks(web, base_url)\n\n    @autologger.automation_logger(\"Role\")\n    def login(self) -> None:\n        self.auth_tasks.log_in(self.email, self.password)\n",
+    "role_metadata": {
+      "class_name": "RegisteredUser",
+      "import_path": "roles.registered_user",
+      "composed_tasks": [
+        "AuthTasks"
+      ],
+      "workflow_methods": [
+        {
+          "name": "login",
+          "params": [],
+          "calls": [
+            "auth_tasks.log_in"
+          ]
+        }
+      ]
+    }
+  }
+}

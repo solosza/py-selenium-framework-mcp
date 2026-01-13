@@ -1,0 +1,110 @@
+{
+  "run_id": "2026-01-08T22:14:05.135957Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:05.141464Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:05.154761Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:05.167763Z",
+      "metadata": {
+        "intent": "login",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:05.176988Z",
+      "metadata": {
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:05.184513Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:05.195029Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:05.202547Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:05.212068Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 6,
+    "gates_passed": 8,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "run_id": "2026-01-11T00:20:51.116783Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T00:20:51.149114Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T00:20:51.149114Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://parabank.parasoft.com/parabank",
+        "role_name": "RegisteredUser",
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T00:20:51.155190Z",
+      "metadata": {
+        "intent": "login_and_view_account",
+        "scenarios_count": 1,
+        "expected_states_count": 3
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T00:20:51.155190Z",
+      "metadata": {
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T00:20:51.155190Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "type": "mcp_tool",
+      "tool_name": "browser_navigate",
+      "args": {
+        "url": "https://parabank.parasoft.com/parabank/index.htm"
+      },
+      "timestamp": "2026-01-11T00:20:51.165411Z"
+    },
+    {
+      "type": "mcp_tool",
+      "tool_name": "browser_navigate",
+      "args": {
+        "url": "https://parabank.parasoft.com/parabank/overview.htm"
+      },
+      "timestamp": "2026-01-11T00:20:51.165411Z"
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 4,
+    "gates_passed": 5,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

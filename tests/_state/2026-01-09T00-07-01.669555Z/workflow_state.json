@@ -1,0 +1,87 @@
+{
+  "step_6": {
+    "pom_code": "class LoginPage:\n    EMAIL = (By.CSS_SELECTOR, \"#email\")\n    PASSWORD = (By.CSS_SELECTOR, \"#passwd\")\n    SUBMIT = (By.CSS_SELECTOR, \"#SubmitLogin\")\n\n    def navigate(self) -> \"LoginPage\":\n        self.web.navigate_to(self.web.config[\"url\"] + \"/login\")\n        return self\n\n    def enter_email(self, email: str) -> \"LoginPage\":\n        self.web.type_text(*self.EMAIL, text=email)\n        return self\n\n    def click_submit(self) -> \"LoginPage\":\n        self.web.click(*self.SUBMIT)\n        return self\n\n    def is_logged_in(self) -> bool:\n        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)\n\n    def get_error_text(self) -> str:\n        return self.web.get_text(*self.ERROR_MESSAGE)\n",
+    "pom_metadata": {
+      "class_name": "LoginPage",
+      "import_path": "pages.auth.login_page",
+      "locators": [
+        {
+          "name": "EMAIL",
+          "by": "CSS_SELECTOR",
+          "value": "#email"
+        }
+      ],
+      "action_methods": [
+        {
+          "name": "navigate",
+          "params": [],
+          "returns": "self"
+        },
+        {
+          "name": "enter_email",
+          "params": [
+            "email: str"
+          ],
+          "returns": "self"
+        },
+        {
+          "name": "click_submit",
+          "params": [],
+          "returns": "self"
+        }
+      ],
+      "state_methods": [
+        {
+          "name": "is_logged_in",
+          "params": [],
+          "returns": "bool"
+        }
+      ]
+    },
+    "generated_poms": {
+      "LoginPage": {
+        "code": "class LoginPage:\n    EMAIL = (By.CSS_SELECTOR, \"#email\")\n    PASSWORD = (By.CSS_SELECTOR, \"#passwd\")\n    SUBMIT = (By.CSS_SELECTOR, \"#SubmitLogin\")\n\n    def navigate(self) -> \"LoginPage\":\n        self.web.navigate_to(self.web.config[\"url\"] + \"/login\")\n        return self\n\n    def enter_email(self, email: str) -> \"LoginPage\":\n        self.web.type_text(*self.EMAIL, text=email)\n        return self\n\n    def click_submit(self) -> \"LoginPage\":\n        self.web.click(*self.SUBMIT)\n        return self\n\n    def is_logged_in(self) -> bool:\n        return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)\n\n    def get_error_text(self) -> str:\n        return self.web.get_text(*self.ERROR_MESSAGE)\n",
+        "metadata": {
+          "class_name": "LoginPage",
+          "import_path": "pages.auth.login_page",
+          "locators": [
+            {
+              "name": "EMAIL",
+              "by": "CSS_SELECTOR",
+              "value": "#email"
+            }
+          ],
+          "action_methods": [
+            {
+              "name": "navigate",
+              "params": [],
+              "returns": "self"
+            },
+            {
+              "name": "enter_email",
+              "params": [
+                "email: str"
+              ],
+              "returns": "self"
+            },
+            {
+              "name": "click_submit",
+              "params": [],
+              "returns": "self"
+            }
+          ],
+          "state_methods": [
+            {
+              "name": "is_logged_in",
+              "params": [],
+              "returns": "bool"
+            }
+          ]
+        }
+      }
+    },
+    "poms_generated": 1,
+    "total_poms": 1,
+    "generation_complete": true
+  }
+}

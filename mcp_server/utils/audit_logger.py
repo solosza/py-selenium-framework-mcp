@@ -97,7 +97,8 @@ class AuditLogger:
         mode: str,
         result: str,
         error: Optional[str] = None,
-        source: Optional[str] = None
+        source: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
     ) -> None:
         """
         Log a gate call and persist immediately (DEF-040).
@@ -109,6 +110,7 @@ class AuditLogger:
             result: Result (pass, fail, blocked)
             error: Error message if failed
             source: Execution source (tool, ai, self-heal)
+            metadata: Validation data from this step (e.g., persona, URL, page_name)
         """
         entry: Dict[str, Any] = {
             "step": step,
@@ -123,6 +125,9 @@ class AuditLogger:
 
         if source is not None:
             entry["source"] = source
+
+        if metadata is not None:
+            entry["metadata"] = metadata
 
         self.steps.append(entry)
 

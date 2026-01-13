@@ -1,0 +1,158 @@
+{
+  "run_id": "2026-01-11T22:03:50.257560Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:03:50.264709Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:03:55.730659Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "https://parabank.parasoft.com/parabank",
+        "role_name": "RegisteredUser",
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:04:01.702430Z",
+      "metadata": {
+        "intent": "login_and_view_account_overview",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:04:07.613543Z",
+      "metadata": {
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:04:17.112149Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:15:18.514856Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "multi_page": true,
+        "total_pages": 2
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:23:16.689037Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "elements_count": 3,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:33:40.658451Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "elements_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:34:32.402380Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "class_name": "ParabankIndexPage",
+        "import_path": "pages.parabank.parabank_index_page",
+        "action_methods_count": 6,
+        "state_methods_count": 2
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:34:38.732308Z",
+      "metadata": {
+        "page_name": "ParabankOverviewPage",
+        "elements_count": 2
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T22:34:55.028753Z",
+      "metadata": {
+        "page_name": "ParabankOverviewPage",
+        "class_name": "ParabankOverviewPage",
+        "import_path": "pages.parabank.parabank_overview_page",
+        "action_methods_count": 3,
+        "state_methods_count": 2
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\parabank\\parabank_index_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\parabank\\parabank_overview_page.py",
+      "step": 6
+    }
+  ],
+  "summary": {
+    "total_steps": 6,
+    "gates_passed": 11,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

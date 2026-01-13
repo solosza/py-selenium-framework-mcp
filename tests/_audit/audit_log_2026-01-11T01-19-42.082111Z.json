@@ -1,0 +1,102 @@
+{
+  "run_id": "2026-01-11T01:19:42.082111Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T01:19:42.087617Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T01:19:48.123881Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "https://parabank.parasoft.com/parabank",
+        "role_name": "RegisteredUser",
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T01:19:53.501662Z",
+      "metadata": {
+        "intent": "login_and_view_account_overview",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T01:20:43.812918Z",
+      "metadata": {
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T01:25:30.433580Z",
+      "metadata": {
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T01:25:39.536698Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-11T01:27:34.193100Z",
+      "metadata": {
+        "workflow": "parabank"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-11T01:27:43.761478Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 4,
+    "gates_passed": 8,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

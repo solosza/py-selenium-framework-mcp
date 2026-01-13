@@ -1,0 +1,26 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_7": {
+    "task_code": "dummy_task_code",
+    "task_metadata": {
+      "class_name": "AuthTasks",
+      "import_path": "tasks.auth_tasks",
+      "task_methods": [
+        "log_in"
+      ]
+    }
+  },
+  "step_8": {
+    "role_code": "\nfrom typing import Dict, Any\nfrom interfaces.web_interface import WebInterface\nfrom tasks.auth_tasks import AuthTasks\nfrom resources.utilities import autologger\n\nclass RegisteredUser:\n    \"\"\"RegisteredUser role with CORRECT static credential pattern.\"\"\"\n\n    @autologger.automation_logger(\"Role Constructor\")\n    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any], base_url: str):\n        self.web = web_interface\n        # CORRECT: Reads from user_data (static strategy)\n        self.user_data = user_data\n        self.email = user_data.get('email')\n        self.password = user_data.get('password')\n        self.auth_tasks = AuthTasks(web_interface, base_url)\n\n    @autologger.automation_logger(\"Role\")\n    def login_workflow(self):\n        \"\"\"Complete login workflow.\"\"\"\n        self.auth_tasks.log_in(self.email, self.password)\n",
+    "role_metadata": {
+      "class_name": "RegisteredUser",
+      "import_path": "roles.registered_user",
+      "workflow_methods": [
+        "login_workflow"
+      ]
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "run_id": "2026-01-08T22:14:18.529047Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:18.534557Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:18.576648Z",
+      "metadata": {
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:18.587211Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.990342Z",
+      "metadata": {
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.998353Z",
+      "metadata": {
+        "workflow": "catalog"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.010877Z",
+      "metadata": {
+        "workflow": "custom_workflow"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.026705Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.040039Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.055476Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.069006Z",
+      "metadata": {
+        "scenarios_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.087024Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.099532Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.123010Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.130507Z",
+      "metadata": {
+        "workflow": "catalog"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:21.143034Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 2,
+    "gates_passed": 15,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

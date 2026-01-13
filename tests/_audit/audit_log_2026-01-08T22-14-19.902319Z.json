@@ -1,0 +1,153 @@
+{
+  "run_id": "2026-01-08T22:14:19.902319Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:19.904818Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:19.911823Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:19.920344Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:19.962530Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:19.985951Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.032624Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.048320Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.071934Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.099528Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.122671Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    }
+  ],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 10,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

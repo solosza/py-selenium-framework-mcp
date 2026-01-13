@@ -1,0 +1,206 @@
+{
+  "run_id": "2026-01-09T00:12:54.648701Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:54.655677Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:54.674940Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "role_name": "RegisteredUser",
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:54.690551Z",
+      "metadata": {
+        "intent": "login",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:54.703689Z",
+      "metadata": {
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:54.716395Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:54.730394Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:54.742540Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:54.756280Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:55.006555Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:55.021613Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:55.044075Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:55.057395Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:55.080090Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:55.094107Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-09T00:12:55.123565Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    }
+  ],
+  "summary": {
+    "total_steps": 9,
+    "gates_passed": 15,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

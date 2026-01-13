@@ -1,0 +1,356 @@
+{
+  "run_id": "2026-01-08T22:14:20.253938Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.255929Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.263450Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.270658Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.312618Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.337333Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.367726Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.400884Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.413926Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.447482Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.457555Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.466745Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.516426Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.542597Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/admin/test_create_user.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.568661Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/admin/test_user_management.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.612907Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.653712Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.680755Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.710364Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.734160Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.764860Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.870312Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.907406Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.931939Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.956995Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T22:14:20.981808Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/auth/test_login.py"
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\admin\\test_create_user.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\admin\\test_user_management.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\auth\\test_login.py",
+      "step": 9
+    }
+  ],
+  "summary": {
+    "total_steps": 2,
+    "gates_passed": 25,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

@@ -327,6 +327,35 @@ These skills enable AI to:
 - Self-heal when tool output is incomplete
 - Block progression until quality standards are met
 
+#### Workflow Naming Convention
+
+To avoid overwriting existing files from previous test runs, use **unique workflow names**:
+
+```yaml
+# First test on ParaBank
+workflow_name: "parabank"
+
+# Subsequent tests on ParaBank
+workflow_name: "parabank2"
+workflow_name: "parabank3"
+# etc.
+```
+
+The framework generates files in:
+- `framework/pages/{workflow_name}/`
+- `framework/tasks/{workflow_name}/`
+- `framework/roles/{workflow_name}/`
+- `tests/{workflow_name}/`
+
+**Reusing the same workflow name will overwrite existing files.**
+
+If you intentionally want to update existing tests (e.g., improving an existing workflow), you can reuse the workflow name. Just be aware that files will be overwritten.
+
+**Best practice:** Append incrementing numbers or dates to workflow names for test isolation:
+- By number: `parabank`, `parabank2`, `parabank3`
+- By date: `parabank_2026_01_11`, `parabank_2026_01_12`
+- By feature: `parabank_login`, `parabank_transfer`, `parabank_admin`
+
 #### Common MCP Issues
 
 **Server not starting:**

@@ -821,6 +821,663 @@ Step 10 PRE gate validates:
 
 ---
 
+### Topic 13: Smart Gate Unified Design - Dynamic Pattern Templates
+
+**Decision Date:** 2026-01-10
+
+**Context:**
+- Smart Gate pattern defined in `execution_patterns.md` Pattern 3 has TWO layers
+- Current state: Only 3 of 10 gates implement Gate Orchestration layer
+- Current state: Code Generation layer NOT implemented
+- Issue #5 (LoginPage failure): Tool complexity causes "existing_found" errors
+- Issue #26 (self-heal masking): AI works around broken tools
+- **Critical requirement:** Every user tests different sites - patterns must be domain-agnostic
+
+**Smart Gate Two-Layer Pattern:**
+
+| Layer | Pattern | Current Status | Target |
+|-------|---------|----------------|--------|
+| **Gate Orchestration** | Gate detects missing data → Provides fix → AI retries | ✅ Partial (3/10) | ✅ All 10 gates |
+| **Code Generation** | Tool generates skeleton → Gate provides pattern → AI fills → Gate validates | ❌ Not implemented | ✅ Steps 6-9 |
+
+**Decision: ALL Gates Use Dynamic Pattern Templates**
+
+**Core Principle:**
+> **Patterns are templates + dynamic data, NEVER hardcoded to specific sites/pages/elements.**
+
+Every Smart Gate must provide:
+1. **Pattern template** (generic structure)
+2. **Dynamic data** (from discovery/state/metadata)
+3. AI combines template + data for ANY site
+
+**❌ WRONG - Hardcoded Patterns:**
+```python
+# Step 6 gate returns:
+{
+    "pattern": "Add LoginPage.navigate() method",  # Hardcoded "LoginPage"
+    "fix": "Add EMAIL = (By.CSS_SELECTOR, '#email')"  # Hardcoded selector
+}
+```
+
+**✅ CORRECT - Dynamic Pattern Templates:**
+```python
+# Step 6 gate returns:
+{
+    "pattern_template": "Add {page_name}.navigate() method",
+    "dynamic_data": {
+        "page_name": "LoginPage"  # From Step 5 state
+    },
+    "fill_instructions": {
+        "locator_template": "{NAME} = (By.{BY_TYPE}, \"{locator}\")",
+        "method_template": "def {action}_{element}(self, {params}): ...",
+        "discovered_elements": [...]  # From Step 5, works for ANY site
+    }
+}
+```
+
+**Why Dynamic Templates:**
+- User tests automationpractice.pl, ParaBank, Udemy, healthcare site, etc.
+- Each site has different page names, elements, locators
+- Gates cannot assume "LoginPage", "email", "#username", etc.
+- Templates work for ALL sites, data comes from discovery
+
+**Implementation Per Layer:**
+
+**Layer 1: Gate Orchestration (All 10 Gates)**
+
+Pattern provision format:
+```python
+{
+    "status": "NEEDS_RETRY",
+    "pattern_template": "...",  # Generic structure
+    "dynamic_data": {...},       # Site-specific data
+    "example": "..."             # Rendered example for this site
+}
+```
+
+**Example - Step 5 (Multi-Page Detection):**
+```python
+# Dynamic scope_result provision:
+{
+    "status": "NEEDS_RETRY",
+    "fix_applied": "scope_result",
+    "scope_result": {
+        "page_count": detected_page_count,  # Dynamic
+        "pages": [
+            {"name": inferred_page_name, "url": discovered_url}  # From BDD/nav
+            for each discovered page
+        ]
+    }
+}
+```
+
+**Layer 2: Code Generation (Steps 6-9)**
+
+Skeleton + fill instructions format:
+```python
+{
+    "status": "skeleton_ready",
+    "skeleton_code": "...",  # Class structure only
+    "fill_instructions": {
+        "templates": {
+            "locator": "{NAME} = (By.{BY_TYPE}, \"{locator}\")",
+            "action_method": "def {action}_{element}(self, {params}) -> \"{class_name}\": ..."
+        },
+        "data": {
+            "class_name": metadata.get("page_name"),  # Dynamic
+            "elements": discovered_elements           # From Step 5
+        }
+    }
+}
+```
+
+**Example - Step 6 (POM Generation):**
+
+Tool 3 generates skeleton:
+```python
+class {page_name}:  # Placeholder, AI fills
+    def __init__(self, web: WebInterface):
+        self.web = web
+
+    # LOCATORS - AI fills using template + data
+    # METHODS - AI fills using template + data
+```
+
+Gate provides fill instructions:
+```python
+{
+    "fill_instructions": {
+        "templates": {
+            "locator": "{NAME} = (By.CSS_SELECTOR, \"{selector}\")",
+            "input_method": "def enter_{name}(self, text: str) -> \"{page_name}\":\n    self.web.type_text(*self.{NAME}, text=text)\n    return self",
+            "click_method": "def click_{name}(self) -> \"{page_name}\":\n    self.web.click(*self.{NAME})\n    return self"
+        },
+        "data": {
+            "page_name": "LoginPage",  # From Step 5
+            "elements": [
+                {"name": "email", "locator": "#email", "type": "input"},
+                {"name": "submit", "locator": "#submit-btn", "type": "button"}
+            ]
+        }
+    }
+}
+```
+
+AI fills:
+```python
+class LoginPage:  # From data.page_name
+    def __init__(self, web: WebInterface):
+        self.web = web
+
+    # Locators from template + data
+    EMAIL = (By.CSS_SELECTOR, "#email")
+    SUBMIT = (By.CSS_SELECTOR, "#submit-btn")
+
+    # Methods from template + data
+    def enter_email(self, text: str) -> "LoginPage":
+        self.web.type_text(*self.EMAIL, text=text)
+        return self
+
+    def click_submit(self) -> "LoginPage":
+        self.web.click(*self.SUBMIT)
+        return self
+```
+
+**Gates Already Implementing Dynamic Patterns:**
+
+| Gate | Step | Dynamic Pattern | Status |
+|------|------|-----------------|--------|
+| qg_discovered_elements | 5 | Calculates scope_result from BDD (any workflow) | ✅ Done |
+| qg_task | 7 | Provides base_url pattern (any task class) | ✅ Done |
+| qg_test_runner | 9 | Provides orchestration pattern (any role/workflow) | ✅ Done |
+
+**Gates Need Dynamic Pattern Implementation:**
+
+| Gate | Step | Dynamic Pattern Needed |
+|------|------|------------------------|
+| qg_preflight | 1 | Default strategies if missing (any project) |
+| qg_user_input | 2 | Infer persona from URL (any site) |
+| qg_ai_processing | 3 | Suggest expected_states from BDD (any workflow) |
+| qg_test_scenarios | 4 | Provide scenario template if malformed (any domain) |
+| qg_page_object | 6 | **Skeleton + fill instructions (any site/page)** |
+| qg_role | 8 | **Skeleton + fill instructions (any role)** |
+| qg_save_run | 10 | Regenerate missing code (any layer) |
+
+**Implementation Phases:**
+
+**Phase 0: Foundation (Task 26.0 - 4 hours)**
+- Navigation tracking (validates dynamic scope_result)
+- Test with parabank5
+
+**Phase 1: Extend Dynamic Patterns to All Gates (Tasks 27.0-27.3 - 12 hours)**
+- Add dynamic pattern provision to Steps 1-4, 6, 8, 10
+- Verify no hardcoded page names, element names, selectors
+- Outcome: All 10 gates use templates + dynamic data
+
+**Phase 2: Skeleton-Only with Dynamic Fill Instructions (Tasks 28.0-35.0 - 56-70 hours)**
+- Task 28.0: Protocol docs (skeleton + dynamic fill pattern)
+- Task 29.0: Gates 6-9 PRE - Provide dynamic fill_instructions
+- Tasks 30-33: Tools 3-6 skeleton-only (no hardcoded examples)
+- Task 34.0: Gates 6-9 POST - Validate filled code
+- Task 35.0: E2E test with multiple sites (automationpractice.pl + ParaBank)
+
+**Total Effort:** 72-86 hours
+
+**Success Criteria:**
+
+Phase 1 (Dynamic Gate Orchestration):
+- ✅ All 10 gates provide patterns as templates + data
+- ✅ Zero hardcoded page names, element names, selectors in gate responses
+- ✅ Test same workflow on 2 different sites → gates work for both
+
+Phase 2 (Dynamic Code Generation):
+- ✅ Tools 3-6 generate skeleton with placeholders
+- ✅ Gates provide fill_instructions with templates + discovered data
+- ✅ AI fills skeleton → works for ANY site
+- ✅ Test parabank5 → Test automationpractice.pl → Both work with same gates
+- ✅ Issue #5 eliminated (no existing check, skeleton always fresh)
+- ✅ Self-heal eliminated (AI filling skeleton IS the design)
+
+**Validation Test:**
+```
+Run same workflow (registration) on 3 different sites:
+1. automationpractice.pl
+2. ParaBank
+3. New site never tested before
+
+Expected: Gates provide dynamic templates + site-specific data
+Result: All 3 workflows complete without gate code changes
+```
+
+**Rationale:**
+- Every user tests different sites with different element names
+- Hardcoded patterns fail on new sites
+- Templates + dynamic data scale infinitely
+- Proves Isagawa is domain-agnostic AI Management Layer
+- Demonstrates platform applies to ANY vertical
+
+**Mandatory Validation Loop (NO BYPASS):**
+
+**CRITICAL ENFORCEMENT RULE:**
+> Every time AI generates or modifies code (including self-heal), it MUST go through POST gate validation. NO EXCEPTIONS.
+
+**The Loop (Steps 6-9):**
+```
+1. Code generated (Tool or AI) → POST gate validates → FAIL/PASS
+2. If FAIL: Gate returns NEEDS_RETRY with pattern
+3. AI fixes code → **MUST call POST gate again** (not optional!)
+4. Repeat until POST gate returns "pass"
+5. Only after "pass" → Save code → Proceed to next step
+```
+
+**Example - Step 6 (POM Generation):**
+```
+Attempt 1:
+  Tool 3 generates skeleton → qg_page_object POST → FAIL (skeleton detected)
+  Gate returns: NEEDS_RETRY with fill_instructions
+
+Attempt 2:
+  AI fills skeleton → **qg_page_object POST called again** → FAIL (missing navigate)
+  Gate returns: NEEDS_RETRY with navigate pattern
+
+Attempt 3:
+  AI adds navigate() → **qg_page_object POST called again** → PASS
+  Code saved → Proceed to Step 7
+```
+
+**Applies To:**
+- Step 6: Every POM modification → qg_page_object POST
+- Step 7: Every Task modification → qg_task POST
+- Step 8: Every Role modification → qg_role POST
+- Step 9: Every Test modification → qg_test_runner POST
+
+**What Counts as "Code Generation/Modification":**
+- Tool generates code
+- AI self-heals tool output
+- AI fills skeleton
+- AI fixes gate validation errors
+- AI reconstructs code from state
+- **ALL of the above → POST gate validates**
+
+**Blocked by Max Attempts:**
+If 3 attempts fail (per Topic 3 self-heal cap), gate returns `"status": "blocked"` → User decision required (DD-22).
+
+---
+
+**Comprehensive Bypass Gap Analysis (All 10 Steps):**
+
+**GOAL:** Identify EVERY scenario where data/code could bypass quality gates.
+
+**Enforcement Principle:**
+> Nothing proceeds to next step without gate validation. State saved AFTER gate passes. Files written AFTER gate passes.
+
+**Step 1 (Preflight Configuration) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Missing strategy** | AI proceeds without credential_strategy or test_data_location | PRE gate blocks if missing |
+| **Invalid strategy** | AI provides invalid strategy value | PRE gate validates against allowed values |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes |
+
+**Checkpoint:** qg_preflight POST validates → State saves → Step 2 allowed
+
+---
+
+**Step 2 (User Input) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Missing persona** | AI proceeds without persona | PRE gate blocks if missing |
+| **Invalid URL** | AI provides malformed URL | PRE gate validates URL format |
+| **Inferred data** | AI infers role_name without validation | POST gate validates inferred values |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes |
+
+**Checkpoint:** qg_user_input POST validates → State saves → Step 3 allowed
+
+---
+
+**Step 3 (AI Processing) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Missing BDD** | AI proceeds without proper Given/When/Then | POST gate validates BDD structure |
+| **Missing expected_states** | AI skips expected_states extraction | POST gate requires expected_states array |
+| **Malformed intent** | AI provides vague intent | POST gate validates intent clarity |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes |
+
+**Checkpoint:** qg_ai_processing POST validates → State saves → Step 4 allowed
+
+---
+
+**Step 4 (Test Scenarios) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Tool 1 not called** | AI skips Tool 1, generates scenarios directly | PRE gate checks Tool 1 was called |
+| **Malformed scenarios** | Tool 1 returns incomplete scenarios | POST gate validates scenario structure |
+| **Missing Given/When/Then** | Scenarios lack proper BDD format | POST gate validates all three sections present |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes |
+
+**Checkpoint:** qg_test_scenarios POST validates → State saves → Step 5 allowed
+
+---
+
+**Step 5 (Discovered Elements) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Tool 2 not called** | AI skips discovery, guesses elements | PRE gate checks discovery method used |
+| **Empty elements** | No elements discovered for page | POST gate blocks if elements array empty |
+| **Incomplete multi-page** | Only 2 of 4 pages discovered | PRE gate requires all pages in scope |
+| **Missing locators** | Elements missing locator values | POST gate validates each element has locator |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes for EACH page |
+
+**Checkpoint:** qg_discovered_elements POST validates (PER PAGE) → State saves → Step 6 allowed
+
+---
+
+**Step 6 (POM Generation) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Tool 3 not called** | AI generates POM directly without tool | PRE gate checks tool was called OR skeleton ready |
+| **Skeleton saved without fill** | Skeleton saved to disk without AI filling | POST gate blocks skeleton code |
+| **File written before validation** | File written before POST gate passes | File write ONLY after POST gate "pass" |
+| **Metadata saved without code** | Metadata saved but code invalid | POST gate validates code matches metadata |
+| **Multi-page: only last validated** | 6 POMs generated but only last one goes through POST | Each POM must pass POST gate individually |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes for EACH POM |
+| **Code reconstruction skip** | AI reads POM from state, skips revalidation | Reconstructed code must pass POST gate |
+
+**Checkpoint:** qg_page_object POST validates (PER POM) → File written → State saves → Step 7 allowed
+
+---
+
+**Step 7 (Task Generation) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Tool 4 not called** | AI generates Task directly without tool | PRE gate checks tool was called OR skeleton ready |
+| **Skeleton saved without fill** | Skeleton saved to disk without AI filling | POST gate blocks skeleton code |
+| **File written before validation** | File written before POST gate passes | File write ONLY after POST gate "pass" |
+| **Locators in Task code** | Task contains locators (DD-27 violation) | POST gate detects and blocks locators |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes |
+| **Code reconstruction skip** | AI reads Task from state, skips revalidation | Reconstructed code must pass POST gate |
+
+**Checkpoint:** qg_task POST validates → File written → State saves → Step 8 allowed
+
+---
+
+**Step 8 (Role Generation) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Tool 5 not called** | AI generates Role directly without tool | PRE gate checks tool was called OR skeleton ready |
+| **Skeleton saved without fill** | Skeleton saved to disk without AI filling | POST gate blocks skeleton code |
+| **File written before validation** | File written before POST gate passes | File write ONLY after POST gate "pass" |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes |
+| **Code reconstruction skip** | AI reads Role from state, skips revalidation | Reconstructed code must pass POST gate |
+
+**Checkpoint:** qg_role POST validates → File written → State saves → Step 9 allowed
+
+---
+
+**Step 9 (Test Generation) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Tool 6 not called** | AI generates Test directly without tool | PRE gate checks tool was called OR skeleton ready |
+| **Skeleton saved without fill** | Skeleton saved to disk without AI filling | POST gate blocks skeleton code |
+| **File written before validation** | File written before POST gate passes | File write ONLY after POST gate "pass" |
+| **Orchestration in test** | Test calls multiple role methods (architecture violation) | POST gate detects and provides pattern |
+| **POM action calls in test** | Test calls POM methods directly | POST gate detects and blocks |
+| **State saved early** | State saved before validation | State saves AFTER POST gate passes |
+| **Code reconstruction skip** | AI reads Test from state, skips revalidation | Reconstructed code must pass POST gate |
+
+**Checkpoint:** qg_test_runner POST validates → File written → State saves → Step 10 allowed
+
+---
+
+**Step 10 (Save & Run) - Bypass Gaps:**
+
+| Gap | Scenario | Enforcement |
+|-----|----------|-------------|
+| **Files missing** | Not all expected files exist on disk | PRE gate validates all files present |
+| **Files never validated** | Files exist but never passed POST gates | PRE gate checks audit log for POST passes |
+| **State inconsistent with files** | State metadata doesn't match file contents | PRE gate validates checksums/signatures |
+| **Multi-page POMs missing** | Only 2 of 4 POMs saved | PRE gate counts files vs scope_result |
+
+**Checkpoint:** qg_save_run PRE validates all files exist and passed gates → Test execution allowed
+
+---
+
+**Cross-Cutting Enforcement Rules:**
+
+| Rule | Enforcement |
+|------|-------------|
+| **State saves AFTER gate passes** | StateManager.save() only called after gate returns "pass" |
+| **Files written AFTER gate passes** | File write operations only after POST gate "pass" |
+| **Every code modification revalidated** | Tool output, AI fill, AI fix, reconstruction → all go through POST gate |
+| **PRE gate before POST gate** | Cannot call POST without calling PRE first (validates prerequisites) |
+| **Multi-page: validate each individually** | Step 6 with 4 pages → 4 separate POST gate calls |
+| **No tool bypass** | AI cannot skip calling tool (PRE gate checks) |
+| **Audit trail required** | Every gate call logged to audit trail (validates enforcement) |
+
+---
+
+**Implementation in Subtasks:**
+
+Each task implementation must include comprehensive audit subtask:
+
+**Subtask X.N: Audit - Verify No Bypass Gaps + Code Logic + Protocol + Smart Gate Compliance**
+
+**Bypass Gap Checks:**
+- ✓ State saves only after gate passes
+- ✓ Files written only after gate passes
+- ✓ All code goes through POST gate (no exceptions)
+- ✓ PRE gate called before POST gate (no skip)
+- ✓ Multi-page: Each item validated individually
+- ✓ Audit trail logs all gate calls
+- ✓ No tool bypass (AI cannot skip calling tool)
+- ✓ No reconstruction bypass (read from state → revalidate)
+
+**Code Logic Gaps:**
+- ✓ Edge cases handled (empty arrays, null values, missing keys)
+- ✓ Error handling present (try/catch, validation)
+- ✓ No hardcoded values (page names, element names, selectors)
+- ✓ Dynamic templates used (works for ANY site)
+- ✓ Metadata matches code (action_methods_count accurate)
+- ✓ File paths correct (framework/pages/, framework/tasks/, tests/)
+- ✓ Import paths valid (can be imported without errors)
+- ✓ No race conditions (sequential operations enforced)
+
+**Protocol Compliance:**
+- ✓ Follows step protocol in `.claude/skills/qa-guidance-layer/references/step-XX.md`
+- ✓ Calls tools in correct order (Tool → PRE gate → AI fill → POST gate)
+- ✓ Uses correct metadata contract (DD-26)
+- ✓ Respects architecture rules (DD-27, DD-49, etc.)
+- ✓ Credential strategy enforced (from Step 1)
+- ✓ Test data location enforced (from Step 1)
+- ✓ Multi-page workflow handled correctly (DD-44)
+- ✓ Navigation tracking used (Task 26.0)
+
+**Smart Gate Compliance (Both Layers):**
+- ✓ **Layer 1 (Orchestration):** Gate provides data/pattern when missing
+- ✓ **Layer 1:** Returns NEEDS_RETRY with fix_applied or pattern_template
+- ✓ **Layer 1:** Dynamic templates + dynamic data (not hardcoded)
+- ✓ **Layer 2 (Code Gen - Steps 6-9):** Tool generates skeleton
+- ✓ **Layer 2:** Gate PRE provides fill_instructions with templates
+- ✓ **Layer 2:** AI fills skeleton using patterns
+- ✓ **Layer 2:** Gate POST validates filled code
+- ✓ **Layer 2:** NEEDS_RETRY returns corrected pattern if wrong
+- ✓ Validation loop enforced (fix → POST gate → fix → POST gate)
+- ✓ Max attempts tracked (3 max per step)
+- ✓ Blocked status returned after max attempts
+
+**Execution Validation:**
+- ✓ Test with parabank5 (multi-page workflow)
+- ✓ Test with automationpractice.pl (different site)
+- ✓ Verify no bypass scenarios occur
+- ✓ Verify audit trail complete
+- ✓ Verify all files saved correctly
+
+**Design Decisions:**
+- **DD-NEW-01:** All gates implement Smart Gate pattern (both layers)
+- **DD-NEW-02:** Skeleton-only IS Smart Gate for code generation
+- **DD-NEW-03:** NEEDS_RETRY status distinguishes fixable from fatal
+- **DD-NEW-04:** Gates provide patterns, AI generates code
+- **DD-NEW-05:** All patterns are templates + dynamic data, never hardcoded
+- **DD-NEW-06:** Every code generation/modification MUST go through POST gate (no bypass allowed)
+
+---
+
+### Topic 14: Parabank5 Production Scrutiny - Semantic Validation Gaps
+
+**Decision Date:** 2026-01-09
+
+**Context:**
+- Ran comprehensive scrutiny of parabank5 E2E test workflow
+- Generated full test successfully (proves framework works end-to-end)
+- Found 34 issues across 6 severity levels showing **what passes gates but shouldn't**
+- **Critical Discovery:** Gates validate STRUCTURE (syntax, imports, patterns) but not SEMANTICS (business logic, strategy adherence)
+
+**Issue Breakdown:**
+- 4 CRITICAL: Business logic errors (same account transfer, credential violations, missing test data)
+- 5 HIGH: Discovery isolation, missing field validation, LoginPage detection failure
+- 8 MEDIUM: Code quality (unused methods, wrong patterns, duplicate locators)
+- 9 LOW: Polish issues (better error messages, URL validation)
+- 4 GATE FAILURES: Gates didn't catch semantic errors
+- 4 ARCHITECTURAL: Missing rollback, transaction support
+
+**Root Cause Analysis:**
+
+**Problem #1: Business Logic Not Validated**
+```python
+# Test generates (PASSES all gates but WRONG):
+user.transfer_funds_between_accounts(
+    amount="100",
+    from_account="15564",  # ❌ SAME ACCOUNT!
+    to_account="15564"     # ❌ SAME ACCOUNT!
+)
+
+# qg_test_runner POST validates:
+✓ AAA pattern correct
+✓ POM state methods used for assertions
+✓ Imports correct
+✓ Orchestration correct (ONE workflow method call)
+❌ Does NOT validate: from_account != to_account (semantic error)
+```
+
+**Why This Passed:** Gate checks **structure** (AAA pattern, assertions, imports) but not **semantics** (do parameters make business sense?).
+
+**Problem #2: Step 1 Strategies Not Enforced**
+```python
+# Step 1: User selects
+state.save(1, {
+    "credential_strategy": "self-contained",  # Test should register user
+    "test_data_location": "workflow"          # Data should be in tests/parabank5/data/
+})
+
+# Step 8: Role generated with HARDCODED credentials
+self.email = "testuser20260108@example.com"  # ❌ From discovery, not self-contained
+self.password = "Test123!"                    # ❌ Hardcoded, not registered in test
+
+# Step 9: Test validation
+✓ Test has AAA pattern
+✓ Test uses fixtures correctly
+❌ Does NOT check: credentials match strategy
+❌ Does NOT check: test data files created in workflow location
+```
+
+**Why This Passed:** Gates don't read Step 1 state to validate downstream code honors user's strategy choices.
+
+**Problem #3: Discovery Creates Real Accounts**
+```python
+# Step 5: AI uses Playwright to discover elements
+mcp__playwright__browser_navigate("https://parabank.parasoft.com/parabank/register.htm")
+mcp__playwright__browser_fill_form([
+    {"name": "First Name", "value": "Test"},
+    {"name": "Username", "value": "testuser20260108"},  # Creates REAL account!
+    {"name": "Password", "value": "Test123!"}
+])
+mcp__playwright__browser_click("Register")
+
+# Result: User account CREATED in ParaBank
+# Test then hardcodes these credentials (not portable to other environments)
+```
+
+**Why This Happened:** No guidance that discovery should be read-only. AI defaulted to "create test data" during discovery.
+
+**Problem #4: LoginPage Detection Failure (Issue #5)**
+```python
+# Parabank5 workflow has 2 pages:
+# 1. LoginPage (initial entry point)
+# 2. TransferFundsPage (after login)
+
+# Expected: Step 5 discovers both pages → generates 2 POMs
+# Actual: Step 5 only discovered TransferFundsPage → generated 1 POM
+
+# Root Cause: BDD-based detection missed LoginPage
+# Fix: Task 26.0 (Navigation Tracking) uses browser_navigate audit log instead
+```
+
+**Decision: Semantic Validation Layer**
+
+| Aspect | Decision |
+|--------|----------|
+| **Business Logic Validation** | Gates detect semantic errors (same account transfer, unrealistic parameter values) |
+| **Strategy Enforcement** | Gates validate code honors Step 1 strategies (credentials, test data location) |
+| **Discovery Isolation** | Step 5 uses read-only mode (snapshots/existing accounts, no account creation) |
+| **PRE Gate Fix Provision** | All PRE gates provide fix data on first failure (no retry loops) |
+| **Navigation-Based Detection** | Step 5 uses audit log browser_navigate calls (not just BDD) for multi-page detection |
+
+**Functional Requirements:**
+
+### From Topic 14: Semantic Validation
+- **FR-14.1:** qg_test_runner detects same-account transfers (validates from_account != to_account) **[Task 36.0]**
+- **FR-14.2:** qg_role enforces credential_strategy from Step 1 (self-contained, static, dynamic) **[Task 36.0]**
+- **FR-14.3:** qg_test_runner enforces test_data_location from Step 1 (shared, workflow, both) **[Task 36.0]**
+- **FR-14.4:** qg_save_run PRE validates expected data files exist based on strategies **[Task 36.0]**
+- **FR-14.5:** Step 5 discovery operates in read-only mode (no account creation in target app) **[Task 37.0]**
+- **FR-14.6:** Playwright browser lifecycle managed (cleanup, no "already in use" errors) **[Task 37.0]**
+- **FR-14.7:** All PRE gates provide fix_applied or pattern_template on first validation failure **[Task 39.0]**
+- **FR-14.8:** qg_discovered_elements uses browser_navigate audit log for multi-page detection **[Task 26.0]**
+
+**Implementation Scope:**
+
+| Gap | FR | Task | Priority | v0.2 MVP? |
+|-----|----|----|----------|-----------|
+| Business logic + strategy enforcement | FR-14.1 to FR-14.4 | Task 36.0 | CRITICAL | ✅ YES |
+| Discovery isolation | FR-14.5, FR-14.6 | Task 37.0 | CRITICAL | ✅ YES |
+| Navigation-based detection | FR-14.8 | Task 26.0 | CRITICAL | ✅ YES |
+| PRE gate fix provision | FR-14.7 | Task 39.0 | HIGH | ✅ YES |
+| URL path validation | - | Task 40.0 | MEDIUM | ⬜ NO (defer v0.3) |
+| Business assertion enforcement | - | Task 41.0 | MEDIUM | ⬜ NO (defer v0.3) |
+| Rollback mechanism | - | Task 51.0 | ARCH | ⬜ NO (defer v0.3) |
+
+**v0.2 MVP Scope (MUST HAVE):**
+- ✅ Task 26.0: Navigation Tracking (fixes LoginPage detection Issue #5)
+- ✅ Task 36.0: Semantic Validation (fixes Issues #1-4: business logic, strategies)
+- ✅ Task 37.0: Discovery Isolation (fixes Issues #7, #11: account creation)
+- ✅ Task 39.0: PRE Gate Enhancement (fixes Issue #6: retry loops)
+
+**Test-in-Production Strategy:**
+Complete one task → Re-run parabank5 workflow → Verify gates catch errors → Fix → Next task
+
+**Estimated Effort:**
+- Task 26.0: 4 hours (implementation + testing)
+- Task 36.0: 10 hours (complex, 4 gates affected)
+- Task 37.0: 6 hours (Playwright isolation + cleanup)
+- Task 39.0: 5 hours (extends existing Smart Gate pattern)
+- **Total:** ~25 hours for v0.2 MVP
+
+**Success Criteria:**
+- Parabank5 re-run with Task 36.0: Gates FAIL on same-account transfer, credential violations, missing data files
+- Parabank5 re-run with Task 37.0: No new accounts created during Step 5 discovery
+- Parabank5 re-run with Task 26.0: Both LoginPage + TransferFundsPage detected (2 POMs generated)
+- Parabank5 re-run with Task 39.0: No retry loops for missing fields (gates provide fix data immediately)
+
+---
+
 ---
 
 ## Summary of All Design Decisions
@@ -839,6 +1496,8 @@ Step 10 PRE gate validates:
 | **10. Context Reconstruction** | Audit metadata enables state rebuild after context loss | `utils/context_reconstructor.py` ✅ |
 | **11. Smart Gates** | Self-teaching error messages with patterns + examples | Navigate enforcement, code reconstruction detection, audit validation ✅ |
 | **12. Production Fixes** | Immediate file writes + per-run state + fresh audit run_ids | StateManager refactor, gates write files immediately, Step 10 validates |
+| **13. Smart Gate Unified Design** | ALL gates implement BOTH layers (orchestration + code gen) with dynamic templates | Phase 0: Task 26.0, Phase 1: Tasks 27.x (12h), Phase 2: Tasks 28-35 (56-70h) |
+| **14. Parabank5 Scrutiny** | Gates must validate SEMANTICS (business logic, strategies), not just structure | v0.2 MVP: Tasks 26, 36, 37, 39 (25h total) |
 
 ---
 

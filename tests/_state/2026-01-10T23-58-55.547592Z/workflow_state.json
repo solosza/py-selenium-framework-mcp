@@ -1,0 +1,43 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_2": {
+    "persona": "As a registered user",
+    "URL": "https://parabank.parasoft.com/parabank/index.htm",
+    "role_name": "RegisteredUser",
+    "workflow": "parabank",
+    "raw_requirement": "As a registered user, I want to login to ParaBank and view my account overview"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "scenario": "User logs in and views account overview",
+        "given": "I am a registered user on ParaBank homepage",
+        "when": "I enter valid credentials and submit login form",
+        "then": "I should be logged in and see my account overview page"
+      }
+    ],
+    "expected_states": [
+      "is_logged_in",
+      "has_account_overview"
+    ],
+    "intent": "login and view account overview"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_registered_user_logs_in_and_views_account_overview",
+        "given": "I am on the ParaBank login page",
+        "when": [
+          "I enter valid credentials and submit"
+        ],
+        "then": [
+          "I should see my account overview page with account details"
+        ],
+        "workflow": "parabank"
+      }
+    ]
+  }
+}

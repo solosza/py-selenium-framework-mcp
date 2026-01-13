@@ -1,0 +1,223 @@
+{
+  "run_id": "2026-01-08T21:05:03.865779Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:05:03.872799Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:05:20.645362Z",
+      "metadata": {
+        "persona": "registered ParaBank user",
+        "URL": "https://parabank.parasoft.com/parabank/index.htm",
+        "role_name": "RegisteredParaBankUser",
+        "workflow": "parabank4"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:05:36.968534Z",
+      "metadata": {
+        "intent": "transfer_funds",
+        "scenarios_count": 1,
+        "expected_states_count": 3
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:06:31.089004Z",
+      "metadata": {
+        "workflow": "parabank4"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:07:24.983579Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:09:14.475155Z",
+      "metadata": {
+        "page_name": "TransferFundsPage",
+        "url": "https://parabank.parasoft.com/parabank/transfer.htm",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:09:42.098462Z",
+      "metadata": {
+        "page_name": "TransferFundsPage",
+        "elements_count": 4,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:10:19.964174Z",
+      "metadata": {
+        "page_name": "TransferFundsPage",
+        "elements_count": 4
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:11:56.946787Z",
+      "metadata": {
+        "page_name": "TransferFundsPage",
+        "class_name": "TransferFundsPage",
+        "import_path": "pages.parabank4.transfer_funds_page",
+        "action_methods_count": 5,
+        "state_methods_count": 3
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:12:47.005405Z",
+      "metadata": {
+        "task_name": "Parabank4Tasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:13:33.141059Z",
+      "metadata": {
+        "class_name": "Parabank4Tasks",
+        "import_path": "tasks.parabank4.parabank4_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:14:15.126561Z",
+      "metadata": {
+        "role_name": "RegisteredParaBankUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:14:37.052489Z",
+      "metadata": {
+        "class_name": "RegisteredParaBankUser",
+        "import_path": "roles.registered_para_bank_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:15:40.450525Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:16:22.857457Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/parabank4/test_transfer_funds_between_accounts.py"
+      }
+    },
+    {
+      "step": 10,
+      "gate": "qg_save_run",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-08T21:17:30.425529Z",
+      "metadata": {
+        "validated_layers": [
+          "POM",
+          "Task",
+          "Role",
+          "Test"
+        ],
+        "ready_for_save": true,
+        "files_validated": true
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\pages\\parabank4\\transfer_funds_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tasks\\parabank4\\parabank4_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\roles\\registered_para_bank_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\parabank4\\test_transfer_funds_between_accounts.py",
+      "step": 9
+    }
+  ],
+  "summary": {
+    "total_steps": 10,
+    "gates_passed": 16,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

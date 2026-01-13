@@ -1,0 +1,43 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_2": {
+    "persona": "As a registered user",
+    "URL": "http://www.automationpractice.pl/index.php?controller=authentication",
+    "role_name": "RegisteredUser",
+    "workflow": "auth",
+    "raw_requirement": "I want to log in to my account"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am on the login page",
+        "when": [
+          "I enter valid email",
+          "I enter valid password",
+          "I click login"
+        ],
+        "then": [
+          "I should see my account dashboard",
+          "I should see logout link"
+        ]
+      },
+      {
+        "given": "I am logged in",
+        "when": [
+          "I click logout"
+        ],
+        "then": [
+          "I should see login page"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_on_dashboard",
+      "is_on_login_page"
+    ],
+    "intent": "login_logout"
+  }
+}

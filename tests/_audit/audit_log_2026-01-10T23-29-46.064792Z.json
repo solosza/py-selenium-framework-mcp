@@ -1,0 +1,615 @@
+{
+  "run_id": "2026-01-10T23:29:46.064792Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.069795Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.109879Z",
+      "metadata": {
+        "workflow": "auth"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.120443Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.132625Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php?controller=authentication",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.141188Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.153957Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.459550Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "class_name": "LoginPage",
+        "import_path": "pages.auth.login_page",
+        "action_methods_count": 2,
+        "state_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.472764Z",
+      "metadata": {
+        "task_name": "AuthTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.494409Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.508606Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.530812Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:29:46.545705Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.200579Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.208630Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.229330Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.235959Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.243480Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://localhost:8080/login",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.251531Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "https://example.com:3000/page",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.263607Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.275398Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 2,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.287082Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.296712Z",
+      "metadata": {
+        "page_name": "CartModal",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.308220Z",
+      "metadata": {
+        "page_name": "OAuth2Page",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.318970Z",
+      "metadata": {
+        "page_name": "CheckoutForm",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.335959Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.354506Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.369697Z",
+      "metadata": {
+        "page_name": "SearchPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": true,
+        "total_pages": null
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.378209Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.387486Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.397641Z",
+      "metadata": {
+        "page_name": "SearchPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 4,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.407749Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.418260Z",
+      "metadata": {
+        "page_name": "SearchPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 4,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.426971Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.437002Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.446558Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.456970Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.465611Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.474648Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.483169Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.492700Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 1,
+        "total_pages": 1,
+        "discovery_complete": true
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.501229Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.510990Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.518733Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 1,
+        "total_pages": 1,
+        "discovery_complete": true
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.528240Z",
+      "metadata": {
+        "page_name": "Page2",
+        "elements_count": 1,
+        "pages_discovered": 2,
+        "total_pages": 2,
+        "discovery_complete": true
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-10T23:30:01.540846Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\auth\\login_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\registered_user.py",
+      "step": 8
+    }
+  ],
+  "summary": {
+    "total_steps": 7,
+    "gates_passed": 45,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

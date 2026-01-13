@@ -1,0 +1,248 @@
+{
+  "run_id": "2026-01-12T00:04:03.380999Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:04:03.396658Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:04:23.327479Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "https://parabank.parasoft.com/parabank",
+        "role_name": "RegisteredUser",
+        "workflow": "parabank7"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:04:44.353408Z",
+      "metadata": {
+        "intent": "login_and_view_account_overview",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:05:25.489012Z",
+      "metadata": {
+        "workflow": "parabank7"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:05:36.339133Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:07:38.168366Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "url": "https://parabank.parasoft.com/parabank/index.htm",
+        "multi_page": true,
+        "total_pages": null
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:08:48.932281Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "elements_count": 4,
+        "pages_discovered": 0,
+        "total_pages": 2,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:08:59.705276Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "elements_count": 2,
+        "pages_discovered": 1,
+        "total_pages": 2,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:09:07.802852Z",
+      "metadata": {
+        "page_name": "AccountOverviewPage",
+        "elements_count": 1,
+        "pages_discovered": 1,
+        "total_pages": 2,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:09:16.195459Z",
+      "metadata": {
+        "page_name": "AccountOverviewPage",
+        "elements_count": 3,
+        "pages_discovered": 2,
+        "total_pages": 2,
+        "discovery_complete": true
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:10:13.873498Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "elements_count": 6
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:12:31.136402Z",
+      "metadata": {
+        "page_name": "ParabankIndexPage",
+        "class_name": "ParabankIndexPage",
+        "import_path": "pages.parabank7.parabank_index_page",
+        "action_methods_count": 5,
+        "state_methods_count": 3,
+        "multi_page": {
+          "poms_generated": 1,
+          "total_poms": 2,
+          "generation_complete": false,
+          "page_index": 1
+        }
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:12:41.047158Z",
+      "metadata": {
+        "page_name": "AccountOverviewPage",
+        "elements_count": 4
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:12:56.881744Z",
+      "metadata": {
+        "page_name": "AccountOverviewPage",
+        "class_name": "AccountOverviewPage",
+        "import_path": "pages.parabank7.account_overview_page",
+        "action_methods_count": 2,
+        "state_methods_count": 5,
+        "multi_page": {
+          "poms_generated": 2,
+          "total_poms": 2,
+          "generation_complete": true,
+          "page_index": 2
+        }
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:14:37.217563Z",
+      "metadata": {
+        "task_name": "Parabank7Tasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:15:30.704888Z",
+      "metadata": {
+        "class_name": "Parabank7Tasks",
+        "import_path": "tasks.parabank7.parabank7_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-12T00:16:01.828573Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\parabank7\\parabank_index_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\parabank7\\account_overview_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\parabank7\\parabank7_tasks.py",
+      "step": 7
+    }
+  ],
+  "summary": {
+    "total_steps": 8,
+    "gates_passed": 17,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

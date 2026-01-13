@@ -1,0 +1,45 @@
+{
+  "step_7": {
+    "task_code": "\nfrom interfaces.web_interface import WebInterface\nfrom resources.utilities import autologger\nfrom pages.auth.login_page import LoginPage\n\n\nclass AuthTasks:\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose Page Objects - NO base_url.\"\"\"\n        self.web = web\n        self.login_page = LoginPage(web)\n\n    @autologger.automation_logger(\"Task\")\n    def log_in(self, email: str, password: str) -> None:\n        self.login_page.navigate()\n        (self.login_page\n            .enter_email(email)\n            .enter_password(password)\n            .click_submit())\n",
+    "task_metadata": {
+      "class_name": "AuthTasks",
+      "import_path": "tasks.auth.auth_tasks",
+      "composed_pages": [
+        "LoginPage"
+      ],
+      "task_methods": [
+        {
+          "name": "log_in",
+          "params": [
+            "email: str",
+            "password: str"
+          ],
+          "calls": [
+            "enter_email",
+            "enter_password",
+            "click_submit"
+          ]
+        }
+      ]
+    }
+  },
+  "step_8": {
+    "role_code": "\nclass RegisteredUser:\n    @autologger.automation_logger(\"Role Constructor\")\n    def __init__(self, web, user_data, base_url):\n        self.auth_tasks = AuthTasks(web, base_url)\n\n    @autologger.automation_logger(\"Role\")\n    def login(self) -> None:\n        self.auth_tasks.log_in(self.email, self.password)\n",
+    "role_metadata": {
+      "class_name": "RegisteredUser",
+      "import_path": "roles.registered_user",
+      "composed_tasks": [
+        "AuthTasks"
+      ],
+      "workflow_methods": [
+        {
+          "name": "login",
+          "params": [],
+          "calls": [
+            "auth_tasks.log_in"
+          ]
+        }
+      ]
+    }
+  }
+}
