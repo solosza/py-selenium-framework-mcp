@@ -7,7 +7,7 @@ Uses AAA pattern: Arrange, Act, Assert.
 
 import pytest
 from resources.utilities import autologger
-from roles.parabank11_registered_user import Parabank11RegisteredUser
+from roles.parabank11.registered_user import Parabank11RegisteredUser
 from pages.parabank11.open_account_page import OpenAccountPage
 
 
