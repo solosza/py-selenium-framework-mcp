@@ -277,6 +277,7 @@ class TestStateSaved:
             assert "URL" in call_kwargs["data"], "Should include URL"
             assert "role_name" in call_kwargs["data"], "Should include role_name"
             assert "workflow" in call_kwargs["data"], "Should include workflow"
+            assert "detected_env_id" in call_kwargs["data"], "Should include detected_env_id"
 
 
 class TestInvalidInputs:
@@ -777,3 +778,107 @@ class TestIntegration:
         assert result["status"] == "fail", "Invalid input should fail"
         assert "error" in result, "Should include error for debugging"
         # Note: Actual Step 3 blocking is done by state_manager.is_step_complete(2)
+
+
+class TestEnvironmentDetection:
+    """
+    Test suite for environment auto-detection (DEF-062).
+
+    Tests organized by: detection scenarios
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.qg_user_input
+    def test_detects_parabank_environment(self):
+        """
+        P0: Verify ParaBank URL detects 'parabank' environment.
+
+        AAA Pattern:
+        1. Arrange - Create input with ParaBank URL
+        2. Act - Call qg_user_input.validate()
+        3. Assert - detected_env_id is 'parabank'
+        """
+        # Arrange
+        input_data = {
+            "persona": "registered user",
+            "URL": "https://parabank.parasoft.com/parabank/index.htm",
+            "role_name": "RegisteredUser",
+            "workflow": "auth",
+            "raw_requirement": "I want to login"
+        }
+
+        # Act
+        with patch('tools.gates.qg_user_input.StateManager') as MockStateManager:
+            mock_instance = MagicMock()
+            MockStateManager.return_value = mock_instance
+            result = QGUserInput.validate(input_data)
+
+            # Assert
+            assert result["status"] == "pass", "Validation should pass"
+            call_kwargs = mock_instance.save.call_args.kwargs
+            assert call_kwargs["data"]["detected_env_id"] == "parabank", \
+                "ParaBank URL should detect 'parabank' environment"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_user_input
+    def test_detects_default_environment(self):
+        """
+        P0: Verify automationpractice.pl URL detects 'DEFAULT' environment.
+
+        AAA Pattern:
+        1. Arrange - Create input with automationpractice.pl URL
+        2. Act - Call qg_user_input.validate()
+        3. Assert - detected_env_id is 'DEFAULT'
+        """
+        # Arrange
+        input_data = {
+            "persona": "guest",
+            "URL": "http://www.automationpractice.pl/index.php",
+            "role_name": "Guest",
+            "workflow": "catalog",
+            "raw_requirement": "I want to browse products"
+        }
+
+        # Act
+        with patch('tools.gates.qg_user_input.StateManager') as MockStateManager:
+            mock_instance = MagicMock()
+            MockStateManager.return_value = mock_instance
+            result = QGUserInput.validate(input_data)
+
+            # Assert
+            assert result["status"] == "pass", "Validation should pass"
+            call_kwargs = mock_instance.save.call_args.kwargs
+            assert call_kwargs["data"]["detected_env_id"] == "DEFAULT", \
+                "Automationpractice.pl URL should detect 'DEFAULT' environment"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_user_input
+    def test_unknown_domain_defaults_to_default(self):
+        """
+        P1: Verify unknown domain falls back to 'DEFAULT' environment.
+
+        AAA Pattern:
+        1. Arrange - Create input with unknown domain URL
+        2. Act - Call qg_user_input.validate()
+        3. Assert - detected_env_id is 'DEFAULT' (fallback)
+        """
+        # Arrange
+        input_data = {
+            "persona": "user",
+            "URL": "https://unknown-domain.com/page",
+            "role_name": "User",
+            "workflow": "test",
+            "raw_requirement": "Test requirement"
+        }
+
+        # Act
+        with patch('tools.gates.qg_user_input.StateManager') as MockStateManager:
+            mock_instance = MagicMock()
+            MockStateManager.return_value = mock_instance
+            result = QGUserInput.validate(input_data)
+
+            # Assert
+            assert result["status"] == "pass", "Validation should pass"
+            call_kwargs = mock_instance.save.call_args.kwargs
+            assert call_kwargs["data"]["detected_env_id"] == "DEFAULT", \
+                "Unknown domain should fall back to 'DEFAULT'"

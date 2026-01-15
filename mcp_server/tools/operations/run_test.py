@@ -105,7 +105,7 @@ def extract_failure_data(pytest_output: str) -> Dict[str, Any]:
 
 def execute_test(
     test_path: str,
-    env: str = "dev",
+    env: str = "DEFAULT",
     report_dir: str = "tests/_reports",
     timeout: int = 300
 ) -> Dict[str, Any]:
@@ -114,7 +114,7 @@ def execute_test(
 
     Args:
         test_path: Path to test file or directory (must be within tests/)
-        env: Environment name (default: "dev")
+        env: Environment name (default: "DEFAULT")
         report_dir: Directory for HTML reports (default: "tests/_reports")
         timeout: Maximum execution time in seconds (default: 300 = 5 minutes)
 
@@ -219,7 +219,7 @@ async def run_test_async(arguments: dict) -> str:
     Args:
         arguments: Dict with:
             - test_path (required): Path to test file or directory
-            - env (optional): Environment name (default: "dev")
+            - env (optional): Environment name (if not provided, reads from Step 2 state)
             - report_dir (optional): Report directory (default: "tests/_reports")
             - timeout (optional): Timeout in seconds (default: 300)
 
@@ -230,7 +230,25 @@ async def run_test_async(arguments: dict) -> str:
     if not test_path:
         return json.dumps({"error": "Missing required parameter: test_path"}, indent=2)
 
-    env = arguments.get("env", "dev")
+    env = arguments.get("env")  # DEF-062: No default here
+
+    # DEF-062: If env not provided, read from Step 2 state
+    if env is None:
+        try:
+            from utils.audit_logger import AuditLogger
+            from utils.state_manager import StateManager
+
+            audit_logger = AuditLogger()
+            state_manager = StateManager(run_id=audit_logger.run_id)
+            step2_data = state_manager.get_step(2)
+
+            if step2_data:
+                env = step2_data.get("detected_env_id", "DEFAULT")
+            else:
+                env = "DEFAULT"
+        except Exception:
+            env = "DEFAULT"  # Fallback if state read fails
+
     report_dir = arguments.get("report_dir", "tests/_reports")
     timeout = arguments.get("timeout", 300)
 

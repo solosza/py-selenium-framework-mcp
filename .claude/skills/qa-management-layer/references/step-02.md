@@ -82,7 +82,8 @@ RETRY:
     "URL": "http://automationpractice.pl/index.php?controller=authentication",
     "role_name": "RegisteredUser",
     "workflow": "auth",
-    "raw_requirement": "As a registered user, I want to login with email and password"
+    "raw_requirement": "As a registered user, I want to login with email and password",
+    "detected_env_id": "DEFAULT"
   }
 }
 ```

@@ -16,7 +16,9 @@ Note: workflow (formerly domain) is now dynamic - any non-empty string is valid.
 This allows the framework to work with any website, not just e-commerce.
 """
 
+import json
 import re
+from pathlib import Path
 from typing import Dict, Any
 from urllib.parse import urlparse
 
@@ -100,8 +102,11 @@ class QGUserInput(BaseGate):
                 fix_hint=cls._get_raw_requirement_hint()
             )
 
-        # All valid - save state and return pass
+        # All valid - detect environment and save state
         # Task 10.0: Use per-run state isolation
+        # DEF-062: Auto-detect environment from URL
+        detected_env_id = cls._detect_environment_from_url(url)
+
         audit_logger = cls.get_audit_logger()
         state_manager = StateManager(run_id=audit_logger.run_id)
         state_manager.save(step=2, data={
@@ -109,7 +114,8 @@ class QGUserInput(BaseGate):
             "URL": url,
             "role_name": role_name,
             "workflow": workflow,
-            "raw_requirement": raw_requirement
+            "raw_requirement": raw_requirement,
+            "detected_env_id": detected_env_id
         })
 
         return cls.pass_response(
@@ -120,7 +126,8 @@ class QGUserInput(BaseGate):
                 "persona": persona,
                 "URL": url,
                 "role_name": role_name,
-                "workflow": workflow
+                "workflow": workflow,
+                "detected_env_id": detected_env_id
             }
         )
 
@@ -173,6 +180,46 @@ class QGUserInput(BaseGate):
         if value is None or value == "":
             return False
         return isinstance(value, str) and len(value.strip()) > 0
+
+    @classmethod
+    def _detect_environment_from_url(cls, url: str) -> str:
+        """
+        Detect environment ID by matching URL domain against environment_config.json.
+
+        Args:
+            url: User-provided URL (validated by _is_valid_url)
+
+        Returns:
+            Environment ID matching the URL domain, or "DEFAULT" if no match
+
+        Implementation:
+            - Reads framework/resources/config/environment_config.json
+            - Extracts domain from URL and each environment's URL
+            - Matches domains (exact or subdomain match)
+            - Falls back to "DEFAULT" if no match or config read fails
+        """
+        config_path = Path(__file__).parent.parent.parent.parent / "framework" / "resources" / "config" / "environment_config.json"
+
+        try:
+            with open(config_path, 'r') as f:
+                environments = json.load(f)
+        except Exception:
+            return "DEFAULT"  # Fallback if config read fails
+
+        # Extract domain from URL
+        parsed_url = urlparse(url)
+        url_domain = parsed_url.netloc.lower()
+
+        # Match against each environment's URL domain
+        for env_id, config in environments.items():
+            env_url = config.get('url', '')
+            env_parsed = urlparse(env_url)
+            env_domain = env_parsed.netloc.lower()
+
+            if url_domain == env_domain or url_domain.endswith(f".{env_domain}"):
+                return env_id
+
+        return "DEFAULT"  # No match found
 
     @staticmethod
     def _get_fix_hint_for_missing(missing_fields: list) -> str:
