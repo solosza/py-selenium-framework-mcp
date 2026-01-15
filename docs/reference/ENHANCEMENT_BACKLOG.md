@@ -1,0 +1,799 @@
+# Enhancement Backlog
+
+**Project:** py_sel_framework_mcp - QA Execution Engine
+**Company:** Isagawa Corp
+**Purpose:** Track feature enhancements and improvements by version
+
+---
+
+## Version Planning
+
+| Version | Focus | Status |
+|---------|-------|--------|
+| **v1.0 (MVP)** | Stability, critical fixes | 🚀 In Progress (8.5/10 ready) |
+| **v1.1 (Post-MVP)** | UX improvements, quality-of-life | 📋 Planned |
+| **v1.2** | Long-term improvements | 📋 Planned |
+| **v2.0 (Major)** | Advanced features, AI self-heal | 💡 Future |
+
+---
+
+## Architecture: Protocols + Smart Gates Pattern
+
+**Core Innovation:** Tools generate skeleton code → AI fills implementation → Gates validate and provide patterns
+
+This is the foundational architecture that makes the QA Execution Engine work. Understanding this pattern is critical for understanding all enhancements in this backlog.
+
+---
+
+### How It Works (Steps 6-9)
+
+**Flow Across All Code-Generating Steps:**
+
+```
+┌─────────────┐
+│   Tool 3-6  │  Generates skeleton code (structure only)
+│  (MCP Tool) │  - Class structure + signatures
+└──────┬──────┘  - Empty method bodies
+       │
+       ▼
+┌─────────────┐
+│  Smart Gate │  Detects skeleton in POST validation
+│ (qg_* tool) │  - Checks for incomplete methods
+└──────┬──────┘  - Returns NEEDS_RETRY with pattern_template
+       │
+       ▼
+┌─────────────┐
+│     AI      │  Fills implementation using pattern
+│  (Claude)   │  - Reads protocol (.claude/skills/qa-management-layer/references/step-XX.md)
+└──────┬──────┘  - Implements method bodies following examples
+       │          - Uses gate's dynamic_data for context
+       ▼
+┌─────────────┐
+│  Smart Gate │  Validates complete code
+│ (qg_* tool) │  - Checks architecture rules
+└──────┬──────┘  - PASS → File written to disk immediately
+       │
+       ▼
+  File Saved
+```
+
+---
+
+### Step-by-Step Breakdown
+
+#### Step 6: POM Generation (Tool 3 → qg_page_object)
+
+**1. Tool generates skeleton:**
+```python
+class LoginPage:
+    # Locators
+    EMAIL = (By.CSS_SELECTOR, "#email")
+    PASSWORD = (By.CSS_SELECTOR, "#passwd")
+
+    def __init__(self, web: WebInterface):
+        self.web = web
+
+    def enter_email(self, text: str) -> "LoginPage":
+        pass  # ← SKELETON DETECTED
+
+    def is_logged_in(self) -> bool:
+        pass  # ← SKELETON DETECTED
+```
+
+**2. Gate detects skeleton (POST validation):**
+- Detects `pass` statements in method bodies
+- Returns `NEEDS_RETRY` with:
+  - `pattern_template`: Complete POM pattern from step-06.md
+  - `dynamic_data`: {page_name: "LoginPage", elements: [...]}
+
+**3. AI fills implementation:**
+```python
+def enter_email(self, text: str) -> "LoginPage":
+    self.web.type_text(*self.EMAIL, text)
+    return self  # ← AI added implementation
+
+def is_logged_in(self) -> bool:
+    return self.web.is_element_displayed(*self.LOGOUT_LINK, timeout=5)
+```
+
+**4. Gate validates complete code:**
+- ✅ Atomic methods return `self`
+- ✅ State-check methods exist
+- ✅ No locators in method bodies
+- ✅ PASS → File written to `framework/pages/{workflow}/{page_name}.py`
+
+---
+
+#### Step 7: Task Generation (Tool 4 → qg_task)
+
+**Pattern:**
+```python
+# Tool 4 generates skeleton
+class AuthTasks:
+    def __init__(self, web: WebInterface):
+        self.web = web
+        self.login_page = LoginPage(web)
+
+    @autologger.automation_logger("Task")
+    def log_in(self, email: str, password: str):
+        pass  # ← SKELETON
+
+# Gate provides pattern → AI fills
+    def log_in(self, email: str, password: str):
+        self.login_page.navigate()
+        (self.login_page
+            .enter_email(email)
+            .enter_password(password)
+            .click_submit())
+        # NO return - test asserts via POM state-check
+```
+
+**Gate validates:**
+- ✅ NO locators in Task (delegates to POMs)
+- ✅ Uses @autologger decorator
+- ✅ Returns None (no return values)
+- ✅ Only calls POM methods
+
+---
+
+#### Step 8: Role Generation (Tool 5 → qg_role)
+
+**Pattern:**
+```python
+# Tool 5 generates skeleton
+class RegisteredUser:
+    def __init__(self, web: WebInterface, user_data: dict):
+        self.web = web
+        self.user_data = user_data
+        self.auth_tasks = AuthTasks(web)
+
+    @autologger.automation_logger("Role")
+    def purchase_product(self, product_data: dict):
+        pass  # ← SKELETON
+
+# Gate provides pattern → AI fills
+    def purchase_product(self, product_data: dict):
+        self.auth_tasks.log_in(self.user_data['email'], self.user_data['password'])
+        self.catalog_tasks.add_to_cart(product_data['name'])
+        self.checkout_tasks.complete_purchase()
+        # NO return - orchestrates MULTIPLE tasks
+```
+
+**Gate validates:**
+- ✅ NO locators in Role
+- ✅ NO direct POM imports (uses Tasks only)
+- ✅ Returns None
+- ✅ Orchestrates multiple Task methods
+
+---
+
+#### Step 9: Test Generation (Tool 6 → qg_test_runner)
+
+**Pattern:**
+```python
+# Tool 6 generates skeleton
+@autologger.automation_logger("Test")
+def test_user_can_purchase_product(web_interface, test_users):
+    pass  # ← SKELETON
+
+# Gate provides pattern → AI fills
+def test_user_can_purchase_product(web_interface, test_users):
+    # Arrange
+    user = RegisteredUser(web_interface, test_users['john'])
+    confirmation_page = OrderConfirmationPage(web_interface)
+
+    # Act - ONE workflow method call
+    user.purchase_product({"name": "T-Shirt", "category": "Women"})
+
+    # Assert - Via POM state-check methods
+    assert confirmation_page.is_order_confirmed()
+    assert confirmation_page.get_order_total() > 0
+```
+
+**Gate validates:**
+- ✅ Calls ONE Role workflow method (not multiple)
+- ✅ Asserts via POM state-check methods (not return values)
+- ✅ Uses @autologger decorator
+- ✅ NO locators in test
+
+---
+
+### Why This Pattern Works
+
+**Benefits:**
+
+1. **Tools Stay Simple**
+   - Generate structure, not business logic
+   - No need to understand site-specific details
+   - Skeleton output is predictable and testable
+
+2. **Gates Enforce Patterns**
+   - Validate architecture rules at each step
+   - Provide fix guidance on violations
+   - Block bad code before it propagates
+
+3. **Protocols Guide AI**
+   - Step-specific patterns in `.claude/skills/qa-management-layer/references/`
+   - Examples show correct implementation
+   - AI has complete context to fill skeleton
+
+4. **Dynamic Not Hardcoded**
+   - Pattern templates use placeholders: `{page_name}`, `{element}`, `{locator}`
+   - Works for ANY website (not site-specific)
+   - Gates provide site-specific data in `dynamic_data`
+
+5. **Consistent Architecture**
+   - Same pattern across all 4 layers (POM → Task → Role → Test)
+   - Predictable flow: skeleton → pattern → fill → validate
+   - Easy to understand and debug
+
+---
+
+### Key Components
+
+**1. Protocols (Skills)**
+- **Location:** `.claude/skills/qa-management-layer/references/step-06.md` through `step-09.md`
+- **Purpose:** Provide implementation patterns and examples for each layer
+- **Content:** Code templates, architecture rules, common patterns
+
+**2. Smart Gates (MCP Tools)**
+- **Location:** `mcp_server/tools/gates/qg_*.py`
+- **Purpose:** Validate code + provide fix patterns
+- **Layers:**
+  - **Layer 1 (Data Provision):** Provide missing data or defaults
+  - **Layer 2 (Pattern Provision):** Detect skeleton → provide fill pattern
+
+**3. Skeleton Detection**
+- **Indicators:** `pass` statements, placeholder comments, empty method bodies
+- **Trigger:** POST validation after tool generates code
+- **Response:** `NEEDS_RETRY` with `pattern_template` and `dynamic_data`
+
+**4. Pattern Templates**
+- **Format:** Code examples with placeholders
+- **Example:**
+  ```python
+  def {method_name}(self, {params}) -> "{class_name}":
+      self.web.{action}(*self.{locator}, {args})
+      return self
+  ```
+- **Dynamic Data:** Gate fills in actual values from metadata
+
+**5. AI Fill Process**
+- **Input:** Skeleton code + pattern template + dynamic data + protocol reference
+- **Process:** AI reads pattern, applies to skeleton, implements method bodies
+- **Output:** Complete code following architecture rules
+
+**6. Validation Rules**
+- **POM:** Locators as constants, atomic methods return self, state-check methods exist
+- **Task:** No locators, uses POMs only, returns None, @autologger decorator
+- **Role:** No POMs, uses Tasks only, returns None, orchestrates multiple tasks
+- **Test:** Calls ONE role method, asserts via POM, @autologger decorator
+
+---
+
+### Implementation Status
+
+**Current State (v1.0 MVP):**
+
+| Step | Component | Tool | Gate | Protocol | Layer 1 | Layer 2 | Status |
+|------|-----------|------|------|----------|---------|---------|--------|
+| 1 | Pre-flight | - | qg_preflight | step-01.md | ❌ | N/A | ⚠️ Pending |
+| 2 | User Input | - | qg_user_input | step-02.md | ❌ | N/A | ⚠️ Pending |
+| 3 | AI Processing | - | qg_ai_processing | step-03.md | ❌ | N/A | ⚠️ Pending |
+| 4 | Test Scenarios | Tool 1 | qg_test_scenarios | step-04.md | ❌ | N/A | ⚠️ Pending |
+| 5 | Element Discovery | Tool 2 | qg_discovered_elements | step-05.md | ✅ | N/A | ✅ Complete |
+| 6 | POM Generation | Tool 3 | qg_page_object | step-06.md | ❌ | ⚠️ | ⚠️ Partial |
+| 7 | Task Generation | Tool 4 | qg_task | step-07.md | ✅ | ⚠️ | ✅ Complete |
+| 8 | Role Generation | Tool 5 | qg_role | step-08.md | ❌ | ⚠️ | ⚠️ Partial |
+| 9 | Test Generation | Tool 6 | qg_test_runner | step-09.md | ✅ | ⚠️ | ✅ Complete |
+| 10 | Save & Run | - | qg_save_run | step-10.md | ❌ | N/A | ⚠️ Pending |
+| 11 | Execution | - | qg_execution | step-11.md | N/A | N/A | ✅ Complete |
+
+**Legend:**
+- ✅ Complete - Fully implemented and tested
+- ⚠️ Partial - Basic implementation exists, enhancements pending
+- ❌ Pending - Not yet implemented
+
+**Layer Definitions:**
+- **Layer 1:** Data/default provision (provide missing values)
+- **Layer 2:** Pattern provision (detect skeleton → provide fill pattern)
+
+---
+
+### Roadmap: Completing the Pattern
+
+**v1.1 Goals:**
+- Implement Layer 1 (data provision) for Steps 1-4, 6, 8, 10
+- Enhance Layer 2 (pattern provision) for Steps 6, 8
+
+**v1.2 Goals:**
+- Refactor Tools 3-6 to skeleton-only generation
+- Update protocols with complete AI fill instructions
+- Cross-site validation (same workflow, 3 different sites)
+
+**v2.0 Goals:**
+- AI self-heal integration (AI suggests code fixes using patterns)
+- Learning memory (remember successful pattern applications)
+- Confidence scoring (pattern match confidence)
+
+---
+
+## MVP Critical Fixes (v1.0)
+
+**Status:** 2 remaining fixes, both quick (<2 hours total)
+
+### DEF-060: Test Data Auto-Creation
+**Priority:** Medium
+**Effort:** <1 hour
+**Description:** Automatically create test data directories based on Step 1 config
+**Fix:** Step 1 (qg_preflight) POST validation creates directory structure
+
+### DEF-062: Environment Flag Auto-Detection
+**Priority:** High
+**Effort:** <1 hour
+**Description:** Auto-detect environment from URL to prevent 5-minute timeout
+**Fix:** Add URL domain → environment mapping in Step 2 (qg_user_input)
+
+---
+
+## HITL Function Enhancements
+
+**Added:** 2026-01-14
+**Context:** Parabank10 production test validation
+
+### Current State: 7/10 (MVP-Ready)
+
+**What Works:**
+- ✅ Captures diagnostic data (test output, failures, HTML reports)
+- ✅ Enables iterative fixes (fail → diagnose → fix → retry)
+- ✅ Non-blocking (user controls when to retry)
+- ✅ Transparent (user sees what broke and why)
+
+**What's Missing:**
+- Proactive guidance (warn before issues occur)
+- Failure pattern recognition (remember past issues)
+- Smart retry logic (auto-retry transient failures)
+- Visual diagnostics (screenshots, element state)
+- Learning memory (track patterns across runs)
+
+---
+
+### Architectural Gap: HITL Only at Step 11
+
+**Current Problem:**
+- HITL (Human-in-the-Loop) confirmation only exists at Step 11 (test execution failures)
+- Other steps that need user confirmation must build their own ad-hoc confirmation logic
+- No standardized HITL interface across the workflow
+- Each step reinvents the wheel for user approvals
+
+**Examples Where HITL Needed:**
+- **Step 2:** Confirm new environment addition to `environment_config.json` (DEF-062)
+- **Step 5:** Confirm multi-page scope detection results before POM generation
+- **Step 6:** Confirm skeleton code fix before saving POM
+- **Step 9:** Confirm test data file creation before test generation
+- **Step 11:** Already has HITL for execution failures
+
+**Impact:**
+- Inconsistent user experience across steps
+- Code duplication for confirmation logic
+- No standardized confirmation patterns
+- Harder to add HITL to new steps
+
+---
+
+### Solution: Modular HITL System (v1.2+)
+
+**Vision:** Standardized HITL module accessible by any step
+
+**Proposed Architecture:**
+```
+mcp_server/
+├── tools/
+│   ├── hitl/                         ← New modular HITL system
+│   │   ├── __init__.py
+│   │   ├── hitl_core.py              ← Core confirmation engine
+│   │   ├── confirmation_types.py     ← Standard confirmation patterns
+│   │   └── templates/                ← Reusable templates
+│   │       ├── config_change.py      ← For environment_config.json changes
+│   │       ├── code_approval.py      ← For skeleton fixes
+│   │       ├── data_creation.py      ← For test data file creation
+│   │       └── execution_retry.py    ← Step 11 execution failures
+│   ├── gates/
+│   │   ├── qg_user_input.py          ← Can call HITL for confirmations
+│   │   ├── qg_discovered_elements.py ← Can call HITL for scope confirmation
+│   │   ├── qg_page_object.py         ← Can call HITL for skeleton fixes
+│   │   ├── qg_test_runner.py         ← Can call HITL for data creation
+│   │   └── qg_execution.py           ← Already uses HITL (refactor to use core)
+```
+
+**Standard Interface:**
+```python
+from tools.hitl import request_confirmation
+
+# Any gate can use it
+result = request_confirmation(
+    confirmation_type="config_change",     # Template to use
+    context={
+        "file": "environment_config.json",
+        "action": "add_environment",
+        "proposed_change": {
+            "env_id": "parabank",
+            "url": "https://parabank.parasoft.com/parabank"
+        }
+    },
+    options=[
+        {"id": "approve", "label": "Yes, add it"},
+        {"id": "modify", "label": "Let me change the name"},
+        {"id": "reject", "label": "No, I'll add it manually"}
+    ]
+)
+
+# Returns: {"action": "approve|modify|reject", "user_input": {...}}
+```
+
+**Benefits:**
+- ✅ Single reusable HITL system across all steps
+- ✅ Consistent confirmation UX
+- ✅ Standard templates reduce boilerplate
+- ✅ Easy to add HITL to new steps
+- ✅ Centralized logging of user decisions
+- ✅ Audit trail of all confirmations
+
+**Implementation Plan:**
+1. Extract Step 11 HITL logic into `hitl_core.py`
+2. Define standard confirmation templates
+3. Refactor Step 11 to use modular system
+4. Add HITL to Step 2 (environment config - DEF-062)
+5. Add HITL to Step 5 (scope confirmation)
+6. Add HITL to Step 6/7/8 (skeleton fixes)
+7. Add HITL to Step 9 (test data creation)
+
+**Effort:** 12-15 hours (foundational work)
+**Impact:** High (enables all future HITL use cases)
+**Target:** v1.2 (after MVP stabilizes)
+
+**Related Defects:** DEF-062 (environment flag) needs HITL for config changes
+
+---
+
+## Priority 1: v1.1 (Quick Wins)
+
+**Target:** Post-MVP release, within 2 weeks of v1.0 launch
+
+### 1.1.1 Pre-Execution Validation
+**Effort:** 2-3 hours
+**Impact:** High (prevents timeouts, wrong environments)
+
+**Features:**
+- Environment validation: Check URL domain matches selected environment BEFORE running test
+- Test data validation: Verify required files exist BEFORE Step 10
+- Credential validation: Confirm test_users.json has required keys BEFORE execution
+
+**Implementation:**
+- Add validation checks to qg_user_input (Step 2)
+- Add pre-execution gate to qg_execution (Step 11)
+- Provide warnings with fix suggestions if mismatches detected
+
+**Success Metric:** Zero timeouts due to wrong environment
+
+---
+
+### 1.1.2 Failure Pattern Recognition
+**Effort:** 4-5 hours
+**Impact:** Medium (speeds debugging, reduces retry loops)
+
+**Features:**
+- Detect common failure patterns:
+  - Timing issues (element not ready)
+  - Locator type mismatches (<a> vs <p>)
+  - Network timeouts
+  - Stale element references
+- Provide targeted suggestions based on pattern
+
+**Example Output:**
+```
+❌ Test failed: Element ACCOUNT_ACTIVITY_LINK not found
+
+PATTERN DETECTED: Locator Type Mismatch
+- Expected: <a> (link)
+- Found: <p> (paragraph) with similar text
+
+SUGGESTED FIX:
+Update locator from:
+  ACCOUNT_ACTIVITY_LINK = (By.CSS_SELECTOR, "a.activity-link")
+To:
+  ACCOUNT_ACTIVITY_TEXT = (By.CSS_SELECTOR, "p.activity-text")
+```
+
+**Implementation:**
+- Add failure pattern analyzer to qg_execution
+- Build pattern library (timing, locator, network)
+- Provide fix templates for each pattern
+
+**Success Metric:** 50% reduction in retry attempts due to better guidance
+
+---
+
+### 1.1.3 Element Inspector Hints
+**Effort:** 3-4 hours
+**Impact:** Medium (faster locator debugging)
+
+**Features:**
+- When element not found, scan DOM for similar elements:
+  - Similar text content
+  - Similar class names
+  - Similar IDs
+  - Same tag but different selector
+- Suggest alternative locators
+
+**Example Output:**
+```
+❌ Element TRANSFER_BUTTON not found
+
+SIMILAR ELEMENTS FOUND:
+1. <button class="btn-transfer"> (id="submit-transfer")
+   Suggested: TRANSFER_BUTTON = (By.ID, "submit-transfer")
+
+2. <input type="submit" value="Transfer Funds">
+   Suggested: TRANSFER_BUTTON = (By.CSS_SELECTOR, "input[value='Transfer Funds']")
+
+3. <a class="transfer-link">
+   Suggested: TRANSFER_LINK = (By.CSS_SELECTOR, "a.transfer-link")
+```
+
+**Implementation:**
+- Use Playwright snapshot to scan DOM on failure
+- Fuzzy match similar elements (text, attributes)
+- Generate alternative locator suggestions
+
+**Success Metric:** 80% of locator issues resolved in first retry
+
+---
+
+## Priority 2: v1.2 (Longer Term)
+
+**Target:** 1-2 months after v1.0 launch
+
+### 1.2.1 Smart Retry Logic
+**Effort:** 5-6 hours
+**Impact:** High (reduces manual intervention)
+
+**Features:**
+- Auto-retry transient failures (network, timing) with exponential backoff
+- Configurable retry rules:
+  - Max retries per failure type
+  - Delay between retries
+  - Conditions for auto-retry vs user intervention
+- Track retry history in audit log
+
+**Implementation:**
+- Add retry engine to qg_execution
+- Define retry-eligible failure types
+- Implement backoff strategy (1s, 2s, 4s)
+- User configurable via environment variables
+
+**Success Metric:** 30% of failures auto-resolve without user intervention
+
+---
+
+### 1.2.2 Visual Diff on Failures
+**Effort:** 6-8 hours
+**Impact:** Medium (better debugging for visual issues)
+
+**Features:**
+- Capture screenshot on assertion failure
+- Highlight expected vs actual state visually
+- Show element bounding boxes for "not found" errors
+- Save screenshots to `tests/_reports/screenshots/`
+
+**Example:**
+```
+❌ Assertion failed: is_transfer_confirmed()
+
+VISUAL DIFF:
+- Expected: "Transfer Complete!" heading visible
+- Actual: "Transfer Failed" heading shown
+
+Screenshot: tests/_reports/screenshots/test_transfer_2026-01-14_23-15-30.png
+```
+
+**Implementation:**
+- Integrate Playwright screenshot API
+- Add screenshot capture on failure hook
+- Generate visual diff HTML reports
+- Store screenshots with test results
+
+**Success Metric:** 70% of visual issues debugged without re-running test
+
+---
+
+### 1.2.3 Learning Memory
+**Effort:** 8-10 hours
+**Impact:** Medium (improves over time)
+
+**Features:**
+- Track failure patterns across workflow runs
+- Build knowledge base of:
+  - Common failures per workflow
+  - Successful fixes per failure pattern
+  - Time-to-resolution per issue type
+- Suggest fixes based on historical success rate
+
+**Example:**
+```
+❌ Test timed out (300s) on parabank.parasoft.com
+
+LEARNING MEMORY DETECTED:
+This URL domain caused the same timeout in:
+- Workflow: parabank9 (2026-01-14)
+- Workflow: parabank10 (2026-01-14)
+
+Both resolved by using: --env parabank
+
+SUGGESTED FIX:
+Add `--env parabank` flag to test execution
+Success rate: 100% (2/2 past occurrences)
+```
+
+**Implementation:**
+- Store failure/resolution history in SQLite DB
+- Index by: workflow, failure_type, URL_domain
+- Calculate success rates for suggested fixes
+- Prune old data (keep last 90 days)
+
+**Success Metric:** 40% of recurring issues auto-suggested fix on first occurrence
+
+---
+
+## Priority 3: v2.0 (Advanced Features)
+
+**Target:** 3-6 months after v1.0 launch
+
+### 2.0.1 AI Self-Heal Suggestions with Approval
+**Effort:** 15-20 hours
+**Impact:** Very High (semi-autonomous fix generation)
+
+**Features:**
+- AI analyzes failure context:
+  - Error message
+  - Playwright snapshot
+  - Recent code changes
+  - Similar past failures
+- Generates fix code (locator updates, wait logic, assertions)
+- Presents to user for approval before applying
+- Tracks fix success rate to improve suggestions
+
+**User Flow:**
+```
+1. Test fails
+2. AI analyzes: "Locator mismatch detected"
+3. AI generates fix:
+   - Old: LINK = (By.CSS_SELECTOR, "a.activity")
+   - New: TEXT = (By.CSS_SELECTOR, "p.activity")
+4. User reviews diff
+5. User approves → AI applies fix → Re-runs test
+6. Fix success tracked for future learning
+```
+
+**Implementation:**
+- Integrate Claude API for fix generation
+- Build prompt templates for fix types
+- Create approval UI (CLI-based for MVP)
+- Track fix success rate (successful retry after apply)
+
+**Success Metric:** 60% of AI-suggested fixes resolve issue on first apply
+
+---
+
+### 2.0.2 Playwright Integration (Deep Diagnostics)
+**Effort:** 10-12 hours
+**Impact:** High (professional-grade debugging)
+
+**Features:**
+- Use Playwright's trace viewer for failure debugging
+- Capture network logs, console errors, JS exceptions
+- Generate interactive HTML reports with timeline
+- Record video of test execution on failure
+
+**Tools Integrated:**
+- Playwright trace viewer
+- Network inspector (HAR files)
+- Console log capture
+- Video recording
+
+**Implementation:**
+- Enable Playwright tracing for failed tests
+- Save trace files to `tests/_reports/traces/`
+- Generate links to open traces in browser
+- Configure trace retention policy
+
+**Success Metric:** 90% of failures debugged using trace data alone
+
+---
+
+### 2.0.3 Confidence Scoring for Failures
+**Effort:** 12-15 hours
+**Impact:** Medium (reduces false-positive investigations)
+
+**Features:**
+- Assign confidence score to each failure:
+  - High confidence (90%+): Definitely a real issue
+  - Medium confidence (50-89%): Likely an issue, investigate
+  - Low confidence (<50%): Probably transient, auto-retry
+- Factors for scoring:
+  - Failure repeatability (1 time = low, 3+ times = high)
+  - Failure type (assertion = high, timeout = low)
+  - Test history (new test = low, stable test = high)
+
+**Example Output:**
+```
+❌ Test failed: Timeout after 30s
+
+CONFIDENCE SCORE: 25% (Low)
+
+REASONING:
+- First occurrence (no pattern)
+- Network-dependent operation
+- No similar failures in history
+
+RECOMMENDATION: Auto-retry (2 attempts remaining)
+```
+
+**Implementation:**
+- Build confidence scoring model
+- Weight factors: repeatability (40%), failure_type (30%), test_history (30%)
+- Integrate with smart retry logic
+- Display confidence in failure reports
+
+**Success Metric:** 50% reduction in time spent investigating transient failures
+
+---
+
+## Cross-Cutting Enhancements
+
+### Configuration Management
+**Version:** v1.1
+**Effort:** 3-4 hours
+
+**Features:**
+- Centralized configuration file: `.isagawa/config.yaml`
+- Environment-specific overrides
+- CLI flags to override config values
+- Validation on startup
+
+---
+
+### Performance Optimization
+**Version:** v1.2
+**Effort:** 5-6 hours
+
+**Features:**
+- Parallel test execution (pytest-xdist)
+- Test result caching (skip unchanged tests)
+- Browser session reuse (between tests in same workflow)
+- Optimize gate validation (cache metadata)
+
+---
+
+### Documentation Generation
+**Version:** v2.0
+**Effort:** 8-10 hours
+
+**Features:**
+- Auto-generate POM documentation from code
+- Generate test coverage reports (scenarios vs implemented tests)
+- Create architecture diagrams from codebase analysis
+- Publish docs to static site (GitHub Pages)
+
+---
+
+## Notes
+
+- All enhancements tracked with effort estimates (conservative)
+- Priorities based on user feedback and MVP validation results
+- Version targets are flexible based on user demand
+- Each enhancement should have acceptance criteria before implementation
+
+---
+
+**Last Updated:** 2026-01-14 (Created with HITL analysis from Parabank10 validation)
