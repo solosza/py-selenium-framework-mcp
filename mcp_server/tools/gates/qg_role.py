@@ -17,9 +17,10 @@ POST Validation:
 - @autologger.automation_logger("Role") decorator present (IC-08-04)
 - At least one task method call (IC-08-06)
 - Semantic validation (FR-14.2): credential strategy enforcement via pluggable rules
+- DEF-063: Dynamic credential field resolution (returns NEEDS_RETRY if hardcoded)
 - metadata present with class_name and import_path (DD-26)
 
-Enforces: DD-12, DD-25, DD-26, DD-27, FR-14.2, IC-08-01 through IC-08-06
+Enforces: DD-12, DD-25, DD-26, DD-27, FR-14.2, IC-08-01 through IC-08-06, DEF-063
 """
 
 import re
@@ -358,6 +359,11 @@ class QGRole(BaseGate):
         if semantic_error:
             return semantic_error
 
+        # DEF-063: Check for hardcoded credential fields
+        credential_check = cls._check_credential_field_hardcoding(code)
+        if credential_check:
+            return credential_check  # NEEDS_RETRY
+
         # Validate metadata field (DD-26)
         metadata = input_data.get("metadata")
 
@@ -599,6 +605,78 @@ class QGRole(BaseGate):
             return result
 
         return None
+
+    @classmethod
+    def _check_credential_field_hardcoding(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        DEF-063: Check if Role constructor hardcodes credential field names.
+
+        Detects patterns like:
+        - self.email = user_data.get('email')
+        - self.password = user_data.get('password') (without fallback to username)
+
+        Returns NEEDS_RETRY with dynamic pattern template if hardcoded fields detected.
+        Returns None if dynamic pattern already used or no credential fields.
+        """
+        # Check if code already uses dynamic pattern (idempotent)
+        if "user_data.get('username') or user_data.get('email')" in code:
+            return None  # Already dynamic, pass validation
+
+        # Detect hardcoded 'email' field (without username fallback)
+        hardcoded_fields = []
+
+        # Pattern 1: self.email = user_data.get('email')
+        if "self.email = user_data.get('email')" in code:
+            hardcoded_fields.append("email")
+
+        # Pattern 2: self.password = user_data.get('password') without username check before it
+        if "self.password = user_data.get('password')" in code:
+            # Check if there's no username handling
+            if "user_data.get('username')" not in code:
+                hardcoded_fields.append("password (no username fallback)")
+
+        if hardcoded_fields:
+            return {
+                "status": "NEEDS_RETRY",
+                "fix_applied": "dynamic_credential_fields",
+                "error": f"Role hardcodes credential fields: {', '.join(hardcoded_fields)}",
+                "message": "Make Role use dynamic credential field resolution:",
+                "scaffolding_needed": [{
+                    "type": "code_pattern",
+                    "location": "Role constructor (__init__)",
+                    "template": cls._get_dynamic_credential_pattern(),
+                    "reason": "Flexible credential field resolution for any application"
+                }]
+            }
+
+        return None
+
+    @classmethod
+    def _get_dynamic_credential_pattern(cls) -> str:
+        """
+        DEF-063: Get template for dynamic credential field resolution.
+
+        Returns code pattern that works with any credential field names:
+        - username, email, user_id, login
+        - password, pin, secret
+        """
+        return """# Dynamic credential resolution - works with any field names
+self.user_data = user_data
+self.username = (
+    user_data.get('username') or
+    user_data.get('email') or
+    user_data.get('user_id') or
+    user_data.get('login')
+)
+self.password = (
+    user_data.get('password') or
+    user_data.get('pin') or
+    user_data.get('secret')
+)
+
+# Validate credentials present
+if not self.username or not self.password:
+    raise ValueError(f"RegisteredUser requires username and password. Got: {list(user_data.keys())}")"""
 
     @classmethod
     def _validate_metadata_structure(cls, metadata: Dict[str, Any]) -> Optional[Dict[str, Any]]:

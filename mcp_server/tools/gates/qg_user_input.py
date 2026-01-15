@@ -104,8 +104,15 @@ class QGUserInput(BaseGate):
 
         # All valid - detect environment and save state
         # Task 10.0: Use per-run state isolation
-        # DEF-062: Auto-detect environment from URL
-        detected_env_id = cls._detect_environment_from_url(url)
+        # DEF-062: Auto-detect environment from URL (NEEDS_RETRY pattern)
+        detection_result = cls._detect_environment_from_url(url, workflow)
+
+        # Check if unknown domain (NEEDS_RETRY)
+        if "needs_retry" in detection_result:
+            return detection_result["needs_retry"]
+
+        # Known domain - save state
+        detected_env_id = detection_result["env_id"]
 
         audit_logger = cls.get_audit_logger()
         state_manager = StateManager(run_id=audit_logger.run_id)
@@ -182,44 +189,79 @@ class QGUserInput(BaseGate):
         return isinstance(value, str) and len(value.strip()) > 0
 
     @classmethod
-    def _detect_environment_from_url(cls, url: str) -> str:
+    def _detect_environment_from_url(cls, url: str, workflow: str) -> Dict[str, Any]:
         """
         Detect environment ID by matching URL domain against environment_config.json.
 
+        DEF-062 REFACTOR: Now returns NEEDS_RETRY for unknown domains instead of
+        silently falling back to "DEFAULT".
+
         Args:
             url: User-provided URL (validated by _is_valid_url)
+            workflow: Workflow name for scaffolding template
 
         Returns:
-            Environment ID matching the URL domain, or "DEFAULT" if no match
-
-        Implementation:
-            - Reads framework/resources/config/environment_config.json
-            - Extracts domain from URL and each environment's URL
-            - Matches domains (exact or subdomain match)
-            - Falls back to "DEFAULT" if no match or config read fails
+            Dict with:
+            - If known: {"env_id": "parabank", "is_known": True}
+            - If DEFAULT URL: {"env_id": "DEFAULT", "is_known": True}
+            - If unknown: {"needs_retry": {...NEEDS_RETRY response...}}
         """
         config_path = Path(__file__).parent.parent.parent.parent / "framework" / "resources" / "config" / "environment_config.json"
 
+        # Read environment config
         try:
             with open(config_path, 'r') as f:
                 environments = json.load(f)
         except Exception:
-            return "DEFAULT"  # Fallback if config read fails
+            # Config read failed - can't scaffold, use DEFAULT
+            return {"env_id": "DEFAULT", "is_known": True}
 
         # Extract domain from URL
         parsed_url = urlparse(url)
         url_domain = parsed_url.netloc.lower()
+        base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
 
-        # Match against each environment's URL domain
+        # Check if this is the DEFAULT environment URL
+        default_url = environments.get("DEFAULT", {}).get("url", "")
+        default_parsed = urlparse(default_url)
+        default_domain = default_parsed.netloc.lower()
+
+        if url_domain == default_domain or url_domain.endswith(f".{default_domain}"):
+            return {"env_id": "DEFAULT", "is_known": True}
+
+        # Match against each environment's URL domain (excluding DEFAULT)
         for env_id, config in environments.items():
+            if env_id == "DEFAULT":
+                continue  # Already checked above
+
             env_url = config.get('url', '')
             env_parsed = urlparse(env_url)
             env_domain = env_parsed.netloc.lower()
 
             if url_domain == env_domain or url_domain.endswith(f".{env_domain}"):
-                return env_id
+                return {"env_id": env_id, "is_known": True}
 
-        return "DEFAULT"  # No match found
+        # Unknown domain - return NEEDS_RETRY with scaffolding instructions
+        template = json.dumps({
+            workflow: {
+                "url": base_url
+            }
+        }, indent=2)
+
+        return {
+            "needs_retry": {
+                "status": "NEEDS_RETRY",
+                "fix_applied": "environment_added_to_config",
+                "error": f"Unknown environment: {url_domain}",
+                "message": f"Add environment for '{workflow}' workflow to environment_config.json:",
+                "scaffolding_needed": [{
+                    "type": "config_entry",
+                    "path": "framework/resources/config/environment_config.json",
+                    "template": template,
+                    "reason": f"Environment config for {workflow} workflow at {base_url}"
+                }]
+            }
+        }
 
     @staticmethod
     def _get_fix_hint_for_missing(missing_fields: list) -> str:

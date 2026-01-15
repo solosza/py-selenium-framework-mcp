@@ -6,7 +6,7 @@ Task module for ParaBank authentication using ParabankLoginPage.
 
 from interfaces.web_interface import WebInterface
 from resources.utilities import autologger
-from pages.auth.parabank_login_page import ParabankLoginPage
+from pages.parabank11.parabank_login_page import ParabankLoginPage
 
 
 class Parabank11AuthTasks:

@@ -1,0 +1,531 @@
+{
+  "run_id": "2026-01-15T07:07:04.383937Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:07:04.383937Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:11:00.496300Z",
+      "metadata": {
+        "persona": "user",
+        "URL": "https://new-app.example.com/login",
+        "role_name": "User",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:11:41.122910Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://parabank.parasoft.com/parabank/index.htm",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:11:41.134719Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:11:41.143180Z",
+      "metadata": {
+        "persona": "user",
+        "URL": "https://demo.parabank.parasoft.com/parabank/register.htm",
+        "role_name": "User",
+        "workflow": "auth",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:11:48.887205Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://parabank.parasoft.com/parabank/index.htm",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:11:48.894005Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:11:48.903706Z",
+      "metadata": {
+        "persona": "user",
+        "URL": "https://demo.parabank.parasoft.com/parabank/register.htm",
+        "role_name": "User",
+        "workflow": "auth",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.800593Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.804926Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "https://parabank.parasoft.com/parabank/index.htm",
+        "role_name": "Customer",
+        "workflow": "checkout",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.816006Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://www.automationpractice.pl/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.824186Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/browse",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.824186Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://www.automationpractice.pl/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.838763Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/products",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.848051Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://www.automationpractice.pl/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.856672Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "http://www.automationpractice.pl/login",
+        "role_name": "Customer",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.866465Z",
+      "metadata": {
+        "persona": "developer",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Developer",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.875888Z",
+      "metadata": {
+        "persona": "tester",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Tester",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.883215Z",
+      "metadata": {
+        "persona": "premium registered user with subscription",
+        "URL": "http://www.automationpractice.pl/premium",
+        "role_name": "PremiumUser",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.893230Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://parabank.parasoft.com/parabank/index.htm",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.898734Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:12:54.909718Z",
+      "metadata": {
+        "persona": "user",
+        "URL": "https://demo.parabank.parasoft.com/parabank/register.htm",
+        "role_name": "User",
+        "workflow": "auth",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.834449Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.841668Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.848649Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "https://parabank.parasoft.com/parabank/index.htm",
+        "role_name": "Customer",
+        "workflow": "checkout",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.858227Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://www.automationpractice.pl/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.865439Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/browse",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.883594Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://www.automationpractice.pl/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.899100Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/products",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.909348Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "http://www.automationpractice.pl/login",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.925299Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "http://www.automationpractice.pl/login",
+        "role_name": "Customer",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.947077Z",
+      "metadata": {
+        "persona": "developer",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Developer",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.954290Z",
+      "metadata": {
+        "persona": "tester",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Tester",
+        "workflow": "auth",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.971261Z",
+      "metadata": {
+        "persona": "premium registered user with subscription",
+        "URL": "http://www.automationpractice.pl/premium",
+        "role_name": "PremiumUser",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:38.988062Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://parabank.parasoft.com/parabank/index.htm",
+        "role_name": "RegisteredUser",
+        "workflow": "auth",
+        "detected_env_id": "parabank"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:39.000047Z",
+      "metadata": {
+        "persona": "guest",
+        "URL": "http://www.automationpractice.pl/index.php",
+        "role_name": "Guest",
+        "workflow": "catalog",
+        "detected_env_id": "DEFAULT"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T07:13:39.009592Z",
+      "metadata": {
+        "persona": "user",
+        "URL": "https://demo.parabank.parasoft.com/parabank/register.htm",
+        "role_name": "User",
+        "workflow": "auth",
+        "detected_env_id": "parabank"
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 2,
+    "gates_passed": 37,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

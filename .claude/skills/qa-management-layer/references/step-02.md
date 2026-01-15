@@ -154,6 +154,79 @@ Say:
 
 ---
 
+## H. Environment Auto-Detection (DEF-062)
+
+**Purpose:** Auto-detect test environment from URL, scaffold config for unknown environments.
+
+**Detection Logic:**
+
+| URL Domain | Environment Detected | Behavior |
+|------------|---------------------|----------|
+| Matches environment_config.json | Auto-detect (e.g., "parabank") | Continue without NEEDS_RETRY |
+| DEFAULT URL (automationpractice.pl) | "DEFAULT" | Continue without NEEDS_RETRY |
+| Unknown domain | NEEDS_RETRY | AI scaffolds environment config |
+
+**Scaffolding Response Format:**
+
+When unknown environment detected, gate returns `status: "NEEDS_RETRY"`:
+
+```json
+{
+  "status": "NEEDS_RETRY",
+  "fix_applied": "environment_added_to_config",
+  "error": "Unknown environment: new-app.example.com",
+  "message": "Add environment for 'auth' workflow to environment_config.json:",
+  "scaffolding_needed": [{
+    "type": "config_entry",
+    "path": "framework/resources/config/environment_config.json",
+    "template": "{\n  \"auth\": {\n    \"url\": \"https://new-app.example.com\"\n  }\n}",
+    "reason": "Environment config for auth workflow at https://new-app.example.com"
+  }]
+}
+```
+
+**AI Handling Instructions (HUMAN APPROVAL REQUIRED):**
+
+When gate returns `NEEDS_RETRY`:
+1. Read `scaffolding_needed[0].template`
+2. Parse template to extract proposed environment config
+3. **USE AskUserQuestion to request approval:**
+   ```
+   "I detected a new environment that's not in the config.
+
+   Proposed environment config:
+   {
+     \"auth\": {
+       \"url\": \"https://new-app.example.com\"
+     }
+   }
+
+   Add this environment to environment_config.json?"
+
+   Options:
+   1. Yes, add as shown (Recommended)
+   2. Modify environment name or URL
+   ```
+4. **If user approves (option 1):**
+   - Read existing environment_config.json
+   - Add new environment entry from template
+   - Write updated environment_config.json using Write tool
+   - Retry gate call
+   - Verify gate returns `status: "pass"` with `detected_env_id` matching new environment
+5. **If user wants to modify (option 2):**
+   - Ask user for modified environment name and/or URL
+   - Create modified template
+   - Add modified environment to config
+   - Retry gate call
+
+**CRITICAL:** Never auto-scaffold environment config without user approval. Environment config affects test execution and requires user decision.
+
+**Idempotent:** If environment already exists in config, gate returns `pass` (no scaffolding or approval needed).
+
+**Temporary Stopgap:** This manual approval step will be replaced by full HITL system in future version.
+
+---
+
 ## Flow Diagram
 
 ```
@@ -192,25 +265,51 @@ Say:
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  QUALITY GATE: qg_user_input                                                 │
 │  - Validates all extracted fields                                           │
+│  - Auto-detects environment from URL (DEF-062)                              │
 │  - Saves state on PASS                                                      │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
-                          ┌───────────┴───────────┐
-                          ▼                       ▼
-                    ┌──────────┐            ┌──────────┐
-                    │  PASS    │            │  FAIL    │
-                    └────┬─────┘            └────┬─────┘
-                         │                       │
-                         ▼                       ▼
-              ┌─────────────────────┐  ┌─────────────────────┐
-              │  STATE SAVED        │  │  ASK USER           │
-              │  (by qg_user_input) │  │  (show what's wrong)│
-              └─────────────────────┘  └─────────────────────┘
-                         │
-                         ▼
-              ┌─────────────────────┐
-              │  PROCEED TO STEP 3  │
-              └─────────────────────┘
+                          ┌───────────┴───────────────────────┐
+                          ▼                ▼                  ▼
+                    ┌──────────┐    ┌──────────┐      ┌──────────┐
+                    │  PASS    │    │NEEDS_RETRY│      │  FAIL    │
+                    └────┬─────┘    └────┬─────┘      └────┬─────┘
+                         │               │                   │
+                         │               ▼                   ▼
+                         │     ┌─────────────────┐  ┌─────────────┐
+                         │     │ AI ASKS USER    │  │  ASK USER   │
+                         │     │ approve env?    │  │  (fix issue)│
+                         │     └─────────┬───────┘  └─────────────┘
+                         │               │
+                         │               ▼
+                         │     ┌─────────────────┐
+                         │     │ USER APPROVES   │
+                         │     └─────────┬───────┘
+                         │               │
+                         │               ▼
+                         │     ┌─────────────────┐
+                         │     │ AI ADDS to      │
+                         │     │ config.json     │
+                         │     └─────────┬───────┘
+                         │               │
+                         │               ▼
+                         │     ┌─────────────────┐
+                         │     │ AI RETRIES      │
+                         │     │ qg_user_input   │
+                         │     └─────────┬───────┘
+                         │               │
+                         └───────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  STATE SAVED           │
+                         │  (by qg_user_input)    │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  PROCEED TO STEP 3     │
+                         └────────────────────────┘
 ```
 
 ---

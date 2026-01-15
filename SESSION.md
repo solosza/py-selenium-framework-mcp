@@ -1,160 +1,213 @@
-# Session State - 2026-01-14 (Step 11 - Implementation Phase)
+# Session State - 2026-01-15 (Framework Cleanup Complete)
 
 ## Current Phase
-**Phase:** Divide/Deliver (4D Framework - Phase 3/4)
-**Status:** Tasks 58.0-64.0 COMPLETE, Task 65.0 IN PROGRESS
-**Project:** step-11-hitl-execution-gate
-**Active Branch:** `feature/65.0-step11-e2e-tests`
-
-## What We're Working On
-**Active Task:** 65.0 - E2E Testing & Validation [CORE]
-**Task Status:** In Progress (5%)
-
-## Progress This Session
-
-### Completed This Session
-- [x] Task 64.0 - Integration Testing COMPLETE
-  - Created `test_step11_integration.py` (609 lines)
-  - 3 passing tests (HITL triage workflows)
-  - 4 tests skipped (deferred to E2E - Task 65.0)
-  - Commit: `75feab6`
-- [x] Created feature branch `feature/65.0-step11-e2e-tests`
-- [x] Reviewed Task 65.0 requirements (10 test scenarios)
-- [x] Reviewed 4 skipped tests from Task 64.0
-
-### In Progress
-- [ ] Task 65.0.1-65.0.2 - Create E2E test file structure (IN PROGRESS)
-- [ ] Task 65.0.3-65.0.12 - Implement 10 E2E test scenarios
-- [ ] Task 65.0.13-65.0.16 - Create test fixtures
-- [ ] Task 65.0.17-65.0.20 - Run checks and commit
-
-### Issue Discovered
-**CLI Caching Issue:**
-- Command file on disk is correct: "11-step", "qa-management-layer"
-- CLI expansion shows cached old version: "10-step", "qa-guidance-layer"
-- Files were updated in Task 63.0 (129 replacements across 24 files)
-- **Fix Required:** Restart Claude Code CLI to clear command cache
-
-## Files Changed
-
-**This Session:**
-```
-NONE YET - Only branch created
-```
-
-**Previous Session (Task 64.0):**
-```
-mcp_server/_dev_tests/test_gates/test_step11_integration.py (NEW - 609 lines)
-```
-
-**Recent Commits:**
-- `75feab6` - Task 64.0: Integration tests (3 passing, 4 skipped)
-- `aa840d4` - Task 63.0: Documentation updates (11-step)
-- `56e1069` - Task 63.0: Rename qa-guidance-layer → qa-management-layer
-- `febfc80` - Task 62.0: MCP server registration
-
-## Test Status
-
-**Integration Tests (Task 64.0):** ✅ PASSING
-- 3 passed, 4 skipped (intentionally deferred to E2E)
-- Core HITL triage workflows validated
-
-**E2E Tests (Task 65.0):** 🔄 NOT STARTED
-- Test file not created yet
-- 10 scenarios to implement
-
-## Active Blockers
-
-**BLOCKER:** CLI command cache showing old version
-- **Impact:** Cannot run `/qa-workflow` to test production workflow
-- **Resolution:** User restarting Claude Code CLI
-- **Status:** Waiting for restart
-
-## Context for Next Session
-
-**Resume Point:** After CLI restart, continue Task 65.0 - Create E2E test file structure.
-
-**Task 65.0 Requirements Summary:**
-
-**10 E2E Test Scenarios:**
-1. ✅ Happy path (11-step workflow, test passes)
-2. ✅ Test failure - app bug (user selects "app defect", workflow stops)
-3. ✅ Test failure - test issue (user selects "test issue", AI fixes, test passes)
-4. ✅ qg_workflow_complete failure - test path mismatch
-5. ✅ qg_workflow_complete failure - file missing
-6. ✅ qg_workflow_complete failure - workflow ID mismatch
-7. ✅ Backward compatibility (old 10-step state files)
-8. ✅ Migration validation (10-step + Step 11 coexist)
-9. ✅ Audit trail completeness (all 11 steps logged)
-10. ✅ Performance validation (Step 11 < 2 minutes)
-
-**4 Skipped Tests from Task 64.0 (Move to E2E):**
-- `test_full_chain_happy_path_test_passes` - Requires file system + qg_workflow_complete
-- `test_same_error_retry_limit` - Requires stateful retry tracking
-- `test_audit_trail_captures_step11_data` - Requires PostToolUse hooks
-- `test_state_saves_step11_data_with_triage` - Requires real StateManager
-
-**Implementation Approach:**
-- Create sample test fixtures (passing/failing tests)
-- Use real pytest execution (NOT mocked subprocess)
-- Use real file system (generate actual POMs/Tasks/Roles/Tests)
-- Validate audit trail files created
-- Verify state files updated
-- Test backward compatibility with old 10-step state
-
-**Next Steps After Restart:**
-1. Verify `/qa-workflow` command expands correctly
-2. Test production workflow with ParaBank requirement
-3. Continue Task 65.0 - Create E2E test file
-4. Implement 10 E2E scenarios
-5. Run E2E tests
-6. Commit Task 65.0
-
-## Project Status
-
-**Step 11 HITL Execution Gate Project:**
-- ✅ Task 58.0 - StateManager Extension COMPLETE
-- ✅ Task 59.0 - run_test Operation COMPLETE
-- ✅ Task 60.0 - qg_execution Gate COMPLETE
-- ✅ Task 61.0 - qg_workflow_complete Meta-Gate COMPLETE
-- ✅ Task 62.0 - MCP Server Registration COMPLETE
-- ✅ Task 63.0 - Documentation Updates COMPLETE
-- ✅ Task 64.0 - Integration Testing COMPLETE
-- 🔄 Task 65.0 - E2E Testing IN PROGRESS (5%)
-
-**Overall Progress:** 87.5% (7/8 tasks complete)
-
-## Important Context
-
-**ParaBank Test Requirement (for production test):**
-- **Persona:** As a registered user
-- **URL:** https://parabank.parasoft.com/parabank/index.htm
-- **Requirement:** I want to log in with valid credentials and verify I am logged in
-- **Credentials:** username=john, password=demo (in test_users.json)
-- **Command:** `/qa-workflow` (production) or `/qa-workflow-dev` (development)
-
-**11-Step Workflow Summary:**
-```
-Step 1:  qg_preflight           → credential_strategy, test_data_location
-Step 2:  qg_user_input          → persona, URL
-Step 3:  qg_ai_processing       → metadata_context
-Step 4:  Tool 1                 → test_scenarios
-Step 5:  Tool 2                 → discovered_elements
-Step 6:  Tool 3                 → pom_metadata
-Step 7:  Tool 4                 → task_metadata
-Step 8:  Tool 5                 → role_metadata
-Step 9:  Tool 6                 → test_code
-Step 10: Save & Run             → files saved
-Step 11: Execution & Validation → run_test → qg_execution → qg_workflow_complete
-```
-
-## Token Usage
-- Session start: ~49K tokens (from summarized context)
-- Session end: ~72K tokens
-- Total session: ~23K tokens
+**Phase:** Framework Cleanup
+**Status:** Complete - Clean ParaBank-only structure
 
 ---
 
-**Last Updated:** 2026-01-14 (before CLI restart)
-**Next Action:** User restarting Claude Code CLI to clear command cache
-**Then:** Continue Task 65.0 - Create E2E test file structure
+## What We're Working On
+
+**Active Task:** Framework cleanup (Task 66.0, 66.1)
+**Current Branch:** `feature/65.0-parabank11-workflow`
+
+---
+
+## Progress This Session
+
+### Completed
+
+#### Task 65.0: Parabank11 Workflow Completion
+- [x] Created workflow-specific AuthTasks (ParaBank uses username, not email)
+- [x] Created Parabank11RegisteredUser role
+- [x] Generated test file (test_open_new_checking_account.py)
+- [x] Fixed ParabankLoginPage navigation URL
+- [x] **Test execution: PASSED** (6.29s)
+- [x] Committed to feature branch
+
+#### Task 66.0: ParaBank Workflow Cleanup
+- [x] Analyzed all 11 parabank workflows
+- [x] Deleted 9 redundant parabank workflows
+- [x] Kept parabank5 (transfer funds) and parabank11 (open account)
+- [x] **Deleted:** 40 files, 9,401 lines
+
+#### Task 66.1: Non-ParaBank Workflow Cleanup
+- [x] Identified 6 non-ParaBank applications in framework
+- [x] Deleted all non-ParaBank workflows
+- [x] **Deleted:** 31 files, 1,473 lines
+- [x] Framework now ParaBank-only (single app focus)
+
+---
+
+## Files Deleted Summary
+
+### Task 66.0: ParaBank Cleanup (40 files)
+**Incomplete workflows (6):**
+- parabank2, 3, 4, 6, 7, 8
+
+**Complete but redundant (3):**
+- parabank (older implementation)
+- parabank9 (simple login only)
+- parabank10 (duplicate transfer scenario)
+
+### Task 66.1: Non-ParaBank Cleanup (31 files)
+**Applications removed:**
+1. **SauceDemo** (cart/) - Inventory, login
+2. **Helios Digital Retail** (inquiries/) - Sales inquiry
+3. **AutomationPractice** (auth/, checkout/) - Login, purchase
+4. **Admin** (admin/) - User management
+5. **Banking** (banking/) - Redundant ParaBank implementation
+6. **Generic Auth** (auth/auth_tasks.py, login_page.py)
+
+---
+
+## Final Framework Structure
+
+```
+framework/
+├── pages/
+│   ├── auth/
+│   │   └── parabank_login_page.py  ← ParaBank login only
+│   ├── parabank5/                  ← Transfer funds scenario
+│   │   ├── login_page.py
+│   │   ├── transfer_confirmation_page.py
+│   │   └── transfer_funds_page.py
+│   └── parabank11/                 ← Open account scenario
+│       └── open_account_page.py
+│
+├── tasks/
+│   ├── parabank5/
+│   │   └── parabank_tasks.py
+│   └── parabank11/
+│       ├── parabank11_auth_tasks.py
+│       └── parabank11_tasks.py
+│
+└── roles/
+    ├── parabank5/
+    │   └── registered_user.py
+    └── parabank11_registered_user.py
+
+tests/
+├── data/
+│   └── test_users.json             ← Shared test data
+├── parabank5/
+│   └── test_transfer_funds.py
+└── parabank11/
+    └── test_open_new_checking_account.py
+```
+
+---
+
+## Benefits of Cleanup
+
+1. **Single Application Focus:** ParaBank only
+2. **Clear Reference:** 2 complete, validated workflows
+3. **Reduced Clutter:** Deleted 71 files total (10,874 lines)
+4. **Easy Navigation:** Simple, organized structure
+5. **Modern Patterns:** Both workflows demonstrate current architecture
+6. **Complementary Scenarios:** Transfer funds + Account opening
+
+---
+
+## Commits
+
+**Branch:** `feature/65.0-parabank11-workflow`
+
+1. **16d0a05** - feat: Complete parabank11 workflow (Task 65.0)
+   - 11 files created (548 insertions)
+
+2. **67ebea1** - chore: Clean up redundant parabank workflows (Task 66.0)
+   - 40 files deleted (9,401 deletions)
+
+3. **98d5622** - chore: Remove all non-ParaBank workflows (Task 66.1)
+   - 31 files deleted (1,473 deletions)
+
+---
+
+## Context for Next Session
+
+### Resume Point
+**Framework cleanup complete.** Ready for:
+1. Production testing of DEF-060 and DEF-062 (still pending)
+2. Merge feature branch when ready
+3. Continue with additional ParaBank test scenarios if needed
+
+### Important Context
+
+#### What Was Cleaned
+**Total:** 71 files deleted (10,874 lines removed)
+
+**ParaBank workflows:** 9 deleted, 2 kept
+- **Kept:** parabank5, parabank11
+- **Deleted:** parabank, parabank2-4, parabank6-10
+
+**Non-ParaBank:** All removed
+- SauceDemo (cart)
+- Helios (inquiries)
+- AutomationPractice (auth, checkout)
+- Admin workflows
+- Generic/shared components
+
+#### Why Single-App Focus
+- Simpler maintenance and navigation
+- Clear reference implementation
+- Avoid confusion from multiple apps
+- Foundation for consistent test patterns
+- ParaBank provides complete banking domain
+
+#### ParaBank Coverage
+- **parabank5:** Transfer funds between accounts
+- **parabank11:** Open new checking account
+- Both use modern 4-layer architecture
+- Both production-validated (tests passing)
+
+---
+
+## Branch Status
+
+**Current Branch:** `feature/65.0-parabank11-workflow`
+**Previous Branch:** `feature/def062-environment-auto-detection` (DEF-060, DEF-062 uncommitted)
+
+**Commit Status:**
+- ✅ Parabank11 workflow committed
+- ✅ ParaBank cleanup committed (Task 66.0)
+- ✅ Non-ParaBank cleanup committed (Task 66.1)
+- ⚠️ DEF-060 and DEF-062 still awaiting production test
+
+---
+
+## Active Blockers/Issues
+
+**None** - Cleanup complete and committed
+
+---
+
+## Next Steps
+
+### Immediate
+1. Production test DEF-060 and DEF-062 (switch to feature/def062 branch)
+2. Merge parabank cleanup branch when approved
+3. Consider additional ParaBank scenarios if needed
+
+### Future Considerations
+1. Build out more ParaBank test scenarios
+2. Document ParaBank testing patterns
+3. Create testing best practices guide
+4. Expand ParaBank coverage (registration, loan application, etc.)
+
+---
+
+## Token Usage
+
+**This session:** ~93k/200k tokens used (46.5% utilization)
+
+**Key work:**
+- Completed parabank11 workflow
+- Analyzed and cleaned 11 parabank workflows
+- Removed 6 non-ParaBank applications
+- Committed 3 major changes
+
+---
+
+**Session Saved:** 2026-01-15 (Framework Cleanup Complete)
+**Next Session:** Production test DEF-060 + DEF-062, or continue with new ParaBank scenarios

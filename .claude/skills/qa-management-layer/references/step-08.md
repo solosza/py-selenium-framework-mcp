@@ -453,4 +453,88 @@ def add_product_and_checkout(self, product: dict) -> None:
 
 ---
 
+## K. Dynamic Credential Field Resolution (DEF-063)
+
+**Purpose:** Auto-detect credential field name mismatches and provide dynamic resolution pattern.
+
+**Problem:** Tool 5 may hardcode credential field names (`email`/`password`) that don't match `test_users.json` (which uses `username`/`password`), causing Role constructor to fail.
+
+**Detection Logic:**
+
+Gate checks if Role hardcodes credential field names:
+- Looks for `self.email = user_data.get('email')` pattern
+- Checks for `self.password = user_data.get('password')` without username fallback
+- Returns NEEDS_RETRY if hardcoded fields detected
+
+**Scaffolding Response Format:**
+
+When hardcoded fields detected, gate returns `status: "NEEDS_RETRY"`:
+
+```json
+{
+  "status": "NEEDS_RETRY",
+  "fix_applied": "dynamic_credential_fields",
+  "error": "Role hardcodes credential fields: email, password (no username fallback)",
+  "message": "Make Role use dynamic credential field resolution:",
+  "scaffolding_needed": [{
+    "type": "code_pattern",
+    "location": "Role constructor (__init__)",
+    "template": "<dynamic pattern>",
+    "reason": "Flexible credential field resolution for any application"
+  }]
+}
+```
+
+**AI Handling Instructions:**
+
+When gate returns `NEEDS_RETRY`:
+1. Read `scaffolding_needed[0].template`
+2. Replace hardcoded field assignments in Role `__init__` with dynamic pattern
+3. Retry qg_role POST with updated code
+4. Verify gate returns `status: "pass"`
+
+**NO human approval needed** - code quality fix, not config decision.
+
+**Dynamic Pattern Template:**
+
+```python
+# Dynamic credential resolution - works with any field names
+self.user_data = user_data
+self.username = (
+    user_data.get('username') or
+    user_data.get('email') or
+    user_data.get('user_id') or
+    user_data.get('login')
+)
+self.password = (
+    user_data.get('password') or
+    user_data.get('pin') or
+    user_data.get('secret')
+)
+
+# Validate credentials present
+if not self.username or not self.password:
+    raise ValueError(f"RegisteredUser requires username and password. Got: {list(user_data.keys())}")
+```
+
+**Idempotent:** If Role already uses dynamic pattern, gate returns `pass` (no scaffolding needed).
+
+**Benefits:**
+- ✓ Application-agnostic - Works with any credential field names
+- ✓ Auto-healing - AI fixes code without human intervention
+- ✓ Consistent pattern - Uses same NEEDS_RETRY pattern as DEF-060/DEF-062
+- ✓ Future-proof - Handles new field name variations automatically
+
+**Pattern Summary:**
+
+| Aspect | DEF-063 |
+|--------|---------|
+| **Scaffolds** | Code pattern (dynamic credential resolution) |
+| **Risk Level** | Low (code quality fix) |
+| **Human Approval** | NO (auto-heal) |
+| **Reasoning** | Code quality fix, not configuration decision |
+| **Pattern** | NEEDS_RETRY → AI refactors code → Retry |
+
+---
+
 *Next: Step 9 - Generate Test Runner (Tool 6)*

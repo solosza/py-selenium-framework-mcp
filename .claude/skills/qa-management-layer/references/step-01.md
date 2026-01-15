@@ -139,6 +139,57 @@ Where should test data live?
 
 ---
 
+## H. Test Data Infrastructure Scaffolding (DEF-060)
+
+**Purpose:** Auto-create test data files/directories based on Step 1 configuration.
+
+**Phase 1 (Step 1 POST):** Scaffold shared infrastructure immediately
+
+| Strategy | Infrastructure Created |
+|----------|----------------------|
+| `static` or `dynamic` | `tests/data/` directory + `tests/data/test_users.json` |
+| `self-contained` or `none` | `tests/data/` directory only (no credential file) |
+
+**Scaffolding Response Format:**
+
+When infrastructure missing, gate returns `status: "NEEDS_RETRY"`:
+
+```json
+{
+  "status": "NEEDS_RETRY",
+  "fix_applied": "test_data_infrastructure_scaffolded",
+  "error": "Missing test data infrastructure",
+  "message": "Create the following files/directories based on Step 1 config:",
+  "scaffolding_needed": [
+    {
+      "type": "directory",
+      "path": "tests/data",
+      "reason": "Root directory for shared test data"
+    },
+    {
+      "type": "file",
+      "path": "tests/data/test_users.json",
+      "template": "{\n  \"default_user\": {\n    \"username\": \"\",\n    \"password\": \"\",\n    \"email\": \"\"\n  }\n}",
+      "reason": "Credential storage for static/dynamic strategies"
+    }
+  ]
+}
+```
+
+**AI Handling Instructions:**
+
+When gate returns `NEEDS_RETRY`:
+1. Read `scaffolding_needed` array
+2. For each item:
+   - If `type: "directory"` → Create directory using Bash `mkdir -p {path}`
+   - If `type: "file"` → Create file using Write tool with `template` content
+3. Retry gate call after scaffolding complete
+4. Verify gate returns `status: "pass"` on retry
+
+**Idempotent:** If files/directories already exist, gate returns `pass` (no scaffolding needed).
+
+---
+
 ## Flow Diagram
 
 ```
@@ -172,25 +223,40 @@ Where should test data live?
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  QUALITY GATE: qg_preflight                                                  │
 │  - Validates both answers                                                   │
+│  - Checks test data infrastructure (DEF-060)                                │
 │  - Saves state on PASS                                                      │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
-                          ┌───────────┴───────────┐
-                          ▼                       ▼
-                    ┌──────────┐            ┌──────────┐
-                    │  PASS    │            │  FAIL    │
-                    └────┬─────┘            └────┬─────┘
-                         │                       │
-                         ▼                       ▼
-              ┌─────────────────────┐  ┌─────────────────────┐
-              │  STATE SAVED        │  │  RE-ASK USER        │
-              │  (by qg_preflight)  │  │  (show what's wrong)│
-              └─────────────────────┘  └─────────────────────┘
-                         │
-                         ▼
-              ┌─────────────────────┐
-              │  PROCEED TO STEP 2  │
-              └─────────────────────┘
+                          ┌───────────┴───────────────────────┐
+                          ▼                ▼                  ▼
+                    ┌──────────┐    ┌──────────┐      ┌──────────┐
+                    │  PASS    │    │NEEDS_RETRY│      │  FAIL    │
+                    └────┬─────┘    └────┬─────┘      └────┬─────┘
+                         │               │                   │
+                         │               ▼                   ▼
+                         │     ┌─────────────────┐  ┌─────────────┐
+                         │     │ AI SCAFFOLDS    │  │  RE-ASK     │
+                         │     │ files/dirs      │  │  USER       │
+                         │     └─────────┬───────┘  └─────────────┘
+                         │               │
+                         │               ▼
+                         │     ┌─────────────────┐
+                         │     │ AI RETRIES      │
+                         │     │ qg_preflight    │
+                         │     └─────────┬───────┘
+                         │               │
+                         └───────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  STATE SAVED           │
+                         │  (by qg_preflight)     │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  PROCEED TO STEP 2     │
+                         └────────────────────────┘
 ```
 
 ---

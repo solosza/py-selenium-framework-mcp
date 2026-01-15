@@ -45,7 +45,12 @@ class TestValidCredentialStrategy:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        # Mock infrastructure exists so scaffolding doesn't trigger
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "Static credential strategy should pass"
@@ -68,7 +73,11 @@ class TestValidCredentialStrategy:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "Dynamic credential strategy should pass"
@@ -91,7 +100,11 @@ class TestValidCredentialStrategy:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "Self-contained credential strategy should pass"
@@ -114,7 +127,11 @@ class TestValidCredentialStrategy:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "None credential strategy should pass"
@@ -145,7 +162,11 @@ class TestValidTestDataLocation:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "Shared test data location should pass"
@@ -168,7 +189,11 @@ class TestValidTestDataLocation:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "Workflow test data location should pass"
@@ -191,7 +216,11 @@ class TestValidTestDataLocation:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "Both test data location should pass"
@@ -214,7 +243,11 @@ class TestValidTestDataLocation:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "None test data location should pass"
@@ -245,7 +278,11 @@ class TestBothFieldsValid:
         }
 
         # Act
-        result = QGPreflight.validate(input_data)
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+            result = QGPreflight.validate(input_data)
 
         # Assert
         assert result["status"] == "pass", "Both valid fields should pass"
@@ -269,17 +306,23 @@ class TestBothFieldsValid:
 
         # Act
         with patch('tools.gates.qg_preflight.StateManager') as MockStateManager:
-            mock_instance = MagicMock()
-            MockStateManager.return_value = mock_instance
-            result = QGPreflight.validate(input_data)
+            with patch('tools.gates.qg_preflight.Path') as MockPath:
+                # Mock infrastructure exists
+                mock_path = MagicMock()
+                mock_path.exists.return_value = True
+                MockPath.return_value = mock_path
 
-            # Assert
-            assert result["status"] == "pass", "Validation should pass"
-            mock_instance.save.assert_called_once()
-            call_kwargs = mock_instance.save.call_args.kwargs
-            assert call_kwargs["step"] == 1, "Should save to step 1"
-            assert "credential_strategy" in call_kwargs["data"], "Should include credential_strategy"
-            assert "test_data_location" in call_kwargs["data"], "Should include test_data_location"
+                mock_instance = MagicMock()
+                MockStateManager.return_value = mock_instance
+                result = QGPreflight.validate(input_data)
+
+                # Assert
+                assert result["status"] == "pass", "Validation should pass"
+                mock_instance.save.assert_called_once()
+                call_kwargs = mock_instance.save.call_args.kwargs
+                assert call_kwargs["step"] == 1, "Should save to step 1"
+                assert "credential_strategy" in call_kwargs["data"], "Should include credential_strategy"
+                assert "test_data_location" in call_kwargs["data"], "Should include test_data_location"
 
 
 class TestInvalidInputs:
@@ -543,3 +586,258 @@ class TestErrorHandling:
         assert result["status"] == "fail", "Should fail"
         assert "fix_hint" in result, "Should include fix_hint"
         assert len(result["fix_hint"]) > 0, "fix_hint should not be empty"
+
+
+class TestScaffoldingInfrastructure:
+    """
+    Test suite for test data infrastructure scaffolding (DEF-060).
+
+    Tests organized by: scaffolding scenarios
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.qg_preflight
+    def test_returns_needs_retry_when_tests_data_missing(self):
+        """
+        P0: Verify NEEDS_RETRY returned when tests/data/ doesn't exist.
+
+        AAA Pattern:
+        1. Arrange - Mock Path.exists() to return False, input with 'static' strategy
+        2. Act - Call qg_preflight.validate()
+        3. Assert - Returns NEEDS_RETRY with scaffolding instructions
+        """
+        # Arrange
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared"
+        }
+
+        # Act
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            # Mock tests/data directory doesn't exist
+            mock_data_dir = MagicMock()
+            mock_data_dir.exists.return_value = False
+
+            # Mock tests/data/test_users.json doesn't exist
+            mock_cred_file = MagicMock()
+            mock_cred_file.exists.return_value = False
+
+            # Setup Path() to return appropriate mocks
+            def path_side_effect(path_str):
+                if path_str == "tests/data":
+                    return mock_data_dir
+                elif path_str == "tests/data/test_users.json":
+                    return mock_cred_file
+                return MagicMock()
+
+            MockPath.side_effect = path_side_effect
+
+            result = QGPreflight.validate(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY when infrastructure missing"
+        assert "scaffolding_needed" in result, "Should include scaffolding instructions"
+        assert len(result["scaffolding_needed"]) > 0, "Should have at least one scaffolding item"
+
+        # Verify scaffolding instructions include directory and file
+        paths = [item["path"] for item in result["scaffolding_needed"]]
+        assert "tests/data" in paths, "Should include tests/data directory"
+        assert "tests/data/test_users.json" in paths, "Should include credential file"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_preflight
+    def test_creates_credential_file_for_static_strategy(self):
+        """
+        P0: Verify credential file scaffolding for 'static' strategy.
+
+        AAA Pattern:
+        1. Arrange - Mock directory exists, file doesn't, input with 'static' strategy
+        2. Act - Call qg_preflight.validate()
+        3. Assert - Returns NEEDS_RETRY with credential file template
+        """
+        # Arrange
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared"
+        }
+
+        # Act
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            # Mock tests/data directory exists
+            mock_data_dir = MagicMock()
+            mock_data_dir.exists.return_value = True
+
+            # Mock tests/data/test_users.json doesn't exist
+            mock_cred_file = MagicMock()
+            mock_cred_file.exists.return_value = False
+
+            def path_side_effect(path_str):
+                if path_str == "tests/data":
+                    return mock_data_dir
+                elif path_str == "tests/data/test_users.json":
+                    return mock_cred_file
+                return MagicMock()
+
+            MockPath.side_effect = path_side_effect
+
+            result = QGPreflight.validate(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY"
+        assert "scaffolding_needed" in result, "Should include scaffolding"
+
+        # Find credential file in scaffolding
+        cred_file_item = next((item for item in result["scaffolding_needed"]
+                               if item["path"] == "tests/data/test_users.json"), None)
+
+        assert cred_file_item is not None, "Should include credential file"
+        assert "template" in cred_file_item, "Should include JSON template"
+        assert "default_user" in cred_file_item["template"], "Template should have default_user key"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_preflight
+    def test_creates_credential_file_for_dynamic_strategy(self):
+        """
+        P0: Verify credential file scaffolding for 'dynamic' strategy.
+
+        AAA Pattern:
+        1. Arrange - Input with 'dynamic' strategy, mock file doesn't exist
+        2. Act - Call qg_preflight.validate()
+        3. Assert - Returns NEEDS_RETRY with credential file
+        """
+        # Arrange
+        input_data = {
+            "credential_strategy": "dynamic",
+            "test_data_location": "shared"
+        }
+
+        # Act
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            mock_data_dir = MagicMock()
+            mock_data_dir.exists.return_value = True
+
+            mock_cred_file = MagicMock()
+            mock_cred_file.exists.return_value = False
+
+            def path_side_effect(path_str):
+                if path_str == "tests/data":
+                    return mock_data_dir
+                elif path_str == "tests/data/test_users.json":
+                    return mock_cred_file
+                return MagicMock()
+
+            MockPath.side_effect = path_side_effect
+
+            result = QGPreflight.validate(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY for dynamic strategy"
+        paths = [item["path"] for item in result["scaffolding_needed"]]
+        assert "tests/data/test_users.json" in paths, "Should include credential file for dynamic"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_preflight
+    def test_no_credential_file_for_self_contained(self):
+        """
+        P1: Verify no credential file for 'self-contained' strategy.
+
+        AAA Pattern:
+        1. Arrange - Input with 'self-contained' strategy, mock directory doesn't exist
+        2. Act - Call qg_preflight.validate()
+        3. Assert - Returns NEEDS_RETRY with directory only, NO credential file
+        """
+        # Arrange
+        input_data = {
+            "credential_strategy": "self-contained",
+            "test_data_location": "shared"
+        }
+
+        # Act
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            # Mock tests/data directory doesn't exist
+            mock_data_dir = MagicMock()
+            mock_data_dir.exists.return_value = False
+
+            def path_side_effect(path_str):
+                if path_str == "tests/data":
+                    return mock_data_dir
+                return MagicMock()
+
+            MockPath.side_effect = path_side_effect
+
+            result = QGPreflight.validate(input_data)
+
+        # Assert
+        if result["status"] == "NEEDS_RETRY":
+            paths = [item["path"] for item in result["scaffolding_needed"]]
+            assert "tests/data" in paths, "Should include directory"
+            assert "tests/data/test_users.json" not in paths, \
+                "Should NOT include credential file for self-contained"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_preflight
+    def test_no_credential_file_for_none_strategy(self):
+        """
+        P1: Verify no credential file for 'none' strategy.
+
+        AAA Pattern:
+        1. Arrange - Input with 'none' strategy, mock directory doesn't exist
+        2. Act - Call qg_preflight.validate()
+        3. Assert - Returns NEEDS_RETRY with directory only, NO credential file
+        """
+        # Arrange
+        input_data = {
+            "credential_strategy": "none",
+            "test_data_location": "shared"
+        }
+
+        # Act
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            # Mock tests/data directory doesn't exist
+            mock_data_dir = MagicMock()
+            mock_data_dir.exists.return_value = False
+
+            def path_side_effect(path_str):
+                if path_str == "tests/data":
+                    return mock_data_dir
+                return MagicMock()
+
+            MockPath.side_effect = path_side_effect
+
+            result = QGPreflight.validate(input_data)
+
+        # Assert
+        if result["status"] == "NEEDS_RETRY":
+            paths = [item["path"] for item in result["scaffolding_needed"]]
+            assert "tests/data/test_users.json" not in paths, \
+                "Should NOT include credential file for none strategy"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_preflight
+    def test_no_needs_retry_when_infrastructure_exists(self):
+        """
+        P0: Verify no NEEDS_RETRY when infrastructure already exists.
+
+        AAA Pattern:
+        1. Arrange - Mock all files/directories exist, valid input
+        2. Act - Call qg_preflight.validate()
+        3. Assert - Returns pass status (no NEEDS_RETRY)
+        """
+        # Arrange
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared"
+        }
+
+        # Act
+        with patch('tools.gates.qg_preflight.Path') as MockPath:
+            # Mock everything exists
+            mock_path = MagicMock()
+            mock_path.exists.return_value = True
+            MockPath.return_value = mock_path
+
+            result = QGPreflight.validate(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Should pass when infrastructure exists"
+        assert "scaffolding_needed" not in result, "Should NOT include scaffolding when files exist"

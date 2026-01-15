@@ -84,7 +84,8 @@ class RegisteredUser:
         self.web = web_interface
         self.base_url = base_url
         self.user_data = user_data
-        self.email = user_data.get('email')
+        # Dynamic credential resolution (DEF-063)
+        self.username = user_data.get('username') or user_data.get('email')
         self.password = user_data.get('password')
         self.auth_tasks = AuthTasks(web_interface, base_url)
 
@@ -94,7 +95,7 @@ class RegisteredUser:
         Login workflow.
         NO return value - test asserts via POM.
         """
-        self.auth_tasks.log_in(self.email, self.password)
+        self.auth_tasks.log_in(self.username, self.password)
         # NO return
 '''
 
@@ -410,9 +411,15 @@ class TestPostHappy:
         from tools.gates.qg_role import QGRole
         code_with_return_none = '''
 class RegisteredUser:
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface, user_data, base_url):
+        self.username = user_data.get('username') or user_data.get('email')
+        self.password = user_data.get('password')
+        self.auth_tasks = AuthTasks(web_interface, base_url)
+
     @autologger.automation_logger("Role")
     def login(self) -> None:
-        self.auth_tasks.log_in(self.email, self.password)
+        self.auth_tasks.log_in(self.username, self.password)
         return None
 
     @autologger.automation_logger("Role")
@@ -809,9 +816,15 @@ class RegisteredUser:
         from tools.gates.qg_role import QGRole
         code_with_task_call = '''
 class RegisteredUser:
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface, user_data, base_url):
+        self.username = user_data.get('username') or user_data.get('email')
+        self.password = user_data.get('password')
+        self.auth_tasks = AuthTasks(web_interface, base_url)
+
     @autologger.automation_logger("Role")
     def login(self) -> None:
-        self.auth_tasks.log_in(self.email, self.password)
+        self.auth_tasks.log_in(self.username, self.password)
 '''
         input_data = {
             "mode": "POST",
@@ -1044,9 +1057,16 @@ class TestEdge:
         from tools.gates.qg_role import QGRole
         code_multiple_methods = '''
 class RegisteredUser:
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface, user_data, base_url):
+        self.username = user_data.get('username') or user_data.get('email')
+        self.password = user_data.get('password')
+        self.auth_tasks = AuthTasks(web_interface, base_url)
+        self.catalog_tasks = CatalogTasks(web_interface, base_url)
+
     @autologger.automation_logger("Role")
     def login(self) -> None:
-        self.auth_tasks.log_in(self.email, self.password)
+        self.auth_tasks.log_in(self.username, self.password)
 
     @autologger.automation_logger("Role")
     def logout(self) -> None:
@@ -1054,7 +1074,7 @@ class RegisteredUser:
 
     @autologger.automation_logger("Role")
     def login_and_browse(self, category: str) -> None:
-        self.auth_tasks.log_in(self.email, self.password)
+        self.auth_tasks.log_in(self.username, self.password)
         self.catalog_tasks.browse_category(category)
 '''
         input_data = {
@@ -1098,6 +1118,116 @@ class RegisteredUser:
 
         # Assert
         assert result["status"] == "pass", "Constructor decorator should be allowed"
+
+
+# =============================================================================
+# DEF-063: Dynamic Credential Field Resolution (3 tests)
+# =============================================================================
+
+class TestDynamicCredentialFields:
+    """DEF-063: Test credential field hardcoding detection."""
+
+    @pytest.mark.unit
+    def test_detects_hardcoded_email(self, valid_role_metadata):
+        """
+        P0: DEF-063 - Verify gate detects hardcoded 'email' field.
+
+        # Arrange
+        """
+        from tools.gates.qg_role import QGRole
+        code = '''
+class RegisteredUser:
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface, user_data, base_url):
+        self.email = user_data.get('email')
+        self.password = user_data.get('password')
+        self.auth_tasks = AuthTasks(web_interface, base_url)
+
+    @autologger.automation_logger("Role")
+    def login(self) -> None:
+        self.auth_tasks.log_in(self.email, self.password)
+'''
+        input_data = {
+            "mode": "POST",
+            "code": code,
+            "metadata": valid_role_metadata
+        }
+
+        # Act
+        result = QGRole.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY for hardcoded email"
+        assert "email" in result["error"], "Error should mention email"
+        assert result["fix_applied"] == "dynamic_credential_fields"
+        assert "scaffolding_needed" in result, "Should include scaffolding template"
+        assert result["scaffolding_needed"][0]["type"] == "code_pattern"
+
+    @pytest.mark.unit
+    def test_passes_dynamic_pattern(self, valid_role_metadata):
+        """
+        P0: DEF-063 - Verify gate passes when dynamic pattern used (idempotent).
+
+        # Arrange
+        """
+        from tools.gates.qg_role import QGRole
+        code = '''
+class RegisteredUser:
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface, user_data, base_url):
+        self.user_data = user_data
+        self.username = user_data.get('username') or user_data.get('email')
+        self.password = user_data.get('password')
+        self.auth_tasks = AuthTasks(web_interface, base_url)
+
+    @autologger.automation_logger("Role")
+    def login(self) -> None:
+        self.auth_tasks.log_in(self.username, self.password)
+'''
+        input_data = {
+            "mode": "POST",
+            "code": code,
+            "metadata": valid_role_metadata
+        }
+
+        # Act
+        result = QGRole.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "pass", "Dynamic pattern should pass validation"
+
+    @pytest.mark.unit
+    def test_detects_password_without_username_fallback(self, valid_role_metadata):
+        """
+        P1: DEF-063 - Verify gate detects password field without username fallback.
+
+        # Arrange
+        """
+        from tools.gates.qg_role import QGRole
+        code = '''
+class RegisteredUser:
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface, user_data, base_url):
+        self.email = user_data.get('email')
+        self.password = user_data.get('password')
+        self.auth_tasks = AuthTasks(web_interface, base_url)
+
+    @autologger.automation_logger("Role")
+    def login(self) -> None:
+        self.auth_tasks.log_in(self.email, self.password)
+'''
+        input_data = {
+            "mode": "POST",
+            "code": code,
+            "metadata": valid_role_metadata
+        }
+
+        # Act
+        result = QGRole.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY"
+        assert "password" in result["error"] or "email" in result["error"]
 
 
 # =============================================================================

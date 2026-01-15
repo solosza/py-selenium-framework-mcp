@@ -7,10 +7,13 @@ Validates:
 - DD-24: credential_strategy (static, dynamic, self-contained, none)
 - DD-28: test_data_location (shared, workflow, both, none)
 
+DEF-060: Auto-scaffolds test data infrastructure based on strategy.
+
 Saves state on PASS via StateManager.
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, Optional
+from pathlib import Path
 
 from .base_gate import BaseGate
 from utils.state_manager import StateManager
@@ -73,6 +76,15 @@ class QGPreflight(BaseGate):
                 fix_hint=cls._get_test_data_location_hint()
             )
 
+        # DEF-060: Check test data infrastructure (Phase 1 scaffolding)
+        infrastructure_check = cls._check_test_data_infrastructure(
+            credential_strategy=credential_strategy,
+            test_data_location=test_data_location
+        )
+
+        if infrastructure_check:
+            return infrastructure_check  # NEEDS_RETRY - AI creates files, retries
+
         # All valid - save state and return pass
         # Task 9.0: Use per-run state isolation
         audit_logger = cls.get_audit_logger()
@@ -105,6 +117,60 @@ class QGPreflight(BaseGate):
         if value is None or value == "":
             return False
         return value in cls.VALID_TEST_DATA_LOCATIONS
+
+    @classmethod
+    def _check_test_data_infrastructure(
+        cls,
+        credential_strategy: str,
+        test_data_location: str
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Phase 1: Check/create shared test data infrastructure (DEF-060).
+
+        Checks for:
+        - tests/data/ directory
+        - tests/data/test_users.json (if credential_strategy requires it)
+
+        Args:
+            credential_strategy: One of static, dynamic, self-contained, none
+            test_data_location: One of shared, workflow, both, none
+
+        Returns:
+            None if infrastructure exists
+            NEEDS_RETRY dict with scaffolding instructions if missing
+        """
+        missing = []
+
+        # Check tests/data/ directory exists
+        data_dir = Path("tests/data")
+        if not data_dir.exists():
+            missing.append({
+                "type": "directory",
+                "path": "tests/data",
+                "reason": "Root directory for shared test data"
+            })
+
+        # Check credential file based on strategy
+        if credential_strategy in ["static", "dynamic"]:
+            cred_file = Path("tests/data/test_users.json")
+            if not cred_file.exists():
+                missing.append({
+                    "type": "file",
+                    "path": "tests/data/test_users.json",
+                    "template": '{\n  "default_user": {\n    "username": "",\n    "password": "",\n    "email": ""\n  }\n}',
+                    "reason": "Credential storage for static/dynamic strategies"
+                })
+
+        if missing:
+            return {
+                "status": "NEEDS_RETRY",
+                "fix_applied": "test_data_infrastructure_scaffolded",
+                "error": "Missing test data infrastructure",
+                "message": "Create the following files/directories based on Step 1 config:",
+                "scaffolding_needed": missing
+            }
+
+        return None
 
     @staticmethod
     def _get_fix_hint_for_missing(missing_fields: list) -> str:

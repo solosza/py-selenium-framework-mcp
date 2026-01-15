@@ -1,0 +1,14 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_2": {
+    "persona": "premium registered user with subscription",
+    "URL": "http://www.automationpractice.pl/premium",
+    "role_name": "PremiumUser",
+    "workflow": "catalog",
+    "raw_requirement": "As a premium user, I want to access exclusive content",
+    "detected_env_id": "DEFAULT"
+  }
+}

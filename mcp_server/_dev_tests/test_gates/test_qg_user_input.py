@@ -42,7 +42,7 @@ class TestValidPersona:
         # Arrange
         input_data = {
             "persona": "registered user",
-            "URL": "http://automationpractice.pl/index.php",
+            "URL": "http://www.automationpractice.pl/index.php",
             "role_name": "RegisteredUser",
             "domain": "auth",
             "raw_requirement": "As a registered user, I want to login"
@@ -76,7 +76,7 @@ class TestValidURL:
         # Arrange
         input_data = {
             "persona": "guest",
-            "URL": "http://example.com/page",
+            "URL": "http://www.automationpractice.pl/index.php",
             "role_name": "Guest",
             "domain": "catalog",
             "raw_requirement": "As a guest, I want to browse products"
@@ -102,7 +102,7 @@ class TestValidURL:
         # Arrange
         input_data = {
             "persona": "customer",
-            "URL": "https://secure.example.com/checkout",
+            "URL": "https://parabank.parasoft.com/parabank/index.htm",
             "role_name": "Customer",
             "domain": "checkout",
             "raw_requirement": "As a customer, I want to checkout"
@@ -136,7 +136,7 @@ class TestRoleNameExtraction:
         # Arrange
         input_data = {
             "persona": "registered user",
-            "URL": "http://example.com/login",
+            "URL": "http://www.automationpractice.pl/login",
             "role_name": "RegisteredUser",
             "domain": "auth",
             "raw_requirement": "As a registered user, I want to login"
@@ -162,7 +162,7 @@ class TestRoleNameExtraction:
         # Arrange
         input_data = {
             "persona": "guest",
-            "URL": "http://example.com/browse",
+            "URL": "http://www.automationpractice.pl/browse",
             "role_name": "Guest",
             "domain": "catalog",
             "raw_requirement": "As a guest, I want to browse"
@@ -196,7 +196,7 @@ class TestDomainDetection:
         # Arrange
         input_data = {
             "persona": "registered user",
-            "URL": "http://example.com/login",
+            "URL": "http://www.automationpractice.pl/login",
             "role_name": "RegisteredUser",
             "domain": "auth",
             "raw_requirement": "As a registered user, I want to login"
@@ -222,7 +222,7 @@ class TestDomainDetection:
         # Arrange
         input_data = {
             "persona": "guest",
-            "URL": "http://example.com/products",
+            "URL": "http://www.automationpractice.pl/products",
             "role_name": "Guest",
             "domain": "catalog",
             "raw_requirement": "As a guest, I want to browse products"
@@ -256,7 +256,7 @@ class TestStateSaved:
         # Arrange
         input_data = {
             "persona": "registered user",
-            "URL": "http://example.com/login",
+            "URL": "http://www.automationpractice.pl/login",
             "role_name": "RegisteredUser",
             "domain": "auth",
             "raw_requirement": "As a registered user, I want to login"
@@ -300,7 +300,7 @@ class TestInvalidInputs:
         """
         # Arrange
         input_data = {
-            "URL": "http://example.com/login",
+            "URL": "http://www.automationpractice.pl/login",
             "role_name": "RegisteredUser",
             "domain": "auth",
             "raw_requirement": "I want to login"
@@ -329,7 +329,7 @@ class TestInvalidInputs:
         # Arrange - persona is present, just not in standard format
         input_data = {
             "persona": "customer",  # Valid persona, just not "As a..." format
-            "URL": "http://example.com/login",
+            "URL": "http://www.automationpractice.pl/login",
             "role_name": "Customer",
             "domain": "auth",
             "raw_requirement": "I want to login as customer"
@@ -408,7 +408,7 @@ class TestInvalidInputs:
         # Arrange
         input_data = {
             "persona": "",  # Invalid - empty
-            "URL": "http://example.com",
+            "URL": "http://www.automationpractice.pl",
             "role_name": "Guest",
             "domain": "catalog",
             "raw_requirement": "Browse products"
@@ -446,7 +446,7 @@ class TestEdgeCases:
         # Arrange
         input_data = {
             "persona": "",
-            "URL": "http://example.com/login",
+            "URL": "http://www.automationpractice.pl/login",
             "role_name": "Guest",
             "domain": "auth",
             "raw_requirement": "Login"
@@ -472,7 +472,7 @@ class TestEdgeCases:
         # Arrange
         input_data = {
             "persona": "developer",
-            "URL": "http://localhost:3000/app",
+            "URL": "http://www.automationpractice.pl/index.php",
             "role_name": "Developer",
             "domain": "auth",
             "raw_requirement": "As a developer, I want to test locally"
@@ -498,7 +498,7 @@ class TestEdgeCases:
         # Arrange
         input_data = {
             "persona": "tester",
-            "URL": "http://staging.example.com:8080/login",
+            "URL": "http://www.automationpractice.pl/index.php",
             "role_name": "Tester",
             "domain": "auth",
             "raw_requirement": "As a tester, I want to verify staging"
@@ -524,7 +524,7 @@ class TestEdgeCases:
         # Arrange
         input_data = {
             "persona": "premium registered user with subscription",
-            "URL": "http://example.com/premium",
+            "URL": "http://www.automationpractice.pl/premium",
             "role_name": "PremiumUser",
             "domain": "catalog",
             "raw_requirement": "As a premium user, I want to access exclusive content"
@@ -557,7 +557,7 @@ class TestErrorHandling:
         """
         # Arrange
         input_data = {
-            "URL": "http://example.com",
+            "URL": "http://www.automationpractice.pl",
             "role_name": "Guest",
             "domain": "catalog",
             "raw_requirement": "Browse products"
@@ -625,7 +625,7 @@ class TestWorkflowValidation:
         # Arrange
         input_data = {
             "persona": "guest",
-            "URL": "http://example.com/page",
+            "URL": "http://www.automationpractice.pl/page",
             "role_name": "Guest",
             "workflow": "",  # Empty workflow should fail
             "raw_requirement": "As a guest, I want to do something"
@@ -660,7 +660,7 @@ class TestInvalidRoleName:
         # Arrange
         input_data = {
             "persona": "guest",
-            "URL": "http://example.com/page",
+            "URL": "http://www.automationpractice.pl/page",
             "role_name": "",  # Invalid - empty
             "domain": "catalog",
             "raw_requirement": "As a guest, I want to browse"
@@ -695,7 +695,7 @@ class TestInvalidRawRequirement:
         # Arrange
         input_data = {
             "persona": "guest",
-            "URL": "http://example.com/page",
+            "URL": "http://www.automationpractice.pl/page",
             "role_name": "Guest",
             "domain": "catalog",
             "raw_requirement": ""  # Invalid - empty
@@ -853,22 +853,94 @@ class TestEnvironmentDetection:
 
     @pytest.mark.unit
     @pytest.mark.qg_user_input
-    def test_unknown_domain_defaults_to_default(self):
+    def test_unknown_domain_returns_needs_retry(self):
         """
-        P1: Verify unknown domain falls back to 'DEFAULT' environment.
+        P0: Verify unknown domain returns NEEDS_RETRY with scaffolding instructions.
 
         AAA Pattern:
         1. Arrange - Create input with unknown domain URL
         2. Act - Call qg_user_input.validate()
-        3. Assert - detected_env_id is 'DEFAULT' (fallback)
+        3. Assert - Returns NEEDS_RETRY with environment config scaffolding
         """
         # Arrange
         input_data = {
             "persona": "user",
-            "URL": "https://unknown-domain.com/page",
+            "URL": "https://new-app.example.com/login",
             "role_name": "User",
-            "workflow": "test",
+            "workflow": "auth",
             "raw_requirement": "Test requirement"
+        }
+
+        # Act
+        result = QGUserInput.validate(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY for unknown domain"
+        assert "scaffolding_needed" in result, "Should include scaffolding instructions"
+        assert result["fix_applied"] == "environment_added_to_config", \
+            "Should indicate environment was added"
+
+        # Verify scaffolding structure
+        scaffolding = result["scaffolding_needed"][0]
+        assert scaffolding["type"] == "config_entry", "Should be config entry type"
+        assert "environment_config.json" in scaffolding["path"], "Should point to environment config"
+        assert "auth" in scaffolding["template"], "Should include workflow name in template"
+        assert "new-app.example.com" in scaffolding["template"], "Should include domain in template"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_user_input
+    def test_unknown_domain_template_valid_json(self):
+        """
+        P1: Verify NEEDS_RETRY template has correct JSON format.
+
+        AAA Pattern:
+        1. Arrange - Create input with unknown domain
+        2. Act - Call qg_user_input.validate()
+        3. Assert - Template is valid JSON with correct structure
+        """
+        # Arrange
+        input_data = {
+            "persona": "admin",
+            "URL": "https://staging.myapp.io/dashboard",
+            "role_name": "Admin",
+            "workflow": "admin",
+            "raw_requirement": "Admin workflow test"
+        }
+
+        # Act
+        result = QGUserInput.validate(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY"
+
+        # Verify template is valid JSON
+        import json
+        scaffolding = result["scaffolding_needed"][0]
+        template_json = json.loads(scaffolding["template"])
+
+        assert "admin" in template_json, "Template should have workflow key"
+        assert "url" in template_json["admin"], "Template should have url field"
+        assert template_json["admin"]["url"] == "https://staging.myapp.io", \
+            "Template should have base URL (no path)"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_user_input
+    def test_known_subdomain_auto_detects(self):
+        """
+        P1: Verify subdomain of known domain auto-detects correctly.
+
+        AAA Pattern:
+        1. Arrange - Create input with subdomain of known environment
+        2. Act - Call qg_user_input.validate()
+        3. Assert - Auto-detects parent domain environment without NEEDS_RETRY
+        """
+        # Arrange
+        input_data = {
+            "persona": "user",
+            "URL": "https://demo.parabank.parasoft.com/parabank/register.htm",
+            "role_name": "User",
+            "workflow": "auth",
+            "raw_requirement": "Register test"
         }
 
         # Act
@@ -878,7 +950,7 @@ class TestEnvironmentDetection:
             result = QGUserInput.validate(input_data)
 
             # Assert
-            assert result["status"] == "pass", "Validation should pass"
+            assert result["status"] == "pass", "Should pass for known subdomain"
             call_kwargs = mock_instance.save.call_args.kwargs
-            assert call_kwargs["data"]["detected_env_id"] == "DEFAULT", \
-                "Unknown domain should fall back to 'DEFAULT'"
+            assert call_kwargs["data"]["detected_env_id"] == "parabank", \
+                "Subdomain should match parent domain environment"

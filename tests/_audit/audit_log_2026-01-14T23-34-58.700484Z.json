@@ -1,0 +1,40 @@
+{
+  "run_id": "2026-01-14T23:34:58.700484Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-14T23:34:58.707511Z",
+      "metadata": {
+        "test_status": "passed",
+        "duration": 18.13,
+        "report_path": null
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-15T01:21:38.002991Z",
+      "metadata": {
+        "test_status": "passed",
+        "duration": 7.2,
+        "report_path": "tests/_reports/parabank10_transfer_funds.html"
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 2,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}
