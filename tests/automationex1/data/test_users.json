@@ -1,0 +1,18 @@
+{
+  "new_user": {
+    "name": "Erika Mejia",
+    "email": "masondonna@example.net",
+    "password": "TestPass123!",
+    "first_name": "Cynthia",
+    "last_name": "Sherman",
+    "address": "7675 Anthony Stravenue Suite 029",
+    "state": "West Virginia",
+    "city": "Nicolebury",
+    "zipcode": "12498",
+    "mobile": "(860)705-1120",
+    "day": "15",
+    "month": "May",
+    "year": "1990",
+    "country": "United States"
+  }
+}

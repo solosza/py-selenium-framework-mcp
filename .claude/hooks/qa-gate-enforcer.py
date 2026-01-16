@@ -98,6 +98,75 @@ def is_gate_passed(state: dict, step: str) -> bool:
     return True
 
 
+def is_step_complete(state: dict, step: str) -> bool:
+    """
+    Check if a step is marked as complete in state.
+
+    Used for validation checkpoints (Steps 10-11) that don't have metadata,
+    but have status='complete' when finished.
+
+    Args:
+        state: Workflow state dict
+        step: Step key (e.g., 'step_10', 'step_11')
+
+    Returns:
+        True if step exists and status='complete', False otherwise
+    """
+    if step not in state:
+        return False
+
+    step_data = state[step]
+    return step_data.get('status') == 'complete'
+
+
+def is_step_10_required(state: dict) -> bool:
+    """
+    Check if Step 10 (qg_save_run) is required but not complete.
+
+    Step 10 is required when:
+    - Step 9 is complete (test code generated)
+    - Step 10 is not complete (files not validated)
+
+    Returns:
+        True if Step 10 required but not complete, False otherwise.
+    """
+    # Check if Step 9 complete (test generation done)
+    step_9_complete = 'step_9' in state and is_gate_passed(state, 'step_9')
+
+    if not step_9_complete:
+        return False
+
+    # Check if Step 10 complete (validation done)
+    step_10_complete = is_step_complete(state, 'step_10')
+
+    # If Step 9 done but Step 10 not done, require Step 10
+    return not step_10_complete
+
+
+def is_step_11_required(state: dict) -> bool:
+    """
+    Check if Step 11 (qg_execution) is required but not complete.
+
+    Step 11 is required when:
+    - Step 10 is complete (files validated, ready to run)
+    - Step 11 is not complete (test not executed)
+
+    Returns:
+        True if Step 11 required but not complete, False otherwise.
+    """
+    # Check if Step 10 complete (validation done)
+    step_10_complete = is_step_complete(state, 'step_10')
+
+    if not step_10_complete:
+        return False
+
+    # Check if Step 11 complete (execution validated)
+    step_11_complete = is_step_complete(state, 'step_11')
+
+    # If Step 10 done but Step 11 not done, require Step 11
+    return not step_11_complete
+
+
 def get_state_file_path() -> Path:
     """
     Get the path to workflow_state.json (DEF-052 location).
@@ -144,8 +213,13 @@ def main():
     """
     Main hook logic.
 
-    Reads tool call from stdin, checks if it's a protected write,
+    Reads tool call from stdin, checks if it's a protected write/execution,
     and blocks if the required gate hasn't passed.
+
+    Enforces:
+    - Steps 6-9: Cannot write framework files without gate validation
+    - Step 10: Implicit - Step 11 requires Step 10 complete
+    - Step 11: Cannot run pytest without qg_execution
     """
     try:
         # Read tool call data from stdin
@@ -157,7 +231,61 @@ def main():
     tool_name = data.get('tool_name', '')
     tool_input = data.get('tool_input', {})
 
-    # Only enforce on Write and Edit tools
+    # === STEP 11 ENFORCEMENT: Block pytest bypass ===
+    if tool_name == 'Bash':
+        command = tool_input.get('command', '')
+
+        # Check if this is a pytest execution command
+        if 'pytest' in command:
+            # Load workflow state to check Step 11 requirement
+            state_file = get_state_file_path()
+
+            if state_file.exists():
+                try:
+                    with open(state_file, 'r') as f:
+                        state = json.load(f)
+
+                    # If Step 11 required but not complete, block pytest
+                    if is_step_11_required(state):
+                        # Check if Step 10 also missing (more specific error)
+                        if is_step_10_required(state):
+                            sys.stderr.write(
+                                f"BLOCKED: Test execution requires Steps 10 and 11.\n"
+                                f"Command: {command}\n"
+                                f"\n"
+                                f"Step 9 complete but Steps 10 and 11 not invoked.\n"
+                                f"\n"
+                                f"Correct flow:\n"
+                                f"1. Call qg_save_run (Step 10: validate all files exist)\n"
+                                f"2. Call run_test (execute pytest subprocess)\n"
+                                f"3. Call qg_execution (Step 11: validate results + HITL triage)\n"
+                                f"4. Call qg_workflow_complete (meta-gate validation)\n"
+                                f"\n"
+                                f"Do not bypass Steps 10-11 by running pytest directly.\n"
+                            )
+                        else:
+                            sys.stderr.write(
+                                f"BLOCKED: Test execution must use Step 11 (qg_execution).\n"
+                                f"Command: {command}\n"
+                                f"\n"
+                                f"Step 10 complete but Step 11 not invoked.\n"
+                                f"You MUST call qg_execution for test execution and HITL triage.\n"
+                                f"Do not bypass Step 11 by running pytest directly.\n"
+                                f"\n"
+                                f"Correct flow:\n"
+                                f"1. Call run_test (executes pytest subprocess)\n"
+                                f"2. Call qg_execution (validates results + HITL triage on failure)\n"
+                                f"3. Call qg_workflow_complete (meta-gate validation)\n"
+                            )
+                        sys.exit(2)
+                except Exception:
+                    # If we can't read state, allow (fail open)
+                    pass
+
+        # Not a pytest command or Step 11 not required, allow
+        sys.exit(0)
+
+    # Only enforce on Write and Edit tools beyond this point
     if tool_name not in ('Write', 'Edit'):
         sys.exit(0)
 

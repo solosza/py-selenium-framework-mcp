@@ -86,7 +86,11 @@
       "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add mcp_server/tools/gates/qg_execution.py mcp_server/tools/gates/__init__.py mcp_server/_dev_tests/test_gates/test_qg_execution.py mcp_server/server.py)",
       "Bash(ls:*)",
       "Bash(done)",
-      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" status --short)"
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" status --short)",
+      "Bash(CLAUDE_PROJECT_DIR=\"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" python:*)",
+      "Bash(1 <<'EOF'\n{\n  \"tool_name\": \"Bash\",\n  \"tool_input\": {\n    \"command\": \"pytest tests/parabank13/test_open_new_checking_account.py\"\n  }\n}\nEOF)",
+      "Bash(echo:*)",
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add framework/pages/parabank13/ framework/tasks/parabank13/ framework/roles/parabank13/)"
     ],
     "deny": [],
     "ask": []
@@ -99,7 +103,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Edit|Write",
+        "matcher": "Edit|Write|Bash",
         "hooks": [
           {
             "type": "command",
