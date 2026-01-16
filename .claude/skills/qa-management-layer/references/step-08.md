@@ -308,8 +308,10 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 | IC-08-05 | `task_metadata` in PRE must have `class_name` and `task_methods` | Validates Tool 4 output was passed correctly. Empty `task_methods` may produce skeleton. | `validate_pre()` |
 | IC-08-06 | Workflow methods must contain at least one task method call | Methods with only `pass` or no `self.xxx_tasks.method()` calls = skeleton code. | `validate_post()` |
 | IC-08-07 | FR-14.2: Credential strategy must match Step 1 config | Validates that Role's credential handling (user_data param vs hardcoded) matches the strategy chosen in Step 1. Prevents semantic mismatch between configuration and implementation. | `validate_post()` via semantic rules |
+| IC-08-08 | DD-49: No base_url parameter in Role constructor | URL configuration flows via conftest → environment_config.json → web.config. POMs access via `self.web.config['url']`. Roles/Tasks do NOT need base_url parameter. | `validate_post()` via semantic rule templates |
+| IC-08-09 | Workflow subfolder pattern: import_path must include workflow namespace | Role import_path must follow `roles.{workflow}.{role_name}` pattern (NOT flat `roles.{role_name}`). Consistency with Tasks which use `tasks.{workflow}.{task_name}`. File path: `framework/roles/{workflow}/{role_name}.py` | `validate_post()` via `_check_workflow_subfolder_pattern()` |
 
-**Date Added:** 2025-12-21 (IC-08-01 to IC-08-06), 2026-01-10 (IC-08-07)
+**Date Added:** 2025-12-21 (IC-08-01 to IC-08-06), 2026-01-10 (IC-08-07), 2026-01-15 (IC-08-08), 2026-01-16 (IC-08-09)
 **Task Reference:** Task 11.0 (qg_role), Task 36.0 (FR-14.2 semantic validation)
 
 ---
@@ -534,6 +536,156 @@ if not self.username or not self.password:
 | **Human Approval** | NO (auto-heal) |
 | **Reasoning** | Code quality fix, not configuration decision |
 | **Pattern** | NEEDS_RETRY → AI refactors code → Retry |
+
+---
+
+## L. DD-49: Navigation Responsibility Pattern (No base_url Parameter)
+
+**Purpose:** Enforce centralized URL configuration via environment config instead of parameter passing.
+
+**Rule:** Only POMs call navigate(). URL comes from `self.web.config['url']` via conftest.py → environment_config.json flow.
+
+**Architecture Flow:**
+
+```
+conftest.py (loads environment_config.json)
+  ↓
+{"parabank12": {"url": "https://parabank.parasoft.com"}}
+  ↓
+web_interface fixture
+  ↓
+WebInterface(driver, config, logger)
+  ↓
+POMs access via self.web.config['url']
+  ↓
+open_account_page.py: self.web.navigate_to(self.web.config['url'] + '/parabank/openaccount.htm')
+```
+
+**Old Pattern (DEPRECATED):**
+
+```python
+# ❌ WRONG: base_url parameter passed through layers
+class RegisteredUser:
+    def __init__(self, web: WebInterface, user_data: Dict[str, Any], base_url: str):
+        self.base_url = base_url  # Stored but never used!
+        self.auth_tasks = AuthTasks(web, base_url)  # Passed down
+```
+
+**New Pattern (CORRECT):**
+
+```python
+# ✅ CORRECT: No base_url parameter - POMs get URL from config
+class RegisteredUser:
+    def __init__(self, web: WebInterface, user_data: Dict[str, Any]):
+        # No base_url parameter needed
+        # Compose tasks without base_url
+        self.auth_tasks = AuthTasks(web)
+```
+
+**POM Navigation Pattern:**
+
+```python
+# ✅ CORRECT: POM accesses URL directly from config
+class OpenAccountPage:
+    def navigate(self) -> "OpenAccountPage":
+        self.web.navigate_to(self.web.config['url'] + '/parabank/openaccount.htm')
+        return self
+```
+
+**Enforcement:**
+
+- Semantic rule templates show NO base_url parameter (credential_strategy_rule.py)
+- Gate validates Role constructor signature
+- Protocol documents correct pattern (this section)
+
+**Why This Pattern:**
+
+- ✓ URL configuration belongs in environment config, not passed as parameters
+- ✓ Centralized management via environment_config.json
+- ✓ Easier multi-environment testing (dev/staging/prod)
+- ✓ Cleaner Role/Task constructor signatures
+- ✓ Follows framework principle: composition over parameter passing
+
+**Smart Gate Layer 2:**
+
+Semantic rule templates (credential_strategy_rule.py) automatically provide correct pattern without base_url parameter. AI generates code following this pattern by default.
+
+---
+
+## M. Workflow Subfolder Pattern (IC-08-09)
+
+**Purpose:** Enforce consistent file organization between Tasks and Roles layers using workflow subfolders.
+
+**Rule:** Role import_path must include workflow namespace: `roles.{workflow}.{role_name}`, matching Tasks pattern.
+
+**Pattern Consistency:**
+
+```
+Tasks:  framework/tasks/{workflow}/task_name.py  → tasks.{workflow}.task_name
+Roles:  framework/roles/{workflow}/role_name.py  → roles.{workflow}.role_name
+```
+
+**Old Pattern (DEPRECATED):**
+
+```python
+# ❌ WRONG: Flat structure
+# File: framework/roles/registered_user.py
+# Import: from roles.registered_user import RegisteredUser
+
+# Problems:
+# - Inconsistent with Tasks layer organization
+# - All roles in single flat directory
+# - No workflow grouping
+```
+
+**New Pattern (CORRECT):**
+
+```python
+# ✅ CORRECT: Workflow subfolder structure
+# File: framework/roles/parabank12/registered_user.py
+# Import: from roles.parabank12.registered_user import RegisteredUser
+
+# Benefits:
+# - Consistent with Tasks layer
+# - Roles grouped by workflow/domain
+# - Clear namespace separation
+```
+
+**Metadata Structure:**
+
+```python
+# Tool 5 output metadata
+{
+    "class_name": "RegisteredUser",
+    "import_path": "roles.parabank12.registered_user",  # ✅ Includes workflow
+    "composed_tasks": ["OpenAccountTasks"],
+    "workflow_methods": [...]
+}
+```
+
+**Enforcement:**
+
+- Generator creates correct path with workflow parameter (`role_generator.get_file_path(role_name, workflow)`)
+- Gate validates import_path structure (`_check_workflow_subfolder_pattern()`)
+- Protocol documents correct pattern (this section)
+
+**Why This Pattern:**
+
+- ✓ Consistency across framework layers (Tasks + Roles)
+- ✓ Clear workflow/domain grouping
+- ✓ Scalable organization as framework grows
+- ✓ Easier to find related components
+- ✓ Matches industry best practices
+
+**Smart Gate Layer 2:**
+
+`qg_role._check_workflow_subfolder_pattern()` detects flat import paths and provides correct pattern template. AI generates fix by updating import_path to include workflow namespace.
+
+**Defense-in-Depth:**
+
+1. Generator creates correct path (prevention)
+2. Gate validates correct path (enforcement)
+3. Protocol documents correct pattern (guidance)
 
 ---
 

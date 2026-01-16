@@ -38,6 +38,9 @@ class CredentialStrategyRule(SemanticRule):
         """
         Check Role code against credential_strategy from Step 1.
 
+        CRITICAL: This rule ONLY applies to Role code (Step 8).
+        Skips validation if code is Test code (Step 9).
+
         Args:
             code: Generated Role code (from Tool 5)
             context: Must contain step_1_config with credential_strategy
@@ -45,6 +48,10 @@ class CredentialStrategyRule(SemanticRule):
         Returns:
             NEEDS_RETRY response if strategy mismatch, None if valid
         """
+        # Scope detection: Skip if this is test code (not Role code)
+        if self._is_test_code(code):
+            return None  # This rule doesn't apply to tests
+
         # Extract Step 1 config
         step_1_config = context.get("step_1_config", {})
         credential_strategy = step_1_config.get("credential_strategy", "")
@@ -71,6 +78,21 @@ class CredentialStrategyRule(SemanticRule):
         else:
             # Unknown strategy - skip validation
             return None
+
+    def _is_test_code(self, code: str) -> bool:
+        """
+        Detect if code is test code (not Role code).
+
+        Test code characteristics:
+        - Has Test class (class TestXxx)
+        - Has test methods (def test_xxx)
+
+        Returns:
+            True if test code, False if Role code
+        """
+        has_test_class = bool(re.search(r'class\s+Test\w+', code))
+        has_test_methods = bool(re.search(r'def\s+test_\w+', code))
+        return has_test_class and has_test_methods
 
     def _detect_credential_patterns(self, code: str) -> Dict[str, bool]:
         """
@@ -248,49 +270,49 @@ class CredentialStrategyRule(SemanticRule):
         return None
 
     def _get_self_contained_template(self) -> str:
-        """Pattern template for self-contained strategy."""
+        """Pattern template for self-contained strategy (DD-49: NO base_url)."""
         return """
-# Self-contained strategy example
+# Self-contained strategy example (DD-49: POMs use self.web.config['url'])
 import uuid
 
 class RegisteredUser:
-    def __init__(self, web_interface: WebInterface, base_url: str):
+    def __init__(self, web_interface: WebInterface):
         self.web = web_interface
         # Generate unique credentials
         self.email = f"test_{uuid.uuid4().hex[:8]}@example.com"
         self.password = "TestPass123!"
-        # Compose tasks
-        self.auth_tasks = AuthTasks(web_interface, base_url)
+        # Compose tasks (no base_url needed - POMs get URL from config)
+        self.auth_tasks = AuthTasks(web_interface)
 """
 
     def _get_static_template(self) -> str:
-        """Pattern template for static strategy."""
+        """Pattern template for static strategy (DD-49: NO base_url)."""
         return """
-# Static strategy example
+# Static strategy example (DD-49: POMs use self.web.config['url'])
 class RegisteredUser:
-    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any], base_url: str):
+    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any]):
         self.web = web_interface
         # Read from test_users fixture
         self.user_data = user_data
         self.email = user_data.get('email')
         self.password = user_data.get('password')
-        # Compose tasks
-        self.auth_tasks = AuthTasks(web_interface, base_url)
+        # Compose tasks (no base_url needed - POMs get URL from config)
+        self.auth_tasks = AuthTasks(web_interface)
 """
 
     def _get_dynamic_template(self) -> str:
-        """Pattern template for dynamic strategy."""
+        """Pattern template for dynamic strategy (DD-49: NO base_url)."""
         return """
-# Dynamic strategy example
+# Dynamic strategy example (DD-49: POMs use self.web.config['url'])
 import json
 
 class RegisteredUser:
-    def __init__(self, web_interface: WebInterface, base_url: str):
+    def __init__(self, web_interface: WebInterface):
         self.web = web_interface
         # Read from config file (after registration)
         with open('tests/data/test_users.json') as f:
             users = json.load(f)
             self.user_data = users.get('registered_user')
-        # Compose tasks
-        self.auth_tasks = AuthTasks(web_interface, base_url)
+        # Compose tasks (no base_url needed - POMs get URL from config)
+        self.auth_tasks = AuthTasks(web_interface)
 """

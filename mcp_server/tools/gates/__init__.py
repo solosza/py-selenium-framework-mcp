@@ -1,4 +1,4 @@
-"""Quality Gates module for QA Execution Engine."""
+"""Quality Gates module for QA Management Engine."""
 
 from .base_gate import BaseGate
 from .test_structure_validator import TestStructureValidator

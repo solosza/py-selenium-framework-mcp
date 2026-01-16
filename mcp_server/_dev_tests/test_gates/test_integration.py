@@ -1,5 +1,5 @@
 """
-Integration Tests for QA Execution Engine - Task 15.0
+Integration Tests for QA Management Engine - Task 15.0
 
 Tests cross-gate behavior, state flow, and workflow integrity.
 

@@ -1,0 +1,187 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_2": {
+    "persona": "As a registered user",
+    "URL": "https://parabank.parasoft.com/parabank/openaccount.htm",
+    "role_name": "RegisteredUser",
+    "workflow": "parabank13",
+    "raw_requirement": "As a registered user, I want to open a new checking account",
+    "detected_env_id": "parabank11"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "scenario": "Open new checking account",
+        "given": "I am logged in as a registered user",
+        "when": "I navigate to the open account page and select Checking account type and select an existing account to transfer from and click Open New Account",
+        "then": "I should see account opened successfully message and the new account number should be displayed"
+      }
+    ],
+    "expected_states": [
+      "is_account_opened_successfully",
+      "has_success_message",
+      "get_new_account_number"
+    ],
+    "intent": "open_new_checking_account"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_open_new_checking_account",
+        "given": "I am logged in as a registered user",
+        "when": [
+          "I navigate to the open account page",
+          "I select Checking as the account type",
+          "I select an existing account to transfer from",
+          "I click Open New Account"
+        ],
+        "then": [
+          "I should see account opened successfully message",
+          "the new account number should be displayed"
+        ],
+        "workflow": "parabank13"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "ACCOUNT_TYPE_DROPDOWN",
+        "element_type": "combobox",
+        "tag_name": "select",
+        "id": "type",
+        "class": "input",
+        "locator_id": "type",
+        "locator_css": "#type",
+        "visible": "Yes",
+        "validated": true
+      },
+      {
+        "suggested_name": "FROM_ACCOUNT_DROPDOWN",
+        "element_type": "combobox",
+        "tag_name": "select",
+        "id": "fromAccountId",
+        "class": "input",
+        "locator_id": "fromAccountId",
+        "locator_css": "#fromAccountId",
+        "visible": "Yes",
+        "validated": true
+      },
+      {
+        "suggested_name": "OPEN_ACCOUNT_BUTTON",
+        "element_type": "button",
+        "tag_name": "input",
+        "type_attr": "submit",
+        "class": "button",
+        "text": "Open New Account",
+        "locator_css": "input.button[value='Open New Account']",
+        "visible": "Yes",
+        "validated": true
+      },
+      {
+        "suggested_name": "SUCCESS_HEADING",
+        "element_type": "heading",
+        "tag_name": "h1",
+        "class": "title",
+        "text": "Account Opened!",
+        "locator_css": "h1.title",
+        "visible": "Yes",
+        "validated": true
+      },
+      {
+        "suggested_name": "SUCCESS_MESSAGE",
+        "element_type": "paragraph",
+        "tag_name": "p",
+        "text": "Congratulations, your account is now open.",
+        "locator_xpath": "//p[contains(text(), 'Congratulations')]",
+        "visible": "Yes",
+        "validated": true
+      },
+      {
+        "suggested_name": "NEW_ACCOUNT_NUMBER",
+        "element_type": "link",
+        "tag_name": "a",
+        "id": "newAccountId",
+        "locator_id": "newAccountId",
+        "locator_css": "#newAccountId",
+        "visible": "Yes",
+        "validated": true
+      }
+    ],
+    "page_name": "OpenAccountPage",
+    "discovered_pages": {
+      "OpenAccountPage": {
+        "input_elements": [
+          {
+            "suggested_name": "ACCOUNT_TYPE_DROPDOWN",
+            "element_type": "combobox",
+            "tag_name": "select",
+            "id": "type",
+            "class": "input",
+            "locator_id": "type",
+            "locator_css": "#type",
+            "visible": "Yes",
+            "validated": true
+          },
+          {
+            "suggested_name": "FROM_ACCOUNT_DROPDOWN",
+            "element_type": "combobox",
+            "tag_name": "select",
+            "id": "fromAccountId",
+            "class": "input",
+            "locator_id": "fromAccountId",
+            "locator_css": "#fromAccountId",
+            "visible": "Yes",
+            "validated": true
+          },
+          {
+            "suggested_name": "OPEN_ACCOUNT_BUTTON",
+            "element_type": "button",
+            "tag_name": "input",
+            "type_attr": "submit",
+            "class": "button",
+            "text": "Open New Account",
+            "locator_css": "input.button[value='Open New Account']",
+            "visible": "Yes",
+            "validated": true
+          },
+          {
+            "suggested_name": "SUCCESS_HEADING",
+            "element_type": "heading",
+            "tag_name": "h1",
+            "class": "title",
+            "text": "Account Opened!",
+            "locator_css": "h1.title",
+            "visible": "Yes",
+            "validated": true
+          },
+          {
+            "suggested_name": "SUCCESS_MESSAGE",
+            "element_type": "paragraph",
+            "tag_name": "p",
+            "text": "Congratulations, your account is now open.",
+            "locator_xpath": "//p[contains(text(), 'Congratulations')]",
+            "visible": "Yes",
+            "validated": true
+          },
+          {
+            "suggested_name": "NEW_ACCOUNT_NUMBER",
+            "element_type": "link",
+            "tag_name": "a",
+            "id": "newAccountId",
+            "locator_id": "newAccountId",
+            "locator_css": "#newAccountId",
+            "visible": "Yes",
+            "validated": true
+          }
+        ]
+      }
+    },
+    "pages_discovered": 0,
+    "total_pages": 1,
+    "discovery_complete": false
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "run_id": "2026-01-16T10:17:32.936748Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T10:19:06.341861Z",
+      "metadata": {
+        "page_name": "OpenAccountPage",
+        "class_name": "OpenAccountPage",
+        "import_path": "pages.parabank13.open_account_page",
+        "action_methods_count": 4,
+        "state_methods_count": 3
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T10:19:34.524511Z",
+      "metadata": {
+        "task_name": "OpenAccountTasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T10:19:49.522477Z",
+      "metadata": {
+        "class_name": "OpenAccountTasks",
+        "import_path": "tasks.parabank13.open_account_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T10:20:06.342835Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T10:20:28.555472Z",
+      "metadata": {
+        "class_name": "RegisteredUser",
+        "import_path": "roles.parabank13.registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T10:22:34.628136Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T10:24:08.025875Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/parabank13/test_open_new_checking_account.py"
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\parabank13\\open_account_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\parabank13\\open_account_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\parabank13\\registered_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\parabank13\\test_open_new_checking_account.py",
+      "step": 9
+    }
+  ],
+  "summary": {
+    "total_steps": 4,
+    "gates_passed": 7,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

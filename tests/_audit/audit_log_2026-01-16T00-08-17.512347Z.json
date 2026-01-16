@@ -1,0 +1,239 @@
+{
+  "run_id": "2026-01-16T00:08:17.512347Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:08:17.517348Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "workflow"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:08:31.276955Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://parabank.parasoft.com/parabank/openaccount.htm",
+        "role_name": "RegisteredUser",
+        "workflow": "parabank12",
+        "detected_env_id": "parabank11"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:08:47.677093Z",
+      "metadata": {
+        "intent": "open_checking_account",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:09:03.420798Z",
+      "metadata": {
+        "workflow": "parabank12"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:09:14.268421Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:10:28.152112Z",
+      "metadata": {
+        "page_name": "OpenAccountPage",
+        "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:10:38.480361Z",
+      "metadata": {
+        "page_name": "OpenAccountPage",
+        "elements_count": 3,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:10:55.506349Z",
+      "metadata": {
+        "page_name": "OpenAccountPage",
+        "url": "https://parabank.parasoft.com/parabank/openaccount.htm",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:11:02.467624Z",
+      "metadata": {
+        "page_name": "OpenAccountPage",
+        "elements_count": 3,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:11:29.535185Z",
+      "metadata": {
+        "page_name": "OpenAccountPage",
+        "elements_count": 6
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:12:14.691659Z",
+      "metadata": {
+        "page_name": "OpenAccountPage",
+        "class_name": "OpenAccountPage",
+        "import_path": "pages.parabank12.open_account_page",
+        "action_methods_count": 4,
+        "state_methods_count": 3
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:12:46.694642Z",
+      "metadata": {
+        "task_name": "Parabank12Tasks"
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:13:12.802301Z",
+      "metadata": {
+        "class_name": "Parabank12Tasks",
+        "import_path": "tasks.parabank12.parabank12_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:14:19.819823Z",
+      "metadata": {
+        "role_name": "RegisteredUser"
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:14:59.744737Z",
+      "metadata": {
+        "class_name": "Parabank12RegisteredUser",
+        "import_path": "roles.parabank12_registered_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:17:30.632722Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-16T00:26:31.586224Z",
+      "error": "Invalid test status: PASSED"
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T00:26:42.225053Z",
+      "metadata": {
+        "test_status": "passed",
+        "duration": 7.62,
+        "report_path": null
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\parabank12\\open_account_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\parabank12\\parabank12_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\parabank12_registered_user.py",
+      "step": 8
+    }
+  ],
+  "summary": {
+    "total_steps": 10,
+    "gates_passed": 17,
+    "gates_failed": 1,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

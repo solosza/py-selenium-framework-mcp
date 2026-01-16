@@ -1,12 +1,36 @@
 # Enhancement Backlog
 
-**Project:** py_sel_framework_mcp - QA Execution Engine
+**Status:** 🚨 **DEPRECATED - SPLIT INTO INDIVIDUAL FILES**
+**Project:** py_sel_framework_mcp - QA Management Engine
 **Company:** Isagawa Corp
 **Purpose:** Track feature enhancements and improvements by version
 
-**NOTE:** This document will be split into:
-- **Platform enhancements** → `.business/roadmap/backlog/` (affects all verticals)
-- **QA-specific enhancements** → `docs/projects/qa-execution-engine/backlog/` (QA vertical only)
+---
+
+## ⚠️ DEPRECATION NOTICE
+
+**This consolidated backlog has been split into modular enhancement files following the roadmap workflow.**
+
+### New Locations
+
+**Platform Enhancements (All Verticals):**
+- `.business/roadmap/backlog/modular_hitl_system.md`
+- `.business/roadmap/backlog/gate_layer_2_pattern_provision.md`
+- `.business/roadmap/backlog/audit_system_enhancements.md`
+- `.business/roadmap/backlog/state_management_improvements.md`
+
+**QA-Specific Enhancements:**
+- `docs/projects/qa-management-engine/backlog/critical_fixes_mvp.md`
+- `docs/projects/qa-management-engine/backlog/pre_execution_validation.md`
+- `docs/projects/qa-management-engine/backlog/failure_pattern_recognition.md`
+- `docs/projects/qa-management-engine/backlog/element_inspector_hints.md`
+- `docs/projects/qa-management-engine/backlog/advanced_features_v2.md`
+
+**See:** `docs/projects/qa-management-engine/backlog/README.md` for structure and usage.
+
+**This file is kept for reference only. All new enhancements should be added to individual files in the appropriate location.**
+
+---
 
 ---
 

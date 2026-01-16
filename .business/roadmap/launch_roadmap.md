@@ -12,7 +12,7 @@
 **Strategic Insight (2026-01-11):** Based on fresh competitive intelligence, Isagawa is launching four products in sequence to maximize market opportunity and minimize competitive risk.
 
 **Launch Sequence:**
-1. **QA Execution Engine** (Week 1) - Open source, community flywheel, brand building
+1. **QA Management Engine** (Week 1) - Open source, community flywheel, brand building
 2. **Consumer Execution Engine** (Weeks 2-8) - User-configurable, no SME needed, brand positioning trap advantage
 3. **AI Agent Management Layer** (Weeks 9-16) - Dogfooding on our own testing agents, validates platform thesis
 4. **Enterprise via Compliance** (Parallel) - EU AI Act August 2026 deadline (6 months)
@@ -29,7 +29,7 @@
 
 ---
 
-## PHASE 1: QA EXECUTION ENGINE (OPEN SOURCE) 🔄 IN PROGRESS
+## PHASE 1: QA MANAGEMENT ENGINE (OPEN SOURCE) 🔄 IN PROGRESS
 
 **Timeline:** Week 1
 **Goal:** Open source launch with dual GTM (community + enterprise tier)
@@ -46,7 +46,7 @@
 
 | Project | Task | Description | Status |
 |---------|------|-------------|--------|
-| qa-execution-engine | 1.0-15.0 | All 10 quality gates + integration tests | ✅ DONE |
+| qa-management-engine | 1.0-15.0 | All 10 quality gates + integration tests | ✅ DONE |
 | release-readiness | 1.0-3.0 | Audit Trail, Self-Heal Cap, Execution Mode, License/Docs | ✅ DONE |
 | enhanced-runtime | 1.0-8.5 | Scope Discovery, RuntimeValidator, Visual Feedback, WebInterface Checker | ✅ DONE |
 

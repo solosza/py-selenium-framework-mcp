@@ -421,11 +421,11 @@ class TestValidLogin:
         """
         # ═══════════════════════════════════════════════════════════════════════
         # ARRANGE - Create Role and POM instances for assertions
+        # DD-49: No base_url parameter - POMs get URL from self.web.config
         # ═══════════════════════════════════════════════════════════════════════
         user = RegisteredUser(
-            web=web_interface,
-            user_data=test_data["valid_user"],
-            base_url=config["base_url"]
+            web_interface=web_interface,
+            user_data=test_data["valid_user"]
         )
         login_page = LoginPage(web_interface)
         home_page = HomePage(web_interface)
@@ -459,9 +459,9 @@ class TestMultiPersonaScenario:
 
         Multiple Role calls ARE valid for multi-persona workflows.
         """
-        # ARRANGE
-        admin = AdminUser(web_interface, test_data["admin"], config["base_url"])
-        new_user = RegisteredUser(web_interface, test_data["new_user"], config["base_url"])
+        # ARRANGE - DD-49: No base_url parameter
+        admin = AdminUser(web_interface, test_data["admin"])
+        new_user = RegisteredUser(web_interface, test_data["new_user"])
         admin_page = AdminPage(web_interface)
         login_page = LoginPage(web_interface)
 
@@ -486,6 +486,7 @@ class TestMultiPersonaScenario:
 | ☐ | Call Role workflow methods (one or more) |
 | ☐ | Assert via POM state-check methods |
 | ☐ | Import POMs for assertions only (not for actions) |
+| ☐ | **NO `base_url` parameter** when instantiating Roles (DD-49) |
 | ☐ | **NO Task method calls** (delegate to Role) |
 | ☐ | **NO POM action method calls** (delegate to Role) |
 | ☐ | **NO orchestration logic** (that belongs in Role) |
@@ -496,8 +497,8 @@ class TestMultiPersonaScenario:
 ```python
 # ❌ WRONG: Task method call in test (bypasses Role)
 def test_login(self, web_interface, config):
-    auth_tasks = AuthTasks(web_interface, config["base_url"])
-    auth_tasks.log_in(email, password)  # NO! Use Role
+    auth_tasks = AuthTasks(web_interface)  # NO! Tests should use Roles
+    auth_tasks.log_in(email, password)     # This bypasses Role layer
 
 # ❌ WRONG: POM action method call in test (bypasses Role+Task)
 def test_login(self, web_interface, config):
@@ -532,11 +533,11 @@ def test_login(self, web_interface):  # Missing @autologger
 **Correct Pattern: Test calls Role, asserts via POM:**
 
 ```python
-# ✅ CORRECT: Single Role call for simple workflow
+# ✅ CORRECT: Single Role call for simple workflow (DD-49: No base_url)
 @autologger.automation_logger("Test")
 def test_user_can_browse_products(self, web_interface, config, test_data):
     # Arrange
-    user = GuestUser(web_interface, config["base_url"])
+    user = GuestUser(web_interface)
     catalog_page = CatalogPage(web_interface)
 
     # Act - ONE Role call
@@ -546,12 +547,12 @@ def test_user_can_browse_products(self, web_interface, config, test_data):
     assert catalog_page.has_products(), "Products should be displayed"
 
 
-# ✅ CORRECT: Multiple Role calls for multi-persona scenario
+# ✅ CORRECT: Multiple Role calls for multi-persona scenario (DD-49: No base_url)
 @autologger.automation_logger("Test")
 def test_buyer_and_seller_transaction(self, web_interface, config, test_data):
     # Arrange
-    seller = SellerUser(web_interface, test_data["seller"], config["base_url"])
-    buyer = BuyerUser(web_interface, test_data["buyer"], config["base_url"])
+    seller = SellerUser(web_interface, test_data["seller"])
+    buyer = BuyerUser(web_interface, test_data["buyer"])
     product_page = ProductPage(web_interface)
 
     # Act - Multiple Role calls (valid: different personas)
@@ -561,6 +562,75 @@ def test_buyer_and_seller_transaction(self, web_interface, config, test_data):
     # Assert
     assert product_page.is_sold()
 ```
+
+---
+
+## K. DD-49: No base_url in Test Code (Role Instantiation)
+
+**Purpose:** Tests should NOT pass `base_url` parameter when instantiating Roles. URL configuration flows via conftest → environment_config.json → web.config.
+
+**Rule:** Role instantiation in tests uses only `web_interface` and `user_data` parameters (if applicable). NO `base_url` parameter.
+
+**Correct Pattern:**
+
+```python
+# ✅ CORRECT: No base_url parameter (DD-49)
+@autologger.automation_logger("Test")
+def test_user_can_login(self, web_interface, config, test_users):
+    # Arrange
+    user_data = test_users.get("registered_user")
+    user = RegisteredUser(web_interface, user_data)  # No base_url!
+    login_page = LoginPage(web_interface)
+
+    # Act
+    user.login()
+
+    # Assert
+    assert login_page.is_logged_in()
+```
+
+**Wrong Pattern (DEPRECATED):**
+
+```python
+# ❌ WRONG: base_url parameter is deprecated (old pattern)
+def test_user_can_login(self, web_interface, config, test_users):
+    user = RegisteredUser(
+        web_interface,
+        user_data,
+        config["base_url"]  # NO! This is deprecated
+    )
+```
+
+**Why This Pattern:**
+
+- ✓ Consistent with Role/Task layer architecture (see step-08.md DD-49)
+- ✓ URL management centralized in environment_config.json
+- ✓ POMs access URL via `self.web.config['url']`
+- ✓ Cleaner test code (fewer parameters)
+- ✓ Easier multi-environment testing (dev/staging/prod)
+
+**conftest.py Flow:**
+
+```
+conftest.py loads environment_config.json
+  ↓
+{"parabank12": {"url": "https://parabank.parasoft.com"}}
+  ↓
+web_interface fixture receives config
+  ↓
+WebInterface(driver, config, logger)
+  ↓
+POMs access via self.web.config['url']
+```
+
+**Gate Enforcement:**
+
+Step 9 gate (`qg_test_runner`) does NOT currently validate base_url absence (tests are flexible). However, following DD-49 pattern ensures consistency across framework layers (POM → Task → Role → Test).
+
+**Related Sections:**
+
+- Step 7 (Task): See section J - Task constructor has NO base_url
+- Step 8 (Role): See section L - Role constructor has NO base_url
 
 ---
 

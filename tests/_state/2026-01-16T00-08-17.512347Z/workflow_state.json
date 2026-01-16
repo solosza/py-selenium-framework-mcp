@@ -1,0 +1,330 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "workflow"
+  },
+  "step_2": {
+    "persona": "registered user",
+    "URL": "https://parabank.parasoft.com/parabank/openaccount.htm",
+    "role_name": "RegisteredUser",
+    "workflow": "parabank12",
+    "raw_requirement": "As a registered user, I want to open a new checking account",
+    "detected_env_id": "parabank11"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": [
+          "I am logged in as a registered user",
+          "I am on the Open New Account page"
+        ],
+        "when": [
+          "I select Checking as the account type",
+          "I select an existing account to transfer funds from",
+          "I click Open New Account button"
+        ],
+        "then": [
+          "I should see the account opened successfully message",
+          "I should see the new account number displayed"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_account_opened",
+      "has_account_number"
+    ],
+    "intent": "open_checking_account"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_open_new_checking_account",
+        "given": "I am logged in as a registered user AND I am on the Open New Account page",
+        "when": [
+          "I select Checking as the account type",
+          "I select an existing account to transfer funds from",
+          "I click Open New Account button"
+        ],
+        "then": [
+          "I should see the account opened successfully message",
+          "I should see the new account number displayed"
+        ],
+        "workflow": "parabank12"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "SUCCESS_HEADING",
+        "element_type": "text",
+        "locator_id": "",
+        "locator_css": "h1.title",
+        "locator_xpath": "//h1[@class='title']"
+      },
+      {
+        "suggested_name": "CONFIRMATION_MESSAGE",
+        "element_type": "text",
+        "locator_id": "",
+        "locator_css": "#openAccountResult p:first-of-type",
+        "locator_xpath": "//div[@id='openAccountResult']//p[1]"
+      },
+      {
+        "suggested_name": "NEW_ACCOUNT_NUMBER",
+        "element_type": "link",
+        "locator_id": "newAccountId",
+        "locator_css": "a#newAccountId",
+        "locator_xpath": "//a[@id='newAccountId']"
+      }
+    ],
+    "page_name": "OpenAccountPage",
+    "discovered_pages": {
+      "OpenAccountPage": {
+        "input_elements": [
+          {
+            "suggested_name": "SUCCESS_HEADING",
+            "element_type": "text",
+            "locator_id": "",
+            "locator_css": "h1.title",
+            "locator_xpath": "//h1[@class='title']"
+          },
+          {
+            "suggested_name": "CONFIRMATION_MESSAGE",
+            "element_type": "text",
+            "locator_id": "",
+            "locator_css": "#openAccountResult p:first-of-type",
+            "locator_xpath": "//div[@id='openAccountResult']//p[1]"
+          },
+          {
+            "suggested_name": "NEW_ACCOUNT_NUMBER",
+            "element_type": "link",
+            "locator_id": "newAccountId",
+            "locator_css": "a#newAccountId",
+            "locator_xpath": "//a[@id='newAccountId']"
+          }
+        ]
+      }
+    },
+    "pages_discovered": 0,
+    "total_pages": 1,
+    "discovery_complete": false
+  },
+  "step_6": {
+    "pom_code": "\"\"\"\nOpenAccountPage - Page Object Model\n\nPage Object representing a single page in the application.\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass OpenAccountPage:\n    \"\"\"\n    Page Object for Open Account Page.\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # ==================== LOCATORS (Class Constants) ====================\n    ACCOUNT_TYPE_DROPDOWN = (By.CSS_SELECTOR, \"select#type\")\n    FROM_ACCOUNT_DROPDOWN = (By.CSS_SELECTOR, \"select#fromAccountId\")\n    OPEN_ACCOUNT_BUTTON = (By.CSS_SELECTOR, \"input[value='Open New Account']\")\n    SUCCESS_HEADING = (By.CSS_SELECTOR, \"h1.title\")\n    CONFIRMATION_MESSAGE = (By.CSS_SELECTOR, \"#openAccountResult p:first-of-type\")\n    NEW_ACCOUNT_NUMBER = (By.CSS_SELECTOR, \"a#newAccountId\")\n\n    # ==================== NAVIGATION ====================\n\n    def navigate(self) -> \"OpenAccountPage\":\n        \"\"\"Navigate to Open Account page.\"\"\"\n        self.web.navigate_to(self.web.config['url'] + '/parabank/openaccount.htm')\n        return self\n\n    # ==================== ATOMIC METHODS (One UI Action) ====================\n\n    def select_account_type(self, account_type: str) -> \"OpenAccountPage\":\n        \"\"\"Select account type from dropdown (CHECKING or SAVINGS).\"\"\"\n        self.web.select_dropdown_by_value(*self.ACCOUNT_TYPE_DROPDOWN, account_type)\n        return self\n\n    def select_from_account(self, account_id: str) -> \"OpenAccountPage\":\n        \"\"\"Select source account for funds transfer.\"\"\"\n        self.web.select_dropdown_by_value(*self.FROM_ACCOUNT_DROPDOWN, account_id)\n        return self\n\n    def click_open_account(self) -> \"OpenAccountPage\":\n        \"\"\"Click Open New Account button.\"\"\"\n        self.web.click(*self.OPEN_ACCOUNT_BUTTON)\n        return self\n\n    # ==================== STATE-CHECK METHODS (For Assertions) ====================\n\n    def is_account_opened(self) -> bool:\n        \"\"\"Check if account opened successfully message is displayed.\"\"\"\n        return self.web.is_element_displayed(*self.SUCCESS_HEADING, timeout=5)\n\n    def has_account_number(self) -> bool:\n        \"\"\"Check if new account number is displayed.\"\"\"\n        return self.web.is_element_displayed(*self.NEW_ACCOUNT_NUMBER, timeout=5)\n\n    def get_account_number(self) -> str:\n        \"\"\"Get the new account number text.\"\"\"\n        return self.web.get_text(*self.NEW_ACCOUNT_NUMBER)\n",
+    "pom_metadata": {
+      "class_name": "OpenAccountPage",
+      "import_path": "pages.parabank12.open_account_page",
+      "locators": [
+        {
+          "name": "ACCOUNT_TYPE_DROPDOWN",
+          "by": "CSS_SELECTOR",
+          "value": "select#type"
+        },
+        {
+          "name": "FROM_ACCOUNT_DROPDOWN",
+          "by": "CSS_SELECTOR",
+          "value": "select#fromAccountId"
+        },
+        {
+          "name": "OPEN_ACCOUNT_BUTTON",
+          "by": "CSS_SELECTOR",
+          "value": "input[value='Open New Account']"
+        },
+        {
+          "name": "SUCCESS_HEADING",
+          "by": "CSS_SELECTOR",
+          "value": "h1.title"
+        },
+        {
+          "name": "CONFIRMATION_MESSAGE",
+          "by": "CSS_SELECTOR",
+          "value": "#openAccountResult p:first-of-type"
+        },
+        {
+          "name": "NEW_ACCOUNT_NUMBER",
+          "by": "CSS_SELECTOR",
+          "value": "a#newAccountId"
+        }
+      ],
+      "action_methods": [
+        {
+          "name": "navigate",
+          "params": [],
+          "returns": "OpenAccountPage"
+        },
+        {
+          "name": "select_account_type",
+          "params": [
+            "account_type: str"
+          ],
+          "returns": "OpenAccountPage"
+        },
+        {
+          "name": "select_from_account",
+          "params": [
+            "account_id: str"
+          ],
+          "returns": "OpenAccountPage"
+        },
+        {
+          "name": "click_open_account",
+          "params": [],
+          "returns": "OpenAccountPage"
+        }
+      ],
+      "state_methods": [
+        {
+          "name": "is_account_opened",
+          "params": [],
+          "returns": "bool"
+        },
+        {
+          "name": "has_account_number",
+          "params": [],
+          "returns": "bool"
+        },
+        {
+          "name": "get_account_number",
+          "params": [],
+          "returns": "str"
+        }
+      ]
+    },
+    "generated_poms": {
+      "OpenAccountPage": {
+        "code": "\"\"\"\nOpenAccountPage - Page Object Model\n\nPage Object representing a single page in the application.\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass OpenAccountPage:\n    \"\"\"\n    Page Object for Open Account Page.\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # ==================== LOCATORS (Class Constants) ====================\n    ACCOUNT_TYPE_DROPDOWN = (By.CSS_SELECTOR, \"select#type\")\n    FROM_ACCOUNT_DROPDOWN = (By.CSS_SELECTOR, \"select#fromAccountId\")\n    OPEN_ACCOUNT_BUTTON = (By.CSS_SELECTOR, \"input[value='Open New Account']\")\n    SUCCESS_HEADING = (By.CSS_SELECTOR, \"h1.title\")\n    CONFIRMATION_MESSAGE = (By.CSS_SELECTOR, \"#openAccountResult p:first-of-type\")\n    NEW_ACCOUNT_NUMBER = (By.CSS_SELECTOR, \"a#newAccountId\")\n\n    # ==================== NAVIGATION ====================\n\n    def navigate(self) -> \"OpenAccountPage\":\n        \"\"\"Navigate to Open Account page.\"\"\"\n        self.web.navigate_to(self.web.config['url'] + '/parabank/openaccount.htm')\n        return self\n\n    # ==================== ATOMIC METHODS (One UI Action) ====================\n\n    def select_account_type(self, account_type: str) -> \"OpenAccountPage\":\n        \"\"\"Select account type from dropdown (CHECKING or SAVINGS).\"\"\"\n        self.web.select_dropdown_by_value(*self.ACCOUNT_TYPE_DROPDOWN, account_type)\n        return self\n\n    def select_from_account(self, account_id: str) -> \"OpenAccountPage\":\n        \"\"\"Select source account for funds transfer.\"\"\"\n        self.web.select_dropdown_by_value(*self.FROM_ACCOUNT_DROPDOWN, account_id)\n        return self\n\n    def click_open_account(self) -> \"OpenAccountPage\":\n        \"\"\"Click Open New Account button.\"\"\"\n        self.web.click(*self.OPEN_ACCOUNT_BUTTON)\n        return self\n\n    # ==================== STATE-CHECK METHODS (For Assertions) ====================\n\n    def is_account_opened(self) -> bool:\n        \"\"\"Check if account opened successfully message is displayed.\"\"\"\n        return self.web.is_element_displayed(*self.SUCCESS_HEADING, timeout=5)\n\n    def has_account_number(self) -> bool:\n        \"\"\"Check if new account number is displayed.\"\"\"\n        return self.web.is_element_displayed(*self.NEW_ACCOUNT_NUMBER, timeout=5)\n\n    def get_account_number(self) -> str:\n        \"\"\"Get the new account number text.\"\"\"\n        return self.web.get_text(*self.NEW_ACCOUNT_NUMBER)\n",
+        "metadata": {
+          "class_name": "OpenAccountPage",
+          "import_path": "pages.parabank12.open_account_page",
+          "locators": [
+            {
+              "name": "ACCOUNT_TYPE_DROPDOWN",
+              "by": "CSS_SELECTOR",
+              "value": "select#type"
+            },
+            {
+              "name": "FROM_ACCOUNT_DROPDOWN",
+              "by": "CSS_SELECTOR",
+              "value": "select#fromAccountId"
+            },
+            {
+              "name": "OPEN_ACCOUNT_BUTTON",
+              "by": "CSS_SELECTOR",
+              "value": "input[value='Open New Account']"
+            },
+            {
+              "name": "SUCCESS_HEADING",
+              "by": "CSS_SELECTOR",
+              "value": "h1.title"
+            },
+            {
+              "name": "CONFIRMATION_MESSAGE",
+              "by": "CSS_SELECTOR",
+              "value": "#openAccountResult p:first-of-type"
+            },
+            {
+              "name": "NEW_ACCOUNT_NUMBER",
+              "by": "CSS_SELECTOR",
+              "value": "a#newAccountId"
+            }
+          ],
+          "action_methods": [
+            {
+              "name": "navigate",
+              "params": [],
+              "returns": "OpenAccountPage"
+            },
+            {
+              "name": "select_account_type",
+              "params": [
+                "account_type: str"
+              ],
+              "returns": "OpenAccountPage"
+            },
+            {
+              "name": "select_from_account",
+              "params": [
+                "account_id: str"
+              ],
+              "returns": "OpenAccountPage"
+            },
+            {
+              "name": "click_open_account",
+              "params": [],
+              "returns": "OpenAccountPage"
+            }
+          ],
+          "state_methods": [
+            {
+              "name": "is_account_opened",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "has_account_number",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "get_account_number",
+              "params": [],
+              "returns": "str"
+            }
+          ]
+        }
+      }
+    },
+    "poms_generated": 1,
+    "total_poms": 1,
+    "generation_complete": true
+  },
+  "step_7": {
+    "task_code": "\"\"\"\nOpen a new checking account\n\nThis module provides high-level task methods that orchestrate page objects\nto accomplish business workflows.\n\"\"\"\n\nfrom interfaces.web_interface import WebInterface\nfrom resources.utilities import autologger\nfrom pages.parabank12.open_account_page import OpenAccountPage\n\n\nclass Parabank12Tasks:\n    \"\"\"\n    Task module for parabank12 operations.\n\n    - @autologger(\"Task\") on all methods\n    - NO decorator on constructor\n    - Composes Page Objects\n    - One domain operation per method\n    - NO return values\n    - Uses fluent POM API\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"\n        Compose Page Objects - NO decorator on constructor.\n\n        Args:\n            web: WebInterface instance\n        \"\"\"\n        self.web = web\n        self.open_account_page = OpenAccountPage(web)\n\n    # ==================== TASK METHODS ====================\n\n    @autologger.automation_logger(\"Task\")\n    def open_new_checking_account(self, account_type: str, from_account_id: str) -> None:\n        \"\"\"\n        Open a new checking account.\n\n        Args:\n            account_type: Account type (CHECKING or SAVINGS)\n            from_account_id: Source account ID for transfer\n\n        NO return value - test asserts via POM state-check methods.\n        \"\"\"\n        (self.open_account_page\n            .navigate()\n            .select_account_type(account_type)\n            .select_from_account(from_account_id)\n            .click_open_account())\n        # NO return - test asserts via POM\n",
+    "task_metadata": {
+      "class_name": "Parabank12Tasks",
+      "import_path": "tasks.parabank12.parabank12_tasks",
+      "composed_pages": [
+        "OpenAccountPage"
+      ],
+      "task_methods": [
+        {
+          "name": "open_new_checking_account",
+          "params": [
+            "account_type: str",
+            "from_account_id: str"
+          ],
+          "calls": [
+            "navigate",
+            "select_account_type",
+            "select_from_account",
+            "click_open_account"
+          ]
+        }
+      ]
+    }
+  },
+  "step_8": {
+    "role_code": "\"\"\"\nParabank12RegisteredUser - Role for orchestrating business workflows.\n\nRoles represent user personas (e.g., Admin, Customer, Guest).\nThis role orchestrates complete business workflows using Task modules.\n\"\"\"\n\nfrom typing import Dict, Any\nfrom interfaces.web_interface import WebInterface\nfrom resources.utilities import autologger\nfrom tasks.parabank12.parabank12_tasks import Parabank12Tasks\nfrom tasks.parabank11.parabank11_auth_tasks import Parabank11AuthTasks\n\n\nclass Parabank12RegisteredUser:\n    \"\"\"\n    Parabank12RegisteredUser - orchestrates complete business workflows.\n\n    - @autologger(\"Role\") on workflow methods\n    - @autologger(\"Role Constructor\") on __init__\n    - Composes Task modules\n    - Workflow methods call MULTIPLE tasks\n    - NO return values\n    - NO locators\n    \"\"\"\n\n    @autologger.automation_logger(\"Role Constructor\")\n    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any]):\n        \"\"\"\n        Initialize with credentials and compose Task modules.\n\n        Args:\n            web_interface: WebInterface instance\n            user_data: User data dict with username/password\n        \"\"\"\n        self.web = web_interface\n        self.user_data = user_data\n\n        # Dynamic credential resolution (DEF-063)\n        self.username = (\n            user_data.get('username') or\n            user_data.get('email') or\n            user_data.get('user_id') or\n            user_data.get('login')\n        )\n        self.password = (\n            user_data.get('password') or\n            user_data.get('pin') or\n            user_data.get('secret')\n        )\n\n        # Validate required credentials\n        if not self.username or not self.password:\n            raise ValueError(f\"Parabank12RegisteredUser requires username and password. Got: {list(user_data.keys())}\")\n\n        # Compose Task modules\n        self.auth_tasks = Parabank11AuthTasks(web_interface)\n        self.parabank12_tasks = Parabank12Tasks(web_interface)\n\n    # ==================== WORKFLOW METHODS ====================\n\n    @autologger.automation_logger(\"Role\")\n    def open_new_checking_account(self, account_type: str, from_account_id: str) -> None:\n        \"\"\"\n        Complete workflow: Login then open new checking account.\n\n        Orchestrates MULTIPLE tasks:\n        - Authenticate user via AuthTasks\n        - Open new account via Parabank12Tasks\n\n        NO return value - test asserts via POM state-check methods.\n        \"\"\"\n        # First, login\n        self.auth_tasks.log_in(self.username, self.password)\n\n        # Then, open account\n        self.parabank12_tasks.open_new_checking_account(account_type, from_account_id)\n        # NO return - test asserts via open_account_page.is_account_opened()\n",
+    "role_metadata": {
+      "class_name": "Parabank12RegisteredUser",
+      "import_path": "roles.parabank12_registered_user",
+      "composed_tasks": [
+        "Parabank11AuthTasks",
+        "Parabank12Tasks"
+      ],
+      "workflow_methods": [
+        {
+          "name": "open_new_checking_account",
+          "params": [
+            "account_type: str",
+            "from_account_id: str"
+          ],
+          "calls": [
+            "auth_tasks.log_in",
+            "parabank12_tasks.open_new_checking_account"
+          ]
+        }
+      ]
+    }
+  }
+}

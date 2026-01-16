@@ -1,5 +1,5 @@
 """
-AuditLogger - Audit Trail System for QA Execution Engine.
+AuditLogger - Audit Trail System for QA Management Engine.
 
 Task 1.0 - Provides per-run audit logging for the 10-step workflow.
 DEF-040 - Added incremental persist after each log_gate() call.

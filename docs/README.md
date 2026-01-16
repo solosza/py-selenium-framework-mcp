@@ -1,6 +1,6 @@
 # Documentation Index
 
-**Project:** py_sel_framework_mcp - QA Execution Engine (Isagawa Corp)
+**Project:** py_sel_framework_mcp - QA Management Engine (Isagawa Corp)
 
 ---
 
@@ -40,7 +40,7 @@ Reusable workflow templates:
 
 Project-specific documentation (PRDs, task lists):
 - `release-readiness/` - MVP release preparation
-- `qa-execution-engine/` - Core QA engine design
+- `qa-management-engine/` - Core QA engine design
 - `audit/` - Framework audit project
 - `enhanced-runtime-validation/` - Runtime validation features
 - Additional projects organized by name

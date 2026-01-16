@@ -615,7 +615,8 @@ def generate_role_with_metadata(
     task_metadata_list: Optional[List[Dict[str, Any]]] = None,
     role_type: Optional[str] = None,
     role_description: Optional[str] = None,
-    requires_credentials: bool = True
+    requires_credentials: bool = True,
+    workflow: str = "common"
 ) -> Dict[str, Any]:
     """
     Generate Role class code AND metadata for downstream tools.
@@ -694,7 +695,7 @@ def generate_role_with_metadata(
 
     # Build metadata for Test generator
     snake_name = _pascal_to_snake(role_name)
-    import_path = f"roles.{snake_name}"
+    import_path = f"roles.{workflow}.{snake_name}"
 
     metadata = {
         "class_name": role_name,
@@ -713,18 +714,19 @@ def generate_role_with_metadata(
 # UTILITY FUNCTIONS
 # =============================================================================
 
-def get_file_path(role_name: str) -> str:
+def get_file_path(role_name: str, workflow: str = "common") -> str:
     """
     Get suggested file path for the generated role.
 
     Args:
         role_name: Role class name (PascalCase)
+        workflow: Workflow/domain folder (auth, parabank12, etc.)
 
     Returns:
-        Suggested file path (e.g., framework/roles/authenticated_user.py)
+        Suggested file path (e.g., framework/roles/parabank12/parabank12_registered_user.py)
     """
     snake_name = _pascal_to_snake(role_name)
-    return f"framework/roles/{snake_name}.py"
+    return f"framework/roles/{workflow}/{snake_name}.py"
 
 
 def get_available_role_types() -> List[str]:

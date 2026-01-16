@@ -2,7 +2,7 @@
 
 **Version:** v2.0.0 | **Status:** Production Development
 **Company:** Isagawa Corp
-**Product:** QA Execution Engine (AI Management Layer - First Vertical)
+**Product:** QA Management Engine (AI Management Layer - First Vertical)
 
 ---
 
@@ -28,7 +28,7 @@ See `.claude/skills/dialogue-engine/` for complete protocol and references.
 
 ## Project Overview
 
-**Project:** py_sel_framework_mcp - QA Execution Engine (Isagawa Corp)
+**Project:** py_sel_framework_mcp - QA Management Engine (Isagawa Corp)
 
 **Company:** Isagawa Corp - The AI Management Layer for Complex Domains
 

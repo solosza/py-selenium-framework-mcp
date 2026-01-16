@@ -591,11 +591,11 @@ class {role_used}:
         self.task3()
         # NO return - test asserts via POM
 
-# IN TEST: Call ONE workflow method
+# IN TEST: Call ONE workflow method (DD-49: no base_url)
 @autologger.automation_logger("Test")
 def {test_name}(self):
     # Arrange
-    {var_name} = {role_used}(self.web, data, self.base_url)
+    {var_name} = {role_used}(self.web, data)
 
     # Act - ONE Role call
     {var_name}.complete_workflow(params)

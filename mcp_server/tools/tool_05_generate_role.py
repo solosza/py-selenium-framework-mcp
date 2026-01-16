@@ -133,14 +133,15 @@ async def generate_role(arguments: dict) -> str:
             role_name=role_name,
             task_metadata_list=task_metadata_list if task_metadata_list else None,
             role_type=role_type,
-            requires_credentials=(role_type == "authenticated")
+            requires_credentials=(role_type == "authenticated"),
+            workflow=workflow
         )
 
         role_code = generation_result["code"]
         role_metadata = generation_result["metadata"]
 
         # Get file path
-        file_path = get_file_path(role_name)
+        file_path = get_file_path(role_name, workflow)
 
         result = {
             "status": "success",

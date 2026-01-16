@@ -1,4 +1,4 @@
-"""Operations module for QA Execution Engine."""
+"""Operations module for QA Management Engine."""
 
 from .run_test import execute_test, run_test_async
 

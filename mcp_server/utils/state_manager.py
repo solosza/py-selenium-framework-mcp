@@ -1,5 +1,5 @@
 """
-StateManager - Workflow state persistence for QA Execution Engine
+StateManager - Workflow state persistence for QA Management Engine
 
 Task 2.0 - Manages workflow state across quality gate operations.
 Task 2.5 - Adds execution mode management.

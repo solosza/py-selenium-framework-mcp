@@ -13,6 +13,7 @@ POST Validation:
 - code field present and not empty
 - No skeleton code (DD-25): pass, # Add..., NotImplementedError, # TODO
 - No locators (DD-27): By. imports, tuple patterns, find_element
+- No base_url parameter (DD-49, IC-08-08): base_url forbidden in constructor
 - No return values except bare return/return None
 - @autologger.automation_logger("Role") decorator present (IC-08-04)
 - At least one task method call (IC-08-06)
@@ -20,7 +21,7 @@ POST Validation:
 - DEF-063: Dynamic credential field resolution (returns NEEDS_RETRY if hardcoded)
 - metadata present with class_name and import_path (DD-26)
 
-Enforces: DD-12, DD-25, DD-26, DD-27, FR-14.2, IC-08-01 through IC-08-06, DEF-063
+Enforces: DD-12, DD-25, DD-26, DD-27, DD-49, FR-14.2, IC-08-01 through IC-08-08, DEF-063
 """
 
 import re
@@ -339,6 +340,11 @@ class QGRole(BaseGate):
         if pom_call_error:
             return pom_call_error
 
+        # DD-49: Check for base_url parameter (architecture violation)
+        base_url_error = cls._check_base_url_parameter(code)
+        if base_url_error:
+            return base_url_error
+
         # Check for return values
         return_error = cls._detect_return_values(code)
         if return_error:
@@ -388,6 +394,11 @@ class QGRole(BaseGate):
         workflow_methods_error = cls._validate_workflow_methods(metadata)
         if workflow_methods_error:
             return workflow_methods_error
+
+        # Check workflow subfolder pattern (Smart Gate for consistency with Tasks)
+        workflow_subfolder_error = cls._check_workflow_subfolder_pattern(metadata, input_data)
+        if workflow_subfolder_error:
+            return workflow_subfolder_error
 
         # Save Step 8 state on POST-VALIDATE pass
         state_manager = cls._get_state_manager()
@@ -496,6 +507,115 @@ class QGRole(BaseGate):
                 fix_hint="Roles should not call POM methods. Use Task methods instead: self.xxx_tasks.method(), not self.xxx_page.method()."
             )
         return None
+
+    @classmethod
+    def _check_base_url_parameter(cls, code: str) -> Optional[Dict[str, Any]]:
+        """
+        Check for base_url parameter in Role constructor (DD-49, IC-08-08).
+
+        Architecture rule:
+        - Roles should NOT have base_url parameter
+        - URL configuration flows via conftest → environment_config.json → web.config
+        - POMs access URL via self.web.config['url']
+
+        Pattern-based Smart Gate (Layer 2):
+        - Detects base_url parameter (whether used or unused)
+        - Provides correct pattern from step-08.md
+        - AI generates fix from pattern
+
+        Returns NEEDS_RETRY response with pattern if base_url detected, None otherwise.
+        """
+        # Detect base_url parameter in __init__ signature
+        # Pattern matches: def __init__(self, web: WebInterface, user_data: Dict[str, Any], base_url: str):
+        base_url_pattern = re.compile(
+            r'def\s+__init__\s*\([^)]*\bbase_url\s*:',
+            re.MULTILINE
+        )
+
+        if base_url_pattern.search(code):
+            pattern_template = """# ✅ CORRECT PATTERN (DD-49):
+
+# Role constructor - NO base_url parameter
+class RegisteredUser:
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any]):
+        self.web = web_interface
+        self.user_data = user_data
+        # Compose tasks - NO base_url passed
+        self.auth_tasks = AuthTasks(web_interface)
+
+# POMs get URL from self.web.config (loaded via conftest → environment_config.json)
+"""
+            return {
+                "status": "NEEDS_RETRY",
+                "pattern_template": pattern_template,
+                "error": "Role constructor has base_url parameter (violates DD-49 architecture)",
+                "message": "base_url parameter should not be used in Roles. POMs get URL from self.web.config. Use pattern above."
+            }
+
+        return None
+
+    @classmethod
+    def _check_workflow_subfolder_pattern(cls, metadata: Dict[str, Any], input_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Smart Gate: Validate Role import_path includes workflow namespace.
+
+        Pattern rule (consistency with Tasks):
+        - Roles should use: roles.{workflow}.{role_name}
+        - NOT flat pattern: roles.{role_name}
+
+        Tasks use: tasks.{workflow}.{task_name}
+        Roles should match: roles.{workflow}.{role_name}
+
+        Pattern-based Smart Gate (Layer 2):
+        - Detects flat import path (roles.{role_name})
+        - Provides correct pattern (roles.{workflow}.{role_name})
+        - AI generates fix from pattern
+
+        Returns NEEDS_RETRY response with pattern if violation detected, None otherwise.
+        """
+        import_path = metadata.get("import_path", "")
+
+        # Pattern: roles.workflow.role_name (at least 3 parts)
+        parts = import_path.split(".")
+
+        if len(parts) < 3 or parts[0] != "roles":  # Flat structure or malformed
+            workflow = input_data.get("workflow", "common")
+            role_name = metadata.get("class_name", "RoleClass")
+            snake_name = cls._pascal_to_snake(role_name)
+
+            pattern_template = f"""# ✅ CORRECT PATTERN (Workflow Subfolder):
+
+# File Path: framework/roles/{workflow}/{snake_name}.py
+# Import: from roles.{workflow}.{snake_name} import {role_name}
+
+# Consistency with Tasks pattern:
+# Tasks: framework/tasks/{{workflow}}/task_name.py → tasks.{{workflow}}.task_name
+# Roles: framework/roles/{{workflow}}/role_name.py → roles.{{workflow}}.role_name
+
+# Example:
+class {role_name}:
+    @autologger.automation_logger("Role Constructor")
+    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any]):
+        self.web = web_interface
+        # Import path will be: roles.{workflow}.{snake_name}
+"""
+
+            return {
+                "status": "NEEDS_RETRY",
+                "pattern_template": pattern_template,
+                "error": f"Role import_path missing workflow namespace: '{import_path}'",
+                "message": f"Import path should be 'roles.{workflow}.{{role}}', not 'roles.{{role}}' for consistency with Tasks layer"
+            }
+
+        return None
+
+    @staticmethod
+    def _pascal_to_snake(name: str) -> str:
+        """Convert PascalCase to snake_case."""
+        import re
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
     @classmethod
     def _detect_return_values(cls, code: str) -> Optional[Dict[str, Any]]:

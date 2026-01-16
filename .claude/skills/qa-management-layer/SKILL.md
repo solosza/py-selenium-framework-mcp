@@ -14,7 +14,7 @@ description: Guide AI through 11-step QA test generation workflow with quality g
 
 **Applies to:** QA test automation generation using MCP tools.
 
-**Part of:** QA Execution Engine (guidance layer + quality gates + operations + state)
+**Part of:** QA Management Engine (guidance layer + quality gates + operations + state)
 
 ---
 
