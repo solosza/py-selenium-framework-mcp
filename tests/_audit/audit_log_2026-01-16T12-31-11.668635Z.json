@@ -1,0 +1,28 @@
+{
+  "run_id": "2026-01-16T12:31:11.668635Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:31:11.669636Z",
+      "metadata": {
+        "test_status": "passed",
+        "duration": 17.19,
+        "report_path": null
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 1,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

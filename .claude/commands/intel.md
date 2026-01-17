@@ -190,6 +190,36 @@ Report saved: .business/intel_reports/competitive_intel_YYYY-MM-DD.md
 
 Isagawa is an AI Management Layer implemented through domain-specific Execution Engines. It enforces how AI executes work, not just what it produces.
 
+**CRITICAL: Scan competitors for ALL 5 Isagawa products:**
+
+1. **AI Management Layer** (Enterprise platform)
+   - Competitors: AI governance platforms, agent orchestration platforms
+   - Examples: Credo AI, Airia, ModelOp, IBM watsonx.governance
+
+2. **QA Execution Engine** (Test automation vertical)
+   - Competitors: TestMu AI, mabl, Virtuoso QA, Katalon, Selenium alternatives
+   - Examples: Autonomous test generation, AI-augmented testing tools
+
+3. **Consumer Execution Engine** (Personal productivity)
+   - Competitors: Personal AI assistants, task automation tools
+   - Examples: Notion AI, ClickUp AI, personal workflow automation
+
+4. **AI Agent Management Layer** (Multi-agent orchestration)
+   - Competitors: Agent orchestration platforms, multi-agent frameworks
+   - Examples: PwC Agent OS, CrewAI, AutoGen, LangGraph
+
+5. **HITL Infrastructure** (Cross-product platform)
+   - Competitors: Approval workflow systems, human-in-the-loop platforms
+   - Examples: Workato (sandbox testing), enterprise approval workflows
+
+**Report Structure Reference:**
+
+Follow the format from `.business/intel_reports/competitive_intel_consolidated_HITL_2026-01-14.md`:
+- One consolidated report covering all 5 products
+- Separate threat assessment per product
+- Overall threat + validation scores at top
+- Product-specific competitor sections in Category 1 (Direct Competitors)
+
 **Key differentiators to monitor against:**
 - Execution enforcement (not just observation)
 - Step-by-step workflow control (not just input/output validation)

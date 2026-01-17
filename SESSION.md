@@ -52,11 +52,13 @@
 - **Impact**: Wastes tokens, requires manual intervention
 - **Fix Priority**: MEDIUM - Rare but catastrophic when it happens
 
-### 1-Week Polish Sprint (Pre-MVP Launch Checklist)
+### 1.5-Week Polish Sprint (Pre-MVP Launch Checklist)
 
-**Sprint Goal:** Improve gate teaching quality + add runtime UX + add layered HITL safety nets
+**Sprint Goal:** Improve gate teaching quality + clean UX + layered HITL safety nets + AI analysis
 
 **HITL Strategy:** Lightweight implementation using AskUserQuestion tool (full HITL component = post-MVP)
+
+**Timeline:** 11 days total (Fix 1: 3 days, Fix 2: 2.5 days, Fix 3: 2.5 days, Fix 4: 4 days, buffer: 1 day)
 
 ---
 
@@ -168,12 +170,99 @@
 
 ---
 
-#### Fix 4: Output Log Cleanup (Optional - Nice to Have)
-- [ ] **Add Section Markers to Audit Logs** (0.5 day)
-  - Add: `=== STEP 7: Generate Task (Attempt 1) ===`
-  - Add: `Retry 2/8: Fixing skeleton code`
-  - Add: `✅ Converged after 2 retries`
-  - Makes post-mortem analysis easier
+#### Fix 4: Workflow Output Management & AI Analysis (High Priority)
+**Goal:** Clean terminal UX + automated workflow analysis
+
+##### Part A: Clean Terminal Output with Full Log Capture (2 days)
+- [ ] **Implement Quiet Mode (Default)** (1 day)
+  - Terminal shows clean progress view:
+    - Step name, status (✓/⟳/✗), duration, key info only
+    - Retry indicators with reason (e.g., "Fixing DD-49 violation")
+    - Convergence messages (e.g., "Converged after 4 retries")
+    - Final summary with timing breakdown
+  - Example:
+    ```
+    ✓ Step 8: Generate Role [6.1s]
+      ↳ Converged after 4 retries
+    ```
+
+- [ ] **Auto-Save Full Output to File** (0.5 day)
+  - Location: `tests/_state/{run_id}/workflow_output.log`
+  - Content: EVERYTHING (tool calls, gate responses, AI decisions, full verbose output)
+  - Format: Plain text with timestamps
+  - Benefits:
+    - Replaces manual copy/paste to test_run_otput/
+    - Co-located with workflow state (easy to find)
+    - Full debugging details available when needed
+
+- [ ] **Add `--verbose` Flag for Full Terminal Output** (0.5 day)
+  - `/qa-workflow --verbose` shows everything in terminal
+  - Default (`/qa-workflow`) uses quiet mode
+  - Power users can still see full details if needed
+
+**Expected Impact:**
+- Terminal UX dramatically improved (progress view vs wall of text)
+- No more manual output saving
+- Full logs automatically captured for debugging
+
+##### Part B: AI-Powered Workflow Analysis (2 days)
+- [ ] **Create `/analyze-run` Slash Command** (1 day)
+  - Usage: `/analyze-run {run_id}` or `/analyze-last-run`
+  - AI reads: `tests/_state/{run_id}/workflow_output.log`
+  - AI generates: `tests/_state/{run_id}/analysis.md`
+  - Manual trigger (user runs when they want analysis)
+
+- [ ] **Analysis Engine - Defect Detection** (0.5 day)
+  - Detect: Infinite loops (retry > threshold)
+  - Detect: Gate validation failures (patterns, violations)
+  - Detect: Tool errors (exceptions, timeouts)
+  - Detect: Test failures (assertions, runtime errors)
+  - Detect: Missing validations (bypassed steps)
+
+- [ ] **Analysis Engine - Enhancement Detection** (0.5 day)
+  - Detect: Slow convergence (high retry count)
+  - Detect: Repeated gate feedback (same error multiple times)
+  - Detect: Token waste (unnecessary retries)
+  - Detect: Gate teaching quality issues (vague feedback)
+  - Detect: Time bottlenecks (which steps take longest)
+
+**Analysis Report Contents:**
+```markdown
+# Workflow Analysis Report
+
+## Executive Summary
+✅ Overall: HEALTHY
+⚠️ 1 enhancement opportunity
+❌ 0 defects
+
+## Step-by-Step Analysis
+Step 8: ⚠️ HIGH RETRY COUNT (4 retries)
+- Issue: Gate feedback not specific
+- Root Cause: No line numbers, no diff
+- Recommendation: Improve qg_role feedback
+- Impact: 4 retries → 2 retries, save 3s
+
+## Pattern Analysis
+- Retry distribution across steps
+- Gate performance metrics
+- Time breakdown by phase
+
+## Recommendations (Prioritized)
+1. [HIGH] Improve qg_role gate feedback
+2. [MEDIUM] Add progress during element discovery
+3. [LOW] Consider caching element results
+
+## Historical Comparison
+Compare with last 5 runs (trends)
+```
+
+**Expected Impact:**
+- No more manual analysis of 5480-line outputs
+- Actionable insights (specific files, expected impact)
+- Pattern detection (which gates struggle most)
+- Historical tracking (improving/degrading over time)
+
+**Total Effort:** 4 days (2 output management + 2 analysis engine)
 
 ---
 
@@ -300,23 +389,41 @@
   - DD-49 compliance verified (all navigation uses config URL)
 
 ### Pending
-- [ ] Commit changes after successful test (ready to commit)
-- [ ] Document lessons learned from first complete workflow
+- [x] Commit changes after successful test ✅ (Commit: a307a3e)
+  - Committed Task 67.0 with hook enforcement, production test, and analysis findings
+  - 21 files changed: +6690, -420
+  - Includes automationex1 workflow (6 files), test output analysis (5480 lines)
+  - MVP readiness score: 7.5/10 with 1-week polish sprint documented
+- [ ] Document lessons learned from first complete workflow (captured in SESSION.md CRITICAL section)
 
 ## Files Changed This Session
 
-### Modified (Not Yet Committed)
+### Committed (Task 67.0 - Commit a307a3e)
 - `.claude/hooks/qa-gate-enforcer.py` - Step 10 & 11 enforcement logic
 - `.claude/settings.local.json` - Added Bash to PreToolUse matcher
+- `SESSION.md` - MVP analysis findings + 1-week polish sprint checklist
+- `docs/test_output_notes/automationex1.md` - 5480-line test output analysis
+- `framework/pages/automationex1/` - 3 POMs (signup, registration, products)
+- `framework/tasks/automationex1/` - RegistrationTasks (2 methods)
+- `framework/roles/automationex1/` - NewUser role (1 workflow method)
+- `tests/automationex1/` - Test with dynamic credentials
+- `framework/resources/config/environment_config.json` - Added automationex1 environment
+- Deleted: All parabank13 workflow files (login_page, open_account_page, auth_tasks, open_account_tasks, registered_user)
 
-### Deleted
-- All parabank5, parabank11, parabank13 workflow files (cleaned up)
+### Modified (Not Yet Committed)
+- `.business/architecture/execution_patterns.md` - Updated with 6-component platform definition
+- `.business/intel_reports/competitive_intel_qa_engine_2026-01-07.md` - Updated analysis
+- `.claude/commands/intel.md` - Updated intel scan command
+- `mcp_server/state/.run_session` - Workflow session state
 
 ## Active Task Details
 
-**Task 67.0: HITL Step 10 & 11 Hook Enforcement**
+**Task 67.0: HITL Step 10 & 11 Hook Enforcement** ✅ COMPLETE
 
-### Implementation Complete
+**Commit:** a307a3e
+**Branch:** feature/67.0-hitl-step10-11-enforcement
+
+### Implementation Summary
 
 **Step 10 Enforcement:**
 - Checks: Step 9 complete AND Step 10 pending
@@ -379,58 +486,68 @@ Test Data: Shared (tests/data/)
 
 ## Context for Next Session
 
-**Resume Point:** Execute automationex1 workflow to production test hook enforcement
+**Resume Point:** Begin 1-week MVP polish sprint OR proceed with other priorities
 
-**How to Execute:**
-User will manually run:
-```
-/qa-workflow-dev
-```
+### Option 1: Start MVP Polish Sprint (Recommended for Public Launch)
 
-Then provide the following test requirement:
+**What:** Implement 4 critical fixes documented in SESSION.md CRITICAL section
 
----
+**Priority Tasks:**
+1. **Improve Gate Teaching Quality** (3 days)
+   - Specific error messages with line numbers
+   - Add diff output in gate responses
+   - Goal: Reduce retries from 6 → 2-3
 
-**TEST REQUIREMENT FOR AUTOMATIONEXERCISE.COM:**
+2. **Add Runtime Progress Visualization** (2.5 days)
+   - Status line showing current step and retry count
+   - Progress indicator with elapsed time
+   - Convergence messages
 
-```
-URL: https://www.automationexercise.com/
-Requirement: As a new user, I want to register an account and add a product to cart
-Workflow: automationex1
-Credentials: Dynamic
-Test Data: Shared
-```
+3. **Add Layered HITL Safety Nets** (2.5 days)
+   - Soft checkpoint at retry 4 (optional assist)
+   - Hard circuit breaker at retry 8 (mandatory escalation)
+   - Retry counter in gate base class
+   - Diagnostic info for HITL
 
-**Acceptance Criteria:**
-- User can register with email, password, and basic info
-- User can log in after registration
-- User can browse products
-- User can add a product to cart
-- Cart shows added product
+4. **Workflow Output Management & AI Analysis** (4 days)
+   - Clean terminal output (quiet mode by default)
+   - Auto-save full logs to tests/_state/{run_id}/workflow_output.log
+   - /analyze-run slash command for AI-powered defect/enhancement detection
+   - Replaces manual copy/paste workflow
 
----
+**Timeline:** 1.5 weeks (11 days with buffer)
+**Outcome:** Public MVP ready (7.5/10 → 9.0/10)
 
-**What to Watch For:**
-1. Steps 1-9: Code generation completes successfully
-2. After Step 9: Does AI try to run pytest directly?
-3. Hook blocks it: Does error message appear?
-4. AI calls qg_save_run: Does Step 10 complete?
-5. AI calls qg_execution: Does Step 11 HITL engage?
-6. Test failure: Does HITL triage workflow present options?
+### Option 2: Continue Other Work (Controlled Beta Ready Now)
 
-**Important Context:**
-- Hook enforcement implemented but NOT yet committed
-- Need successful production test before commit
-- This is the FIRST test of Step 10 & 11 enforcement
-- Expect test to fail (triggers HITL triage - this is good!)
-- Purpose: Verify HITL triage engages instead of autonomous fixes
-- **Site Change:** Using AutomationExercise.com instead of ParaBank (stability)
+**Current State:** System works end-to-end, tested in production
+- Architecture validated: 6/6 files compliant
+- Full 11-step workflow passing
+- Hook enforcement verified
+- MVP readiness: 7.5/10 (sufficient for controlled beta)
 
-**Files to Monitor:**
-- Hook: `.claude/hooks/qa-gate-enforcer.py`
-- Settings: `.claude/settings.local.json`
-- State: `tests/_state/{run_id}/workflow_state.json`
-- Audit: `tests/_audit/audit_log_{timestamp}.json`
+**Acceptable For:**
+- Internal pilots with hand-holding
+- Controlled beta with known users
+- Demo purposes
+- Validation of additional workflows
+
+**Not Recommended For:**
+- Public self-service MVP (users will struggle with retry visibility)
+- Unsupervised usage (no circuit breaker for edge cases)
+
+### Branch Status
+
+**Current Branch:** feature/67.0-hitl-step10-11-enforcement
+**Status:** Ready to merge to main (all work committed)
+**Commit:** a307a3e
+
+**Next Branch Suggestions (for Option 1):**
+- `feature/68.0-gate-teaching-quality` (Fix 1)
+- `feature/69.0-runtime-progress-visualization` (Fix 2)
+- `feature/70.0-layered-hitl-safety-nets` (Fix 3)
+- `feature/71.0-workflow-output-ai-analysis` (Fix 4)
+- OR merge to main and create new feature branch for next priority
 
 ## ParaBank Server Issues (Log)
 
@@ -475,12 +592,15 @@ Test Data: Shared
 - Fail-open design (allows non-workflow operations)
 
 ## Token Usage
-- Current session: ~62k/200k (31%)
+- Current session: ~114k/200k (57%)
 - Context size: manageable, no summarization needed
+- Major contributors: automationex1.md analysis (5480 lines), comprehensive commit message
 
 ---
 
-**Session Saved:** 2026-01-16 (Updated)
-**Status:** Hook enforcement implemented, ready for production test with AutomationExercise.com
-**Next:** User will manually run `/qa-workflow-dev` with automationex1 test requirement
-**Branch:** feature/67.0-hitl-step10-11-enforcement
+**Session Saved:** 2026-01-16 (Final Update)
+**Status:** Task 67.0 COMPLETE - Hook enforcement verified, production test passed, MVP analysis complete
+**Commit:** a307a3e (21 files: +6690, -420)
+**MVP Readiness:** 7.5/10 (controlled beta ready, 1-week polish for public launch)
+**Next Decision:** Start MVP polish sprint OR proceed with other priorities (see Context for Next Session)
+**Branch:** feature/67.0-hitl-step10-11-enforcement (ready to merge)

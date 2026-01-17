@@ -1,0 +1,45 @@
+{
+  "step_1": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_2": {
+    "persona": "As a registered user",
+    "URL": "https://parabank.parasoft.com/parabank/openaccount.htm",
+    "role_name": "RegisteredUser",
+    "workflow": "parabank14",
+    "raw_requirement": "As a registered user, I want to open a new checking account",
+    "detected_env_id": "parabank11"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "scenario": "Open new checking account",
+        "given": "User is logged in to ParaBank",
+        "when": "User opens a new checking account",
+        "then": "Account is successfully created and visible in account list"
+      }
+    ],
+    "expected_states": [
+      "is_account_opened",
+      "is_new_account_listed",
+      "get_new_account_number"
+    ],
+    "intent": "open_new_checking_account"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_open_new_checking_account",
+        "given": "User is logged in to ParaBank",
+        "when": [
+          "User opens a new checking account"
+        ],
+        "then": [
+          "Account is successfully created and visible in account list"
+        ],
+        "workflow": "parabank14"
+      }
+    ]
+  }
+}

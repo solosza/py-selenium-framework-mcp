@@ -1,0 +1,343 @@
+{
+  "run_id": "2026-01-16T12:00:29.901150Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:00:29.908391Z",
+      "metadata": {
+        "credential_strategy": "dynamic",
+        "test_data_location": "workflow"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:01:38.910930Z",
+      "metadata": {
+        "persona": "new user",
+        "URL": "https://www.automationexercise.com/",
+        "role_name": "NewUser",
+        "workflow": "automationex1",
+        "detected_env_id": "automationex1"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:01:58.115828Z",
+      "metadata": {
+        "intent": "register_and_add_to_cart",
+        "scenarios_count": 2,
+        "expected_states_count": 4
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:02:18.018018Z",
+      "metadata": {
+        "workflow": "automationex1"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:02:27.223587Z",
+      "metadata": {
+        "scenarios_count": 2
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:03:47.937462Z",
+      "metadata": {
+        "page_name": "SignupPage",
+        "url": "https://www.automationexercise.com/login",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:08:11.747274Z",
+      "metadata": {
+        "page_name": "SignupPage",
+        "elements_count": 3,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:09:50.118279Z",
+      "metadata": {
+        "page_name": "RegistrationPage",
+        "url": "https://www.automationexercise.com/signup",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:10:01.330870Z",
+      "metadata": {
+        "page_name": "RegistrationPage",
+        "elements_count": 15,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:12:17.298966Z",
+      "metadata": {
+        "page_name": "RegistrationPage",
+        "url": "https://www.automationexercise.com/account_created",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:12:24.096326Z",
+      "metadata": {
+        "page_name": "RegistrationPage",
+        "elements_count": 3,
+        "pages_discovered": 1,
+        "total_pages": 1,
+        "discovery_complete": true
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:13:38.693793Z",
+      "metadata": {
+        "page_name": "ProductsPage",
+        "url": "https://www.automationexercise.com/products",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:13:45.795613Z",
+      "metadata": {
+        "page_name": "ProductsPage",
+        "elements_count": 3,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:16:24.656743Z",
+      "metadata": {
+        "page_name": "ProductsPage",
+        "url": "https://www.automationexercise.com/products",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:16:44.452069Z",
+      "metadata": {
+        "page_name": "ProductsPage",
+        "elements_count": 4,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:18:41.830065Z",
+      "metadata": {
+        "page_name": "SignupPage",
+        "elements_count": 3
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:19:52.033205Z",
+      "metadata": {
+        "page_name": "SignupPage",
+        "class_name": "SignupPage",
+        "import_path": "pages.automationex1.signup_page",
+        "action_methods_count": 4,
+        "state_methods_count": 5
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:20:05.396837Z",
+      "metadata": {
+        "page_name": "RegistrationPage",
+        "elements_count": 18
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:21:12.221489Z",
+      "metadata": {
+        "page_name": "RegistrationPage",
+        "class_name": "RegistrationPage",
+        "import_path": "pages.automationex1.registration_page",
+        "action_methods_count": 17,
+        "state_methods_count": 7
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:21:25.076989Z",
+      "metadata": {
+        "page_name": "ProductsPage",
+        "elements_count": 7
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:21:51.605538Z",
+      "metadata": {
+        "page_name": "ProductsPage",
+        "class_name": "ProductsPage",
+        "import_path": "pages.automationex1.products_page",
+        "action_methods_count": 6,
+        "state_methods_count": 8
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:23:24.922186Z",
+      "metadata": {
+        "class_name": "RegistrationTasks",
+        "import_path": "tasks.automationex1.registration_tasks",
+        "task_methods_count": 2
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:25:18.709176Z",
+      "metadata": {
+        "class_name": "NewUser",
+        "import_path": "roles.automationex1.new_user",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-16T12:26:02.171845Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/automationex1/test_register_and_add_to_cart.py"
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\automationex1\\signup_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\automationex1\\registration_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\pages\\automationex1\\products_page.py",
+      "step": 6
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\automationex1\\registration_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\automationex1\\new_user.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\automationex1\\test_register_and_add_to_cart.py",
+      "step": 9
+    }
+  ],
+  "summary": {
+    "total_steps": 9,
+    "gates_passed": 24,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}
