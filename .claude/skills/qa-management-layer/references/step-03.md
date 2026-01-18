@@ -48,6 +48,12 @@ VALIDATE:
 RETRY:
 - If gate FAIL: AI retries processing (max 3 attempts)
 - After 3 failures: STOP → REPORT → USER DECIDES
+
+POST-ACTION:
+- WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
+- Include: step name, AI analysis (intent, BDD scenarios, expected states), gate result, timestamp
+- Append mode (don't overwrite existing content)
+- Create directory and file on first write if they don't exist
 ```
 
 ---

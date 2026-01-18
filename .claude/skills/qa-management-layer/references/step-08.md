@@ -55,6 +55,12 @@ VALIDATE (DD-25 - Skeleton Code Quality Gate):
 RETRY:
 - If POST-VALIDATE fails: AI completes the code (max 3 attempts)
 - After 3 failures: STOP → REPORT → USER DECIDES
+
+POST-ACTION:
+- WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
+- Include: step name, Role class name, workflow method counts, PRE/POST gate results, timestamp
+- Append mode (don't overwrite existing content)
+- Create directory and file on first write if they don't exist
 ```
 
 ---

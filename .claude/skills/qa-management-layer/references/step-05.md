@@ -167,6 +167,12 @@ RETRY:
 - If POST-VALIDATE fails: AI re-prepares page, retries (max 3 attempts)
 - After 3 failures: STOP → REPORT → USER DECIDES
 
+POST-ACTION:
+- WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
+- Include: step name, pages discovered, element counts, PRE/POST gate results, timestamp
+- Append mode (don't overwrite existing content)
+- Create directory and file on first write if they don't exist
+
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  AUDIT-BASED NAVIGATION TRACKING (Task 26.0 - FR-14.8)                      │
 └─────────────────────────────────────────────────────────────────────────────┘

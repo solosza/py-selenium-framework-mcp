@@ -73,6 +73,13 @@ RETRY POLICY:
 - Error signature tracking (MD5 hash of error location + message)
 - Max 3 retries per unique error signature
 - Flaky test detection (passes after retry)
+
+POST-ACTION:
+- WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
+- Include: step name, test result, HITL triage (if triggered), workflow integrity checks, timestamp
+- Append mode (don't overwrite existing content)
+- Create directory and file on first write if they don't exist
+- CLOSE transcript with workflow summary (total duration, final status)
 ```
 
 ---

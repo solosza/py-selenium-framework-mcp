@@ -52,6 +52,12 @@ RETRY:
 - If PRE-VALIDATE fails: AI fixes input (max 3 attempts)
 - If POST-VALIDATE fails: AI retries operation (max 3 attempts)
 - After 3 failures: STOP → REPORT → USER DECIDES
+
+POST-ACTION:
+- WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
+- Include: step name, tool input/output, PRE/POST gate results, timestamp
+- Append mode (don't overwrite existing content)
+- Create directory and file on first write if they don't exist
 ```
 
 ---

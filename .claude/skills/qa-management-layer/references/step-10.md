@@ -60,6 +60,12 @@ ON TEST FAILURE (DD-22):
 - STOP → REPORT failure details
 - DISCUSS with user before any fix attempt
 - USER DECIDES: fix, restart, or abort
+
+POST-ACTION:
+- WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
+- Include: step name, files saved, test execution result (pass/fail), gate results, timestamp
+- Append mode (don't overwrite existing content)
+- Create directory and file on first write if they don't exist
 ```
 
 ---

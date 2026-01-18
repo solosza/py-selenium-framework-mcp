@@ -49,6 +49,12 @@ VALIDATE:
 RETRY:
 - If gate FAIL: ASK user for missing/invalid field with example
 - No max retries (user provides input, not AI)
+
+POST-ACTION:
+- WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
+- Include: step name, extracted fields, gate result (PASS/FAIL with full error), timestamp
+- Append mode (don't overwrite existing content)
+- Create directory and file on first write if they don't exist
 ```
 
 ---
