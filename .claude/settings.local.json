@@ -90,7 +90,8 @@
       "Bash(CLAUDE_PROJECT_DIR=\"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" python:*)",
       "Bash(1 <<'EOF'\n{\n  \"tool_name\": \"Bash\",\n  \"tool_input\": {\n    \"command\": \"pytest tests/parabank13/test_open_new_checking_account.py\"\n  }\n}\nEOF)",
       "Bash(echo:*)",
-      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add framework/pages/parabank13/ framework/tasks/parabank13/ framework/roles/parabank13/)"
+      "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add framework/pages/parabank13/ framework/tasks/parabank13/ framework/roles/parabank13/)",
+      "mcp__playwright__browser_close"
     ],
     "deny": [],
     "ask": []
