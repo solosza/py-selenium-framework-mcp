@@ -3,9 +3,9 @@
 <!-- You may NOT redistribute, modify, or create derivative works. -->
 <!-- See LICENSE.md for full terms. -->
 
-# Step 10: Save & Run
+# Step 10: Validation
 
-**Purpose:** Save all generated files to disk and execute the test.
+**Purpose:** Validate all generated files are saved to disk and ready for execution (Step 11).
 
 ---
 
@@ -13,10 +13,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Step** | 10 - Save & Run |
+| **Step** | 10 - Validation |
 | **Dependencies** | Step 9 complete (all code generated: POM, Task, Role, Test) |
 | **Input** | All generated code from Steps 6-9 |
-| **Output** | Files saved, test execution result |
+| **Output** | Validation confirmation (files exist and ready) |
 
 ---
 
@@ -24,9 +24,9 @@
 
 | Persona | Actions |
 |---------|---------|
-| **User** | Confirms ready to run, reviews results, decides on failures |
-| **AI** | Saves files to correct locations, runs pytest, reports results, follows DD-22 on failure |
-| **Tool** | `qg_save_run` validates all code present, `run_test` executes pytest (optional) |
+| **User** | Reviews validation results |
+| **AI** | Validates all files exist on disk and are ready for execution |
+| **Tool** | `qg_save_run` validates all code present and files exist on disk |
 
 ---
 
@@ -45,9 +45,8 @@ ACTION:
   - Task file → framework/tasks/{workflow}/{task_name}.py
   - Role file → framework/roles/{workflow}/{role_name}.py
   - Test file → tests/{workflow}/test_{scenario}.py
-- ASK user: "Ready to run the test?"
-- IF yes: RUN pytest
-- REPORT results
+- REPORT validation results
+- **PROCEED TO STEP 11** for test execution
 
 VALIDATE:
 - PRE:
@@ -56,16 +55,12 @@ VALIDATE:
   - **ALL FILES EXIST ON DISK** (Task 19.0 - DEF-051 validation)
 - POST: N/A (PRE-only gate)
 
-ON TEST FAILURE (DD-22):
-- STOP → REPORT failure details
-- DISCUSS with user before any fix attempt
-- USER DECIDES: fix, restart, or abort
-
 POST-ACTION:
 - WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
-- Include: step name, files saved, test execution result (pass/fail), gate results, timestamp
+- Include: step name, files validated, gate results, timestamp
 - Append mode (don't overwrite existing content)
 - Create directory and file on first write if they don't exist
+- **Test execution happens in Step 11**
 ```
 
 ---
@@ -74,9 +69,9 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **Operation Tool** | File I/O (Write tool), `run_test` (optional) |
+| **Operation Tool** | None (files already saved in Steps 6-9 via DEF-051) |
 | **Quality Gate** | `qg_save_run` |
-| **Gate Mode** | PRE-only (validates all code ready before save) |
+| **Gate Mode** | PRE-only (validates all code and files ready for execution) |
 
 ---
 
@@ -84,9 +79,9 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **State Saved** | `files_saved`, `test_result` |
-| **Who Saves** | AI (after successful file writes) |
-| **When Saved** | After all files written and test executed |
+| **State Saved** | `files_validated` |
+| **Who Saves** | AI (after successful validation) |
+| **When Saved** | After qg_save_run PRE validation passes |
 | **State Schema** | See below |
 
 ```json
@@ -95,18 +90,14 @@ POST-ACTION:
   "status": "complete",
   "timestamp": "ISO-8601",
   "data": {
-    "files_saved": [
+    "files_validated": [
       "framework/pages/auth/login_page.py",
       "framework/tasks/auth/auth_tasks.py",
       "framework/roles/registered_user.py",
       "tests/auth/test_login.py"
     ],
-    "test_result": {
-      "executed": true,
-      "passed": true,
-      "duration": "2.3s",
-      "output": "1 passed in 2.3s"
-    }
+    "validation_complete": true,
+    "ready_for_execution": true
   }
 }
 ```
@@ -117,8 +108,8 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **Rules That Apply** | DD-22 (stop-and-discuss on failure) |
-| **Gate Enforcement** | **BLOCKED: Cannot save until all code validated** |
+| **Rules That Apply** | DD-25 (no skeleton code), FR-14.4 (test data files exist) |
+| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 11 until all files validated** |
 
 **PRE-Validation Checks:**
 
@@ -139,34 +130,12 @@ POST-ACTION:
 | Failure Point | Behavior |
 |---------------|----------|
 | Missing code | Go back to relevant step (6, 7, 8, or 9) |
-| File write error | Report error, retry or ask user |
-| Test fails | DD-22: STOP → REPORT → DISCUSS → USER DECIDES |
+| File not found | Report error with file path, check DEF-051 implementation |
+| Skeleton code | Report error with layer name, go back to step that generated skeleton |
 
-**Known Defects:** None (final step)
+**Known Defects:** None
 
-**Test Failure Protocol (DD-22):**
-
-```
-"Test execution failed.
-
-Test: test_valid_login
-Error:
-[show error message and stack trace]
-
-Possible causes:
-1. Element locator incorrect
-2. Timing issue (element not ready)
-3. Page state not as expected
-4. Framework bug
-
-How should we proceed?
-1. Investigate failure - I'll analyze the error
-2. Restart from Step 1 - Fresh generation
-3. Manual fix - You fix the code
-4. Abort - Stop workflow"
-```
-
-**CRITICAL:** Never attempt fixes without user consultation. DD-22 is enforced strictly.
+**CRITICAL:** Step 10 only validates - it does NOT execute tests. Test execution happens in Step 11.
 
 ---
 
@@ -193,7 +162,7 @@ tests/auth/test_login.py
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    STEP 10: SAVE & RUN                                       │
+│                    STEP 10: VALIDATION                                       │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
@@ -218,74 +187,53 @@ tests/auth/test_login.py
                          │
                          ▼
               ┌─────────────────────┐
-              │  SAVE FILES:        │
-              │  - POM              │
-              │  - Task             │
-              │  - Role             │
-              │  - Test             │
+              │  VALIDATE FILES:    │
+              │  - POM exists       │
+              │  - Task exists      │
+              │  - Role exists      │
+              │  - Test exists      │
               └─────────────────────┘
                          │
                          ▼
               ┌─────────────────────┐
-              │  ASK USER:          │
-              │  "Ready to run?"    │
+              │  REPORT RESULTS:    │
+              │  All files valid    │
+              │  Ready for Step 11  │
               └─────────────────────┘
                          │
-          ┌──────────────┴──────────────┐
-          ▼                             ▼
-    ┌──────────┐                  ┌──────────┐
-    │  YES     │                  │  NO      │
-    └────┬─────┘                  └────┬─────┘
-         │                             │
-         ▼                             ▼
-    ┌──────────────┐             ┌──────────────┐
-    │  RUN PYTEST  │             │  WORKFLOW    │
-    │              │             │  COMPLETE    │
-    └──────────────┘             │  (no run)    │
-         │                       └──────────────┘
-         │
-         ▼
-    ┌──────────────────────────────────────────┐
-    │  TEST RESULT                              │
-    └──────────────────────────────────────────┘
-         │
-         ├── PASS ──► WORKFLOW COMPLETE (success)
-         │
-         └── FAIL ──► DD-22: STOP → REPORT → DISCUSS
-                            │
-                            ▼
-                      ┌──────────────┐
-                      │  USER        │
-                      │  DECIDES     │
-                      │              │
-                      │  1. Investigate
-                      │  2. Restart  │
-                      │  3. Manual   │
-                      │  4. Abort    │
-                      └──────────────┘
+                         ▼
+              ┌─────────────────────┐
+              │  STEP 10 COMPLETE   │
+              │                     │
+              │  → PROCEED TO       │
+              │     STEP 11         │
+              │     (Test Execution)│
+              └─────────────────────┘
 ```
 
 ---
 
-## Workflow Complete
+## Step 10 Complete
 
-Upon successful completion:
+Upon successful validation:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    WORKFLOW COMPLETE                                         │
+│                    STEP 10: VALIDATION COMPLETE                              │
 │                                                                              │
-│  Files generated:                                                           │
+│  Files validated:                                                           │
 │  ✓ framework/pages/auth/login_page.py                                       │
 │  ✓ framework/tasks/auth/auth_tasks.py                                       │
 │  ✓ framework/roles/registered_user.py                                       │
 │  ✓ tests/auth/test_login.py                                                 │
 │                                                                              │
-│  Test result: PASSED (1 passed in 2.3s)                                     │
+│  Status: Ready for execution                                                │
 │                                                                              │
-│  State saved to: mcp_server/state/workflow_state.json                       │
+│  State saved to: mcp_server/state/<run_id>/step_10.json                     │
 │                                                                              │
-│  Audit trail: tests/_audit/2025-12-28_120000_auth_login.json                │
+│  Audit trail: tests/_audit/<run_id>.json (Step 10 entry added)              │
+│                                                                              │
+│  → PROCEED TO STEP 11 (Execution & Validation)                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -405,4 +353,4 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 
 ---
 
-*End of 10-Step Workflow*
+*Step 10 validation complete. Proceed to Step 11 for test execution.*
