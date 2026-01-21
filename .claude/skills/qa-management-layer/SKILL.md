@@ -75,10 +75,10 @@ Use when:
   Step 9: Generate Test Runner ──► test_code (Tool 6)
       │
       ▼
-  Step 10: Save & Run          ──► files saved
+  Step 10: Validation          ──► files validated
       │
       ▼
-  Step 11: Execution & Validation ──► test executed, HITL triage, workflow integrity
+  Step 11: Execution & Validation ──► test passes ✓ = COMPLETE | test fails ✗ = AWAITING TRIAGE
 ```
 
 ---
@@ -190,7 +190,7 @@ All quality gates return a consistent response format:
 |------|-----------|----------|
 | **POST-only** | Steps 1-3 (no operation tool) | Gate validates after AI/user provides data |
 | **PRE+POST** | Steps 4-9 (has operation tool) | PRE validates input, POST validates output |
-| **PRE-only** | Step 10 (save & run) | Gate validates all code before save |
+| **PRE-only** | Step 10 (validation) | Gate validates all code before save |
 
 **PRE vs POST Validation:**
 
@@ -203,7 +203,7 @@ All quality gates return a consistent response format:
 │    Gate PRE validates → Operation runs → Gate POST validates → State saved  │
 │                                                                              │
 │  PRE-only (Step 10):                                                         │
-│    Gate PRE validates all code → Files saved → Test executed                │
+│    Gate PRE validates all code → Files saved (execution in Step 11)         │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 

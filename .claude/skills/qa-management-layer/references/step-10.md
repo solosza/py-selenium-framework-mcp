@@ -48,16 +48,30 @@ ACTION:
 - REPORT validation results
 - **PROCEED TO STEP 11** for test execution
 
+AUTO-RECOVERY (NEEDS_RETRY):
+- If validation fails, qg_save_run returns NEEDS_RETRY with recovery_action
+- AI MUST follow recovery_action to fix issue and retry Step 10
+- Recovery actions:
+  - regenerate_layer: Go back to Step 6/7/8/9 to regenerate code
+  - complete_skeleton: Complete incomplete code (DD-25)
+  - write_files_from_state: Write missing files to disk (DEF-051 fix)
+  - validate_through_post_gate: Validate reconstructed code via POST gate
+  - create_test_data_files: Create missing test data files
+  - complete_step_9: Complete Step 9 first
+- Escalation: After 3 attempts, escalates to blocked (DD-22) for manual intervention
+- Attempt count tracked in state with error history
+
 VALIDATE:
 - PRE:
   - All code present (input_data or fallback to state)
-  - No skeleton code
+  - No skeleton code (DD-25 final sweep)
+  - No reconstructed code without POST validation (DEF-048)
   - **ALL FILES EXIST ON DISK** (Task 19.0 - DEF-051 validation)
 - POST: N/A (PRE-only gate)
 
 POST-ACTION:
 - WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
-- Include: step name, files validated, gate results, timestamp
+- Include: step name, files validated, gate results, timestamp, recovery actions if any
 - Append mode (don't overwrite existing content)
 - Create directory and file on first write if they don't exist
 - **Test execution happens in Step 11**
@@ -125,13 +139,24 @@ POST-ACTION:
 
 ## G. Error Handling
 
-**Failure Behavior:**
+**Auto-Recovery via NEEDS_RETRY:**
 
-| Failure Point | Behavior |
-|---------------|----------|
-| Missing code | Go back to relevant step (6, 7, 8, or 9) |
-| File not found | Report error with file path, check DEF-051 implementation |
-| Skeleton code | Report error with layer name, go back to step that generated skeleton |
+Step 10 uses auto-recovery pattern for validation failures. Gate returns NEEDS_RETRY with recovery_action:
+
+| Failure Point | Recovery Action | AI Behavior |
+|---------------|-----------------|-------------|
+| Missing code | `regenerate_layer` | Go back to relevant step (6, 7, 8, or 9) to regenerate |
+| Empty code | `regenerate_layer` | Go back to relevant step to regenerate |
+| Skeleton code | `complete_skeleton` | Complete incomplete code, remove placeholders (DD-25) |
+| File not found | `write_files_from_state` | Write missing files from state (DEF-051 fix) |
+| Reconstructed code | `validate_through_post_gate` | Validate modified code via POST gate (DEF-048) |
+| Missing test data | `create_test_data_files` | Create missing test data infrastructure |
+| Step 9 incomplete | `complete_step_9` | Complete Step 9 first |
+
+**Escalation to Manual Intervention:**
+- After 3 retry attempts, escalates to `blocked` status (DD-22)
+- Returns error history and last recovery action attempted
+- User must manually resolve issue and restart workflow
 
 **Known Defects:** None
 
@@ -350,6 +375,31 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 
 **Date Added:** 2025-12-21
 **Task Reference:** Task 13.0 (qg_save_run)
+
+---
+
+## K. User Communication
+
+**Purpose:** Define clean, concise output to user (not verbose MCP JSON).
+
+**What to Show:**
+- Number of files validated
+- Confirmation all exist on disk
+
+**Output Format:**
+```
+✓ Step 10: Validation
+  • Files validated: 4 (POM, Task, Role, Test)
+  • All files exist on disk: YES
+```
+
+**What NOT to Show:**
+- ❌ Full file paths in output
+- ❌ Gate status
+- ❌ File content summaries
+- ❌ Timestamps
+
+**Rule:** Follow user-communication-protocol.md - Signal, not noise.
 
 ---
 

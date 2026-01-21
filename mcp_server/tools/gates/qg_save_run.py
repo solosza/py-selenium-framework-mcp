@@ -1,7 +1,7 @@
 """
 Quality Gate: Save Run (Step 10).
 
-PRE-only validation gate for file save and test execution.
+PRE-only validation gate with auto-recovery via NEEDS_RETRY.
 
 PRE Validation:
 - Step 9 complete
@@ -9,6 +9,11 @@ PRE Validation:
 - No skeleton code in any layer (DD-25 final sweep)
 - Primary: code from input_data; Fallback: code from state (IC-10-01)
 - FR-14.4: Required test data files exist (tests/data/test_users.json for static)
+
+Auto-Recovery:
+- Returns NEEDS_RETRY with recovery_action for validation failures
+- Escalates to blocked (DD-22) after 3 attempts
+- Recovery actions: write_files_from_state, complete_skeleton, regenerate_layer, etc.
 
 No POST Validation (PRE-only gate per IC-10-02).
 
@@ -23,7 +28,7 @@ from utils.state_manager import StateManager
 
 
 class QGSaveRun(BaseGate):
-    """Quality gate for Step 10: Save & Run."""
+    """Quality gate for Step 10: Validation."""
 
     # Skeleton code patterns (DD-25) - same as other gates
     SKELETON_PATTERNS = [
@@ -40,6 +45,73 @@ class QGSaveRun(BaseGate):
         "role_code": {"step": 8, "layer": "Role"},
         "test_code": {"step": 9, "layer": "Test"},
     }
+
+    # Max retry attempts before escalation to blocked (DD-22)
+    MAX_RETRY_ATTEMPTS = 3
+
+    @classmethod
+    def _needs_retry_response(
+        cls,
+        error: str,
+        recovery_action: str,
+        message: str,
+        recovery_data: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Return NEEDS_RETRY response with escalation safeguard.
+
+        Tracks attempt count in state. After MAX_RETRY_ATTEMPTS, escalates
+        to blocked_response (DD-22) for manual user intervention.
+
+        Args:
+            error: Error description
+            recovery_action: Action type for AI to take
+            message: Human-readable recovery instructions
+            recovery_data: Optional action-specific data
+
+        Returns:
+            NEEDS_RETRY response or blocked_response if max attempts exceeded
+        """
+        state_manager = cls._get_state_manager()
+
+        # Increment attempt count for Step 10 (atomic operation)
+        attempts = state_manager.increment_attempt(10)
+
+        # Escalate to blocked if max attempts exceeded
+        if attempts > cls.MAX_RETRY_ATTEMPTS:
+            # Get error history from state
+            step_data = state_manager.get_step(10) or {}
+            error_history = step_data.get("error_history", [])
+            error_history.append(f"Attempt {attempts}: {error}")
+
+            return cls.blocked_response(
+                step=10,
+                attempts=attempts,
+                errors=error_history,
+                metadata={"last_recovery_action": recovery_action}
+            )
+
+        # Track error in history
+        step_data = state_manager.get_step(10) or {}
+        error_history = step_data.get("error_history", [])
+        error_history.append(f"Attempt {attempts}: {error}")
+        step_data["error_history"] = error_history
+        state_manager.save(10, step_data)
+
+        # Return NEEDS_RETRY response
+        response = {
+            "status": "NEEDS_RETRY",
+            "error": error,
+            "recovery_action": recovery_action,
+            "message": message,
+            "attempt": attempts,
+            "max_attempts": cls.MAX_RETRY_ATTEMPTS
+        }
+
+        if recovery_data:
+            response["recovery_data"] = recovery_data
+
+        return response
 
     @classmethod
     def _get_state_manager(cls) -> StateManager:
@@ -98,22 +170,26 @@ class QGSaveRun(BaseGate):
             layer: Human-readable layer name (POM, Task, Role, Test)
 
         Returns:
-            fail_response if validation fails, None if passes
+            NEEDS_RETRY response if validation fails, None if passes
         """
         code = cls._get_code(input_data, field, step)
 
         # Check presence
         if code is None:
-            return cls.fail_response(
+            return cls._needs_retry_response(
                 error=f"Missing {field}: {layer} code not found",
-                fix_hint=f"Go back to Step {step} to generate {layer} code."
+                recovery_action="regenerate_layer",
+                message=f"Go back to Step {step} to generate {layer} code.",
+                recovery_data={"step": step, "layer": layer, "field": field}
             )
 
         # Check not empty
         if not isinstance(code, str) or not code.strip():
-            return cls.fail_response(
+            return cls._needs_retry_response(
                 error=f"Empty {field}: {layer} code is empty",
-                fix_hint=f"Go back to Step {step} to generate {layer} code."
+                recovery_action="regenerate_layer",
+                message=f"Go back to Step {step} to generate {layer} code.",
+                recovery_data={"step": step, "layer": layer, "field": field}
             )
 
         # DEF-048: Check if code was reconstructed and needs POST validation
@@ -151,7 +227,7 @@ class QGSaveRun(BaseGate):
             layer: Layer name (POM, Task, Role, Test)
 
         Returns:
-            fail_response if reconstructed code not validated, None otherwise
+            NEEDS_RETRY response if reconstructed code not validated, None otherwise
         """
         # Get original code from state
         state_manager = cls._get_state_manager()
@@ -192,10 +268,10 @@ class QGSaveRun(BaseGate):
                     "Test": "qg_test_runner"
                 }.get(layer, "appropriate quality gate")
 
-                return cls.fail_response(
+                return cls._needs_retry_response(
                     error=f"Code reconstruction detected for {layer} without POST validation (DEF-048)",
-                    fix_hint=f"""
-Reconstructed/modified code must pass POST gate before saving.
+                    recovery_action="validate_through_post_gate",
+                    message=f"""Reconstructed/modified code must pass POST gate before saving.
 
 Pattern:
 1. Call {gate_name} POST validation with modified code
@@ -218,8 +294,8 @@ if result["status"] == "pass":
         "{metadata_field}": result["metadata"]  # Proof of validation
     }})
 
-Fix: Validate reconstructed {layer} code through POST gate first.
-                    """
+Fix: Validate reconstructed {layer} code through POST gate first.""",
+                    recovery_data={"gate_name": gate_name, "layer": layer, "field": field, "metadata_field": metadata_field}
                 )
 
         return None
@@ -229,13 +305,15 @@ Fix: Validate reconstructed {layer} code through POST gate first.
         """
         Detect skeleton code patterns in generated code (DD-25, IC-10-03).
 
-        Returns fail_response if skeleton detected, None otherwise.
+        Returns NEEDS_RETRY response if skeleton detected, None otherwise.
         """
         for pattern, description in cls.SKELETON_PATTERNS:
             if re.search(pattern, code, re.MULTILINE):
-                return cls.fail_response(
+                return cls._needs_retry_response(
                     error=f"Skeleton code detected in {layer}: {description}",
-                    fix_hint=f"Complete the {layer} code. Remove placeholders and implement all methods."
+                    recovery_action="complete_skeleton",
+                    message=f"Complete the {layer} code. Remove placeholders and implement all methods.",
+                    recovery_data={"layer": layer, "skeleton_type": description}
                 )
         return None
 
@@ -291,7 +369,7 @@ Fix: Validate reconstructed {layer} code through POST gate first.
             state_manager: StateManager instance to use for reading state
 
         Returns:
-            fail_response if any files missing, None if all exist or no metadata
+            NEEDS_RETRY response if any files missing, None if all exist or no metadata
         """
         import os
         from pathlib import Path
@@ -386,9 +464,10 @@ Fix: Validate reconstructed {layer} code through POST gate first.
                 error_lines.append(f"  - Step {missing['step']} ({missing['layer']}): {missing['name']}")
                 error_lines.append(f"    Expected: {missing['path']}")
 
-            return cls.fail_response(
+            return cls._needs_retry_response(
                 error="\n".join(error_lines),
-                fix_hint="""Files were not written to disk. This indicates DEF-051 fix not working.
+                recovery_action="write_files_from_state",
+                message="""Files were not written to disk. This indicates DEF-051 fix not working.
 
 Possible causes:
 1. Quality gates (Steps 6-9) not writing files after POST validation
@@ -396,7 +475,8 @@ Possible causes:
 3. Invalid file paths in metadata
 
 Fix: Check that Steps 6-9 gates write files immediately after POST validation passes.
-"""
+Reading code from state and writing files now...""",
+                recovery_data={"missing_files": missing_files}
             )
 
         return None
@@ -414,7 +494,7 @@ Fix: Check that Steps 6-9 gates write files immediately after POST validation pa
             state_manager: StateManager instance to use for reading state
 
         Returns:
-            fail_response if required files missing, None if all exist
+            NEEDS_RETRY response if required files missing, None if all exist
         """
         import os
         from pathlib import Path
@@ -468,16 +548,17 @@ Fix: Check that Steps 6-9 gates write files immediately after POST validation pa
                 error_lines.append(f"  Reason: {missing['reason']}")
                 error_lines.append(f"  Fix: {missing['fix']}")
 
-            return cls.fail_response(
+            return cls._needs_retry_response(
                 error="\n".join(error_lines),
-                fix_hint="""Test data files required by Step 1 strategies are missing.
+                recovery_action="create_test_data_files",
+                message="""Test data files required by Step 1 strategies are missing.
 
 This validation ensures test data infrastructure matches Step 1 choices:
 - credential_strategy='static' → tests/data/test_users.json must exist
 - test_data_location='workflow' → tests/{workflow}/data/ should exist
 
-Fix: Create the missing files/directories before running tests.
-"""
+Fix: Creating the missing files/directories now...""",
+                recovery_data={"missing_files": missing_files}
             )
 
         return None
@@ -496,14 +577,16 @@ Fix: Create the missing files/directories before running tests.
             input_data: Dict with pom_code, task_code, role_code, test_code
 
         Returns:
-            {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
+            {"status": "pass"} or {"status": "NEEDS_RETRY"} or {"status": "blocked"}
         """
         # Check Step 9 completion
         state_manager = cls._get_state_manager()
         if not state_manager.is_step_complete(9):
-            return cls.fail_response(
+            return cls._needs_retry_response(
                 error="Step 9 is not complete. Cannot proceed to Step 10.",
-                fix_hint="Complete Step 9 (Generate Test Runner) first."
+                recovery_action="complete_step_9",
+                message="Complete Step 9 (Generate Test Runner) first.",
+                recovery_data={"required_step": 9}
             )
 
         # Validate all 4 code blocks (IC-10-04: fail-fast)

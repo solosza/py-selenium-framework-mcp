@@ -41,6 +41,8 @@ PRE-CHECK:
 ACTION (3-TOOL SEQUENCE):
 1. CALL run_test with test_path
    - Executes pytest subprocess
+   - **Browser ALWAYS visible (non-headless) for HITL observation**
+   - Parameters: test_path (required), marker (optional)
    - Captures: status, exit_code, output, duration, failure_data
    - Returns test_result object
 
@@ -73,6 +75,20 @@ RETRY POLICY:
 - Error signature tracking (MD5 hash of error location + message)
 - Max 3 retries per unique error signature
 - Flaky test detection (passes after retry)
+
+COMPLETION CRITERIA:
+- ✓ ONLY mark Step 11 complete if BOTH gates return pass_response:
+  - qg_execution returns pass (test status = "passed")
+  - qg_workflow_complete returns pass (all 8 checks pass)
+- ✗ DO NOT mark complete if test fails, even after presenting triage options
+- ✗ DO NOT mark complete if consistency checks fail
+- Workflow status remains "IN PROGRESS" or "AWAITING TRIAGE" until test passes
+
+IF TEST FAILS:
+- Present triage options (Section G)
+- STOP - do not mark Step 11 complete
+- Wait for user decision
+- Resume from Step 11 after fix (do not restart from Step 1)
 
 POST-ACTION:
 - WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
@@ -622,6 +638,49 @@ This may indicate a flaky test. Consider:
 
 Error signature: a1b2c3d4e5f6g7h8"
 ```
+
+---
+
+## K. User Communication
+
+**Purpose:** Define clean, concise output to user (not verbose MCP JSON).
+
+**In Progress:**
+```
+⚙ Step 11: Executing Test...
+  • Test: tests/helios1/test_create_service_inquiry.py
+  • Environment: helios1
+  • Browser: visible
+  [Test execution in progress...]
+```
+
+**Complete (Passed):**
+```
+✓ Step 11: Test Execution
+  • Status: PASSED
+  • Duration: 12.3s
+  • Report: tests/_reports/2026-01-19T00-20-55.248039Z/
+```
+
+**In Progress (Test Failed, Awaiting Triage):**
+```
+⚙ Step 11: Test Execution - FAILED (Awaiting Triage)
+  • Test: tests/helios1/test_create_service_inquiry.py
+  • Status: FAILED
+  • Assertion: is_inquiry_created() returned False
+  • Next: Choose fix strategy (1: Debug, 2: Regenerate, 3: Manual)
+  • Workflow Status: INCOMPLETE
+```
+
+**What NOT to Show:**
+- ❌ Full pytest output
+- ❌ Gate status (unless showing triage options)
+- ❌ Stack traces (unless part of triage diagnostic data)
+- ❌ Verbose test logs
+- ❌ "✓ Step 11 Complete" when test failed
+- ❌ "✓ 11-Step QA Workflow Complete!" when test failed
+
+**Rule:** Follow user-communication-protocol.md - Signal, not noise.
 
 ---
 

@@ -22,7 +22,7 @@ QUALITY GATES (Steps 1-10):
 - qg_task (Step 7) - Task validation (PRE+POST)
 - qg_role (Step 8) - Role validation (PRE+POST)
 - qg_test_runner (Step 9) - Test runner validation (PRE+POST)
-- qg_save_run (Step 10) - Final save/run validation (PRE-only)
+- qg_save_run (Step 10) - File validation (PRE-only)
 
 PLANNED (Tools 7-11):
 7. list_tests - Catalog all tests
@@ -409,15 +409,6 @@ async def list_available_tools() -> list[Tool]:
                     "marker": {
                         "type": "string",
                         "description": "Optional pytest marker filter (e.g., smoke)"
-                    },
-                    "browser": {
-                        "type": "string",
-                        "description": "Optional browser override",
-                        "enum": ["chrome", "firefox", "edge"]
-                    },
-                    "headless": {
-                        "type": "boolean",
-                        "description": "Optional headless mode override"
                     }
                 },
                 "required": ["test_path"]
