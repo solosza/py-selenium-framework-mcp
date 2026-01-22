@@ -5,16 +5,18 @@
 
 ---
 name: qa-management-layer
-description: Guide AI through 11-step QA test generation workflow with quality gates and HITL execution validation. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
+description: Guide AI through 5-step QA test generation workflow with quality gates and collaborative construction. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
 ---
 
 # QA Guidance Layer
 
-**Purpose:** Guide AI through the 11-step QA test generation workflow with enforced quality gates and HITL execution validation.
+**Purpose:** Guide AI through the 5-step QA test generation workflow with enforced quality gates and collaborative construction.
 
 **Applies to:** QA test automation generation using MCP tools.
 
 **Part of:** QA Management Engine (guidance layer + quality gates + operations + state)
+
+**Workflow Type:** Pair Programming (Human guides, AI builds incrementally with real-time validation)
 
 ---
 
@@ -45,40 +47,41 @@ Use when:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         11-STEP QA WORKFLOW                                  │
+│                         5-STEP QA WORKFLOW (Pair Programming)                │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-  Step 1: Pre-flight Config    ──► credential_strategy, test_data_location
+  Step 1: User Input           ──► persona, URL, role_name, workflow
       │
       ▼
-  Step 2: User Input           ──► persona, URL, role_name, domain
+  Step 2: Pre-flight Config    ──► credential_strategy, test_data_location
       │
       ▼
   Step 3: AI Processing        ──► bdd_scenarios, expected_states, intent
       │
       ▼
-  Step 4: Generate Tests       ──► test_scenarios (Tool 1)
+  Step 4: Collaborative Construction (HITL Loop)
+      │
+      ├─► Tool 1: Generate BDD scenarios (structure)
+      ├─► Tool 2: Discover elements (bulk extraction)
+      │
+      ├─► AI builds POMs manually (Edit/Write tools)
+      ├─► AI builds Tasks manually (Edit/Write tools)
+      ├─► AI builds Roles manually (Edit/Write tools)
+      ├─► AI builds Tests manually (Edit/Write tools)
+      │
+      ├─► Gates validate each piece (framework compliance)
+      ├─► HITL triggers at blockers (human guides)
+      │
+      └─► Repeat: build → save → test → discover gap → build more
       │
       ▼
-  Step 5: Discover Elements    ──► discovered_elements (Tool 2)
+  Step 5: Done
       │
-      ▼
-  Step 6: Generate POM         ──► page_object_code (Tool 3)
-      │
-      ▼
-  Step 7: Generate Task        ──► task_code (Tool 4)
-      │
-      ▼
-  Step 8: Generate Role        ──► role_code (Tool 5)
-      │
-      ▼
-  Step 9: Generate Test Runner ──► test_code (Tool 6)
-      │
-      ▼
-  Step 10: Validation          ──► files validated
-      │
-      ▼
-  Step 11: Execution & Validation ──► test passes ✓ = COMPLETE | test fails ✗ = AWAITING TRIAGE
+      └─► Test passes ✓ = COMPLETE | Test fails ✗ = AWAITING TRIAGE
+
+NOTE: Old 11-step autonomous workflow (Steps 6-11, Tools 3-6) archived to
+_archived/autonomous_workflow_v1/ on 2026-01-22. New workflow uses collaborative
+construction instead of autonomous code generation (96% failure rate).
 ```
 
 ---
@@ -87,17 +90,15 @@ Use when:
 
 | Step | Reference | Quality Gate | Gate Mode | Description |
 |------|-----------|--------------|-----------|-------------|
-| 1 | `references/step-01.md` | `qg_preflight` | POST-only | Pre-flight Configuration |
-| 2 | `references/step-02.md` | `qg_user_input` | POST-only | User Input |
+| 1 | `references/step-01.md` | `qg_user_input` | POST-only | User Input |
+| 2 | `references/step-02.md` | `qg_preflight` | POST-only | Pre-flight Configuration |
 | 3 | `references/step-03.md` | `qg_ai_processing` | POST-only | AI Processing |
-| 4 | `references/step-04.md` | `qg_test_scenarios` | PRE+POST | Generate Tests (Tool 1) |
-| 5 | `references/step-05.md` | `qg_discovered_elements` | PRE+POST | Discover Elements (Tool 2) |
-| 6 | `references/step-06.md` | `qg_page_object` | PRE+POST | Generate POM (Tool 3) |
-| 7 | `references/step-07.md` | `qg_task` | PRE+POST | Generate Task (Tool 4) |
-| 8 | `references/step-08.md` | `qg_role` | PRE+POST | Generate Role (Tool 5) |
-| 9 | `references/step-09.md` | `qg_test_runner` | PRE+POST | Generate Test Runner (Tool 6) |
-| 10 | `references/step-10.md` | `qg_save_run` | PRE-only | Save & Run |
-| 11 | `references/step-11.md` | `qg_execution`, `qg_workflow_complete` | POST-only | Execution & Validation |
+| 4 | TBD: `references/step-04-construction.md` | Multiple gates | Varies | Collaborative Construction (HITL Loop) |
+| 4a | `references/step-04.md` | `qg_test_scenarios` | PRE+POST | Generate Tests (Tool 1) - Part of Step 4 |
+| 4b | `references/step-05.md` | `qg_discovered_elements`, `qg_discovery_complete` | PRE+POST, PRE-only | Discover Elements (Tool 2) - Part of Step 4 |
+| 5 | TBD: `references/step-05-done.md` | N/A | N/A | Done (Test Execution & Triage) |
+
+**Archived (2026-01-22):** Steps 6-11 moved to `_archived/autonomous_workflow_v1/protocols/`
 
 ---
 
