@@ -5,6 +5,9 @@
 
 # Step 4: Tool 1 - Generate Tests
 
+**NOTE:** This protocol is part of Step 4 (Collaborative Construction) in the NEW 5-step workflow.
+The old 11-step workflow was archived on 2026-01-22. See `_archived/autonomous_workflow_v1/`.
+
 **Purpose:** Generate test scenarios from BDD metadata using MCP tool.
 
 ---
@@ -284,4 +287,6 @@ Then I should see my account dashboard
 
 ---
 
-*Next: Step 5 - Discover Elements (Tool 2)*
+*Next: Continue Step 4 - Discover Elements (Tool 2 - see step-05.md)*
+
+*After Tool 2: Manual Construction Phase (AI builds POMs/Tasks/Roles/Tests with Edit/Write tools)*

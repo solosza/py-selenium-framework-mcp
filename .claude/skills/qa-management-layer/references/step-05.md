@@ -3,9 +3,12 @@
 <!-- You may NOT redistribute, modify, or create derivative works. -->
 <!-- See LICENSE.md for full terms. -->
 
-# Step 5: Tool 2 - Discover Elements
+# Step 4 (Part 2): Tool 2 - Discover Elements
 
-**Purpose:** Discover interactive elements on target page for POM generation.
+**NOTE:** This protocol is part of Step 4 (Collaborative Construction) in the NEW 5-step workflow.
+The old 11-step workflow was archived on 2026-01-22. Tool 3 (generate_page_object) is ARCHIVED.
+
+**Purpose:** Discover interactive elements on target page for manual POM construction.
 
 ---
 
@@ -875,4 +878,9 @@ These clarifications document gate enforcement decisions. If bugs occur, check t
 
 ---
 
-*Next: Step 6 - Generate POM (Tool 3)*
+*Next: Manual Construction Phase*
+
+**NEW Workflow:** AI manually builds POMs, Tasks, Roles, and Tests using Edit/Write tools (NOT Tool 3-6).
+Gates validate framework compliance. HITL triggers when AI gets blocked.
+
+**OLD Workflow (ARCHIVED):** Step 6 - Generate POM (Tool 3) - See `_archived/autonomous_workflow_v1/`
