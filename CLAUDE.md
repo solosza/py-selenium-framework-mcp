@@ -42,7 +42,7 @@ See `.claude/skills/dialogue-engine/` for complete protocol and references.
 
 **Key Features:**
 - Production-grade 4-layer architecture (Role → Task → Page → WebInterface)
-- 11-step workflow with mandatory quality gates (v2.0)
+- 5-step pair programming workflow with collaborative construction (v3.0)
 - 28 Design Decisions enforced via MCP validation tools
 - Hybrid architecture: Protocols (Skills for guidance) + Smart Gates (MCP Tools for enforcement)
 - Progressive audit trail and state management
@@ -121,32 +121,25 @@ Step 10: Save & Run                → files saved, test executed
 
 ### QA Guidance Layer (Protocol)
 
-For guided 11-step workflow with quality gates:
+For guided 5-step workflow with collaborative construction:
 ```
 .claude/skills/qa-management-layer/
 ├── SKILL.md              ← Overview and rules
 └── references/
-    ├── step-01.md        ← Per-step guidance
-    ├── step-02.md
-    └── ...
+    ├── step-01.md        ← User Input
+    ├── step-02.md        ← Pre-flight Config
+    ├── step-03.md        ← AI Processing
+    ├── step-04.md        ← Tool 1 (part of Step 4)
+    └── step-05.md        ← Tool 2 (part of Step 4)
 ```
 
 **Usage:** Read relevant step reference before executing each step.
 
-**Meta Protocol:** See `design-execution-engine/` for patterns applicable to any vertical.
+**Commands:**
+- `/qa-workflow` - Production mode (restricted permissions)
+- `/qa-workflow-dev` - Development mode (full access with approval)
 
-### Legacy Protocol (Deprecated - Use Section 9 Instead)
-
-For old 9-step workflow:
-```
-/skill execute-from-step1
-```
-
-The protocol provides:
-- Complete 9-step workflow guide
-- Autonomous troubleshooting (iframe detection, shadow DOM, JS fallbacks)
-- Step-by-step DevTools guidance when AI needs help
-- Defect handling with mandatory restart-from-step-1
+**Archived (2026-01-22):** Old 11-step autonomous workflow moved to `_archived/autonomous_workflow_v1/`. See ARCHIVE_VERIFICATION_REPORT.md for details.
 
 ### 9-Step Flow Summary
 
