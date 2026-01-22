@@ -1,5 +1,5 @@
 """
-QGUserInput - Step 2 User Input Quality Gate.
+QGUserInput - Step 1 User Input Quality Gate.
 
 Task 5.0 - PD-005: Validates user input before AI processing.
 
@@ -27,7 +27,7 @@ from utils.state_manager import StateManager
 
 
 class QGUserInput(BaseGate):
-    """Step 2 quality gate for user input validation."""
+    """Step 1 quality gate for user input validation."""
 
     # URL pattern - must start with http:// or https://
     URL_PATTERN = re.compile(r'^https?://\S+$')
@@ -116,7 +116,7 @@ class QGUserInput(BaseGate):
 
         audit_logger = cls.get_audit_logger()
         state_manager = StateManager(run_id=audit_logger.run_id)
-        state_manager.save(step=2, data={
+        state_manager.save(step=1, data={
             "persona": persona,
             "URL": url,
             "role_name": role_name,
@@ -126,7 +126,7 @@ class QGUserInput(BaseGate):
         })
 
         return cls.pass_response(
-            step=2,
+            step=1,
             gate_name="qg_user_input",
             mode="POST",
             metadata={
@@ -253,7 +253,7 @@ class QGUserInput(BaseGate):
                 "status": "NEEDS_RETRY",
                 "fix_applied": "environment_added_to_config",
                 "error": f"Unknown environment: {url_domain}",
-                "message": f"Add environment for '{workflow}' workflow to environment_config.json:",
+                "message": f"Unknown environment detected. What should I do?\n\n1. Create new environment config ({workflow})\n2. Skip environment detection (proceed without config)\n3. Cancel workflow",
                 "scaffolding_needed": [{
                     "type": "config_entry",
                     "path": "framework/resources/config/environment_config.json",

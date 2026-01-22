@@ -3,9 +3,11 @@
 <!-- You may NOT redistribute, modify, or create derivative works. -->
 <!-- See LICENSE.md for full terms. -->
 
-# Step 1: Pre-flight Configuration
+# Step 1: User Input
 
-**Purpose:** Establish configuration strategy before any test generation begins.
+**Purpose:** Capture test requirement, persona, URL, and workflow identifier from user.
+
+**Workflow Version:** v3.0 (5-Step Pair Programming Workflow)
 
 ---
 
@@ -13,10 +15,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Step** | 1 - Pre-flight Configuration |
+| **Step** | 1 - User Input |
 | **Dependencies** | None (first step) |
-| **Input** | None |
-| **Output** | `credential_strategy`, `test_data_location` |
+| **Input** | User describes test requirement |
+| **Output** | `persona`, `URL`, `role_name`, `workflow`, `raw_requirement`, `detected_env_id` |
 
 ---
 
@@ -24,9 +26,9 @@
 
 | Persona | Actions |
 |---------|---------|
-| **User** | Answers Question 1 (credential strategy), Answers Question 2 (test data location) |
-| **AI** | Asks questions, waits for answers, passes answers to gate |
-| **Tool** | `qg_preflight` validates answers, saves state on PASS |
+| **User** | Describes test requirement (persona, action, URL) |
+| **AI** | Asks questions, extracts data, auto-detects environment |
+| **Tool** | `qg_user_input` validates all fields, saves state on PASS |
 
 ---
 
@@ -37,21 +39,38 @@ PRE-CHECK:
 - None (first step)
 
 ACTION:
-- ASK user Question 1 (credential strategy)
-- WAIT for answer
-- ASK user Question 2 (test data location)
-- WAIT for answer
+- ASK user: "What test do you want to create?"
+  Format: "As a [persona], I want to [action]"
+  Example: "As a sales representative, I want to submit a service inquiry"
+
+- ASK user: "What is the URL for this action?"
+  Example: "https://example.com/inquiries"
+
+- ASK user: "Workflow identifier?"
+  Explanation: "This creates folders at framework/pages/{workflow}/ and tests/{workflow}/
+               Use to organize tests by: test run (helios7), feature (checkout-v2), sprint (auth-sprint-2)"
+
+- EXTRACT from requirement:
+  - persona: Extract from "As a [X]" pattern
+  - role_name: Convert persona to PascalCase (sales representative → SalesRepresentative)
+  - raw_requirement: Store full user requirement verbatim
+
+- AUTO-DETECT environment:
+  - Check URL against framework/resources/config/environment_config.json
+  - If match found → detected_env_id = environment name
+  - If no match → ASK user: "Unknown environment. Should I create config for '{url_domain}'?"
 
 VALIDATE:
-- CALL qg_preflight with both answers
+- CALL qg_user_input with all extracted data
 
 RETRY:
 - If gate FAIL: RE-ASK the invalid/missing field
+- If gate NEEDS_RETRY with scaffolding: Create files/dirs, retry gate
 - No max retries (user provides input, not AI)
 
 POST-ACTION:
 - WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
-- Include: step name, user answers, gate result (PASS/FAIL with full error), timestamp
+- Include: step name, user inputs, extracted fields, gate result, timestamp
 - Append mode (don't overwrite existing content)
 - Create directory and file on first write if they don't exist
 ```
@@ -62,8 +81,8 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **Operation Tool** | - (none) |
-| **Quality Gate** | `qg_preflight` |
+| **Operation Tool** | None (data collection step) |
+| **Quality Gate** | `qg_user_input` |
 | **Gate Mode** | POST-only (validates after user input) |
 
 ---
@@ -72,8 +91,8 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **State Saved** | `credential_strategy`, `test_data_location` |
-| **Who Saves** | Quality gate (`qg_preflight`) |
+| **State Saved** | `persona`, `URL`, `role_name`, `workflow`, `raw_requirement`, `detected_env_id` |
+| **Who Saves** | Quality gate (`qg_user_input`) |
 | **When Saved** | On gate PASS |
 | **State Schema** | See below |
 
@@ -83,8 +102,12 @@ POST-ACTION:
   "status": "complete",
   "timestamp": "ISO-8601",
   "data": {
-    "credential_strategy": "static | dynamic | self-contained | none",
-    "test_data_location": "shared | workflow | both | none"
+    "persona": "sales representative",
+    "URL": "https://example.com/inquiries",
+    "role_name": "SalesRepresentative",
+    "workflow": "helios8",
+    "raw_requirement": "As a sales representative, I want to submit a service inquiry",
+    "detected_env_id": "helios1"
   }
 }
 ```
@@ -95,15 +118,18 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **Rules That Apply** | DD-24 (credential strategy), DD-28 (test data location) |
-| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 2 until both answers valid** |
+| **Rules That Apply** | DD-01 (persona required), DD-02 (URL required), DD-07 (workflow determined) |
+| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 2 until all fields valid** |
 
 **Validation Checks:**
 
 | Check | Rule |
 |-------|------|
-| `credential_strategy` | Must be one of: static, dynamic, self-contained, none |
-| `test_data_location` | Must be one of: shared, workflow, both, none |
+| `persona` | Must be present, extracted from "As a [X]" pattern |
+| `URL` | Must be valid HTTP/HTTPS URL |
+| `role_name` | Must be PascalCase conversion of persona |
+| `workflow` | Must be valid identifier (alphanumeric + hyphen/underscore) |
+| `raw_requirement` | Must be present (full user input) |
 
 ---
 
@@ -113,150 +139,176 @@ POST-ACTION:
 
 | Issue | Behavior |
 |-------|----------|
-| User skips question | RE-ASK: "I need this to proceed. [repeat question]" |
-| Invalid answer | RE-ASK: "Please choose from the options: 1, 2, 3, or 4" |
-| User says "I don't know" | GUIDE: Explain each option briefly, recommend based on context |
-
-**Known Defects:** None
+| User skips persona | RE-ASK: "I need a persona to proceed. Example: 'As a sales representative, I want to...'" |
+| Missing URL | RE-ASK: "What is the URL where this action happens?" |
+| Invalid URL format | RE-ASK: "Please provide a valid HTTP/HTTPS URL" |
+| Missing workflow | RE-ASK: "What workflow identifier should I use? (e.g., helios7, checkout-v2)" |
+| Unknown environment | ASK: "Should I create environment config for '{domain}'? (yes/no)" |
 
 **Error Message Templates:**
 
-Missing credential_strategy:
+Missing persona:
 ```
-"I need to know the credential approach before proceeding.
+"I need a persona to create the test.
 
-Which credential approach for this test?
-1. Static        - Use existing account from test_users.json
-2. Dynamic       - Register fresh user, save for later tests
-3. Self-contained - Register and use within same test
-4. None needed   - Test doesn't require credentials"
+Please describe the test in this format:
+'As a [persona], I want to [action]'
+
+Example: As a sales representative, I want to submit a service inquiry"
 ```
 
-Missing test_data_location:
+Missing URL:
 ```
-"I need to know where test data should live.
+"What is the URL where this action takes place?
 
-Where should test data live?
-1. Shared            - tests/data/ (cross-workflow)
-2. Workflow-specific - tests/{workflow}/data/
-3. Both              - Shared credentials + workflow-specific data
-4. None needed       - Test doesn't require external data"
+Example: https://example.com/inquiries"
+```
+
+Missing workflow:
+```
+"What workflow identifier should I use?
+
+This creates folders at:
+- framework/pages/{workflow}/
+- tests/{workflow}/
+
+Use to organize tests by test run, feature, or sprint.
+
+Example: helios7, checkout-v2, auth-sprint-2"
 ```
 
 ---
 
-## H. Test Data Infrastructure Scaffolding (DEF-060)
+## H. Environment Auto-Detection
 
-**Purpose:** Auto-create test data files/directories based on Step 1 configuration.
+**Purpose:** Detect which environment config to use based on URL.
 
-**Phase 1 (Step 1 POST):** Scaffold shared infrastructure immediately
+**Process:**
+1. Extract domain from URL (e.g., "example.com" from "https://example.com/inquiries")
+2. Check `framework/resources/config/environment_config.json` for matching base_url
+3. If match found → `detected_env_id` = environment name
+4. If no match → Ask user to create new environment config
 
-| Strategy | Infrastructure Created |
-|----------|----------------------|
-| `static` or `dynamic` | `tests/data/` directory + `tests/data/test_users.json` |
-| `self-contained` or `none` | `tests/data/` directory only (no credential file) |
-
-**Scaffolding Response Format:**
-
-When infrastructure missing, gate returns `status: "NEEDS_RETRY"`:
-
+**Example environment_config.json:**
 ```json
 {
-  "status": "NEEDS_RETRY",
-  "fix_applied": "test_data_infrastructure_scaffolded",
-  "error": "Missing test data infrastructure",
-  "message": "Create the following files/directories based on Step 1 config:",
-  "scaffolding_needed": [
-    {
-      "type": "directory",
-      "path": "tests/data",
-      "reason": "Root directory for shared test data"
-    },
-    {
-      "type": "file",
-      "path": "tests/data/test_users.json",
-      "template": "{\n  \"default_user\": {\n    \"username\": \"\",\n    \"password\": \"\",\n    \"email\": \"\"\n  }\n}",
-      "reason": "Credential storage for static/dynamic strategies"
-    }
-  ]
+  "helios1": {
+    "base_url": "https://helios-app.com",
+    "browser": "chrome"
+  },
+  "staging": {
+    "base_url": "https://staging.example.com",
+    "browser": "chrome"
+  }
 }
 ```
 
-**AI Handling Instructions:**
+**If URL is "https://helios-app.com/inquiries":**
+- Match found: `detected_env_id = "helios1"`
 
-When gate returns `NEEDS_RETRY`:
-1. Read `scaffolding_needed` array
-2. For each item:
-   - If `type: "directory"` → Create directory using Bash `mkdir -p {path}`
-   - If `type: "file"` → Create file using Write tool with `template` content
-3. Retry gate call after scaffolding complete
-4. Verify gate returns `status: "pass"` on retry
-
-**Idempotent:** If files/directories already exist, gate returns `pass` (no scaffolding needed).
+**If URL is "https://unknown-site.com/inquiries":**
+- No match: Ask user "Unknown environment. Should I create config for 'unknown-site.com'?"
 
 ---
 
-## Flow Diagram
+## I. User Communication
+
+**What to Show:**
+- Persona extracted
+- Role name derived
+- Workflow identified
+- Environment detected (if applicable)
+
+**Output Format:**
+```
+✓ Step 1: User Input
+  • Persona: sales representative
+  • Role: SalesRepresentative
+  • Workflow: helios8
+  • Environment: helios1
+```
+
+---
+
+## J. Flow Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         STEP 1: PRE-FLIGHT                                   │
+│                         STEP 1: USER INPUT                                   │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
                          ┌────────────────────────┐
-                         │  AI ASKS Question 1    │
-                         │  (credential strategy) │
+                         │  AI ASKS:              │
+                         │  "What test do you     │
+                         │   want to create?"     │
                          └────────────────────────┘
                                       │
                                       ▼
                          ┌────────────────────────┐
-                         │  USER answers          │
+                         │  USER provides         │
+                         │  requirement           │
                          └────────────────────────┘
                                       │
                                       ▼
                          ┌────────────────────────┐
-                         │  AI ASKS Question 2    │
-                         │  (test data location)  │
+                         │  AI ASKS: "URL?"       │
                          └────────────────────────┘
                                       │
                                       ▼
                          ┌────────────────────────┐
-                         │  USER answers          │
+                         │  USER provides URL     │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  AI ASKS:              │
+                         │  "Workflow ID?"        │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  USER provides         │
+                         │  workflow              │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  AI EXTRACTS:          │
+                         │  - persona             │
+                         │  - role_name           │
+                         │  - raw_requirement     │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  AI AUTO-DETECTS       │
+                         │  environment           │
                          └────────────────────────┘
                                       │
                                       ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  QUALITY GATE: qg_preflight                                                  │
-│  - Validates both answers                                                   │
-│  - Checks test data infrastructure (DEF-060)                                │
+│  QUALITY GATE: qg_user_input                                                 │
+│  - Validates all fields                                                     │
 │  - Saves state on PASS                                                      │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
-                          ┌───────────┴───────────────────────┐
-                          ▼                ▼                  ▼
-                    ┌──────────┐    ┌──────────┐      ┌──────────┐
-                    │  PASS    │    │NEEDS_RETRY│      │  FAIL    │
-                    └────┬─────┘    └────┬─────┘      └────┬─────┘
-                         │               │                   │
-                         │               ▼                   ▼
-                         │     ┌─────────────────┐  ┌─────────────┐
-                         │     │ AI SCAFFOLDS    │  │  RE-ASK     │
-                         │     │ files/dirs      │  │  USER       │
-                         │     └─────────┬───────┘  └─────────────┘
-                         │               │
-                         │               ▼
-                         │     ┌─────────────────┐
-                         │     │ AI RETRIES      │
-                         │     │ qg_preflight    │
-                         │     └─────────┬───────┘
-                         │               │
-                         └───────────────┘
-                                      │
-                                      ▼
+                          ┌───────────┴───────────┐
+                          ▼                       ▼
+                    ┌──────────┐           ┌──────────┐
+                    │  PASS    │           │  FAIL    │
+                    └────┬─────┘           └────┬─────┘
+                         │                       │
+                         │                       ▼
+                         │              ┌─────────────┐
+                         │              │  RE-ASK     │
+                         │              │  USER       │
+                         │              └─────────────┘
+                         │
+                         ▼
                          ┌────────────────────────┐
                          │  STATE SAVED           │
-                         │  (by qg_preflight)     │
+                         │  (by qg_user_input)    │
                          └────────────────────────┘
                                       │
                                       ▼
@@ -267,4 +319,4 @@ When gate returns `NEEDS_RETRY`:
 
 ---
 
-*Next: Step 2 - User Input*
+*Next: Step 2 - Pre-flight Configuration*

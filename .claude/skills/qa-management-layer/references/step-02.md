@@ -3,9 +3,11 @@
 <!-- You may NOT redistribute, modify, or create derivative works. -->
 <!-- See LICENSE.md for full terms. -->
 
-# Step 2: User Input
+# Step 2: Pre-flight Configuration
 
-**Purpose:** Collect and validate user's test requirement (persona + URL).
+**Purpose:** Establish configuration strategy before test construction begins.
+
+**Workflow Version:** v3.0 (5-Step Pair Programming Workflow)
 
 ---
 
@@ -13,10 +15,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Step** | 2 - User Input |
-| **Dependencies** | Step 1 complete (credential_strategy, test_data_location exist) |
-| **Input** | User's natural language requirement |
-| **Output** | `persona`, `URL`, `role_name`, `workflow`, `raw_requirement` |
+| **Step** | 2 - Pre-flight Configuration |
+| **Dependencies** | Step 1 (User Input) must be complete |
+| **Input** | Step 1 output (persona, URL, workflow, etc.) |
+| **Output** | `credential_strategy`, `test_data_location`, `browser_config`, `timeout_config` |
 
 ---
 
@@ -24,9 +26,9 @@
 
 | Persona | Actions |
 |---------|---------|
-| **User** | Provides test requirement in "As a [role], I want to..." format with URL |
-| **AI** | Asks for requirement if not provided, extracts persona/URL/role_name/workflow, passes to gate |
-| **Tool** | `qg_user_input` validates extracted fields, saves state on PASS |
+| **User** | Answers configuration questions |
+| **AI** | Asks questions, waits for answers, passes to gate |
+| **Tool** | `qg_preflight` validates answers, scaffolds infrastructure, saves state on PASS |
 
 ---
 
@@ -34,27 +36,54 @@
 
 ```
 PRE-CHECK:
-- Verify Step 1 complete (credential_strategy, test_data_location exist in state)
+- Step 1 must be complete (qg_user_input passed)
 
 ACTION:
-- IF user hasn't provided requirement: ASK for it
-  "What test do you want to create?
-   Format: 'As a [role], I want to [action]...'
-   URL: [target page]"
-- IF user provided requirement: EXTRACT persona, URL, role_name, workflow
+- ASK user Question 1: Credential strategy?
+  Options:
+  1. Static        - Use existing account from test_users.json
+  2. Dynamic       - Register fresh user, save for later tests
+  3. Self-contained - Register and use within same test
+  4. None needed   - Test doesn't require credentials
+
+- WAIT for answer
+
+- ASK user Question 2: Test data location?
+  Options:
+  1. Shared            - tests/data/ (cross-workflow)
+  2. Workflow-specific - tests/{workflow}/data/
+  3. Both              - Shared credentials + workflow-specific data
+  4. None needed       - Test doesn't require external data
+
+- WAIT for answer
+
+- ASK user Question 3: Browser visibility?
+  Options:
+  1. Visible (headless=false) - REQUIRED for pair programming
+  (No other options - this is non-negotiable)
+
+- WAIT for confirmation
+
+- ASK user Question 4: Timeout monitoring?
+  Options:
+  1. Enabled (default 30s) - AI stops if element not found within threshold
+  2. Custom threshold      - Specify seconds (e.g., 60s for slow apps)
+  3. Disabled              - No timeout monitoring (use with caution)
+
+- WAIT for answer
 
 VALIDATE:
-- CALL qg_user_input with extracted fields
+- CALL qg_preflight with all answers
 
 RETRY:
-- If gate FAIL: ASK user for missing/invalid field with example
+- If gate FAIL: RE-ASK the invalid/missing field
+- If gate NEEDS_RETRY with scaffolding: Create files/dirs, retry gate
 - No max retries (user provides input, not AI)
 
 POST-ACTION:
 - WRITE transcript entry to tests/_reports/<run_id>/workflow_transcript.md
-- Include: step name, extracted fields, gate result (PASS/FAIL with full error), timestamp
+- Include: step name, user answers, gate result, timestamp
 - Append mode (don't overwrite existing content)
-- Create directory and file on first write if they don't exist
 ```
 
 ---
@@ -63,9 +92,9 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **Operation Tool** | - (none) |
-| **Quality Gate** | `qg_user_input` |
-| **Gate Mode** | POST-only (validates after AI extraction) |
+| **Operation Tool** | None (configuration step) |
+| **Quality Gate** | `qg_preflight` |
+| **Gate Mode** | POST-only (validates after user input) |
 
 ---
 
@@ -73,8 +102,8 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **State Saved** | `persona`, `URL`, `role_name`, `workflow`, `raw_requirement` |
-| **Who Saves** | Quality gate (`qg_user_input`) |
+| **State Saved** | `credential_strategy`, `test_data_location`, `browser_config`, `timeout_config` |
+| **Who Saves** | Quality gate (`qg_preflight`) |
 | **When Saved** | On gate PASS |
 | **State Schema** | See below |
 
@@ -84,12 +113,15 @@ POST-ACTION:
   "status": "complete",
   "timestamp": "ISO-8601",
   "data": {
-    "persona": "registered user",
-    "URL": "http://automationpractice.pl/index.php?controller=authentication",
-    "role_name": "RegisteredUser",
-    "workflow": "auth",
-    "raw_requirement": "As a registered user, I want to login with email and password",
-    "detected_env_id": "DEFAULT"
+    "credential_strategy": "static | dynamic | self-contained | none",
+    "test_data_location": "shared | workflow | both | none",
+    "browser_config": {
+      "headless": false
+    },
+    "timeout_config": {
+      "enabled": true,
+      "threshold_seconds": 30
+    }
   }
 }
 ```
@@ -100,18 +132,18 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **Rules That Apply** | DD-01 (persona required), DD-02 (URL required) |
-| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 3 until all fields valid** |
+| **Rules That Apply** | DD-24 (credential strategy), DD-28 (test data location), FR-8.1 (headless=false), FR-8.2 (timeout monitoring) |
+| **Gate Enforcement** | **BLOCKED: Cannot proceed to Step 3 until all answers valid** |
 
 **Validation Checks:**
 
 | Check | Rule |
 |-------|------|
-| `persona` | Must be present (extracted from "As a [X]") |
-| `URL` | Must be valid URL format |
-| `role_name` | Must be derivable from persona (PascalCase) |
-| `workflow` | Must be non-empty string (accepts `domain` for backwards compatibility) |
-| `raw_requirement` | Must be specific enough for BDD generation |
+| `credential_strategy` | Must be one of: static, dynamic, self-contained, none |
+| `test_data_location` | Must be one of: shared, workflow, both, none |
+| `browser_config.headless` | Must be false (non-negotiable for pair programming) |
+| `timeout_config.enabled` | Must be true or false |
+| `timeout_config.threshold_seconds` | If enabled, must be positive integer (default 30) |
 
 ---
 
@@ -121,157 +153,177 @@ POST-ACTION:
 
 | Issue | Behavior |
 |-------|----------|
-| Persona missing | ASK: "Please specify persona. Example: 'As a customer, I want to...'" |
-| URL missing | ASK: "Which page? Example: 'http://yoursite.com/login'" |
-| Cannot determine role | ASK: "What type of user? Example: 'customer', 'admin', 'visitor'" |
-| Cannot determine workflow | ASK: "What workflow area? Example: 'auth', 'search', 'checkout', or any custom name" |
-| Requirement vague | ASK: "Please be more specific. Example: 'I want to add a blue t-shirt size M to cart'" |
-
-**Known Defects:** Enforcement gap - AI sometimes forgets to ask for missing info
+| User skips question | RE-ASK: "I need this to proceed. [repeat question]" |
+| Invalid answer | RE-ASK: "Please choose from the options: 1, 2, 3, or 4" |
+| User says "I don't know" | GUIDE: Explain each option briefly, recommend based on context |
+| User requests headless=true | REJECT: "Pair programming requires visible browser (headless=false is non-negotiable)" |
 
 **Error Message Templates:**
 
-Missing persona (DD-01):
+Missing credential_strategy:
 ```
-"I need to know the user persona.
+"Which credential approach for this test?
 
-Please provide in format: 'As a [role], I want to [action]...'
-Example: 'As a registered user, I want to login with email and password'"
-```
-
-Missing URL (DD-02):
-```
-"I need the target page URL.
-
-Which page should the test interact with?
-Example: 'http://automationpractice.pl/index.php?controller=authentication'"
+1. Static        - Use existing account from test_users.json
+2. Dynamic       - Register fresh user, save for later tests
+3. Self-contained - Register and use within same test
+4. None needed   - Test doesn't require credentials"
 ```
 
-Vague requirement:
+Missing test_data_location:
 ```
-"The requirement isn't specific enough for test generation.
+"Where should test data live?
 
-Please add details. Instead of:
-  'I want to browse products'
+1. Shared            - tests/data/ (cross-workflow)
+2. Workflow-specific - tests/{workflow}/data/
+3. Both              - Shared credentials + workflow-specific data
+4. None needed       - Test doesn't require external data"
+```
 
-Say:
-  'I want to browse products in the Women category and add a Printed Dress to cart'"
+Browser visibility (informational):
+```
+"Browser visibility: headless=false (visible)
+
+This is required for pair programming so you can see AI actions in real-time."
+```
+
+Timeout monitoring:
+```
+"Timeout monitoring configuration?
+
+1. Enabled (default 30s) - AI stops if element not found within threshold
+2. Custom threshold      - Specify seconds (e.g., 60s for slow apps)
+3. Disabled              - No timeout monitoring (use with caution)"
 ```
 
 ---
 
-## H. Environment Auto-Detection (DEF-062)
+## H. Infrastructure Scaffolding
 
-**Purpose:** Auto-detect test environment from URL, scaffold config for unknown environments.
+**Purpose:** Auto-create test data files/directories based on Step 2 configuration.
 
-**Detection Logic:**
+**Scaffolding Rules:**
 
-| URL Domain | Environment Detected | Behavior |
-|------------|---------------------|----------|
-| Matches environment_config.json | Auto-detect (e.g., "parabank") | Continue without NEEDS_RETRY |
-| DEFAULT URL (automationpractice.pl) | "DEFAULT" | Continue without NEEDS_RETRY |
-| Unknown domain | NEEDS_RETRY | AI scaffolds environment config |
+| Strategy | Infrastructure Created |
+|----------|----------------------|
+| `static` or `dynamic` | `tests/data/` directory + `tests/data/test_users.json` |
+| `workflow` or `both` | `tests/{workflow}/data/` directory |
+| `self-contained` or `none` | `tests/data/` directory only (no credential file) |
 
-**Scaffolding Response Format:**
-
-When unknown environment detected, gate returns `status: "NEEDS_RETRY"`:
+**Gate Response Format (NEEDS_RETRY):**
 
 ```json
 {
   "status": "NEEDS_RETRY",
-  "fix_applied": "environment_added_to_config",
-  "error": "Unknown environment: new-app.example.com",
-  "message": "Add environment for 'auth' workflow to environment_config.json:",
-  "scaffolding_needed": [{
-    "type": "config_entry",
-    "path": "framework/resources/config/environment_config.json",
-    "template": "{\n  \"auth\": {\n    \"url\": \"https://new-app.example.com\"\n  }\n}",
-    "reason": "Environment config for auth workflow at https://new-app.example.com"
-  }]
+  "fix_applied": "test_data_infrastructure_scaffolded",
+  "error": "Missing test data infrastructure",
+  "message": "Create the following files/directories based on Step 2 config:",
+  "scaffolding_needed": [
+    {
+      "type": "directory",
+      "path": "tests/data",
+      "reason": "Root directory for shared test data"
+    },
+    {
+      "type": "file",
+      "path": "tests/data/test_users.json",
+      "template": "{\n  \"default_user\": {\n    \"username\": \"\",\n    \"password\": \"\",\n    \"email\": \"\"\n  }\n}",
+      "reason": "Credential storage for static/dynamic strategies"
+    }
+  ]
 }
 ```
 
-**AI Handling Instructions (HUMAN APPROVAL REQUIRED):**
+**AI Handling Instructions:**
 
 When gate returns `NEEDS_RETRY`:
-1. Read `scaffolding_needed[0].template`
-2. Parse template to extract proposed environment config
-3. **USE AskUserQuestion to request approval:**
-   ```
-   "I detected a new environment that's not in the config.
+1. Read `scaffolding_needed` array
+2. For each item:
+   - If `type: "directory"` → Create directory using Bash `mkdir -p {path}`
+   - If `type: "file"` → Create file using Write tool with `template` content
+3. Retry gate call after scaffolding complete
+4. Verify gate returns `status: "pass"` on retry
 
-   Proposed environment config:
-   {
-     \"auth\": {
-       \"url\": \"https://new-app.example.com\"
-     }
-   }
-
-   Add this environment to environment_config.json?"
-
-   Options:
-   1. Yes, add as shown (Recommended)
-   2. Modify environment name or URL
-   ```
-4. **If user approves (option 1):**
-   - Read existing environment_config.json
-   - Add new environment entry from template
-   - Write updated environment_config.json using Write tool
-   - Retry gate call
-   - Verify gate returns `status: "pass"` with `detected_env_id` matching new environment
-5. **If user wants to modify (option 2):**
-   - Ask user for modified environment name and/or URL
-   - Create modified template
-   - Add modified environment to config
-   - Retry gate call
-
-**CRITICAL:** Never auto-scaffold environment config without user approval. Environment config affects test execution and requires user decision.
-
-**Idempotent:** If environment already exists in config, gate returns `pass` (no scaffolding or approval needed).
-
-**Temporary Stopgap:** This manual approval step will be replaced by full HITL system in future version.
+**Idempotent:** If files/directories already exist, gate returns `pass` (no scaffolding needed).
 
 ---
 
-## Flow Diagram
+## I. User Communication
+
+**What to Show:**
+- Credential strategy chosen
+- Test data location chosen
+- Browser config (always visible)
+- Timeout config
+
+**Output Format:**
+```
+✓ Step 2: Pre-flight Configuration
+  • Credentials: static (use existing account)
+  • Test data: workflow-specific
+  • Browser: visible (headless=false)
+  • Timeout: 30s
+```
+
+---
+
+## J. Flow Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         STEP 2: USER INPUT                                   │
+│                   STEP 2: PRE-FLIGHT CONFIGURATION                           │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
                                       ▼
                          ┌────────────────────────┐
-                         │  PRE-CHECK:            │
-                         │  Step 1 complete?      │
+                         │  AI ASKS Question 1    │
+                         │  (credential strategy) │
                          └────────────────────────┘
                                       │
-                          ┌───────────┴───────────┐
-                          ▼                       ▼
-                    ┌──────────┐            ┌──────────┐
-                    │  YES     │            │  NO      │
-                    └────┬─────┘            └────┬─────┘
-                         │                       │
-                         ▼                       ▼
-              ┌─────────────────────┐     ┌─────────────────┐
-              │  Receive/Ask for    │     │  BLOCKED        │
-              │  user requirement   │     │  Go to Step 1   │
-              └─────────────────────┘     └─────────────────┘
-                         │
-                         ▼
-              ┌─────────────────────┐
-              │  AI EXTRACTS:       │
-              │  - persona          │
-              │  - URL              │
-              │  - role_name        │
-              │  - workflow         │
-              └─────────────────────┘
-                         │
-                         ▼
+                                      ▼
+                         ┌────────────────────────┐
+                         │  USER answers          │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  AI ASKS Question 2    │
+                         │  (test data location)  │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  USER answers          │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  AI ASKS Question 3    │
+                         │  (browser visibility)  │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  USER confirms         │
+                         │  (headless=false)      │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  AI ASKS Question 4    │
+                         │  (timeout monitoring)  │
+                         └────────────────────────┘
+                                      │
+                                      ▼
+                         ┌────────────────────────┐
+                         │  USER answers          │
+                         └────────────────────────┘
+                                      │
+                                      ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  QUALITY GATE: qg_user_input                                                 │
-│  - Validates all extracted fields                                           │
-│  - Auto-detects environment from URL (DEF-062)                              │
+│  QUALITY GATE: qg_preflight                                                  │
+│  - Validates all answers                                                    │
+│  - Scaffolds infrastructure (DEF-060)                                       │
 │  - Saves state on PASS                                                      │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
@@ -283,25 +335,14 @@ When gate returns `NEEDS_RETRY`:
                          │               │                   │
                          │               ▼                   ▼
                          │     ┌─────────────────┐  ┌─────────────┐
-                         │     │ AI ASKS USER    │  │  ASK USER   │
-                         │     │ approve env?    │  │  (fix issue)│
+                         │     │ AI SCAFFOLDS    │  │  RE-ASK     │
+                         │     │ files/dirs      │  │  USER       │
                          │     └─────────┬───────┘  └─────────────┘
                          │               │
                          │               ▼
                          │     ┌─────────────────┐
-                         │     │ USER APPROVES   │
-                         │     └─────────┬───────┘
-                         │               │
-                         │               ▼
-                         │     ┌─────────────────┐
-                         │     │ AI ADDS to      │
-                         │     │ config.json     │
-                         │     └─────────┬───────┘
-                         │               │
-                         │               ▼
-                         │     ┌─────────────────┐
                          │     │ AI RETRIES      │
-                         │     │ qg_user_input   │
+                         │     │ qg_preflight    │
                          │     └─────────┬───────┘
                          │               │
                          └───────────────┘
@@ -309,7 +350,7 @@ When gate returns `NEEDS_RETRY`:
                                       ▼
                          ┌────────────────────────┐
                          │  STATE SAVED           │
-                         │  (by qg_user_input)    │
+                         │  (by qg_preflight)     │
                          └────────────────────────┘
                                       │
                                       ▼

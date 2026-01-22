@@ -2,12 +2,12 @@
 
 ## Current Phase
 **Phase:** TDD Implementation - Validator-Driven Development
-**Status:** Iteration 1 Complete ✅, Ready for Phase 1 (Real Workflow Testing)
+**Status:** Iteration 2 - Protocol Updates Complete, Ready for Step 1 Execution
 
 ## What We're Working On
-**Active Task:** Phase 1 - Run real workflow and discover actual issues
-**Task Status:** Ready to start - Validator framework solid, core refactoring complete
-**Approach:** Design-on-the-fly TDD - Use existing design when clear, pause to design when ambiguous
+**Active Task:** Run Step 1 with real workflow, validate with validator
+**Task Status:** Protocols updated, gate fixed, ready to execute and validate
+**Approach:** TDD - Let validator catch issues, fix what fails
 
 ## Progress This Session
 
@@ -31,6 +31,11 @@
 - [x] Phase 0: Created validate_step.py (6 validation criteria)
 - [x] Phase 0: Tested validator on helios1 data (discovered audit format mismatch)
 - [x] Adopted design-on-the-fly TDD approach
+- [x] Iteration 2: Updated step-01.md protocol (User Input - persona, URL, workflow)
+- [x] Iteration 2: Updated step-02.md protocol (Pre-flight Config - credentials, test data, browser, timeout)
+- [x] Iteration 2: Fixed qg_user_input.py gate (Step 2 → Step 1, saves to step_1)
+- [x] Iteration 2: Added numbered options UX to environment detection
+- [x] Iteration 2: Added helios1 environment to environment_config.json
 
 ## Decision Log This Session
 
@@ -51,6 +56,12 @@
 
 ## Files Changed This Session
 
+### Iteration 2 Changes (Uncommitted)
+- `.claude/skills/qa-management-layer/references/step-01.md` - Complete rewrite for 5-step workflow
+- `.claude/skills/qa-management-layer/references/step-02.md` - Complete rewrite for 5-step workflow
+- `mcp_server/tools/gates/qg_user_input.py` - Fixed step number (2 → 1), added numbered UX
+- `framework/resources/config/environment_config.json` - Added helios1 environment
+
 ### Created
 - `ARCHIVE_VERIFICATION_REPORT.md` - Verification results with priority actions
 
@@ -70,7 +81,7 @@
 ### Created This Iteration
 - `mcp_server/_dev_tests/validate_step.py` - Step validator with 6 validation criteria
 
-### Commits (10 total)
+### Commits (12 total)
 1. `0621d83` - fix: Remove archived tool/gate imports from server.py (CRITICAL)
 2. `6c32d5f` - fix: Update SKILL.md to reflect 5-step workflow (HIGH)
 3. `4314c54` - fix: Update step-04/step-05 navigation for new workflow (MEDIUM)
@@ -81,6 +92,8 @@
 8. `d6ba980` - docs: Update session for TDD approach
 9. `995c9b8` - feat: Create step validator for TDD workflow (Phase 0)
 10. `1f925ce` - feat: Refactor AuditLogger and add TranscriptWriter (Iteration 1)
+11. `15bbfc4` - docs: Update SESSION.md - Iteration 1 complete
+12. UNCOMMITTED - Iteration 2: Protocol updates (step-01.md, step-02.md, qg_user_input.py)
 
 ## Active Blockers/Issues
 
@@ -88,7 +101,15 @@
 
 ## Context for Next Session
 
-**Resume Point:** Building step validator (Phase 0 of TDD approach)
+**Resume Point:** Run Step 1 with real workflow, validate output
+
+**Next Actions:**
+1. Restart MCP server
+2. Run `/qa-workflow-dev` command
+3. Provide test requirement (persona + URL + workflow)
+4. Execute Step 1 (calls qg_user_input gate)
+5. Run validator on Step 1 output
+6. Fix whatever validator discovers
 
 **TDD Approach Decision (2026-01-22):**
 - **REJECTED:** 4D Divide (waterfall task planning)
@@ -189,6 +210,17 @@ Phase 3-5: Steps 3-5 (same pattern)
 - [x] Test validator on known-good data (helios1 audit log)
 - [x] Discovered audit format mismatch (has 'steps' not 'events')
 
+**Iteration 2: Update Protocols for 5-Step Workflow (COMPLETE ✅)**
+- [x] Updated step-01.md (User Input: persona, URL, workflow)
+- [x] Updated step-02.md (Pre-flight Config: credentials, test data, browser, timeout)
+- [x] Fixed qg_user_input.py gate (Step 2 → Step 1, saves to step_1)
+- [x] Added numbered options UX pattern (1, 2, 3 format)
+- [x] Added helios1 environment to environment_config.json
+- [x] User identified inconsistency: SKILL.md shows step_2 outputs only 2 fields, but step-02.md has 4
+- [x] Decided to let TDD catch this (don't pre-fix, let validator discover)
+
+**Key Discovery:** Protocols (step-XX.md) were for OLD 11-step workflow, needed rewrite for NEW 5-step workflow.
+
 **Iteration 1: Fix AuditLogger (COMPLETE ✅)**
 - [x] Update AuditLogger to use events array format
 - [x] Added QA_DEV_MODE bypass to qa-gate-enforcer.py
@@ -205,11 +237,20 @@ Phase 3-5: Steps 3-5 (same pattern)
 - [SKIP] Protocol Adherence (AI)
 - [WARN] Step Flow (Integrity) - Working (warnings expected for isolated test)
 
-**Iteration 2: Phase 1 - Run Real Workflow (NEXT)**
-- [ ] Run `/qa-workflow-dev` Step 1 with real requirement
-- [ ] Run validator on Step 1 output (discover real issues)
-- [ ] Fix what fails iteratively
-- [ ] Continue through Steps 2-5
+**Iteration 3: Phase 1 - Execute Step 1 (NEXT)**
+- [ ] Restart MCP server
+- [ ] Run `/qa-workflow-dev` command
+- [ ] Provide test requirement
+- [ ] Execute Step 1 (qg_user_input)
+- [ ] Run validator on Step 1 output
+- [ ] Fix discovered issues
+- [ ] Continue to Step 2
+
+**Pending Protocol Updates:**
+- [ ] step-03.md (AI Processing) - needs rewrite for 5-step workflow
+- [ ] step-04.md (Collaborative Construction) - needs rewrite
+- [ ] step-05.md (Done) - needs rewrite
+- [ ] SKILL.md line 55 - inconsistent with step-02.md (2 fields vs 4 fields)
 
 **Phase 1: Step 1 TDD Cycle**
 - [ ] Run `/qa-workflow-dev` Step 1 with real requirement
@@ -267,10 +308,10 @@ Phase 3-5: Steps 3-5 (same pattern)
 **Next:** Fix AuditLogger to use events array (match design)
 
 ## Token Usage
-- This session: ~128K tokens used (64% of 200K budget)
-- Remaining: ~72K tokens (36%)
-- **Status:** Auto-compact near - session saved
+- This session: ~133K tokens used (66% of 200K budget)
+- Remaining: ~67K tokens (33%)
+- **Status:** Iteration 2 complete - ready for Step 1 execution after MCP restart
 
 ---
 
-**Last Updated:** 2026-01-22
+**Last Updated:** 2026-01-22 (Iteration 2)

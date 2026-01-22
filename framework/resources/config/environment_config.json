@@ -1,4 +1,7 @@
 {
+  "helios1": {
+    "url": "https://heliosdigital-retail-qa.azurewebsites.net"
+  },
   "parabank11": {
     "url": "https://parabank.parasoft.com"
   },
