@@ -1,18 +1,26 @@
 """
 AuditLogger - Audit Trail System for QA Management Engine.
 
-Task 1.0 - Provides per-run audit logging for the 10-step workflow.
-DEF-040 - Added incremental persist after each log_gate() call.
+Provides per-run audit logging for the 5-step workflow (v3.0).
+DEF-040 - Incremental persist after each event (crash-safe, no data loss).
 
 Features:
-- Logs gate calls with results and sources
-- Logs self-heal attempts
-- Logs generated files
-- Generates summary statistics
-- Writes JSON audit file per run
-- Incremental persist: crash-safe, no data loss (DEF-040)
+- Event-driven audit trail (typed events: gate_validation, tool_call, hitl_interaction, hook_intervention)
+- Gate validation logging with results and sources
+- Self-heal attempt logging
+- Atomic writes per event (no data loss on crash)
+- Outputs events array format per finalized data model (FR-5 in PRD)
 
-Schema matches PRD spec (1-prd-release-readiness.md).
+Output Format:
+{
+  "workflow_id": "2026-01-22T10-30-45.123456Z",
+  "events": [
+    {"type": "gate_validation", "step": 1, "gate": "qg_preflight", "result": "pass", ...},
+    {"type": "self-heal", "step": 2, "attempt": 1, "error": "...", ...}
+  ]
+}
+
+Schema matches PRD spec (2-prd-pair-programming-formalization.md FR-5).
 """
 
 import json
@@ -59,8 +67,8 @@ class AuditLogger:
         self._audit_file = self._output_dir / f"audit_log_{safe_run_id}.json"
 
         # DEF-043: Load existing audit data if continuing a session
-        self.steps: List[Dict[str, Any]] = []
-        self.files_generated: List[Dict[str, Any]] = []
+        self.events: List[Dict[str, Any]] = []
+        self.files_generated: List[Dict[str, Any]] = []  # Kept for backward compatibility
         self._load_existing_data()
 
     def _load_existing_data(self) -> None:
@@ -68,8 +76,7 @@ class AuditLogger:
         DEF-043: Load existing audit data when continuing a session.
 
         If the audit file already exists (from a previous MCP tool call in
-        the same workflow run), load its steps and files_generated lists
-        to continue appending to them.
+        the same workflow run), load its events list to continue appending.
         """
         if not self._audit_file.exists():
             return
@@ -78,8 +85,10 @@ class AuditLogger:
             with open(self._audit_file, 'r') as f:
                 data = json.load(f)
 
-            # Restore existing steps and files
-            self.steps = data.get("steps", [])
+            # Restore existing events (backward compatible with 'steps')
+            self.events = data.get("events", data.get("steps", []))
+
+            # Restore files_generated for backward compatibility
             self.files_generated = data.get("files_generated", [])
 
             # Restore execution_mode if present
@@ -87,7 +96,7 @@ class AuditLogger:
                 self.execution_mode = data["execution_mode"]
         except (json.JSONDecodeError, IOError):
             # If file is corrupted, start fresh
-            self.steps = []
+            self.events = []
             self.files_generated = []
 
     def log_gate(
@@ -113,6 +122,7 @@ class AuditLogger:
             metadata: Validation data from this step (e.g., persona, URL, page_name)
         """
         entry: Dict[str, Any] = {
+            "type": "gate_validation",
             "step": step,
             "gate": gate_name,
             "mode": mode,
@@ -129,7 +139,7 @@ class AuditLogger:
         if metadata is not None:
             entry["metadata"] = metadata
 
-        self.steps.append(entry)
+        self.events.append(entry)
 
         # DEF-040: Persist immediately after each log
         self._persist()
@@ -149,14 +159,14 @@ class AuditLogger:
             error: Error that triggered self-heal
         """
         entry = {
-            "step": step,
             "type": "self-heal",
+            "step": step,
             "attempt": attempt,
             "error": error,
             "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
         }
 
-        self.steps.append(entry)
+        self.events.append(entry)
 
         # DEF-040: Persist immediately after each log
         self._persist()
@@ -185,7 +195,10 @@ class AuditLogger:
 
     def get_summary(self) -> Dict[str, Any]:
         """
-        Calculate summary statistics.
+        Calculate summary statistics from events.
+
+        NOTE: Summary is computed on-demand and NOT persisted to audit log.
+        Metrics belong in workflow_state.json per the finalized data model.
 
         Returns:
             Dict with total_steps, gates_passed, gates_failed, self_heals,
@@ -201,7 +214,7 @@ class AuditLogger:
         # Task 2.5: Count sources
         source_counts: Dict[str, int] = {}
 
-        for entry in self.steps:
+        for entry in self.events:
             step = entry.get("step")
             if step is not None:
                 unique_steps.add(step)
@@ -209,7 +222,7 @@ class AuditLogger:
             entry_type = entry.get("type")
             if entry_type == "self-heal":
                 self_heals += 1
-            else:
+            elif entry_type == "gate_validation":
                 # It's a gate entry
                 result = entry.get("result")
                 if result == "pass":
@@ -243,17 +256,16 @@ class AuditLogger:
 
         Called automatically after each log_gate(), log_self_heal(),
         and log_file_generated() call. Crash-safe - data is never lost.
+
+        Persists events array per finalized data model (FR-5 in PRD).
         """
         # Ensure parent directory exists
         self._output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Build output data (always includes current summary)
+        # Build output data (events array format per designed data model)
         data = {
-            "run_id": self.run_id,
-            "execution_mode": self.execution_mode,
-            "steps": self.steps,
-            "files_generated": self.files_generated,
-            "summary": self.get_summary()
+            "workflow_id": self.run_id,  # Renamed from run_id
+            "events": self.events  # Renamed from steps, contains typed events
         }
 
         # Atomic write: write to temp file, then rename

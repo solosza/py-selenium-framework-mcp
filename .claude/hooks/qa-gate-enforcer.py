@@ -220,7 +220,14 @@ def main():
     - Steps 6-9: Cannot write framework files without gate validation
     - Step 10: Implicit - Step 11 requires Step 10 complete
     - Step 11: Cannot run pytest without qg_execution
+
+    Dev Mode:
+    - Set QA_DEV_MODE=true to bypass all gate checks during development
     """
+    # DEV MODE: Bypass all checks when QA_DEV_MODE=true
+    if os.getenv('QA_DEV_MODE', '').lower() == 'true':
+        sys.exit(0)
+
     try:
         # Read tool call data from stdin
         data = json.load(sys.stdin)
