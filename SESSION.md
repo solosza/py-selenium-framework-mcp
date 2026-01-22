@@ -24,6 +24,9 @@
 - [x] Updated /qa-workflow and /qa-workflow-dev commands
 - [x] Updated user-communication-protocol.md
 - [x] Updated CLAUDE.md documentation
+- [x] Finalized data model decisions (5 components implemented, 3 rejected)
+- [x] Updated design discussion document with data model
+- [x] Updated PRD with complete JSON schema examples
 
 ## Files Changed This Session
 
@@ -39,6 +42,8 @@
 - `.claude/commands/qa-workflow-dev.md` - Updated to 5-step workflow
 - `.claude/skills/qa-management-layer/references/user-communication-protocol.md` - Updated to 5-step flow
 - `CLAUDE.md` - Updated Key Features and QA Guidance Layer sections
+- `docs/projects/pair-programming/1-design-discussion.md` - Added data model finalization section
+- `docs/projects/pair-programming/2-prd-pair-programming-formalization.md` - Updated FR-5 with complete JSON schemas
 
 ### Commits (6 total)
 1. `0621d83` - fix: Remove archived tool/gate imports from server.py (CRITICAL)
@@ -54,7 +59,7 @@
 
 ## Context for Next Session
 
-**Resume Point:** Begin TDD approach for NEW Step 4 and Step 5 protocols
+**Resume Point:** Begin implementing data model (StateManager updates, audit trail enhancements)
 
 **What's Complete:**
 1. ✅ Archive verification (3 critical issues found)
@@ -65,6 +70,9 @@
 6. ✅ User communication protocol updated
 7. ✅ CLAUDE.md documentation updated
 8. ✅ Clean separation between active and archived code
+9. ✅ Data model finalized (5 components, 3 rejected)
+10. ✅ Design doc updated with data model section
+11. ✅ PRD updated with complete JSON schemas
 
 **NEW 5-Step Workflow:**
 - Step 1: User Input
@@ -81,7 +89,25 @@
 - ✅ Documentation consistent across all files
 - ✅ Clear separation between archived and active code
 
+**Data Model Finalized:**
+- **File Structure:**
+  - `tests/_audit/audit_log_<run_id>.json` - Event stream (gates, tools, HITL, violations)
+  - `tests/_state/<run_id>/workflow_state.json` - Accumulated state (steps, construction journal, metrics)
+  - `tests/_reports/<run_id>/screenshot_*.png` - Test artifacts
+- **Implemented (5 components):**
+  1. HITL Interaction Log (audit log)
+  2. Construction Journal (workflow state - file paths only)
+  3. Test Execution History (workflow state - screenshot paths referenced)
+  4. Count-Based Metrics (workflow state - correctness focus)
+  5. Framework Compliance Results (audit log - already exists)
+- **Rejected (3 components):**
+  1. Discovery Gaps Log (redundant with construction journal)
+  2. Decision Log (redundant with HITL interactions)
+  3. Rollback/Resume with Snapshots (fix forward with HITL instead)
+
 **What Needs Building:**
+- [ ] StateManager updates (construction journal, test execution history, metrics)
+- [ ] Audit trail writer enhancements (HITL interactions, hook interventions)
 - [ ] NEW Step 4 protocol (collaborative construction guidance)
 - [ ] NEW Step 5 protocol (done/execution guidance)
 - [ ] Framework compliance gate (validate code against 4-layer architecture)
@@ -97,12 +123,16 @@
 - Last commit: `9e968db` - "docs: Update CLAUDE.md for 5-step workflow"
 - Working directory: CLEAN (except untracked files from previous work)
 
-**Next Actions:**
-1. Create NEW Step 4 protocol (collaborative construction)
-2. Create NEW Step 5 protocol (done/execution)
-3. Write acceptance tests for new protocols (TDD)
-4. Implement HITL system
-5. Implement Hooks
+**Next Actions (Priority Order):**
+1. Implement data model in code:
+   - Update StateManager to support construction_journal, test_execution_history, metrics
+   - Update audit trail writer to capture HITL interactions, hook interventions
+   - Create `tests/_reports/<run_id>/` directory structure
+   - Write unit tests for StateManager and audit writer enhancements
+2. Create NEW Step 4 protocol (collaborative construction)
+3. Create NEW Step 5 protocol (done/execution)
+4. Implement HITL system (trigger on blockers, timeout, DD violations)
+5. Implement Hooks (timeout monitoring, rambling detection)
 
 ## Summary of Changes
 
@@ -111,15 +141,18 @@
 2. SKILL.md workflow - AI would follow wrong workflow structure
 3. Step navigation - Protocols referenced archived steps
 
-**DOCUMENTATION UPDATES (3):**
+**DOCUMENTATION UPDATES (5):**
 1. Slash commands - /qa-workflow and /qa-workflow-dev now describe 5-step flow
 2. User communication protocol - Updated from 11-step to 5-step
 3. CLAUDE.md - Main documentation updated to reflect v3.0 workflow
+4. Design discussion - Added data model finalization section with complete structure
+5. PRD - Updated FR-5 with complete JSON schemas for audit log and workflow state
 
-**Result:** Complete clean break achieved. All references to old workflow updated or archived.
+**Result:** Complete clean break achieved. All references to old workflow updated or archived. Data model finalized and documented.
 
 ## Token Usage
-- This session: ~128K tokens used (64% of 200K budget)
+- This session: ~88K tokens used (44% of 200K budget)
+- Remaining: ~112K tokens (56%)
 
 ---
 
