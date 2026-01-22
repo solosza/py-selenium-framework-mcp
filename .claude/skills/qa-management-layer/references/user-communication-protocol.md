@@ -7,7 +7,9 @@
 
 **Purpose:** Define how AI presents workflow progress to users - clear, concise, informative.
 
-**Applies To:** All 11 steps in `/qa-workflow` and `/qa-workflow-dev`
+**Applies To:** All 5 steps in `/qa-workflow` and `/qa-workflow-dev`
+
+**NOTE:** Updated for NEW 5-step workflow (2026-01-22). Old 11-step workflow archived.
 
 ---
 
@@ -18,7 +20,7 @@
 | **Signal, Not Noise** | Show 2-4 key data points per step, not full JSON |
 | **Visual Progress** | Use ✓ (complete), ⚙ (in progress), ✗ (failed) |
 | **Hide Implementation** | Never show "Gate: PASS" or internal validation details |
-| **Context Awareness** | User should see where they are in 11-step flow |
+| **Context Awareness** | User should see where they are in 5-step flow |
 
 ---
 
