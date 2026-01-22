@@ -1,12 +1,13 @@
 # Session State - 2026-01-22
 
 ## Current Phase
-**Phase:** Clean Break - All Updates Complete
-**Status:** Ready for Step 4 Development
+**Phase:** TDD Implementation - Validator-Driven Development
+**Status:** Building Step Validator (Phase 0)
 
 ## What We're Working On
-**Active Task:** Archive verification and critical fixes
-**Task Status:** Complete - All issues resolved, slash commands updated
+**Active Task:** Create step validation script for TDD workflow
+**Task Status:** In Progress - Building validator framework
+**Approach:** TDD (Test-Driven Development) - Run each step, validate 6 criteria, fix what breaks
 
 ## Progress This Session
 
@@ -27,6 +28,21 @@
 - [x] Finalized data model decisions (5 components implemented, 3 rejected)
 - [x] Updated design discussion document with data model
 - [x] Updated PRD with complete JSON schema examples
+
+## Decision Log This Session
+
+### Key Decisions
+1. **Data Model Finalized** - 5 components implemented, 3 rejected (audit log, workflow state, reports)
+2. **TDD Approach Adopted** - Rejected waterfall planning, using validator-driven development
+3. **4D Divide Skipped** - No upfront task generation, tasks emerge from validation failures
+
+### Approach Comparison
+| Aspect | Waterfall (Rejected) | TDD (Adopted) |
+|--------|---------------------|---------------|
+| Discovery | Hypothetical design gaps | Real validation failures |
+| Speed | Slow (design everything first) | Fast (fix only what breaks) |
+| Confidence | Low (untested assumptions) | High (validated at each step) |
+| Wasted Work | High (build unused features) | Zero (only build what's needed) |
 
 ## Files Changed This Session
 
@@ -59,7 +75,36 @@
 
 ## Context for Next Session
 
-**Resume Point:** Begin implementing data model (StateManager updates, audit trail enhancements)
+**Resume Point:** Building step validator (Phase 0 of TDD approach)
+
+**TDD Approach Decision (2026-01-22):**
+- **REJECTED:** 4D Divide (waterfall task planning)
+- **ADOPTED:** TDD workflow - run step, validate, fix, repeat
+- **Rationale:** Discover REAL problems via validation, not hypothetical design gaps
+
+**6 Validation Criteria Per Step:**
+1. **State (Persistence)** - workflow_state.json updated with correct fields
+2. **Audit (Observability)** - audit_log.json contains gate entry
+3. **Transcript (Human-Readable)** - workflow_transcript.md updated
+4. **Gate Validation (Quality)** - Gate returns pass/fail/NEEDS_RETRY
+5. **Protocol Adherence (AI)** - AI follows step-XX.md guidance
+6. **Step Flow (Integrity)** - Can proceed to next step if pass, blocked if fail
+
+**TDD Cycle:**
+```
+Phase 0: Build validator framework (file existence, JSON validity, basic structure)
+Phase 1: Run Step 1 → Validate → Fix → Repeat until 6/6 pass
+Phase 2: Run Step 2 → Validate → Fix → Repeat until 6/6 pass
+Phase 3-5: Steps 3-5 (same pattern)
+```
+
+**Validator Bootstrap Process:**
+1. Create minimal validator (file existence, JSON validity)
+2. Test on existing helios1 data (known good)
+3. Test on intentionally broken data (known bad)
+4. Run Step 1 and see actual output
+5. Improve validator based on real requirements
+6. Repeat until solid
 
 **What's Complete:**
 1. ✅ Archive verification (3 critical issues found)
@@ -123,16 +168,32 @@
 - Last commit: `9e968db` - "docs: Update CLAUDE.md for 5-step workflow"
 - Working directory: CLEAN (except untracked files from previous work)
 
-**Next Actions (Priority Order):**
-1. Implement data model in code:
-   - Update StateManager to support construction_journal, test_execution_history, metrics
-   - Update audit trail writer to capture HITL interactions, hook interventions
-   - Create `tests/_reports/<run_id>/` directory structure
-   - Write unit tests for StateManager and audit writer enhancements
-2. Create NEW Step 4 protocol (collaborative construction)
-3. Create NEW Step 5 protocol (done/execution)
-4. Implement HITL system (trigger on blockers, timeout, DD violations)
-5. Implement Hooks (timeout monitoring, rambling detection)
+**Next Actions (TDD Approach - No Waterfall Planning):**
+
+**Phase 0: Build Validator (CURRENT)**
+- [ ] Create `mcp_server/_dev_tests/validate_step.py`
+- [ ] Implement 6 validation checks (minimal level - file existence, JSON validity)
+- [ ] Test validator on known-good data (helios1 audit log)
+- [ ] Test validator on known-bad data (intentionally broken)
+- [ ] Confirm validator framework is solid
+
+**Phase 1: Step 1 TDD Cycle**
+- [ ] Run `/qa-workflow-dev` Step 1
+- [ ] Run validator on Step 1 output
+- [ ] Fix what fails (discover actual requirements, not hypothetical)
+- [ ] Improve validator based on real output
+- [ ] Repeat until Step 1 passes 6/6 validations
+
+**Phase 2-5: Steps 2-5 (Same Pattern)**
+- [ ] Each step: Run → Validate → Fix → Repeat
+- [ ] Only move to Step N+1 when Step N passes all 6 validations
+- [ ] Refactor existing code (StateManager, AuditLogger, Gates) as needed
+- [ ] Add missing pieces (TranscriptWriter) as discovered
+
+**NOT DOING (Waterfall Approaches):**
+- ❌ 4D Divide (generate task list upfront)
+- ❌ Design all components before implementation
+- ❌ Plan hypothetical features before discovering real needs
 
 ## Summary of Changes
 
@@ -150,9 +211,14 @@
 
 **Result:** Complete clean break achieved. All references to old workflow updated or archived. Data model finalized and documented.
 
+## Architecture References
+- **execution_patterns.md** - 6-component defense-in-depth architecture (Protocols, Gates, Hooks, Checkpointing, Audit, HITL)
+- **Assembly Line Pattern** - Sequential pipeline with metadata contracts (our 5-step workflow)
+- **Existing Code** - StateManager, AuditLogger, BaseGate, 7 active gates, 2 hooks (all working, refactor as needed)
+
 ## Token Usage
-- This session: ~88K tokens used (44% of 200K budget)
-- Remaining: ~112K tokens (56%)
+- This session: ~110K tokens used (55% of 200K budget)
+- Remaining: ~90K tokens (45%)
 
 ---
 
