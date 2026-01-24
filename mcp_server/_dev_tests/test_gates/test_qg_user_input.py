@@ -21,6 +21,18 @@ from unittest.mock import patch, MagicMock
 from tools.gates.qg_user_input import QGUserInput
 
 
+@pytest.fixture(autouse=True)
+def mock_transcript_check():
+    """
+    Mock BaseGate._check_transcript_written to skip transcript validation.
+
+    Step 1 v4.0 requires transcript to exist before returning pass.
+    Unit tests focus on validation logic, not transcript infrastructure.
+    """
+    with patch('tools.gates.base_gate.BaseGate._check_transcript_written', return_value=None):
+        yield
+
+
 class TestValidPersona:
     """
     Test suite for persona validation (DD-01).
@@ -263,7 +275,7 @@ class TestStateSaved:
         }
 
         # Act
-        with patch('tools.gates.qg_user_input.StateManager') as MockStateManager:
+        with patch('utils.state_manager.StateManager') as MockStateManager:
             mock_instance = MagicMock()
             MockStateManager.return_value = mock_instance
             result = QGUserInput.validate(input_data)
@@ -272,7 +284,7 @@ class TestStateSaved:
             assert result["status"] == "pass", "Validation should pass"
             mock_instance.save.assert_called_once()
             call_kwargs = mock_instance.save.call_args.kwargs
-            assert call_kwargs["step"] == 2, "Should save to step 2"
+            assert call_kwargs["step"] == 1, "Should save to step 1"
             assert "persona" in call_kwargs["data"], "Should include persona"
             assert "URL" in call_kwargs["data"], "Should include URL"
             assert "role_name" in call_kwargs["data"], "Should include role_name"
@@ -415,7 +427,7 @@ class TestInvalidInputs:
         }
 
         # Act
-        with patch('tools.gates.qg_user_input.StateManager') as MockStateManager:
+        with patch('utils.state_manager.StateManager') as MockStateManager:
             mock_instance = MagicMock()
             MockStateManager.return_value = mock_instance
             result = QGUserInput.validate(input_data)
@@ -808,7 +820,7 @@ class TestEnvironmentDetection:
         }
 
         # Act
-        with patch('tools.gates.qg_user_input.StateManager') as MockStateManager:
+        with patch('utils.state_manager.StateManager') as MockStateManager:
             mock_instance = MagicMock()
             MockStateManager.return_value = mock_instance
             result = QGUserInput.validate(input_data)
@@ -840,7 +852,7 @@ class TestEnvironmentDetection:
         }
 
         # Act
-        with patch('tools.gates.qg_user_input.StateManager') as MockStateManager:
+        with patch('utils.state_manager.StateManager') as MockStateManager:
             mock_instance = MagicMock()
             MockStateManager.return_value = mock_instance
             result = QGUserInput.validate(input_data)
@@ -944,7 +956,7 @@ class TestEnvironmentDetection:
         }
 
         # Act
-        with patch('tools.gates.qg_user_input.StateManager') as MockStateManager:
+        with patch('utils.state_manager.StateManager') as MockStateManager:
             mock_instance = MagicMock()
             MockStateManager.return_value = mock_instance
             result = QGUserInput.validate(input_data)
