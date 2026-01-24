@@ -551,9 +551,9 @@ class TestEdgeCases:
 
 class TestErrorHandling:
     """
-    Test suite for error handling and fix hints.
+    Test suite for error handling and teach guidance.
 
-    Tests organized by: error response format
+    Tests organized by: error response format and teach quality
     """
 
     @pytest.mark.unit
@@ -610,6 +610,99 @@ class TestErrorHandling:
         assert result["status"] == "fail", "Should fail"
         assert "teach" in result, "Should include teach"
         assert "url" in result["teach"].lower(), "teach should mention URL"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_user_input
+    def test_teach_quality_includes_examples(self):
+        """
+        P1: Verify teach includes examples for guidance.
+
+        AAA Pattern:
+        1. Arrange - Create input with invalid persona
+        2. Act - Call qg_user_input.validate()
+        3. Assert - teach includes example values
+        """
+        # Arrange
+        input_data = {
+            "persona": "",  # Invalid - empty
+            "URL": "http://www.automationpractice.pl",
+            "role_name": "Guest",
+            "domain": "catalog",
+            "raw_requirement": "Browse products"
+        }
+
+        # Act
+        result = QGUserInput.validate(input_data)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "teach" in result
+        # Verify example is present
+        assert "example" in result["teach"].lower(), \
+            "teach should include example for guidance"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_user_input
+    def test_teach_quality_is_actionable(self):
+        """
+        P1: Verify teach provides actionable guidance (tells user what to do).
+
+        AAA Pattern:
+        1. Arrange - Create input with invalid URL
+        2. Act - Call qg_user_input.validate()
+        3. Assert - teach tells user what format is required
+        """
+        # Arrange
+        input_data = {
+            "persona": "guest",
+            "URL": "not-a-url",
+            "role_name": "Guest",
+            "domain": "catalog",
+            "raw_requirement": "Browse products"
+        }
+
+        # Act
+        result = QGUserInput.validate(input_data)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "teach" in result
+        # Verify actionable guidance (must be HTTP/HTTPS)
+        assert any(keyword in result["teach"].lower() for keyword in ["must", "should", "http"]), \
+            "teach should provide actionable guidance about what is required"
+
+    @pytest.mark.unit
+    @pytest.mark.qg_user_input
+    def test_teach_quality_multiple_fields(self):
+        """
+        P1: Verify teach for multiple missing fields is comprehensive.
+
+        AAA Pattern:
+        1. Arrange - Create input missing multiple fields
+        2. Act - Call qg_user_input.validate()
+        3. Assert - teach mentions all missing fields
+        """
+        # Arrange
+        input_data = {
+            # Missing: persona, URL, role_name, workflow, raw_requirement
+        }
+
+        # Act
+        result = QGUserInput.validate(input_data)
+
+        # Assert
+        assert result["status"] == "fail"
+        assert "teach" in result
+
+        # Verify all required fields mentioned
+        teach_lower = result["teach"].lower()
+        assert "persona" in teach_lower, "Should mention persona"
+        assert "url" in teach_lower, "Should mention URL"
+        assert "role_name" in teach_lower or "role" in teach_lower, "Should mention role_name"
+        # Note: workflow mentioned as "domain" for backwards compatibility
+        assert "workflow" in teach_lower or "domain" in teach_lower, "Should mention workflow/domain"
+        assert "raw_requirement" in teach_lower or "requirement" in teach_lower, \
+            "Should mention raw_requirement"
 
 
 class TestWorkflowValidation:
