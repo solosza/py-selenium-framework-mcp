@@ -30,3 +30,10 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "qg_user_input: Step 2 user input gate tests")
     config.addinivalue_line("markers", "qg_ai_processing: Step 3 AI processing gate tests")
     config.addinivalue_line("markers", "qg_test_scenarios: Step 4 test scenarios gate tests")
+
+    # Component markers - Step 1 v4.0
+    config.addinivalue_line("markers", "transcript: TranscriptWriter component tests")
+    config.addinivalue_line("markers", "layer1: Test pyramid layer 1 (basic operations)")
+    config.addinivalue_line("markers", "layer2: Test pyramid layer 2 (formatting/edge cases)")
+    config.addinivalue_line("markers", "layer3: Test pyramid layer 3 (integration)")
+    config.addinivalue_line("markers", "layer4: Test pyramid layer 4 (production failures)")

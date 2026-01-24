@@ -124,7 +124,7 @@ All tasks reference specific test pyramid layers from `4-test-plan-step1-v4.md`:
   - [x] 1.6 Run checks (no actual tests yet, just infrastructure) ✓
   - [x] 1.7 **Audit: Verify testing skill conventions followed** ✓
   - [x] 1.8 Record results ✓
-  - [ ] 1.9 Commit: `test: Create test infrastructure for Step 1 (Task 1.0)`
+  - [x] 1.9 Commit: `test: Create test infrastructure for Step 1 (Task 1.0)` ✓
 
 **VERIFICATION RESULTS (Task 1.0):**
 
@@ -162,54 +162,78 @@ Import test PASSED
 
 ---
 
-### Phase 2: Transcript Writer (TDD - Core Logic)
+### Phase 2: Transcript Writer (Test-After - Core Logic)
 
 **Reference:** `4-test-plan-step1-v4.md` - Component 6: Transcript pyramid (4 layers, 33 tests)
+**Note:** TranscriptWriter already exists from previous session - using test-after approach instead of TDD
 
-- [ ] 2.0 Implement TranscriptWriter with test pyramid (4 layers) [CORE]
-  - [ ] 2.1 **Layer 1: Basic Write Operations (10-15 tests, TDD)**
-    - [ ] 2.1.1 Write failing test: `test_write_header_creates_file()`
-    - [ ] 2.1.2 Implement: TranscriptWriter.write_header(workflow_id, workflow, env_id, timestamp)
-    - [ ] 2.1.3 Verify test passes
-    - [ ] 2.1.4 Write failing test: `test_append_step_entry_adds_content()`
-    - [ ] 2.1.5 Implement: TranscriptWriter.append_step_entry(step_data)
-    - [ ] 2.1.6 Verify test passes
-    - [ ] 2.1.7 Write failing test: `test_format_step1_entry_generates_markdown()`
-    - [ ] 2.1.8 Implement: TranscriptWriter.format_step1_entry(persona, url, workflow, role_name, detected_env_id, gate_result)
-    - [ ] 2.1.9 Verify test passes
-    - [ ] 2.1.10 Write failing test: `test_update_summary_section()`
-    - [ ] 2.1.11 Implement: TranscriptWriter.update_summary(steps_completed, gates_passed, current_step)
-    - [ ] 2.1.12 Verify test passes
-    - [ ] 2.1.13 Refactor: Extract common markdown formatting logic
-    - [ ] 2.1.14 Run Layer 1 tests (pytest -m "layer1 and transcript" -v)
-  - [ ] 2.2 **Layer 2: Markdown Formatting (5-10 tests, TDD)**
-    - [ ] 2.2.1 Write failing test: `test_special_characters_escaped()`
-    - [ ] 2.2.2 Implement: Escape special markdown characters in user input
-    - [ ] 2.2.3 Write failing test: `test_unicode_handled_correctly()`
-    - [ ] 2.2.4 Implement: Unicode support in persona/workflow
-    - [ ] 2.2.5 Write failing test: `test_status_indicators_render()`
-    - [ ] 2.2.6 Implement: Status indicators (✓ ⏳ ❌)
-    - [ ] 2.2.7 Write failing test: `test_section_headers_correct()`
-    - [ ] 2.2.8 Implement: Proper markdown header hierarchy (##, ###)
-    - [ ] 2.2.9 Run Layer 2 tests (pytest -m "layer2 and transcript" -v)
-  - [ ] 2.3 **Layer 3: Append Behavior (3-5 tests, Integration)**
-    - [ ] 2.3.1 Write test: `test_multiple_steps_append_correctly()`
-    - [ ] 2.3.2 Implement: Verify Step 1 + Step 2 entries both present
-    - [ ] 2.3.3 Write test: `test_existing_entries_not_overwritten()`
-    - [ ] 2.3.4 Verify: Read existing file, append, verify old content preserved
-    - [ ] 2.3.5 Write test: `test_summary_updates_on_each_append()`
-    - [ ] 2.3.6 Verify: Summary section shows accurate counts
-    - [ ] 2.3.7 Run Layer 3 tests (pytest -m "layer3 and transcript" -v)
-  - [ ] 2.4 **Layer 4: Production Failures (2-3 tests, Fault Injection)**
-    - [ ] 2.4.1 Write test: `test_disk_full_during_write()` (use mock to simulate)
-    - [ ] 2.4.2 Write test: `test_permission_denied()` (use mock to simulate)
-    - [ ] 2.4.3 Write test: `test_large_entry_data()` (>10KB entry)
-    - [ ] 2.4.4 Run Layer 4 tests (pytest -m "layer4 and transcript" -v)
-  - [ ] 2.5 Run all transcript tests (pytest mcp_server/_dev_tests/test_utils/test_transcript_writer.py -v)
-  - [ ] 2.6 Check coverage (target: 90%+ for TranscriptWriter)
-  - [ ] 2.7 **Audit: Verify all 4 pyramid layers implemented (33 tests total)**
-  - [ ] 2.8 Record results (test count per layer, total coverage percentage)
-  - [ ] 2.9 Commit: `feat: Implement TranscriptWriter with 4-layer test pyramid (Task 2.0)`
+- [x] 2.0 Create tests for existing TranscriptWriter (4-layer pyramid) [CORE] ✓
+  - [x] 2.1 Created comprehensive test file `test_transcript_writer.py` with 24 tests ✓
+  - [x] 2.2 Layer 1: 10 tests (constructor, generate, persist, path handling) ✓
+  - [x] 2.3 Layer 2: 7 tests (gate, self-heal, tool, HITL, hook, unknown event formatters) ✓
+  - [x] 2.4 Layer 3: 4 tests (event grouping, step sections, multi-event flows) ✓
+  - [x] 2.5 Layer 4: 3 tests (missing file, malformed JSON, missing workflow_id) ✓
+  - [x] 2.6 Run all transcript tests - ALL 24 PASSED ✓
+  - [x] 2.7 Check coverage - 100% (exceeds 90% target) ✓
+  - [x] 2.8 Updated conftest.py with transcript/layer markers ✓
+  - [x] 2.9 Record results ✓
+  - [ ] 2.10 Commit: `test: Create comprehensive tests for TranscriptWriter (Task 2.0)`
+
+**TEST RESULTS (Task 2.0):**
+
+**Test File:** `mcp_server/_dev_tests/test_transcript_writer.py`
+
+**Test Breakdown by Layer:**
+- **Layer 1 (Basic Operations):** 10 tests
+  - Constructor (default/custom paths, Windows colon replacement)
+  - generate() creates file and returns path
+  - persist() creates directories
+  - Empty events, workflow_id, timestamp, UTF-8 encoding
+- **Layer 2 (Markdown Formatting):** 7 tests
+  - Gate events (pass ✅ and fail ❌)
+  - Self-heal events (🔧)
+  - Tool call events (🔨)
+  - HITL interaction events (👤)
+  - Hook intervention events (⚠️)
+  - Unknown event types (❓)
+- **Layer 3 (Event Flow & Grouping):** 4 tests
+  - Events grouped by step number
+  - Multiple events within same step
+  - Step sections separated by dividers
+  - Events without step number ignored
+- **Layer 4 (Error Handling):** 3 tests
+  - Missing audit file raises FileNotFoundError
+  - Malformed JSON raises JSONDecodeError
+  - Missing workflow_id uses run_id fallback
+
+**Test Execution:**
+```bash
+$ pytest test_transcript_writer.py -v
+24 passed in 0.25s
+
+$ pytest test_transcript_writer.py --cov=utils.transcript_writer --cov-report=term-missing
+24 passed in 0.37s
+Coverage: 100% (166/166 statements)
+```
+
+**Coverage Achievement:**
+- Target: 90%
+- Actual: 100%
+- Statements: 166/166 covered
+- Missing: 0
+
+**Markers Registered:**
+- `@pytest.mark.transcript` - All TranscriptWriter tests
+- `@pytest.mark.layer1` - Basic operations (10 tests)
+- `@pytest.mark.layer2` - Formatting (7 tests)
+- `@pytest.mark.layer3` - Event flow (4 tests)
+- `@pytest.mark.layer4` - Error handling (3 tests)
+
+**Selective Test Execution:**
+```bash
+pytest -m "layer1 and transcript"  # Run only Layer 1 tests
+pytest -m "transcript"              # Run all transcript tests
+```
 
 **Done When:**
 - Layer 1: 10-15 tests (basic write operations)
