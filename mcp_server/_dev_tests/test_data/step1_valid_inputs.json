@@ -1,0 +1,69 @@
+{
+  "description": "Valid inputs for Step 1 (User Input) gate testing",
+  "test_cases": [
+    {
+      "id": "valid_auth_login",
+      "persona": "As a registered user",
+      "url": "http://www.automationpractice.pl/index.php",
+      "role_name": "RegisteredUser",
+      "workflow": "auth",
+      "raw_requirement": "As a registered user, I want to log in to my account at http://www.automationpractice.pl/index.php"
+    },
+    {
+      "id": "valid_guest_browse",
+      "persona": "As a guest visitor",
+      "url": "https://www.automationpractice.pl/index.php?controller=category",
+      "role_name": "GuestVisitor",
+      "workflow": "catalog",
+      "raw_requirement": "As a guest visitor, I want to browse products in the Women category"
+    },
+    {
+      "id": "valid_customer_checkout",
+      "persona": "As an authenticated customer",
+      "url": "https://example.com/checkout",
+      "role_name": "AuthenticatedCustomer",
+      "workflow": "checkout",
+      "raw_requirement": "As an authenticated customer, I want to complete a purchase with my saved payment method"
+    },
+    {
+      "id": "valid_admin_workflow",
+      "persona": "As a system administrator",
+      "url": "http://admin.example.com/dashboard",
+      "role_name": "SystemAdministrator",
+      "workflow": "admin",
+      "raw_requirement": "As a system administrator, I want to manage user accounts"
+    },
+    {
+      "id": "valid_https_url",
+      "persona": "As a new user",
+      "url": "https://secure.example.com/register",
+      "role_name": "NewUser",
+      "workflow": "registration",
+      "raw_requirement": "As a new user, I want to create an account on the secure site"
+    },
+    {
+      "id": "valid_custom_workflow",
+      "persona": "As a premium member",
+      "url": "http://www.example.com/premium",
+      "role_name": "PremiumMember",
+      "workflow": "premium_features",
+      "raw_requirement": "As a premium member, I want to access exclusive content"
+    },
+    {
+      "id": "valid_with_query_params",
+      "persona": "As a shopper",
+      "url": "http://shop.example.com/products?category=electronics&sort=price",
+      "role_name": "Shopper",
+      "workflow": "catalog",
+      "raw_requirement": "As a shopper, I want to filter products by category and price"
+    },
+    {
+      "id": "valid_with_fragment",
+      "persona": "As a reader",
+      "url": "https://blog.example.com/post#comments",
+      "role_name": "Reader",
+      "workflow": "social",
+      "raw_requirement": "As a reader, I want to view and post comments on blog articles"
+    }
+  ]
+}

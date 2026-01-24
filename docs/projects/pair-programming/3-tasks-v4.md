@@ -60,7 +60,7 @@ All tasks reference specific test pyramid layers from `4-test-plan-step1-v4.md`:
   - [x] 0.4 Verify `StateManager` exists and implements per-run isolation ✓
   - [x] 0.5 Verify PostToolUse hook exists and logs gate calls ✓
   - [x] 0.6 Document findings: what exists, what needs creation, what needs updates ✓
-  - [ ] 0.7 Commit: `docs: Verify Step 1 existing components (Task 0.0)`
+  - [x] 0.7 Commit: `docs: Verify Step 1 existing components (Task 0.0)` ✓
 
 **ASSESSMENT FINDINGS (Task 0.0):**
 
@@ -115,16 +115,50 @@ All tasks reference specific test pyramid layers from `4-test-plan-step1-v4.md`:
 
 ### Phase 1: Test Infrastructure (TDD Setup)
 
-- [ ] 1.0 Create test infrastructure for Step 1 components [GLUE]
-  - [ ] 1.1 Create `mcp_server/_dev_tests/test_integration/` directory if not exists
-  - [ ] 1.2 Create `mcp_server/_dev_tests/test_utils/` directory if not exists
-  - [ ] 1.3 Create test fixtures for Step 1 (valid/invalid personas, URLs, workflows)
-  - [ ] 1.4 Create test data files: `test_data/step1_valid_inputs.json`, `test_data/step1_invalid_inputs.json`
-  - [ ] 1.5 Create mock environment_config.json for testing (known/unknown domains)
-  - [ ] 1.6 Run checks (no actual tests yet, just infrastructure)
-  - [ ] 1.7 **Audit: Verify testing skill conventions followed**
-  - [ ] 1.8 Record results
+- [x] 1.0 Create test infrastructure for Step 1 components [GLUE] ✓
+  - [x] 1.1 Create `mcp_server/_dev_tests/test_integration/` directory if not exists ✓
+  - [x] 1.2 Create `mcp_server/_dev_tests/test_utils/` directory if not exists ✓
+  - [x] 1.3 Create test fixtures for Step 1 (valid/invalid personas, URLs, workflows) ✓
+  - [x] 1.4 Create test data files: `test_data/step1_valid_inputs.json`, `test_data/step1_invalid_inputs.json` ✓
+  - [x] 1.5 Create mock environment_config.json for testing (known/unknown domains) ✓
+  - [x] 1.6 Run checks (no actual tests yet, just infrastructure) ✓
+  - [x] 1.7 **Audit: Verify testing skill conventions followed** ✓
+  - [x] 1.8 Record results ✓
   - [ ] 1.9 Commit: `test: Create test infrastructure for Step 1 (Task 1.0)`
+
+**VERIFICATION RESULTS (Task 1.0):**
+
+**Directories Created:**
+- `mcp_server/_dev_tests/test_integration/` - Integration test location (with `__init__.py`)
+- `mcp_server/_dev_tests/test_utils/` - Test utilities and fixtures (with `__init__.py`)
+
+**Test Data Files Created:**
+- `test_data/step1_valid_inputs.json` - 8 valid test cases (auth, catalog, checkout, admin, registration, premium, social workflows)
+- `test_data/step1_invalid_inputs.json` - 16 invalid/edge case scenarios (missing fields, malformed URLs, invalid formats, long values)
+- `test_data/mock_environment_config.json` - 5 known environments (automationpractice, helios1, parabank_test, test_env_1, test_env_2)
+
+**Test Fixtures Created:**
+- `test_utils/test_fixtures.py` - Comprehensive fixture module with:
+  - Data loaders: `load_valid_inputs()`, `load_invalid_inputs()`, `load_mock_environment_config()`
+  - Lookup helpers: `get_valid_input_by_id()`, `get_invalid_input_by_id()`, `get_known_environment_url()`
+  - Builders: `build_valid_input()`, `build_invalid_input()`
+  - Environment checker: `is_known_environment()`
+
+**Import Verification:**
+```bash
+$ python -c "from test_utils import load_valid_inputs, load_invalid_inputs, load_mock_environment_config; ..."
+Valid cases: 8
+Invalid cases: 16
+Mock environments: 5
+Import test PASSED
+```
+
+**Testing Skill Conventions:**
+- ✅ Centralized reports pattern (Pattern A)
+- ✅ Test data in `test_data/` subdirectory
+- ✅ Test utilities in dedicated package
+- ✅ Follows JSON data format for fixtures
+- ✅ Coverage targets defined in test plan (95% gates, 90% transcript/state/audit, 85% hook, 80% protocol)
 
 ---
 

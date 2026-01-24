@@ -1,0 +1,149 @@
+{
+  "description": "Invalid inputs for Step 1 (User Input) gate testing - edge cases and error conditions",
+  "test_cases": [
+    {
+      "id": "invalid_missing_persona",
+      "persona": "",
+      "url": "http://www.example.com",
+      "role_name": "SomeRole",
+      "workflow": "auth",
+      "raw_requirement": "I want to log in",
+      "expected_error": "persona is required"
+    },
+    {
+      "id": "invalid_missing_as_prefix",
+      "persona": "a registered user",
+      "url": "http://www.example.com",
+      "role_name": "RegisteredUser",
+      "workflow": "auth",
+      "raw_requirement": "a registered user, I want to log in",
+      "expected_error": "persona must start with 'As a' or 'As an'"
+    },
+    {
+      "id": "invalid_missing_url",
+      "persona": "As a user",
+      "url": "",
+      "role_name": "User",
+      "workflow": "auth",
+      "raw_requirement": "As a user, I want to log in",
+      "expected_error": "url is required"
+    },
+    {
+      "id": "invalid_malformed_url_no_protocol",
+      "persona": "As a user",
+      "url": "www.example.com",
+      "role_name": "User",
+      "workflow": "auth",
+      "raw_requirement": "As a user, I want to visit the site",
+      "expected_error": "url must start with http:// or https://"
+    },
+    {
+      "id": "invalid_url_with_spaces",
+      "persona": "As a user",
+      "url": "http://www.example.com/path with spaces",
+      "role_name": "User",
+      "workflow": "catalog",
+      "raw_requirement": "As a user, I want to browse products",
+      "expected_error": "url contains invalid characters"
+    },
+    {
+      "id": "invalid_missing_role_name",
+      "persona": "As a shopper",
+      "url": "http://www.example.com",
+      "role_name": "",
+      "workflow": "catalog",
+      "raw_requirement": "As a shopper, I want to browse products",
+      "expected_error": "role_name is required"
+    },
+    {
+      "id": "invalid_role_name_lowercase",
+      "persona": "As a shopper",
+      "url": "http://www.example.com",
+      "role_name": "shopper",
+      "workflow": "catalog",
+      "raw_requirement": "As a shopper, I want to browse products",
+      "expected_error": "role_name must be PascalCase"
+    },
+    {
+      "id": "invalid_role_name_with_spaces",
+      "persona": "As a shopper",
+      "url": "http://www.example.com",
+      "role_name": "Premium Shopper",
+      "workflow": "catalog",
+      "raw_requirement": "As a shopper, I want to browse premium products",
+      "expected_error": "role_name must be PascalCase (no spaces)"
+    },
+    {
+      "id": "invalid_role_name_with_special_chars",
+      "persona": "As a user",
+      "url": "http://www.example.com",
+      "role_name": "User-Admin",
+      "workflow": "admin",
+      "raw_requirement": "As a user, I want to access admin features",
+      "expected_error": "role_name must be PascalCase (alphanumeric only)"
+    },
+    {
+      "id": "invalid_missing_workflow",
+      "persona": "As a user",
+      "url": "http://www.example.com",
+      "role_name": "User",
+      "workflow": "",
+      "raw_requirement": "As a user, I want to do something",
+      "expected_error": "workflow is required"
+    },
+    {
+      "id": "invalid_workflow_with_spaces",
+      "persona": "As a user",
+      "url": "http://www.example.com",
+      "role_name": "User",
+      "workflow": "user management",
+      "raw_requirement": "As a user, I want to manage my account",
+      "expected_error": "workflow must be lowercase alphanumeric with underscores"
+    },
+    {
+      "id": "invalid_workflow_uppercase",
+      "persona": "As a user",
+      "url": "http://www.example.com",
+      "role_name": "User",
+      "workflow": "Auth",
+      "raw_requirement": "As a user, I want to authenticate",
+      "expected_error": "workflow must be lowercase"
+    },
+    {
+      "id": "invalid_missing_raw_requirement",
+      "persona": "As a user",
+      "url": "http://www.example.com",
+      "role_name": "User",
+      "workflow": "auth",
+      "raw_requirement": "",
+      "expected_error": "raw_requirement is required"
+    },
+    {
+      "id": "edge_case_very_long_persona",
+      "persona": "As a super premium enterprise level administrator with full access rights and elevated privileges",
+      "url": "http://www.example.com",
+      "role_name": "SuperPremiumEnterpriseAdministrator",
+      "workflow": "admin",
+      "raw_requirement": "As a super premium enterprise level administrator, I want to manage everything",
+      "expected_behavior": "Should handle long but valid persona"
+    },
+    {
+      "id": "edge_case_very_long_url",
+      "persona": "As a user",
+      "url": "http://www.example.com/very/long/path/with/many/segments/that/goes/on/and/on/and/on/product/12345?filter=name&sort=asc&page=10&limit=50#section",
+      "role_name": "User",
+      "workflow": "catalog",
+      "raw_requirement": "As a user, I want to access a specific product page",
+      "expected_behavior": "Should handle long but valid URL"
+    },
+    {
+      "id": "edge_case_numeric_in_role_name",
+      "persona": "As a tier 2 member",
+      "url": "http://www.example.com",
+      "role_name": "Tier2Member",
+      "workflow": "membership",
+      "raw_requirement": "As a tier 2 member, I want to access tier 2 benefits",
+      "expected_behavior": "Should allow numbers in PascalCase role_name"
+    }
+  ]
+}
