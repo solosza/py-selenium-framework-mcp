@@ -33,6 +33,11 @@ def pytest_configure(config):
 
     # Component markers - Step 1 v4.0
     config.addinivalue_line("markers", "transcript: TranscriptWriter component tests")
+    config.addinivalue_line("markers", "protocol: Protocol adherence tests")
+    config.addinivalue_line("markers", "gate: Gate validation tests")
+    config.addinivalue_line("markers", "state: StateManager tests")
+    config.addinivalue_line("markers", "audit: AuditLogger tests")
+    config.addinivalue_line("markers", "hook: PostToolUse hook tests")
     config.addinivalue_line("markers", "layer1: Test pyramid layer 1 (basic operations)")
     config.addinivalue_line("markers", "layer2: Test pyramid layer 2 (formatting/edge cases)")
     config.addinivalue_line("markers", "layer3: Test pyramid layer 3 (integration)")
