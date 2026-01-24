@@ -1,10 +1,10 @@
-# Session State - 2026-01-24 Late Evening
+# Session State - 2026-01-24 Late Evening (Pre-Compaction Save)
 
 ---
 
 ## Current Phase
 **Phase:** Implementation - Step 1 User Input (7-Step Workflow v4.0)
-**Status:** Tasks 0.0-6.0 COMPLETE - Gold Standard Testing Achieved
+**Status:** Tasks 0.0-6.0 COMPLETE - Awaiting User Production Validation
 
 ---
 
@@ -124,6 +124,32 @@
 
 ---
 
-**Last Updated:** 2026-01-24 Late Evening
-**Session Complete:** Task 6.0 - Gold Standard Testing Achieved
-**Resume Point:** Task 7.0 (Documentation) or Step 2 Design
+---
+
+## IMMEDIATE NEXT: Production Validation (User Running)
+
+**User is running:**
+1. Execute Step 1 via MCP (`/qa-workflow` or `/qa-workflow-dev`)
+2. Stop after Step 1 completes
+3. Get run_id: `tests/_state/.current_run_id`
+4. Run validator:
+   ```bash
+   cd mcp_server/_dev_tests
+   python validate_step.py --run-id <run_id> --step 1
+   ```
+
+**Validator checks 14 points across 6 defense-in-depth layers:**
+- State saved correctly
+- Audit log created with gate event
+- Transcript generated in `_reports/`
+- Gate returned expected status
+- Protocol adherence
+- Hook fired correctly
+
+**After validation passes:** Task 7.0 (Documentation) or move to Step 2 Design
+
+---
+
+**Last Updated:** 2026-01-24 Late Evening (Pre-Compaction)
+**Status:** Dev tests complete (85 passing), awaiting user production validation
+**Resume Point:** After user runs validator, proceed to Task 7.0 or Step 2
