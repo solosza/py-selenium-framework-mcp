@@ -4,15 +4,13 @@ MCP Server for QA Test Automation Framework
 
 Provides tools following the 4-layer architecture workflow:
 
-ACTIVE TOOLS (5-Step Pair Programming Workflow):
-1. generate_tests_from_user_story - User story → test scenarios (Given-When-Then)
-2. discover_page_elements - Page URL → discovered elements
+ACTIVE TOOLS (4-Step Pair Programming Workflow v3.1):
+1. discover_page_elements - Page URL → discovered elements (Tool 2)
 
 QUALITY GATES (Steps 1-4):
-- qg_preflight (Step 2) - Pre-flight configuration validation
 - qg_user_input (Step 1) - User input validation
+- qg_preflight (Step 2) - Pre-flight configuration validation
 - qg_ai_processing (Step 3) - AI processing validation
-- qg_test_scenarios (Step 4) - Test scenarios validation (PRE+POST)
 - qg_discovered_elements (Step 4) - Discovered elements validation (PRE+POST)
 - qg_discovery_complete (Step 4) - Discovery completion checkpoint
 
@@ -40,16 +38,15 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from mcp.server import Server
 from mcp.types import Tool, TextContent
 
-# Import tool implementations (Tools 1-2 active)
-from tools.tool_01_generate_tests_from_user_story import generate_tests_from_user_story
+# Import tool implementations (Tool 2 active)
 from tools.tool_02_discover_page_elements import discover_elements as discover_page_elements
-# Tools 3-6 archived to _archived/autonomous_workflow_v1/tools/ on 2026-01-22
+# Tools 1, 3-6 archived to _archived/autonomous_workflow_v1/tools/ (2026-01-22, 2026-01-23)
 
 # Import quality gates (Steps 1-4 active)
 from tools.gates.qg_preflight import QGPreflight
 from tools.gates.qg_user_input import QGUserInput
 from tools.gates.qg_ai_processing import QGAIProcessing
-from tools.gates.qg_test_scenarios import QGTestScenarios
+# qg_test_scenarios archived on 2026-01-23 (redundant Tool 1)
 from tools.gates.qg_discovered_elements import QGDiscoveredElements
 from tools.gates.qg_discovery_complete import QGDiscoveryComplete
 # Construction gates archived to _archived/autonomous_workflow_v1/gates/ on 2026-01-22
@@ -97,12 +94,6 @@ async def qg_ai_processing(arguments: dict) -> str:
     return json.dumps(result, indent=2)
 
 
-async def qg_test_scenarios(arguments: dict) -> str:
-    """Step 4: Test scenarios validation (PRE+POST). Requires 'mode' field."""
-    result = QGTestScenarios.validate(arguments)
-    return json.dumps(result, indent=2)
-
-
 async def qg_discovered_elements(arguments: dict) -> str:
     """Step 4: Discovered elements validation (PRE+POST). Requires 'mode' field."""
     result = QGDiscoveredElements.validate(arguments)
@@ -135,27 +126,7 @@ server = Server("qa-automation-framework")
 async def list_available_tools() -> list[Tool]:
     """Register all 11 MCP tools."""
     return [
-        # Phase 1: Requirements Analysis
-        Tool(
-            name="generate_tests_from_user_story",
-            description="Convert user story into test scenarios (Given-When-Then format)",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "user_story": {
-                        "type": "string",
-                        "description": "User story with acceptance criteria"
-                    },
-                    "workflow": {
-                        "type": "string",
-                        "description": "Target workflow/domain (e.g., auth, catalog, cart, checkout, or any custom domain)"
-                    }
-                },
-                "required": ["user_story", "workflow"]
-            }
-        ),
-
-        # Phase 2: Element Discovery
+        # Phase 1: Element Discovery (Tool 2)
         Tool(
             name="discover_page_elements",
             description="Discover interactive elements on page (just-in-time, right before POM generation)",
@@ -266,10 +237,10 @@ async def list_available_tools() -> list[Tool]:
         # Quality Gates (Steps 1-10)
         # =================================================================
 
-        # Step 1: Pre-flight Configuration (POST-only)
+        # Step 2: Pre-flight Configuration (POST-only)
         Tool(
             name="qg_preflight",
-            description="Step 1 quality gate: Validate pre-flight configuration (credential_strategy, test_data_location)",
+            description="Step 2 quality gate: Validate pre-flight configuration (credential_strategy, test_data_location, browser_config, timeout_config)",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -280,9 +251,35 @@ async def list_available_tools() -> list[Tool]:
                     "test_data_location": {
                         "type": "string",
                         "description": "Test data location (e.g., shared, workflow, both, none)"
+                    },
+                    "browser_config": {
+                        "type": "object",
+                        "description": "Browser configuration (e.g., {\"headless\": false})",
+                        "properties": {
+                            "headless": {
+                                "type": "boolean",
+                                "description": "Whether to run browser in headless mode (must be false for pair programming)"
+                            }
+                        },
+                        "required": ["headless"]
+                    },
+                    "timeout_config": {
+                        "type": "object",
+                        "description": "Timeout configuration (e.g., {\"enabled\": true, \"threshold_seconds\": 30})",
+                        "properties": {
+                            "enabled": {
+                                "type": "boolean",
+                                "description": "Whether timeout monitoring is enabled"
+                            },
+                            "threshold_seconds": {
+                                "type": "number",
+                                "description": "Timeout threshold in seconds (required if enabled=true)"
+                            }
+                        },
+                        "required": ["enabled"]
                     }
                 },
-                "required": ["credential_strategy", "test_data_location"]
+                "required": ["credential_strategy", "test_data_location", "browser_config", "timeout_config"]
             }
         ),
 
@@ -344,40 +341,10 @@ async def list_available_tools() -> list[Tool]:
             }
         ),
 
-        # Step 4: Test Scenarios (PRE+POST)
-        Tool(
-            name="qg_test_scenarios",
-            description="Step 4 quality gate: Validate test scenarios (PRE+POST mode). PRE checks Step 3 complete, POST validates scenarios.",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "mode": {
-                        "type": "string",
-                        "description": "Validation mode: PRE (before Tool 1) or POST (after Tool 1)",
-                        "enum": ["PRE", "POST"]
-                    },
-                    "metadata_context": {
-                        "type": "object",
-                        "description": "PRE mode: Context from Step 3 (bdd_scenarios, expected_states, intent)"
-                    },
-                    "workflow": {
-                        "type": "string",
-                        "description": "PRE mode: Target workflow/domain"
-                    },
-                    "test_scenarios": {
-                        "type": "array",
-                        "description": "POST mode: Generated test scenarios from Tool 1",
-                        "items": {"type": "object"}
-                    }
-                },
-                "required": ["mode"]
-            }
-        ),
-
-        # Step 5: Discovered Elements (PRE+POST)
+        # Step 4: Discovered Elements (PRE+POST)
         Tool(
             name="qg_discovered_elements",
-            description="Step 5 quality gate: Validate element discovery (PRE+POST mode). PRE checks Step 4 complete, POST validates elements.",
+            description="Step 4 quality gate: Validate element discovery (PRE+POST mode). PRE checks Step 3 complete, POST validates elements.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -442,8 +409,7 @@ async def call_tool_handler(name: str, arguments: dict) -> list[TextContent]:
 
     # Tool routing (matches tool file numbers)
     handlers = {
-        # Tools 1-2: Active (5-step workflow)
-        "generate_tests_from_user_story": generate_tests_from_user_story,  # Tool 1
+        # Tools: Active (4-step workflow v3.1)
         "discover_page_elements": discover_page_elements,                   # Tool 2
         # Tools 7-11: Planned (stubs)
         "list_tests": list_tests,
@@ -455,8 +421,7 @@ async def call_tool_handler(name: str, arguments: dict) -> list[TextContent]:
         "qg_preflight": qg_preflight,                       # Step 2
         "qg_user_input": qg_user_input,                     # Step 1
         "qg_ai_processing": qg_ai_processing,               # Step 3
-        "qg_test_scenarios": qg_test_scenarios,             # Step 4 (Tool 1)
-        "qg_discovered_elements": qg_discovered_elements,   # Step 4 (Tool 2)
+        "qg_discovered_elements": qg_discovered_elements,   # Step 4
         "qg_discovery_complete": qg_discovery_complete,     # Step 4 (checkpoint)
     }
 

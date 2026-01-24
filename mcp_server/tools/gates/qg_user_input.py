@@ -46,7 +46,7 @@ class QGUserInput(BaseGate):
 
         Returns:
             {"status": "pass"} on success
-            {"status": "fail", "error": "...", "fix_hint": "..."} on failure
+            {"status": "fail", "error": "...", "teach": "..."} on failure
         """
         # Support both 'workflow' and 'domain' (backwards compatibility)
         workflow = input_data.get("workflow") or input_data.get("domain")
@@ -60,7 +60,7 @@ class QGUserInput(BaseGate):
         if missing:
             return cls.fail_response(
                 error=f"Missing required field(s): {', '.join(missing)}",
-                fix_hint=cls._get_fix_hint_for_missing(missing)
+                teach=cls._get_teach_for_missing(missing)
             )
 
         # Validate persona (DD-01) - must be non-empty
@@ -68,7 +68,7 @@ class QGUserInput(BaseGate):
         if not cls._is_valid_persona(persona):
             return cls.fail_response(
                 error="Invalid persona: must be non-empty",
-                fix_hint=cls._get_persona_hint()
+                teach=cls._get_persona_hint()
             )
 
         # Validate URL (DD-02) - must be valid HTTP/HTTPS format
@@ -76,7 +76,7 @@ class QGUserInput(BaseGate):
         if not cls._is_valid_url(url):
             return cls.fail_response(
                 error=f"Invalid URL format: '{url}'",
-                fix_hint=cls._get_url_hint()
+                teach=cls._get_url_hint()
             )
 
         # Validate role_name - must be PascalCase
@@ -84,14 +84,14 @@ class QGUserInput(BaseGate):
         if not cls._is_valid_role_name(role_name):
             return cls.fail_response(
                 error=f"Invalid role_name: '{role_name}' must be PascalCase (e.g., RegisteredUser, GuestUser)",
-                fix_hint=cls._get_role_name_hint()
+                teach=cls._get_role_name_hint()
             )
 
         # Validate workflow - must be non-empty (dynamic, not hardcoded)
         if not cls._is_valid_workflow(workflow):
             return cls.fail_response(
                 error="Invalid workflow: must be non-empty",
-                fix_hint=cls._get_workflow_hint()
+                teach=cls._get_workflow_hint()
             )
 
         # Validate raw_requirement - must be non-empty
@@ -99,7 +99,7 @@ class QGUserInput(BaseGate):
         if not cls._is_valid_raw_requirement(raw_requirement):
             return cls.fail_response(
                 error="Invalid raw_requirement: must be non-empty",
-                fix_hint=cls._get_raw_requirement_hint()
+                teach=cls._get_raw_requirement_hint()
             )
 
         # All valid - detect environment and save state
@@ -111,29 +111,19 @@ class QGUserInput(BaseGate):
         if "needs_retry" in detection_result:
             return detection_result["needs_retry"]
 
-        # Known domain - save state
+        # Known domain - use universal completion pattern
         detected_env_id = detection_result["env_id"]
 
-        audit_logger = cls.get_audit_logger()
-        state_manager = StateManager(run_id=audit_logger.run_id)
-        state_manager.save(step=1, data={
-            "persona": persona,
-            "URL": url,
-            "role_name": role_name,
-            "workflow": workflow,
-            "raw_requirement": raw_requirement,
-            "detected_env_id": detected_env_id
-        })
-
-        return cls.pass_response(
+        return cls.validate_and_pass(
             step=1,
+            step_name="User Input",
             gate_name="qg_user_input",
-            mode="POST",
-            metadata={
+            state_data={
                 "persona": persona,
                 "URL": url,
                 "role_name": role_name,
                 "workflow": workflow,
+                "raw_requirement": raw_requirement,
                 "detected_env_id": detected_env_id
             }
         )
@@ -264,7 +254,7 @@ class QGUserInput(BaseGate):
         }
 
     @staticmethod
-    def _get_fix_hint_for_missing(missing_fields: list) -> str:
+    def _get_teach_for_missing(missing_fields: list) -> str:
         """Get fix hint for missing fields."""
         hints = []
 

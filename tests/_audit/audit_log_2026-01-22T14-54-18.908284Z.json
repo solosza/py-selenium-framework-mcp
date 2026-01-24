@@ -1,0 +1,17 @@
+{
+  "workflow_id": "2026-01-22T14:54:18.908284Z",
+  "events": [
+    {
+      "type": "gate_validation",
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T14:54:18.912787Z",
+      "metadata": {
+        "credential_strategy": "none",
+        "test_data_location": "none"
+      }
+    }
+  ]
+}

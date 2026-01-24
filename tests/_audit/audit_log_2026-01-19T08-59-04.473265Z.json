@@ -1,0 +1,307 @@
+{
+  "run_id": "2026-01-19T08:59:04.473265Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "gate_1"
+    },
+    {
+      "step": 2,
+      "gate": "gate_2"
+    },
+    {
+      "step": 3,
+      "gate": "gate_3"
+    },
+    {
+      "step": 4,
+      "gate": "gate_4"
+    },
+    {
+      "step": 5,
+      "gate": "gate_5"
+    },
+    {
+      "step": 6,
+      "gate": "gate_6"
+    },
+    {
+      "step": 7,
+      "gate": "gate_7"
+    },
+    {
+      "step": 8,
+      "gate": "gate_8"
+    },
+    {
+      "step": 9,
+      "gate": "gate_9"
+    },
+    {
+      "step": 10,
+      "gate": "gate_10"
+    },
+    {
+      "step": 11,
+      "gate": "gate_11"
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:05.766166Z",
+      "metadata": {
+        "workflow_id": "auth",
+        "test_path": "tests/test_example.py",
+        "all_checks_passed": true
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.778966Z",
+      "error": "Missing required parameter: workflow_id"
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.784623Z",
+      "error": "Missing required parameter: test_path"
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.790338Z",
+      "error": "Missing required parameter: test_result"
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.798385Z",
+      "error": "Workflow integrity validation failed: 2 check(s) failed",
+      "metadata": {
+        "workflow_id": "auth",
+        "test_path": "tests/test_checkout.py",
+        "failed_checks": [
+          "Test path consistency",
+          "State completeness"
+        ],
+        "escalation_options": [
+          "rerun_step11",
+          "restart_workflow",
+          "accept_as_is",
+          "abort"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.873885Z",
+      "error": "Workflow integrity validation failed: 2 check(s) failed",
+      "metadata": {
+        "workflow_id": "auth",
+        "test_path": "tests/test_example.py",
+        "failed_checks": [
+          "Workflow ID consistency",
+          "State completeness"
+        ],
+        "escalation_options": [
+          "rerun_step11",
+          "restart_workflow",
+          "accept_as_is",
+          "abort"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.884546Z",
+      "error": "Workflow integrity validation failed: 2 check(s) failed",
+      "metadata": {
+        "workflow_id": "auth",
+        "test_path": "tests/test_example.py",
+        "failed_checks": [
+          "Audit trail complete",
+          "State completeness"
+        ],
+        "escalation_options": [
+          "rerun_step11",
+          "restart_workflow",
+          "accept_as_is",
+          "abort"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.892880Z",
+      "error": "Workflow integrity validation failed: 1 check(s) failed",
+      "metadata": {
+        "workflow_id": "auth",
+        "test_path": "tests/test_example.py",
+        "failed_checks": [
+          "State completeness"
+        ],
+        "escalation_options": [
+          "rerun_step11",
+          "restart_workflow",
+          "accept_as_is",
+          "abort"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.901943Z",
+      "error": "Workflow integrity validation failed: 2 check(s) failed",
+      "metadata": {
+        "workflow_id": "auth",
+        "test_path": "tests/test_example.py",
+        "failed_checks": [
+          "State completeness",
+          "No orphaned state"
+        ],
+        "escalation_options": [
+          "rerun_step11",
+          "restart_workflow",
+          "accept_as_is",
+          "abort"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.916158Z",
+      "error": "Workflow integrity validation failed: 5 check(s) failed",
+      "metadata": {
+        "workflow_id": "auth",
+        "test_path": "tests/test_example.py",
+        "failed_checks": [
+          "Test path consistency",
+          "Workflow ID consistency",
+          "Audit trail complete",
+          "State completeness",
+          "No orphaned state"
+        ],
+        "escalation_options": [
+          "rerun_step11",
+          "restart_workflow",
+          "accept_as_is",
+          "abort"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:05.931401Z",
+      "metadata": {
+        "workflow_id": "auth",
+        "test_path": "tests/test_example.py",
+        "all_checks_passed": true
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:27.338032Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:27.357706Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:27.397569Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:27.418454Z",
+      "metadata": {
+        "class_name": "AuthTasks",
+        "import_path": "tasks.auth.auth_tasks",
+        "task_methods_count": 1
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\auth\\auth_tasks.py",
+      "step": 7
+    }
+  ],
+  "summary": {
+    "total_steps": 11,
+    "gates_passed": 6,
+    "gates_failed": 9,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

@@ -1,10 +1,10 @@
 """
-Quality Gate: Discovered Elements (Step 5).
+Quality Gate: Discovered Elements (Step 4).
 
 PRE+POST validation gate for Tool 2 (discover_page_elements) or DD-33 (Playwright snapshot).
 
 PRE Validation:
-- Step 4 complete (test_scenarios exist in state)
+- Step 3 complete (bdd_scenarios, expected_states, intent exist in state)
 - URL present and valid format (http/https)
 - page_name present
 - credential_strategy present and valid (IC-05-01)
@@ -32,10 +32,10 @@ from utils.scope_discovery import ScopeDiscovery, ScopeResult
 
 
 class QGDiscoveredElements(BaseGate):
-    """Quality gate for Step 5: Discovered Elements."""
+    """Quality gate for Step 4: Discovered Elements."""
 
     # Step number for this gate (used for attempt tracking)
-    STEP_NUMBER = 5
+    STEP_NUMBER = 4
 
     # Valid credential strategies (from DD-24)
     VALID_CREDENTIAL_STRATEGIES = {"none", "static", "dynamic", "self-contained"}
@@ -62,7 +62,7 @@ class QGDiscoveredElements(BaseGate):
         PRE validation before Tool 2 operation or DD-33 snapshot extraction.
 
         Validates:
-        - Step 4 is complete
+        - Step 3 is complete
         - URL is present and valid format
         - page_name is present
         - credential_strategy is present and valid (IC-05-01)
@@ -74,12 +74,12 @@ class QGDiscoveredElements(BaseGate):
         Returns:
             {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
         """
-        # Check Step 4 completion
+        # Check Step 3 completion
         state_manager = cls._get_state_manager()
-        if not state_manager.is_step_complete(4):
+        if not state_manager.is_step_complete(3):
             return cls.fail_response(
-                error="Step 4 is not complete. Cannot proceed to Step 5.",
-                fix_hint="Complete Step 4 (Test Scenarios) first. Ensure test_scenarios are generated."
+                error="Step 3 is not complete. Cannot proceed to Step 4.",
+                fix_hint="Complete Step 3 (AI Processing) first. Ensure bdd_scenarios, expected_states, and intent are validated."
             )
 
         # Validate URL
@@ -756,31 +756,30 @@ class QGDiscoveredElements(BaseGate):
             pages_discovered = 1 if has_both else 0
             discovery_complete = has_both
 
-        # Save enhanced Step 5 state
-        state_manager.save(5, {
-            "discovered_elements": elements,  # Keep for backward compatibility (last elements discovered)
-            "page_name": page_name,  # Current page (backward compat)
-            "discovered_pages": discovered_pages,  # Task 2.0 + DEF-045: Nested per-page tracking
-            "pages_discovered": pages_discovered,  # Task 2.0 + DEF-045: Pages with BOTH types
-            "total_pages": total_pages,  # Task 2.0: Total scope
-            "discovery_complete": discovery_complete  # Task 2.0 + DEF-045: True if all pages have both types
-        })
-
-        # DD-44: For multi-page workflows, return progress info (don't block yet)
-        # AI is responsible for calling PRE/POST for each page
-        # Final check happens before Step 6 via is_discovery_complete()
-        response = cls.pass_response(
+        # Save enhanced Step 5 state and return pass
+        response = cls.validate_and_pass(
             step=5,
+            step_name="Discovered Elements",
             gate_name="qg_discovered_elements",
-            mode="POST",
+            state_data={
+                "discovered_elements": elements,  # Keep for backward compatibility (last elements discovered)
+                "page_name": page_name,  # Current page (backward compat)
+                "discovered_pages": discovered_pages,  # Task 2.0 + DEF-045: Nested per-page tracking
+                "pages_discovered": pages_discovered,  # Task 2.0 + DEF-045: Pages with BOTH types
+                "total_pages": total_pages,  # Task 2.0: Total scope
+                "discovery_complete": discovery_complete  # Task 2.0 + DEF-045: True if all pages have both types
+            },
             metadata={
                 "page_name": page_name,
                 "elements_count": len(elements),
                 "pages_discovered": pages_discovered,
                 "total_pages": total_pages,
                 "discovery_complete": discovery_complete
-            }
+            },
+            mode="POST"
         )
+
+        # DD-44: Add multi-page progress info to response
         if total_pages > 1:
             response["multi_page_progress"] = {
                 "pages_discovered": pages_discovered,

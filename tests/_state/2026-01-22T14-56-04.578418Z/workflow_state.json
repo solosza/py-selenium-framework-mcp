@@ -1,0 +1,14 @@
+{
+  "step_1": {
+    "persona": "customer",
+    "URL": "https://heliosdigital-retail-qa.azurewebsites.net",
+    "role_name": "Customer",
+    "workflow": "test4",
+    "raw_requirement": "As a customer, I want to search for a sales representative",
+    "detected_env_id": "helios1"
+  },
+  "step_2": {
+    "credential_strategy": "none",
+    "test_data_location": "none"
+  }
+}

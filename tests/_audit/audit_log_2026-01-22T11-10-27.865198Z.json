@@ -1,0 +1,30 @@
+{
+  "run_id": "2026-01-22T11:10:27.865198Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:10:27.870866Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "https://heliosdigital-retail-qa.azurewebsites.net",
+        "role_name": "Customer",
+        "workflow": "devtests",
+        "detected_env_id": "helios3"
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 1,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

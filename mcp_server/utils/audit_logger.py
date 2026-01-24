@@ -85,8 +85,8 @@ class AuditLogger:
             with open(self._audit_file, 'r') as f:
                 data = json.load(f)
 
-            # Restore existing events (backward compatible with 'steps')
-            self.events = data.get("events", data.get("steps", []))
+            # Restore existing events
+            self.events = data.get("events", [])
 
             # Restore files_generated for backward compatibility
             self.files_generated = data.get("files_generated", [])

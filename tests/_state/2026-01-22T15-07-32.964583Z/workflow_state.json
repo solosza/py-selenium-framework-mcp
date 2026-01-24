@@ -1,0 +1,10 @@
+{
+  "step_1": {
+    "persona": "admin",
+    "URL": "https://heliosdigital-retail-qa.azurewebsites.net",
+    "role_name": "Admin",
+    "workflow": "integration_test",
+    "raw_requirement": "As an admin, I want to manage user accounts",
+    "detected_env_id": "helios1"
+  }
+}

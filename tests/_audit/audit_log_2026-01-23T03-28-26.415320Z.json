@@ -1,0 +1,44 @@
+{
+  "workflow_id": "2026-01-23T03:28:26.415320Z",
+  "events": [
+    {
+      "type": "gate_validation",
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-23T03:28:26.422094Z",
+      "metadata": {
+        "intent": "search",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "type": "gate_validation",
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-23T03:30:24.289009Z",
+      "metadata": {
+        "intent": "search",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "type": "gate_validation",
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-23T03:33:55.246468Z",
+      "metadata": {
+        "intent": "search",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    }
+  ]
+}

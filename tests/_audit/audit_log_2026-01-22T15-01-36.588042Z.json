@@ -1,0 +1,76 @@
+{
+  "workflow_id": "2026-01-22T15:01:36.588042Z",
+  "events": [
+    {
+      "type": "gate_validation",
+      "step": 1,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T15:01:36.591910Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "https://heliosdigital-retail-qa.azurewebsites.net",
+        "role_name": "Customer",
+        "workflow": "test4",
+        "detected_env_id": "helios1"
+      }
+    },
+    {
+      "type": "gate_validation",
+      "step": 2,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T15:01:42.212673Z",
+      "metadata": {
+        "credential_strategy": "none",
+        "test_data_location": "none",
+        "browser_config": {
+          "headless": false
+        },
+        "timeout_config": {
+          "enabled": true,
+          "threshold_seconds": 60
+        }
+      }
+    },
+    {
+      "type": "gate_validation",
+      "step": 2,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T15:07:39.574631Z",
+      "metadata": {
+        "credential_strategy": "static",
+        "test_data_location": "shared",
+        "browser_config": {
+          "headless": false
+        },
+        "timeout_config": {
+          "enabled": true,
+          "threshold_seconds": 30
+        }
+      }
+    },
+    {
+      "type": "gate_validation",
+      "step": 2,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T15:09:45.241335Z",
+      "metadata": {
+        "credential_strategy": "none",
+        "test_data_location": "none",
+        "browser_config": {
+          "headless": false
+        },
+        "timeout_config": {
+          "enabled": false
+        }
+      }
+    }
+  ]
+}

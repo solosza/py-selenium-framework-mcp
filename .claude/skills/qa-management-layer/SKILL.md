@@ -5,12 +5,12 @@
 
 ---
 name: qa-management-layer
-description: Guide AI through 5-step QA test generation workflow with quality gates and collaborative construction. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
+description: Guide AI through 4-step QA test generation workflow with quality gates and collaborative construction. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
 ---
 
 # QA Guidance Layer
 
-**Purpose:** Guide AI through the 5-step QA test generation workflow with enforced quality gates and collaborative construction.
+**Purpose:** Guide AI through the 4-step QA test generation workflow (v3.1) with enforced quality gates and collaborative construction.
 
 **Applies to:** QA test automation generation using MCP tools.
 
@@ -25,7 +25,7 @@ description: Guide AI through 5-step QA test generation workflow with quality ga
 Use when:
 - User wants to generate test automation code
 - User provides a user story or test requirement
-- Starting the 11-step workflow from Step 1
+- Starting the 4-step workflow from Step 1
 
 ---
 
@@ -47,7 +47,7 @@ Use when:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         5-STEP QA WORKFLOW (Pair Programming)                │
+│                      4-STEP QA WORKFLOW v3.1 (Pair Programming)              │
 └─────────────────────────────────────────────────────────────────────────────┘
 
   Step 1: User Input           ──► persona, URL, role_name, workflow
@@ -61,7 +61,6 @@ Use when:
       ▼
   Step 4: Collaborative Construction (HITL Loop)
       │
-      ├─► Tool 1: Generate BDD scenarios (structure)
       ├─► Tool 2: Discover elements (bulk extraction)
       │
       ├─► AI builds POMs manually (Edit/Write tools)
@@ -73,15 +72,12 @@ Use when:
       ├─► HITL triggers at blockers (human guides)
       │
       └─► Repeat: build → save → test → discover gap → build more
-      │
-      ▼
-  Step 5: Done
-      │
-      └─► Test passes ✓ = COMPLETE | Test fails ✗ = AWAITING TRIAGE
+          └─► Test passes ✓ = COMPLETE | Test fails ✗ = AWAITING TRIAGE
 
-NOTE: Old 11-step autonomous workflow (Steps 6-11, Tools 3-6) archived to
-_archived/autonomous_workflow_v1/ on 2026-01-22. New workflow uses collaborative
-construction instead of autonomous code generation (96% failure rate).
+CHANGELOG:
+- 2026-01-23: Removed redundant Tool 1 (generate_tests_from_user_story) - Step 3 already provides BDD
+- 2026-01-22: Archived autonomous workflow (Tools 3-6, Steps 6-11) - 96% failure rate
+- Now: 4-step collaborative construction workflow
 ```
 
 ---
@@ -93,12 +89,11 @@ construction instead of autonomous code generation (96% failure rate).
 | 1 | `references/step-01.md` | `qg_user_input` | POST-only | User Input |
 | 2 | `references/step-02.md` | `qg_preflight` | POST-only | Pre-flight Configuration |
 | 3 | `references/step-03.md` | `qg_ai_processing` | POST-only | AI Processing |
-| 4 | TBD: `references/step-04-construction.md` | Multiple gates | Varies | Collaborative Construction (HITL Loop) |
-| 4a | `references/step-04.md` | `qg_test_scenarios` | PRE+POST | Generate Tests (Tool 1) - Part of Step 4 |
-| 4b | `references/step-05.md` | `qg_discovered_elements`, `qg_discovery_complete` | PRE+POST, PRE-only | Discover Elements (Tool 2) - Part of Step 4 |
-| 5 | TBD: `references/step-05-done.md` | N/A | N/A | Done (Test Execution & Triage) |
+| 4 | `references/step-04.md` | `qg_discovered_elements`, `qg_discovery_complete` | PRE+POST, PRE-only | Discover Elements (Tool 2) + Collaborative Construction |
 
-**Archived (2026-01-22):** Steps 6-11 moved to `_archived/autonomous_workflow_v1/protocols/`
+**Archived:**
+- 2026-01-23: step-04-tool1.md (redundant Tool 1), qg_test_scenarios moved to `_archived/autonomous_workflow_v1/`
+- 2026-01-22: Steps 6-11, Tools 3-6 moved to `_archived/autonomous_workflow_v1/protocols/`
 
 ---
 

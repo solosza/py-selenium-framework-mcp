@@ -1,0 +1,20 @@
+{
+  "workflow_id": "2026-01-23T05:05:54.360399Z",
+  "events": [
+    {
+      "type": "gate_validation",
+      "step": 1,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-23T05:05:54.367136Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "https://heliosdigital-retail-qa.azurewebsites.net",
+        "role_name": "Customer",
+        "workflow": "mytest",
+        "detected_env_id": "helios1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "run_id": "2026-01-21T02:17:51.981884Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-21T02:17:51.987100Z",
+      "metadata": {
+        "credential_strategy": "none",
+        "test_data_location": "none"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-21T02:19:24.005368Z",
+      "metadata": {
+        "persona": "dealership staff member",
+        "URL": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+        "role_name": "DealershipStaffMember",
+        "workflow": "helios7",
+        "detected_env_id": "helios3"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-21T02:19:39.758632Z",
+      "metadata": {
+        "intent": "submit_inquiry",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-21T02:19:53.356163Z",
+      "metadata": {
+        "workflow": "helios7"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-21T02:20:04.074294Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-21T02:20:36.736039Z",
+      "metadata": {
+        "page_name": "CustomerSearchPage",
+        "url": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-21T02:20:47.352874Z",
+      "metadata": {
+        "page_name": "CustomerSearchPage",
+        "elements_count": 6,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-21T03:02:19.686172Z",
+      "metadata": {
+        "page_name": "InquiryFormPage",
+        "url": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-21T03:02:27.044177Z",
+      "metadata": {
+        "page_name": "InquiryFormPage",
+        "elements_count": 7,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-21T03:02:41.660734Z",
+      "metadata": {
+        "page_name": "InquiryFormPage",
+        "url": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-21T03:02:50.632125Z",
+      "metadata": {
+        "page_name": "InquiryFormPage",
+        "elements_count": 7,
+        "pages_discovered": 1,
+        "total_pages": 1,
+        "discovery_complete": true
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 5,
+    "gates_passed": 11,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

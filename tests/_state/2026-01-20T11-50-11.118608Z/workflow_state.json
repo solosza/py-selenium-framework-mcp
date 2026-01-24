@@ -1,0 +1,12 @@
+{
+  "_attempts": {
+    "10": 3
+  },
+  "step_10": {
+    "error_history": [
+      "Attempt 1: Step 9 is not complete. Cannot proceed to Step 10.",
+      "Attempt 2: Step 9 is not complete. Cannot proceed to Step 10.",
+      "Attempt 3: Step 9 is not complete. Cannot proceed to Step 10."
+    ]
+  }
+}

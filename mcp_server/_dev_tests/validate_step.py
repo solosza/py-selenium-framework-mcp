@@ -2,19 +2,33 @@
 """
 Step Validator - TDD validation script for 5-step workflow
 
-Validates 6 criteria after each step completes:
+ALL VALIDATIONS (always run for every step):
 1. State (Persistence) - workflow_state.json updated
 2. Audit (Observability) - audit_log.json contains gate entry
 3. Transcript (Human-Readable) - workflow_transcript.md updated
 4. Gate Validation (Quality) - gate returns correct status
 5. Protocol Adherence (AI) - AI follows step-XX.md guidance
 6. Step Flow (Integrity) - can proceed to next step
+7. Run ID Uniqueness - Fresh run_id created (Step 1 only, expected fail for Step 2+)
+8. Audit Log Isolation - Step N has exactly N events, sequential 1-N
+9. Session Marker Consistency - .current_run_id marker exists and matches
+10. Hook Execution - PostToolUse hook executed recently
+11. Manual File Detection - Files auto-generated (not manually created)
+12. Audit Step Number - Audit entry has correct step field
+13. Old Marker Cleanup - Old marker location properly cleaned up
+14. Audit State Path - Audit entry references correct state path
 
 Usage:
+    # Validate any step (runs all 14 checks)
     python validate_step.py --run-id <run_id> --step <step_num>
 
-    # Example:
+    # Examples:
     python validate_step.py --run-id 2026-01-22T11-11-06.892443Z --step 1
+    python validate_step.py --run-id 2026-01-22T11-11-06.892443Z --step 2
+
+Note:
+    Some checks may fail/skip for certain steps - see each check's docstring
+    for applicability and how to interpret results.
 
 Exit codes:
     0 = All validations passed
@@ -51,7 +65,7 @@ class ValidationResult:
 
 
 class StepValidator:
-    """Validates a completed step against 6 criteria."""
+    """Validates a completed step against 14 criteria."""
 
     def __init__(self, run_id: str, step_num: int):
         """
@@ -80,9 +94,29 @@ class StepValidator:
         self._audit_data: Optional[Dict] = None
         self._transcript_content: Optional[str] = None
 
+    def _load_audit(self) -> Optional[Dict]:
+        """
+        Load audit data from file (cached).
+
+        Returns:
+            Audit data dict if file exists and valid, None otherwise
+        """
+        if self._audit_data is not None:
+            return self._audit_data
+
+        if not self.audit_file.exists():
+            return None
+
+        try:
+            with open(self.audit_file, 'r') as f:
+                self._audit_data = json.load(f)
+            return self._audit_data
+        except (json.JSONDecodeError, IOError):
+            return None
+
     def validate_all(self) -> List[ValidationResult]:
         """
-        Run all 6 validations.
+        Run all validations (14 checks total).
 
         Returns:
             List of validation results (one per criteria)
@@ -93,6 +127,7 @@ class StepValidator:
         print(f"  Validating Step {self.step_num} - Run ID: {self.run_id}")
         print(f"{'='*70}\n")
 
+        # All validations (always run for every step)
         # 1. State (Persistence)
         results.append(self.check_state())
 
@@ -110,6 +145,30 @@ class StepValidator:
 
         # 6. Step Flow (Workflow Integrity)
         results.append(self.check_flow())
+
+        # 7. Run ID Uniqueness
+        results.append(self.check_run_id_uniqueness())
+
+        # 8. Audit Log Isolation
+        results.append(self.check_audit_isolation())
+
+        # 9. Session Marker Consistency
+        results.append(self.check_session_marker())
+
+        # 10. Hook Execution
+        results.append(self.check_hook_execution())
+
+        # 11. Manual File Detection
+        results.append(self.check_manual_files())
+
+        # 12. Audit Step Number
+        results.append(self.check_audit_step_number())
+
+        # 13. Old Marker Cleanup
+        results.append(self.check_old_marker_cleanup())
+
+        # 14. Audit State Path
+        results.append(self.check_audit_state_path())
 
         return results
 
@@ -242,8 +301,8 @@ class StepValidator:
             # Level 4: Has gate entry for this step (progressive - will add field checks later)
             # Gate mapping for steps 1-5
             gate_map = {
-                1: "qg_preflight",
-                2: "qg_user_input",
+                1: "qg_user_input",
+                2: "qg_preflight",
                 3: "qg_ai_processing",
                 4: "qg_test_scenarios",
                 5: "qg_discovered_elements"
@@ -396,8 +455,8 @@ class StepValidator:
 
             # Find gate entry
             gate_map = {
-                1: "qg_preflight",
-                2: "qg_user_input",
+                1: "qg_user_input",
+                2: "qg_preflight",
                 3: "qg_ai_processing",
                 4: "qg_test_scenarios",
                 5: "qg_discovered_elements"
@@ -443,7 +502,7 @@ class StepValidator:
                     "gate": expected_gate,
                     "result": result,
                     "has_error": "error" in gate_entry,
-                    "has_fix_hint": "fix_hint" in gate_entry
+                    "has_teach": "teach" in gate_entry
                 }
             )
 
@@ -513,8 +572,8 @@ class StepValidator:
 
             # Check if gate passed
             gate_map = {
-                1: "qg_preflight",
-                2: "qg_user_input",
+                1: "qg_user_input",
+                2: "qg_preflight",
                 3: "qg_ai_processing",
                 4: "qg_test_scenarios",
                 5: "qg_discovered_elements"
@@ -585,6 +644,609 @@ class StepValidator:
                 details={"error": str(e)}
             )
 
+    # =========================================================================
+    # NEW WORKFLOW VALIDATIONS (--expect-new-workflow flag)
+    # =========================================================================
+
+    def check_run_id_uniqueness(self) -> ValidationResult:
+        """
+        7. Run ID Uniqueness (New Workflow)
+
+        Validates:
+        - Run ID is recent (created within last 5 minutes)
+        - Run ID is unique (not reused from previous workflow)
+
+        Applicability:
+        - Step 1: SHOULD PASS (fresh workflow creates new run_id)
+        - Step 2-5: WILL FAIL (run_id becomes older as workflow progresses)
+
+        How to interpret:
+        - Step 1 FAIL → Bug: run_id reused from previous workflow
+        - Step 2-5 FAIL → EXPECTED (ignore this failure)
+
+        Gap Found: Bug where new workflows reused old run_ids instead of creating fresh ones.
+        """
+        try:
+            # Parse run_id timestamp
+            try:
+                run_id_time = datetime.fromisoformat(self.run_id.replace("Z", "+00:00"))
+            except ValueError:
+                return ValidationResult(
+                    name="Run ID Uniqueness",
+                    status=Status.FAIL,
+                    message="Run ID is not a valid ISO timestamp",
+                    details={"run_id": self.run_id}
+                )
+
+            # Check if recent (within last 5 minutes)
+            now = datetime.now(run_id_time.tzinfo)
+            age_seconds = (now - run_id_time).total_seconds()
+
+            if age_seconds > 300:  # 5 minutes
+                return ValidationResult(
+                    name="Run ID Uniqueness",
+                    status=Status.FAIL,
+                    message=f"Run ID is {int(age_seconds)}s old (expected fresh workflow < 300s)",
+                    details={
+                        "run_id": self.run_id,
+                        "age_seconds": int(age_seconds),
+                        "note": "This may indicate run_id was reused from previous workflow"
+                    }
+                )
+
+            return ValidationResult(
+                name="Run ID Uniqueness",
+                status=Status.PASS,
+                message=f"Run ID is fresh ({int(age_seconds)}s old)",
+                details={"run_id": self.run_id, "age_seconds": int(age_seconds)}
+            )
+
+        except Exception as e:
+            return ValidationResult(
+                name="Run ID Uniqueness",
+                status=Status.ERROR,
+                message=f"Validator crashed: {type(e).__name__}",
+                details={"error": str(e)}
+            )
+
+    def check_audit_isolation(self) -> ValidationResult:
+        """
+        8. Audit Log Isolation (New Workflow)
+
+        Validates:
+        - Audit log only contains events for THIS workflow
+        - No events from previous workflows mixed in
+        - Step N should have exactly N events
+
+        Applicability:
+        - Step 1: Expect 1 event (qg_user_input)
+        - Step 2: Expect 2 events (qg_user_input + qg_preflight)
+        - Step 3: Expect 3 events (+ qg_ai_processing)
+        - Step 4: Expect 4 events (+ qg_test_scenarios)
+        - Step 5: Expect 5 events (+ qg_discovered_elements)
+
+        How to interpret:
+        - Step 1 with >1 events → Bug: audit contaminated with old workflow
+        - Step N with !=N events → Check if contaminated or missing events
+
+        Gap Found: New workflows appended to old audit logs instead of creating fresh ones.
+        """
+        try:
+            audit_data = self._load_audit()
+            if not audit_data:
+                return ValidationResult(
+                    name="Audit Log Isolation",
+                    status=Status.FAIL,
+                    message="Audit log missing or corrupted",
+                    details={"file": str(self.audit_file)}
+                )
+
+            events = audit_data.get("events", [])
+
+            # Step N should have exactly N events (1 per step completed so far)
+            expected_events = self.step_num
+
+            if len(events) != expected_events:
+                # Determine if contaminated (too many) or missing (too few)
+                if len(events) > expected_events:
+                    issue = "contaminated with events from previous workflow"
+                else:
+                    issue = "missing events from previous steps"
+
+                return ValidationResult(
+                    name="Audit Log Isolation",
+                    status=Status.FAIL,
+                    message=f"Step {self.step_num} should have {expected_events} event(s), found {len(events)} ({issue})",
+                    details={
+                        "expected_events": expected_events,
+                        "actual_events": len(events),
+                        "event_steps": [e.get("step") for e in events],
+                        "note": "Step N should have exactly N events in audit log"
+                    }
+                )
+
+            # Verify events are sequential (1, 2, 3, ... N)
+            event_steps = [e.get("step") for e in events]
+            expected_steps = list(range(1, self.step_num + 1))
+
+            if event_steps != expected_steps:
+                return ValidationResult(
+                    name="Audit Log Isolation",
+                    status=Status.FAIL,
+                    message=f"Events are not sequential",
+                    details={
+                        "expected_steps": expected_steps,
+                        "actual_steps": event_steps,
+                        "note": "Events should be sequential: 1, 2, 3, ..."
+                    }
+                )
+
+            return ValidationResult(
+                name="Audit Log Isolation",
+                status=Status.PASS,
+                message=f"Audit log isolated ({len(events)} event(s), sequential steps 1-{self.step_num})",
+                details={
+                    "total_events": len(events),
+                    "steps": event_steps
+                }
+            )
+
+        except Exception as e:
+            return ValidationResult(
+                name="Audit Log Isolation",
+                status=Status.ERROR,
+                message=f"Validator crashed: {type(e).__name__}",
+                details={"error": str(e)}
+            )
+
+    def check_session_marker(self) -> ValidationResult:
+        """
+        9. Session Marker Consistency
+
+        Validates:
+        - .current_run_id marker exists
+        - Marker contains THIS run_id
+        - No stale markers from previous workflows
+
+        Applicability:
+        - All steps: SHOULD PASS (marker should exist and match run_id)
+
+        How to interpret:
+        - FAIL → Bug: Session marker missing or has wrong run_id
+        - This would cause gates to save to wrong workflow directory
+
+        Gap Found: Multiple marker locations (old vs new) out of sync, causing run_id reuse.
+        """
+        try:
+            marker_file = self.project_root / "tests" / "_state" / ".current_run_id"
+
+            if not marker_file.exists():
+                return ValidationResult(
+                    name="Session Marker Consistency",
+                    status=Status.FAIL,
+                    message="Session marker missing",
+                    details={
+                        "expected_path": str(marker_file),
+                        "note": "PostToolUse hook needs this marker to write audit entries"
+                    }
+                )
+
+            marker_run_id = marker_file.read_text().strip()
+
+            if marker_run_id != self.run_id:
+                return ValidationResult(
+                    name="Session Marker Consistency",
+                    status=Status.FAIL,
+                    message="Session marker has wrong run_id",
+                    details={
+                        "expected_run_id": self.run_id,
+                        "marker_run_id": marker_run_id,
+                        "note": "This causes gates to save to wrong workflow"
+                    }
+                )
+
+            return ValidationResult(
+                name="Session Marker Consistency",
+                status=Status.PASS,
+                message="Session marker matches run_id",
+                details={"marker_path": str(marker_file)}
+            )
+
+        except Exception as e:
+            return ValidationResult(
+                name="Session Marker Consistency",
+                status=Status.ERROR,
+                message=f"Validator crashed: {type(e).__name__}",
+                details={"error": str(e)}
+            )
+
+    def check_hook_execution(self) -> ValidationResult:
+        """
+        10. Hook Execution (PostToolUse)
+
+        Validates:
+        - Audit entry has recent timestamp (within last 60s)
+        - Implies PostToolUse hook executed successfully
+
+        Applicability:
+        - All steps: SHOULD PASS (latest event should be recent)
+
+        How to interpret:
+        - PASS → Hook executed recently for this step
+        - WARN (>60s old) → May be validating old workflow, check run_id
+        - FAIL → Hook didn't execute or audit entry missing
+
+        Gap Found: PostToolUse hook configured but not executing, no validation caught it.
+        """
+        try:
+            audit_data = self._load_audit()
+            if not audit_data:
+                return ValidationResult(
+                    name="Hook Execution",
+                    status=Status.FAIL,
+                    message="Cannot validate hook execution (audit log missing)",
+                    details={}
+                )
+
+            events = audit_data.get("events", [])
+
+            # Find most recent event for this step
+            step_events = [e for e in events if e.get("step") == self.step_num]
+            if not step_events:
+                return ValidationResult(
+                    name="Hook Execution",
+                    status=Status.FAIL,
+                    message=f"No events found for Step {self.step_num}",
+                    details={}
+                )
+
+            latest_event = step_events[-1]
+            timestamp_str = latest_event.get("timestamp", "")
+
+            try:
+                event_time = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+                now = datetime.now(event_time.tzinfo)
+                age_seconds = (now - event_time).total_seconds()
+
+                if age_seconds > 60:
+                    return ValidationResult(
+                        name="Hook Execution",
+                        status=Status.WARN,
+                        message=f"Audit entry is {int(age_seconds)}s old (expected < 60s)",
+                        details={
+                            "timestamp": timestamp_str,
+                            "age_seconds": int(age_seconds),
+                            "note": "Hook may have executed in previous session"
+                        }
+                    )
+
+                return ValidationResult(
+                    name="Hook Execution",
+                    status=Status.PASS,
+                    message=f"PostToolUse hook executed recently ({int(age_seconds)}s ago)",
+                    details={"timestamp": timestamp_str}
+                )
+
+            except ValueError:
+                return ValidationResult(
+                    name="Hook Execution",
+                    status=Status.WARN,
+                    message="Cannot parse audit timestamp",
+                    details={"timestamp": timestamp_str}
+                )
+
+        except Exception as e:
+            return ValidationResult(
+                name="Hook Execution",
+                status=Status.ERROR,
+                message=f"Validator crashed: {type(e).__name__}",
+                details={"error": str(e)}
+            )
+
+    def check_manual_files(self) -> ValidationResult:
+        """
+        11. Manual File Detection
+
+        Validates:
+        - Transcript was NOT manually created (should be auto-generated)
+        - Checks for evidence of manual creation vs system generation
+
+        Applicability:
+        - All steps: Currently SKIP (TranscriptWriter not implemented)
+        - Future: SHOULD PASS (when TranscriptWriter implemented)
+
+        How to interpret:
+        - SKIP → Expected (TranscriptWriter not yet called)
+        - WARN → Transcript exists but may be manually created
+        - FAIL → Transcript was manually created (workaround detected)
+
+        Gap Found: We manually created transcripts, validator accepted them as valid.
+        """
+        try:
+            if not self.transcript_file.exists():
+                # No transcript = no manual file issue
+                return ValidationResult(
+                    name="Manual File Detection",
+                    status=Status.SKIP,
+                    message="No transcript file to check (expected - not implemented yet)",
+                    details={}
+                )
+
+            # Check if transcript was created by TranscriptWriter
+            content = self._load_transcript()
+
+            # TranscriptWriter signature: "**Generated:** <timestamp>"
+            has_generated_marker = "**Generated:**" in content
+
+            # Manual transcripts typically have custom formatting
+            has_manual_markers = any([
+                "## Step" in content and "**Timestamp:**" in content,  # Our manual format
+                "Status:" in content and "PASS" in content  # Custom status markers
+            ])
+
+            if has_manual_markers and not has_generated_marker:
+                return ValidationResult(
+                    name="Manual File Detection",
+                    status=Status.WARN,
+                    message="Transcript appears to be manually created (not auto-generated)",
+                    details={
+                        "has_generated_marker": has_generated_marker,
+                        "file": str(self.transcript_file),
+                        "note": "Transcripts should be auto-generated by TranscriptWriter.generate()"
+                    }
+                )
+
+            if has_generated_marker:
+                return ValidationResult(
+                    name="Manual File Detection",
+                    status=Status.PASS,
+                    message="Transcript auto-generated by TranscriptWriter",
+                    details={"file": str(self.transcript_file)}
+                )
+
+            return ValidationResult(
+                name="Manual File Detection",
+                status=Status.SKIP,
+                message="Cannot determine if transcript is manual or auto-generated",
+                details={}
+            )
+
+        except Exception as e:
+            return ValidationResult(
+                name="Manual File Detection",
+                status=Status.ERROR,
+                message=f"Validator crashed: {type(e).__name__}",
+                details={"error": str(e)}
+            )
+
+    def check_audit_step_number(self) -> ValidationResult:
+        """
+        12. Audit Entry Step Number Validation
+
+        Validates:
+        - Audit entry has correct "step" field matching expected step number
+        - Catches incorrect gate-to-step mappings in audit-trail-writer.py
+
+        Applicability:
+        - All steps: SHOULD PASS (audit entry "step" should match actual step)
+
+        How to interpret:
+        - FAIL → Bug: Gate-to-step mapping wrong in audit-trail-writer.py
+        - Example: Step 1 audit has "step": 2 → mappings swapped
+
+        Gap Found: Gate mappings were swapped (Step 1↔Step 2), but validator only checked gate NAME.
+        """
+        try:
+            audit_data = self._load_audit()
+            if not audit_data:
+                return ValidationResult(
+                    name="Audit Step Number",
+                    status=Status.FAIL,
+                    message="Cannot validate step number (audit log missing)",
+                    details={}
+                )
+
+            events = audit_data.get("events", [])
+
+            # Find events for this step's gate
+            gate_map = {
+                1: "qg_user_input",
+                2: "qg_preflight",
+                3: "qg_ai_processing",
+                4: "qg_test_scenarios",
+                5: "qg_discovered_elements"
+            }
+            expected_gate = gate_map.get(self.step_num)
+
+            if not expected_gate:
+                return ValidationResult(
+                    name="Audit Step Number",
+                    status=Status.SKIP,
+                    message=f"No gate mapping for step {self.step_num}",
+                    details={}
+                )
+
+            # Find gate entries
+            gate_entries = [e for e in events if e.get("type") == "gate_validation" and expected_gate in e.get("gate", "")]
+
+            if not gate_entries:
+                return ValidationResult(
+                    name="Audit Step Number",
+                    status=Status.FAIL,
+                    message=f"No audit entry found for gate: {expected_gate}",
+                    details={}
+                )
+
+            # Verify step number matches
+            for entry in gate_entries:
+                actual_step = entry.get("step")
+                if actual_step != self.step_num:
+                    return ValidationResult(
+                        name="Audit Step Number",
+                        status=Status.FAIL,
+                        message=f"Audit entry has wrong step number",
+                        details={
+                            "expected_step": self.step_num,
+                            "actual_step": actual_step,
+                            "gate": expected_gate,
+                            "note": "Gate-to-step mapping is incorrect in audit-trail-writer.py"
+                        }
+                    )
+
+            return ValidationResult(
+                name="Audit Step Number",
+                status=Status.PASS,
+                message=f"Audit entry has correct step number ({self.step_num})",
+                details={"gate": expected_gate}
+            )
+
+        except Exception as e:
+            return ValidationResult(
+                name="Audit Step Number",
+                status=Status.ERROR,
+                message=f"Validator crashed: {type(e).__name__}",
+                details={"error": str(e)}
+            )
+
+    def check_old_marker_cleanup(self) -> ValidationResult:
+        """
+        13. Old Marker Location Cleanup
+
+        Validates:
+        - Old marker location (mcp_server/state/.run_session) does NOT exist
+        - Ensures _clear_session_marker() properly cleaned up old location
+
+        Applicability:
+        - All steps: SHOULD PASS (old location should not exist)
+
+        How to interpret:
+        - PASS → Old marker properly cleaned up (or never existed)
+        - FAIL → _clear_session_marker() didn't clean old location
+        - This proves migration from old to new location worked correctly
+
+        Gap Found: Session marker location migrated from OLD to NEW, but clear didn't clean old location.
+        """
+        try:
+            old_marker_file = self.project_root / "mcp_server" / "state" / ".run_session"
+
+            if old_marker_file.exists():
+                old_run_id = old_marker_file.read_text().strip()
+                return ValidationResult(
+                    name="Old Marker Cleanup",
+                    status=Status.FAIL,
+                    message="Old marker location still exists (not cleaned up)",
+                    details={
+                        "old_location": str(old_marker_file),
+                        "old_run_id": old_run_id,
+                        "note": "_clear_session_marker() should delete old location"
+                    }
+                )
+
+            return ValidationResult(
+                name="Old Marker Cleanup",
+                status=Status.PASS,
+                message="Old marker location properly cleaned up",
+                details={"old_location": str(old_marker_file)}
+            )
+
+        except Exception as e:
+            return ValidationResult(
+                name="Old Marker Cleanup",
+                status=Status.ERROR,
+                message=f"Validator crashed: {type(e).__name__}",
+                details={"error": str(e)}
+            )
+
+    def check_audit_state_path(self) -> ValidationResult:
+        """
+        14. Audit Entry State Path Validation
+
+        Validates:
+        - Audit entry references correct state path (tests/_state/{run_id}/workflow_state.json)
+        - Catches audit hook reading from wrong state location
+
+        Applicability:
+        - All steps: SHOULD PASS (if state_path in audit metadata)
+        - May SKIP if audit entry doesn't include state_path metadata
+
+        How to interpret:
+        - PASS → Audit hook reading from correct state location
+        - FAIL → Audit hook reading from OLD location (mcp_server/state/)
+        - SKIP → State path not included in audit metadata (not captured)
+
+        Gap Found: audit-trail-writer.py was reading from OLD location (mcp_server/state/workflow_state.json).
+        """
+        try:
+            audit_data = self._load_audit()
+            if not audit_data:
+                return ValidationResult(
+                    name="Audit State Path",
+                    status=Status.FAIL,
+                    message="Cannot validate state path (audit log missing)",
+                    details={}
+                )
+
+            events = audit_data.get("events", [])
+
+            # Find events for this step
+            step_events = [e for e in events if e.get("step") == self.step_num]
+
+            if not step_events:
+                return ValidationResult(
+                    name="Audit State Path",
+                    status=Status.FAIL,
+                    message=f"No events found for Step {self.step_num}",
+                    details={}
+                )
+
+            # Check if audit entry has state_path metadata (may not be in all events)
+            latest_event = step_events[-1]
+            metadata = latest_event.get("metadata", {})
+
+            # State path may not be in all audit entries (depends on hook implementation)
+            # If present, validate it
+            if "state_file" in metadata or "state_path" in metadata:
+                state_path = metadata.get("state_file") or metadata.get("state_path", "")
+                expected_path = f"tests/_state/{self.run_id}/workflow_state.json"
+
+                # Normalize paths for comparison (handle both / and \)
+                state_path_normalized = state_path.replace("\\", "/")
+
+                if expected_path not in state_path_normalized:
+                    return ValidationResult(
+                        name="Audit State Path",
+                        status=Status.FAIL,
+                        message="Audit entry references wrong state path",
+                        details={
+                            "expected_path": expected_path,
+                            "actual_path": state_path,
+                            "note": "audit-trail-writer.py reading from wrong location"
+                        }
+                    )
+
+                return ValidationResult(
+                    name="Audit State Path",
+                    status=Status.PASS,
+                    message="Audit entry references correct state path",
+                    details={"state_path": state_path}
+                )
+            else:
+                # State path not in metadata - skip validation
+                return ValidationResult(
+                    name="Audit State Path",
+                    status=Status.SKIP,
+                    message="Audit entry does not contain state path metadata",
+                    details={"note": "State path validation skipped"}
+                )
+
+        except Exception as e:
+            return ValidationResult(
+                name="Audit State Path",
+                status=Status.ERROR,
+                message=f"Validator crashed: {type(e).__name__}",
+                details={"error": str(e)}
+            )
+
     def print_results(self, results: List[ValidationResult]) -> None:
         """
         Print validation results in human-readable format.
@@ -632,15 +1294,38 @@ class StepValidator:
 def main():
     """Main entry point for validator."""
     parser = argparse.ArgumentParser(
-        description="Validate a completed workflow step against 6 criteria",
+        description="Validate a completed workflow step (14 checks total)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Validate Step 1 of a workflow run
+  # Validate Step 1 of a workflow run (runs all 14 checks)
   python validate_step.py --run-id 2026-01-22T11-11-06.892443Z --step 1
 
-  # Validate Step 2
+  # Validate Step 2 (runs all 14 checks)
   python validate_step.py --run-id 2026-01-22T11-11-06.892443Z --step 2
+
+  # Validate Step 3 (runs all 14 checks)
+  python validate_step.py --run-id 2026-01-22T11-11-06.892443Z --step 3
+
+All 14 Checks (always run):
+  1. State (Persistence)
+  2. Audit (Observability)
+  3. Transcript (Human-Readable)
+  4. Gate Validation (Quality)
+  5. Protocol Adherence (AI Behavior)
+  6. Step Flow (Workflow Integrity)
+  7. Run ID Uniqueness
+  8. Audit Log Isolation
+  9. Session Marker Consistency
+  10. Hook Execution
+  11. Manual File Detection
+  12. Audit Step Number
+  13. Old Marker Cleanup
+  14. Audit State Path
+
+Note:
+  Some checks may fail/skip for certain steps (e.g., Check 7 will fail for Step 2+).
+  See each check's docstring for applicability and how to interpret results.
 
 Exit codes:
   0 = All validations passed

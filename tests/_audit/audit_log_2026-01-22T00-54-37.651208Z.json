@@ -1,0 +1,55 @@
+{
+  "run_id": "2026-01-22T00:54:37.651208Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 2,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T00:54:37.654208Z",
+      "metadata": {
+        "credential_strategy": "dynamic",
+        "test_data_location": "workflow"
+      }
+    },
+    {
+      "step": 1,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T00:54:52.416623Z",
+      "metadata": {
+        "persona": "registered user",
+        "URL": "https://heliosdigital-retail-qa.azurewebsites.net",
+        "role_name": "RegisteredUser",
+        "workflow": "helios7",
+        "detected_env_id": "helios3"
+      }
+    },
+    {
+      "step": 1,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T00:54:52.427661Z",
+      "metadata": {
+        "persona": "admin user",
+        "URL": "https://parabank.parasoft.com",
+        "role_name": "AdminUser",
+        "workflow": "parabank13",
+        "detected_env_id": "parabank11"
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 2,
+    "gates_passed": 3,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

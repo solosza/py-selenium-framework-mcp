@@ -1,0 +1,14 @@
+{
+  "step_2": {
+    "credential_strategy": "static",
+    "test_data_location": "shared"
+  },
+  "step_1": {
+    "persona": "admin user",
+    "URL": "https://parabank.parasoft.com",
+    "role_name": "AdminUser",
+    "workflow": "parabank13",
+    "raw_requirement": "As an admin user, I want to access admin panel",
+    "detected_env_id": "parabank11"
+  }
+}

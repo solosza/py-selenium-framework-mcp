@@ -1,0 +1,159 @@
+{
+  "run_id": "2026-01-19T00:20:55.248039Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:20:55.256041Z",
+      "metadata": {
+        "credential_strategy": "none",
+        "test_data_location": "workflow"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:22:14.348515Z",
+      "metadata": {
+        "persona": "sales representative",
+        "URL": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+        "role_name": "SalesRepresentative",
+        "workflow": "helios1",
+        "detected_env_id": "helios1"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:22:44.943625Z",
+      "metadata": {
+        "intent": "create_inquiry",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:23:50.368738Z",
+      "metadata": {
+        "workflow": "helios1"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:24:02.162835Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:26:59.587991Z",
+      "metadata": {
+        "page_name": "InquiriesPage",
+        "url": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:27:55.447482Z",
+      "metadata": {
+        "page_name": "InquiriesPage",
+        "elements_count": 18,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:28:57.298086Z",
+      "metadata": {
+        "page_name": "InquiriesPage",
+        "elements_count": 18
+      }
+    },
+    {
+      "step": 7,
+      "gate": "qg_task",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:38:44.154417Z",
+      "metadata": {
+        "class_name": "InquiryTasks",
+        "import_path": "tasks.helios1.inquiry_tasks",
+        "task_methods_count": 1
+      }
+    },
+    {
+      "step": 8,
+      "gate": "qg_role",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:40:54.651845Z",
+      "metadata": {
+        "class_name": "SalesRepresentative",
+        "import_path": "roles.helios1.sales_representative",
+        "workflow_methods_count": 1
+      }
+    },
+    {
+      "step": 9,
+      "gate": "qg_test_runner",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T00:48:00.236339Z",
+      "metadata": {
+        "test_name": null,
+        "file_path": "tests/helios1/test_create_service_inquiry_with_dynamic_customer_data.py"
+      }
+    }
+  ],
+  "files_generated": [
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\tasks\\helios1\\inquiry_tasks.py",
+      "step": 7
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\framework\\roles\\helios1\\sales_representative.py",
+      "step": 8
+    },
+    {
+      "path": "D:\\my_ai_projects\\py_sel_framework_mcp\\tests\\helios1\\test_create_service_inquiry_with_dynamic_customer_data.py",
+      "step": 9
+    }
+  ],
+  "summary": {
+    "total_steps": 9,
+    "gates_passed": 11,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

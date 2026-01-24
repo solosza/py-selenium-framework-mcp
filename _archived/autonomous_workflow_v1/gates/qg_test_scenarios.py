@@ -207,15 +207,14 @@ class QGTestScenarios(BaseGate):
                     fix_hint="Remove skeleton patterns (pass, # TODO, # Add...as needed). Provide concrete Given/When/Then steps."
                 )
 
-        # All valid - save state and return pass
-        state_manager = cls._get_state_manager()
-        state_manager.save(step=4, data={"test_scenarios": test_scenarios})
-
-        response = cls.pass_response(
+        # All valid - use universal completion pattern
+        response = cls.validate_and_pass(
             step=4,
+            step_name="Test Scenarios",
             gate_name="qg_test_scenarios",
-            mode="POST",
-            metadata={"scenarios_count": len(test_scenarios)}
+            state_data={"test_scenarios": test_scenarios},
+            metadata={"scenarios_count": len(test_scenarios)},
+            mode="POST"
         )
         response["test_scenarios"] = test_scenarios
         return response

@@ -1,0 +1,278 @@
+{
+  "step_1": {
+    "credential_strategy": "none",
+    "test_data_location": "none"
+  },
+  "step_2": {
+    "persona": "dealership staff member",
+    "URL": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+    "role_name": "DealershipStaffMember",
+    "workflow": "helios7",
+    "raw_requirement": "As a dealership staff member, I want to submit a new customer inquiry through the portal so that the inquiry is recorded and assigned for follow-up",
+    "detected_env_id": "helios3"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am on the Inquiries page",
+        "when": [
+          "I click the New Inquiry button",
+          "I enter customer first name",
+          "I enter customer last name",
+          "I select contact type",
+          "I enter contact identifier",
+          "I click Next",
+          "I select inquiry source",
+          "I select inquiry status",
+          "I select inquiry type",
+          "I select assigned user",
+          "I submit the inquiry"
+        ],
+        "then": [
+          "The inquiry should be saved successfully",
+          "The new inquiry should appear in the inquiries list"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_inquiry_saved",
+      "is_inquiry_in_list"
+    ],
+    "intent": "submit_inquiry"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_submit_new_customer_inquiry",
+        "given": "I am on the Inquiries page",
+        "when": [
+          "I click the New Inquiry button",
+          "I enter customer first name",
+          "I enter customer last name",
+          "I select contact type",
+          "I enter contact identifier",
+          "I click Next",
+          "I select inquiry source",
+          "I select inquiry status",
+          "I select inquiry type",
+          "I select assigned user",
+          "I submit the inquiry"
+        ],
+        "then": [
+          "The inquiry should be saved successfully",
+          "The new inquiry should appear in the inquiries list"
+        ],
+        "workflow": "helios7"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "SUCCESS_MESSAGE",
+        "element_type": "text",
+        "locator_css": "[aria-label='alert_message_validation']",
+        "locator_id": "",
+        "locator_xpath": ""
+      },
+      {
+        "suggested_name": "CUSTOMER_NAME_DISPLAY",
+        "element_type": "text",
+        "locator_css": "[aria-label='inquiry_view_value_customername']",
+        "locator_id": "",
+        "locator_xpath": ""
+      },
+      {
+        "suggested_name": "CUSTOMER_CONTACT_DISPLAY",
+        "element_type": "text",
+        "locator_css": "[aria-label='inquiry_view_value_customercontact']",
+        "locator_id": "",
+        "locator_xpath": ""
+      },
+      {
+        "suggested_name": "TYPE_DISPLAY",
+        "element_type": "text",
+        "locator_css": "[aria-label='inquiry_view_value_type']",
+        "locator_id": "",
+        "locator_xpath": ""
+      },
+      {
+        "suggested_name": "SOURCE_DISPLAY",
+        "element_type": "text",
+        "locator_css": "[aria-label='inquiry_view_value_source']",
+        "locator_id": "",
+        "locator_xpath": ""
+      },
+      {
+        "suggested_name": "STATUS_DISPLAY",
+        "element_type": "text",
+        "locator_css": "[aria-label='inquiry_view_value_status']",
+        "locator_id": "",
+        "locator_xpath": ""
+      },
+      {
+        "suggested_name": "BACK_BUTTON",
+        "element_type": "link",
+        "locator_css": "[aria-label='inquiry_view_button_back']",
+        "locator_id": "",
+        "locator_xpath": ""
+      }
+    ],
+    "page_name": "InquiryFormPage",
+    "discovered_pages": {
+      "CustomerSearchPage": {
+        "input_elements": [
+          {
+            "suggested_name": "FIRST_NAME_INPUT",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_search_input_firstname']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "LAST_NAME_INPUT",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_search_input_lastname']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "CONTACT_TYPE_DROPDOWN",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='contact_search_input_type']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "CONTACT_IDENTIFIER_INPUT",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='contact_search_input_identifier']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "NEXT_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='customer_search_button_next']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "CANCEL_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='customer_search button_cancel']",
+            "locator_id": "",
+            "locator_xpath": ""
+          }
+        ]
+      },
+      "InquiryFormPage": {
+        "input_elements": [
+          {
+            "suggested_name": "TYPE_DROPDOWN",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_type']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "SOURCE_DROPDOWN",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_source']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "VEHICLE_NOTES_INPUT",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='inquiry_add_value_desiredvehicle']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "ASSIGNED_USER_DROPDOWN",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_assigneduserid']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "STATUS_DROPDOWN",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_status']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "COMPLETE_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='inquiry_add_button_submit']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "PREVIOUS_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='inquiry_add button_previous']",
+            "locator_id": "",
+            "locator_xpath": ""
+          }
+        ],
+        "output_elements": [
+          {
+            "suggested_name": "SUCCESS_MESSAGE",
+            "element_type": "text",
+            "locator_css": "[aria-label='alert_message_validation']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "CUSTOMER_NAME_DISPLAY",
+            "element_type": "text",
+            "locator_css": "[aria-label='inquiry_view_value_customername']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "CUSTOMER_CONTACT_DISPLAY",
+            "element_type": "text",
+            "locator_css": "[aria-label='inquiry_view_value_customercontact']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "TYPE_DISPLAY",
+            "element_type": "text",
+            "locator_css": "[aria-label='inquiry_view_value_type']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "SOURCE_DISPLAY",
+            "element_type": "text",
+            "locator_css": "[aria-label='inquiry_view_value_source']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "STATUS_DISPLAY",
+            "element_type": "text",
+            "locator_css": "[aria-label='inquiry_view_value_status']",
+            "locator_id": "",
+            "locator_xpath": ""
+          },
+          {
+            "suggested_name": "BACK_BUTTON",
+            "element_type": "link",
+            "locator_css": "[aria-label='inquiry_view_button_back']",
+            "locator_id": "",
+            "locator_xpath": ""
+          }
+        ]
+      }
+    },
+    "pages_discovered": 1,
+    "total_pages": 1,
+    "discovery_complete": true
+  }
+}

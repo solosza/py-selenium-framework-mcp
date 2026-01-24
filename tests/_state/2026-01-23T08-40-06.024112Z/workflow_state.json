@@ -1,0 +1,41 @@
+{
+  "step_1": {
+    "persona": "premium registered user with subscription",
+    "URL": "http://www.automationpractice.pl/premium",
+    "role_name": "PremiumUser",
+    "workflow": "catalog",
+    "raw_requirement": "As a premium user, I want to access exclusive content",
+    "detected_env_id": "DEFAULT"
+  },
+  "step_2": {
+    "credential_strategy": "none",
+    "test_data_location": "none",
+    "browser_config": {
+      "headless": false
+    },
+    "timeout_config": {
+      "enabled": true,
+      "threshold_seconds": 60
+    }
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am a sales rep on the leads page",
+        "when": [
+          "I enter search text in the search field",
+          "I view the filtered results"
+        ],
+        "then": [
+          "I should see search results displayed",
+          "I should see matching leads in the table"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_search_results_visible",
+      "has_matching_leads"
+    ],
+    "intent": "search_leads"
+  }
+}

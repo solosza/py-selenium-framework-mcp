@@ -104,55 +104,37 @@ class BaseGate:
     @classmethod
     def _get_session_run_id(cls) -> Optional[str]:
         """
-        Get run_id from session marker if active (DEF-052 fix).
+        Get run_id from session marker if active (per-run isolation).
 
         Session marker pattern:
-        - File: mcp_server/state/.run_session
-        - Format: "run_id|timestamp"
-        - Timeout: 5 minutes (configurable)
+        - File: tests/_state/.current_run_id
+        - Format: "run_id" (plain text, no timestamp)
+        - Cleared by qg_user_input when starting new workflow
 
         Returns:
-            run_id if session is active and recent, None otherwise.
+            run_id if session marker exists, None otherwise.
         """
         from pathlib import Path
-        from datetime import datetime, timezone, timedelta
 
-        session_file = Path(__file__).parent.parent.parent / "state" / ".run_session"
-        if not session_file.exists():
+        # Use new per-run isolation marker location
+        project_root = Path(__file__).parent.parent.parent.parent
+        marker_file = project_root / "tests" / "_state" / ".current_run_id"
+
+        if not marker_file.exists():
             return None
 
         try:
-            content = session_file.read_text().strip()
-            if '|' not in content:
-                # Invalid format, remove
-                session_file.unlink()
-                return None
-
-            run_id, timestamp_str = content.split('|', 1)
-
-            # Check if session is recent (< 30 minutes) - DEF-052A fix
-            timestamp = datetime.fromisoformat(timestamp_str)
-            now = datetime.now(timezone.utc)
-            if (now - timestamp) > timedelta(minutes=30):
-                # Session expired, remove marker
-                session_file.unlink()
-                return None
-
-            return run_id
+            run_id = marker_file.read_text().strip()
+            return run_id if run_id else None
         except Exception:
-            # Corrupted marker, remove it
-            try:
-                session_file.unlink()
-            except Exception:
-                pass
             return None
 
     @classmethod
     def _save_session_run_id(cls, run_id: str) -> None:
         """
-        Save run_id to session marker (DEF-052 fix).
+        Save run_id to session marker (per-run isolation).
 
-        Creates or updates session marker file with current run_id and timestamp.
+        Creates or updates session marker file with current run_id.
         This allows multiple MCP tool calls (separate Python processes) to share
         the same run_id within a workflow session.
 
@@ -160,28 +142,28 @@ class BaseGate:
             run_id: Run ID to save to session marker.
         """
         from pathlib import Path
-        from datetime import datetime, timezone
 
-        session_file = Path(__file__).parent.parent.parent / "state" / ".run_session"
-        session_file.parent.mkdir(parents=True, exist_ok=True)
-
-        timestamp = datetime.now(timezone.utc).isoformat()
-        session_file.write_text(f"{run_id}|{timestamp}")
+        # Save to new per-run isolation marker
+        project_root = Path(__file__).parent.parent.parent.parent
+        marker_file = project_root / "tests" / "_state" / ".current_run_id"
+        marker_file.parent.mkdir(parents=True, exist_ok=True)
+        marker_file.write_text(run_id)
 
     @classmethod
     def _clear_session_marker(cls) -> None:
         """
-        Clear session marker (DEF-052 fix).
+        Clear session marker (per-run isolation).
 
-        Called after Step 10 completes (workflow done) or when starting
-        a new workflow explicitly.
+        Called when starting a new workflow (Step 1) to ensure fresh run_id.
         """
         from pathlib import Path
 
-        session_file = Path(__file__).parent.parent.parent / "state" / ".run_session"
-        if session_file.exists():
+        # Clear new per-run isolation marker
+        project_root = Path(__file__).parent.parent.parent.parent
+        marker_file = project_root / "tests" / "_state" / ".current_run_id"
+        if marker_file.exists():
             try:
-                session_file.unlink()
+                marker_file.unlink()
             except Exception:
                 pass
 
@@ -222,7 +204,7 @@ class BaseGate:
                 return {
                     "status": "fail",
                     "error": "Audit directory missing (DD-30 violation)",
-                    "fix_hint": """
+                    "teach": """
 Audit trail directory does not exist.
 
 Pattern:
@@ -246,7 +228,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
                 return {
                     "status": "fail",
                     "error": f"Audit file not created: {audit_file.name} (DD-30 violation)",
-                    "fix_hint": f"""
+                    "teach": f"""
 Audit file was not created after gate passed.
 
 Expected file: {audit_file}
@@ -275,10 +257,10 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
                     audit_data = json.load(f)
 
                 # Check 4: Recent entry exists for this step/gate
-                steps = audit_data.get("steps", [])
+                events = audit_data.get("events", [])
                 recent_entry = next(
-                    (s for s in reversed(steps)
-                     if s.get("step") == step and s.get("gate") == gate_name),
+                    (e for e in reversed(events)
+                     if e.get("step") == step and e.get("gate") == gate_name),
                     None
                 )
 
@@ -286,12 +268,12 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
                     return {
                         "status": "fail",
                         "error": f"Audit entry not found for Step {step} {gate_name} (DD-30 violation)",
-                        "fix_hint": f"""
+                        "teach": f"""
 Audit file exists but entry was not written.
 
 File: {audit_file}
 Expected: Step {step}, Gate {gate_name}, Mode {mode or 'POST'}
-Found: {len(steps)} total entries
+Found: {len(events)} total entries
 
 Pattern:
 1. Check AuditLogger.log_gate() is called correctly
@@ -302,7 +284,7 @@ Debug:
 import json
 with open("{audit_file}", 'r') as f:
     data = json.load(f)
-    print("Steps logged:", [s.get("gate") for s in data.get("steps", [])])
+    print("Events logged:", [e.get("gate") for e in data.get("events", [])])
 
 Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
                         """
@@ -312,7 +294,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
                 return {
                     "status": "fail",
                     "error": f"Audit file corrupted: {audit_file.name} (DD-30 violation)",
-                    "fix_hint": """
+                    "teach": """
 Audit file exists but contains invalid JSON.
 
 Pattern:
@@ -335,7 +317,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
             return {
                 "status": "fail",
                 "error": f"Audit enforcement error: {str(e)}",
-                "fix_hint": f"""
+                "teach": f"""
 Unexpected error during audit trail validation.
 
 Error: {str(e)}
@@ -393,7 +375,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
             metadata: Validation data from this step (for audit logging)
 
         Returns:
-            {"status": "blocked", "step": int, "attempts": int, "errors": list, "fix_hint": str}
+            {"status": "blocked", "step": int, "attempts": int, "errors": list, "teach": str}
         """
         # DEF-040: Always log to audit trail (lazy init)
         cls.get_audit_logger().log_gate(
@@ -410,8 +392,66 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
             "step": step,
             "attempts": attempts,
             "errors": errors,
-            "fix_hint": f"Step {step} blocked after {attempts} attempts. Manual user intervention required (DD-22)."
+            "teach": f"Step {step} blocked after {attempts} attempts. Manual user intervention required (DD-22)."
         }
+
+    @classmethod
+    def validate_and_pass(
+        cls,
+        step: int,
+        step_name: str,
+        gate_name: str,
+        state_data: dict,
+        metadata: Optional[dict] = None,
+        mode: str = "POST",
+        source: Optional[str] = None
+    ) -> dict:
+        """
+        Universal gate completion pattern: Check transcript, save state, return pass.
+
+        This method enforces the defense-in-depth pattern for ALL gates:
+        1. Protocol (Layer 1): Defines POST-ACTION (write transcript)
+        2. Gate (Layer 2): Validates transcript exists, teaches if missing
+        3. State: Saves workflow state
+        4. Audit: Logs gate result
+
+        Args:
+            step: Step number (1-5)
+            step_name: Human-readable step name (e.g., "User Input", "Pre-flight Configuration")
+            gate_name: Gate name (e.g., "qg_user_input", "qg_preflight")
+            state_data: Data to save to workflow state
+            metadata: Metadata to log to audit trail (defaults to state_data if not provided)
+            mode: Gate mode (default: "POST")
+            source: Execution source (default: None)
+
+        Returns:
+            {"status": "NEEDS_RETRY", ...} if transcript missing (with template)
+            {"status": "pass"} if all checks pass
+        """
+        # 1. Check transcript written (Protocol POST-ACTION requirement)
+        transcript_check = cls._check_transcript_written(
+            step=step,
+            step_name=step_name,
+            input_data=state_data
+        )
+
+        if transcript_check:
+            return transcript_check  # NEEDS_RETRY - AI writes transcript, retries gate
+
+        # 2. Save state (per-run isolation)
+        from utils.state_manager import StateManager
+        audit_logger = cls.get_audit_logger()
+        state_manager = StateManager(run_id=audit_logger.run_id)
+        state_manager.save(step=step, data=state_data)
+
+        # 3. Return pass (logs audit, validates audit write)
+        return cls.pass_response(
+            step=step,
+            gate_name=gate_name,
+            mode=mode,
+            source=source,
+            metadata=metadata or state_data
+        )
 
     @classmethod
     def pass_response(
@@ -424,6 +464,9 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
     ) -> dict:
         """
         Return standard pass response and optionally log to audit trail.
+
+        NOTE: For POST-only gates, prefer using validate_and_pass() which enforces
+        transcript validation and state saving. This method is for lower-level use.
 
         Args:
             step: Step number (for audit logging)
@@ -457,7 +500,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
     def fail_response(
         cls,
         error: str,
-        fix_hint: str,
+        teach: str,
         step: Optional[int] = None,
         gate_name: Optional[str] = None,
         mode: Optional[str] = None,
@@ -469,7 +512,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
 
         Args:
             error: Error message
-            fix_hint: Hint for fixing the issue
+            teach: Teaching guidance for fixing the issue (Smart Gates = Validate + Teach)
             step: Step number (for audit logging)
             gate_name: Gate name (for audit logging)
             mode: Gate mode PRE/POST (for audit logging)
@@ -477,7 +520,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
             metadata: Validation data from this step (for audit logging)
 
         Returns:
-            {"status": "fail", "error": str, "fix_hint": str}
+            {"status": "fail", "error": str, "teach": str}
         """
         # DEF-040: Log to audit trail if context provided (lazy init)
         if step is not None and gate_name is not None:
@@ -494,7 +537,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
         return {
             "status": "fail",
             "error": error,
-            "fix_hint": fix_hint
+            "teach": teach
         }
 
     @classmethod
@@ -619,7 +662,7 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
             if isinstance(param, dict):
                 return cls.fail_response(
                     error=f"{context}: Param must be string format, got dict: {param}",
-                    fix_hint="""
+                    teach="""
 Params must be string format per DEF-054 standard.
 
 CORRECT: ["email: str", "password: str"]
@@ -639,14 +682,14 @@ Convert dict format to string format:
             if not isinstance(param, str):
                 return cls.fail_response(
                     error=f"{context}: Param must be string, got {type(param).__name__}: {param}",
-                    fix_hint="Params must be strings with format 'name: type' like 'email: str'"
+                    teach="Params must be strings with format 'name: type' like 'email: str'"
                 )
 
             # Check for colon separator (required format: "name: type")
             if ":" not in param:
                 return cls.fail_response(
                     error=f"{context}: Param missing colon separator: '{param}'",
-                    fix_hint="""
+                    teach="""
 Params must have format 'name: type' with colon separator.
 
 Examples:
@@ -661,3 +704,159 @@ NOT:
                 )
 
         return None  # All params valid
+
+    @classmethod
+    def _check_transcript_written(
+        cls,
+        step: int,
+        step_name: str,
+        input_data: dict
+    ) -> Optional[dict]:
+        """
+        Check/create workflow transcript entry (Protocol POST-ACTION requirement).
+
+        Validates:
+        - tests/_reports/{run_id}/workflow_transcript.md exists
+        - Contains entry for this step
+
+        Args:
+            step: Step number (1-5)
+            step_name: Human-readable step name
+            input_data: Input data to include in transcript
+
+        Returns:
+            None if transcript exists with entry for this step
+            NEEDS_RETRY dict with template if missing
+        """
+        from pathlib import Path
+        from datetime import datetime
+
+        # Get run_id from audit logger
+        audit_logger = cls.get_audit_logger()
+        run_id = audit_logger.run_id
+
+        # Safe run_id for Windows paths
+        safe_run_id = run_id.replace(":", "-")
+
+        # Transcript file path
+        transcript_file = Path(f"tests/_reports/{safe_run_id}/workflow_transcript.md")
+
+        # Check if transcript directory exists
+        if not transcript_file.parent.exists():
+            # Create directory template
+            return {
+                "status": "NEEDS_RETRY",
+                "fix_applied": "transcript_infrastructure_created",
+                "error": "Transcript directory missing",
+                "message": f"Create transcript directory and write Step {step} entry",
+                "transcript_scaffolding": {
+                    "directory": str(transcript_file.parent),
+                    "file": str(transcript_file),
+                    "step": step,
+                    "step_name": step_name,
+                    "template": cls._generate_transcript_template(step, step_name, input_data)
+                }
+            }
+
+        # Check if transcript file exists
+        if not transcript_file.exists():
+            # Create transcript with first entry
+            return {
+                "status": "NEEDS_RETRY",
+                "fix_applied": "transcript_file_created",
+                "error": "Transcript file missing",
+                "message": f"Create transcript file with Step {step} entry",
+                "transcript_scaffolding": {
+                    "file": str(transcript_file),
+                    "step": step,
+                    "step_name": step_name,
+                    "template": cls._generate_transcript_template(step, step_name, input_data, is_first_entry=True)
+                }
+            }
+
+        # Transcript exists - check if this step's entry exists
+        content = transcript_file.read_text(encoding='utf-8')
+        step_marker = f"## Step {step}: {step_name}"
+
+        if step_marker not in content:
+            # Append this step's entry
+            return {
+                "status": "NEEDS_RETRY",
+                "fix_applied": "transcript_entry_appended",
+                "error": f"Transcript missing Step {step} entry",
+                "message": f"Append Step {step} entry to existing transcript",
+                "transcript_scaffolding": {
+                    "file": str(transcript_file),
+                    "step": step,
+                    "step_name": step_name,
+                    "mode": "append",
+                    "template": cls._generate_transcript_template(step, step_name, input_data)
+                }
+            }
+
+        # Transcript exists with this step's entry
+        return None
+
+    @staticmethod
+    def _generate_transcript_template(
+        step: int,
+        step_name: str,
+        input_data: dict,
+        is_first_entry: bool = False
+    ) -> str:
+        """
+        Generate transcript entry template.
+
+        Args:
+            step: Step number
+            step_name: Human-readable step name
+            input_data: Input data to include
+            is_first_entry: If True, include header
+
+        Returns:
+            Formatted transcript entry
+        """
+        from datetime import datetime
+
+        timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        # Header for first entry only
+        header = ""
+        if is_first_entry:
+            header = f"""# Workflow Transcript
+
+**Run ID:** {input_data.get('run_id', 'N/A')}
+**Started:** {timestamp}
+
+---
+
+"""
+
+        # Format input data as bullet points
+        input_lines = []
+        for key, value in input_data.items():
+            if key == 'run_id':  # Skip run_id (in header)
+                continue
+            # Format nested dicts
+            if isinstance(value, dict):
+                input_lines.append(f"- **{key}:**")
+                for k, v in value.items():
+                    input_lines.append(f"  - {k}: {v}")
+            else:
+                input_lines.append(f"- **{key}:** {value}")
+
+        inputs_section = "\n".join(input_lines) if input_lines else "- (No inputs)"
+
+        # Entry template
+        entry = f"""{header}## Step {step}: {step_name}
+**Timestamp:** {timestamp}
+**Status:** PASS
+
+**Inputs:**
+{inputs_section}
+
+---
+
+"""
+
+        return entry

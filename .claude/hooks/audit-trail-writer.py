@@ -2,12 +2,11 @@
 """
 Audit Trail Writer Hook - Creates progressive audit trail after each quality gate.
 
-This PostToolUse hook captures gate results and appends them to a timestamped
-audit file. Ensures complete traceability for regulated verticals (healthcare,
-finance, legal, insurance).
+This PostToolUse hook captures gate results and appends them to the audit log.
+Uses per-run isolation (tests/_state/<run_id>/ and tests/_audit/audit_log_<run_id>.json).
 
 Architecture:
-  Gate passes -> Hook triggers -> Reads workflow_state -> Appends to audit file
+  Gate passes -> Hook triggers -> Reads workflow_state -> Appends to audit log
 
 Trigger: After any qg_* MCP tool completes with status: pass
 
@@ -23,18 +22,24 @@ from pathlib import Path
 from datetime import datetime
 
 
-# Map tool names to step numbers
+# Map tool names to step numbers (FIXED: swapped qg_preflight and qg_user_input)
 GATE_TO_STEP = {
-    'mcp__qa-automation__qg_preflight': 'step_1',
-    'mcp__qa-automation__qg_user_input': 'step_2',
-    'mcp__qa-automation__qg_ai_processing': 'step_3',
-    'mcp__qa-automation__qg_test_scenarios': 'step_4',
-    'mcp__qa-automation__qg_discovered_elements': 'step_5',
-    'mcp__qa-automation__qg_page_object': 'step_6',
-    'mcp__qa-automation__qg_task': 'step_7',
-    'mcp__qa-automation__qg_role': 'step_8',
-    'mcp__qa-automation__qg_test_runner': 'step_9',
-    'mcp__qa-automation__qg_save_run': 'step_10',
+    'mcp__qa-automation__qg_user_input': 1,      # Step 1 (was step_2)
+    'mcp__qa-automation__qg_preflight': 2,       # Step 2 (was step_1)
+    'mcp__qa-automation__qg_ai_processing': 3,
+    'mcp__qa-automation__qg_test_scenarios': 4,
+    'mcp__qa-automation__qg_discovered_elements': 5,
+    'mcp__qa-automation__qg_discovery_complete': 5,  # Also Step 5
+}
+
+# Map tool names to gate names (for audit logging)
+TOOL_TO_GATE = {
+    'mcp__qa-automation__qg_user_input': 'qg_user_input',
+    'mcp__qa-automation__qg_preflight': 'qg_preflight',
+    'mcp__qa-automation__qg_ai_processing': 'qg_ai_processing',
+    'mcp__qa-automation__qg_test_scenarios': 'qg_test_scenarios',
+    'mcp__qa-automation__qg_discovered_elements': 'qg_discovered_elements',
+    'mcp__qa-automation__qg_discovery_complete': 'qg_discovery_complete',
 }
 
 
@@ -46,9 +51,21 @@ def get_project_dir() -> Path:
     return Path.cwd()
 
 
-def get_workflow_state() -> dict:
-    """Read current workflow state."""
-    state_file = get_project_dir() / 'mcp_server' / 'state' / 'workflow_state.json'
+def get_current_run_id() -> str | None:
+    """Get current run_id from session marker."""
+    marker = get_project_dir() / 'tests' / '_state' / '.current_run_id'
+    if not marker.exists():
+        return None
+
+    try:
+        return marker.read_text().strip()
+    except Exception:
+        return None
+
+
+def get_workflow_state(run_id: str) -> dict:
+    """Read current workflow state from per-run isolation directory."""
+    state_file = get_project_dir() / 'tests' / '_state' / run_id / 'workflow_state.json'
     if not state_file.exists():
         return {}
 
@@ -59,104 +76,48 @@ def get_workflow_state() -> dict:
         return {}
 
 
-def get_audit_dir() -> Path:
-    """Get or create audit directory."""
+def get_audit_file(run_id: str) -> Path:
+    """Get audit file path for current run_id."""
     audit_dir = get_project_dir() / 'tests' / '_audit'
     audit_dir.mkdir(parents=True, exist_ok=True)
-    return audit_dir
+    return audit_dir / f'audit_log_{run_id}.json'
 
 
-def get_audit_filename(workflow_state: dict) -> str:
-    """Generate audit filename from workflow state."""
-    # Get workflow name from step_2 if available
-    workflow = 'unknown'
-    intent = 'workflow'
-
-    if 'step_2' in workflow_state:
-        workflow = workflow_state['step_2'].get('workflow', 'unknown')
-
-    if 'step_3' in workflow_state:
-        intent = workflow_state['step_3'].get('intent', 'workflow')
-
-    # Use current date/time for unique filename
-    timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
-
-    return f"{timestamp}_{workflow}_{intent}.json"
-
-
-def get_or_create_audit_file(workflow_state: dict) -> Path:
-    """Get existing audit file or create new one for this workflow run."""
-    audit_dir = get_audit_dir()
-
-    # Check for existing audit file for this session
-    # We use a marker file to track the current audit session
-    session_marker = get_project_dir() / 'mcp_server' / 'state' / '.audit_session'
-
-    if session_marker.exists():
-        try:
-            audit_filename = session_marker.read_text().strip()
-            audit_file = audit_dir / audit_filename
-            if audit_file.exists():
-                return audit_file
-        except Exception:
-            pass
-
-    # Create new audit file
-    audit_filename = get_audit_filename(workflow_state)
-    audit_file = audit_dir / audit_filename
-
-    # Save session marker
-    try:
-        session_marker.parent.mkdir(parents=True, exist_ok=True)
-        session_marker.write_text(audit_filename)
-    except Exception:
-        pass
-
-    return audit_file
-
-
-def strip_code_from_step(step_data: dict) -> dict:
-    """Remove raw code blobs from step data to reduce audit file size."""
-    stripped = {}
-    for key, value in step_data.items():
-        # Skip keys ending in '_code' (pom_code, task_code, role_code, test_code)
-        if key.endswith('_code'):
-            stripped[key] = '[CODE_STRIPPED_FOR_AUDIT]'
-        else:
-            stripped[key] = value
-    return stripped
-
-
-def append_to_audit(audit_file: Path, step_name: str, step_data: dict, gate_result: dict):
-    """Append step data to audit file."""
+def append_to_audit(audit_file: Path, step: int, gate_name: str, metadata: dict):
+    """Append gate validation event to audit log."""
     # Read existing audit or create new structure
     if audit_file.exists():
         try:
             with open(audit_file, 'r') as f:
                 audit = json.load(f)
         except (json.JSONDecodeError, Exception):
-            audit = {}
-    else:
-        audit = {
-            'audit_metadata': {
-                'created': datetime.now().isoformat(),
-                'platform': 'qa-automation',
-                'version': '1.0'
+            # If file is corrupted, start fresh
+            run_id = audit_file.stem.replace('audit_log_', '')
+            audit = {
+                'workflow_id': run_id,
+                'events': []
             }
+    else:
+        # Create new audit log
+        run_id = audit_file.stem.replace('audit_log_', '')
+        audit = {
+            'workflow_id': run_id,
+            'events': []
         }
 
-    # Update metadata timestamp
-    audit['audit_metadata']['last_updated'] = datetime.now().isoformat()
-
-    # Strip code from step data to reduce file size
-    stripped_data = strip_code_from_step(step_data) if step_data else {}
-
-    # Add step data with gate result
-    audit[step_name] = {
-        'timestamp': datetime.now().isoformat(),
-        'gate_result': gate_result.get('status', 'unknown'),
-        'data': stripped_data
+    # Create new event entry
+    event = {
+        'type': 'gate_validation',
+        'step': step,
+        'gate': gate_name,
+        'mode': 'POST',
+        'result': 'pass',
+        'timestamp': datetime.now().isoformat() + 'Z',
+        'metadata': metadata
     }
+
+    # Append event
+    audit['events'].append(event)
 
     # Write updated audit
     try:
@@ -164,16 +125,6 @@ def append_to_audit(audit_file: Path, step_name: str, step_data: dict, gate_resu
             json.dump(audit, f, indent=2)
     except Exception as e:
         sys.stderr.write(f"Warning: Could not write audit file: {e}\n")
-
-
-def clear_session_marker():
-    """Clear session marker after Step 10 completes (workflow done)."""
-    session_marker = get_project_dir() / 'mcp_server' / 'state' / '.audit_session'
-    try:
-        if session_marker.exists():
-            session_marker.unlink()
-    except Exception:
-        pass
 
 
 def main():
@@ -210,23 +161,28 @@ def main():
     if result.get('status') != 'pass':
         sys.exit(0)
 
-    step_name = GATE_TO_STEP[tool_name]
+    # Get current run_id
+    run_id = get_current_run_id()
+    if not run_id:
+        # No active workflow, exit silently
+        sys.exit(0)
+
+    # Get step number and gate name
+    step = GATE_TO_STEP[tool_name]
+    gate_name = TOOL_TO_GATE[tool_name]
 
     # Get current workflow state
-    workflow_state = get_workflow_state()
+    workflow_state = get_workflow_state(run_id)
 
-    # Get step data from workflow state
-    step_data = workflow_state.get(step_name, {})
+    # Extract metadata from workflow state for this step
+    step_key = f'step_{step}'
+    metadata = workflow_state.get(step_key, {})
 
-    # Get or create audit file
-    audit_file = get_or_create_audit_file(workflow_state)
+    # Get audit file
+    audit_file = get_audit_file(run_id)
 
     # Append to audit
-    append_to_audit(audit_file, step_name, step_data, result)
-
-    # Clear session marker after Step 10 (workflow complete)
-    if step_name == 'step_10':
-        clear_session_marker()
+    append_to_audit(audit_file, step, gate_name, metadata)
 
     sys.exit(0)
 

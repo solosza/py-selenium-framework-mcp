@@ -1,0 +1,21 @@
+{
+  "step_1": {
+    "persona": "guest",
+    "URL": "https://heliosdigital-retail-qa.azurewebsites.net",
+    "role_name": "Guest",
+    "workflow": "integration_test_v2",
+    "raw_requirement": "As a guest, I want to browse products",
+    "detected_env_id": "helios1"
+  },
+  "step_2": {
+    "credential_strategy": "none",
+    "test_data_location": "none",
+    "browser_config": {
+      "headless": false
+    },
+    "timeout_config": {
+      "enabled": true,
+      "threshold_seconds": 45
+    }
+  }
+}

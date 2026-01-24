@@ -1,0 +1,147 @@
+{
+  "step_2": {
+    "credential_strategy": "none",
+    "test_data_location": "none"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am on the Helios Digital Retail homepage",
+        "when": [
+          "I navigate to the search functionality",
+          "I enter search criteria for sales representative",
+          "I submit the search"
+        ],
+        "then": [
+          "I should see search results displayed",
+          "I should see sales representative information"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_search_results_displayed",
+      "is_sales_rep_info_visible"
+    ],
+    "intent": "search"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_search_for_sales_representative",
+        "given": "I am on the Helios Digital Retail homepage",
+        "when": [
+          "I navigate to the search functionality",
+          "I enter search criteria for sales representative",
+          "I submit the search"
+        ],
+        "then": [
+          "I should see search results displayed",
+          "I should see sales representative information"
+        ],
+        "workflow": "devtests"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "SEARCH_INPUT",
+        "element_type": "textbox",
+        "locator_css": "[data-test-id='search_view_input_search']",
+        "locator_xpath": "//input[@data-test-id='search_view_input_search']"
+      },
+      {
+        "suggested_name": "SEARCH_CANCEL_BUTTON",
+        "element_type": "button",
+        "locator_css": "[data-test-id='search_view_button_cancel']",
+        "locator_xpath": "//*[@data-test-id='search_view_button_cancel']"
+      },
+      {
+        "suggested_name": "FILTER_BUTTON",
+        "element_type": "button",
+        "locator_css": "[data-test-id='search_view_button_filter']",
+        "locator_xpath": "//*[@data-test-id='search_view_button_filter']"
+      },
+      {
+        "suggested_name": "RESULTS_TABLE",
+        "element_type": "table",
+        "locator_css": "table",
+        "locator_xpath": "//table"
+      },
+      {
+        "suggested_name": "CUSTOMER_NAME_CELL",
+        "element_type": "text",
+        "locator_css": "[data-test-id='lead_view_value_customername']",
+        "locator_xpath": "//*[@data-test-id='lead_view_value_customername']"
+      }
+    ],
+    "page_name": "SearchPage",
+    "discovered_pages": {
+      "HeliosDigitalRetailHomepagePage": {
+        "input_elements": [
+          {
+            "suggested_name": "SALES_LINK",
+            "element_type": "link",
+            "locator_css": "[data-test-id='portal_nav_button_sales']",
+            "locator_xpath": "//a[@data-test-id='portal_nav_button_sales']"
+          },
+          {
+            "suggested_name": "INQUIRIES_LINK",
+            "element_type": "link",
+            "locator_css": "[data-test-id='portal_nav_button_inquiries']",
+            "locator_xpath": "//a[@data-test-id='portal_nav_button_inquiries']"
+          },
+          {
+            "suggested_name": "VEHICLES_LINK",
+            "element_type": "link",
+            "locator_css": "[data-test-id='portal_nav_button_vehicles']",
+            "locator_xpath": "//a[@data-test-id='portal_nav_button_vehicles']"
+          },
+          {
+            "suggested_name": "CUSTOMERS_LINK",
+            "element_type": "link",
+            "locator_css": "[data-test-id='portal_nav_button_customers']",
+            "locator_xpath": "//a[@data-test-id='portal_nav_button_customers']"
+          }
+        ]
+      },
+      "SearchPage": {
+        "input_elements": [
+          {
+            "suggested_name": "SEARCH_INPUT",
+            "element_type": "textbox",
+            "locator_css": "[data-test-id='search_view_input_search']",
+            "locator_xpath": "//input[@data-test-id='search_view_input_search']"
+          },
+          {
+            "suggested_name": "SEARCH_CANCEL_BUTTON",
+            "element_type": "button",
+            "locator_css": "[data-test-id='search_view_button_cancel']",
+            "locator_xpath": "//*[@data-test-id='search_view_button_cancel']"
+          },
+          {
+            "suggested_name": "FILTER_BUTTON",
+            "element_type": "button",
+            "locator_css": "[data-test-id='search_view_button_filter']",
+            "locator_xpath": "//*[@data-test-id='search_view_button_filter']"
+          },
+          {
+            "suggested_name": "RESULTS_TABLE",
+            "element_type": "table",
+            "locator_css": "table",
+            "locator_xpath": "//table"
+          },
+          {
+            "suggested_name": "CUSTOMER_NAME_CELL",
+            "element_type": "text",
+            "locator_css": "[data-test-id='lead_view_value_customername']",
+            "locator_xpath": "//*[@data-test-id='lead_view_value_customername']"
+          }
+        ]
+      }
+    },
+    "pages_discovered": 0,
+    "total_pages": 2,
+    "discovery_complete": false
+  }
+}

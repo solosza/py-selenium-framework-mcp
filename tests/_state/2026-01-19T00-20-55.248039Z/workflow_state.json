@@ -1,0 +1,476 @@
+{
+  "step_1": {
+    "credential_strategy": "none",
+    "test_data_location": "workflow"
+  },
+  "step_2": {
+    "persona": "sales representative",
+    "URL": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+    "role_name": "SalesRepresentative",
+    "workflow": "helios1",
+    "raw_requirement": "As a Sales representative, I want to create a new inquiry for a customer with dynamically generated name and email contact, set the inquiry type to \"Service\", source to \"Email\", and status to \"New\", so that I can track their service request in the system.",
+    "detected_env_id": "helios1"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am logged in to the Retail Portal on the Inquiries page",
+        "when": [
+          "I click New Inquiry button",
+          "I search for customer with dynamically generated name and email",
+          "I proceed through Customer form with title Mr and assigned user Test User",
+          "I proceed through Contacts form keeping email as preferred",
+          "I skip Address form",
+          "I complete Inquiry form with type Service source Email status New",
+          "I submit the inquiry"
+        ],
+        "then": [
+          "The inquiry should be created successfully",
+          "The inquiry should appear in the inquiries list"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_inquiry_created",
+      "is_inquiry_in_list"
+    ],
+    "intent": "create_inquiry"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_create_service_inquiry_with_dynamic_customer_data",
+        "given": "I am logged in to the Retail Portal on the Inquiries page",
+        "when": [
+          "I click New Inquiry button",
+          "I search for customer with dynamically generated name and email",
+          "I proceed through Customer form with title Mr and assigned user Test User",
+          "I proceed through Contacts form keeping email as preferred",
+          "I skip Address form",
+          "I complete Inquiry form with type Service source Email status New",
+          "I submit the inquiry"
+        ],
+        "then": [
+          "The inquiry should be created successfully",
+          "The inquiry should appear in the inquiries list"
+        ],
+        "workflow": "helios1"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "new_inquiry_button",
+        "name": "New Inquiry",
+        "aria_label": "inquiry_view_button_add",
+        "role": "generic",
+        "element_type": "button",
+        "locator_css": "[aria-label='inquiry_view_button_add']",
+        "ref": "e71"
+      },
+      {
+        "suggested_name": "search_firstname_input",
+        "name": "First Name",
+        "aria_label": "customer_search_input_firstname",
+        "role": "textbox",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_search_input_firstname']",
+        "ref": "e217"
+      },
+      {
+        "suggested_name": "search_lastname_input",
+        "name": "Last Name",
+        "aria_label": "customer_search_input_lastname",
+        "role": "textbox",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_search_input_lastname']",
+        "ref": "e222"
+      },
+      {
+        "suggested_name": "search_contact_type",
+        "name": "Contact Type",
+        "aria_label": "contact_search_input_type",
+        "role": "combobox",
+        "element_type": "select",
+        "locator_css": "[aria-label='contact_search_input_type']",
+        "ref": "e227"
+      },
+      {
+        "suggested_name": "search_contact_identifier",
+        "name": "Contact Identifier",
+        "aria_label": "contact_search_input_identifier",
+        "role": "textbox",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='contact_search_input_identifier']",
+        "ref": "e232"
+      },
+      {
+        "suggested_name": "search_next_button",
+        "name": "Next",
+        "aria_label": "customer_search_button_next",
+        "role": "generic",
+        "element_type": "button",
+        "locator_css": "[aria-label='customer_search_button_next']",
+        "ref": "e236"
+      },
+      {
+        "suggested_name": "customer_title_select",
+        "name": "Title",
+        "aria_label": "customer_add_input_title",
+        "role": "combobox",
+        "element_type": "select",
+        "locator_css": "[aria-label='customer_add_input_title']",
+        "ref": "e291"
+      },
+      {
+        "suggested_name": "customer_firstname_input",
+        "name": "First Name",
+        "aria_label": "customer_add_input_firstname",
+        "role": "textbox",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_add_input_firstname']",
+        "ref": "e296"
+      },
+      {
+        "suggested_name": "customer_lastname_input",
+        "name": "Last Name",
+        "aria_label": "customer_add_input_lastname",
+        "role": "textbox",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_add_input_lastname']",
+        "ref": "e306"
+      },
+      {
+        "suggested_name": "customer_assigned_user_select",
+        "name": "Assigned User",
+        "aria_label": "customer_add_input_assigneduserid",
+        "role": "combobox",
+        "element_type": "select",
+        "locator_css": "[aria-label='customer_add_input_assigneduserid']",
+        "ref": "e321"
+      },
+      {
+        "suggested_name": "customer_next_button",
+        "name": "Next",
+        "aria_label": "customer_add_button_submit",
+        "role": "button",
+        "element_type": "button",
+        "locator_css": "[aria-label='customer_add_button_submit']",
+        "ref": "e325"
+      },
+      {
+        "suggested_name": "contact_preferred_radio",
+        "name": "Preferred",
+        "aria_label": "contact_add_input_ispreferred",
+        "role": "radio",
+        "element_type": "radio",
+        "locator_css": "[aria-label='contact_add_input_ispreferred']",
+        "ref": "e345"
+      },
+      {
+        "suggested_name": "contact_next_button",
+        "name": "Next",
+        "aria_label": "contact_add_button_submit",
+        "role": "button",
+        "element_type": "button",
+        "locator_css": "[aria-label='contact_add_button_submit']",
+        "ref": "e354"
+      },
+      {
+        "suggested_name": "address_next_button",
+        "name": "Next",
+        "aria_label": "address_add_button_submit",
+        "role": "button",
+        "element_type": "button",
+        "locator_css": "[aria-label='address_add_button_submit']",
+        "ref": "e418"
+      },
+      {
+        "suggested_name": "inquiry_type_select",
+        "name": "Type",
+        "aria_label": "inquiry_add_value_type",
+        "role": "combobox",
+        "element_type": "select",
+        "locator_css": "[aria-label='inquiry_add_value_type']",
+        "ref": "e427"
+      },
+      {
+        "suggested_name": "inquiry_source_select",
+        "name": "Source",
+        "aria_label": "inquiry_add_value_source",
+        "role": "combobox",
+        "element_type": "select",
+        "locator_css": "[aria-label='inquiry_add_value_source']",
+        "ref": "e432"
+      },
+      {
+        "suggested_name": "inquiry_status_select",
+        "name": "Status",
+        "aria_label": "inquiry_add_value_status",
+        "role": "combobox",
+        "element_type": "select",
+        "locator_css": "[aria-label='inquiry_add_value_status']",
+        "ref": "e447"
+      },
+      {
+        "suggested_name": "inquiry_complete_button",
+        "name": "Complete",
+        "aria_label": "inquiry_add_button_submit",
+        "role": "button",
+        "element_type": "button",
+        "locator_css": "[aria-label='inquiry_add_button_submit']",
+        "ref": "e451"
+      }
+    ],
+    "page_name": "InquiriesPage",
+    "discovered_pages": {
+      "InquiriesPage": {
+        "input_elements": [
+          {
+            "suggested_name": "new_inquiry_button",
+            "name": "New Inquiry",
+            "aria_label": "inquiry_view_button_add",
+            "role": "generic",
+            "element_type": "button",
+            "locator_css": "[aria-label='inquiry_view_button_add']",
+            "ref": "e71"
+          },
+          {
+            "suggested_name": "search_firstname_input",
+            "name": "First Name",
+            "aria_label": "customer_search_input_firstname",
+            "role": "textbox",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_search_input_firstname']",
+            "ref": "e217"
+          },
+          {
+            "suggested_name": "search_lastname_input",
+            "name": "Last Name",
+            "aria_label": "customer_search_input_lastname",
+            "role": "textbox",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_search_input_lastname']",
+            "ref": "e222"
+          },
+          {
+            "suggested_name": "search_contact_type",
+            "name": "Contact Type",
+            "aria_label": "contact_search_input_type",
+            "role": "combobox",
+            "element_type": "select",
+            "locator_css": "[aria-label='contact_search_input_type']",
+            "ref": "e227"
+          },
+          {
+            "suggested_name": "search_contact_identifier",
+            "name": "Contact Identifier",
+            "aria_label": "contact_search_input_identifier",
+            "role": "textbox",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='contact_search_input_identifier']",
+            "ref": "e232"
+          },
+          {
+            "suggested_name": "search_next_button",
+            "name": "Next",
+            "aria_label": "customer_search_button_next",
+            "role": "generic",
+            "element_type": "button",
+            "locator_css": "[aria-label='customer_search_button_next']",
+            "ref": "e236"
+          },
+          {
+            "suggested_name": "customer_title_select",
+            "name": "Title",
+            "aria_label": "customer_add_input_title",
+            "role": "combobox",
+            "element_type": "select",
+            "locator_css": "[aria-label='customer_add_input_title']",
+            "ref": "e291"
+          },
+          {
+            "suggested_name": "customer_firstname_input",
+            "name": "First Name",
+            "aria_label": "customer_add_input_firstname",
+            "role": "textbox",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_add_input_firstname']",
+            "ref": "e296"
+          },
+          {
+            "suggested_name": "customer_lastname_input",
+            "name": "Last Name",
+            "aria_label": "customer_add_input_lastname",
+            "role": "textbox",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_add_input_lastname']",
+            "ref": "e306"
+          },
+          {
+            "suggested_name": "customer_assigned_user_select",
+            "name": "Assigned User",
+            "aria_label": "customer_add_input_assigneduserid",
+            "role": "combobox",
+            "element_type": "select",
+            "locator_css": "[aria-label='customer_add_input_assigneduserid']",
+            "ref": "e321"
+          },
+          {
+            "suggested_name": "customer_next_button",
+            "name": "Next",
+            "aria_label": "customer_add_button_submit",
+            "role": "button",
+            "element_type": "button",
+            "locator_css": "[aria-label='customer_add_button_submit']",
+            "ref": "e325"
+          },
+          {
+            "suggested_name": "contact_preferred_radio",
+            "name": "Preferred",
+            "aria_label": "contact_add_input_ispreferred",
+            "role": "radio",
+            "element_type": "radio",
+            "locator_css": "[aria-label='contact_add_input_ispreferred']",
+            "ref": "e345"
+          },
+          {
+            "suggested_name": "contact_next_button",
+            "name": "Next",
+            "aria_label": "contact_add_button_submit",
+            "role": "button",
+            "element_type": "button",
+            "locator_css": "[aria-label='contact_add_button_submit']",
+            "ref": "e354"
+          },
+          {
+            "suggested_name": "address_next_button",
+            "name": "Next",
+            "aria_label": "address_add_button_submit",
+            "role": "button",
+            "element_type": "button",
+            "locator_css": "[aria-label='address_add_button_submit']",
+            "ref": "e418"
+          },
+          {
+            "suggested_name": "inquiry_type_select",
+            "name": "Type",
+            "aria_label": "inquiry_add_value_type",
+            "role": "combobox",
+            "element_type": "select",
+            "locator_css": "[aria-label='inquiry_add_value_type']",
+            "ref": "e427"
+          },
+          {
+            "suggested_name": "inquiry_source_select",
+            "name": "Source",
+            "aria_label": "inquiry_add_value_source",
+            "role": "combobox",
+            "element_type": "select",
+            "locator_css": "[aria-label='inquiry_add_value_source']",
+            "ref": "e432"
+          },
+          {
+            "suggested_name": "inquiry_status_select",
+            "name": "Status",
+            "aria_label": "inquiry_add_value_status",
+            "role": "combobox",
+            "element_type": "select",
+            "locator_css": "[aria-label='inquiry_add_value_status']",
+            "ref": "e447"
+          },
+          {
+            "suggested_name": "inquiry_complete_button",
+            "name": "Complete",
+            "aria_label": "inquiry_add_button_submit",
+            "role": "button",
+            "element_type": "button",
+            "locator_css": "[aria-label='inquiry_add_button_submit']",
+            "ref": "e451"
+          }
+        ]
+      }
+    },
+    "pages_discovered": 0,
+    "total_pages": 1,
+    "discovery_complete": false
+  },
+  "step_7": {
+    "task_code": "\"\"\"\nCreate and manage customer inquiries through multi-step wizard form\n\nThis module provides high-level task methods that orchestrate page objects\nto accomplish business workflows.\n\"\"\"\n\nfrom interfaces.web_interface import WebInterface\nfrom resources.utilities import autologger\nfrom framework.pages.helios1.inquiries_page import InquiriesPage\n\n\nclass InquiryTasks:\n    \"\"\"\n    Task module for inquiry operations.\n\n    - @autologger(\"Task\") on all methods\n    - NO decorator on constructor\n    - Composes Page Objects\n    - One domain operation per method\n    - NO return values\n    - Uses fluent POM API\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"\n        Compose Page Objects - NO decorator on constructor.\n\n        Args:\n            web: WebInterface instance\n        \"\"\"\n        self.web = web\n        self.inquiries_page = InquiriesPage(web)\n\n    # ==================== TASK METHODS ====================\n\n    @autologger.automation_logger(\"Task\")\n    def create_inquiry(self, customer_data: dict, inquiry_data: dict) -> None:\n        \"\"\"\n        Complete workflow: create inquiry through 5-step wizard.\n\n        Steps:\n        1. Search for customer (or create new)\n        2. Fill customer details\n        3. Set contact preferences\n        4. Skip address (optional)\n        5. Complete inquiry form\n\n        Args:\n            customer_data: dict with firstname, lastname, email, title, assigned_user\n            inquiry_data: dict with type, source, status\n\n        NO return value - test asserts via POM state-check methods.\n        \"\"\"\n        # Step 1: Open modal and search for customer\n        (self.inquiries_page\n            .click_new_inquiry()\n            .enter_search_firstname(customer_data[\"firstname\"])\n            .enter_search_lastname(customer_data[\"lastname\"])\n            .select_search_contact_type(\"Email\")\n            .enter_search_contact_identifier(customer_data[\"email\"])\n            .click_search_next())\n\n        # Step 2: Fill customer form\n        (self.inquiries_page\n            .select_customer_title(customer_data[\"title\"])\n            .enter_customer_firstname(customer_data[\"firstname\"])\n            .enter_customer_lastname(customer_data[\"lastname\"])\n            .select_customer_assigned_user(customer_data[\"assigned_user\"])\n            .click_customer_next())\n\n        # Step 3: Set contact as preferred\n        (self.inquiries_page\n            .click_contact_preferred()\n            .click_contact_next())\n\n        # Step 4: Skip address (optional)\n        self.inquiries_page.click_address_next()\n\n        # Step 5: Complete inquiry form\n        (self.inquiries_page\n            .select_inquiry_type(inquiry_data[\"type\"])\n            .select_inquiry_source(inquiry_data[\"source\"])\n            .select_inquiry_status(inquiry_data[\"status\"])\n            .click_inquiry_complete())\n\n        # NO return - test asserts via inquiries_page.is_inquiry_created()\n",
+    "task_metadata": {
+      "class_name": "InquiryTasks",
+      "import_path": "tasks.helios1.inquiry_tasks",
+      "composed_pages": [
+        "InquiriesPage"
+      ],
+      "task_methods": [
+        {
+          "name": "create_inquiry",
+          "params": [
+            "customer_data: dict",
+            "inquiry_data: dict"
+          ],
+          "calls": [
+            "click_new_inquiry",
+            "enter_search_firstname",
+            "enter_search_lastname",
+            "select_search_contact_type",
+            "enter_search_contact_identifier",
+            "click_search_next",
+            "select_customer_title",
+            "enter_customer_firstname",
+            "enter_customer_lastname",
+            "select_customer_assigned_user",
+            "click_customer_next",
+            "click_contact_preferred",
+            "click_contact_next",
+            "click_address_next",
+            "select_inquiry_type",
+            "select_inquiry_source",
+            "select_inquiry_status",
+            "click_inquiry_complete"
+          ]
+        }
+      ]
+    }
+  },
+  "step_8": {
+    "role_code": "\"\"\"\nSalesRepresentative - Role for orchestrating business workflows.\n\nRoles represent user personas (e.g., Admin, Customer, Guest).\nThis role orchestrates complete business workflows using Task modules.\n\"\"\"\n\nfrom interfaces.web_interface import WebInterface\nfrom resources.utilities import autologger\nfrom tasks.helios1.inquiry_tasks import InquiryTasks\n\n\nclass SalesRepresentative:\n    \"\"\"\n    SalesRepresentative - orchestrates complete business workflows.\n\n    - @autologger(\"Role\") on workflow methods\n    - @autologger(\"Role Constructor\") on __init__\n    - Composes Task modules\n    - Workflow methods call MULTIPLE tasks\n    - NO return values\n    - NO locators\n    - NO credentials (strategy: none - already logged in)\n    \"\"\"\n\n    @autologger.automation_logger(\"Role Constructor\")\n    def __init__(self, web_interface: WebInterface):\n        \"\"\"\n        Initialize and compose Task modules.\n\n        Args:\n            web_interface: WebInterface instance\n\n        Note: No credentials needed - user is already logged in.\n        \"\"\"\n        self.web = web_interface\n\n        # Compose task modules - NO base_url passed\n        self.inquiry_tasks = InquiryTasks(web_interface)\n\n    # ==================== WORKFLOW METHODS ====================\n\n    @autologger.automation_logger(\"Role\")\n    def create_inquiry(self, customer_data: dict, inquiry_data: dict) -> None:\n        \"\"\"\n        Execute create inquiry workflow.\n\n        Args:\n            customer_data: dict with firstname, lastname, email, title, assigned_user\n            inquiry_data: dict with type, source, status\n\n        NO return value - test asserts via POM state-check methods.\n        \"\"\"\n        self.inquiry_tasks.create_inquiry(customer_data, inquiry_data)\n        # NO return - test asserts via inquiries_page.is_inquiry_created()\n",
+    "role_metadata": {
+      "class_name": "SalesRepresentative",
+      "import_path": "roles.helios1.sales_representative",
+      "composed_tasks": [
+        "InquiryTasks"
+      ],
+      "workflow_methods": [
+        {
+          "name": "create_inquiry",
+          "params": [
+            "customer_data: dict",
+            "inquiry_data: dict"
+          ],
+          "calls": [
+            "inquiry_tasks.create_inquiry"
+          ]
+        }
+      ]
+    }
+  },
+  "step_9": {
+    "test_code": "\"\"\"\nTest suite for Helios1 - Create service inquiry with dynamic customer data.\n\nTests the create inquiry workflow for sales representatives.\nUses AAA pattern: Arrange, Act, Assert.\n\"\"\"\n\nimport pytest\nfrom faker import Faker\nfrom resources.utilities import autologger\nfrom roles.helios1.sales_representative import SalesRepresentative\nfrom framework.pages.helios1.inquiries_page import InquiriesPage\n\n\nclass TestCreateServiceInquiryWithDynamicCustomerData:\n    \"\"\"Test suite for creating service inquiries with dynamic customer data.\"\"\"\n\n    @pytest.mark.helios1\n    @autologger.automation_logger(\"Test\")\n    def test_create_service_inquiry_with_dynamic_customer_data(self, web_interface):\n        \"\"\"\n        Test create inquiry workflow with dynamic customer data.\n\n        Given: I am logged in to the Retail Portal on the Inquiries page\n        When: I create a new inquiry with dynamic customer data\n        Then: The inquiry should be created successfully and appear in the list\n\n        AAA Pattern:\n        1. Arrange - Create role and prepare test data\n        2. Act - Call ONE workflow method (no return value)\n        3. Assert - Use POM state-check methods\n        \"\"\"\n        # Arrange\n        fake = Faker()\n        user = SalesRepresentative(web_interface)\n        inquiries_page = InquiriesPage(web_interface)\n\n        # Generate dynamic customer data\n        customer_data = {\n            \"firstname\": fake.first_name(),\n            \"lastname\": fake.last_name(),\n            \"email\": fake.email(),\n            \"title\": \"Mr\",\n            \"assigned_user\": \"Test User\"\n        }\n\n        # Inquiry data\n        inquiry_data = {\n            \"type\": \"Service\",\n            \"source\": \"Email\",\n            \"status\": \"New\"\n        }\n\n        # Act - ONE workflow call, NO return value\n        user.create_inquiry(customer_data, inquiry_data)\n\n        # Assert - Via Page Object state-check methods (NOT return value)\n        assert inquiries_page.is_inquiry_created(), \"Inquiry should be created successfully\"\n        assert inquiries_page.is_inquiry_in_list(), \"Inquiry should appear in the inquiries list\"\n",
+    "test_metadata": {
+      "class_name": "TestCreateServiceInquiryWithDynamicCustomerData",
+      "file_path": "tests/helios1/test_create_service_inquiry_with_dynamic_customer_data.py",
+      "test_methods": [
+        {
+          "name": "test_create_service_inquiry_with_dynamic_customer_data",
+          "assertions": [
+            "is_inquiry_created",
+            "is_inquiry_in_list"
+          ]
+        }
+      ]
+    }
+  }
+}

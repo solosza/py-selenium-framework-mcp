@@ -1,0 +1,113 @@
+{
+  "run_id": "2026-01-22T11:11:06.892443Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 2,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:11:06.898364Z",
+      "metadata": {
+        "credential_strategy": "none",
+        "test_data_location": "none"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:11:19.397551Z",
+      "metadata": {
+        "intent": "search",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:11:32.653697Z",
+      "metadata": {
+        "workflow": "devtests"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:11:40.724308Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:12:49.535783Z",
+      "metadata": {
+        "page_name": "HeliosDigitalRetailHomepagePage",
+        "url": "https://heliosdigital-retail-qa.azurewebsites.net/Home",
+        "multi_page": true,
+        "total_pages": null
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:12:58.237973Z",
+      "metadata": {
+        "page_name": "HeliosDigitalRetailHomepagePage",
+        "elements_count": 4,
+        "pages_discovered": 0,
+        "total_pages": 2,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:13:14.911902Z",
+      "metadata": {
+        "page_name": "SearchPage",
+        "url": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Sales/Leads",
+        "multi_page": true,
+        "total_pages": null
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T11:13:24.398133Z",
+      "metadata": {
+        "page_name": "SearchPage",
+        "elements_count": 5,
+        "pages_discovered": 0,
+        "total_pages": 2,
+        "discovery_complete": false
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 4,
+    "gates_passed": 8,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

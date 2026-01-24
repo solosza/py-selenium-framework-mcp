@@ -1,0 +1,22 @@
+{
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am a customer on the Helios Digital Retail site",
+        "when": [
+          "I navigate to the sales representative section",
+          "I initiate a search for sales representatives"
+        ],
+        "then": [
+          "I should see search results",
+          "I should see sales representative contact information"
+        ]
+      }
+    ],
+    "expected_states": [
+      "has_search_results",
+      "is_sales_rep_info_displayed"
+    ],
+    "intent": "search"
+  }
+}

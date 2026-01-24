@@ -1,0 +1,111 @@
+{
+  "run_id": "2026-01-19T08:23:10.788467Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 1,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:23:10.792996Z",
+      "metadata": {
+        "credential_strategy": "none",
+        "test_data_location": "workflow"
+      }
+    },
+    {
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:23:24.617903Z",
+      "metadata": {
+        "persona": "Sales representative",
+        "URL": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+        "role_name": "SalesRepresentative",
+        "workflow": "helios2",
+        "detected_env_id": "helios1"
+      }
+    },
+    {
+      "step": 3,
+      "gate": "qg_ai_processing",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:23:36.264770Z",
+      "metadata": {
+        "intent": "create_product_inquiry",
+        "scenarios_count": 1,
+        "expected_states_count": 2
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:23:48.117860Z",
+      "metadata": {
+        "workflow": "helios2"
+      }
+    },
+    {
+      "step": 4,
+      "gate": "qg_test_scenarios",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:23:56.907721Z",
+      "metadata": {
+        "scenarios_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:25:16.045263Z",
+      "metadata": {
+        "page_name": "InquiriesPage",
+        "url": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:25:55.766348Z",
+      "metadata": {
+        "page_name": "InquiriesPage",
+        "elements_count": 13,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:26:19.994371Z",
+      "metadata": {
+        "page_name": "InquiriesPage",
+        "elements_count": 13
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 6,
+    "gates_passed": 8,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

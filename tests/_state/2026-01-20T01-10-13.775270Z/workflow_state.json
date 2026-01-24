@@ -1,0 +1,14 @@
+{
+  "step_9": {
+    "test_code": "\"\"\"Multi-persona tests.\"\"\"\nimport pytest\nfrom resources.utilities import autologger\nfrom roles.admin_user import AdminUser\nfrom roles.registered_user import RegisteredUser\nfrom pages.admin.user_management_page import UserManagementPage\nfrom pages.auth.login_page import LoginPage\n\n\nclass TestMultiPersona:\n    @pytest.mark.admin\n    @autologger.automation_logger(\"Test\")\n    def test_admin_login(self):\n        \"\"\"Test admin login.\"\"\"\n        admin = AdminUser(self.web, admin_data, self.base_url)\n        admin.login()\n        assert self.admin_page.is_logged_in()\n\n    @pytest.mark.auth\n    @autologger.automation_logger(\"Test\")\n    def test_user_login(self):\n        \"\"\"Test user login.\"\"\"\n        user = RegisteredUser(self.web, user_data, self.base_url)\n        user.login()\n        assert self.login_page.is_logged_in()\n",
+    "test_metadata": {
+      "class_name": "TestLogin",
+      "file_path": "tests/auth/test_login.py",
+      "role_used": "RegisteredUser",
+      "page_used": "LoginPage",
+      "test_methods": [
+        "test_valid_login"
+      ]
+    }
+  }
+}

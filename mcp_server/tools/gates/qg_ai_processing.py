@@ -67,22 +67,18 @@ class QGAIProcessing(BaseGate):
                 fix_hint=cls._get_intent_hint()
             )
 
-        # All valid - build metadata_context, save state, and return pass
+        # All valid - build metadata_context and use universal completion pattern
         metadata_context = {
             "bdd_scenarios": bdd_scenarios,
             "expected_states": expected_states,
             "intent": intent
         }
 
-        # Task 11.0: Use per-run state isolation
-        audit_logger = cls.get_audit_logger()
-        state_manager = StateManager(run_id=audit_logger.run_id)
-        state_manager.save(step=3, data=metadata_context)
-
-        response = cls.pass_response(
+        response = cls.validate_and_pass(
             step=3,
+            step_name="AI Processing",
             gate_name="qg_ai_processing",
-            mode="POST",
+            state_data=metadata_context,
             metadata={
                 "intent": intent,
                 "scenarios_count": len(bdd_scenarios),

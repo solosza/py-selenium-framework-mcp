@@ -1,0 +1,19 @@
+{
+  "workflow_id": "2026-01-22T12-00-00.000000Z",
+  "events": [
+    {
+      "type": "gate_validation",
+      "step": 2,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T12:00:05.123456Z",
+      "metadata": {
+        "persona": "As a registered user",
+        "URL": "https://example.com",
+        "role_name": "RegisteredUser",
+        "workflow": "example"
+      }
+    }
+  ]
+}

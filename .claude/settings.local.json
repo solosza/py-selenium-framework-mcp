@@ -91,7 +91,8 @@
       "Bash(1 <<'EOF'\n{\n  \"tool_name\": \"Bash\",\n  \"tool_input\": {\n    \"command\": \"pytest tests/parabank13/test_open_new_checking_account.py\"\n  }\n}\nEOF)",
       "Bash(echo:*)",
       "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add framework/pages/parabank13/ framework/tasks/parabank13/ framework/roles/parabank13/)",
-      "mcp__playwright__browser_close"
+      "mcp__playwright__browser_close",
+      "Bash(git mv:*)"
     ],
     "deny": [],
     "ask": []
@@ -101,6 +102,9 @@
     "qa-automation",
     "playwright"
   ],
+  "env": {
+    "QA_DEV_MODE": "true"
+  },
   "hooks": {
     "PreToolUse": [
       {

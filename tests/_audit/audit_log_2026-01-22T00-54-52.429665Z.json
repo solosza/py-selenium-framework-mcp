@@ -1,0 +1,41 @@
+{
+  "run_id": "2026-01-22T00:54:52.429665Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 2,
+      "gate": "qg_preflight",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T00:54:52.431667Z",
+      "metadata": {
+        "credential_strategy": "dynamic",
+        "test_data_location": "workflow"
+      }
+    },
+    {
+      "step": 1,
+      "gate": "qg_user_input",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-22T01:01:34.095067Z",
+      "metadata": {
+        "persona": "customer",
+        "URL": "https://heliosdigital-retail-qa.azurewebsites.net",
+        "role_name": "Customer",
+        "workflow": "none",
+        "detected_env_id": "helios3"
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 2,
+    "gates_passed": 2,
+    "gates_failed": 0,
+    "self_heals": 0,
+    "final_result": "pass",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

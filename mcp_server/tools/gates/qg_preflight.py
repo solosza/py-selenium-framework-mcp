@@ -1,5 +1,5 @@
 """
-QGPreflight - Step 1 Pre-flight Configuration Quality Gate.
+QGPreflight - Step 2 Pre-flight Configuration Quality Gate.
 
 Task 4.0 - PD-004: Validates configuration strategy before test generation.
 
@@ -20,7 +20,7 @@ from utils.state_manager import StateManager
 
 
 class QGPreflight(BaseGate):
-    """Step 1 quality gate for pre-flight configuration validation."""
+    """Step 2 quality gate for pre-flight configuration validation."""
 
     # Valid credential strategies (DD-24)
     VALID_CREDENTIAL_STRATEGIES = ["static", "dynamic", "self-contained", "none"]
@@ -33,25 +33,18 @@ class QGPreflight(BaseGate):
         """
         Validate pre-flight configuration.
 
-        DEF-052A FIX: Clear stale class variable and session marker from previous
-        workflow to ensure fresh run_id for each new workflow. This prevents
-        long-running MCP server from reusing old logger across workflows.
-
         Args:
-            input_data: Dict with credential_strategy and test_data_location
+            input_data: Dict with credential_strategy, test_data_location,
+                       browser_config, timeout_config
 
         Returns:
             {"status": "pass"} on success
             {"status": "fail", "error": "...", "fix_hint": "..."} on failure
         """
-        # DEF-052A: Clear stale session from previous workflow
-        cls._audit_logger = None
-        cls._clear_session_marker()
-
         # Check required fields
         missing = cls.validate_required_fields(
             input_data,
-            ["credential_strategy", "test_data_location"]
+            ["credential_strategy", "test_data_location", "browser_config", "timeout_config"]
         )
 
         if missing:
@@ -76,6 +69,18 @@ class QGPreflight(BaseGate):
                 fix_hint=cls._get_test_data_location_hint()
             )
 
+        # Validate browser_config (FR-8.1)
+        browser_config = input_data.get("browser_config")
+        browser_error = cls._validate_browser_config(browser_config)
+        if browser_error:
+            return browser_error
+
+        # Validate timeout_config (FR-8.2)
+        timeout_config = input_data.get("timeout_config")
+        timeout_error = cls._validate_timeout_config(timeout_config)
+        if timeout_error:
+            return timeout_error
+
         # DEF-060: Check test data infrastructure (Phase 1 scaffolding)
         infrastructure_check = cls._check_test_data_infrastructure(
             credential_strategy=credential_strategy,
@@ -85,22 +90,16 @@ class QGPreflight(BaseGate):
         if infrastructure_check:
             return infrastructure_check  # NEEDS_RETRY - AI creates files, retries
 
-        # All valid - save state and return pass
-        # Task 9.0: Use per-run state isolation
-        audit_logger = cls.get_audit_logger()
-        state_manager = StateManager(run_id=audit_logger.run_id)
-        state_manager.save(step=1, data={
-            "credential_strategy": credential_strategy,
-            "test_data_location": test_data_location
-        })
-
-        return cls.pass_response(
-            step=1,
+        # All valid - use universal completion pattern
+        return cls.validate_and_pass(
+            step=2,
+            step_name="Pre-flight Configuration",
             gate_name="qg_preflight",
-            mode="POST",
-            metadata={
+            state_data={
                 "credential_strategy": credential_strategy,
-                "test_data_location": test_data_location
+                "test_data_location": test_data_location,
+                "browser_config": browser_config,
+                "timeout_config": timeout_config
             }
         )
 
@@ -117,6 +116,82 @@ class QGPreflight(BaseGate):
         if value is None or value == "":
             return False
         return value in cls.VALID_TEST_DATA_LOCATIONS
+
+    @classmethod
+    def _validate_browser_config(cls, browser_config: Any) -> Optional[Dict[str, Any]]:
+        """
+        Validate browser_config structure (FR-8.1).
+
+        Args:
+            browser_config: Dict with headless field
+
+        Returns:
+            fail_response if invalid, None if valid
+        """
+        if not isinstance(browser_config, dict):
+            return cls.fail_response(
+                error="browser_config must be a dict",
+                fix_hint="browser_config should be: {\"headless\": false}"
+            )
+
+        if "headless" not in browser_config:
+            return cls.fail_response(
+                error="browser_config missing 'headless' field",
+                fix_hint="browser_config should be: {\"headless\": false}"
+            )
+
+        if browser_config["headless"] is not False:
+            return cls.fail_response(
+                error="browser_config.headless must be false (pair programming requires visible browser)",
+                fix_hint="Set browser_config to: {\"headless\": false}"
+            )
+
+        return None
+
+    @classmethod
+    def _validate_timeout_config(cls, timeout_config: Any) -> Optional[Dict[str, Any]]:
+        """
+        Validate timeout_config structure (FR-8.2).
+
+        Args:
+            timeout_config: Dict with enabled and threshold_seconds fields
+
+        Returns:
+            fail_response if invalid, None if valid
+        """
+        if not isinstance(timeout_config, dict):
+            return cls.fail_response(
+                error="timeout_config must be a dict",
+                fix_hint="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
+            )
+
+        if "enabled" not in timeout_config:
+            return cls.fail_response(
+                error="timeout_config missing 'enabled' field",
+                fix_hint="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
+            )
+
+        if not isinstance(timeout_config["enabled"], bool):
+            return cls.fail_response(
+                error="timeout_config.enabled must be a boolean",
+                fix_hint="Set enabled to true or false"
+            )
+
+        if timeout_config["enabled"]:
+            if "threshold_seconds" not in timeout_config:
+                return cls.fail_response(
+                    error="timeout_config missing 'threshold_seconds' field when enabled",
+                    fix_hint="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
+                )
+
+            threshold = timeout_config["threshold_seconds"]
+            if not isinstance(threshold, (int, float)) or threshold <= 0:
+                return cls.fail_response(
+                    error="timeout_config.threshold_seconds must be a positive number",
+                    fix_hint="Set threshold_seconds to a positive number (e.g., 30, 60)"
+                )
+
+        return None
 
     @classmethod
     def _check_test_data_infrastructure(
@@ -166,7 +241,7 @@ class QGPreflight(BaseGate):
                 "status": "NEEDS_RETRY",
                 "fix_applied": "test_data_infrastructure_scaffolded",
                 "error": "Missing test data infrastructure",
-                "message": "Create the following files/directories based on Step 1 config:",
+                "message": "Create the following files/directories based on Step 2 config:",
                 "scaffolding_needed": missing
             }
 
@@ -187,6 +262,16 @@ class QGPreflight(BaseGate):
             hints.append(
                 "Provide test_data_location: one of "
                 "'shared', 'workflow', 'both', or 'none'"
+            )
+
+        if "browser_config" in missing_fields:
+            hints.append(
+                "Provide browser_config: {\"headless\": false}"
+            )
+
+        if "timeout_config" in missing_fields:
+            hints.append(
+                "Provide timeout_config: {\"enabled\": true, \"threshold_seconds\": 30}"
             )
 
         return " | ".join(hints)

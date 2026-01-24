@@ -1,0 +1,19 @@
+{
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "test",
+        "when": [
+          "test"
+        ],
+        "then": [
+          "test"
+        ]
+      }
+    ],
+    "expected_states": [
+      "test_state"
+    ],
+    "intent": "test"
+  }
+}

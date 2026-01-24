@@ -1,0 +1,107 @@
+{
+  "run_id": "2026-01-21T03:34:52.561194Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-21T03:34:52.561194Z",
+      "error": "Invalid test status: fail"
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-21T03:35:01.885715Z",
+      "error": "Test failed: FAILED helios7/test_submit_new_customer_inquiry.py::TestSubmitNewCustomerInquiry::test_submit_new_customer_inquiry - selenium.common.exceptions.ElementNotInteractableException: Message: element not in",
+      "metadata": {
+        "test_status": "failed",
+        "diagnostic_data": {
+          "version": "v1",
+          "data_types": {
+            "test_execution": {
+              "pytest_output": "FAILED helios7/test_submit_new_customer_inquiry.py::TestSubmitNewCustomerInquiry::test_submit_new_customer_inquiry - selenium.common.exceptions.ElementNotInteractableException: Message: element not interactable",
+              "exit_code": 1,
+              "duration": 39.16,
+              "report_path": null,
+              "failure_data": {
+                "error_type": "ElementNotInteractableException",
+                "error_message": "element not interactable",
+                "failing_layer": "Page",
+                "failing_method": "enter_first_name",
+                "root_cause": "Element [aria-label='customer_search_input_firstname'] not interactable - wizard may not be open"
+              }
+            },
+            "page_state": {
+              "snapshot": null,
+              "url": null,
+              "dom_structure": null
+            },
+            "browser_context": {
+              "url": null,
+              "cookies": null,
+              "local_storage": null,
+              "session_storage": null
+            },
+            "expected_vs_actual": {
+              "expected": null,
+              "actual": null,
+              "comparison": null
+            },
+            "test_context": {
+              "test_file": "tests/helios7/test_submit_new_customer_inquiry.py::TestSubmitNewCustomerInquiry::test_submit_new_customer_inquiry",
+              "test_function": null,
+              "line_number": null,
+              "fixtures": null
+            },
+            "test_data": {
+              "credentials": "[REDACTED]",
+              "workflow_parameters": "helios7",
+              "test_inputs": null
+            },
+            "execution_flow": {
+              "stack_trace": null,
+              "framework_calls": null,
+              "navigation_history": null
+            }
+          }
+        },
+        "ai_analysis": {
+          "likely_cause": "Unknown failure",
+          "confidence": 50,
+          "evidence": [],
+          "suggested_fix": "Review test code and application behavior"
+        },
+        "retry_decision": {
+          "should_retry": true,
+          "reason": "No retry limits reached yet",
+          "attempt_count": 0,
+          "same_error_count": 0,
+          "error_signature": "d140212a1c998efa",
+          "policy": {
+            "same_error_limit": 2,
+            "total_attempt_limit": 5
+          }
+        },
+        "triage_options": [
+          "application_defect",
+          "test_issue",
+          "investigate"
+        ]
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 0,
+    "gates_failed": 2,
+    "self_heals": 0,
+    "final_result": "fail",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

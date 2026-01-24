@@ -1,0 +1,768 @@
+{
+  "run_id": "2026-01-19T08:59:03.152197Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 6,
+      "gate": "qg_page_object",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.154208Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.291215Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.297126Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.324759Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.331941Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.339783Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://localhost:8080/login",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.346341Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "https://example.com:3000/page",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.356710Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.368370Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 2,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.380141Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.388355Z",
+      "metadata": {
+        "page_name": "CartModal",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.397763Z",
+      "metadata": {
+        "page_name": "OAuth2Page",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.406641Z",
+      "metadata": {
+        "page_name": "CheckoutForm",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.424960Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.435147Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.447346Z",
+      "metadata": {
+        "page_name": "SearchPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": true,
+        "total_pages": null
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.451417Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.462253Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.474396Z",
+      "metadata": {
+        "page_name": "SearchPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 4,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.482529Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.490040Z",
+      "metadata": {
+        "page_name": "SearchPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 4,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.498758Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.507641Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "PRE",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.514571Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "url": "http://www.automationpractice.pl/index.php",
+        "multi_page": false,
+        "total_pages": 1
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.524901Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.530905Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.541086Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.548275Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.556428Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 1,
+        "total_pages": 1,
+        "discovery_complete": true
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.562648Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.568816Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.579938Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 1,
+        "total_pages": 1,
+        "discovery_complete": true
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.584524Z",
+      "metadata": {
+        "page_name": "Page2",
+        "elements_count": 1,
+        "pages_discovered": 2,
+        "total_pages": 2,
+        "discovery_complete": true
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.596016Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 5,
+      "gate": "qg_discovered_elements",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.607633Z",
+      "metadata": {
+        "page_name": "LoginPage",
+        "elements_count": 1,
+        "pages_discovered": 0,
+        "total_pages": 1,
+        "discovery_complete": false
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T08:59:03.717769Z",
+      "metadata": {
+        "test_status": "passed",
+        "duration": 1.23,
+        "report_path": "tests/_reports/report.html"
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:03.723773Z",
+      "error": "Missing required parameter: test_result"
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:03.728857Z",
+      "error": "Invalid test status: unknown"
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:03.728857Z",
+      "error": "Test failed: test_example.py::test_fail FAILED\nE   assert False",
+      "metadata": {
+        "test_status": "failed",
+        "diagnostic_data": {
+          "version": "v1",
+          "data_types": {
+            "test_execution": {
+              "pytest_output": "test_example.py::test_fail FAILED\nE   assert False",
+              "exit_code": 1,
+              "duration": 0.5,
+              "report_path": null,
+              "failure_data": {
+                "failed_assertion": "False",
+                "error_location": "tests/test_example.py:10",
+                "stack_trace": "test_fail\n    assert False"
+              }
+            },
+            "page_state": {
+              "snapshot": null,
+              "url": null,
+              "dom_structure": null
+            },
+            "browser_context": {
+              "url": null,
+              "cookies": null,
+              "local_storage": null,
+              "session_storage": null
+            },
+            "expected_vs_actual": {
+              "expected": null,
+              "actual": null,
+              "comparison": "False"
+            },
+            "test_context": {
+              "test_file": "tests/test_example.py",
+              "test_function": null,
+              "line_number": "tests/test_example.py:10",
+              "fixtures": null
+            },
+            "test_data": {
+              "credentials": "[REDACTED]",
+              "workflow_parameters": "auth",
+              "test_inputs": null
+            },
+            "execution_flow": {
+              "stack_trace": "test_fail\n    assert False",
+              "framework_calls": null,
+              "navigation_history": null
+            }
+          }
+        },
+        "ai_analysis": {
+          "likely_cause": "Assertion failure - expected value not met",
+          "confidence": 70,
+          "evidence": [
+            "Assertion: False"
+          ],
+          "suggested_fix": "Verify assertion logic and expected values"
+        },
+        "retry_decision": {
+          "should_retry": true,
+          "reason": "No retry limits reached yet",
+          "attempt_count": 0,
+          "same_error_count": 0,
+          "error_signature": "fa333b5f3e939e30",
+          "policy": {
+            "same_error_limit": 2,
+            "total_attempt_limit": 5
+          }
+        },
+        "triage_options": [
+          "application_defect",
+          "test_issue",
+          "investigate"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.940111Z",
+      "error": "Test failed: test_login.py::test_valid_login FAILED\nE   assert False\nE   + where False = <bound method LoginPage.is_logged_in>()",
+      "metadata": {
+        "test_status": "failed",
+        "diagnostic_data": {
+          "version": "v1",
+          "data_types": {
+            "test_execution": {
+              "pytest_output": "test_login.py::test_valid_login FAILED\nE   assert False\nE   + where False = <bound method LoginPage.is_logged_in>()",
+              "exit_code": 1,
+              "duration": 0.0,
+              "report_path": null,
+              "failure_data": {
+                "failed_assertion": "False",
+                "stack_trace": null,
+                "error_location": null
+              }
+            },
+            "page_state": {
+              "snapshot": null,
+              "url": null,
+              "dom_structure": null
+            },
+            "browser_context": {
+              "url": null,
+              "cookies": null,
+              "local_storage": null,
+              "session_storage": null
+            },
+            "expected_vs_actual": {
+              "expected": null,
+              "actual": null,
+              "comparison": "False"
+            },
+            "test_context": {
+              "test_file": "tests/auth/test_login.py",
+              "test_function": null,
+              "line_number": null,
+              "fixtures": null
+            },
+            "test_data": {
+              "credentials": "[REDACTED]",
+              "workflow_parameters": "auth",
+              "test_inputs": null
+            },
+            "execution_flow": {
+              "stack_trace": null,
+              "framework_calls": null,
+              "navigation_history": null
+            }
+          }
+        },
+        "ai_analysis": {
+          "likely_cause": "Assertion failure - expected value not met",
+          "confidence": 70,
+          "evidence": [
+            "Assertion: False"
+          ],
+          "suggested_fix": "Verify assertion logic and expected values"
+        },
+        "retry_decision": {
+          "should_retry": true,
+          "reason": "No retry limits reached yet",
+          "attempt_count": 0,
+          "same_error_count": 0,
+          "error_signature": "a011c68a11f7a7b8",
+          "policy": {
+            "same_error_limit": 2,
+            "total_attempt_limit": 5
+          }
+        },
+        "triage_options": [
+          "application_defect",
+          "test_issue",
+          "investigate"
+        ]
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T08:59:05.950854Z",
+      "error": "Test failed: test_login.py::test_valid_login FAILED\nE   TimeoutException: Element not found",
+      "metadata": {
+        "test_status": "failed",
+        "diagnostic_data": {
+          "version": "v1",
+          "data_types": {
+            "test_execution": {
+              "pytest_output": "test_login.py::test_valid_login FAILED\nE   TimeoutException: Element not found",
+              "exit_code": 1,
+              "duration": 0.0,
+              "report_path": null,
+              "failure_data": {
+                "failed_assertion": null,
+                "stack_trace": null,
+                "error_location": null
+              }
+            },
+            "page_state": {
+              "snapshot": null,
+              "url": null,
+              "dom_structure": null
+            },
+            "browser_context": {
+              "url": null,
+              "cookies": null,
+              "local_storage": null,
+              "session_storage": null
+            },
+            "expected_vs_actual": {
+              "expected": null,
+              "actual": null,
+              "comparison": null
+            },
+            "test_context": {
+              "test_file": "tests/auth/test_login.py",
+              "test_function": null,
+              "line_number": null,
+              "fixtures": null
+            },
+            "test_data": {
+              "credentials": "[REDACTED]",
+              "workflow_parameters": "auth",
+              "test_inputs": null
+            },
+            "execution_flow": {
+              "stack_trace": null,
+              "framework_calls": null,
+              "navigation_history": null
+            }
+          }
+        },
+        "ai_analysis": {
+          "likely_cause": "Element locator issue - element not found on page",
+          "confidence": 80,
+          "evidence": [
+            "Pytest output contains 'timeout'",
+            "Selenium exception: Element not found"
+          ],
+          "suggested_fix": "Verify locator strategy and add explicit waits"
+        },
+        "retry_decision": {
+          "should_retry": true,
+          "reason": "No retry limits reached yet",
+          "attempt_count": 0,
+          "same_error_count": 0,
+          "error_signature": "2e831f76a191eb4c",
+          "policy": {
+            "same_error_limit": 2,
+            "total_attempt_limit": 5
+          }
+        },
+        "triage_options": [
+          "application_defect",
+          "test_issue",
+          "investigate"
+        ]
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 3,
+    "gates_passed": 36,
+    "gates_failed": 5,
+    "self_heals": 0,
+    "final_result": "fail",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

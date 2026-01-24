@@ -1,0 +1,698 @@
+{
+  "step_1": {
+    "credential_strategy": "none",
+    "test_data_location": "workflow"
+  },
+  "step_2": {
+    "persona": "Customer Service Agent",
+    "URL": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+    "role_name": "CustomerServiceAgent",
+    "workflow": "helios2",
+    "raw_requirement": "As a Customer Service Agent, I want to create a new sales inquiry for a customer with dynamically generated name and email contact, set the inquiry type to \"Sales\", source to \"Phone\", and status to \"Open\", so that I can track their sales opportunity in the system.",
+    "detected_env_id": "helios1"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am logged in to the Retail Portal on the Inquiries page",
+        "when": [
+          "I click New Inquiry button",
+          "I search for customer with dynamically generated name and email",
+          "I proceed through Customer form with title and assigned user",
+          "I proceed through Contacts form keeping email as preferred",
+          "I skip Address form",
+          "I complete Inquiry form with type Sales source Phone status Open",
+          "I submit the inquiry"
+        ],
+        "then": [
+          "The inquiry should be created successfully",
+          "The inquiry should appear in the inquiries list"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_inquiry_created",
+      "is_inquiry_in_list"
+    ],
+    "intent": "create_sales_inquiry"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_create_sales_inquiry_with_dynamic_customer_data",
+        "given": "I am logged in to the Retail Portal on the Inquiries page",
+        "when": [
+          "I click New Inquiry button",
+          "I search for customer with dynamically generated name and email",
+          "I proceed through Customer form with title and assigned user",
+          "I proceed through Contacts form keeping email as preferred",
+          "I skip Address form",
+          "I complete Inquiry form with type Sales source Phone status Open",
+          "I submit the inquiry"
+        ],
+        "then": [
+          "The inquiry should be created successfully",
+          "The inquiry should appear in the inquiries list"
+        ],
+        "workflow": "helios2"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "suggested_name": "NEW_INQUIRY_BUTTON",
+        "element_type": "button",
+        "locator_css": "[aria-label='inquiry_view_button_add']"
+      },
+      {
+        "suggested_name": "SEARCH_FIRSTNAME",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_search_input_firstname']"
+      },
+      {
+        "suggested_name": "SEARCH_LASTNAME",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_search_input_lastname']"
+      },
+      {
+        "suggested_name": "SEARCH_CONTACT_TYPE",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='contact_search_input_type']"
+      },
+      {
+        "suggested_name": "SEARCH_CONTACT_IDENTIFIER",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='contact_search_input_identifier']"
+      },
+      {
+        "suggested_name": "SEARCH_NEXT_BUTTON",
+        "element_type": "button",
+        "locator_css": "[aria-label='customer_search_button_next']"
+      },
+      {
+        "suggested_name": "CUSTOMER_TITLE",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='customer_add_input_title']"
+      },
+      {
+        "suggested_name": "CUSTOMER_FIRSTNAME",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_add_input_firstname']"
+      },
+      {
+        "suggested_name": "CUSTOMER_LASTNAME",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_add_input_lastname']"
+      },
+      {
+        "suggested_name": "CUSTOMER_ASSIGNED_USER",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='customer_add_input_assigneduserid']"
+      },
+      {
+        "suggested_name": "CUSTOMER_SUBMIT_BUTTON",
+        "element_type": "button",
+        "locator_css": "[aria-label='customer_add_button_submit']"
+      },
+      {
+        "suggested_name": "CONTACT_SUBMIT_BUTTON",
+        "element_type": "button",
+        "locator_css": "[aria-label='contact_add_button_submit']"
+      },
+      {
+        "suggested_name": "ADDRESS_SUBMIT_BUTTON",
+        "element_type": "button",
+        "locator_css": "[aria-label='address_add_button_submit']"
+      },
+      {
+        "suggested_name": "INQUIRY_TYPE",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='inquiry_add_value_type']"
+      },
+      {
+        "suggested_name": "INQUIRY_SOURCE",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='inquiry_add_value_source']"
+      },
+      {
+        "suggested_name": "INQUIRY_VEHICLE_NOTES",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='inquiry_add_value_desiredvehicle']"
+      },
+      {
+        "suggested_name": "INQUIRY_ASSIGNED_USER",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='inquiry_add_value_assigneduserid']"
+      },
+      {
+        "suggested_name": "INQUIRY_STATUS",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='inquiry_add_value_status']"
+      },
+      {
+        "suggested_name": "INQUIRY_COMPLETE_BUTTON",
+        "element_type": "button",
+        "locator_css": "[aria-label='inquiry_add_button_submit']"
+      }
+    ],
+    "page_name": "InquiriesPage",
+    "discovered_pages": {
+      "InquiriesPage": {
+        "input_elements": [
+          {
+            "suggested_name": "NEW_INQUIRY_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='inquiry_view_button_add']"
+          },
+          {
+            "suggested_name": "SEARCH_FIRSTNAME",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_search_input_firstname']"
+          },
+          {
+            "suggested_name": "SEARCH_LASTNAME",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_search_input_lastname']"
+          },
+          {
+            "suggested_name": "SEARCH_CONTACT_TYPE",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='contact_search_input_type']"
+          },
+          {
+            "suggested_name": "SEARCH_CONTACT_IDENTIFIER",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='contact_search_input_identifier']"
+          },
+          {
+            "suggested_name": "SEARCH_NEXT_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='customer_search_button_next']"
+          },
+          {
+            "suggested_name": "CUSTOMER_TITLE",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='customer_add_input_title']"
+          },
+          {
+            "suggested_name": "CUSTOMER_FIRSTNAME",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_add_input_firstname']"
+          },
+          {
+            "suggested_name": "CUSTOMER_LASTNAME",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_add_input_lastname']"
+          },
+          {
+            "suggested_name": "CUSTOMER_ASSIGNED_USER",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='customer_add_input_assigneduserid']"
+          },
+          {
+            "suggested_name": "CUSTOMER_SUBMIT_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='customer_add_button_submit']"
+          },
+          {
+            "suggested_name": "CONTACT_SUBMIT_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='contact_add_button_submit']"
+          },
+          {
+            "suggested_name": "ADDRESS_SUBMIT_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='address_add_button_submit']"
+          },
+          {
+            "suggested_name": "INQUIRY_TYPE",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_type']"
+          },
+          {
+            "suggested_name": "INQUIRY_SOURCE",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_source']"
+          },
+          {
+            "suggested_name": "INQUIRY_VEHICLE_NOTES",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='inquiry_add_value_desiredvehicle']"
+          },
+          {
+            "suggested_name": "INQUIRY_ASSIGNED_USER",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_assigneduserid']"
+          },
+          {
+            "suggested_name": "INQUIRY_STATUS",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_status']"
+          },
+          {
+            "suggested_name": "INQUIRY_COMPLETE_BUTTON",
+            "element_type": "button",
+            "locator_css": "[aria-label='inquiry_add_button_submit']"
+          }
+        ]
+      }
+    },
+    "pages_discovered": 0,
+    "total_pages": 1,
+    "discovery_complete": false
+  },
+  "step_6": {
+    "pom_code": "\"\"\"\nInquiriesPage - Page Object Model\n\nPage Object representing the Inquiries wizard flow in the application.\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass InquiriesPage:\n    \"\"\"\n    Page Object for Inquiries Page (5-step wizard).\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # ==================== LOCATORS (Class Constants) ====================\n    NEW_INQUIRY_BUTTON = (By.CSS_SELECTOR, \"[aria-label='inquiry_view_button_add']\")\n    SEARCH_FIRSTNAME = (By.CSS_SELECTOR, \"[aria-label='customer_search_input_firstname']\")\n    SEARCH_LASTNAME = (By.CSS_SELECTOR, \"[aria-label='customer_search_input_lastname']\")\n    SEARCH_CONTACT_TYPE = (By.CSS_SELECTOR, \"[aria-label='contact_search_input_type']\")\n    SEARCH_CONTACT_IDENTIFIER = (By.CSS_SELECTOR, \"[aria-label='contact_search_input_identifier']\")\n    SEARCH_NEXT_BUTTON = (By.CSS_SELECTOR, \"[aria-label='customer_search_button_next']\")\n    CUSTOMER_TITLE = (By.CSS_SELECTOR, \"[aria-label='customer_add_input_title']\")\n    CUSTOMER_FIRSTNAME = (By.CSS_SELECTOR, \"[aria-label='customer_add_input_firstname']\")\n    CUSTOMER_LASTNAME = (By.CSS_SELECTOR, \"[aria-label='customer_add_input_lastname']\")\n    CUSTOMER_ASSIGNED_USER = (By.CSS_SELECTOR, \"[aria-label='customer_add_input_assigneduserid']\")\n    CUSTOMER_SUBMIT_BUTTON = (By.CSS_SELECTOR, \"[aria-label='customer_add_button_submit']\")\n    CONTACT_SUBMIT_BUTTON = (By.CSS_SELECTOR, \"[aria-label='contact_add_button_submit']\")\n    ADDRESS_SUBMIT_BUTTON = (By.CSS_SELECTOR, \"[aria-label='address_add_button_submit']\")\n    INQUIRY_TYPE = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_type']\")\n    INQUIRY_SOURCE = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_source']\")\n    INQUIRY_VEHICLE_NOTES = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_desiredvehicle']\")\n    INQUIRY_ASSIGNED_USER = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_assigneduserid']\")\n    INQUIRY_STATUS = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_status']\")\n    INQUIRY_COMPLETE_BUTTON = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_button_submit']\")\n\n    # ==================== NAVIGATION ====================\n    def navigate(self) -> \"InquiriesPage\":\n        \"\"\"Navigate to Inquiries page.\"\"\"\n        self.web.navigate_to(self.web.config['url'] + '/Portal/Inquiries')\n        import time\n        time.sleep(5)\n        return self\n\n    # ==================== ATOMIC METHODS (One UI Action) ====================\n    def click_new_inquiry_button(self) -> \"InquiriesPage\":\n        \"\"\"Click new inquiry button.\"\"\"\n        self.web.click(*self.NEW_INQUIRY_BUTTON)\n        return self\n\n    def enter_search_firstname(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter search firstname.\"\"\"\n        self.web.type_text(*self.SEARCH_FIRSTNAME, text)\n        return self\n\n    def enter_search_lastname(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter search lastname.\"\"\"\n        self.web.type_text(*self.SEARCH_LASTNAME, text)\n        return self\n\n    def select_search_contact_type(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select search contact type from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.SEARCH_CONTACT_TYPE, value)\n        return self\n\n    def enter_search_contact_identifier(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter search contact identifier.\"\"\"\n        self.web.type_text(*self.SEARCH_CONTACT_IDENTIFIER, text)\n        return self\n\n    def click_search_next_button(self) -> \"InquiriesPage\":\n        \"\"\"Click search next button.\"\"\"\n        self.web.click(*self.SEARCH_NEXT_BUTTON)\n        return self\n\n    def select_customer_title(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select customer title from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.CUSTOMER_TITLE, value)\n        return self\n\n    def enter_customer_firstname(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter customer firstname.\"\"\"\n        self.web.type_text(*self.CUSTOMER_FIRSTNAME, text)\n        return self\n\n    def enter_customer_lastname(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter customer lastname.\"\"\"\n        self.web.type_text(*self.CUSTOMER_LASTNAME, text)\n        return self\n\n    def select_customer_assigned_user(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select customer assigned user from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.CUSTOMER_ASSIGNED_USER, value)\n        return self\n\n    def click_customer_submit_button(self) -> \"InquiriesPage\":\n        \"\"\"Click customer submit button.\"\"\"\n        self.web.click(*self.CUSTOMER_SUBMIT_BUTTON)\n        return self\n\n    def click_contact_submit_button(self) -> \"InquiriesPage\":\n        \"\"\"Click contact submit button.\"\"\"\n        self.web.click(*self.CONTACT_SUBMIT_BUTTON)\n        return self\n\n    def click_address_submit_button(self) -> \"InquiriesPage\":\n        \"\"\"Click address submit button.\"\"\"\n        self.web.click(*self.ADDRESS_SUBMIT_BUTTON)\n        return self\n\n    def select_inquiry_type(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select inquiry type from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.INQUIRY_TYPE, value)\n        return self\n\n    def select_inquiry_source(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select inquiry source from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.INQUIRY_SOURCE, value)\n        return self\n\n    def enter_inquiry_vehicle_notes(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter inquiry vehicle notes.\"\"\"\n        self.web.type_text(*self.INQUIRY_VEHICLE_NOTES, text)\n        return self\n\n    def select_inquiry_assigned_user(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select inquiry assigned user from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.INQUIRY_ASSIGNED_USER, value)\n        return self\n\n    def select_inquiry_status(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select inquiry status from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.INQUIRY_STATUS, value)\n        return self\n\n    def click_inquiry_complete_button(self) -> \"InquiriesPage\":\n        \"\"\"Click inquiry complete button.\"\"\"\n        self.web.click(*self.INQUIRY_COMPLETE_BUTTON)\n        return self\n\n    # ==================== STATE-CHECK METHODS (For Assertions) ====================\n    def is_inquiry_created(self) -> bool:\n        \"\"\"Check if inquiry was created successfully.\"\"\"\n        table_locator = (By.CSS_SELECTOR, \"table\")\n        return self.web.is_element_displayed(*table_locator, timeout=10)\n\n    def is_inquiry_in_list(self) -> bool:\n        \"\"\"Check if inquiry appears in the inquiries list.\"\"\"\n        rows_locator = (By.CSS_SELECTOR, \"tbody tr\")\n        return len(self.web.driver.find_elements(*rows_locator)) > 0\n",
+    "pom_metadata": {
+      "class_name": "InquiriesPage",
+      "import_path": "pages.helios1.inquiries_page",
+      "locators": [
+        {
+          "name": "NEW_INQUIRY_BUTTON",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='inquiry_view_button_add']"
+        },
+        {
+          "name": "SEARCH_FIRSTNAME",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='customer_search_input_firstname']"
+        },
+        {
+          "name": "SEARCH_LASTNAME",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='customer_search_input_lastname']"
+        },
+        {
+          "name": "SEARCH_CONTACT_TYPE",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='contact_search_input_type']"
+        },
+        {
+          "name": "SEARCH_CONTACT_IDENTIFIER",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='contact_search_input_identifier']"
+        },
+        {
+          "name": "SEARCH_NEXT_BUTTON",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='customer_search_button_next']"
+        },
+        {
+          "name": "INQUIRY_TYPE",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='inquiry_add_value_type']"
+        },
+        {
+          "name": "INQUIRY_SOURCE",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='inquiry_add_value_source']"
+        },
+        {
+          "name": "INQUIRY_STATUS",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='inquiry_add_value_status']"
+        },
+        {
+          "name": "INQUIRY_COMPLETE_BUTTON",
+          "by": "CSS_SELECTOR",
+          "value": "[aria-label='inquiry_add_button_submit']"
+        }
+      ],
+      "action_methods": [
+        {
+          "name": "navigate",
+          "params": []
+        },
+        {
+          "name": "click_new_inquiry_button",
+          "params": []
+        },
+        {
+          "name": "enter_search_firstname",
+          "params": [
+            "text: str"
+          ]
+        },
+        {
+          "name": "enter_search_lastname",
+          "params": [
+            "text: str"
+          ]
+        },
+        {
+          "name": "select_search_contact_type",
+          "params": [
+            "value: str"
+          ]
+        },
+        {
+          "name": "enter_search_contact_identifier",
+          "params": [
+            "text: str"
+          ]
+        },
+        {
+          "name": "click_search_next_button",
+          "params": []
+        },
+        {
+          "name": "select_customer_title",
+          "params": [
+            "value: str"
+          ]
+        },
+        {
+          "name": "enter_customer_firstname",
+          "params": [
+            "text: str"
+          ]
+        },
+        {
+          "name": "enter_customer_lastname",
+          "params": [
+            "text: str"
+          ]
+        },
+        {
+          "name": "select_customer_assigned_user",
+          "params": [
+            "value: str"
+          ]
+        },
+        {
+          "name": "click_customer_submit_button",
+          "params": []
+        },
+        {
+          "name": "click_contact_submit_button",
+          "params": []
+        },
+        {
+          "name": "click_address_submit_button",
+          "params": []
+        },
+        {
+          "name": "select_inquiry_type",
+          "params": [
+            "value: str"
+          ]
+        },
+        {
+          "name": "select_inquiry_source",
+          "params": [
+            "value: str"
+          ]
+        },
+        {
+          "name": "enter_inquiry_vehicle_notes",
+          "params": [
+            "text: str"
+          ]
+        },
+        {
+          "name": "select_inquiry_assigned_user",
+          "params": [
+            "value: str"
+          ]
+        },
+        {
+          "name": "select_inquiry_status",
+          "params": [
+            "value: str"
+          ]
+        },
+        {
+          "name": "click_inquiry_complete_button",
+          "params": []
+        }
+      ],
+      "state_methods": [
+        {
+          "name": "is_inquiry_created",
+          "params": [],
+          "returns": "bool"
+        },
+        {
+          "name": "is_inquiry_in_list",
+          "params": [],
+          "returns": "bool"
+        }
+      ]
+    },
+    "generated_poms": {
+      "InquiriesPage": {
+        "code": "\"\"\"\nInquiriesPage - Page Object Model\n\nPage Object representing the Inquiries wizard flow in the application.\nProvides atomic UI interactions via WebInterface composition.\n\"\"\"\n\nfrom selenium.webdriver.common.by import By\nfrom interfaces.web_interface import WebInterface\n\n\nclass InquiriesPage:\n    \"\"\"\n    Page Object for Inquiries Page (5-step wizard).\n\n    - NO decorators\n    - Locators as class constants\n    - Atomic methods (one UI action)\n    - Return self for chaining\n    - State-check methods for assertions\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"Compose WebInterface - NO inheritance.\"\"\"\n        self.web = web\n\n    # ==================== LOCATORS (Class Constants) ====================\n    NEW_INQUIRY_BUTTON = (By.CSS_SELECTOR, \"[aria-label='inquiry_view_button_add']\")\n    SEARCH_FIRSTNAME = (By.CSS_SELECTOR, \"[aria-label='customer_search_input_firstname']\")\n    SEARCH_LASTNAME = (By.CSS_SELECTOR, \"[aria-label='customer_search_input_lastname']\")\n    SEARCH_CONTACT_TYPE = (By.CSS_SELECTOR, \"[aria-label='contact_search_input_type']\")\n    SEARCH_CONTACT_IDENTIFIER = (By.CSS_SELECTOR, \"[aria-label='contact_search_input_identifier']\")\n    SEARCH_NEXT_BUTTON = (By.CSS_SELECTOR, \"[aria-label='customer_search_button_next']\")\n    CUSTOMER_TITLE = (By.CSS_SELECTOR, \"[aria-label='customer_add_input_title']\")\n    CUSTOMER_FIRSTNAME = (By.CSS_SELECTOR, \"[aria-label='customer_add_input_firstname']\")\n    CUSTOMER_LASTNAME = (By.CSS_SELECTOR, \"[aria-label='customer_add_input_lastname']\")\n    CUSTOMER_ASSIGNED_USER = (By.CSS_SELECTOR, \"[aria-label='customer_add_input_assigneduserid']\")\n    CUSTOMER_SUBMIT_BUTTON = (By.CSS_SELECTOR, \"[aria-label='customer_add_button_submit']\")\n    CONTACT_SUBMIT_BUTTON = (By.CSS_SELECTOR, \"[aria-label='contact_add_button_submit']\")\n    ADDRESS_SUBMIT_BUTTON = (By.CSS_SELECTOR, \"[aria-label='address_add_button_submit']\")\n    INQUIRY_TYPE = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_type']\")\n    INQUIRY_SOURCE = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_source']\")\n    INQUIRY_VEHICLE_NOTES = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_desiredvehicle']\")\n    INQUIRY_ASSIGNED_USER = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_assigneduserid']\")\n    INQUIRY_STATUS = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_value_status']\")\n    INQUIRY_COMPLETE_BUTTON = (By.CSS_SELECTOR, \"[aria-label='inquiry_add_button_submit']\")\n\n    # ==================== NAVIGATION ====================\n    def navigate(self) -> \"InquiriesPage\":\n        \"\"\"Navigate to Inquiries page.\"\"\"\n        self.web.navigate_to(self.web.config['url'] + '/Portal/Inquiries')\n        import time\n        time.sleep(5)\n        return self\n\n    # ==================== ATOMIC METHODS (One UI Action) ====================\n    def click_new_inquiry_button(self) -> \"InquiriesPage\":\n        \"\"\"Click new inquiry button.\"\"\"\n        self.web.click(*self.NEW_INQUIRY_BUTTON)\n        return self\n\n    def enter_search_firstname(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter search firstname.\"\"\"\n        self.web.type_text(*self.SEARCH_FIRSTNAME, text)\n        return self\n\n    def enter_search_lastname(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter search lastname.\"\"\"\n        self.web.type_text(*self.SEARCH_LASTNAME, text)\n        return self\n\n    def select_search_contact_type(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select search contact type from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.SEARCH_CONTACT_TYPE, value)\n        return self\n\n    def enter_search_contact_identifier(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter search contact identifier.\"\"\"\n        self.web.type_text(*self.SEARCH_CONTACT_IDENTIFIER, text)\n        return self\n\n    def click_search_next_button(self) -> \"InquiriesPage\":\n        \"\"\"Click search next button.\"\"\"\n        self.web.click(*self.SEARCH_NEXT_BUTTON)\n        return self\n\n    def select_customer_title(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select customer title from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.CUSTOMER_TITLE, value)\n        return self\n\n    def enter_customer_firstname(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter customer firstname.\"\"\"\n        self.web.type_text(*self.CUSTOMER_FIRSTNAME, text)\n        return self\n\n    def enter_customer_lastname(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter customer lastname.\"\"\"\n        self.web.type_text(*self.CUSTOMER_LASTNAME, text)\n        return self\n\n    def select_customer_assigned_user(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select customer assigned user from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.CUSTOMER_ASSIGNED_USER, value)\n        return self\n\n    def click_customer_submit_button(self) -> \"InquiriesPage\":\n        \"\"\"Click customer submit button.\"\"\"\n        self.web.click(*self.CUSTOMER_SUBMIT_BUTTON)\n        return self\n\n    def click_contact_submit_button(self) -> \"InquiriesPage\":\n        \"\"\"Click contact submit button.\"\"\"\n        self.web.click(*self.CONTACT_SUBMIT_BUTTON)\n        return self\n\n    def click_address_submit_button(self) -> \"InquiriesPage\":\n        \"\"\"Click address submit button.\"\"\"\n        self.web.click(*self.ADDRESS_SUBMIT_BUTTON)\n        return self\n\n    def select_inquiry_type(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select inquiry type from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.INQUIRY_TYPE, value)\n        return self\n\n    def select_inquiry_source(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select inquiry source from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.INQUIRY_SOURCE, value)\n        return self\n\n    def enter_inquiry_vehicle_notes(self, text: str) -> \"InquiriesPage\":\n        \"\"\"Enter inquiry vehicle notes.\"\"\"\n        self.web.type_text(*self.INQUIRY_VEHICLE_NOTES, text)\n        return self\n\n    def select_inquiry_assigned_user(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select inquiry assigned user from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.INQUIRY_ASSIGNED_USER, value)\n        return self\n\n    def select_inquiry_status(self, value: str) -> \"InquiriesPage\":\n        \"\"\"Select inquiry status from dropdown.\"\"\"\n        self.web.select_dropdown_by_visible_text(*self.INQUIRY_STATUS, value)\n        return self\n\n    def click_inquiry_complete_button(self) -> \"InquiriesPage\":\n        \"\"\"Click inquiry complete button.\"\"\"\n        self.web.click(*self.INQUIRY_COMPLETE_BUTTON)\n        return self\n\n    # ==================== STATE-CHECK METHODS (For Assertions) ====================\n    def is_inquiry_created(self) -> bool:\n        \"\"\"Check if inquiry was created successfully.\"\"\"\n        table_locator = (By.CSS_SELECTOR, \"table\")\n        return self.web.is_element_displayed(*table_locator, timeout=10)\n\n    def is_inquiry_in_list(self) -> bool:\n        \"\"\"Check if inquiry appears in the inquiries list.\"\"\"\n        rows_locator = (By.CSS_SELECTOR, \"tbody tr\")\n        return len(self.web.driver.find_elements(*rows_locator)) > 0\n",
+        "metadata": {
+          "class_name": "InquiriesPage",
+          "import_path": "pages.helios1.inquiries_page",
+          "locators": [
+            {
+              "name": "NEW_INQUIRY_BUTTON",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='inquiry_view_button_add']"
+            },
+            {
+              "name": "SEARCH_FIRSTNAME",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='customer_search_input_firstname']"
+            },
+            {
+              "name": "SEARCH_LASTNAME",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='customer_search_input_lastname']"
+            },
+            {
+              "name": "SEARCH_CONTACT_TYPE",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='contact_search_input_type']"
+            },
+            {
+              "name": "SEARCH_CONTACT_IDENTIFIER",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='contact_search_input_identifier']"
+            },
+            {
+              "name": "SEARCH_NEXT_BUTTON",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='customer_search_button_next']"
+            },
+            {
+              "name": "INQUIRY_TYPE",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='inquiry_add_value_type']"
+            },
+            {
+              "name": "INQUIRY_SOURCE",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='inquiry_add_value_source']"
+            },
+            {
+              "name": "INQUIRY_STATUS",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='inquiry_add_value_status']"
+            },
+            {
+              "name": "INQUIRY_COMPLETE_BUTTON",
+              "by": "CSS_SELECTOR",
+              "value": "[aria-label='inquiry_add_button_submit']"
+            }
+          ],
+          "action_methods": [
+            {
+              "name": "navigate",
+              "params": []
+            },
+            {
+              "name": "click_new_inquiry_button",
+              "params": []
+            },
+            {
+              "name": "enter_search_firstname",
+              "params": [
+                "text: str"
+              ]
+            },
+            {
+              "name": "enter_search_lastname",
+              "params": [
+                "text: str"
+              ]
+            },
+            {
+              "name": "select_search_contact_type",
+              "params": [
+                "value: str"
+              ]
+            },
+            {
+              "name": "enter_search_contact_identifier",
+              "params": [
+                "text: str"
+              ]
+            },
+            {
+              "name": "click_search_next_button",
+              "params": []
+            },
+            {
+              "name": "select_customer_title",
+              "params": [
+                "value: str"
+              ]
+            },
+            {
+              "name": "enter_customer_firstname",
+              "params": [
+                "text: str"
+              ]
+            },
+            {
+              "name": "enter_customer_lastname",
+              "params": [
+                "text: str"
+              ]
+            },
+            {
+              "name": "select_customer_assigned_user",
+              "params": [
+                "value: str"
+              ]
+            },
+            {
+              "name": "click_customer_submit_button",
+              "params": []
+            },
+            {
+              "name": "click_contact_submit_button",
+              "params": []
+            },
+            {
+              "name": "click_address_submit_button",
+              "params": []
+            },
+            {
+              "name": "select_inquiry_type",
+              "params": [
+                "value: str"
+              ]
+            },
+            {
+              "name": "select_inquiry_source",
+              "params": [
+                "value: str"
+              ]
+            },
+            {
+              "name": "enter_inquiry_vehicle_notes",
+              "params": [
+                "text: str"
+              ]
+            },
+            {
+              "name": "select_inquiry_assigned_user",
+              "params": [
+                "value: str"
+              ]
+            },
+            {
+              "name": "select_inquiry_status",
+              "params": [
+                "value: str"
+              ]
+            },
+            {
+              "name": "click_inquiry_complete_button",
+              "params": []
+            }
+          ],
+          "state_methods": [
+            {
+              "name": "is_inquiry_created",
+              "params": [],
+              "returns": "bool"
+            },
+            {
+              "name": "is_inquiry_in_list",
+              "params": [],
+              "returns": "bool"
+            }
+          ]
+        }
+      }
+    },
+    "poms_generated": 1,
+    "total_poms": 1,
+    "generation_complete": true
+  },
+  "step_7": {
+    "task_code": "\"\"\"\nCreate sales inquiry for customer with dynamically generated name and email, set inquiry type to Sales, source to Phone, status to Open\n\nThis module provides high-level task methods that orchestrate page objects\nto accomplish business workflows.\n\"\"\"\n\nfrom interfaces.web_interface import WebInterface\nfrom resources.utilities import autologger\nfrom pages.helios1.inquiries_page import InquiriesPage\n\n\nclass Helios2Tasks:\n    \"\"\"\n    Task module for Helios2 operations.\n\n    - @autologger(\"Task\") on all methods\n    - NO decorator on constructor\n    - Composes Page Objects\n    - One domain operation per method\n    - NO return values\n    - Uses fluent POM API\n    \"\"\"\n\n    def __init__(self, web: WebInterface):\n        \"\"\"\n        Compose Page Objects - NO decorator on constructor.\n\n        Args:\n            web: WebInterface instance\n        \"\"\"\n        self.web = web\n        self.inquiries_page = InquiriesPage(web)\n\n    # ==================== TASK METHODS ====================\n\n    @autologger.automation_logger(\"Task\")\n    def create_sales_inquiry(self, customer_firstname: str, customer_lastname: str, \n                             customer_email: str, customer_title: str, \n                             assigned_user: str, inquiry_type: str, \n                             inquiry_source: str, inquiry_status: str) -> None:\n        \"\"\"\n        Create sales inquiry with dynamic customer data through 5-step wizard.\n\n        Args:\n            customer_firstname: Customer first name\n            customer_lastname: Customer last name\n            customer_email: Customer email contact\n            customer_title: Customer title (Mr, Mrs, Ms)\n            assigned_user: Assigned user name\n            inquiry_type: Inquiry type (Sales, Feedback, etc.)\n            inquiry_source: Inquiry source (Email, Phone, etc.)\n            inquiry_status: Inquiry status (Open, Action Required, etc.)\n\n        NO return value - test asserts via POM state-check methods.\n        \"\"\"\n        # Step 1: Click New Inquiry button\n        self.inquiries_page.click_new_inquiry_button()\n        \n        # Step 2: Search for customer (wizard step 1)\n        (self.inquiries_page\n            .enter_search_firstname(customer_firstname)\n            .enter_search_lastname(customer_lastname)\n            .select_search_contact_type(\"Email\")\n            .enter_search_contact_identifier(customer_email)\n            .click_search_next_button())\n        \n        # Step 3: Fill customer form (wizard step 2)\n        (self.inquiries_page\n            .select_customer_title(customer_title)\n            .select_customer_assigned_user(assigned_user)\n            .click_customer_submit_button())\n        \n        # Step 4: Skip contacts form (wizard step 3 - email auto-added)\n        self.inquiries_page.click_contact_submit_button()\n        \n        # Step 5: Skip address form (wizard step 4)\n        self.inquiries_page.click_address_submit_button()\n        \n        # Step 6: Complete inquiry form (wizard step 5)\n        (self.inquiries_page\n            .select_inquiry_type(inquiry_type)\n            .select_inquiry_source(inquiry_source)\n            .select_inquiry_status(inquiry_status)\n            .click_inquiry_complete_button())\n        \n        # NO return - test asserts via POM\n",
+    "task_metadata": {
+      "class_name": "Helios2Tasks",
+      "import_path": "tasks.helios2.helios2_tasks",
+      "composed_pages": [
+        "InquiriesPage"
+      ],
+      "task_methods": [
+        {
+          "name": "create_sales_inquiry",
+          "params": [
+            "customer_firstname: str",
+            "customer_lastname: str",
+            "customer_email: str",
+            "customer_title: str",
+            "assigned_user: str",
+            "inquiry_type: str",
+            "inquiry_source: str",
+            "inquiry_status: str"
+          ],
+          "calls": [
+            "click_new_inquiry_button",
+            "enter_search_firstname",
+            "enter_search_lastname",
+            "select_search_contact_type",
+            "enter_search_contact_identifier",
+            "click_search_next_button",
+            "select_customer_title",
+            "select_customer_assigned_user",
+            "click_customer_submit_button",
+            "click_contact_submit_button",
+            "click_address_submit_button",
+            "select_inquiry_type",
+            "select_inquiry_source",
+            "select_inquiry_status",
+            "click_inquiry_complete_button"
+          ]
+        }
+      ]
+    }
+  },
+  "step_8": {
+    "role_code": "\"\"\"\nCustomerServiceAgent - Role for orchestrating business workflows.\n\nRoles represent user personas (e.g., Admin, Customer, Guest).\nThis role orchestrates complete business workflows using Task modules.\n\"\"\"\n\nfrom interfaces.web_interface import WebInterface\nfrom resources.utilities import autologger\nfrom tasks.helios2.helios2_tasks import Helios2Tasks\n\n\nclass CustomerServiceAgent:\n    \"\"\"\n    CustomerServiceAgent - orchestrates complete business workflows.\n\n    - @autologger(\"Role\") on workflow methods\n    - @autologger(\"Role Constructor\") on __init__\n    - Composes Task modules\n    - Workflow methods call MULTIPLE tasks\n    - NO return values\n    - NO locators\n    \"\"\"\n\n    @autologger.automation_logger(\"Role Constructor\")\n    def __init__(self, web_interface: WebInterface):\n        \"\"\"\n        Initialize and compose Task modules.\n\n        Args:\n            web_interface: WebInterface instance\n        \"\"\"\n        self.web = web_interface\n        self.helios2_tasks = Helios2Tasks(web_interface)\n\n    # ==================== WORKFLOW METHODS ====================\n\n    @autologger.automation_logger(\"Role\")\n    def create_sales_inquiry(self, customer_firstname: str, customer_lastname: str, customer_email: str, customer_title: str, assigned_user: str, inquiry_type: str, inquiry_source: str, inquiry_status: str) -> None:\n        \"\"\"\n        Execute create sales inquiry workflow.\n\n        NO return value - test asserts via POM state-check methods.\n        \"\"\"\n        self.helios2_tasks.create_sales_inquiry(customer_firstname, customer_lastname, customer_email, customer_title, assigned_user, inquiry_type, inquiry_source, inquiry_status)\n        # NO return - test asserts via POM\n",
+    "role_metadata": {
+      "class_name": "CustomerServiceAgent",
+      "import_path": "roles.helios2.customer_service_agent",
+      "composed_tasks": [
+        "Helios2Tasks"
+      ],
+      "workflow_methods": [
+        {
+          "name": "create_sales_inquiry",
+          "params": [
+            "customer_firstname: str",
+            "customer_lastname: str",
+            "customer_email: str",
+            "customer_title: str",
+            "assigned_user: str",
+            "inquiry_type: str",
+            "inquiry_source: str",
+            "inquiry_status: str"
+          ],
+          "calls": [
+            "helios2_tasks.create_sales_inquiry"
+          ]
+        }
+      ]
+    }
+  }
+}

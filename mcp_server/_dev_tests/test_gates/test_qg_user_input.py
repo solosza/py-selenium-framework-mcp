@@ -558,14 +558,14 @@ class TestErrorHandling:
 
     @pytest.mark.unit
     @pytest.mark.qg_user_input
-    def test_fix_hint_for_missing_persona(self):
+    def test_teach_for_missing_persona(self):
         """
-        P0: Verify fix_hint is provided for missing persona.
+        P0: Verify teach is provided for missing persona.
 
         AAA Pattern:
         1. Arrange - Create input without persona
         2. Act - Call qg_user_input.validate()
-        3. Assert - Returns fix_hint mentioning persona format
+        3. Assert - Returns teach mentioning persona format
         """
         # Arrange
         input_data = {
@@ -580,19 +580,19 @@ class TestErrorHandling:
 
         # Assert
         assert result["status"] == "fail", "Should fail"
-        assert "fix_hint" in result, "Should include fix_hint"
-        assert "persona" in result["fix_hint"].lower(), "fix_hint should mention persona"
+        assert "teach" in result, "Should include teach"
+        assert "persona" in result["teach"].lower(), "teach should mention persona"
 
     @pytest.mark.unit
     @pytest.mark.qg_user_input
-    def test_fix_hint_for_invalid_url(self):
+    def test_teach_for_invalid_url(self):
         """
-        P0: Verify fix_hint is provided for invalid URL.
+        P0: Verify teach is provided for invalid URL.
 
         AAA Pattern:
         1. Arrange - Create input with invalid URL
         2. Act - Call qg_user_input.validate()
-        3. Assert - Returns fix_hint mentioning URL format
+        3. Assert - Returns teach mentioning URL format
         """
         # Arrange
         input_data = {
@@ -608,8 +608,8 @@ class TestErrorHandling:
 
         # Assert
         assert result["status"] == "fail", "Should fail"
-        assert "fix_hint" in result, "Should include fix_hint"
-        assert "url" in result["fix_hint"].lower(), "fix_hint should mention URL"
+        assert "teach" in result, "Should include teach"
+        assert "url" in result["teach"].lower(), "teach should mention URL"
 
 
 class TestWorkflowValidation:
@@ -732,12 +732,12 @@ class TestMissingMultipleFields:
     @pytest.mark.qg_user_input
     def test_missing_all_fields_shows_all_hints(self):
         """
-        P1: Verify all missing fields are reported in fix_hint.
+        P1: Verify all missing fields are reported in teach.
 
         AAA Pattern:
         1. Arrange - Create empty input
         2. Act - Call qg_user_input.validate()
-        3. Assert - fix_hint mentions all fields
+        3. Assert - teach mentions all fields
         """
         # Arrange
         input_data = {}  # All fields missing
@@ -747,10 +747,10 @@ class TestMissingMultipleFields:
 
         # Assert
         assert result["status"] == "fail", "Missing all fields should fail"
-        assert "persona" in result["fix_hint"].lower(), "Should mention persona"
-        assert "url" in result["fix_hint"].lower(), "Should mention URL"
-        assert "role_name" in result["fix_hint"].lower(), "Should mention role_name"
-        assert "domain" in result["fix_hint"].lower(), "Should mention domain"
+        assert "persona" in result["teach"].lower(), "Should mention persona"
+        assert "url" in result["teach"].lower(), "Should mention URL"
+        assert "role_name" in result["teach"].lower(), "Should mention role_name"
+        assert "domain" in result["teach"].lower(), "Should mention domain"
 
 
 class TestIntegration:

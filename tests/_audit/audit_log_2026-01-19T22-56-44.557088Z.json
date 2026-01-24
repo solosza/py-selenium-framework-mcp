@@ -1,0 +1,50 @@
+{
+  "run_id": "2026-01-19T22:56:44.557088Z",
+  "execution_mode": "mixed",
+  "steps": [
+    {
+      "step": 11,
+      "gate": "qg_execution",
+      "mode": "POST",
+      "result": "pass",
+      "timestamp": "2026-01-19T22:56:44.566261Z",
+      "metadata": {
+        "test_status": "passed",
+        "duration": 21.43,
+        "report_path": null
+      }
+    },
+    {
+      "step": 11,
+      "gate": "qg_workflow_complete",
+      "mode": "POST",
+      "result": "fail",
+      "timestamp": "2026-01-19T22:58:10.469851Z",
+      "error": "Workflow integrity validation failed: 2 check(s) failed",
+      "metadata": {
+        "workflow_id": "helios1_create_service_inquiry",
+        "test_path": "tests/helios1/test_create_service_inquiry_with_dynamic_customer_data.py::TestCreateServiceInquiryWithDynamicCustomerData::test_create_service_inquiry_with_dynamic_customer_data",
+        "failed_checks": [
+          "Import path validity",
+          "Audit trail complete"
+        ],
+        "escalation_options": [
+          "rerun_step11",
+          "restart_workflow",
+          "accept_as_is",
+          "abort"
+        ]
+      }
+    }
+  ],
+  "files_generated": [],
+  "summary": {
+    "total_steps": 1,
+    "gates_passed": 1,
+    "gates_failed": 1,
+    "self_heals": 0,
+    "final_result": "fail",
+    "execution_mode": "mixed",
+    "source_counts": {}
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "step_1": {
+    "credential_strategy": "none",
+    "test_data_location": "workflow"
+  },
+  "step_2": {
+    "persona": "Sales representative",
+    "URL": "https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries",
+    "role_name": "SalesRepresentative",
+    "workflow": "helios2",
+    "raw_requirement": "As a Sales representative, I want to create a new product inquiry for an existing customer so that I can track potential sales opportunities.\n\nACCEPTANCE CRITERIA:\n- Given I am on the Inquiries page\n- When I click the \"New Inquiry\" button\n- And I select \"Product\" as the inquiry type\n- And I select an existing customer from the dropdown\n- And I enter product details (product name, quantity, estimated value)\n- And I set the follow-up date to 7 days from today\n- And I click \"Save\"\n- Then the inquiry should be created successfully\n- And I should see a success confirmation message",
+    "detected_env_id": "helios1"
+  },
+  "step_3": {
+    "bdd_scenarios": [
+      {
+        "given": "I am on the Inquiries page",
+        "when": [
+          "I click the New Inquiry button",
+          "I select Product as the inquiry type",
+          "I select an existing customer from the dropdown",
+          "I enter product details (product name, quantity, estimated value)",
+          "I set the follow-up date to 7 days from today",
+          "I click Save"
+        ],
+        "then": [
+          "The inquiry should be created successfully",
+          "I should see a success confirmation message"
+        ]
+      }
+    ],
+    "expected_states": [
+      "is_inquiry_created_successfully",
+      "is_success_confirmation_visible"
+    ],
+    "intent": "create_product_inquiry"
+  },
+  "step_4": {
+    "test_scenarios": [
+      {
+        "name": "test_create_product_inquiry",
+        "given": "I am on the Inquiries page",
+        "when": [
+          "I click the New Inquiry button",
+          "I select Product as the inquiry type",
+          "I select an existing customer from the dropdown",
+          "I enter product details (product name, quantity, estimated value)",
+          "I set the follow-up date to 7 days from today",
+          "I click Save"
+        ],
+        "then": [
+          "The inquiry should be created successfully",
+          "I should see a success confirmation message"
+        ],
+        "workflow": "helios2"
+      }
+    ]
+  },
+  "step_5": {
+    "discovered_elements": [
+      {
+        "name": "new_inquiry_button",
+        "suggested_name": "new_inquiry_button",
+        "element_type": "button",
+        "locator_css": "[aria-label='inquiry_view_button_add']"
+      },
+      {
+        "name": "inquiry_type_dropdown",
+        "suggested_name": "inquiry_type_dropdown",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='inquiry_add_value_type']"
+      },
+      {
+        "name": "inquiry_source_dropdown",
+        "suggested_name": "inquiry_source_dropdown",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='inquiry_add_value_source']"
+      },
+      {
+        "name": "vehicle_notes_input",
+        "suggested_name": "vehicle_notes_input",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='inquiry_add_value_desiredvehicle']"
+      },
+      {
+        "name": "assigned_user_dropdown",
+        "suggested_name": "assigned_user_dropdown",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='inquiry_add_value_assigneduserid']"
+      },
+      {
+        "name": "status_dropdown",
+        "suggested_name": "status_dropdown",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='inquiry_add_value_status']"
+      },
+      {
+        "name": "complete_button",
+        "suggested_name": "complete_button",
+        "element_type": "button",
+        "locator_css": "[name='inquiry_add_button_submit']"
+      },
+      {
+        "name": "modal_close_button",
+        "suggested_name": "modal_close_button",
+        "element_type": "button",
+        "locator_css": "[aria-label='customer_add_button_close']"
+      },
+      {
+        "name": "customer_search_firstname_input",
+        "suggested_name": "customer_search_firstname_input",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_search_input_firstname']"
+      },
+      {
+        "name": "customer_search_lastname_input",
+        "suggested_name": "customer_search_lastname_input",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='customer_search_input_lastname']"
+      },
+      {
+        "name": "contact_type_dropdown",
+        "suggested_name": "contact_type_dropdown",
+        "element_type": "combobox",
+        "locator_css": "[aria-label='contact_search_input_type']"
+      },
+      {
+        "name": "contact_identifier_input",
+        "suggested_name": "contact_identifier_input",
+        "element_type": "textbox",
+        "locator_css": "[aria-label='contact_search_input_identifier']"
+      },
+      {
+        "name": "search_next_button",
+        "suggested_name": "search_next_button",
+        "element_type": "button",
+        "locator_css": "[aria-label='customer_search_button_next']"
+      }
+    ],
+    "page_name": "InquiriesPage",
+    "discovered_pages": {
+      "InquiriesPage": {
+        "input_elements": [
+          {
+            "name": "new_inquiry_button",
+            "suggested_name": "new_inquiry_button",
+            "element_type": "button",
+            "locator_css": "[aria-label='inquiry_view_button_add']"
+          },
+          {
+            "name": "inquiry_type_dropdown",
+            "suggested_name": "inquiry_type_dropdown",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_type']"
+          },
+          {
+            "name": "inquiry_source_dropdown",
+            "suggested_name": "inquiry_source_dropdown",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_source']"
+          },
+          {
+            "name": "vehicle_notes_input",
+            "suggested_name": "vehicle_notes_input",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='inquiry_add_value_desiredvehicle']"
+          },
+          {
+            "name": "assigned_user_dropdown",
+            "suggested_name": "assigned_user_dropdown",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_assigneduserid']"
+          },
+          {
+            "name": "status_dropdown",
+            "suggested_name": "status_dropdown",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='inquiry_add_value_status']"
+          },
+          {
+            "name": "complete_button",
+            "suggested_name": "complete_button",
+            "element_type": "button",
+            "locator_css": "[name='inquiry_add_button_submit']"
+          },
+          {
+            "name": "modal_close_button",
+            "suggested_name": "modal_close_button",
+            "element_type": "button",
+            "locator_css": "[aria-label='customer_add_button_close']"
+          },
+          {
+            "name": "customer_search_firstname_input",
+            "suggested_name": "customer_search_firstname_input",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_search_input_firstname']"
+          },
+          {
+            "name": "customer_search_lastname_input",
+            "suggested_name": "customer_search_lastname_input",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='customer_search_input_lastname']"
+          },
+          {
+            "name": "contact_type_dropdown",
+            "suggested_name": "contact_type_dropdown",
+            "element_type": "combobox",
+            "locator_css": "[aria-label='contact_search_input_type']"
+          },
+          {
+            "name": "contact_identifier_input",
+            "suggested_name": "contact_identifier_input",
+            "element_type": "textbox",
+            "locator_css": "[aria-label='contact_search_input_identifier']"
+          },
+          {
+            "name": "search_next_button",
+            "suggested_name": "search_next_button",
+            "element_type": "button",
+            "locator_css": "[aria-label='customer_search_button_next']"
+          }
+        ]
+      }
+    },
+    "pages_discovered": 0,
+    "total_pages": 1,
+    "discovery_complete": false
+  }
+}
