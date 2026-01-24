@@ -42,3 +42,4 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "layer2: Test pyramid layer 2 (formatting/edge cases)")
     config.addinivalue_line("markers", "layer3: Test pyramid layer 3 (integration)")
     config.addinivalue_line("markers", "layer4: Test pyramid layer 4 (production failures)")
+    config.addinivalue_line("markers", "security: Security validation tests")

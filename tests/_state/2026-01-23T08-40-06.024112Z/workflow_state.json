@@ -1,10 +1,10 @@
 {
   "step_1": {
-    "persona": "premium registered user with subscription",
-    "URL": "http://www.automationpractice.pl/premium",
-    "role_name": "PremiumUser",
-    "workflow": "catalog",
-    "raw_requirement": "As a premium user, I want to access exclusive content",
+    "persona": "user\nwith\nnewlines",
+    "URL": "http://www.automationpractice.pl",
+    "role_name": "User",
+    "workflow": "auth",
+    "raw_requirement": "Test",
     "detected_env_id": "DEFAULT"
   },
   "step_2": {
