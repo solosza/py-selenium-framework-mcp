@@ -1697,3 +1697,122 @@ class TestAuditIntegration:
                         # Not reset or overwrite
                         assert second_call_count > first_call_count, \
                             "Audit should append, not overwrite (call count should increase)"
+
+
+# ==============================================================================
+# Task 8.0: PRE-Check Blocking Tests (Defense-in-Depth)
+# ==============================================================================
+
+class TestPreCheckBlocking:
+    """
+    Task 8.0: PRE-check blocking tests for Step 2 gate.
+
+    Verifies defense-in-depth: Step 2 blocks if Step 1 transcript missing.
+    These tests do NOT use mock_pre_check fixture to test actual blocking.
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.layer3
+    def test_gate_fails_if_step1_transcript_missing(self):
+        """8.1: Gate FAILS if Step 1 transcript missing."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        # Mock pre_check to return an error (simulating missing Step 1 transcript)
+        with patch('tools.gates.base_gate.BaseGate.pre_check_previous_transcript') as mock_pre_check:
+            mock_pre_check.return_value = {
+                "status": "fail",
+                "error": "Step 1 transcript missing (hook may have failed)",
+                "teach": "Previous step's transcript was not created..."
+            }
+
+            result = QGPreflight.validate(input_data)
+
+            assert result["status"] == "fail", "Gate should FAIL when Step 1 transcript missing"
+            mock_pre_check.assert_called_once()
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.layer3
+    def test_error_message_mentions_step_1(self):
+        """8.2: Error message mentions 'Step 1'."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('tools.gates.base_gate.BaseGate.pre_check_previous_transcript') as mock_pre_check:
+            mock_pre_check.return_value = {
+                "status": "fail",
+                "error": "Step 1 transcript missing (hook may have failed)",
+                "teach": "Previous step's transcript was not created by the PostToolUse hook."
+            }
+
+            result = QGPreflight.validate(input_data)
+
+            assert result["status"] == "fail"
+            assert "Step 1" in result["error"], "Error should mention Step 1"
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.layer3
+    def test_teach_explains_how_to_complete_step_1(self):
+        """8.3: Teach explains how to complete Step 1."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('tools.gates.base_gate.BaseGate.pre_check_previous_transcript') as mock_pre_check:
+            mock_pre_check.return_value = {
+                "status": "fail",
+                "error": "Step 1 transcript missing",
+                "teach": "Previous step's transcript was not created. Check hook configuration."
+            }
+
+            result = QGPreflight.validate(input_data)
+
+            assert result["status"] == "fail"
+            assert "teach" in result, "Should include teach field"
+            # Teach should provide actionable guidance
+            assert len(result["teach"]) > 20, "Teach should be substantive"
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.layer3
+    def test_gate_passes_if_step1_transcript_exists(self, mock_pre_check):
+        """8.4: Gate PASSES if Step 1 transcript exists (pre_check returns None)."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        # mock_pre_check fixture patches pre_check_previous_transcript to return None
+        # This simulates Step 1 transcript existing
+        with patch('tools.gates.base_gate.BaseGate.get_audit_logger') as MockGetAuditLogger:
+            with patch('tools.gates.base_gate.BaseGate._enforce_audit_write', return_value=None):
+                with patch('utils.state_manager.StateManager'):
+                    with patch('tools.gates.qg_preflight.Path') as MockPath:
+                        mock_path = MagicMock()
+                        mock_path.exists.return_value = True
+                        MockPath.return_value = mock_path
+
+                        mock_audit_logger = MagicMock()
+                        mock_audit_logger.run_id = "test-run-id"
+                        MockGetAuditLogger.return_value = mock_audit_logger
+
+                        result = QGPreflight.validate(input_data)
+
+                        assert result["status"] == "pass", \
+                            "Gate should PASS when Step 1 transcript exists"
