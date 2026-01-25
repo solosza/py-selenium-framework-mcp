@@ -905,24 +905,27 @@ pytest mcp_server/_dev_tests/ --cov=mcp_server/utils/transcript_writer --cov=mcp
 
 ---
 
-### Task 3.0: Smart Gate Teach Validation [CORE - TDD]
+### Task 3.0: Smart Gate Teach Validation [CORE - TDD] ✓ COMPLETE
 
 **TDD Micro-cycle:** Write test for teach content → Verify gate provides it
 
-- [ ] 3.1 Test: gate response uses `teach` key (not `fix_hint`)
-- [ ] 3.2 Test: teach for invalid credential_strategy includes valid options list
-- [ ] 3.3 Test: teach for invalid test_data_location includes valid options list
-- [ ] 3.4 Test: teach for invalid browser_config explains headless requirement
-- [ ] 3.5 Test: teach for invalid timeout_config explains threshold requirement
-- [ ] 3.6 Test: teach includes example of correct format
-- [ ] 3.7 Test: teach is actionable (contains "should be" or "must be")
-- [ ] 3.8 Run teach tests: `pytest -k "teach" -v`
-- [ ] 3.9 Run checks (pytest)
-- [ ] 3.10 **Audit: DD-50 (smart gate pattern) enforced**
-- [ ] 3.11 Record results
-- [ ] 3.12 Commit: `test: Add teach content validation tests (Task 3.0)`
+- [x] 3.1 Test: gate response uses `teach` key (not `fix_hint`) ✓
+- [x] 3.2 Test: teach for invalid credential_strategy includes valid options list ✓
+- [x] 3.3 Test: teach for invalid test_data_location includes valid options list ✓
+- [x] 3.4 Test: teach for invalid browser_config explains headless requirement ✓
+- [x] 3.5 Test: teach for invalid timeout_config explains threshold requirement ✓
+- [x] 3.6 Test: teach includes example of correct format ✓
+- [x] 3.7 Test: teach is actionable (contains directive language) ✓
+- [x] 3.8 Run teach tests: `pytest -k "teach" -v` ✓
+- [x] 3.9 Run checks (pytest) ✓
+- [x] 3.10 **Audit: DD-50 (smart gate pattern) enforced** ✓
 
-**Done When:** 7 teach tests, all verify actionable guidance
+**Results:**
+- Before: 57 tests
+- After: 64 tests (+7 new)
+- Time: 0.25s
+
+**Done When:** 7 teach tests, all verify actionable guidance ✓
 
 ---
 

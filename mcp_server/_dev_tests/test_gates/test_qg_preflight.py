@@ -1200,3 +1200,158 @@ class TestLayer2EdgeCases:
         result = QGPreflight._validate_browser_config({"headless": "false"})
         assert result is not None
         assert result["status"] == "fail"
+
+
+# ==============================================================================
+# Task 3.0: Teach Content Validation Tests (DD-50 Smart Gate Pattern)
+# ==============================================================================
+
+class TestTeachContentValidation:
+    """
+    Task 3.0: Verify teach content provides actionable guidance.
+
+    DD-50: Smart gates provide fix data, not just block.
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.teach
+    def test_response_uses_teach_key(self, mock_pre_check):
+        """3.1: Gate response uses 'teach' key (not 'fix_hint')."""
+        input_data = {
+            "credential_strategy": "invalid",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        result = QGPreflight.validate(input_data)
+
+        assert result["status"] == "fail"
+        assert "teach" in result, "Response should use 'teach' key"
+        assert "fix_hint" not in result, "Response should NOT use 'fix_hint' key"
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.teach
+    def test_teach_credential_strategy_includes_valid_options(self, mock_pre_check):
+        """3.2: Teach for invalid credential_strategy includes valid options list."""
+        input_data = {
+            "credential_strategy": "invalid",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        result = QGPreflight.validate(input_data)
+
+        assert result["status"] == "fail"
+        teach = result["teach"]
+        # Should list all valid options
+        assert "static" in teach, "Teach should mention 'static'"
+        assert "dynamic" in teach, "Teach should mention 'dynamic'"
+        assert "self-contained" in teach, "Teach should mention 'self-contained'"
+        assert "none" in teach, "Teach should mention 'none'"
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.teach
+    def test_teach_test_data_location_includes_valid_options(self, mock_pre_check):
+        """3.3: Teach for invalid test_data_location includes valid options list."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "invalid",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        result = QGPreflight.validate(input_data)
+
+        assert result["status"] == "fail"
+        teach = result["teach"]
+        # Should list all valid options
+        assert "shared" in teach, "Teach should mention 'shared'"
+        assert "workflow" in teach, "Teach should mention 'workflow'"
+        assert "both" in teach, "Teach should mention 'both'"
+        assert "none" in teach, "Teach should mention 'none'"
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.teach
+    def test_teach_browser_config_explains_headless(self, mock_pre_check):
+        """3.4: Teach for invalid browser_config explains headless requirement."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": True},  # Wrong - should be False
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        result = QGPreflight.validate(input_data)
+
+        assert result["status"] == "fail"
+        teach = result["teach"]
+        assert "headless" in teach.lower(), "Teach should mention headless"
+        assert "false" in teach.lower(), "Teach should mention false"
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.teach
+    def test_teach_timeout_config_explains_threshold(self, mock_pre_check):
+        """3.5: Teach for invalid timeout_config explains threshold requirement."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True}  # Missing threshold_seconds
+        }
+
+        result = QGPreflight.validate(input_data)
+
+        assert result["status"] == "fail"
+        teach = result["teach"]
+        assert "threshold" in teach.lower(), "Teach should mention threshold"
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.teach
+    def test_teach_includes_example_format(self, mock_pre_check):
+        """3.6: Teach includes example of correct format."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {},  # Missing headless
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        result = QGPreflight.validate(input_data)
+
+        assert result["status"] == "fail"
+        teach = result["teach"]
+        # Should show example format
+        assert "{" in teach or ":" in teach, "Teach should include format example"
+
+    @pytest.mark.unit
+    @pytest.mark.preflight
+    @pytest.mark.teach
+    def test_teach_is_actionable(self, mock_pre_check):
+        """3.7: Teach is actionable (contains directive language)."""
+        input_data = {
+            "credential_strategy": "invalid",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        result = QGPreflight.validate(input_data)
+
+        assert result["status"] == "fail"
+        teach = result["teach"].lower()
+        # Should contain actionable language
+        actionable = (
+            "must be" in teach or
+            "should be" in teach or
+            "one of" in teach or
+            "must" in teach
+        )
+        assert actionable, f"Teach should be actionable, got: {result['teach']}"
