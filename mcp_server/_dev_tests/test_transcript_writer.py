@@ -646,3 +646,224 @@ for test_class in TestLayer3EventFlowGrouping.__dict__.values():
 for test_class in TestLayer4ErrorHandling.__dict__.values():
     if callable(test_class) and test_class.__name__.startswith('test_'):
         pytest.mark.layer4(pytest.mark.transcript(test_class))
+
+
+# ============================================================
+# Task 7.0: Step 2 (qg_preflight) Transcript Tests
+# ============================================================
+
+class TestStep2PreflightTranscript:
+    """
+    Task 7.0: Transcript integration tests for Step 2 (qg_preflight).
+
+    Verifies transcript behavior specific to pre-flight configuration gate.
+    """
+
+    @pytest.mark.layer3
+    @pytest.mark.transcript
+    @pytest.mark.preflight
+    def test_step2_entry_appended_not_overwrite_step1(self, temp_test_dir, create_audit_file):
+        """
+        7.1: Step 2 entry appended to transcript (doesn't overwrite Step 1).
+
+        AAA Pattern:
+        1. Arrange - Create audit log with Step 1 and Step 2 events
+        2. Act - Generate transcript
+        3. Assert - Both Step 1 and Step 2 sections present
+        """
+        run_id = "2026-01-25T14:00:00.000000Z"
+        audit_data = {
+            "workflow_id": "test_step2_append",
+            "events": [
+                {
+                    "type": "gate_validation",
+                    "step": 1,
+                    "gate": "qg_user_input",
+                    "mode": "POST",
+                    "result": "pass",
+                    "timestamp": "2026-01-25T14:00:01Z",
+                    "metadata": {
+                        "persona": "As a registered user",
+                        "URL": "http://example.com"
+                    }
+                },
+                {
+                    "type": "gate_validation",
+                    "step": 2,
+                    "gate": "qg_preflight",
+                    "mode": "POST",
+                    "result": "pass",
+                    "timestamp": "2026-01-25T14:00:02Z",
+                    "metadata": {
+                        "credential_strategy": "static",
+                        "test_data_location": "shared",
+                        "browser_config": {"headless": False},
+                        "timeout_config": {"enabled": True, "threshold_seconds": 30}
+                    }
+                }
+            ]
+        }
+        create_audit_file(run_id, audit_data)
+
+        writer = TranscriptWriter(run_id, temp_test_dir["audit_dir"], temp_test_dir["output_dir"])
+        result_path = writer.generate()
+
+        with open(result_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Both steps should be present
+        assert "## Step 1" in content, "Step 1 should be present"
+        assert "## Step 2" in content, "Step 2 should be present"
+        assert "qg_user_input" in content, "Step 1 gate should be recorded"
+        assert "qg_preflight" in content, "Step 2 gate should be recorded"
+        # Order preserved
+        assert content.index("## Step 1") < content.index("## Step 2")
+
+    @pytest.mark.layer3
+    @pytest.mark.transcript
+    @pytest.mark.preflight
+    def test_step2_transcript_contains_header_with_timestamp(self, temp_test_dir, create_audit_file):
+        """
+        7.2: Transcript contains Step 2 header with timestamp.
+
+        AAA Pattern:
+        1. Arrange - Create audit log with Step 2 event including timestamp
+        2. Act - Generate transcript
+        3. Assert - Step 2 section has timestamp
+        """
+        run_id = "2026-01-25T14:05:00.000000Z"
+        audit_data = {
+            "workflow_id": "test_step2_timestamp",
+            "events": [
+                {
+                    "type": "gate_validation",
+                    "step": 2,
+                    "gate": "qg_preflight",
+                    "mode": "POST",
+                    "result": "pass",
+                    "timestamp": "2026-01-25T14:05:30Z",
+                    "metadata": {
+                        "credential_strategy": "static",
+                        "test_data_location": "shared"
+                    }
+                }
+            ]
+        }
+        create_audit_file(run_id, audit_data)
+
+        writer = TranscriptWriter(run_id, temp_test_dir["audit_dir"], temp_test_dir["output_dir"])
+        result_path = writer.generate()
+
+        with open(result_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Step 2 section should exist
+        assert "## Step 2" in content, "Step 2 header should be present"
+        # Timestamp should be in the content
+        assert "2026-01-25T14:05:30Z" in content, "Step 2 timestamp should be recorded"
+
+    @pytest.mark.layer3
+    @pytest.mark.transcript
+    @pytest.mark.preflight
+    def test_step2_transcript_contains_all_4_config_values(self, temp_test_dir, create_audit_file):
+        """
+        7.3: Transcript contains all 4 config values from Step 2.
+
+        AAA Pattern:
+        1. Arrange - Create audit log with all 4 Step 2 config fields
+        2. Act - Generate transcript
+        3. Assert - All 4 config values appear in transcript
+        """
+        run_id = "2026-01-25T14:10:00.000000Z"
+        audit_data = {
+            "workflow_id": "test_step2_config_values",
+            "events": [
+                {
+                    "type": "gate_validation",
+                    "step": 2,
+                    "gate": "qg_preflight",
+                    "mode": "POST",
+                    "result": "pass",
+                    "timestamp": "2026-01-25T14:10:30Z",
+                    "metadata": {
+                        "credential_strategy": "dynamic",
+                        "test_data_location": "workflow",
+                        "browser_config": {"headless": False},
+                        "timeout_config": {"enabled": True, "threshold_seconds": 60}
+                    }
+                }
+            ]
+        }
+        create_audit_file(run_id, audit_data)
+
+        writer = TranscriptWriter(run_id, temp_test_dir["audit_dir"], temp_test_dir["output_dir"])
+        result_path = writer.generate()
+
+        with open(result_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # All 4 config fields should appear in metadata
+        assert "credential_strategy" in content, "credential_strategy should be in transcript"
+        assert "dynamic" in content, "credential_strategy value should be in transcript"
+        assert "test_data_location" in content, "test_data_location should be in transcript"
+        assert "workflow" in content, "test_data_location value should be in transcript"
+        assert "browser_config" in content, "browser_config should be in transcript"
+        assert "headless" in content, "browser_config.headless should be in transcript"
+        assert "timeout_config" in content, "timeout_config should be in transcript"
+        assert "threshold_seconds" in content, "timeout_config.threshold_seconds should be in transcript"
+
+    @pytest.mark.layer3
+    @pytest.mark.transcript
+    @pytest.mark.preflight
+    def test_step2_transcript_format_matches_spec(self, temp_test_dir, create_audit_file):
+        """
+        7.4: Transcript format matches PRD spec (markdown with gate details).
+
+        AAA Pattern:
+        1. Arrange - Create audit log with Step 2 pass
+        2. Act - Generate transcript
+        3. Assert - Format follows spec (header, gate, result, metadata)
+        """
+        run_id = "2026-01-25T14:15:00.000000Z"
+        audit_data = {
+            "workflow_id": "test_step2_format",
+            "events": [
+                {
+                    "type": "gate_validation",
+                    "step": 2,
+                    "gate": "qg_preflight",
+                    "mode": "POST",
+                    "result": "pass",
+                    "timestamp": "2026-01-25T14:15:30Z",
+                    "metadata": {
+                        "credential_strategy": "static",
+                        "test_data_location": "shared",
+                        "browser_config": {"headless": False},
+                        "timeout_config": {"enabled": True, "threshold_seconds": 30}
+                    }
+                }
+            ]
+        }
+        create_audit_file(run_id, audit_data)
+
+        writer = TranscriptWriter(run_id, temp_test_dir["audit_dir"], temp_test_dir["output_dir"])
+        result_path = writer.generate()
+
+        with open(result_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # PRD spec format requirements:
+        # 1. Main header
+        assert "# Workflow Transcript" in content, "Should have main header"
+        # 2. Workflow ID
+        assert "test_step2_format" in content, "Should include workflow_id"
+        # 3. Step section header
+        assert "## Step 2" in content, "Should have step section header"
+        # 4. Gate name with backticks
+        assert "Gate: `qg_preflight`" in content, "Gate name should be in code format"
+        # 5. Result with status
+        assert "Result:** `pass`" in content, "Result should show pass status"
+        # 6. Metadata section
+        assert "**Metadata:**" in content, "Should have metadata section"
+        # 7. Pass icon (emoji)
+        assert "✅" in content, "Should have pass icon"
