@@ -1510,3 +1510,190 @@ class TestStateIntegration:
 
             assert result["status"] == "fail"
             mock_instance.save.assert_not_called()
+
+
+# ==============================================================================
+# Task 5.0: Audit Integration Tests (FR-2.7)
+# ==============================================================================
+
+class TestAuditIntegration:
+    """
+    Task 5.0: Audit integration tests for Step 2 gate.
+
+    Verifies FR-2.7: Audit logging on gate PASS.
+    """
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.audit
+    def test_audit_event_logged_on_gate_pass(self, mock_pre_check):
+        """5.1: Audit event logged on gate PASS."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('tools.gates.base_gate.BaseGate.get_audit_logger') as MockGetAuditLogger:
+            with patch('tools.gates.base_gate.BaseGate._enforce_audit_write', return_value=None):
+                with patch('utils.state_manager.StateManager'):
+                    with patch('tools.gates.qg_preflight.Path') as MockPath:
+                        mock_path = MagicMock()
+                        mock_path.exists.return_value = True
+                        MockPath.return_value = mock_path
+
+                        # Setup mock audit logger
+                        mock_audit_logger = MagicMock()
+                        mock_audit_logger.run_id = "test-run-id"
+                        MockGetAuditLogger.return_value = mock_audit_logger
+
+                        result = QGPreflight.validate(input_data)
+
+                        assert result["status"] == "pass"
+                        # Verify log_gate was called
+                        mock_audit_logger.log_gate.assert_called()
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.audit
+    def test_audit_event_has_step_2_field(self, mock_pre_check):
+        """5.2: Audit event has step=2 field."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('tools.gates.base_gate.BaseGate.get_audit_logger') as MockGetAuditLogger:
+            with patch('tools.gates.base_gate.BaseGate._enforce_audit_write', return_value=None):
+                with patch('utils.state_manager.StateManager'):
+                    with patch('tools.gates.qg_preflight.Path') as MockPath:
+                        mock_path = MagicMock()
+                        mock_path.exists.return_value = True
+                        MockPath.return_value = mock_path
+
+                        mock_audit_logger = MagicMock()
+                        mock_audit_logger.run_id = "test-run-id"
+                        MockGetAuditLogger.return_value = mock_audit_logger
+
+                        result = QGPreflight.validate(input_data)
+
+                        assert result["status"] == "pass"
+                        # Verify step=2 in log_gate call
+                        call_kwargs = mock_audit_logger.log_gate.call_args.kwargs
+                        assert call_kwargs["step"] == 2, "Audit event should have step=2"
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.audit
+    def test_audit_event_has_gate_qg_preflight(self, mock_pre_check):
+        """5.3: Audit event has gate='qg_preflight'."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('tools.gates.base_gate.BaseGate.get_audit_logger') as MockGetAuditLogger:
+            with patch('tools.gates.base_gate.BaseGate._enforce_audit_write', return_value=None):
+                with patch('utils.state_manager.StateManager'):
+                    with patch('tools.gates.qg_preflight.Path') as MockPath:
+                        mock_path = MagicMock()
+                        mock_path.exists.return_value = True
+                        MockPath.return_value = mock_path
+
+                        mock_audit_logger = MagicMock()
+                        mock_audit_logger.run_id = "test-run-id"
+                        MockGetAuditLogger.return_value = mock_audit_logger
+
+                        result = QGPreflight.validate(input_data)
+
+                        assert result["status"] == "pass"
+                        # Verify gate_name='qg_preflight' in log_gate call
+                        call_kwargs = mock_audit_logger.log_gate.call_args.kwargs
+                        assert call_kwargs["gate_name"] == "qg_preflight", \
+                            "Audit event should have gate='qg_preflight'"
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.audit
+    def test_audit_metadata_includes_all_config_fields(self, mock_pre_check):
+        """5.4: Audit metadata includes all 4 config fields."""
+        input_data = {
+            "credential_strategy": "dynamic",
+            "test_data_location": "workflow",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 60}
+        }
+
+        with patch('tools.gates.base_gate.BaseGate.get_audit_logger') as MockGetAuditLogger:
+            with patch('tools.gates.base_gate.BaseGate._enforce_audit_write', return_value=None):
+                with patch('utils.state_manager.StateManager'):
+                    with patch('tools.gates.qg_preflight.Path') as MockPath:
+                        mock_path = MagicMock()
+                        mock_path.exists.return_value = True
+                        MockPath.return_value = mock_path
+
+                        mock_audit_logger = MagicMock()
+                        mock_audit_logger.run_id = "test-run-id"
+                        MockGetAuditLogger.return_value = mock_audit_logger
+
+                        result = QGPreflight.validate(input_data)
+
+                        assert result["status"] == "pass"
+                        # Verify metadata includes all 4 config fields
+                        call_kwargs = mock_audit_logger.log_gate.call_args.kwargs
+                        metadata = call_kwargs.get("metadata", {})
+                        assert "credential_strategy" in metadata, \
+                            "Metadata should include credential_strategy"
+                        assert "test_data_location" in metadata, \
+                            "Metadata should include test_data_location"
+                        assert "browser_config" in metadata, \
+                            "Metadata should include browser_config"
+                        assert "timeout_config" in metadata, \
+                            "Metadata should include timeout_config"
+                        # Verify actual values are preserved
+                        assert metadata["credential_strategy"] == "dynamic"
+                        assert metadata["test_data_location"] == "workflow"
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.audit
+    def test_audit_appends_not_overwrites(self, mock_pre_check):
+        """5.5: Audit appends (log_gate called once per validation, not clear)."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('tools.gates.base_gate.BaseGate.get_audit_logger') as MockGetAuditLogger:
+            with patch('tools.gates.base_gate.BaseGate._enforce_audit_write', return_value=None):
+                with patch('utils.state_manager.StateManager'):
+                    with patch('tools.gates.qg_preflight.Path') as MockPath:
+                        mock_path = MagicMock()
+                        mock_path.exists.return_value = True
+                        MockPath.return_value = mock_path
+
+                        mock_audit_logger = MagicMock()
+                        mock_audit_logger.run_id = "test-run-id"
+                        MockGetAuditLogger.return_value = mock_audit_logger
+
+                        # First validation
+                        result1 = QGPreflight.validate(input_data)
+                        assert result1["status"] == "pass"
+                        first_call_count = mock_audit_logger.log_gate.call_count
+
+                        # Second validation (simulates Step 2 after Step 1)
+                        result2 = QGPreflight.validate(input_data)
+                        assert result2["status"] == "pass"
+                        second_call_count = mock_audit_logger.log_gate.call_count
+
+                        # Each validation should add to log (append behavior)
+                        # Not reset or overwrite
+                        assert second_call_count > first_call_count, \
+                            "Audit should append, not overwrite (call count should increase)"
