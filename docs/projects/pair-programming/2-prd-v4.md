@@ -513,8 +513,177 @@ Step 1 PRD is ready for task generation when:
 - ✅ Security & privacy reviewed (no secrets, threat model documented)
 - ✅ Rollout & rollback plan defined (smoke test, revert plan)
 
+**Status:** ✅ COMPLETE (139 tests, 98% coverage)
+
+---
+
+## Step 2: Pre-flight Configuration
+
+### Phase 0 Assessment (Don't Reinvent the Wheel)
+
+| Component | Status | Location | Tests | Action |
+|-----------|--------|----------|-------|--------|
+| **Gate** | ✅ EXISTS | `mcp_server/tools/gates/qg_preflight.py` (11KB) | 26 tests (15 failing) | **FIX TESTS** |
+| **Protocol** | ✅ EXISTS | `.claude/skills/qa-management-layer/references/step-02.md` (15KB) | N/A | Verify current |
+| **Archived** | N/A | No preflight in `_archived/` | N/A | Skip |
+| **Shared Utils** | ✅ Reuse | StateManager, AuditLogger, TranscriptWriter | Already tested | Reuse |
+
+**Root Cause of Failing Tests:** Tests missing transcript check mock (same issue as Step 1).
+
+**Effort Adjustment:**
+- Original: Full TDD from scratch
+- Revised: Fix 15 failing tests + gap-fill to 95% coverage
+
+---
+
+### Functional Requirements
+
+**FR-2.1: Credential Strategy Configuration (DD-24)**
+- System MUST ask user which credential strategy to use
+- Valid options: `static`, `dynamic`, `self-contained`, `none`
+- System MUST validate selection is one of valid options
+- System MUST provide fix hint if invalid selection
+
+**FR-2.2: Test Data Location Configuration (DD-28)**
+- System MUST ask user where test data should live
+- Valid options: `shared`, `workflow`, `both`, `none`
+- System MUST validate selection is one of valid options
+- System MUST provide fix hint if invalid selection
+
+**FR-2.3: Browser Configuration**
+- System MUST configure browser settings for pair programming
+- `headless: false` REQUIRED for pair programming (user sees browser)
+- System MUST validate headless is boolean
+- System MUST provide fix hint if invalid
+
+**FR-2.4: Timeout Configuration**
+- System MUST configure timeout settings
+- `enabled: true/false` - whether timeout monitoring active
+- `threshold_seconds: N` - timeout threshold (required if enabled=true)
+- System MUST validate configuration structure
+
+**FR-2.5: Gate Validation (POST-only)**
+- System MUST validate all 4 configuration fields
+- System MUST check Step 1 transcript exists (PRE-check)
+- System MUST provide fix hints for all validation failures
+- System MUST use `teach` terminology (not `fix_hint`)
+
+**FR-2.6: State Checkpoint**
+- On gate PASS, save to `tests/_state/{run_id}/workflow_state.json`
+- State MUST include: credential_strategy, test_data_location, browser_config, timeout_config
+- State MUST merge with Step 1 state (not overwrite)
+
+**FR-2.7: Audit Logging**
+- System MUST log gate validation event to audit log
+- Audit entry MUST include: step=2, gate=qg_preflight, result, metadata
+
+**FR-2.8: Infrastructure Scaffolding (NEEDS_RETRY Pattern)**
+- If credential strategy requires files that don't exist, return NEEDS_RETRY
+- Provide scaffolding template for missing files
+- Allow AI to create files and retry
+
+---
+
+### Non-Goals (Out of Scope)
+
+**NG-2.1:** Actual credential file content (user provides credentials, not system)
+**NG-2.2:** Browser driver installation (handled by webdriver-manager)
+**NG-2.3:** Timeout enforcement (configured here, enforced in Step 6)
+
+---
+
+### Design Considerations
+
+**Protocol Reference:** `.claude/skills/qa-management-layer/references/step-02.md`
+
+**Design Decisions Applied:**
+- DD-24: Credential strategy (static/dynamic/self-contained/none)
+- DD-28: Test data organization (shared/workflow/both/none)
+
+**Existing Gate Implementation:**
+- `qg_preflight.py` already implements validation logic
+- PRE-check for Step 1 transcript already implemented
+- NEEDS_RETRY scaffolding pattern already implemented
+
+---
+
+### Acceptance Tests (GIVEN/WHEN/THEN)
+
+**AT-2.1: Valid Configuration Passes**
+```
+GIVEN Step 1 completed (transcript exists)
+  AND user provides valid credential_strategy (static)
+  AND user provides valid test_data_location (shared)
+  AND user provides valid browser_config (headless: false)
+  AND user provides valid timeout_config (enabled: true, threshold_seconds: 30)
+WHEN AI calls qg_preflight gate
+THEN gate returns status: pass
+  AND state saved with all 4 configuration fields
+  AND audit log contains Step 2 event
+```
+
+**AT-2.2: Invalid Credential Strategy Fails**
+```
+GIVEN Step 1 completed
+  AND user provides invalid credential_strategy ("invalid")
+WHEN AI calls qg_preflight gate
+THEN gate returns status: fail
+  AND error mentions invalid credential_strategy
+  AND teach provides valid options
+```
+
+**AT-2.3: Missing Step 1 Transcript Fails**
+```
+GIVEN Step 1 NOT completed (no transcript)
+WHEN AI calls qg_preflight gate
+THEN gate returns status: fail
+  AND error mentions Step 1 transcript required
+```
+
+**AT-2.4: Scaffolding for Missing Credential File**
+```
+GIVEN Step 1 completed
+  AND user provides credential_strategy: static
+  AND tests/data/test_users.json does NOT exist
+WHEN AI calls qg_preflight gate
+THEN gate returns status: NEEDS_RETRY
+  AND scaffolding_needed contains credential file template
+```
+
+**AT-2.5: Pass When Infrastructure Exists**
+```
+GIVEN Step 1 completed
+  AND user provides valid configuration
+  AND all required infrastructure files exist
+WHEN AI calls qg_preflight gate
+THEN gate returns status: pass
+```
+
+---
+
+### Test Strategy
+
+**Test Pyramid (Target: 95% coverage for gate):**
+- Layer 1: 20-30 tests (validation helpers, regex patterns)
+- Layer 2: 10-15 tests (edge cases, invalid inputs)
+- Layer 3: 3-5 tests (integration with state, PRE-check)
+- Layer 4: 2-3 tests (production failures, scaffolding)
+
+**Existing Tests:** 26 tests exist (15 failing due to missing mock)
+**Action:** Fix failing tests first, then gap-fill to 95% coverage
+
+---
+
+### Definition of Ready
+
+Step 2 PRD is ready for task generation when:
+- ✅ Functional requirements defined (FR-2.1 through FR-2.8)
+- ✅ Phase 0 assessment completed (existing components documented)
+- ✅ Acceptance tests written (5 scenarios)
+- ✅ Test strategy defined (fix existing + gap-fill)
+
 **Status:** ✅ Ready for task generation
 
 ---
 
-**Next:** Generate tasks for Step 1 implementation (TDD for gates, test-after for protocol)
+**Next:** Generate tasks for Step 2 implementation

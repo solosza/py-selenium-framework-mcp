@@ -649,3 +649,155 @@ pytest mcp_server/_dev_tests/ --cov=mcp_server/utils/transcript_writer --cov=mcp
 - **Total:** 155 tests across all layers
 
 **Confidence Level:** High - TDD approach with clear pyramid structure ensures quality
+
+---
+---
+
+# Step 2: Pre-flight Configuration Tasks
+
+**PRD:** `2-prd-v4.md` (Step 2 section)
+**Status:** Ready for implementation
+**Approach:** Fix existing tests, then gap-fill (Test-After, not TDD)
+**Date:** 2026-01-25
+
+---
+
+## Phase 0 Assessment Summary
+
+| Component | Status | Action |
+|-----------|--------|--------|
+| Gate (`qg_preflight.py`) | ✅ EXISTS (11KB) | Fix 15 failing tests |
+| Protocol (`step-02.md`) | ✅ EXISTS (15KB) | Verify current |
+| Tests (`test_qg_preflight.py`) | ⚠️ 26 tests (15 failing) | Fix + gap-fill |
+| Shared Utils | ✅ Reuse | StateManager, AuditLogger, TranscriptWriter |
+
+**Root Cause:** Tests missing transcript check mock (same as Step 1)
+
+---
+
+## Relevant Files
+
+### Existing (Modify)
+- `mcp_server/tools/gates/qg_preflight.py` - Step 2 gate (already implemented)
+- `mcp_server/_dev_tests/test_gates/test_qg_preflight.py` - Tests (fix + gap-fill)
+- `.claude/skills/qa-management-layer/references/step-02.md` - Protocol (verify)
+
+### Reuse (No Changes)
+- `mcp_server/utils/state_manager.py` - State checkpoint (tested in Step 1)
+- `mcp_server/utils/audit_logger.py` - Audit logging (tested in Step 1)
+- `mcp_server/utils/transcript_writer.py` - Transcript (tested in Step 1)
+- `mcp_server/tools/gates/base_gate.py` - Base gate class (tested in Step 1)
+
+---
+
+## Tasks
+
+### Phase 0: Pre-Implementation Assessment
+
+- [ ] 0.0 Verify existing components and document findings [GLUE]
+  - [ ] 0.1 Run existing tests: `pytest test_gates/test_qg_preflight.py -v`
+  - [ ] 0.2 Document: 26 tests, 11 passing, 15 failing
+  - [ ] 0.3 Identify root cause: missing transcript mock
+  - [ ] 0.4 Read gate implementation, verify PRE-check pattern
+  - [ ] 0.5 Read protocol, verify matches gate implementation
+  - [ ] 0.6 Record assessment in this file ✓
+
+---
+
+### Phase 1: Fix Failing Tests
+
+- [ ] 1.0 Fix 15 failing tests by adding transcript mock [CORE]
+  - [ ] 1.1 Add `mock_transcript_check` fixture (copy from Step 1 tests)
+  - [ ] 1.2 Run tests, verify all 26 pass
+  - [ ] 1.3 Check coverage: `pytest --cov=tools.gates.qg_preflight`
+  - [ ] 1.4 Document current coverage percentage
+  - [ ] 1.5 **Audit: Verify testing skill conventions followed**
+  - [ ] 1.6 Record results
+  - [ ] 1.7 Commit: `test: Fix qg_preflight tests - add transcript mock (Task 1.0)`
+
+---
+
+### Phase 2: Gap-Fill Test Coverage (4-Layer Pyramid)
+
+- [ ] 2.0 Add Layer 1 tests (validation helpers) [CORE]
+  - [ ] 2.1 Write tests: `_is_valid_credential_strategy()` (4 valid + invalid cases)
+  - [ ] 2.2 Write tests: `_is_valid_test_data_location()` (4 valid + invalid cases)
+  - [ ] 2.3 Write tests: `_is_valid_browser_config()` (headless validation)
+  - [ ] 2.4 Write tests: `_is_valid_timeout_config()` (enabled + threshold)
+  - [ ] 2.5 Run Layer 1 tests
+  - [ ] 2.6 Record results
+
+- [ ] 3.0 Add Layer 2 tests (edge cases) [CORE]
+  - [ ] 3.1 Write test: empty string for credential_strategy
+  - [ ] 3.2 Write test: case sensitivity (STATIC vs static)
+  - [ ] 3.3 Write test: browser_config missing headless key
+  - [ ] 3.4 Write test: timeout_config enabled=true but no threshold
+  - [ ] 3.5 Write test: all fields missing
+  - [ ] 3.6 Run Layer 2 tests
+  - [ ] 3.7 Record results
+
+- [ ] 4.0 Add Layer 3 tests (integration) [CORE]
+  - [ ] 4.1 Write test: state saved with all 4 config fields
+  - [ ] 4.2 Write test: Step 1 state preserved (merge, not overwrite)
+  - [ ] 4.3 Write test: PRE-check blocks if Step 1 transcript missing
+  - [ ] 4.4 Run Layer 3 tests
+  - [ ] 4.5 Record results
+
+- [ ] 5.0 Add Layer 4 tests (production failures) [CORE]
+  - [ ] 5.1 Write test: state save fails gracefully
+  - [ ] 5.2 Write test: NEEDS_RETRY scaffolding returns valid template
+  - [ ] 5.3 Run Layer 4 tests
+  - [ ] 5.4 Check coverage (target: 95%)
+  - [ ] 5.5 **Audit: Verify 4-layer pyramid complete**
+  - [ ] 5.6 Record results
+  - [ ] 5.7 Commit: `test: Implement qg_preflight 4-layer test pyramid (Task 2-5)`
+
+---
+
+### Phase 3: Protocol Verification
+
+- [ ] 6.0 Verify protocol matches implementation [GLUE]
+  - [ ] 6.1 Read `step-02.md` protocol
+  - [ ] 6.2 Compare with gate implementation
+  - [ ] 6.3 Update protocol if needed (POST-ACTION, paths, etc.)
+  - [ ] 6.4 Verify teach terminology used (not fix_hint)
+  - [ ] 6.5 Record findings
+  - [ ] 6.6 Commit (if changes): `docs: Update step-02 protocol (Task 6.0)`
+
+---
+
+### Phase 4: Documentation & Completion
+
+- [ ] 7.0 Finalize Step 2 and update documentation [GLUE]
+  - [ ] 7.1 Run all Step 2 tests: `pytest test_gates/test_qg_preflight.py -v`
+  - [ ] 7.2 Verify coverage meets 95% target
+  - [ ] 7.3 Update SESSION.md with Step 2 completion status
+  - [ ] 7.4 Mark Step 2 complete in PRD
+  - [ ] 7.5 **Audit: Verify all FR-2.x requirements tested**
+  - [ ] 7.6 Record final results
+  - [ ] 7.7 Commit: `docs: Mark Step 2 complete (Task 7.0)`
+
+---
+
+## Estimated Effort
+
+| Phase | Description | Effort |
+|-------|-------------|--------|
+| Phase 0 | Assessment (already done) | 0.5 hours |
+| Phase 1 | Fix failing tests | 0.5 hours |
+| Phase 2-5 | Gap-fill 4-layer pyramid | 3 hours |
+| Phase 6 | Protocol verification | 0.5 hours |
+| Phase 7 | Documentation | 0.5 hours |
+| **Total** | | **5 hours** |
+
+**Note:** Significantly less than Step 1 (19 hours) because gate and tests already exist.
+
+---
+
+## Done When
+
+- [ ] All tests pass (target: 40+ tests)
+- [ ] Coverage ≥ 95% for qg_preflight
+- [ ] Protocol verified current
+- [ ] All FR-2.x requirements have test coverage
+- [ ] Step 2 marked complete in PRD and SESSION.md
