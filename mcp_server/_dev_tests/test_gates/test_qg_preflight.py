@@ -29,7 +29,7 @@ class TestValidCredentialStrategy:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_valid_credential_strategy_static(self):
+    def test_valid_credential_strategy_static(self, mock_pre_check):
         """
         P0: Verify 'static' credential strategy passes validation.
 
@@ -41,7 +41,9 @@ class TestValidCredentialStrategy:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -57,7 +59,7 @@ class TestValidCredentialStrategy:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_valid_credential_strategy_dynamic(self):
+    def test_valid_credential_strategy_dynamic(self, mock_pre_check):
         """
         P0: Verify 'dynamic' credential strategy passes validation.
 
@@ -69,7 +71,9 @@ class TestValidCredentialStrategy:
         # Arrange
         input_data = {
             "credential_strategy": "dynamic",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -84,7 +88,7 @@ class TestValidCredentialStrategy:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_valid_credential_strategy_self_contained(self):
+    def test_valid_credential_strategy_self_contained(self, mock_pre_check):
         """
         P0: Verify 'self-contained' credential strategy passes validation.
 
@@ -96,7 +100,9 @@ class TestValidCredentialStrategy:
         # Arrange
         input_data = {
             "credential_strategy": "self-contained",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -111,7 +117,7 @@ class TestValidCredentialStrategy:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_valid_credential_strategy_none(self):
+    def test_valid_credential_strategy_none(self, mock_pre_check):
         """
         P0: Verify 'none' credential strategy passes validation.
 
@@ -123,7 +129,9 @@ class TestValidCredentialStrategy:
         # Arrange
         input_data = {
             "credential_strategy": "none",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -146,7 +154,7 @@ class TestValidTestDataLocation:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_valid_test_data_location_shared(self):
+    def test_valid_test_data_location_shared(self, mock_pre_check):
         """
         P0: Verify 'shared' test data location passes validation.
 
@@ -158,7 +166,9 @@ class TestValidTestDataLocation:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -173,7 +183,7 @@ class TestValidTestDataLocation:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_valid_test_data_location_workflow(self):
+    def test_valid_test_data_location_workflow(self, mock_pre_check):
         """
         P0: Verify 'workflow' test data location passes validation.
 
@@ -185,7 +195,9 @@ class TestValidTestDataLocation:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "workflow"
+            "test_data_location": "workflow",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -200,7 +212,7 @@ class TestValidTestDataLocation:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_valid_test_data_location_both(self):
+    def test_valid_test_data_location_both(self, mock_pre_check):
         """
         P0: Verify 'both' test data location passes validation.
 
@@ -212,7 +224,9 @@ class TestValidTestDataLocation:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "both"
+            "test_data_location": "both",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -227,7 +241,7 @@ class TestValidTestDataLocation:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_valid_test_data_location_none(self):
+    def test_valid_test_data_location_none(self, mock_pre_check):
         """
         P0: Verify 'none' test data location passes validation.
 
@@ -239,7 +253,9 @@ class TestValidTestDataLocation:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "none"
+            "test_data_location": "none",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -262,7 +278,7 @@ class TestBothFieldsValid:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_both_fields_valid_passes(self):
+    def test_both_fields_valid_passes(self, mock_pre_check):
         """
         P0: Verify both valid fields together pass validation.
 
@@ -274,7 +290,9 @@ class TestBothFieldsValid:
         # Arrange
         input_data = {
             "credential_strategy": "dynamic",
-            "test_data_location": "both"
+            "test_data_location": "both",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -289,7 +307,7 @@ class TestBothFieldsValid:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_state_saved_on_pass(self):
+    def test_state_saved_on_pass(self, mock_pre_check):
         """
         P0: Verify state is saved when validation passes.
 
@@ -301,11 +319,14 @@ class TestBothFieldsValid:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
-        with patch('tools.gates.qg_preflight.StateManager') as MockStateManager:
+        # Mock StateManager in utils.state_manager where base_gate imports it
+        with patch('utils.state_manager.StateManager') as MockStateManager:
             with patch('tools.gates.qg_preflight.Path') as MockPath:
                 # Mock infrastructure exists
                 mock_path = MagicMock()
@@ -320,7 +341,7 @@ class TestBothFieldsValid:
                 assert result["status"] == "pass", "Validation should pass"
                 mock_instance.save.assert_called_once()
                 call_kwargs = mock_instance.save.call_args.kwargs
-                assert call_kwargs["step"] == 1, "Should save to step 1"
+                assert call_kwargs["step"] == 2, "Should save to step 2"
                 assert "credential_strategy" in call_kwargs["data"], "Should include credential_strategy"
                 assert "test_data_location" in call_kwargs["data"], "Should include test_data_location"
 
@@ -334,7 +355,7 @@ class TestInvalidInputs:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_invalid_credential_strategy_fails(self):
+    def test_invalid_credential_strategy_fails(self, mock_pre_check):
         """
         P0: Verify invalid credential strategy fails validation.
 
@@ -346,7 +367,9 @@ class TestInvalidInputs:
         # Arrange
         input_data = {
             "credential_strategy": "invalid_strategy",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -358,7 +381,7 @@ class TestInvalidInputs:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_invalid_test_data_location_fails(self):
+    def test_invalid_test_data_location_fails(self, mock_pre_check):
         """
         P0: Verify invalid test data location fails validation.
 
@@ -370,7 +393,9 @@ class TestInvalidInputs:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "invalid_location"
+            "test_data_location": "invalid_location",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -382,7 +407,7 @@ class TestInvalidInputs:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_missing_credential_strategy_fails(self):
+    def test_missing_credential_strategy_fails(self, mock_pre_check):
         """
         P0: Verify missing credential strategy fails validation.
 
@@ -393,7 +418,9 @@ class TestInvalidInputs:
         """
         # Arrange
         input_data = {
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -402,10 +429,11 @@ class TestInvalidInputs:
         # Assert
         assert result["status"] == "fail", "Missing credential strategy should fail"
         assert "error" in result, "Should include error message"
+        assert "credential_strategy" in result["error"], "Error should mention missing field"
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_missing_test_data_location_fails(self):
+    def test_missing_test_data_location_fails(self, mock_pre_check):
         """
         P0: Verify missing test data location fails validation.
 
@@ -416,7 +444,9 @@ class TestInvalidInputs:
         """
         # Arrange
         input_data = {
-            "credential_strategy": "static"
+            "credential_strategy": "static",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -425,10 +455,11 @@ class TestInvalidInputs:
         # Assert
         assert result["status"] == "fail", "Missing test data location should fail"
         assert "error" in result, "Should include error message"
+        assert "test_data_location" in result["error"], "Error should mention missing field"
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_both_invalid_fails(self):
+    def test_both_invalid_fails(self, mock_pre_check):
         """
         P0: Verify both invalid fields fail validation.
 
@@ -440,7 +471,9 @@ class TestInvalidInputs:
         # Arrange
         input_data = {
             "credential_strategy": "bad_strategy",
-            "test_data_location": "bad_location"
+            "test_data_location": "bad_location",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -452,7 +485,7 @@ class TestInvalidInputs:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_no_state_saved_on_fail(self):
+    def test_no_state_saved_on_fail(self, mock_pre_check):
         """
         P0: Verify state is NOT saved when validation fails.
 
@@ -464,7 +497,9 @@ class TestInvalidInputs:
         # Arrange
         input_data = {
             "credential_strategy": "invalid",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -487,7 +522,7 @@ class TestEdgeCases:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_empty_string_credential_strategy(self):
+    def test_empty_string_credential_strategy(self, mock_pre_check):
         """
         P1: Verify empty string credential strategy fails validation.
 
@@ -499,7 +534,9 @@ class TestEdgeCases:
         # Arrange
         input_data = {
             "credential_strategy": "",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -510,7 +547,7 @@ class TestEdgeCases:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_null_value_handled(self):
+    def test_null_value_handled(self, mock_pre_check):
         """
         P1: Verify None values are handled as failures.
 
@@ -522,7 +559,9 @@ class TestEdgeCases:
         # Arrange
         input_data = {
             "credential_strategy": None,
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -533,7 +572,7 @@ class TestEdgeCases:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_case_sensitivity(self):
+    def test_case_sensitivity(self, mock_pre_check):
         """
         P1: Verify case sensitivity is enforced.
 
@@ -545,7 +584,9 @@ class TestEdgeCases:
         # Arrange
         input_data = {
             "credential_strategy": "STATIC",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -564,19 +605,21 @@ class TestErrorHandling:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_fix_hint_provided_on_fail(self):
+    def test_teach_provided_on_fail(self, mock_pre_check):
         """
-        P0: Verify fix_hint is provided on validation failure.
+        P0: Verify teach is provided on validation failure.
 
         AAA Pattern:
         1. Arrange - Create invalid input
         2. Act - Call qg_preflight.validate()
-        3. Assert - Returns fix_hint in response
+        3. Assert - Returns teach in response
         """
         # Arrange
         input_data = {
             "credential_strategy": "invalid",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -584,8 +627,8 @@ class TestErrorHandling:
 
         # Assert
         assert result["status"] == "fail", "Should fail"
-        assert "fix_hint" in result, "Should include fix_hint"
-        assert len(result["fix_hint"]) > 0, "fix_hint should not be empty"
+        assert "teach" in result, "Should include teach"
+        assert len(result["teach"]) > 0, "teach should not be empty"
 
 
 class TestScaffoldingInfrastructure:
@@ -597,7 +640,7 @@ class TestScaffoldingInfrastructure:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_returns_needs_retry_when_tests_data_missing(self):
+    def test_returns_needs_retry_when_tests_data_missing(self, mock_pre_check):
         """
         P0: Verify NEEDS_RETRY returned when tests/data/ doesn't exist.
 
@@ -609,7 +652,9 @@ class TestScaffoldingInfrastructure:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -646,7 +691,7 @@ class TestScaffoldingInfrastructure:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_creates_credential_file_for_static_strategy(self):
+    def test_creates_credential_file_for_static_strategy(self, mock_pre_check):
         """
         P0: Verify credential file scaffolding for 'static' strategy.
 
@@ -658,7 +703,9 @@ class TestScaffoldingInfrastructure:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -696,7 +743,7 @@ class TestScaffoldingInfrastructure:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_creates_credential_file_for_dynamic_strategy(self):
+    def test_creates_credential_file_for_dynamic_strategy(self, mock_pre_check):
         """
         P0: Verify credential file scaffolding for 'dynamic' strategy.
 
@@ -708,7 +755,9 @@ class TestScaffoldingInfrastructure:
         # Arrange
         input_data = {
             "credential_strategy": "dynamic",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -737,7 +786,7 @@ class TestScaffoldingInfrastructure:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_no_credential_file_for_self_contained(self):
+    def test_no_credential_file_for_self_contained(self, mock_pre_check):
         """
         P1: Verify no credential file for 'self-contained' strategy.
 
@@ -749,7 +798,9 @@ class TestScaffoldingInfrastructure:
         # Arrange
         input_data = {
             "credential_strategy": "self-contained",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -776,7 +827,7 @@ class TestScaffoldingInfrastructure:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_no_credential_file_for_none_strategy(self):
+    def test_no_credential_file_for_none_strategy(self, mock_pre_check):
         """
         P1: Verify no credential file for 'none' strategy.
 
@@ -788,7 +839,9 @@ class TestScaffoldingInfrastructure:
         # Arrange
         input_data = {
             "credential_strategy": "none",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act
@@ -814,7 +867,7 @@ class TestScaffoldingInfrastructure:
 
     @pytest.mark.unit
     @pytest.mark.qg_preflight
-    def test_no_needs_retry_when_infrastructure_exists(self):
+    def test_no_needs_retry_when_infrastructure_exists(self, mock_pre_check):
         """
         P0: Verify no NEEDS_RETRY when infrastructure already exists.
 
@@ -826,7 +879,9 @@ class TestScaffoldingInfrastructure:
         # Arrange
         input_data = {
             "credential_strategy": "static",
-            "test_data_location": "shared"
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
         # Act

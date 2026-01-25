@@ -39,8 +39,16 @@ class QGPreflight(BaseGate):
 
         Returns:
             {"status": "pass"} on success
-            {"status": "fail", "error": "...", "fix_hint": "..."} on failure
+            {"status": "fail", "error": "...", "teach": "..."} on failure
         """
+        # PRE-CHECK: Verify Step 1 transcript was written by hook
+        pre_check_error = cls.pre_check_previous_transcript(
+            previous_step=1,
+            previous_step_name="User Input"
+        )
+        if pre_check_error:
+            return pre_check_error
+
         # Check required fields
         missing = cls.validate_required_fields(
             input_data,
@@ -50,7 +58,7 @@ class QGPreflight(BaseGate):
         if missing:
             return cls.fail_response(
                 error=f"Missing required field(s): {', '.join(missing)}",
-                fix_hint=cls._get_fix_hint_for_missing(missing)
+                teach=cls._get_teach_for_missing(missing)
             )
 
         # Validate credential_strategy (DD-24)
@@ -58,7 +66,7 @@ class QGPreflight(BaseGate):
         if not cls._is_valid_credential_strategy(credential_strategy):
             return cls.fail_response(
                 error=f"Invalid credential_strategy: '{credential_strategy}'",
-                fix_hint=cls._get_credential_strategy_hint()
+                teach=cls._get_credential_strategy_hint()
             )
 
         # Validate test_data_location (DD-28)
@@ -66,7 +74,7 @@ class QGPreflight(BaseGate):
         if not cls._is_valid_test_data_location(test_data_location):
             return cls.fail_response(
                 error=f"Invalid test_data_location: '{test_data_location}'",
-                fix_hint=cls._get_test_data_location_hint()
+                teach=cls._get_test_data_location_hint()
             )
 
         # Validate browser_config (FR-8.1)
@@ -131,19 +139,19 @@ class QGPreflight(BaseGate):
         if not isinstance(browser_config, dict):
             return cls.fail_response(
                 error="browser_config must be a dict",
-                fix_hint="browser_config should be: {\"headless\": false}"
+                teach="browser_config should be: {\"headless\": false}"
             )
 
         if "headless" not in browser_config:
             return cls.fail_response(
                 error="browser_config missing 'headless' field",
-                fix_hint="browser_config should be: {\"headless\": false}"
+                teach="browser_config should be: {\"headless\": false}"
             )
 
         if browser_config["headless"] is not False:
             return cls.fail_response(
                 error="browser_config.headless must be false (pair programming requires visible browser)",
-                fix_hint="Set browser_config to: {\"headless\": false}"
+                teach="Set browser_config to: {\"headless\": false}"
             )
 
         return None
@@ -162,33 +170,33 @@ class QGPreflight(BaseGate):
         if not isinstance(timeout_config, dict):
             return cls.fail_response(
                 error="timeout_config must be a dict",
-                fix_hint="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
+                teach="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
             )
 
         if "enabled" not in timeout_config:
             return cls.fail_response(
                 error="timeout_config missing 'enabled' field",
-                fix_hint="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
+                teach="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
             )
 
         if not isinstance(timeout_config["enabled"], bool):
             return cls.fail_response(
                 error="timeout_config.enabled must be a boolean",
-                fix_hint="Set enabled to true or false"
+                teach="Set enabled to true or false"
             )
 
         if timeout_config["enabled"]:
             if "threshold_seconds" not in timeout_config:
                 return cls.fail_response(
                     error="timeout_config missing 'threshold_seconds' field when enabled",
-                    fix_hint="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
+                    teach="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
                 )
 
             threshold = timeout_config["threshold_seconds"]
             if not isinstance(threshold, (int, float)) or threshold <= 0:
                 return cls.fail_response(
                     error="timeout_config.threshold_seconds must be a positive number",
-                    fix_hint="Set threshold_seconds to a positive number (e.g., 30, 60)"
+                    teach="Set threshold_seconds to a positive number (e.g., 30, 60)"
                 )
 
         return None
@@ -248,7 +256,7 @@ class QGPreflight(BaseGate):
         return None
 
     @staticmethod
-    def _get_fix_hint_for_missing(missing_fields: list) -> str:
+    def _get_teach_for_missing(missing_fields: list) -> str:
         """Get fix hint for missing fields."""
         hints = []
 

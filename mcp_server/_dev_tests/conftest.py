@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 import pytest
+from unittest.mock import patch
 
 # Add mcp_server directory to Python path for imports
 MCP_SERVER_DIR = Path(__file__).parent.parent
@@ -43,3 +44,44 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "layer3: Test pyramid layer 3 (integration)")
     config.addinivalue_line("markers", "layer4: Test pyramid layer 4 (production failures)")
     config.addinivalue_line("markers", "security: Security validation tests")
+    config.addinivalue_line("markers", "preflight: Step 2 preflight gate tests")
+
+
+# ==============================================================================
+# Shared Fixtures
+# ==============================================================================
+
+@pytest.fixture
+def mock_pre_check():
+    """
+    Mock the PRE-CHECK that validates previous step transcript.
+
+    Use this for Step 2+ gate tests where you want to skip the
+    pre_check_previous_transcript validation (it returns None = no error).
+
+    Usage:
+        def test_something(mock_pre_check):
+            # PRE-CHECK is automatically bypassed
+            result = QGPreflight.validate(input_data)
+    """
+    with patch('tools.gates.base_gate.BaseGate.pre_check_previous_transcript', return_value=None):
+        yield
+
+
+@pytest.fixture
+def valid_preflight_input():
+    """
+    Valid 4-field input for Step 2 preflight gate.
+
+    Returns dict with all required fields:
+    - credential_strategy: "static"
+    - test_data_location: "shared"
+    - browser_config: {"headless": False}
+    - timeout_config: {"enabled": True, "threshold_seconds": 30}
+    """
+    return {
+        "credential_strategy": "static",
+        "test_data_location": "shared",
+        "browser_config": {"headless": False},
+        "timeout_config": {"enabled": True, "threshold_seconds": 30}
+    }
