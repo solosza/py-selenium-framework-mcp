@@ -657,147 +657,449 @@ pytest mcp_server/_dev_tests/ --cov=mcp_server/utils/transcript_writer --cov=mcp
 
 **PRD:** `2-prd-v4.md` (Step 2 section)
 **Status:** Ready for implementation
-**Approach:** Fix existing tests, then gap-fill (Test-After, not TDD)
 **Date:** 2026-01-25
 
 ---
 
-## Phase 0 Assessment Summary
+## Repo/CI Status (Phase 0 - already bootstrapped)
 
-| Component | Status | Action |
-|-----------|--------|--------|
-| Gate (`qg_preflight.py`) | ✅ EXISTS (11KB) | Fix 15 failing tests |
-| Protocol (`step-02.md`) | ✅ EXISTS (15KB) | Verify current |
-| Tests (`test_qg_preflight.py`) | ⚠️ 26 tests (15 failing) | Fix + gap-fill |
-| Shared Utils | ✅ Reuse | StateManager, AuditLogger, TranscriptWriter |
+- ✅ CI workflow exists (pytest runs on PR)
+- ✅ Pre-commit hooks configured
+- ✅ Test directories exist (`mcp_server/_dev_tests/`)
+- ✅ Coverage tooling configured (pytest-cov)
 
-**Root Cause:** Tests missing transcript check mock (same as Step 1)
+---
+
+## Testing Strategy: Core vs Glue
+
+### What Gets TDD (Core - logic/contracts)
+| Component | Why TDD | Red-Green-Refactor |
+|-----------|---------|-------------------|
+| Gate validation helpers | Pure logic, no I/O | Write failing test → implement → refactor |
+| Teach content quality | Contract: must include valid options | Write test for content → implement |
+| PRE-check blocking | Contract: must block if Step 1 missing | Write blocking test → verify behavior |
+| NEEDS_RETRY scaffolding | Contract: must return valid template | Write template test → verify output |
+
+### What Gets Test-After (Glue - wiring/UX)
+| Component | Why Test-After | Approach |
+|-----------|----------------|----------|
+| Protocol verification | Documentation, not logic | Read → compare → update if needed |
+| Integration tests | Wiring existing components | Verify existing behavior works together |
+| Fix failing tests | Existing code, broken tests | Add mock → verify pass |
+
+### Coverage Targets
+| Component | Target | Rationale |
+|-----------|--------|-----------|
+| Gate (`qg_preflight.py`) | 95% | Critical validation logic |
+| State integration | 90% | Data integrity |
+| Audit integration | 90% | Observability |
+| Hook integration | 85% | Wiring |
+| Transcript integration | 90% | User-facing output |
+
+---
+
+## Repo Steps (apply to each task)
+
+- **Branch:** `feature/step2-preflight-v4` (single branch for all Step 2 tasks)
+- **Commits:** Small, reference task IDs (e.g., `test: Fix qg_preflight tests (Task 1.0)`)
+- **Checks per task:** `pytest -v`, `pytest --cov`, verify coverage ≥ target
+- **Done When:** Local checks pass, coverage meets target
+
+---
+
+## Scaffolding & Testability (Phase 1 - already done in Step 1)
+
+- ✅ Test directories: `mcp_server/_dev_tests/test_gates/`, `test_integration/`, `test_utils/`
+- ✅ Fixtures: `conftest.py` with layer markers, transcript mocks
+- ✅ Test data: `test_data/` with valid/invalid inputs
+- ✅ Mocks: `mock_transcript_check`, `mock_state_manager` patterns established
+
+---
+
+## Defense-in-Depth Coverage (6 Layers)
+
+| Layer | Component | Task | TDD? | Status |
+|-------|-----------|------|------|--------|
+| 1 | Protocol (`step-02.md`) | Task 10.0 | No (Glue) | ⬜ Pending |
+| 2 | Smart Gate (`qg_preflight.py`) | Tasks 1.0-3.0, 8.0-9.0 | Yes (Core) | ⬜ Pending |
+| 3 | Hook (`audit-trail-writer.py`) | Task 6.0 | No (Glue) | ⬜ Pending |
+| 4 | State (`StateManager`) | Task 4.0 | No (Glue) | ⬜ Pending |
+| 5 | Audit (`AuditLogger`) | Task 5.0 | No (Glue) | ⬜ Pending |
+| 6 | Transcript (`TranscriptWriter`) | Task 7.0 | No (Glue) | ⬜ Pending |
+
+---
+
+## Current State Assessment
+
+| Component | Status | Tests | Action |
+|-----------|--------|-------|--------|
+| Gate (`qg_preflight.py`) | ✅ EXISTS (11KB) | 26 (15 failing) | Fix tests, gap-fill |
+| Protocol (`step-02.md`) | ✅ EXISTS (15KB) | N/A | Verify current |
+| Tests (`test_qg_preflight.py`) | ⚠️ BROKEN | 11 pass, 15 fail | Multiple fixes needed |
+| Shared Utils | ✅ TESTED | Step 1 coverage | Reuse |
+
+**Root Causes of Failures (3 issues):**
+
+1. **PRE-CHECK blocking** (gate line 44-50)
+   - Gate calls `pre_check_previous_transcript(previous_step=1)`
+   - Tests don't mock this → immediate fail
+   - Fix: Add `mock_transcript_check` fixture
+
+2. **Missing required fields** (gate line 53-56)
+   - Gate now requires 4 fields: `credential_strategy`, `test_data_location`, `browser_config`, `timeout_config`
+   - Old tests only provide 2 fields
+   - Fix: Update test inputs to include all 4 fields
+
+3. **Terminology mismatch** (gate uses `fix_hint`, PRD says `teach`)
+   - Gate line 61, 69, 77: `fix_hint=...`
+   - PRD FR-2.5 says use `teach` terminology
+   - Fix: Task 3.0 will verify/update this
+
+**Protocol vs Implementation:**
+
+| Aspect | Protocol | Gate | Match? |
+|--------|----------|------|--------|
+| 4 required fields | ✓ | ✓ | ✓ |
+| PRE-CHECK for Step 1 | ✓ | ✓ | ✓ |
+| NEEDS_RETRY scaffolding | ✓ | ✓ | ✓ |
+| `teach` terminology | Expected | Uses `fix_hint` | ❌ |
+| browser_config.headless=false | Required | ✓ Enforced | ✓ |
+| timeout_config validation | Required | ✓ Enforced | ✓ |
 
 ---
 
 ## Relevant Files
 
-### Existing (Modify)
-- `mcp_server/tools/gates/qg_preflight.py` - Step 2 gate (already implemented)
-- `mcp_server/_dev_tests/test_gates/test_qg_preflight.py` - Tests (fix + gap-fill)
-- `.claude/skills/qa-management-layer/references/step-02.md` - Protocol (verify)
+### Source Files (Modify)
+- `mcp_server/tools/gates/qg_preflight.py` - Step 2 gate (POST validation, PRE-check, teach)
+- `.claude/skills/qa-management-layer/references/step-02.md` - Protocol (verify current)
 
-### Reuse (No Changes)
+### Test Files (Modify)
+- `mcp_server/_dev_tests/test_gates/test_qg_preflight.py` - Gate tests (fix + gap-fill to 95%)
+
+### Shared Utils (Reuse - no changes)
 - `mcp_server/utils/state_manager.py` - State checkpoint (tested in Step 1)
 - `mcp_server/utils/audit_logger.py` - Audit logging (tested in Step 1)
 - `mcp_server/utils/transcript_writer.py` - Transcript (tested in Step 1)
 - `mcp_server/tools/gates/base_gate.py` - Base gate class (tested in Step 1)
+- `.claude/hooks/audit-trail-writer.py` - PostToolUse hook (tested in Step 1)
+
+### Notes
+
+- Tests located in `mcp_server/_dev_tests/test_gates/`
+- Run tests: `pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v`
+- Run coverage: `pytest --cov=tools.gates.qg_preflight --cov-report=term-missing`
+- Layer markers: `@pytest.mark.layer1`, `@pytest.mark.layer2`, `@pytest.mark.layer3`, `@pytest.mark.layer4`
+- Run by layer: `pytest -m "layer1 and preflight"`
+- Run by component: `pytest -m "preflight"`
 
 ---
 
 ## Tasks
 
-### Phase 0: Pre-Implementation Assessment
+### Task 0.0: Pre-Implementation Assessment [GLUE]
 
-- [ ] 0.0 Verify existing components and document findings [GLUE]
-  - [ ] 0.1 Run existing tests: `pytest test_gates/test_qg_preflight.py -v`
-  - [ ] 0.2 Document: 26 tests, 11 passing, 15 failing
-  - [ ] 0.3 Identify root cause: missing transcript mock
-  - [ ] 0.4 Read gate implementation, verify PRE-check pattern
-  - [ ] 0.5 Read protocol, verify matches gate implementation
-  - [ ] 0.6 Record assessment in this file ✓
+- [x] 0.1 Create branch `feature/step2-preflight-v4` ✓
+- [x] 0.2 Run existing tests: `pytest test_gates/test_qg_preflight.py -v` ✓
+- [x] 0.3 Document: 11 passing, 15 failing ✓
+- [x] 0.4 Identify root cause: 3 issues (PRE-CHECK, missing fields, terminology) ✓
+- [x] 0.5 Read gate implementation, note PRE-check pattern (line 44-50) ✓
+- [x] 0.6 Read protocol, compare with implementation ✓
+- [x] 0.7 Run checks (N/A - assessment only) ✓
+- [x] 0.8 **Audit: All 6 defense-in-depth layers identified** ✓
+- [x] 0.9 Record results in this file ✓
+- [ ] 0.10 Commit: `docs: Step 2 Phase 0 assessment (Task 0.0)`
 
----
+**Assessment Results:**
 
-### Phase 1: Fix Failing Tests
+| Test Class | Passing | Failing | Root Cause |
+|------------|---------|---------|------------|
+| TestValidCredentialStrategy | 0 | 4 | PRE-CHECK + missing fields |
+| TestValidTestDataLocation | 0 | 4 | PRE-CHECK + missing fields |
+| TestBothFieldsValid | 0 | 2 | PRE-CHECK + missing fields |
+| TestInvalidInputs | 6 | 0 | ✓ Working |
+| TestEdgeCases | 3 | 0 | ✓ Working |
+| TestErrorHandling | 0 | 1 | PRE-CHECK |
+| TestScaffoldingInfrastructure | 2 | 4 | PRE-CHECK + Path mock issues |
 
-- [ ] 1.0 Fix 15 failing tests by adding transcript mock [CORE]
-  - [ ] 1.1 Add `mock_transcript_check` fixture (copy from Step 1 tests)
-  - [ ] 1.2 Run tests, verify all 26 pass
-  - [ ] 1.3 Check coverage: `pytest --cov=tools.gates.qg_preflight`
-  - [ ] 1.4 Document current coverage percentage
-  - [ ] 1.5 **Audit: Verify testing skill conventions followed**
-  - [ ] 1.6 Record results
-  - [ ] 1.7 Commit: `test: Fix qg_preflight tests - add transcript mock (Task 1.0)`
+**6 Defense-in-Depth Layers:**
 
----
+| Layer | Component | Status | Tested in Step 1? |
+|-------|-----------|--------|-------------------|
+| 1 | Protocol (step-02.md) | ✅ EXISTS | N/A |
+| 2 | Smart Gate (qg_preflight.py) | ✅ EXISTS | No - needs tests |
+| 3 | Hook (audit-trail-writer.py) | ✅ EXISTS | ✓ 12 tests |
+| 4 | State (StateManager) | ✅ EXISTS | ✓ Tested |
+| 5 | Audit (AuditLogger) | ✅ EXISTS | ✓ Tested |
+| 6 | Transcript (TranscriptWriter) | ✅ EXISTS | ✓ 24 tests |
 
-### Phase 2: Gap-Fill Test Coverage (4-Layer Pyramid)
-
-- [ ] 2.0 Add Layer 1 tests (validation helpers) [CORE]
-  - [ ] 2.1 Write tests: `_is_valid_credential_strategy()` (4 valid + invalid cases)
-  - [ ] 2.2 Write tests: `_is_valid_test_data_location()` (4 valid + invalid cases)
-  - [ ] 2.3 Write tests: `_is_valid_browser_config()` (headless validation)
-  - [ ] 2.4 Write tests: `_is_valid_timeout_config()` (enabled + threshold)
-  - [ ] 2.5 Run Layer 1 tests
-  - [ ] 2.6 Record results
-
-- [ ] 3.0 Add Layer 2 tests (edge cases) [CORE]
-  - [ ] 3.1 Write test: empty string for credential_strategy
-  - [ ] 3.2 Write test: case sensitivity (STATIC vs static)
-  - [ ] 3.3 Write test: browser_config missing headless key
-  - [ ] 3.4 Write test: timeout_config enabled=true but no threshold
-  - [ ] 3.5 Write test: all fields missing
-  - [ ] 3.6 Run Layer 2 tests
-  - [ ] 3.7 Record results
-
-- [ ] 4.0 Add Layer 3 tests (integration) [CORE]
-  - [ ] 4.1 Write test: state saved with all 4 config fields
-  - [ ] 4.2 Write test: Step 1 state preserved (merge, not overwrite)
-  - [ ] 4.3 Write test: PRE-check blocks if Step 1 transcript missing
-  - [ ] 4.4 Run Layer 3 tests
-  - [ ] 4.5 Record results
-
-- [ ] 5.0 Add Layer 4 tests (production failures) [CORE]
-  - [ ] 5.1 Write test: state save fails gracefully
-  - [ ] 5.2 Write test: NEEDS_RETRY scaffolding returns valid template
-  - [ ] 5.3 Run Layer 4 tests
-  - [ ] 5.4 Check coverage (target: 95%)
-  - [ ] 5.5 **Audit: Verify 4-layer pyramid complete**
-  - [ ] 5.6 Record results
-  - [ ] 5.7 Commit: `test: Implement qg_preflight 4-layer test pyramid (Task 2-5)`
+**Done When:** Assessment documented, root cause confirmed, plan ready ✓
 
 ---
 
-### Phase 3: Protocol Verification
+### Task 1.0: Fix Existing Gate Tests [GLUE - Test-After]
 
-- [ ] 6.0 Verify protocol matches implementation [GLUE]
-  - [ ] 6.1 Read `step-02.md` protocol
-  - [ ] 6.2 Compare with gate implementation
-  - [ ] 6.3 Update protocol if needed (POST-ACTION, paths, etc.)
-  - [ ] 6.4 Verify teach terminology used (not fix_hint)
-  - [ ] 6.5 Record findings
-  - [ ] 6.6 Commit (if changes): `docs: Update step-02 protocol (Task 6.0)`
+- [ ] 1.1 Add `mock_transcript_check` fixture (copy from Step 1 pattern)
+- [ ] 1.2 Add `mock_state_manager` fixture if needed
+- [ ] 1.3 Run tests: `pytest test_gates/test_qg_preflight.py -v`
+- [ ] 1.4 Verify all 26 tests pass
+- [ ] 1.5 Check baseline coverage: `pytest --cov=tools.gates.qg_preflight`
+- [ ] 1.6 Document coverage percentage (expected: ~70-80%)
+- [ ] 1.7 Run checks (pytest -v, coverage)
+- [ ] 1.8 **Audit: Testing skill conventions followed**
+- [ ] 1.9 Record results
+- [ ] 1.10 Commit: `test: Fix qg_preflight tests - add transcript mock (Task 1.0)`
+
+**Done When:** 26 tests pass, baseline coverage documented
 
 ---
 
-### Phase 4: Documentation & Completion
+### Task 2.0: Layer 1+2 Tests - Validation Helpers [CORE - TDD]
 
-- [ ] 7.0 Finalize Step 2 and update documentation [GLUE]
-  - [ ] 7.1 Run all Step 2 tests: `pytest test_gates/test_qg_preflight.py -v`
-  - [ ] 7.2 Verify coverage meets 95% target
-  - [ ] 7.3 Update SESSION.md with Step 2 completion status
-  - [ ] 7.4 Mark Step 2 complete in PRD
-  - [ ] 7.5 **Audit: Verify all FR-2.x requirements tested**
-  - [ ] 7.6 Record final results
-  - [ ] 7.7 Commit: `docs: Mark Step 2 complete (Task 7.0)`
+**TDD Micro-cycle:** Write failing test → Implement/verify → Refactor
+
+- [ ] 2.1 **Layer 1: Validation helper tests (23 tests)**
+  - [ ] 2.1.1 `_is_valid_credential_strategy()` - 6 tests (static, dynamic, self-contained, none + invalids)
+  - [ ] 2.1.2 `_is_valid_test_data_location()` - 6 tests (shared, workflow, both, none + invalids)
+  - [ ] 2.1.3 `_is_valid_browser_config()` - 5 tests (headless true/false + invalids)
+  - [ ] 2.1.4 `_is_valid_timeout_config()` - 6 tests (enabled+threshold combos + invalids)
+- [ ] 2.2 **Layer 2: Edge case tests (8 tests)**
+  - [ ] 2.2.1 Empty string for all fields
+  - [ ] 2.2.2 Case sensitivity (STATIC vs static)
+  - [ ] 2.2.3 Extra keys in config (should pass)
+  - [ ] 2.2.4 Threshold edge cases (0, negative)
+  - [ ] 2.2.5 All fields missing
+  - [ ] 2.2.6 Partial fields missing
+  - [ ] 2.2.7 null/None vs missing keys
+  - [ ] 2.2.8 Unicode in values
+- [ ] 2.3 Run Layer 1+2: `pytest -m "(layer1 or layer2) and preflight" -v`
+- [ ] 2.4 Check coverage (target: 90%+)
+- [ ] 2.5 Run checks (pytest, coverage)
+- [ ] 2.6 **Audit: All FR-2.1 through FR-2.4 covered**
+- [ ] 2.7 Record results
+- [ ] 2.8 Commit: `test: Add Layer 1+2 validation tests for qg_preflight (Task 2.0)`
+
+**Done When:** 31 new tests (23 L1 + 8 L2), coverage 90%+
+
+---
+
+### Task 3.0: Smart Gate Teach Validation [CORE - TDD]
+
+**TDD Micro-cycle:** Write test for teach content → Verify gate provides it
+
+- [ ] 3.1 Test: gate response uses `teach` key (not `fix_hint`)
+- [ ] 3.2 Test: teach for invalid credential_strategy includes valid options list
+- [ ] 3.3 Test: teach for invalid test_data_location includes valid options list
+- [ ] 3.4 Test: teach for invalid browser_config explains headless requirement
+- [ ] 3.5 Test: teach for invalid timeout_config explains threshold requirement
+- [ ] 3.6 Test: teach includes example of correct format
+- [ ] 3.7 Test: teach is actionable (contains "should be" or "must be")
+- [ ] 3.8 Run teach tests: `pytest -k "teach" -v`
+- [ ] 3.9 Run checks (pytest)
+- [ ] 3.10 **Audit: DD-50 (smart gate pattern) enforced**
+- [ ] 3.11 Record results
+- [ ] 3.12 Commit: `test: Add teach content validation tests (Task 3.0)`
+
+**Done When:** 7 teach tests, all verify actionable guidance
+
+---
+
+### Task 4.0: State Integration Tests [GLUE - Test-After]
+
+- [ ] 4.1 Test: state saved with all 4 config fields on gate PASS
+- [ ] 4.2 Test: Step 1 state preserved (merge, not overwrite)
+- [ ] 4.3 Test: step_2 key added to workflow_state.json
+- [ ] 4.4 Test: step_2 includes status="complete" and timestamp
+- [ ] 4.5 Test: concurrent runs don't conflict (different run_ids)
+- [ ] 4.6 Run state tests: `pytest -k "state" -v`
+- [ ] 4.7 Run checks (pytest)
+- [ ] 4.8 **Audit: FR-2.6 (state checkpoint) covered**
+- [ ] 4.9 Record results
+
+**Done When:** 5 state tests, merge behavior verified
+
+---
+
+### Task 5.0: Audit Integration Tests [GLUE - Test-After]
+
+- [ ] 5.1 Test: audit event logged on gate PASS
+- [ ] 5.2 Test: audit event has step=2 field
+- [ ] 5.3 Test: audit event has gate="qg_preflight"
+- [ ] 5.4 Test: audit metadata includes all 4 config fields
+- [ ] 5.5 Test: audit appends (doesn't overwrite Step 1 events)
+- [ ] 5.6 Run audit tests: `pytest -k "audit" -v`
+- [ ] 5.7 Run checks (pytest)
+- [ ] 5.8 **Audit: FR-2.7 (audit logging) covered**
+- [ ] 5.9 Record results
+
+**Done When:** 5 audit tests, step=2 verified
+
+---
+
+### Task 6.0: Hook Integration Tests [GLUE - Test-After]
+
+- [ ] 6.1 Test: hook fires after qg_preflight PASS
+- [ ] 6.2 Test: hook appends to audit log correctly
+- [ ] 6.3 Test: hook ignores qg_preflight FAIL
+- [ ] 6.4 Test: hook handles NEEDS_RETRY status
+- [ ] 6.5 Run hook tests: `pytest -k "hook" -v`
+- [ ] 6.6 Run checks (pytest)
+- [ ] 6.7 **Audit: Defense layer 3 (Hook) covered**
+- [ ] 6.8 Record results
+
+**Done When:** 4 hook tests
+
+---
+
+### Task 7.0: Transcript Integration Tests [GLUE - Test-After]
+
+- [ ] 7.1 Test: Step 2 entry appended (not overwrite Step 1)
+- [ ] 7.2 Test: transcript contains Step 2 header with timestamp
+- [ ] 7.3 Test: transcript contains all 4 config values
+- [ ] 7.4 Test: transcript format matches PRD spec
+- [ ] 7.5 Run transcript tests: `pytest -k "transcript" -v`
+- [ ] 7.6 Run checks (pytest)
+- [ ] 7.7 **Audit: Defense layer 6 (Transcript) covered**
+- [ ] 7.8 Record results
+
+**Done When:** 4 transcript tests, append verified
+
+---
+
+### Task 8.0: PRE-Check Blocking Tests [CORE - TDD]
+
+**TDD Micro-cycle:** Write test that expects block → Verify gate blocks
+
+- [ ] 8.1 Test: gate FAILS if Step 1 transcript missing
+- [ ] 8.2 Test: error message mentions "Step 1"
+- [ ] 8.3 Test: teach explains how to complete Step 1
+- [ ] 8.4 Test: gate PASSES if Step 1 transcript exists
+- [ ] 8.5 Run PRE-check tests: `pytest -k "pre_check" -v`
+- [ ] 8.6 Run checks (pytest)
+- [ ] 8.7 **Audit: AT-2.3 (missing Step 1 transcript) covered**
+- [ ] 8.8 Record results
+
+**Done When:** 4 PRE-check tests, blocking verified
+
+---
+
+### Task 9.0: NEEDS_RETRY Scaffolding Tests [CORE - TDD]
+
+**TDD Micro-cycle:** Write test for scaffolding output → Verify gate provides it
+
+- [ ] 9.1 Test: NEEDS_RETRY when credential file missing (static strategy)
+- [ ] 9.2 Test: scaffolding_needed contains valid JSON template
+- [ ] 9.3 Test: template has correct file path
+- [ ] 9.4 Test: gate PASSES after scaffolding file created
+- [ ] 9.5 Run scaffolding tests: `pytest -k "scaffolding or needs_retry" -v`
+- [ ] 9.6 Check final coverage: `pytest --cov=tools.gates.qg_preflight` (target: 95%)
+- [ ] 9.7 Run checks (pytest, coverage ≥ 95%)
+- [ ] 9.8 **Audit: FR-2.8 and AT-2.4 covered**
+- [ ] 9.9 Record results
+- [ ] 9.10 Commit: `test: Complete qg_preflight 4-layer test pyramid (Tasks 2-9)`
+
+**Done When:** 4 scaffolding tests, Layer 4 complete, coverage ≥ 95%
+
+---
+
+### Task 10.0: Protocol Verification [GLUE - Test-After]
+
+- [ ] 10.1 Read `step-02.md` protocol
+- [ ] 10.2 Compare PRE-CHECK section with gate code
+- [ ] 10.3 Compare VALIDATION section with gate code
+- [ ] 10.4 Compare POST-ACTION section with implementation
+- [ ] 10.5 Verify `teach` terminology (not `fix_hint`)
+- [ ] 10.6 Update protocol if discrepancies found
+- [ ] 10.7 Run checks (N/A - documentation)
+- [ ] 10.8 **Audit: Defense layer 1 (Protocol) verified**
+- [ ] 10.9 Record findings
+- [ ] 10.10 Commit (if changes): `docs: Update step-02 protocol (Task 10.0)`
+
+**Done When:** Protocol matches implementation
+
+---
+
+### Task 11.0: Documentation & Ship [GLUE]
+
+- [ ] 11.1 Run all Step 2 tests: `pytest test_gates/test_qg_preflight.py -v`
+- [ ] 11.2 Verify coverage ≥ 95%
+- [ ] 11.3 Update defense-in-depth table (all ✅)
+- [ ] 11.4 Update SESSION.md with completion status
+- [ ] 11.5 Mark Step 2 complete in PRD
+- [ ] 11.6 Run final checks (all tests, coverage)
+- [ ] 11.7 **Audit: All FR-2.x covered**
+- [ ] 11.8 **Audit: All AT-2.x mapped**
+- [ ] 11.9 Record final results
+- [ ] 11.10 Commit: `feat: Complete Step 2 Pre-flight Configuration (Task 11.0)`
+
+**Done When:** All 6 layers ✅, coverage ≥ 95%, PR ready
+
+---
+
+## Requirement Mappings
+
+### Acceptance Tests → Tasks
+
+| AT | Description | Task | TDD? |
+|----|-------------|------|------|
+| AT-2.1 | Valid config passes | 2.0 | Yes |
+| AT-2.2 | Invalid credential_strategy fails with teach | 3.0 | Yes |
+| AT-2.3 | Missing Step 1 transcript fails | 8.0 | Yes |
+| AT-2.4 | Scaffolding for missing credential file | 9.0 | Yes |
+| AT-2.5 | Pass when infrastructure exists | 2.0 | Yes |
+
+### Functional Requirements → Tasks
+
+| FR | Description | Task | TDD? |
+|----|-------------|------|------|
+| FR-2.1 | Credential strategy validation | 2.0 | Yes |
+| FR-2.2 | Test data location validation | 2.0 | Yes |
+| FR-2.3 | Browser config validation | 2.0 | Yes |
+| FR-2.4 | Timeout config validation | 2.0 | Yes |
+| FR-2.5 | Gate validation with teach | 3.0 | Yes |
+| FR-2.6 | State checkpoint | 4.0 | No |
+| FR-2.7 | Audit logging | 5.0 | No |
+| FR-2.8 | NEEDS_RETRY scaffolding | 9.0 | Yes |
+
+---
+
+## Test Summary
+
+| Layer | New Tests | TDD? | Description |
+|-------|-----------|------|-------------|
+| Layer 1 | 23 | Yes | Validation helpers |
+| Layer 2 | 8 | Yes | Edge cases |
+| Layer 3 | 25 | Mixed | Integration (teach:7, state:5, audit:5, hook:4, transcript:4) |
+| Layer 4 | 8 | Yes | PRE-check (4) + NEEDS_RETRY (4) |
+| **New** | **64** | | |
+| **Existing** | **26** | | (after fix) |
+| **Total** | **90** | | |
 
 ---
 
 ## Estimated Effort
 
-| Phase | Description | Effort |
-|-------|-------------|--------|
-| Phase 0 | Assessment (already done) | 0.5 hours |
-| Phase 1 | Fix failing tests | 0.5 hours |
-| Phase 2-5 | Gap-fill 4-layer pyramid | 3 hours |
-| Phase 6 | Protocol verification | 0.5 hours |
-| Phase 7 | Documentation | 0.5 hours |
-| **Total** | | **5 hours** |
-
-**Note:** Significantly less than Step 1 (19 hours) because gate and tests already exist.
+| Task | Description | Effort | TDD? |
+|------|-------------|--------|------|
+| 0.0 | Assessment | 0.5h | No |
+| 1.0 | Fix failing tests | 0.5h | No |
+| 2.0 | Layer 1+2 tests | 2h | Yes |
+| 3.0 | Teach validation | 0.5h | Yes |
+| 4.0-7.0 | Integration tests | 2h | No |
+| 8.0-9.0 | PRE-check + scaffolding | 1h | Yes |
+| 10.0 | Protocol verification | 0.5h | No |
+| 11.0 | Documentation | 0.5h | No |
+| **Total** | | **7.5h** | |
 
 ---
 
 ## Done When
 
-- [ ] All tests pass (target: 40+ tests)
+- [ ] All 6 defense-in-depth layers ✅
+- [ ] 90 tests pass (26 fixed + 64 new)
 - [ ] Coverage ≥ 95% for qg_preflight
+- [ ] All FR-2.x have test coverage
+- [ ] All AT-2.x mapped to tests
 - [ ] Protocol verified current
-- [ ] All FR-2.x requirements have test coverage
-- [ ] Step 2 marked complete in PRD and SESSION.md
+- [ ] SESSION.md updated
+- [ ] PRD marked complete

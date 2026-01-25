@@ -74,6 +74,52 @@ Phase 4: Protocol Update (if needed)
 Phase 5: Documentation & Commit
 ```
 
+### 0.5 Required Task Coverage (6 Defense-in-Depth Layers)
+
+**MANDATORY:** Every step implementation MUST include tasks covering all 6 layers:
+
+| Layer | Component | Required Tasks | Test Target |
+|-------|-----------|----------------|-------------|
+| 1 | **Protocol** (`step-0X.md`) | Verify matches implementation, update if needed | Behavior verification |
+| 2 | **Smart Gate** (`qg_*.py`) | 4-layer test pyramid + teach validation | 95% coverage |
+| 3 | **Hook** (`audit-trail-writer.py`) | Integration tests (fires correctly, appends audit) | 85% coverage |
+| 4 | **State** (`StateManager`) | Checkpoint saved, merge with previous steps | 90% coverage |
+| 5 | **Audit** (`AuditLogger`) | Event logged, step field correct, metadata | 90% coverage |
+| 6 | **Transcript** (`TranscriptWriter`) | Entry appended (not overwrite), format correct | 90% coverage |
+
+**Gate-Specific Required Tasks:**
+
+| Task Category | Description | PRD Reference |
+|---------------|-------------|---------------|
+| PRE-Check | Verify gate blocks if previous step incomplete | FR-X.5 |
+| POST Validation | All input fields validated with fix hints | FR-X.1-X.4 |
+| Teach Content | `teach` terminology used, hints are actionable | DD-50 |
+| NEEDS_RETRY | Scaffolding templates for missing infrastructure | FR-X.8 |
+| State Merge | Previous step state preserved, not overwritten | FR-X.6 |
+
+**Parent Task Template (Copy for Each Step):**
+
+```markdown
+| # | Parent Task | Type | Component | Description |
+|---|-------------|------|-----------|-------------|
+| 0.0 | Pre-Implementation Assessment | GLUE | All | Check existing, run tests, document findings |
+| 1.0 | Fix Existing Tests (if any) | CORE | Gate | Add mocks, fix broken tests |
+| 2.0 | Gate 4-Layer Test Pyramid | CORE | Gate | L1 validators, L2 edge, L3 integration, L4 failures |
+| 3.0 | Smart Gate Teach Validation | CORE | Gate | Verify teach content, not fix_hint |
+| 4.0 | State Integration Tests | CORE | State | Checkpoint, merge, isolation |
+| 5.0 | Audit Integration Tests | CORE | Audit | Event logged, step field, metadata |
+| 6.0 | Hook Integration Tests | CORE | Hook | PostToolUse fires, audit appended |
+| 7.0 | Transcript Integration | CORE | Transcript | Entry appended, format correct |
+| 8.0 | PRE-Check Validation | CORE | Gate | Blocks if previous step incomplete |
+| 9.0 | NEEDS_RETRY Scaffolding | CORE | Gate | Templates for missing infrastructure |
+| 10.0 | Protocol Verification | GLUE | Protocol | Matches implementation, update if needed |
+| 11.0 | Documentation & Ship | GLUE | All | Final tests, coverage, PRD/SESSION update |
+```
+
+**Acceptance Test Mapping (Required):**
+- Every AT-X.Y from PRD MUST map to at least one test
+- Document mapping in task results section
+
 ---
 
 ## Introduction/Overview
