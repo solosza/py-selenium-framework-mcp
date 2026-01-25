@@ -1355,3 +1355,158 @@ class TestTeachContentValidation:
             "must" in teach
         )
         assert actionable, f"Teach should be actionable, got: {result['teach']}"
+
+
+# ==============================================================================
+# Task 4.0: State Integration Tests (FR-2.6)
+# ==============================================================================
+
+class TestStateIntegration:
+    """
+    Task 4.0: State integration tests for Step 2 gate.
+
+    Verifies FR-2.6: State checkpoint on gate PASS.
+    """
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.state
+    def test_state_saved_with_all_config_fields(self, mock_pre_check):
+        """4.1: State saved with all 4 config fields on gate PASS."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('utils.state_manager.StateManager') as MockStateManager:
+            with patch('tools.gates.qg_preflight.Path') as MockPath:
+                mock_path = MagicMock()
+                mock_path.exists.return_value = True
+                MockPath.return_value = mock_path
+
+                mock_instance = MagicMock()
+                MockStateManager.return_value = mock_instance
+
+                result = QGPreflight.validate(input_data)
+
+                assert result["status"] == "pass"
+                mock_instance.save.assert_called_once()
+
+                # Verify all 4 fields are in saved data
+                call_kwargs = mock_instance.save.call_args.kwargs
+                saved_data = call_kwargs["data"]
+                assert "credential_strategy" in saved_data
+                assert "test_data_location" in saved_data
+                assert "browser_config" in saved_data
+                assert "timeout_config" in saved_data
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.state
+    def test_state_saved_to_step_2(self, mock_pre_check):
+        """4.3: State saved with step=2."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('utils.state_manager.StateManager') as MockStateManager:
+            with patch('tools.gates.qg_preflight.Path') as MockPath:
+                mock_path = MagicMock()
+                mock_path.exists.return_value = True
+                MockPath.return_value = mock_path
+
+                mock_instance = MagicMock()
+                MockStateManager.return_value = mock_instance
+
+                result = QGPreflight.validate(input_data)
+
+                assert result["status"] == "pass"
+                call_kwargs = mock_instance.save.call_args.kwargs
+                assert call_kwargs["step"] == 2, "Should save to step 2"
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.state
+    def test_state_includes_config_values(self, mock_pre_check):
+        """4.4: State includes actual config values."""
+        input_data = {
+            "credential_strategy": "dynamic",
+            "test_data_location": "workflow",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 60}
+        }
+
+        with patch('utils.state_manager.StateManager') as MockStateManager:
+            with patch('tools.gates.qg_preflight.Path') as MockPath:
+                mock_path = MagicMock()
+                mock_path.exists.return_value = True
+                MockPath.return_value = mock_path
+
+                mock_instance = MagicMock()
+                MockStateManager.return_value = mock_instance
+
+                result = QGPreflight.validate(input_data)
+
+                assert result["status"] == "pass"
+                call_kwargs = mock_instance.save.call_args.kwargs
+                saved_data = call_kwargs["data"]
+
+                # Verify actual values are preserved
+                assert saved_data["credential_strategy"] == "dynamic"
+                assert saved_data["test_data_location"] == "workflow"
+                assert saved_data["browser_config"]["headless"] is False
+                assert saved_data["timeout_config"]["threshold_seconds"] == 60
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.state
+    def test_state_manager_uses_run_id(self, mock_pre_check):
+        """4.5: StateManager initialized with run_id for isolation."""
+        input_data = {
+            "credential_strategy": "static",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('utils.state_manager.StateManager') as MockStateManager:
+            with patch('tools.gates.qg_preflight.Path') as MockPath:
+                mock_path = MagicMock()
+                mock_path.exists.return_value = True
+                MockPath.return_value = mock_path
+
+                mock_instance = MagicMock()
+                MockStateManager.return_value = mock_instance
+
+                result = QGPreflight.validate(input_data)
+
+                assert result["status"] == "pass"
+                # Verify StateManager was called with run_id
+                call_kwargs = MockStateManager.call_args.kwargs
+                assert "run_id" in call_kwargs, "StateManager should be initialized with run_id"
+
+    @pytest.mark.integration
+    @pytest.mark.preflight
+    @pytest.mark.state
+    def test_no_state_saved_on_validation_failure(self, mock_pre_check):
+        """State NOT saved when validation fails."""
+        input_data = {
+            "credential_strategy": "invalid",
+            "test_data_location": "shared",
+            "browser_config": {"headless": False},
+            "timeout_config": {"enabled": True, "threshold_seconds": 30}
+        }
+
+        with patch('utils.state_manager.StateManager') as MockStateManager:
+            mock_instance = MagicMock()
+            MockStateManager.return_value = mock_instance
+
+            result = QGPreflight.validate(input_data)
+
+            assert result["status"] == "fail"
+            mock_instance.save.assert_not_called()

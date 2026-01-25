@@ -46,6 +46,7 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "security: Security validation tests")
     config.addinivalue_line("markers", "preflight: Step 2 preflight gate tests")
     config.addinivalue_line("markers", "teach: Teach content validation tests (DD-50)")
+    config.addinivalue_line("markers", "state: State integration tests (FR-2.6)")
 
 
 # ==============================================================================
