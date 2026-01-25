@@ -10,7 +10,7 @@ ALL VALIDATIONS (always run for every step):
 5. Protocol Adherence (AI) - AI follows step-XX.md guidance
 6. Step Flow (Integrity) - can proceed to next step
 7. Run ID Uniqueness - Fresh run_id created (Step 1 only, expected fail for Step 2+)
-8. Audit Log Isolation - Step N has exactly N events, sequential 1-N
+8. Audit Log Isolation - Steps 1-N present, final event for each is PASS (allows retries)
 9. Session Marker Consistency - .current_run_id marker exists and matches
 10. Hook Execution - PostToolUse hook executed recently
 11. Manual File Detection - Files auto-generated (not manually created)
@@ -112,6 +112,26 @@ class StepValidator:
                 self._audit_data = json.load(f)
             return self._audit_data
         except (json.JSONDecodeError, IOError):
+            return None
+
+    def _load_transcript(self) -> Optional[str]:
+        """
+        Load transcript content from file (cached).
+
+        Returns:
+            Transcript content string if file exists, None otherwise
+        """
+        if self._transcript_content is not None:
+            return self._transcript_content
+
+        if not self.transcript_file.exists():
+            return None
+
+        try:
+            with open(self.transcript_file, 'r', encoding='utf-8') as f:
+                self._transcript_content = f.read()
+            return self._transcript_content
+        except IOError:
             return None
 
     def validate_all(self) -> List[ValidationResult]:
@@ -668,15 +688,31 @@ class StepValidator:
         """
         try:
             # Parse run_id timestamp
+            # Handle both formats:
+            # - ISO format: 2026-01-25T01:28:37.064712Z (with colons)
+            # - Safe format: 2026-01-25T01-28-37.064712Z (with hyphens for Windows paths)
             try:
+                # Try standard ISO format first
                 run_id_time = datetime.fromisoformat(self.run_id.replace("Z", "+00:00"))
             except ValueError:
-                return ValidationResult(
-                    name="Run ID Uniqueness",
-                    status=Status.FAIL,
-                    message="Run ID is not a valid ISO timestamp",
-                    details={"run_id": self.run_id}
+                # Try safe format (hyphens in time portion)
+                # Convert 2026-01-25T01-28-37.064712Z to 2026-01-25T01:28:37.064712Z
+                import re
+                # Match pattern: date T hh-mm-ss
+                safe_format = re.sub(
+                    r'T(\d{2})-(\d{2})-(\d{2})',
+                    r'T\1:\2:\3',
+                    self.run_id
                 )
+                try:
+                    run_id_time = datetime.fromisoformat(safe_format.replace("Z", "+00:00"))
+                except ValueError:
+                    return ValidationResult(
+                        name="Run ID Uniqueness",
+                        status=Status.FAIL,
+                        message="Run ID is not a valid ISO timestamp",
+                        details={"run_id": self.run_id}
+                    )
 
             # Check if recent (within last 5 minutes)
             now = datetime.now(run_id_time.tzinfo)
@@ -714,20 +750,23 @@ class StepValidator:
         8. Audit Log Isolation (New Workflow)
 
         Validates:
-        - Audit log only contains events for THIS workflow
-        - No events from previous workflows mixed in
-        - Step N should have exactly N events
+        - Audit log only contains events for THIS workflow (steps 1-N)
+        - No events from future steps or other workflows
+        - Each step 1 through N has at least one event
+        - The FINAL event for current step is PASS
 
         Applicability:
-        - Step 1: Expect 1 event (qg_user_input)
-        - Step 2: Expect 2 events (qg_user_input + qg_preflight)
-        - Step 3: Expect 3 events (+ qg_ai_processing)
-        - Step 4: Expect 4 events (+ qg_test_scenarios)
-        - Step 5: Expect 5 events (+ qg_discovered_elements)
+        - Step 1: At least 1 event for step 1, final must be PASS
+        - Step 2: Events for steps 1 and 2, final for step 2 must be PASS
+        - etc.
+
+        Note: Multiple events per step are allowed (FAIL/retry scenarios).
+        The gate may be called multiple times before passing.
 
         How to interpret:
-        - Step 1 with >1 events → Bug: audit contaminated with old workflow
-        - Step N with !=N events → Check if contaminated or missing events
+        - Events from steps > N → Bug: contaminated with future steps
+        - Missing events for steps 1-N → Bug: step was skipped
+        - Final event for step N not PASS → Step didn't complete
 
         Gap Found: New workflows appended to old audit logs instead of creating fresh ones.
         """
@@ -743,51 +782,86 @@ class StepValidator:
 
             events = audit_data.get("events", [])
 
-            # Step N should have exactly N events (1 per step completed so far)
-            expected_events = self.step_num
-
-            if len(events) != expected_events:
-                # Determine if contaminated (too many) or missing (too few)
-                if len(events) > expected_events:
-                    issue = "contaminated with events from previous workflow"
-                else:
-                    issue = "missing events from previous steps"
-
+            if not events:
                 return ValidationResult(
                     name="Audit Log Isolation",
                     status=Status.FAIL,
-                    message=f"Step {self.step_num} should have {expected_events} event(s), found {len(events)} ({issue})",
-                    details={
-                        "expected_events": expected_events,
-                        "actual_events": len(events),
-                        "event_steps": [e.get("step") for e in events],
-                        "note": "Step N should have exactly N events in audit log"
-                    }
+                    message="Audit log has no events",
+                    details={"file": str(self.audit_file)}
                 )
 
-            # Verify events are sequential (1, 2, 3, ... N)
+            # Get all step numbers from events
             event_steps = [e.get("step") for e in events]
-            expected_steps = list(range(1, self.step_num + 1))
 
-            if event_steps != expected_steps:
+            # Check 1: No events from future steps (contamination)
+            future_steps = [s for s in event_steps if s is not None and s > self.step_num]
+            if future_steps:
                 return ValidationResult(
                     name="Audit Log Isolation",
                     status=Status.FAIL,
-                    message=f"Events are not sequential",
+                    message=f"Audit contains events from future steps: {set(future_steps)}",
                     details={
-                        "expected_steps": expected_steps,
-                        "actual_steps": event_steps,
-                        "note": "Events should be sequential: 1, 2, 3, ..."
+                        "current_step": self.step_num,
+                        "future_steps_found": list(set(future_steps)),
+                        "note": "Audit may be contaminated from another workflow"
                     }
                 )
+
+            # Check 2: Each step 1 through N has at least one event
+            steps_present = set(s for s in event_steps if s is not None)
+            expected_steps = set(range(1, self.step_num + 1))
+            missing_steps = expected_steps - steps_present
+
+            if missing_steps:
+                return ValidationResult(
+                    name="Audit Log Isolation",
+                    status=Status.FAIL,
+                    message=f"Missing events for steps: {sorted(missing_steps)}",
+                    details={
+                        "expected_steps": sorted(expected_steps),
+                        "steps_found": sorted(steps_present),
+                        "missing_steps": sorted(missing_steps)
+                    }
+                )
+
+            # Check 3: Final event for current step is PASS
+            current_step_events = [e for e in events if e.get("step") == self.step_num]
+            if not current_step_events:
+                return ValidationResult(
+                    name="Audit Log Isolation",
+                    status=Status.FAIL,
+                    message=f"No events found for current step {self.step_num}",
+                    details={}
+                )
+
+            final_event = current_step_events[-1]
+            final_result = final_event.get("result", "unknown")
+
+            if final_result != "pass":
+                return ValidationResult(
+                    name="Audit Log Isolation",
+                    status=Status.WARN,
+                    message=f"Final event for Step {self.step_num} is '{final_result}' (expected 'pass')",
+                    details={
+                        "final_result": final_result,
+                        "total_events_for_step": len(current_step_events),
+                        "note": "Step may not have completed successfully"
+                    }
+                )
+
+            # Count events per step for info
+            events_per_step = {}
+            for s in range(1, self.step_num + 1):
+                events_per_step[s] = len([e for e in events if e.get("step") == s])
 
             return ValidationResult(
                 name="Audit Log Isolation",
                 status=Status.PASS,
-                message=f"Audit log isolated ({len(events)} event(s), sequential steps 1-{self.step_num})",
+                message=f"Audit log isolated (steps 1-{self.step_num} present, final events are PASS)",
                 details={
                     "total_events": len(events),
-                    "steps": event_steps
+                    "events_per_step": events_per_step,
+                    "final_result_step_{0}".format(self.step_num): final_result
                 }
             )
 

@@ -3973,6 +3973,44 @@ Cannot reliably reproduce. Browser ran visibly in parabank10 test without config
 
 ---
 
+### [DEF-065] Run ID Reused Across New Workflows
+**Severity:** MEDIUM
+**Status:** OPEN
+**Layer:** Quality Gates
+**File:** `mcp_server/tools/gates/qg_user_input.py`, `mcp_server/tools/gates/base_gate.py`
+**Line(s):** 51-62 (qg_user_input.py)
+
+**Rule Violated:**
+- Each new workflow should get a unique run_id for per-run isolation
+
+**Description:**
+When starting a new workflow (via `/qa-workflow`), the system reuses the previous run_id instead of creating a fresh one. This causes:
+- Multiple workflow runs appending to the same audit log
+- State files being overwritten instead of isolated
+- Validator showing run_id as stale (e.g., 974s old)
+
+The smart clearing logic in `qg_user_input.py` (DEF-063) checks if the marker exists and Step 1 state exists, then clears the marker. However, the MCP server appears to cache the `_audit_logger` class variable across tool calls, preventing fresh run_id creation.
+
+**Evidence:**
+- Validator shows `events_per_step: {1: 4}` - four Step 1 events in same audit log
+- Run ID age: 974s (should be <300s for fresh workflow)
+- Session marker missing after workflow completes
+
+**Workaround:**
+Restart MCP server between workflow runs to clear cached state.
+
+**Fix:**
+Investigate MCP server process caching. Possible solutions:
+1. Force `_audit_logger = None` at MCP server level before each tool call
+2. Use instance variables instead of class variables for audit logger
+3. Check if MCP server runs tools in same process vs separate processes
+
+**Priority:** Not a show stopper for MVP - workflows still function, just share run_ids.
+
+**Opened Date:** 2026-01-25
+
+---
+
 ## Summary
 
 | Layer | CRITICAL | HIGH | MEDIUM | LOW | Total | Resolved |
@@ -3984,10 +4022,10 @@ Cannot reliably reproduce. Browser ran visibly in parabank10 test without config
 | MCP Tools | 1 | 4 | 0 | 0 | 5 | 5 |
 | MCP Tools (Phase B) | 1 | 0 | 0 | 0 | 1 | 1 |
 | AI Orchestration | 1 | 3 | 2 | 0 | 6 | 5 |
-| Quality Gates | 3 | 6 | 4 | 1 | 14 | 7 |
+| Quality Gates | 3 | 6 | 5 | 1 | 15 | 7 |
 | Claude Code Infra | 0 | 0 | 0 | 1 | 1 | 1 (WONT_FIX) |
 | MCP State Mgmt | 0 | 1 | 1 | 0 | 2 | 2 |
-| **Total** | **13** | **18** | **12** | **7** | **50** | **38 + 2 WONT_FIX + 1 INVALID** |
+| **Total** | **13** | **18** | **13** | **7** | **51** | **38 + 2 WONT_FIX + 1 INVALID** |
 
 ### Status Breakdown
 - **RESOLVED:** 39 (includes DEF-055a, DEF-055b from 2026-01-08, DEF-057 from 2026-01-13)
@@ -3995,7 +4033,7 @@ Cannot reliably reproduce. Browser ran visibly in parabank10 test without config
 - **WONT_FIX:** 2 (DEF-008, DEF-032)
 - **INVALID:** 1 (DEF-016)
 - **READY_TO_TEST:** 5 (DEF-B08, B09, B10, DEF-025, DEF-034)
-- **OPEN:** 9 (DEF-027, 028, 029, 048, 058, 060, 062)
+- **OPEN:** 10 (DEF-027, 028, 029, 048, 058, 060, 062, 065)
 
 ### Parabank9 → Parabank10 Production Test Results (2026-01-14)
 
@@ -4026,4 +4064,4 @@ Cannot reliably reproduce. Browser ran visibly in parabank10 test without config
 
 ---
 
-**Last Updated:** 2026-01-14 (Parabank10 retest complete - 4 defects CLOSED (not reproducible): DEF-059, DEF-061, DEF-063, DEF-064 | 2 defects CONFIRMED PERSISTENT: DEF-060, DEF-062 | **NO CODE CHANGES** made between tests | MVP readiness: 8.5/10)
+**Last Updated:** 2026-01-25 (Added DEF-065: Run ID reuse across workflows - MEDIUM, not MVP blocker)
