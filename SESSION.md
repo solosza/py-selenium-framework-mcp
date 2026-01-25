@@ -1,155 +1,108 @@
-# Session State - 2026-01-24 Late Evening (Pre-Compaction Save)
+# Session State - 2026-01-25 Early Morning
+
+## QUICK RESUME
+- **Branch:** `feature/step1-user-input-v4`
+- **Step 1:** COMPLETE (139 tests, 98% coverage)
+- **Next:** Step 2 Design (Pre-flight Config)
+- **Process:** Design → PRD → Test Plan → Tasks → Implement → Validate → Ship
 
 ---
 
-## Current Phase
-**Phase:** Implementation - Step 1 User Input (7-Step Workflow v4.0)
-**Status:** Tasks 0.0-6.0 COMPLETE - Awaiting User Production Validation
+## Step 1 Complete - Summary
+
+**Total Tests:** 139 (all passing in 0.67s)
+
+| Component | Tests | Coverage |
+|-----------|-------|----------|
+| Gate (qg_user_input) | 95 | 98% |
+| Transcript | 24 | 100% |
+| Hook | 12 | 85%+ |
+| Integration | 8 | - |
+| **Total** | **139** | - |
+
+**Test Pyramid Coverage:**
+- Layer 1: 51 tests (regex patterns, validation helpers)
+- Layer 2: 10 tests (edge cases, unicode, long values)
+- Layer 3: 8 tests (integration - state, audit, protocol)
+- Layer 4: 3 tests (production failures, fault injection)
+
+**Acceptance Tests:** All 10 ATs (AT-1.1 through AT-1.10) mapped to tests
+
+**Defense-in-Depth Layers (6/6 Tested):**
+1. Protocols - step-01.md
+2. Smart Gates - qg_user_input (95 tests)
+3. Hooks - audit-trail-writer.py (12 tests)
+4. State - StateManager (Layer 3 tests)
+5. Audit - AuditLogger (Layer 3 tests)
+6. Transcript - TranscriptWriter (24 tests)
 
 ---
 
-## SUMMARY - Task 6.0 Completed Successfully
+## Commits This Session
 
-**Goal:** Establish Step 1 as the gold standard testing model for Steps 2-7 to replicate.
+1. `7f7fc74` - test: Implement qg_user_input gate 4-layer test pyramid (Task 3.0)
+   - Added 51 Layer 1 tests, 10 Layer 2 tests, 3 Layer 4 tests
+   - Fixed selective mocking for Layer 4 production failure tests
 
-**Accomplishments:**
-
-| Subtask | Description | Status | Tests Added |
-|---------|-------------|--------|-------------|
-| 6.0 | Fix transcript path error (`_state/` → `_reports/`) | ✅ | - |
-| 6.1 | Rename `fix_hint` → `teach` throughout codebase | ✅ | - |
-| 6.2 | Create Hook tests (PostToolUse) | ✅ | 12 tests |
-| 6.3 | Verify teach quality | ✅ | 3 tests |
-| 6.4 | Security input validation | ✅ | 9 tests |
-| 6.5 | Production validation | ⏭️ Skipped | (requires MCP server) |
-| 6.6 | Final test run | ✅ | - |
-
-**Total New Tests:** 24 tests added (12 hook + 3 teach + 9 security)
-
-**Final Test Count:** 85 tests passing in 0.61s
-
-**Commits (This Session):**
-1. c23b57b - fix: Correct transcript path to _reports/ (Task 6.0)
-2. 1bae77f - refactor: Rename fix_hint → teach for architecture consistency (Task 6.1)
-3. 5eef7c5 - test: Add PostToolUse hook tests (Task 6.2)
-4. cdb2549 - test: Add teach quality validation tests (Task 6.3)
-5. 4942073 - test: Add security input validation tests (Task 6.4)
+2. `e95e1e2` - docs: Verify Phase 5 integration tests complete (Task 5.0)
+   - Verified all integration tests exist and pass
+   - Mapped all 10 acceptance tests to test coverage
 
 ---
 
-## Test Coverage Summary (Final)
+## Known Issues (Not Blocking)
 
-| Component | Tests | Coverage | Status |
-|-----------|-------|----------|--------|
-| TranscriptWriter | 24 | 100% | ✅ Gold Standard |
-| qg_user_input gate | 32 | 95% | ✅ Gold Standard |
-| Security validation | 9 | 100% | ✅ Gold Standard |
-| PostToolUse Hook | 12 | 85%+ | ✅ Gold Standard |
-| Integration (Layer 3) | 8 | - | ✅ Gold Standard |
-| **TOTAL** | **85** | - | ✅ ALL PASSING |
-
-**Test Pyramid Layers Covered:**
-- Layer 1: Basic operations ✅
-- Layer 2: Formatting/edge cases ✅
-- Layer 3: Integration ✅
-- Layer 4: Error handling ✅
-
-**Defense-in-Depth Components (6/6 Tested):**
-1. ✅ Protocols - step-01.md (updated, error fixed)
-2. ✅ Smart Gates - qg_user_input (32 tests, 95% coverage)
-3. ✅ Hooks - audit-trail-writer.py (12 tests)
-4. ✅ State Checkpointing - StateManager (Layer 3 tests)
-5. ✅ Audit System - AuditLogger (Layer 3 tests)
-6. ✅ Transcript System - TranscriptWriter (24 tests, 100%)
+**DEF-065:** Run ID reuse bug - new workflows may reuse old run_ids
+- Workaround: Restart MCP server between workflow runs
+- Severity: MEDIUM (not MVP blocker)
 
 ---
 
-## Architecture Decisions Implemented
+## Next: Step 2 Design
 
-### "teach" Terminology (Task 6.1)
-- Renamed `fix_hint` → `teach` throughout codebase
-- Aligns with architecture: **Smart Gates = Validate + Teach**
-- Files updated: base_gate.py, qg_user_input.py, tests, validate_step.py
+**Process (from PRD):**
+```
+Step N: Design → PRD → Test Plan → Tasks → Implement → Validate → Ship
+  ↓ (working code, lessons learned)
+Step N+1: Repeat with learnings from previous step
+```
 
-### Transcript Path (Task 6.0)
-- Fixed: `tests/_reports/<run_id>/workflow_transcript.md`
-- Correct separation:
-  - `_state/` = machine-readable (JSON)
-  - `_audit/` = machine-readable (JSON)
-  - `_reports/` = human-readable (Markdown)
+**Step 2: Pre-flight Configuration**
+- Credential strategy (static/dynamic/self-contained)
+- Test data location (shared/workflow-specific/both)
+- Browser config (headless: false for pair programming)
+- Timeout config
 
----
-
-## Files Changed This Session
-
-### Created
-- `mcp_server/_dev_tests/test_hook_audit_trail_writer.py` - 12 hook tests
-- `mcp_server/_dev_tests/test_gates/test_qg_user_input_security.py` - 9 security tests
-
-### Modified
-- `.claude/skills/qa-management-layer/references/step-01.md` - Fixed path, clarified POST-ACTION
-- `mcp_server/tools/gates/base_gate.py` - Renamed fix_hint → teach
-- `mcp_server/tools/gates/qg_user_input.py` - Renamed fix_hint → teach
-- `mcp_server/_dev_tests/test_gates/test_qg_user_input.py` - Added 3 teach quality tests
-- `mcp_server/_dev_tests/validate_step.py` - Renamed has_fix_hint → has_teach
-- `mcp_server/_dev_tests/conftest.py` - Added security marker
+**Files to Create/Update:**
+1. Add Step 2 requirements to `2-prd-v4.md`
+2. Create `4-test-plan-step2-v4.md`
+3. Create Step 2 tasks (new file or update `3-tasks-v4.md`)
 
 ---
 
-## Next Steps
+## Files Reference
 
-### Task 7.0: Documentation & Cleanup (Recommended)
-1. Update design doc - Mark Step 1 as ✅ IMPLEMENTED
-2. Update PRD - Add implementation notes
-3. Create summary report
-4. Ready to move to Step 2 design
+**Docs:**
+- `docs/projects/pair-programming/1-design-discussion-v4.md` - All 7 steps overview
+- `docs/projects/pair-programming/2-prd-v4.md` - PRD (Step 1 complete)
+- `docs/projects/pair-programming/3-tasks-v4.md` - Step 1 tasks (complete)
+- `docs/projects/pair-programming/4-test-plan-step1-v4.md` - Step 1 test plan
 
-### Move to Step 2 Design
-- Step 1 is now the **gold standard**
-- Steps 2-7 will replicate this testing model:
-  - 4-layer test pyramid for each component
-  - TDD for Core, Test-After for Glue
-  - All 6 defense-in-depth layers covered
-  - Security tests included
-  - Dev tests + Production validation
+**Gate:**
+- `mcp_server/tools/gates/qg_user_input.py` - Step 1 gate
+- `mcp_server/tools/gates/qg_preflight.py` - Step 2 gate (exists)
 
----
+**Protocol:**
+- `.claude/skills/qa-management-layer/references/step-01.md` - Step 1 protocol
+- `.claude/skills/qa-management-layer/references/step-02.md` - Step 2 protocol (exists)
 
-## Branch Status
-
-**Branch:** `feature/step1-user-input-v4`
-**Total Commits:** 10 commits (5 from previous session + 5 this session)
-**Tests:** 85 tests, all PASSING in 0.61s
-**Coverage:** Meets or exceeds all targets
+**Tests:**
+- `mcp_server/_dev_tests/test_gates/test_qg_user_input.py` - 95 tests
+- `mcp_server/_dev_tests/test_transcript_writer.py` - 24 tests
+- `mcp_server/_dev_tests/test_hook_audit_trail_writer.py` - 12 tests
+- `mcp_server/_dev_tests/test_integration/test_step1_integration.py` - 8 tests
 
 ---
 
----
-
-## IMMEDIATE NEXT: Production Validation (User Running)
-
-**User is running:**
-1. Execute Step 1 via MCP (`/qa-workflow` or `/qa-workflow-dev`)
-2. Stop after Step 1 completes
-3. Get run_id: `tests/_state/.current_run_id`
-4. Run validator:
-   ```bash
-   cd mcp_server/_dev_tests
-   python validate_step.py --run-id <run_id> --step 1
-   ```
-
-**Validator checks 14 points across 6 defense-in-depth layers:**
-- State saved correctly
-- Audit log created with gate event
-- Transcript generated in `_reports/`
-- Gate returned expected status
-- Protocol adherence
-- Hook fired correctly
-
-**After validation passes:** Task 7.0 (Documentation) or move to Step 2 Design
-
----
-
-**Last Updated:** 2026-01-24 Late Evening (Pre-Compaction)
-**Status:** Dev tests complete (85 passing), awaiting user production validation
-**Resume Point:** After user runs validator, proceed to Task 7.0 or Step 2
+**Last Updated:** 2026-01-25 Early Morning
+**Status:** Step 1 COMPLETE, Ready for Step 2 Design
