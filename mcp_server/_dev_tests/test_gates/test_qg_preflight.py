@@ -896,3 +896,307 @@ class TestScaffoldingInfrastructure:
         # Assert
         assert result["status"] == "pass", "Should pass when infrastructure exists"
         assert "scaffolding_needed" not in result, "Should NOT include scaffolding when files exist"
+
+
+# ==============================================================================
+# Layer 1: Validation Helper Tests (Direct method testing)
+# ==============================================================================
+
+class TestLayer1CredentialStrategyHelper:
+    """
+    Layer 1: Direct tests for _is_valid_credential_strategy helper.
+
+    Tests the validation logic in isolation.
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_static(self):
+        """L1: 'static' is valid."""
+        assert QGPreflight._is_valid_credential_strategy("static") is True
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_dynamic(self):
+        """L1: 'dynamic' is valid."""
+        assert QGPreflight._is_valid_credential_strategy("dynamic") is True
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_self_contained(self):
+        """L1: 'self-contained' is valid."""
+        assert QGPreflight._is_valid_credential_strategy("self-contained") is True
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_none(self):
+        """L1: 'none' is valid."""
+        assert QGPreflight._is_valid_credential_strategy("none") is True
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_string(self):
+        """L1: Invalid string is rejected."""
+        assert QGPreflight._is_valid_credential_strategy("invalid") is False
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_none_value_rejected(self):
+        """L1: None value is rejected."""
+        assert QGPreflight._is_valid_credential_strategy(None) is False
+
+
+class TestLayer1TestDataLocationHelper:
+    """
+    Layer 1: Direct tests for _is_valid_test_data_location helper.
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_shared(self):
+        """L1: 'shared' is valid."""
+        assert QGPreflight._is_valid_test_data_location("shared") is True
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_workflow(self):
+        """L1: 'workflow' is valid."""
+        assert QGPreflight._is_valid_test_data_location("workflow") is True
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_both(self):
+        """L1: 'both' is valid."""
+        assert QGPreflight._is_valid_test_data_location("both") is True
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_none(self):
+        """L1: 'none' is valid."""
+        assert QGPreflight._is_valid_test_data_location("none") is True
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_string(self):
+        """L1: Invalid string is rejected."""
+        assert QGPreflight._is_valid_test_data_location("invalid") is False
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_none_value_rejected(self):
+        """L1: None value is rejected."""
+        assert QGPreflight._is_valid_test_data_location(None) is False
+
+
+class TestLayer1BrowserConfigHelper:
+    """
+    Layer 1: Direct tests for _validate_browser_config helper.
+
+    Returns None if valid, fail_response dict if invalid.
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_headless_false(self):
+        """L1: headless=False is valid (required for pair programming)."""
+        result = QGPreflight._validate_browser_config({"headless": False})
+        assert result is None, "Valid config should return None"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_headless_true(self):
+        """L1: headless=True is rejected (pair programming requires visible browser)."""
+        result = QGPreflight._validate_browser_config({"headless": True})
+        assert result is not None, "headless=True should fail"
+        assert result["status"] == "fail"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_not_dict(self):
+        """L1: Non-dict browser_config is rejected."""
+        result = QGPreflight._validate_browser_config("not a dict")
+        assert result is not None
+        assert result["status"] == "fail"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_missing_headless_key(self):
+        """L1: Missing 'headless' key is rejected."""
+        result = QGPreflight._validate_browser_config({})
+        assert result is not None
+        assert result["status"] == "fail"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_with_extra_keys(self):
+        """L1: Extra keys in browser_config are allowed."""
+        result = QGPreflight._validate_browser_config({
+            "headless": False,
+            "window_size": "1920x1080"
+        })
+        assert result is None, "Extra keys should be allowed"
+
+
+class TestLayer1TimeoutConfigHelper:
+    """
+    Layer 1: Direct tests for _validate_timeout_config helper.
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_enabled_with_threshold(self):
+        """L1: enabled=True with valid threshold is valid."""
+        result = QGPreflight._validate_timeout_config({
+            "enabled": True,
+            "threshold_seconds": 30
+        })
+        assert result is None, "Valid config should return None"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_valid_disabled_no_threshold(self):
+        """L1: enabled=False without threshold is valid."""
+        result = QGPreflight._validate_timeout_config({"enabled": False})
+        assert result is None, "Disabled config doesn't need threshold"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_not_dict(self):
+        """L1: Non-dict timeout_config is rejected."""
+        result = QGPreflight._validate_timeout_config("not a dict")
+        assert result is not None
+        assert result["status"] == "fail"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_missing_enabled_key(self):
+        """L1: Missing 'enabled' key is rejected."""
+        result = QGPreflight._validate_timeout_config({"threshold_seconds": 30})
+        assert result is not None
+        assert result["status"] == "fail"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_enabled_missing_threshold(self):
+        """L1: enabled=True without threshold is rejected."""
+        result = QGPreflight._validate_timeout_config({"enabled": True})
+        assert result is not None
+        assert result["status"] == "fail"
+
+    @pytest.mark.unit
+    @pytest.mark.layer1
+    @pytest.mark.preflight
+    def test_invalid_negative_threshold(self):
+        """L1: Negative threshold is rejected."""
+        result = QGPreflight._validate_timeout_config({
+            "enabled": True,
+            "threshold_seconds": -5
+        })
+        assert result is not None
+        assert result["status"] == "fail"
+
+
+# ==============================================================================
+# Layer 2: Edge Case Tests
+# ==============================================================================
+
+class TestLayer2EdgeCases:
+    """
+    Layer 2: Edge case and boundary tests.
+    """
+
+    @pytest.mark.unit
+    @pytest.mark.layer2
+    @pytest.mark.preflight
+    def test_empty_string_credential_strategy(self):
+        """L2: Empty string credential_strategy is rejected."""
+        assert QGPreflight._is_valid_credential_strategy("") is False
+
+    @pytest.mark.unit
+    @pytest.mark.layer2
+    @pytest.mark.preflight
+    def test_empty_string_test_data_location(self):
+        """L2: Empty string test_data_location is rejected."""
+        assert QGPreflight._is_valid_test_data_location("") is False
+
+    @pytest.mark.unit
+    @pytest.mark.layer2
+    @pytest.mark.preflight
+    def test_case_sensitivity_credential_strategy(self):
+        """L2: Credential strategy is case-sensitive (STATIC != static)."""
+        assert QGPreflight._is_valid_credential_strategy("STATIC") is False
+        assert QGPreflight._is_valid_credential_strategy("Static") is False
+
+    @pytest.mark.unit
+    @pytest.mark.layer2
+    @pytest.mark.preflight
+    def test_case_sensitivity_test_data_location(self):
+        """L2: Test data location is case-sensitive (SHARED != shared)."""
+        assert QGPreflight._is_valid_test_data_location("SHARED") is False
+        assert QGPreflight._is_valid_test_data_location("Shared") is False
+
+    @pytest.mark.unit
+    @pytest.mark.layer2
+    @pytest.mark.preflight
+    def test_threshold_zero_rejected(self):
+        """L2: Zero threshold is rejected (must be positive)."""
+        result = QGPreflight._validate_timeout_config({
+            "enabled": True,
+            "threshold_seconds": 0
+        })
+        assert result is not None
+        assert result["status"] == "fail"
+
+    @pytest.mark.unit
+    @pytest.mark.layer2
+    @pytest.mark.preflight
+    def test_threshold_float_accepted(self):
+        """L2: Float threshold is accepted."""
+        result = QGPreflight._validate_timeout_config({
+            "enabled": True,
+            "threshold_seconds": 30.5
+        })
+        assert result is None, "Float threshold should be valid"
+
+    @pytest.mark.unit
+    @pytest.mark.layer2
+    @pytest.mark.preflight
+    def test_enabled_not_boolean_rejected(self):
+        """L2: Non-boolean enabled is rejected."""
+        result = QGPreflight._validate_timeout_config({
+            "enabled": "true",  # string, not bool
+            "threshold_seconds": 30
+        })
+        assert result is not None
+        assert result["status"] == "fail"
+
+    @pytest.mark.unit
+    @pytest.mark.layer2
+    @pytest.mark.preflight
+    def test_headless_not_boolean_rejected(self):
+        """L2: Non-boolean headless is rejected (string 'false')."""
+        result = QGPreflight._validate_browser_config({"headless": "false"})
+        assert result is not None
+        assert result["status"] == "fail"
