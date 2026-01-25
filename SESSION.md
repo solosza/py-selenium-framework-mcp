@@ -1,111 +1,86 @@
-# Session State - 2026-01-25 Morning
+# Session State - 2026-01-25 Late Evening
 
 ## QUICK RESUME
-- **Branch:** `feature/step1-user-input-v4` (Step 2 branch not yet created)
+- **Branch:** `feature/step2-preflight-v4`
 - **Step 1:** COMPLETE (139 tests, 98% coverage)
-- **Step 2:** Task list COMPLETE, ready for execution
-- **Next:** Task 0.0 - Create branch and run assessment
+- **Step 2:** COMPLETE (78 gate tests + 16 hook + 28 transcript = 122 tests, 98% coverage)
+- **Next:** Ready for merge or Step 3
 
 ---
 
-## Step 1 Complete - Summary
+## Step 2 Final Summary
 
-**Total Tests:** 139 (all passing in 0.67s)
+| Task | Status | Tests | Commit |
+|------|--------|-------|--------|
+| 0.0 Assessment | ✓ COMPLETE | - | 7125000 |
+| 1.0 Fix tests | ✓ COMPLETE | 26 | dd86ac4 |
+| 2.0 Layer 1+2 | ✓ COMPLETE | 57 | 6c922fe |
+| 3.0 Teach validation | ✓ COMPLETE | 64 | c954202 |
+| 4.0 State integration | ✓ COMPLETE | 69 | b47b8be |
+| 5.0 Audit integration | ✓ COMPLETE | 74 | 599bd67 |
+| 6.0 Hook integration | ✓ COMPLETE | 16 hook | 33a9d77 |
+| 7.0 Transcript integration | ✓ COMPLETE | 28 transcript | 8c03d63 |
+| 8.0 PRE-check blocking | ✓ COMPLETE | 78 | 42bcaf4 |
+| 9.0 NEEDS_RETRY scaffolding | ✓ COMPLETE | (existing) | - |
+| 10.0 Protocol verification | ✓ COMPLETE | - | - |
+| 11.0 Documentation & ship | ✓ COMPLETE | - | pending |
 
-| Component | Tests | Coverage |
-|-----------|-------|----------|
-| Gate (qg_user_input) | 95 | 98% |
-| Transcript | 24 | 100% |
-| Hook | 12 | 85%+ |
-| Integration | 8 | - |
-| **Total** | **139** | - |
-
----
-
-## Step 2 Task List - COMPLETE
-
-**Created using 4D divide template with all required sections:**
-
-| Section | Status |
-|---------|--------|
-| Repo/CI Status | Bootstrapped |
-| Testing Strategy (Core vs Glue) | Documented |
-| Coverage Targets | 95% gate, 90% state/audit |
-| Repo Steps | Branch, commits, checks |
-| Scaffolding Status | Already done in Step 1 |
-| Defense-in-Depth (6 layers) | All mapped to tasks |
-| Relevant Files + Notes | Source + test files |
-| Tasks (12 parent tasks) | All with TDD indicators |
-| AT/FR Mappings | With TDD? column |
-| Test Summary | 90 tests (26 fixed + 64 new) |
-| Estimated Effort | 7.5 hours |
-
-**TDD vs Test-After:**
-- **TDD (Core):** Tasks 2.0, 3.0, 8.0, 9.0 (validation logic)
-- **Test-After (Glue):** Tasks 0.0, 1.0, 4.0-7.0, 10.0, 11.0 (wiring)
-
-**PRD Updated:** Added Section 0.5 "Required Task Coverage (6 Defense-in-Depth Layers)" - template for Steps 3-7
+**Total Step 2 Tests:** 122 (78 gate + 16 hook + 28 transcript)
+**Coverage:** 98% (exceeds 95% target)
 
 ---
 
-## Files Modified This Session
+## Defense-in-Depth Verification
+
+| Layer | Component | Tests | Status |
+|-------|-----------|-------|--------|
+| 1 | Protocol (step-02.md) | N/A | ✓ Verified |
+| 2 | Smart Gate (qg_preflight) | 78 | ✓ Complete |
+| 3 | Hook (audit-trail-writer) | 16 | ✓ Complete |
+| 4 | State (StateManager) | 5 | ✓ Integrated |
+| 5 | Audit (AuditLogger) | 5 | ✓ Integrated |
+| 6 | Transcript (TranscriptWriter) | 28 | ✓ Complete |
+
+---
+
+## Branch Status
+
+- **Feature branch:** `feature/step2-preflight-v4`
+- **Commits ahead of main:** 48
+- **Step 2 commits:** 10
+
+---
+
+## Files Modified (Step 2)
 
 | File | Change |
 |------|--------|
-| `docs/projects/pair-programming/2-prd-v4.md` | Added Section 0.5 task template |
-| `docs/projects/pair-programming/3-tasks-v4.md` | Rewrote Step 2 tasks with 4D template |
-| `SESSION.md` | This update |
+| `mcp_server/_dev_tests/conftest.py` | Added fixtures, markers |
+| `mcp_server/_dev_tests/test_gates/test_qg_preflight.py` | 78 tests |
+| `mcp_server/_dev_tests/test_hook_audit_trail_writer.py` | +4 Step 2 tests (16 total) |
+| `mcp_server/_dev_tests/test_transcript_writer.py` | +4 Step 2 tests (28 total) |
+| `mcp_server/tools/gates/qg_preflight.py` | fix_hint → teach |
+| `docs/projects/pair-programming/3-tasks-v4.md` | All tasks complete |
 
 ---
 
-## Next Steps (Step 2 Execution)
+## Commands Reference
 
+```bash
+# Run all Step 2 tests
+cd mcp_server/_dev_tests
+pytest test_gates/test_qg_preflight.py test_hook_audit_trail_writer.py test_transcript_writer.py -v
+
+# Check coverage
+pytest test_gates/test_qg_preflight.py --cov=tools.gates.qg_preflight --cov-report=term-missing
+
+# Run by marker
+pytest -m "preflight" -v
+pytest -m "hook" -v
+pytest -m "transcript" -v
 ```
-Task 0.0: Create branch, run assessment
-Task 1.0: Fix 15 failing tests (add transcript mock)
-Task 2.0: Layer 1+2 tests (23+8 = 31 tests) [TDD]
-Task 3.0: Teach validation (7 tests) [TDD]
-Task 4.0-7.0: Integration tests (25 tests)
-Task 8.0: PRE-check tests (4 tests) [TDD]
-Task 9.0: NEEDS_RETRY tests (4 tests) [TDD]
-Task 10.0: Protocol verification
-Task 11.0: Documentation & ship
-```
 
 ---
 
-## Known Issues (Not Blocking)
-
-**DEF-065:** Run ID reuse bug - new workflows may reuse old run_ids
-- Workaround: Restart MCP server between workflow runs
-- Severity: MEDIUM (not MVP blocker)
-
----
-
-## Files Reference
-
-**Docs:**
-- `docs/projects/pair-programming/1-design-discussion-v4.md` - All 7 steps overview
-- `docs/projects/pair-programming/2-prd-v4.md` - PRD (Step 1 complete, Step 2 ready)
-- `docs/projects/pair-programming/3-tasks-v4.md` - Step 1 complete, Step 2 ready
-- `docs/projects/pair-programming/4-test-plan-step1-v4.md` - Step 1 test plan
-
-**Gate:**
-- `mcp_server/tools/gates/qg_user_input.py` - Step 1 gate (98% coverage)
-- `mcp_server/tools/gates/qg_preflight.py` - Step 2 gate (exists, 26 tests, 15 failing)
-
-**Protocol:**
-- `.claude/skills/qa-management-layer/references/step-01.md` - Step 1 protocol
-- `.claude/skills/qa-management-layer/references/step-02.md` - Step 2 protocol (exists)
-
-**Tests:**
-- `mcp_server/_dev_tests/test_gates/test_qg_user_input.py` - 95 tests
-- `mcp_server/_dev_tests/test_gates/test_qg_preflight.py` - 26 tests (15 failing)
-- `mcp_server/_dev_tests/test_transcript_writer.py` - 24 tests
-- `mcp_server/_dev_tests/test_hook_audit_trail_writer.py` - 12 tests
-- `mcp_server/_dev_tests/test_integration/test_step1_integration.py` - 8 tests
-
----
-
-**Last Updated:** 2026-01-25 Morning
-**Status:** Step 2 task list COMPLETE, ready for execution
+**Last Updated:** 2026-01-25 Late Evening
+**Status:** Step 2 COMPLETE - ready for merge or Step 3
