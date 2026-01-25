@@ -448,3 +448,232 @@ class TestLayer2Integration:
         if audit_dir.exists():
             assert len(list(audit_dir.glob("*.json"))) == 0, \
                 "Should not create audit file without run_id"
+
+
+# ============================================================================
+# LAYER 2: Step 2 (qg_preflight) Integration Tests - Task 6.0
+# ============================================================================
+
+class TestStep2PreflightHookIntegration:
+    """
+    Task 6.0: Hook integration tests for qg_preflight (Step 2).
+
+    Verifies hook behavior specific to Step 2 pre-flight configuration gate.
+    """
+
+    @pytest.mark.layer2
+    @pytest.mark.hook
+    @pytest.mark.preflight
+    def test_hook_fires_after_qg_preflight_pass(self, tmp_path):
+        """
+        6.1: Hook fires after qg_preflight PASS.
+
+        AAA Pattern:
+        1. Arrange - Create run_id marker, Step 2 state
+        2. Act - Run hook with qg_preflight PASS result
+        3. Assert - Audit entry created for Step 2
+        """
+        # Arrange
+        run_id = "2026-01-25T12-00-00.000000Z"
+        marker_file = tmp_path / "tests" / "_state" / ".current_run_id"
+        marker_file.parent.mkdir(parents=True, exist_ok=True)
+        marker_file.write_text(run_id)
+
+        state_file = tmp_path / "tests" / "_state" / run_id / "workflow_state.json"
+        state_file.parent.mkdir(parents=True, exist_ok=True)
+        state_data = {
+            "step_2": {
+                "credential_strategy": "static",
+                "test_data_location": "shared",
+                "browser_config": {"headless": False},
+                "timeout_config": {"enabled": True, "threshold_seconds": 30}
+            }
+        }
+        state_file.write_text(json.dumps(state_data))
+
+        # Mock stdin with qg_preflight PASS
+        tool_result = {
+            "tool_name": "mcp__qa-automation__qg_preflight",
+            "tool_result": json.dumps({"status": "pass"})
+        }
+
+        # Act
+        with patch('audit_trail_writer.get_project_dir', return_value=tmp_path):
+            with patch('sys.stdin', io.StringIO(json.dumps(tool_result))):
+                from audit_trail_writer import main
+                try:
+                    main()
+                except SystemExit as e:
+                    assert e.code == 0
+
+        # Assert
+        audit_file = tmp_path / "tests" / "_audit" / f"audit_log_{run_id}.json"
+        assert audit_file.exists(), "Audit file should be created for qg_preflight PASS"
+
+        with open(audit_file, 'r') as f:
+            audit = json.load(f)
+
+        assert len(audit["events"]) == 1
+        assert audit["events"][0]["step"] == 2, "Should log step 2"
+        assert audit["events"][0]["gate"] == "qg_preflight"
+        assert audit["events"][0]["result"] == "pass"
+
+    @pytest.mark.layer2
+    @pytest.mark.hook
+    @pytest.mark.preflight
+    def test_hook_appends_step2_after_step1(self, tmp_path):
+        """
+        6.2: Hook appends qg_preflight audit to existing Step 1 entry.
+
+        AAA Pattern:
+        1. Arrange - Create existing audit with Step 1 event
+        2. Act - Run hook with qg_preflight PASS
+        3. Assert - Audit has both Step 1 and Step 2 events
+        """
+        # Arrange - Create existing audit with Step 1
+        run_id = "2026-01-25T12-05-00.000000Z"
+        audit_file = tmp_path / "tests" / "_audit" / f"audit_log_{run_id}.json"
+        audit_file.parent.mkdir(parents=True, exist_ok=True)
+
+        existing_audit = {
+            "workflow_id": run_id,
+            "events": [{
+                "type": "gate_validation",
+                "step": 1,
+                "gate": "qg_user_input",
+                "result": "pass",
+                "metadata": {"persona": "registered_user", "URL": "http://example.com"}
+            }]
+        }
+        audit_file.write_text(json.dumps(existing_audit, indent=2))
+
+        # Arrange - Create marker and Step 2 state
+        marker_file = tmp_path / "tests" / "_state" / ".current_run_id"
+        marker_file.parent.mkdir(parents=True, exist_ok=True)
+        marker_file.write_text(run_id)
+
+        state_file = tmp_path / "tests" / "_state" / run_id / "workflow_state.json"
+        state_file.parent.mkdir(parents=True, exist_ok=True)
+        state_data = {
+            "step_1": {"persona": "registered_user"},
+            "step_2": {"credential_strategy": "static", "test_data_location": "shared"}
+        }
+        state_file.write_text(json.dumps(state_data))
+
+        # Mock stdin with qg_preflight PASS
+        tool_result = {
+            "tool_name": "mcp__qa-automation__qg_preflight",
+            "tool_result": json.dumps({"status": "pass"})
+        }
+
+        # Act
+        with patch('audit_trail_writer.get_project_dir', return_value=tmp_path):
+            with patch('sys.stdin', io.StringIO(json.dumps(tool_result))):
+                from audit_trail_writer import main
+                try:
+                    main()
+                except SystemExit as e:
+                    assert e.code == 0
+
+        # Assert - Both Step 1 and Step 2 present
+        with open(audit_file, 'r') as f:
+            audit = json.load(f)
+
+        assert len(audit["events"]) == 2, "Should have 2 events (Step 1 + Step 2)"
+        assert audit["events"][0]["step"] == 1
+        assert audit["events"][0]["gate"] == "qg_user_input"
+        assert audit["events"][1]["step"] == 2
+        assert audit["events"][1]["gate"] == "qg_preflight"
+
+    @pytest.mark.layer2
+    @pytest.mark.hook
+    @pytest.mark.preflight
+    def test_hook_ignores_qg_preflight_fail(self, tmp_path):
+        """
+        6.3: Hook ignores qg_preflight FAIL status.
+
+        AAA Pattern:
+        1. Arrange - Create marker, state
+        2. Act - Run hook with qg_preflight FAIL result
+        3. Assert - No audit entry created
+        """
+        # Arrange
+        run_id = "2026-01-25T12-10-00.000000Z"
+        marker_file = tmp_path / "tests" / "_state" / ".current_run_id"
+        marker_file.parent.mkdir(parents=True, exist_ok=True)
+        marker_file.write_text(run_id)
+
+        state_file = tmp_path / "tests" / "_state" / run_id / "workflow_state.json"
+        state_file.parent.mkdir(parents=True, exist_ok=True)
+        state_data = {"step_2": {}}
+        state_file.write_text(json.dumps(state_data))
+
+        # Mock stdin with qg_preflight FAIL
+        tool_result = {
+            "tool_name": "mcp__qa-automation__qg_preflight",
+            "tool_result": json.dumps({
+                "status": "fail",
+                "error": "Invalid credential_strategy",
+                "teach": "Use static, dynamic, self-contained, or none"
+            })
+        }
+
+        # Act
+        with patch('audit_trail_writer.get_project_dir', return_value=tmp_path):
+            with patch('sys.stdin', io.StringIO(json.dumps(tool_result))):
+                from audit_trail_writer import main
+                try:
+                    main()
+                except SystemExit as e:
+                    assert e.code == 0, "Hook should exit gracefully on FAIL"
+
+        # Assert - No audit file created
+        audit_file = tmp_path / "tests" / "_audit" / f"audit_log_{run_id}.json"
+        assert not audit_file.exists(), "Audit file should NOT be created for FAIL status"
+
+    @pytest.mark.layer2
+    @pytest.mark.hook
+    @pytest.mark.preflight
+    def test_hook_ignores_qg_preflight_needs_retry(self, tmp_path):
+        """
+        6.4: Hook ignores qg_preflight NEEDS_RETRY status.
+
+        AAA Pattern:
+        1. Arrange - Create marker, state
+        2. Act - Run hook with qg_preflight NEEDS_RETRY result
+        3. Assert - No audit entry created
+        """
+        # Arrange
+        run_id = "2026-01-25T12-15-00.000000Z"
+        marker_file = tmp_path / "tests" / "_state" / ".current_run_id"
+        marker_file.parent.mkdir(parents=True, exist_ok=True)
+        marker_file.write_text(run_id)
+
+        state_file = tmp_path / "tests" / "_state" / run_id / "workflow_state.json"
+        state_file.parent.mkdir(parents=True, exist_ok=True)
+        state_data = {"step_2": {}}
+        state_file.write_text(json.dumps(state_data))
+
+        # Mock stdin with qg_preflight NEEDS_RETRY
+        tool_result = {
+            "tool_name": "mcp__qa-automation__qg_preflight",
+            "tool_result": json.dumps({
+                "status": "NEEDS_RETRY",
+                "fix_applied": "test_data_infrastructure_scaffolded",
+                "error": "Missing test data infrastructure",
+                "scaffolding_needed": [{"path": "tests/data", "type": "directory"}]
+            })
+        }
+
+        # Act
+        with patch('audit_trail_writer.get_project_dir', return_value=tmp_path):
+            with patch('sys.stdin', io.StringIO(json.dumps(tool_result))):
+                from audit_trail_writer import main
+                try:
+                    main()
+                except SystemExit as e:
+                    assert e.code == 0, "Hook should exit gracefully on NEEDS_RETRY"
+
+        # Assert - No audit file created
+        audit_file = tmp_path / "tests" / "_audit" / f"audit_log_{run_id}.json"
+        assert not audit_file.exists(), "Audit file should NOT be created for NEEDS_RETRY status"
