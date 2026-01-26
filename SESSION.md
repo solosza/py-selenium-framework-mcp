@@ -1,86 +1,165 @@
-# Session State - 2026-01-25 Late Evening
+# Session State - 2026-01-25 Late Night
 
 ## QUICK RESUME
 - **Branch:** `feature/step2-preflight-v4`
-- **Step 1:** COMPLETE (139 tests, 98% coverage)
-- **Step 2:** COMPLETE (78 gate tests + 16 hook + 28 transcript = 122 tests, 98% coverage)
-- **Next:** Ready for merge or Step 3
+- **Status:** Simple workflow complete, complex workflow mapped
+- **Next:** Run `/qa-workflow-dev` with 5-step inquiry creation workflow
 
 ---
 
-## Step 2 Final Summary
+## Completed This Session
 
-| Task | Status | Tests | Commit |
-|------|--------|-------|--------|
-| 0.0 Assessment | ✓ COMPLETE | - | 7125000 |
-| 1.0 Fix tests | ✓ COMPLETE | 26 | dd86ac4 |
-| 2.0 Layer 1+2 | ✓ COMPLETE | 57 | 6c922fe |
-| 3.0 Teach validation | ✓ COMPLETE | 64 | c954202 |
-| 4.0 State integration | ✓ COMPLETE | 69 | b47b8be |
-| 5.0 Audit integration | ✓ COMPLETE | 74 | 599bd67 |
-| 6.0 Hook integration | ✓ COMPLETE | 16 hook | 33a9d77 |
-| 7.0 Transcript integration | ✓ COMPLETE | 28 transcript | 8c03d63 |
-| 8.0 PRE-check blocking | ✓ COMPLETE | 78 | 42bcaf4 |
-| 9.0 NEEDS_RETRY scaffolding | ✓ COMPLETE | (existing) | - |
-| 10.0 Protocol verification | ✓ COMPLETE | - | - |
-| 11.0 Documentation & ship | ✓ COMPLETE | - | pending |
+### 1. Two-Pass Discovery Verification
+- Schema fix verified working (validation_results + scope_result parameters)
+- PASS 1 (input): 4 elements discovered
+- PASS 2 (output): 4 elements discovered
+- `qg_discovery_complete` passed
 
-**Total Step 2 Tests:** 122 (78 gate + 16 hook + 28 transcript)
-**Coverage:** 98% (exceeds 95% target)
+### 2. Clawdbot Workflow Built (Simple Workflow)
+**Files Created:**
+```
+framework/pages/clawdbot/sales_leads_page.py
+framework/tasks/clawdbot/clawdbot_tasks.py
+framework/roles/clawdbot/customer.py
+tests/clawdbot/test_search_sales_representative.py
+```
+**Test Result:** PASSED
 
----
+### 3. Code Generation Discovery
+- Code built using **protocols + smart gates**, NOT Python tools
+- AI read existing helios7 patterns from disk, copied them
+- For production: Need `framework/_examples/` pattern library
 
-## Defense-in-Depth Verification
+### 4. PRD Updated
+Added "Canonical Examples Pattern" section to PRD.
 
-| Layer | Component | Tests | Status |
-|-------|-----------|-------|--------|
-| 1 | Protocol (step-02.md) | N/A | ✓ Verified |
-| 2 | Smart Gate (qg_preflight) | 78 | ✓ Complete |
-| 3 | Hook (audit-trail-writer) | 16 | ✓ Complete |
-| 4 | State (StateManager) | 5 | ✓ Integrated |
-| 5 | Audit (AuditLogger) | 5 | ✓ Integrated |
-| 6 | Transcript (TranscriptWriter) | 28 | ✓ Complete |
+### 5. Complex Workflow Explored
+Mapped the 5-step inquiry creation workflow (see below).
 
 ---
 
-## Branch Status
+## Next Session: 5-Step Complex Workflow Test
 
-- **Feature branch:** `feature/step2-preflight-v4`
-- **Commits ahead of main:** 48
-- **Step 2 commits:** 10
+**Goal:** Stress-test autonomous code generation with complex multi-page wizard
+
+**Test Case:**
+```
+As a dealership staff member, I want to create an inquiry for a new customer
+URL: https://heliosdigital-retail-qa.azurewebsites.net/Portal/Inquiries
+Workflow: helios-inquiry
+```
+
+### 5-Step Wizard Flow (New Customer)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    5-STEP INQUIRY CREATION WIZARD                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  STEP 1: SEARCH                                                          │
+│  ├── First Name* (text + LIVE AUTOCOMPLETE)                             │
+│  ├── Last Name* (text + LIVE AUTOCOMPLETE)                              │
+│  ├── Contact Type* (dropdown: Email, Mobile, Whatsapp, etc.)            │
+│  ├── Id/Number* (text - email/phone)                                    │
+│  └── [Next] → If no match found, expands to 5 steps                     │
+│                                                                          │
+│  STEP 2: CUSTOMER                                                        │
+│  ├── Title (dropdown: Mr, Mrs, Ms)                                      │
+│  ├── First Name* (pre-filled from Step 1)                               │
+│  ├── Middle Name                                                         │
+│  ├── Last Name* (pre-filled from Step 1)                                │
+│  ├── Company                                                             │
+│  ├── Reference Number                                                    │
+│  └── Assigned User* (dropdown)                                          │
+│                                                                          │
+│  STEP 3: CONTACTS                                                        │
+│  ├── Contact table (Type, Identifier, Preferred radio)                  │
+│  ├── Pre-filled from Step 1                                             │
+│  └── [+ Add] button for additional contacts                             │
+│                                                                          │
+│  STEP 4: ADDRESS (Optional)                                              │
+│  ├── Type (checkboxes: Unknown, Billing, Mailing, Delivery)             │
+│  ├── Name                                                                │
+│  ├── Line 1*, Line 2, Line 3                                            │
+│  ├── City*                                                               │
+│  ├── Postal Code                                                         │
+│  └── Country* (dropdown - 200+ countries)                               │
+│                                                                          │
+│  STEP 5: INQUIRY                                                         │
+│  ├── Type* (dropdown: Feedback, Information, New Vehicle, etc.)         │
+│  ├── Source* (dropdown: Dealership, Email, Phone, etc.)                 │
+│  ├── Vehicle Notes (text)                                                │
+│  ├── Assigned User* (dropdown)                                          │
+│  ├── Status* (dropdown: New, In Progress, Action Required, Closed)      │
+│  └── [Complete] → Creates inquiry, returns to list                      │
+│                                                                          │
+│  VERIFICATION: Search list for new inquiry by customer name              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Why This Is Complex
+
+| Challenge | Description |
+|-----------|-------------|
+| **5-step wizard** | Modal with step navigation, Previous/Next/Complete |
+| **Live autocomplete** | Step 1 typing triggers customer search |
+| **Dynamic step expansion** | 2 steps if existing customer, 5 if new |
+| **Dynamic test data** | Each run needs unique First/Last/Email (use Faker) |
+| **Multiple dropdowns** | 8+ dropdowns across all steps |
+| **Optional step** | Step 4 (Address) can be skipped |
+| **State verification** | Must verify inquiry appears in list after creation |
+| **Multi-POM** | At least 2-3 page objects needed |
+
+### Expected POMs
+```
+InquiriesListPage        ← List view, search, New Inquiry button, pagination
+InquiryWizardPage        ← All 5 steps of the wizard (or split into separate POMs)
+```
+
+### Test Data Strategy
+**Dynamic with Faker:**
+```python
+{
+    "first_name": faker.first_name(),      # "John"
+    "last_name": faker.last_name(),        # "Smith"
+    "email": faker.email(),                # "john.smith@test.com"
+    "inquiry_type": "Service",
+    "inquiry_source": "Website",
+    "inquiry_status": "New"
+}
+```
+
+### Expected Stress Points
+1. Will AI recognize this needs dynamic test data (not static)?
+2. Will AI handle the 5-step wizard correctly?
+3. Will AI create appropriate POM structure (1 vs multiple POMs)?
+4. Will AI handle optional Step 4 (Address)?
+5. Will AI verify the inquiry was created in the list?
 
 ---
 
-## Files Modified (Step 2)
+## Files Modified (Uncommitted)
 
-| File | Change |
-|------|--------|
-| `mcp_server/_dev_tests/conftest.py` | Added fixtures, markers |
-| `mcp_server/_dev_tests/test_gates/test_qg_preflight.py` | 78 tests |
-| `mcp_server/_dev_tests/test_hook_audit_trail_writer.py` | +4 Step 2 tests (16 total) |
-| `mcp_server/_dev_tests/test_transcript_writer.py` | +4 Step 2 tests (28 total) |
-| `mcp_server/tools/gates/qg_preflight.py` | fix_hint → teach |
-| `docs/projects/pair-programming/3-tasks-v4.md` | All tasks complete |
-
----
-
-## Commands Reference
-
-```bash
-# Run all Step 2 tests
-cd mcp_server/_dev_tests
-pytest test_gates/test_qg_preflight.py test_hook_audit_trail_writer.py test_transcript_writer.py -v
-
-# Check coverage
-pytest test_gates/test_qg_preflight.py --cov=tools.gates.qg_preflight --cov-report=term-missing
-
-# Run by marker
-pytest -m "preflight" -v
-pytest -m "hook" -v
-pytest -m "transcript" -v
+```
+M  mcp_server/server.py
+M  docs/projects/pair-programming/_archived/v3-formalization/2-prd-pair-programming-formalization.md
++  framework/pages/clawdbot/sales_leads_page.py
++  framework/tasks/clawdbot/clawdbot_tasks.py
++  framework/roles/clawdbot/customer.py
++  tests/clawdbot/test_search_sales_representative.py
 ```
 
 ---
 
-**Last Updated:** 2026-01-25 Late Evening
-**Status:** Step 2 COMPLETE - ready for merge or Step 3
+## Backlog
+
+| Item | Priority | Description |
+|------|----------|-------------|
+| Complex workflow test | High | 5-step inquiry creation |
+| Build _examples/ folder | High | Canonical patterns for AI |
+| Update SKILL.md to v4.0 | Medium | PRD is v4.0, SKILL.md is v3.1 |
+
+---
+
+**Last Updated:** 2026-01-26 ~12:15 AM

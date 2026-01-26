@@ -2,11 +2,13 @@
 """
 Audit Trail Writer Hook - Creates progressive audit trail after each quality gate.
 
-This PostToolUse hook captures gate results and appends them to the audit log.
+This PostToolUse hook captures gate results and appends them to the audit log,
+then regenerates the human-readable transcript from the audit log.
+
 Uses per-run isolation (tests/_state/<run_id>/ and tests/_audit/audit_log_<run_id>.json).
 
 Architecture:
-  Gate passes -> Hook triggers -> Reads workflow_state -> Appends to audit log
+  Gate passes -> Hook triggers -> Appends to audit log -> Regenerates transcript
 
 Trigger: After any qg_* MCP tool completes with status: pass
 
@@ -65,7 +67,9 @@ def get_current_run_id() -> str | None:
 
 def get_workflow_state(run_id: str) -> dict:
     """Read current workflow state from per-run isolation directory."""
-    state_file = get_project_dir() / 'tests' / '_state' / run_id / 'workflow_state.json'
+    # Windows path fix: replace colons with dashes
+    safe_run_id = run_id.replace(":", "-")
+    state_file = get_project_dir() / 'tests' / '_state' / safe_run_id / 'workflow_state.json'
     if not state_file.exists():
         return {}
 
@@ -78,9 +82,11 @@ def get_workflow_state(run_id: str) -> dict:
 
 def get_audit_file(run_id: str) -> Path:
     """Get audit file path for current run_id."""
+    # Windows path fix: replace colons with dashes
+    safe_run_id = run_id.replace(":", "-")
     audit_dir = get_project_dir() / 'tests' / '_audit'
     audit_dir.mkdir(parents=True, exist_ok=True)
-    return audit_dir / f'audit_log_{run_id}.json'
+    return audit_dir / f'audit_log_{safe_run_id}.json'
 
 
 def append_to_audit(audit_file: Path, step: int, gate_name: str, metadata: dict):
@@ -125,6 +131,28 @@ def append_to_audit(audit_file: Path, step: int, gate_name: str, metadata: dict)
             json.dump(audit, f, indent=2)
     except Exception as e:
         sys.stderr.write(f"Warning: Could not write audit file: {e}\n")
+
+
+def generate_transcript(run_id: str):
+    """
+    Regenerate transcript from audit log.
+
+    Uses TranscriptWriter to convert audit events to human-readable markdown.
+    Output: tests/_reports/<run_id>/workflow_transcript.md
+    """
+    try:
+        # Add mcp_server to path for TranscriptWriter import
+        project_dir = get_project_dir()
+        mcp_server_path = str(project_dir / 'mcp_server')
+        if mcp_server_path not in sys.path:
+            sys.path.insert(0, mcp_server_path)
+
+        from utils.transcript_writer import TranscriptWriter
+
+        writer = TranscriptWriter(run_id)
+        writer.generate()
+    except Exception as e:
+        sys.stderr.write(f"Warning: Could not generate transcript: {e}\n")
 
 
 def main():
@@ -183,6 +211,11 @@ def main():
 
     # Append to audit
     append_to_audit(audit_file, step, gate_name, metadata)
+
+    # NOTE: Transcript generation removed from hook (2026-01-25)
+    # AI now generates transcript manually after gate passes.
+    # Gate returns NEEDS_RETRY if transcript missing (defense in depth).
+    # See: base_gate.py:pre_check_previous_transcript()
 
     sys.exit(0)
 

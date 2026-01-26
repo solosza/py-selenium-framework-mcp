@@ -86,7 +86,8 @@ class TestLayer1BasicOperations:
 
         assert writer.run_id == run_id
         assert writer._audit_dir.name == "_audit"
-        assert writer._output_dir.name == run_id
+        # Output dir uses safe_run_id (colons replaced with hyphens for Windows)
+        assert writer._output_dir.name == run_id.replace(":", "-")
         assert "audit_log_2026-01-23T10-00-00.000000Z.json" in str(writer._audit_file)
         assert "workflow_transcript.md" in str(writer._transcript_file)
 

@@ -49,14 +49,14 @@ class QGDiscoveryComplete(BaseGate):
             input_data: Dict (can be empty - reads from state)
 
         Returns:
-            {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
+            {"status": "pass"} or {"status": "fail", "error": str, "teach": str}
         """
         # Check Step 5 completion
         state_manager = cls._get_state_manager()
         if not state_manager.is_step_complete(5):
             return cls.fail_response(
                 error="Step 5 is not complete. Cannot validate discovery checkpoint.",
-                fix_hint="Complete Step 5 (Discover Elements) first. Run two-pass discovery for all pages in scope."
+                teach="Complete Step 5 (Discover Elements) first. Run two-pass discovery for all pages in scope."
             )
 
         # Get Step 5 state
@@ -67,14 +67,14 @@ class QGDiscoveryComplete(BaseGate):
         if not isinstance(discovered_pages, dict):
             return cls.fail_response(
                 error="State corruption detected: discovered_pages is not a dict.",
-                fix_hint="Clear state and restart workflow from Step 1. Run: StateManager().clear()"
+                teach="Clear state and restart workflow from Step 1. Run: StateManager().clear()"
             )
 
         # Validate discovered_pages exists and is not empty
         if not discovered_pages:
             return cls.fail_response(
                 error="No pages discovered in Step 5. discovered_pages is empty.",
-                fix_hint="Run Step 5 discovery loop (PASS 1: input elements, PASS 2: output elements) for at least one page."
+                teach="Run Step 5 discovery loop (PASS 1: input elements, PASS 2: output elements) for at least one page."
             )
 
         # Validate each page has BOTH input_elements AND output_elements
@@ -111,7 +111,7 @@ class QGDiscoveryComplete(BaseGate):
 
             return cls.fail_response(
                 error=f"Discovery incomplete: {pages_discovered}/{total_pages} pages have both input and output elements.",
-                fix_hint=f"Complete two-pass discovery for all pages:\n  - {missing_details}\n\nRun PASS 1 (input) and PASS 2 (output) for each page before proceeding to Step 6."
+                teach=f"Complete two-pass discovery for all pages:\n  - {missing_details}\n\nRun PASS 1 (input) and PASS 2 (output) for each page before proceeding to Step 6."
             )
 
         # All pages complete - success!

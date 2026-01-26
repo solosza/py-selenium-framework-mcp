@@ -1,4 +1,7 @@
 {
+  "env": {
+    "QA_DEV_MODE": "true"
+  },
   "permissions": {
     "allow": [
       "WebFetch(domain:www.automationpractice.pl)",
@@ -92,7 +95,12 @@
       "Bash(echo:*)",
       "Bash(git -C \"D:\\\\my_ai_projects\\\\py_sel_framework_mcp\" add framework/pages/parabank13/ framework/tasks/parabank13/ framework/roles/parabank13/)",
       "mcp__playwright__browser_close",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(git rev-list:*)",
+      "Bash(pushd:*)",
+      "WebFetch(domain:bugasura.io)",
+      "WebFetch(domain:www.macstories.net)",
+      "WebFetch(domain:dev.to)"
     ],
     "deny": [],
     "ask": []
@@ -102,9 +110,6 @@
     "qa-automation",
     "playwright"
   ],
-  "env": {
-    "QA_DEV_MODE": "true"
-  },
   "hooks": {
     "PreToolUse": [
       {

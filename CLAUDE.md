@@ -24,6 +24,47 @@ See `.claude/skills/dialogue-engine/` for complete protocol and references.
 
 ---
 
+# FIX PROTOCOL (MANDATORY)
+
+**When user requests ANY fix to existing code, MUST complete impact assessment BEFORE implementing.**
+
+## Impact Assessment (MANDATORY)
+
+For each fix, answer ALL before writing code:
+
+1. **Who calls this code?**
+   - Run grep/search, show callers
+
+2. **What depends on current behavior?**
+   - List existing tests
+   - List other components that use this
+
+3. **What will break?**
+   - Explicit list: tests, integrations, assumptions
+
+4. **Migration path?**
+   - Backward compatible? Yes/No + why
+   - Old data handling needed?
+
+## Workflow
+
+```
+1. User requests fix
+2. STOP - Do not implement yet
+3. Run impact assessment (all 4 points above)
+4. Present assessment to user
+5. WAIT for user approval
+6. Implement fix
+7. Run affected tests
+```
+
+## Explicit Invocation
+
+User can invoke `/fix` command for this workflow explicitly.
+See `.claude/skills/fix-workflow/SKILL.md`
+
+---
+
 # PROJECT-SPECIFIC INFORMATION
 
 ## Project Overview
@@ -50,7 +91,7 @@ See `.claude/skills/dialogue-engine/` for complete protocol and references.
 
 **Target Application:** http://www.automationpractice.pl/index.php (demo), expandable to any web application
 
-**Company Thesis:** See `.business/strategy/isagawa_corp_thesis_v3.1.md` for complete AI Management Layer vision
+**Company Thesis:** See `.business/strategy/isagawa_corp_thesis_v5.0.md` for complete AI Management Layer vision
 
 ## Technology Stack
 

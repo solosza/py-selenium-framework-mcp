@@ -563,14 +563,14 @@ class TestFixHints:
 
     @pytest.mark.unit
     @pytest.mark.qg_ai_processing
-    def test_fix_hint_for_missing_bdd(self):
+    def test_teach_for_missing_bdd(self):
         """
-        P0: Verify fix_hint is provided for missing bdd_scenarios.
+        P0: Verify teach is provided for missing bdd_scenarios.
 
         AAA Pattern:
         1. Arrange - Create input without bdd_scenarios
         2. Act - Call qg_ai_processing.validate()
-        3. Assert - Response includes fix_hint
+        3. Assert - Response includes teach
         """
         # Arrange
         input_data = {
@@ -583,19 +583,19 @@ class TestFixHints:
 
         # Assert
         assert result["status"] == "fail", "Validation should fail"
-        assert "fix_hint" in result, "Response should include fix_hint"
-        assert len(result["fix_hint"]) > 0, "fix_hint should not be empty"
+        assert "teach" in result, "Response should include teach"
+        assert len(result["teach"]) > 0, "teach should not be empty"
 
     @pytest.mark.unit
     @pytest.mark.qg_ai_processing
-    def test_fix_hint_for_empty_states(self, valid_bdd_scenario):
+    def test_teach_for_empty_states(self, valid_bdd_scenario):
         """
-        P0: Verify fix_hint is provided for empty expected_states.
+        P0: Verify teach is provided for empty expected_states.
 
         AAA Pattern:
         1. Arrange - Create input with empty expected_states
         2. Act - Call qg_ai_processing.validate()
-        3. Assert - Response includes fix_hint
+        3. Assert - Response includes teach
         """
         # Arrange
         input_data = {
@@ -609,9 +609,9 @@ class TestFixHints:
 
         # Assert
         assert result["status"] == "fail", "Validation should fail"
-        assert "fix_hint" in result, "Response should include fix_hint"
-        assert "expected_states" in result["fix_hint"].lower() or "then" in result["fix_hint"].lower(), \
-            "fix_hint should mention expected_states or Then clauses"
+        assert "teach" in result, "Response should include teach"
+        assert "expected_states" in result["teach"].lower() or "then" in result["teach"].lower(), \
+            "teach should mention expected_states or Then clauses"
 
 
 # =============================================================================

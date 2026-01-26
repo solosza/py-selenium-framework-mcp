@@ -373,6 +373,28 @@ async def list_available_tools() -> list[Tool]:
                         "type": "array",
                         "description": "POST mode: Discovered elements from Tool 2 or snapshot extraction",
                         "items": {"type": "object"}
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Element type for two-pass discovery (DEF-045): 'input' for forms/buttons (PASS 1), 'output' for messages/confirmations (PASS 2). Defaults to 'input'.",
+                        "enum": ["input", "output"]
+                    },
+                    "validation_results": {
+                        "type": "object",
+                        "description": "POST mode: Validation results from RuntimeValidator (DD-46). Required for playwright discovery.",
+                        "properties": {
+                            "valid_count": {"type": "integer", "description": "Number of valid elements"},
+                            "error_count": {"type": "integer", "description": "Number of invalid elements"},
+                            "elements": {"type": "array", "description": "Per-element validation results", "items": {"type": "object"}}
+                        }
+                    },
+                    "scope_result": {
+                        "type": "object",
+                        "description": "Multi-page scope result from navigation tracker (DD-44). Optional for multi-page workflows.",
+                        "properties": {
+                            "page_count": {"type": "integer", "description": "Total pages in scope"},
+                            "pages": {"type": "array", "description": "Page info objects", "items": {"type": "object"}}
+                        }
                     }
                 },
                 "required": ["mode"]

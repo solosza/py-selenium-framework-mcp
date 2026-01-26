@@ -1707,15 +1707,16 @@ class TestPreCheckBlocking:
     """
     Task 8.0: PRE-check blocking tests for Step 2 gate.
 
-    Verifies defense-in-depth: Step 2 blocks if Step 1 transcript missing.
+    Verifies defense-in-depth: Step 2 returns NEEDS_RETRY if Step 1 transcript missing.
+    AI regenerates transcript using TranscriptWriter and retries.
     These tests do NOT use mock_pre_check fixture to test actual blocking.
     """
 
     @pytest.mark.unit
     @pytest.mark.preflight
     @pytest.mark.layer3
-    def test_gate_fails_if_step1_transcript_missing(self):
-        """8.1: Gate FAILS if Step 1 transcript missing."""
+    def test_gate_returns_needs_retry_if_step1_transcript_missing(self):
+        """8.1: Gate returns NEEDS_RETRY if Step 1 transcript missing."""
         input_data = {
             "credential_strategy": "static",
             "test_data_location": "shared",
@@ -1723,17 +1724,19 @@ class TestPreCheckBlocking:
             "timeout_config": {"enabled": True, "threshold_seconds": 30}
         }
 
-        # Mock pre_check to return an error (simulating missing Step 1 transcript)
+        # Mock pre_check to return NEEDS_RETRY (simulating missing Step 1 transcript)
         with patch('tools.gates.base_gate.BaseGate.pre_check_previous_transcript') as mock_pre_check:
             mock_pre_check.return_value = {
-                "status": "fail",
-                "error": "Step 1 transcript missing (hook may have failed)",
-                "teach": "Previous step's transcript was not created..."
+                "status": "NEEDS_RETRY",
+                "fix_applied": "transcript_regeneration_needed",
+                "error": "Step 1 transcript missing",
+                "message": "Regenerate transcript from audit log using TranscriptWriter",
+                "teach": "Transcript file missing. AI must regenerate from audit log."
             }
 
             result = QGPreflight.validate(input_data)
 
-            assert result["status"] == "fail", "Gate should FAIL when Step 1 transcript missing"
+            assert result["status"] == "NEEDS_RETRY", "Gate should return NEEDS_RETRY when Step 1 transcript missing"
             mock_pre_check.assert_called_once()
 
     @pytest.mark.unit
@@ -1750,21 +1753,23 @@ class TestPreCheckBlocking:
 
         with patch('tools.gates.base_gate.BaseGate.pre_check_previous_transcript') as mock_pre_check:
             mock_pre_check.return_value = {
-                "status": "fail",
-                "error": "Step 1 transcript missing (hook may have failed)",
-                "teach": "Previous step's transcript was not created by the PostToolUse hook."
+                "status": "NEEDS_RETRY",
+                "fix_applied": "transcript_regeneration_needed",
+                "error": "Step 1 transcript missing",
+                "message": "Regenerate transcript from audit log using TranscriptWriter",
+                "teach": "Transcript file missing. AI must regenerate from audit log."
             }
 
             result = QGPreflight.validate(input_data)
 
-            assert result["status"] == "fail"
+            assert result["status"] == "NEEDS_RETRY"
             assert "Step 1" in result["error"], "Error should mention Step 1"
 
     @pytest.mark.unit
     @pytest.mark.preflight
     @pytest.mark.layer3
-    def test_teach_explains_how_to_complete_step_1(self):
-        """8.3: Teach explains how to complete Step 1."""
+    def test_teach_explains_how_to_regenerate_transcript(self):
+        """8.3: Teach explains how to regenerate transcript."""
         input_data = {
             "credential_strategy": "static",
             "test_data_location": "shared",
@@ -1774,14 +1779,16 @@ class TestPreCheckBlocking:
 
         with patch('tools.gates.base_gate.BaseGate.pre_check_previous_transcript') as mock_pre_check:
             mock_pre_check.return_value = {
-                "status": "fail",
+                "status": "NEEDS_RETRY",
+                "fix_applied": "transcript_regeneration_needed",
                 "error": "Step 1 transcript missing",
-                "teach": "Previous step's transcript was not created. Check hook configuration."
+                "message": "Regenerate transcript from audit log using TranscriptWriter",
+                "teach": "Transcript file missing. AI must regenerate from audit log. Run TranscriptWriter."
             }
 
             result = QGPreflight.validate(input_data)
 
-            assert result["status"] == "fail"
+            assert result["status"] == "NEEDS_RETRY"
             assert "teach" in result, "Should include teach field"
             # Teach should provide actionable guidance
             assert len(result["teach"]) > 20, "Teach should be substantive"

@@ -46,9 +46,9 @@ class TranscriptWriter:
         safe_run_id = run_id.replace(":", "-")
         self._audit_file = self._audit_dir / f"audit_log_{safe_run_id}.json"
 
-        # Set output path
+        # Set output path (use safe_run_id for Windows compatibility)
         if output_dir is None:
-            output_dir = str(project_root / "tests" / "_reports" / run_id)
+            output_dir = str(project_root / "tests" / "_reports" / safe_run_id)
         self._output_dir = Path(output_dir)
         self._transcript_file = self._output_dir / "workflow_transcript.md"
 

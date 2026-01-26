@@ -48,6 +48,19 @@ class QGUserInput(BaseGate):
             {"status": "pass"} on success
             {"status": "fail", "error": "...", "teach": "..."} on failure
         """
+        # DEF-063: Smart marker clearing (Defense Layer 1 - Gate)
+        # Only clear if previous workflow COMPLETED Step 1 (has state)
+        # This preserves run_id for retries while ensuring fresh IDs for new workflows
+        existing_run_id = cls._get_session_run_id()
+        if existing_run_id:
+            state_manager = StateManager(run_id=existing_run_id)
+            step1_state = state_manager.get_step(1)
+
+            if step1_state is not None:
+                # Previous workflow completed Step 1 - start NEW workflow
+                cls._clear_session_marker()
+                cls._audit_logger = None
+
         # Support both 'workflow' and 'domain' (backwards compatibility)
         workflow = input_data.get("workflow") or input_data.get("domain")
         if workflow:

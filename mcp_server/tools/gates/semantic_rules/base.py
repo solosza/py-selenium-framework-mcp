@@ -92,7 +92,7 @@ class SemanticRule(ABC):
             {
                 "status": "fail",
                 "error": "What's wrong",
-                "fix_hint": "What user needs to do"
+                "teach": "What user needs to do"
             }
 
         Note:

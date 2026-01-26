@@ -502,6 +502,61 @@ Step 5: Done (test passes or HITL triage)
   - `tests/helios8/test_submit_inquiry.py` - Test runner
 - **NO dedicated pair_programming_validation/ directory** - use production pattern
 
+### Canonical Examples Pattern (Pattern Library)
+
+**Problem Discovered (2026-01-25):**
+During clawdbot workflow test, AI searched codebase for existing patterns (found helios7), read those files, and copied patterns. This worked but is unreliable:
+- Depends on finding "good" examples (what if first match is bad code?)
+- No version control on patterns (examples may drift from standards)
+- No complexity matching (simple workflow might copy complex patterns)
+
+**Solution: Curated Pattern Library**
+
+**Location:** `framework/_examples/`
+
+**Structure:**
+```
+framework/
+├── _examples/                    ← Canonical patterns (versioned, maintained)
+│   ├── simple_workflow/          ← 1 page, 1 action (search, view)
+│   │   ├── page.py               ← POM with locators, atomic methods, state-checks
+│   │   ├── task.py               ← Task with @autologger, no return, no locators
+│   │   ├── role.py               ← Role with @autologger, workflow orchestration
+│   │   └── test.py               ← Test with AAA pattern, POM assertions
+│   ├── multi_page_workflow/      ← Login → Browse → Action (state dependencies)
+│   │   └── ...
+│   ├── authenticated_workflow/   ← Credential handling (static/dynamic/self-contained)
+│   │   └── ...
+│   ├── complex_workflow/         ← Cart → Checkout → Confirmation (multi-step)
+│   │   └── ...
+│   └── README.md                 ← Pattern documentation, when to use each
+```
+
+**Protocol Integration (SKILL.md directive):**
+```
+Before generating code:
+1. Read framework/_examples/README.md
+2. Match workflow complexity to example type:
+   - 1 page, 1 action → simple_workflow/
+   - Multiple pages, state deps → multi_page_workflow/
+   - Credentials required → authenticated_workflow/
+   - Multi-step journey → complex_workflow/
+3. Read matched example's files
+4. Generate following those patterns exactly
+```
+
+**Smart Gate Enforcement:**
+- `qg_pom` validates imports match example patterns
+- `qg_task` validates no locators (DD-27), decorator usage
+- `qg_role` validates workflow orchestration pattern
+- `qg_test` validates AAA pattern, POM assertions
+
+**Benefits:**
+- Consistent output regardless of existing codebase state
+- Versioned patterns evolve with framework
+- Clear documentation for onboarding
+- Smart gates enforce compliance
+
 ### Visual Design
 - **HITL Signal Format:** Clear, actionable prompts
   - ❌ Bad: "Error occurred"

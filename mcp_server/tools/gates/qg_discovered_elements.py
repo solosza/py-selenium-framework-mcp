@@ -62,6 +62,7 @@ class QGDiscoveredElements(BaseGate):
         PRE validation before Tool 2 operation or DD-33 snapshot extraction.
 
         Validates:
+        - Step 3 transcript exists (hook validation)
         - Step 3 is complete
         - URL is present and valid format
         - page_name is present
@@ -72,14 +73,22 @@ class QGDiscoveredElements(BaseGate):
             input_data: Dict with url, page_name, credential_strategy, discovery_method
 
         Returns:
-            {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
+            {"status": "pass"} or {"status": "fail", "error": str, "teach": str}
         """
+        # PRE-CHECK: Verify Step 3 transcript was written by hook
+        pre_check_error = cls.pre_check_previous_transcript(
+            previous_step=3,
+            previous_step_name="AI Processing"
+        )
+        if pre_check_error:
+            return pre_check_error
+
         # Check Step 3 completion
         state_manager = cls._get_state_manager()
         if not state_manager.is_step_complete(3):
             return cls.fail_response(
                 error="Step 3 is not complete. Cannot proceed to Step 4.",
-                fix_hint="Complete Step 3 (AI Processing) first. Ensure bdd_scenarios, expected_states, and intent are validated."
+                teach="Complete Step 3 (AI Processing) first. Ensure bdd_scenarios, expected_states, and intent are validated."
             )
 
         # Validate URL
@@ -87,19 +96,19 @@ class QGDiscoveredElements(BaseGate):
         if url is None:
             return cls.fail_response(
                 error="Missing required field: url",
-                fix_hint="Provide the target URL from Step 2 state."
+                teach="Provide the target URL from Step 2 state."
             )
 
         if not isinstance(url, str) or not url.strip():
             return cls.fail_response(
                 error="url must be a non-empty string",
-                fix_hint="Provide a valid URL like 'http://example.com/page'"
+                teach="Provide a valid URL like 'http://example.com/page'"
             )
 
         if not url.startswith("http://") and not url.startswith("https://"):
             return cls.fail_response(
                 error="url must start with http:// or https://",
-                fix_hint="Use full URL format: http://example.com or https://example.com"
+                teach="Use full URL format: http://example.com or https://example.com"
             )
 
         # Validate page_name
@@ -107,13 +116,13 @@ class QGDiscoveredElements(BaseGate):
         if page_name is None:
             return cls.fail_response(
                 error="Missing required field: page_name",
-                fix_hint="Provide page_name (e.g., 'LoginPage', 'CartPage')."
+                teach="Provide page_name (e.g., 'LoginPage', 'CartPage')."
             )
 
         if not isinstance(page_name, str) or not page_name.strip():
             return cls.fail_response(
                 error="page_name must be a non-empty string",
-                fix_hint="Provide a descriptive page name like 'LoginPage'."
+                teach="Provide a descriptive page name like 'LoginPage'."
             )
 
         # Validate credential_strategy (IC-05-01)
@@ -121,13 +130,13 @@ class QGDiscoveredElements(BaseGate):
         if credential_strategy is None:
             return cls.fail_response(
                 error="Missing required field: credential_strategy (IC-05-01)",
-                fix_hint=f"Provide credential_strategy from Step 1. Valid options: {', '.join(sorted(cls.VALID_CREDENTIAL_STRATEGIES))}"
+                teach=f"Provide credential_strategy from Step 1. Valid options: {', '.join(sorted(cls.VALID_CREDENTIAL_STRATEGIES))}"
             )
 
         if credential_strategy not in cls.VALID_CREDENTIAL_STRATEGIES:
             return cls.fail_response(
                 error=f"Invalid credential_strategy: '{credential_strategy}'",
-                fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_CREDENTIAL_STRATEGIES))}"
+                teach=f"Use one of: {', '.join(sorted(cls.VALID_CREDENTIAL_STRATEGIES))}"
             )
 
         # Validate discovery_method (DD-33)
@@ -135,13 +144,13 @@ class QGDiscoveredElements(BaseGate):
         if discovery_method is None:
             return cls.fail_response(
                 error="Missing required field: discovery_method (DD-33)",
-                fix_hint=f"Declare discovery_method. Use 'playwright' if Playwright prepared page state, 'tool2' for static pages. Valid options: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}"
+                teach=f"Declare discovery_method. Use 'playwright' if Playwright prepared page state, 'tool2' for static pages. Valid options: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}"
             )
 
         if discovery_method not in cls.VALID_DISCOVERY_METHODS:
             return cls.fail_response(
                 error=f"Invalid discovery_method: '{discovery_method}'",
-                fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}. Use 'playwright' if Playwright prepared page state."
+                teach=f"Use one of: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}. Use 'playwright' if Playwright prepared page state."
             )
 
         # Validate element type (DEF-045 two-pass discovery)
@@ -150,7 +159,7 @@ class QGDiscoveredElements(BaseGate):
         if element_type not in cls.VALID_ELEMENT_TYPES:
             return cls.fail_response(
                 error=f"Invalid type: '{element_type}'",
-                fix_hint=f"Use one of: {', '.join(sorted(cls.VALID_ELEMENT_TYPES))}. Use 'input' for forms/buttons (PASS 1), 'output' for messages/confirmations (PASS 2)."
+                teach=f"Use one of: {', '.join(sorted(cls.VALID_ELEMENT_TYPES))}. Use 'input' for forms/buttons (PASS 1), 'output' for messages/confirmations (PASS 2)."
             )
 
         # DD-44: Auto-detect multi-page from BDD and enforce scope_result
@@ -169,14 +178,14 @@ class QGDiscoveredElements(BaseGate):
                 return {
                     "status": "fail",
                     "error": f"Multi-page workflow detected ({detected_page_count} pages) but scope_result not provided (DD-44)",
-                    "fix_hint": "Retry with the provided scope_result included in your next call.",
+                    "teach": "Retry with the provided scope_result included in your next call.",
                     "scope_result": calculated_scope  # ← Self-healing: provide the fix
                 }
             else:
                 # Fallback if both navigation and BDD calculations fail
                 return cls.fail_response(
                     error=f"Multi-page workflow detected ({detected_page_count} pages) but scope_result not provided (DD-44)",
-                    fix_hint="Call scope_discovery.analyze_workflow(bdd_scenarios) first, then pass scope_result to this gate."
+                    teach="Call scope_discovery.analyze_workflow(bdd_scenarios) first, then pass scope_result to this gate."
                 )
 
         # Task 2.0: Validate scope_result if provided (for multi-page workflows)
@@ -213,21 +222,21 @@ class QGDiscoveredElements(BaseGate):
         if not isinstance(scope_result, dict):
             return cls.fail_response(
                 error="scope_result must be a dictionary",
-                fix_hint="Provide scope_result from scope_discovery.analyze_workflow()"
+                teach="Provide scope_result from scope_discovery.analyze_workflow()"
             )
 
         page_count = scope_result.get("page_count")
         if page_count is None or not isinstance(page_count, int):
             return cls.fail_response(
                 error="scope_result missing required field: page_count",
-                fix_hint="scope_result must have page_count (int) from scope_discovery"
+                teach="scope_result must have page_count (int) from scope_discovery"
             )
 
         pages = scope_result.get("pages", [])
         if not isinstance(pages, list):
             return cls.fail_response(
                 error="scope_result.pages must be a list",
-                fix_hint="scope_result.pages should be list of PageInfo dicts"
+                teach="scope_result.pages should be list of PageInfo dicts"
             )
 
         # For multi-page workflows, validate page_name is in scope
@@ -236,7 +245,7 @@ class QGDiscoveredElements(BaseGate):
             if page_name not in page_names_in_scope:
                 return cls.fail_response(
                     error=f"page_name '{page_name}' not found in scope's page list",
-                    fix_hint=f"page_name must match one from scope discovery. Available: {', '.join(page_names_in_scope)}"
+                    teach=f"page_name must match one from scope discovery. Available: {', '.join(page_names_in_scope)}"
                 )
 
         return None
@@ -559,7 +568,7 @@ class QGDiscoveredElements(BaseGate):
             input_data: Dict with elements array and page_name
 
         Returns:
-            {"status": "pass"} or {"status": "fail", "error": str, "fix_hint": str}
+            {"status": "pass"} or {"status": "fail", "error": str, "teach": str}
             or {"status": "blocked", ...} if max attempts exceeded
         """
         # P1: Check if blocked due to max attempts
@@ -614,19 +623,19 @@ class QGDiscoveredElements(BaseGate):
         if elements is None:
             return cls.fail_response(
                 error="Missing required field: elements",
-                fix_hint="Tool 2 must return elements array."
+                teach="Tool 2 must return elements array."
             )
 
         if not isinstance(elements, list):
             return cls.fail_response(
                 error="elements must be a list",
-                fix_hint="Tool 2 should return elements as an array."
+                teach="Tool 2 should return elements as an array."
             )
 
         if len(elements) == 0:
             return cls.fail_response(
                 error="elements is empty. At least one interactive element required.",
-                fix_hint="Retry Tool 2 - ensure page has interactive elements or prepare page state (DD-20)."
+                teach="Retry Tool 2 - ensure page has interactive elements or prepare page state (DD-20)."
             )
 
         # Validate each element
@@ -661,7 +670,7 @@ class QGDiscoveredElements(BaseGate):
             if validation_results is None:
                 return cls.fail_response(
                     error="Missing required field: validation_results (DD-46)",
-                    fix_hint="Tool 2 elements MUST be validated via RuntimeValidator. "
+                    teach="Tool 2 elements MUST be validated via RuntimeValidator. "
                              "Call RuntimeValidator.validate_element() for each discovered element. "
                              "RuntimeValidator automatically triggers VisualFeedback for visual highlights. "
                              "Collect results into validation_results dict with valid_count, error_count, elements."
@@ -672,7 +681,7 @@ class QGDiscoveredElements(BaseGate):
             if validation_results is None:
                 return cls.fail_response(
                     error="Missing required field: validation_results (DD-46)",
-                    fix_hint="Call RuntimeValidator.validate_element() for each discovered element. "
+                    teach="Call RuntimeValidator.validate_element() for each discovered element. "
                              "RuntimeValidator automatically triggers VisualFeedback for visual highlights. "
                              "Collect results into validation_results dict with valid_count, error_count, elements."
                 )
@@ -687,19 +696,19 @@ class QGDiscoveredElements(BaseGate):
         if page_name is None:
             return cls.fail_response(
                 error="Missing required field: page_name",
-                fix_hint="Provide page_name for the discovered elements."
+                teach="Provide page_name for the discovered elements."
             )
 
         if not isinstance(page_name, str) or not page_name.strip():
             return cls.fail_response(
                 error="page_name must be a non-empty string",
-                fix_hint="Provide a descriptive page name."
+                teach="Provide a descriptive page name."
             )
 
         if not cls.PASCAL_CASE_PATTERN.match(page_name):
             return cls.fail_response(
                 error=f"page_name '{page_name}' is not PascalCase (IC-05-02)",
-                fix_hint="Use PascalCase format: 'LoginPage', 'CartModal', 'CheckoutForm'"
+                teach="Use PascalCase format: 'LoginPage', 'CartModal', 'CheckoutForm'"
             )
 
         # Task 2.0: Track per-page elements for multi-page workflows
@@ -802,7 +811,7 @@ class QGDiscoveredElements(BaseGate):
         if not isinstance(element, dict):
             return cls.fail_response(
                 error=f"Element {index} is not a valid object",
-                fix_hint="Each element must be a dictionary with suggested_name, element_type, and locators."
+                teach="Each element must be a dictionary with suggested_name, element_type, and locators."
             )
 
         # Check suggested_name
@@ -810,13 +819,13 @@ class QGDiscoveredElements(BaseGate):
         if suggested_name is None:
             return cls.fail_response(
                 error=f"Element {index} missing required field: suggested_name",
-                fix_hint="Each element must have a suggested_name."
+                teach="Each element must have a suggested_name."
             )
 
         if not isinstance(suggested_name, str) or not suggested_name.strip():
             return cls.fail_response(
                 error=f"Element {index} suggested_name must be a non-empty string",
-                fix_hint="Provide a descriptive name like 'EMAIL_INPUT', 'SUBMIT_BUTTON'."
+                teach="Provide a descriptive name like 'EMAIL_INPUT', 'SUBMIT_BUTTON'."
             )
 
         # Check element_type
@@ -824,13 +833,13 @@ class QGDiscoveredElements(BaseGate):
         if element_type is None:
             return cls.fail_response(
                 error=f"Element {index} missing required field: element_type",
-                fix_hint="Each element must have an element_type (e.g., 'textbox', 'button')."
+                teach="Each element must have an element_type (e.g., 'textbox', 'button')."
             )
 
         if not isinstance(element_type, str) or not element_type.strip():
             return cls.fail_response(
                 error=f"Element {index} element_type must be a non-empty string",
-                fix_hint="Provide element type like 'textbox', 'button', 'link'."
+                teach="Provide element type like 'textbox', 'button', 'link'."
             )
 
         # Check locators (IC-05-03): at least one non-empty locator required
@@ -848,7 +857,7 @@ class QGDiscoveredElements(BaseGate):
         if not has_valid_locator:
             return cls.fail_response(
                 error=f"Element {index} has no valid locator (IC-05-03)",
-                fix_hint="At least one of locator_id, locator_css, or locator_xpath must be non-empty."
+                teach="At least one of locator_id, locator_css, or locator_xpath must be non-empty."
             )
 
         return None
@@ -873,7 +882,7 @@ class QGDiscoveredElements(BaseGate):
         if not isinstance(validation_results, dict):
             return cls.fail_response(
                 error="validation_results must be a dictionary (DD-46)",
-                fix_hint="validation_results should be dict with valid_count, error_count, elements"
+                teach="validation_results should be dict with valid_count, error_count, elements"
             )
 
         # Check valid_count
@@ -881,12 +890,12 @@ class QGDiscoveredElements(BaseGate):
         if valid_count is None:
             return cls.fail_response(
                 error="validation_results missing required field: valid_count (DD-46)",
-                fix_hint="Include valid_count (int) - number of elements that passed validation"
+                teach="Include valid_count (int) - number of elements that passed validation"
             )
         if not isinstance(valid_count, int):
             return cls.fail_response(
                 error="validation_results.valid_count must be an integer (DD-46)",
-                fix_hint="valid_count should be count of valid elements"
+                teach="valid_count should be count of valid elements"
             )
 
         # Check error_count
@@ -894,12 +903,12 @@ class QGDiscoveredElements(BaseGate):
         if error_count is None:
             return cls.fail_response(
                 error="validation_results missing required field: error_count (DD-46)",
-                fix_hint="Include error_count (int) - number of elements that failed validation"
+                teach="Include error_count (int) - number of elements that failed validation"
             )
         if not isinstance(error_count, int):
             return cls.fail_response(
                 error="validation_results.error_count must be an integer (DD-46)",
-                fix_hint="error_count should be count of invalid elements"
+                teach="error_count should be count of invalid elements"
             )
 
         # Check elements array
@@ -907,12 +916,12 @@ class QGDiscoveredElements(BaseGate):
         if elements is None:
             return cls.fail_response(
                 error="validation_results missing required field: elements (DD-46)",
-                fix_hint="Include elements array with per-element validation status"
+                teach="Include elements array with per-element validation status"
             )
         if not isinstance(elements, list):
             return cls.fail_response(
                 error="validation_results.elements must be a list (DD-46)",
-                fix_hint="elements should be list of validation results per element"
+                teach="elements should be list of validation results per element"
             )
 
         # Validate each element result has required fields
@@ -920,19 +929,19 @@ class QGDiscoveredElements(BaseGate):
             if not isinstance(elem_result, dict):
                 return cls.fail_response(
                     error=f"validation_results.elements[{i}] must be a dictionary (DD-46)",
-                    fix_hint="Each element result should have name, is_valid, error_category"
+                    teach="Each element result should have name, is_valid, error_category"
                 )
 
             if "name" not in elem_result:
                 return cls.fail_response(
                     error=f"validation_results.elements[{i}] missing 'name' field (DD-46)",
-                    fix_hint="Each element result must include the element name"
+                    teach="Each element result must include the element name"
                 )
 
             if "is_valid" not in elem_result:
                 return cls.fail_response(
                     error=f"validation_results.elements[{i}] missing 'is_valid' field (DD-46)",
-                    fix_hint="Each element result must include is_valid (bool)"
+                    teach="Each element result must include is_valid (bool)"
                 )
 
         return None
@@ -959,5 +968,5 @@ class QGDiscoveredElements(BaseGate):
         else:
             return cls.fail_response(
                 error=f"Invalid mode: '{mode}'. Must be 'PRE' or 'POST'.",
-                fix_hint="Specify mode='PRE' for input validation or mode='POST' for output validation."
+                teach="Specify mode='PRE' for input validation or mode='POST' for output validation."
             )

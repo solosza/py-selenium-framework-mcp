@@ -158,7 +158,7 @@ class TestPreValidationStep4:
         # Assert
         assert result["status"] == "fail", "Should fail when Step 4 incomplete"
         assert "Step 4" in result["error"], "Error should mention Step 4"
-        assert "fix_hint" in result, "Should provide fix hint"
+        assert "teach" in result, "Should provide fix hint"
 
 
 # =============================================================================

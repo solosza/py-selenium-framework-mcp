@@ -166,7 +166,7 @@ class TestPREStep5Completion:
 
         assert result["status"] == "fail"
         assert "Step 5 is not complete" in result["error"]
-        assert "Complete Step 5" in result["fix_hint"]
+        assert "Complete Step 5" in result["teach"]
 
     def test_pre_step_5_complete_continues(self, mock_state_manager, single_page_complete):
         """Test PRE continues validation when Step 5 is complete."""
@@ -233,7 +233,7 @@ class TestPRESinglePageComplete:
 
         assert result["status"] == "fail"
         assert "0/1 pages have both input and output" in result["error"]
-        assert "LoginPage (missing: output)" in result["fix_hint"]
+        assert "LoginPage (missing: output)" in result["teach"]
 
     def test_pre_single_page_output_only_fails(self, mock_state_manager):
         """Test PRE fails when single page has only output elements (missing input)."""
@@ -252,7 +252,7 @@ class TestPRESinglePageComplete:
             result = QGDiscoveryComplete.validate_pre({})
 
         assert result["status"] == "fail"
-        assert "LoginPage (missing: input)" in result["fix_hint"]
+        assert "LoginPage (missing: input)" in result["teach"]
 
     def test_pre_single_page_both_missing_fails(self, mock_state_manager):
         """Test PRE fails when single page has neither input nor output elements."""
@@ -267,7 +267,7 @@ class TestPRESinglePageComplete:
             result = QGDiscoveryComplete.validate_pre({})
 
         assert result["status"] == "fail"
-        assert "LoginPage (missing: input, output)" in result["fix_hint"]
+        assert "LoginPage (missing: input, output)" in result["teach"]
 
 
 # ============================================================================
@@ -295,8 +295,8 @@ class TestPREMultiPageComplete:
 
         assert result["status"] == "fail"
         assert "1/3 pages have both input and output" in result["error"]
-        assert "CartPage (missing: output)" in result["fix_hint"]
-        assert "CheckoutPage (missing: input, output)" in result["fix_hint"]
+        assert "CartPage (missing: output)" in result["teach"]
+        assert "CheckoutPage (missing: input, output)" in result["teach"]
 
     def test_pre_multi_page_progress_tracking(self, mock_state_manager):
         """Test PRE shows correct progress for multi-page workflows."""
@@ -343,7 +343,7 @@ class TestBackwardCompatibility:
             result = QGDiscoveryComplete.validate_pre({})
 
         assert result["status"] == "fail"
-        assert "LoginPage (missing: output)" in result["fix_hint"]
+        assert "LoginPage (missing: output)" in result["teach"]
 
 
 # ============================================================================
@@ -376,22 +376,22 @@ class TestErrorMessagesAndFixHints:
 
         assert "1/3 pages" in result["error"]
 
-    def test_fix_hint_lists_incomplete_pages(self, mock_state_manager, multi_page_incomplete):
+    def test_teach_lists_incomplete_pages(self, mock_state_manager, multi_page_incomplete):
         """Test fix hint lists all incomplete pages with what's missing."""
         mock_state_manager.get_step.return_value = multi_page_incomplete
 
         with patch.object(QGDiscoveryComplete, '_get_state_manager', return_value=mock_state_manager):
             result = QGDiscoveryComplete.validate_pre({})
 
-        assert "CartPage (missing: output)" in result["fix_hint"]
-        assert "CheckoutPage (missing: input, output)" in result["fix_hint"]
+        assert "CartPage (missing: output)" in result["teach"]
+        assert "CheckoutPage (missing: input, output)" in result["teach"]
 
-    def test_fix_hint_mentions_two_pass_discovery(self, mock_state_manager, single_page_input_only):
+    def test_teach_mentions_two_pass_discovery(self, mock_state_manager, single_page_input_only):
         """Test fix hint mentions two-pass discovery (PASS 1 and PASS 2)."""
         mock_state_manager.get_step.return_value = single_page_input_only
 
         with patch.object(QGDiscoveryComplete, '_get_state_manager', return_value=mock_state_manager):
             result = QGDiscoveryComplete.validate_pre({})
 
-        assert "PASS 1" in result["fix_hint"]
-        assert "PASS 2" in result["fix_hint"]
+        assert "PASS 1" in result["teach"]
+        assert "PASS 2" in result["teach"]

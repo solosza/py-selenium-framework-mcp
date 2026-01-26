@@ -407,13 +407,14 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
         source: Optional[str] = None
     ) -> dict:
         """
-        Universal gate completion pattern: Check transcript, save state, return pass.
+        Universal gate completion pattern: Save state, return pass.
 
-        This method enforces the defense-in-depth pattern for ALL gates:
-        1. Protocol (Layer 1): Defines POST-ACTION (write transcript)
-        2. Gate (Layer 2): Validates transcript exists, teaches if missing
-        3. State: Saves workflow state
-        4. Audit: Logs gate result
+        Defense-in-depth design:
+        1. THIS gate: Validates data, saves state, returns PASS
+        2. POST-ACTION: Hook writes transcript after gate PASS
+        3. NEXT gate PRE-check: Verifies previous step's transcript exists
+
+        Transcript check moved to next step's PRE-check (not this gate's responsibility).
 
         Args:
             step: Step number (1-5)
@@ -425,26 +426,16 @@ Audit enforcement ensures DD-30 (Progressive Audit Trail) compliance.
             source: Execution source (default: None)
 
         Returns:
-            {"status": "NEEDS_RETRY", ...} if transcript missing (with template)
-            {"status": "pass"} if all checks pass
+            {"status": "pass"} on success
         """
-        # 1. Check transcript written (Protocol POST-ACTION requirement)
-        transcript_check = cls._check_transcript_written(
-            step=step,
-            step_name=step_name,
-            input_data=state_data
-        )
-
-        if transcript_check:
-            return transcript_check  # NEEDS_RETRY - AI writes transcript, retries gate
-
-        # 2. Save state (per-run isolation)
+        # 1. Save state (per-run isolation)
         from utils.state_manager import StateManager
         audit_logger = cls.get_audit_logger()
         state_manager = StateManager(run_id=audit_logger.run_id)
         state_manager.save(step=step, data=state_data)
 
-        # 3. Return pass (logs audit, validates audit write)
+        # 2. Return pass (logs audit, validates audit write)
+        # POST-ACTION: Hook writes transcript after this returns
         return cls.pass_response(
             step=step,
             gate_name=gate_name,
@@ -860,3 +851,99 @@ NOT:
 """
 
         return entry
+
+    @classmethod
+    def pre_check_previous_transcript(
+        cls,
+        previous_step: int,
+        previous_step_name: str
+    ) -> Optional[dict]:
+        """
+        PRE-check: Verify previous step's transcript exists.
+
+        Defense-in-depth: Returns NEEDS_RETRY with instructions for AI to
+        regenerate transcript from audit log. AI is responsible for transcript
+        generation (not the hook).
+
+        Args:
+            previous_step: Previous step number (e.g., 1 for Step 2's PRE-check)
+            previous_step_name: Previous step name (e.g., "User Input")
+
+        Returns:
+            None if previous transcript exists (PRE-check passes)
+            NEEDS_RETRY dict with instructions if missing (AI regenerates)
+        """
+        from pathlib import Path
+
+        # Get run_id from audit logger
+        audit_logger = cls.get_audit_logger()
+        run_id = audit_logger.run_id
+
+        # Safe run_id for Windows paths
+        safe_run_id = run_id.replace(":", "-")
+
+        # Transcript file path
+        transcript_file = Path(f"tests/_reports/{safe_run_id}/workflow_transcript.md")
+
+        # Check if transcript file exists
+        if not transcript_file.exists():
+            return {
+                "status": "NEEDS_RETRY",
+                "fix_applied": "transcript_regeneration_needed",
+                "error": f"Step {previous_step} transcript missing",
+                "message": "Regenerate transcript from audit log using TranscriptWriter",
+                "transcript_fix": {
+                    "run_id": run_id,
+                    "expected_file": str(transcript_file),
+                    "command": f'python -c "import sys; sys.path.insert(0, \'mcp_server\'); from utils.transcript_writer import TranscriptWriter; TranscriptWriter(\'{run_id}\').generate()"'
+                },
+                "teach": f"""
+Transcript file missing. AI must regenerate from audit log.
+
+**Action Required:**
+Run this command to regenerate transcript:
+```
+python -c "import sys; sys.path.insert(0, 'mcp_server'); from utils.transcript_writer import TranscriptWriter; TranscriptWriter('{run_id}').generate()"
+```
+
+Then retry this gate call.
+
+**Why:** Transcript generation is AI's responsibility (not hook).
+The audit log has all the data - TranscriptWriter converts it to markdown.
+                """
+            }
+
+        # Check if previous step's entry exists
+        content = transcript_file.read_text(encoding='utf-8')
+        step_marker = f"## Step {previous_step}"
+
+        if step_marker not in content:
+            return {
+                "status": "NEEDS_RETRY",
+                "fix_applied": "transcript_regeneration_needed",
+                "error": f"Step {previous_step} ({previous_step_name}) entry missing from transcript",
+                "message": "Regenerate transcript from audit log to include all steps",
+                "transcript_fix": {
+                    "run_id": run_id,
+                    "expected_file": str(transcript_file),
+                    "missing_step": previous_step,
+                    "command": f'python -c "import sys; sys.path.insert(0, \'mcp_server\'); from utils.transcript_writer import TranscriptWriter; TranscriptWriter(\'{run_id}\').generate()"'
+                },
+                "teach": f"""
+Transcript exists but Step {previous_step} entry is missing.
+
+**Action Required:**
+Regenerate transcript from audit log:
+```
+python -c "import sys; sys.path.insert(0, 'mcp_server'); from utils.transcript_writer import TranscriptWriter; TranscriptWriter('{run_id}').generate()"
+```
+
+Then retry this gate call.
+
+**Why:** The audit log should have Step {previous_step} data.
+TranscriptWriter reads audit log and generates complete transcript.
+                """
+            }
+
+        # PRE-check passed
+        return None

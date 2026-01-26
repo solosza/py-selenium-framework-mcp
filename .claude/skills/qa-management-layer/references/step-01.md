@@ -35,8 +35,12 @@
 ## C. Skill Instruction
 
 ```
-PRE-CHECK:
-- None (first step)
+PRE-CHECK (Defense Layer 2 - Protocol):
+- DEF-063: Clear session marker if starting NEW workflow (not retry)
+  - Check: Does tests/_state/.current_run_id exist?
+  - If YES and previous workflow completed Step 1 → delete marker (Bash: rm -f tests/_state/.current_run_id)
+  - If NO or retry scenario → skip (gate handles automatically)
+  - Note: Gate Layer 1 also enforces this - protocol provides backup guidance
 
 ACTION:
 - ASK user: "What test do you want to create?"

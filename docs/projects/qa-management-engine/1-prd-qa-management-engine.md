@@ -89,6 +89,7 @@ Implement the QA Execution Engine - quality gates and state management that enfo
 | FR-23 | DD-15 (POM state assertions): qg_test_runner validates assertions use state methods |
 | FR-24 | DD-19 (tool imports): All tools import from `tools/`, never `utils/` |
 | FR-25 | DD-26 (data contracts): Gates validate metadata format matches Section H specs |
+| FR-26 | MCP-first testing: All gate tests MUST call through MCP interface, not Python directly (shift-left for schema bugs) |
 
 ---
 
@@ -435,6 +436,59 @@ pytest mcp_server/_dev_tests/test_gates/test_qg_preflight.py -v
 | Individual Gates | 90% | Enforcement logic, critical |
 | Integration | 85% | Component interactions |
 | E2E | 80% | Full workflows |
+
+### 9.8 MCP-First Testing (MANDATORY)
+
+**Principle:** All gate tests MUST call through the MCP interface, not directly via Python class methods.
+
+**Rationale:** On 2026-01-25, we discovered DEF-045 (two-pass discovery) was broken because:
+- Unit tests called `QGDiscoveredElements.validate_post(input_data)` directly
+- Tests passed because they could set `input_data["type"] = "input"` directly
+- MCP schema in `server.py` never exposed `type` parameter
+- Production (Claude AI calling via MCP) couldn't use the feature
+
+**The Bug Pattern:**
+```python
+# BAD: Tests pass but production fails
+def test_two_pass_discovery():
+    input_data = {...}
+    input_data["type"] = "output"  # Works in Python, not exposed in MCP!
+    result = QGDiscoveredElements.validate_post(input_data)
+    assert result["status"] == "pass"
+
+# GOOD: Tests fail early if MCP schema is incomplete
+def test_two_pass_discovery():
+    result = await mcp_client.call("qg_discovered_elements", {
+        "mode": "POST",
+        "type": "output",  # Will fail if not in MCP schema
+        ...
+    })
+    assert result["status"] == "pass"
+```
+
+**Requirement (FR-26):** All unit and integration tests for MCP tools MUST:
+1. Call through the MCP server interface (not Python directly)
+2. Use only parameters exposed in the MCP tool schema
+3. Validate that schema changes are reflected in both gate logic AND server.py
+
+**Implementation:**
+```python
+# Test helper for MCP-first testing
+from mcp_server.test_utils import MCPTestClient
+
+@pytest.fixture
+def mcp_client():
+    return MCPTestClient()
+
+def test_gate_via_mcp(mcp_client):
+    result = mcp_client.call("qg_discovered_elements", {
+        "mode": "POST",
+        "type": "output",  # Tests the actual MCP interface
+        ...
+    })
+```
+
+**Shift-Left Benefit:** Schema/interface bugs caught at unit test time, not in production.
 
 ---
 

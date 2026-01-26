@@ -30,8 +30,16 @@ class QGAIProcessing(BaseGate):
 
         Returns:
             {"status": "pass", "metadata_context": {...}} on success
-            {"status": "fail", "error": "...", "fix_hint": "..."} on failure
+            {"status": "fail", "error": "...", "teach": "..."} on failure
         """
+        # PRE-CHECK: Verify Step 2 transcript was written by hook
+        pre_check_error = cls.pre_check_previous_transcript(
+            previous_step=2,
+            previous_step_name="Pre-flight Configuration"
+        )
+        if pre_check_error:
+            return pre_check_error
+
         # Check required fields
         required_fields = ["bdd_scenarios", "expected_states", "intent"]
         missing = cls.validate_required_fields(input_data, required_fields)
@@ -39,7 +47,7 @@ class QGAIProcessing(BaseGate):
         if missing:
             return cls.fail_response(
                 error=f"Missing required field(s): {', '.join(missing)}",
-                fix_hint=cls._get_fix_hint_for_missing(missing)
+                teach=cls._get_teach_for_missing(missing)
             )
 
         # Validate bdd_scenarios (DD-03)
@@ -48,7 +56,7 @@ class QGAIProcessing(BaseGate):
         if bdd_error:
             return cls.fail_response(
                 error=bdd_error,
-                fix_hint=cls._get_bdd_hint()
+                teach=cls._get_bdd_hint()
             )
 
         # Validate expected_states (DD-09)
@@ -56,7 +64,7 @@ class QGAIProcessing(BaseGate):
         if not cls._is_valid_expected_states(expected_states):
             return cls.fail_response(
                 error="Invalid expected_states: at least one state must be derived from Then clauses",
-                fix_hint=cls._get_expected_states_hint()
+                teach=cls._get_expected_states_hint()
             )
 
         # Validate intent
@@ -64,7 +72,7 @@ class QGAIProcessing(BaseGate):
         if not cls._is_valid_intent(intent):
             return cls.fail_response(
                 error="Invalid intent: must be a non-empty action verb",
-                fix_hint=cls._get_intent_hint()
+                teach=cls._get_intent_hint()
             )
 
         # All valid - build metadata_context and use universal completion pattern
@@ -155,8 +163,8 @@ class QGAIProcessing(BaseGate):
         return isinstance(value, str) and len(value.strip()) > 0
 
     @staticmethod
-    def _get_fix_hint_for_missing(missing_fields: List[str]) -> str:
-        """Get fix hint for missing fields."""
+    def _get_teach_for_missing(missing_fields: List[str]) -> str:
+        """Get teach message for missing fields."""
         hints = []
 
         if "bdd_scenarios" in missing_fields:
