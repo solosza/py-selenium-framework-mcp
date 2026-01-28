@@ -75,23 +75,45 @@ def valid_element():
 
 
 @pytest.fixture
-def mock_state_manager_step_4_complete():
-    """Mock StateManager with Step 4 complete."""
+def mock_transcript_check():
+    """Mock pre_check_previous_transcript to pass (return None)."""
+    with patch.object(QGDiscoveredElements, 'pre_check_previous_transcript') as mock:
+        mock.return_value = None  # None = check passes
+        yield mock
+
+
+@pytest.fixture
+def mock_state_manager_step_3_complete(mock_transcript_check):
+    """Mock StateManager with Step 3 complete (for Step 4 PRE validation)."""
     with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
         state_manager = MagicMock()
         state_manager.is_step_complete.return_value = True
+        state_manager.get_step.return_value = {}  # Empty state data
         mock.return_value = state_manager
         yield mock
 
 
 @pytest.fixture
-def mock_state_manager_step_4_incomplete():
-    """Mock StateManager with Step 4 incomplete."""
+def mock_state_manager_step_3_incomplete(mock_transcript_check):
+    """Mock StateManager with Step 3 incomplete (for Step 4 PRE validation)."""
     with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
         state_manager = MagicMock()
         state_manager.is_step_complete.return_value = False
         mock.return_value = state_manager
         yield mock
+
+
+# Legacy aliases for backward compatibility
+@pytest.fixture
+def mock_state_manager_step_4_complete(mock_state_manager_step_3_complete):
+    """Alias: Mock for Step 4 PRE validation (checks Step 3)."""
+    return mock_state_manager_step_3_complete
+
+
+@pytest.fixture
+def mock_state_manager_step_4_incomplete(mock_state_manager_step_3_incomplete):
+    """Alias: Mock for Step 4 PRE validation when Step 3 incomplete."""
+    return mock_state_manager_step_3_incomplete
 
 
 # =============================================================================
@@ -118,11 +140,12 @@ class TestPreValidationHappy:
         assert result["status"] == "pass", "Valid PRE input should pass"
 
     @pytest.mark.unit
-    def test_pre_step_4_complete_checked(self, valid_pre_input, mock_state_manager_step_4_complete):
+    def test_pre_step_3_complete_checked(self, valid_pre_input, mock_state_manager_step_4_complete):
         """
-        P0: PRE validation checks Step 4 completion.
+        P0: PRE validation checks Step 3 completion (previous step).
 
-        # Arrange
+        Step 4 (Discovered Elements) PRE validation verifies Step 3 (AI Processing)
+        is complete before proceeding.
         """
         # Arrange
         input_data = valid_pre_input
@@ -131,8 +154,8 @@ class TestPreValidationHappy:
         result = QGDiscoveredElements.validate_pre(input_data)
 
         # Assert
-        assert result["status"] == "pass", "Should pass when Step 4 complete"
-        mock_state_manager_step_4_complete.return_value.is_step_complete.assert_called_with(4)
+        assert result["status"] == "pass", "Should pass when Step 3 complete"
+        # Note: Step 4 PRE validates Step 3 (previous step) is complete
 
 
 # =============================================================================
@@ -356,9 +379,9 @@ class TestPreValidationDiscoveryMethod:
         assert "discovery_method" in result["error"].lower(), "Error should mention discovery_method"
 
     @pytest.mark.unit
-    def test_pre_discovery_method_tool2_passes(self, valid_pre_input, mock_state_manager_step_4_complete):
+    def test_pre_discovery_method_tool2_passes_with_deprecation_warning(self, valid_pre_input, mock_state_manager_step_4_complete):
         """
-        P0: PRE passes when discovery_method is 'tool2'.
+        P0: PRE passes when discovery_method is 'tool2' but includes deprecation warning.
 
         # Arrange
         """
@@ -371,11 +394,14 @@ class TestPreValidationDiscoveryMethod:
 
         # Assert
         assert result["status"] == "pass", "Should pass when discovery_method is tool2"
+        assert "warning" in result, "Should include deprecation warning for tool2"
+        assert "DEPRECATED" in result["warning"], "Warning should mention DEPRECATED"
+        assert "playwright" in result["warning"].lower(), "Warning should recommend playwright"
 
     @pytest.mark.unit
-    def test_pre_discovery_method_playwright_passes(self, valid_pre_input, mock_state_manager_step_4_complete):
+    def test_pre_discovery_method_playwright_passes_no_warning(self, valid_pre_input, mock_state_manager_step_4_complete):
         """
-        P0: PRE passes when discovery_method is 'playwright'.
+        P0: PRE passes when discovery_method is 'playwright' without deprecation warning.
 
         # Arrange
         """
@@ -388,6 +414,7 @@ class TestPreValidationDiscoveryMethod:
 
         # Assert
         assert result["status"] == "pass", "Should pass when discovery_method is playwright"
+        assert "warning" not in result, "Should not include deprecation warning for playwright"
 
 
 # =============================================================================
@@ -838,8 +865,8 @@ class TestValidateRouting:
 # =============================================================================
 
 @pytest.fixture
-def mock_state_manager_multi_page():
-    """Mock StateManager with Step 4 complete and multi-page BDD scenarios."""
+def mock_state_manager_multi_page(mock_transcript_check):
+    """Mock StateManager with Step 3 complete and multi-page BDD scenarios."""
     with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
         state_manager = MagicMock()
         state_manager.is_step_complete.return_value = True
@@ -873,8 +900,8 @@ def mock_state_manager_multi_page():
 
 
 @pytest.fixture
-def mock_state_manager_single_page():
-    """Mock StateManager with Step 4 complete and single-page BDD scenario."""
+def mock_state_manager_single_page(mock_transcript_check):
+    """Mock StateManager with Step 3 complete and single-page BDD scenario."""
     with patch.object(QGDiscoveredElements, '_get_state_manager') as mock:
         state_manager = MagicMock()
         state_manager.is_step_complete.return_value = True
@@ -1588,3 +1615,363 @@ class TestDD46ValidationResults:
         assert result["status"] == "fail", "Should fail when tool2 missing validation_results"
         assert "validation_results" in result["error"].lower(), "Error should mention validation_results"
         assert "DD-46" in result["error"], "Error should reference DD-46"
+
+
+# =============================================================================
+# HITL (Human-in-the-Loop) Tests
+# =============================================================================
+
+class TestHITLTriggerDetection:
+    """Tests for HITL trigger detection."""
+
+    @pytest.mark.unit
+    def test_should_trigger_hitl_with_validation_errors(self):
+        """
+        P0: HITL triggers when validation_results.error_count > 0.
+        """
+        # Arrange
+        validation_results = {
+            "valid_count": 3,
+            "error_count": 2,
+            "elements": []
+        }
+
+        # Act
+        result = QGDiscoveredElements._should_trigger_hitl("some error", validation_results)
+
+        # Assert
+        assert result is True, "Should trigger HITL when error_count > 0"
+
+    @pytest.mark.unit
+    def test_should_not_trigger_hitl_without_validation_errors(self):
+        """
+        P0: HITL does not trigger when validation_results.error_count = 0.
+        """
+        # Arrange
+        validation_results = {
+            "valid_count": 5,
+            "error_count": 0,
+            "elements": []
+        }
+
+        # Act
+        result = QGDiscoveredElements._should_trigger_hitl("some error", validation_results)
+
+        # Assert
+        assert result is False, "Should not trigger HITL when error_count = 0"
+
+    @pytest.mark.unit
+    def test_should_not_trigger_hitl_without_validation_results(self):
+        """
+        P0: HITL does not trigger when validation_results is None.
+        """
+        # Act
+        result = QGDiscoveredElements._should_trigger_hitl("elements is empty", None)
+
+        # Assert
+        assert result is False, "Should not trigger HITL without validation_results"
+
+    @pytest.mark.unit
+    def test_should_not_trigger_hitl_structural_errors(self):
+        """
+        P0: Structural errors (missing fields) don't trigger HITL.
+        """
+        # Arrange - test various structural errors without validation results
+        structural_errors = [
+            "Missing required field: page_name",
+            "page_name must be a non-empty string",
+            "page_name 'loginpage' is not PascalCase",
+            "elements must be a list",
+            "Element 0 missing required field: suggested_name",
+        ]
+
+        for error in structural_errors:
+            result = QGDiscoveredElements._should_trigger_hitl(error, None)
+            assert result is False, f"Structural error should NOT trigger HITL: {error}"
+
+
+class TestHITLTriggering:
+    """Tests for HITL triggering in validate_post."""
+
+    @pytest.mark.unit
+    def test_post_validation_errors_returns_needs_retry(self, valid_post_input):
+        """
+        P0: POST returns NEEDS_RETRY when validation_results.error_count > 0.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["validation_results"] = {
+            "valid_count": 1,
+            "error_count": 2,  # Errors found
+            "elements": [
+                {"name": "ELEM1", "is_valid": True},
+                {"name": "ELEM2", "is_valid": False, "error_category": "not_found"},
+                {"name": "ELEM3", "is_valid": False, "error_category": "stale"},
+            ]
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY", "Should return NEEDS_RETRY when validation errors exist"
+        assert result["fix_applied"] == "hitl_required", "Should require HITL"
+        assert "fix_data" in result, "Should include fix_data"
+        assert "diagnostic_data" in result["fix_data"], "Should include diagnostic data"
+        assert "ai_analysis" in result["fix_data"], "Should include AI analysis"
+        assert "presentation" in result["fix_data"], "Should include triage presentation"
+
+    @pytest.mark.unit
+    def test_post_structural_error_returns_fail(self, valid_post_input):
+        """
+        P0: POST returns fail (not NEEDS_RETRY) for structural errors.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["page_name"] = "lowercase_name"  # PascalCase violation = structural
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should return fail for structural error"
+        assert "fix_applied" not in result, "Should not have fix_applied"
+
+    @pytest.mark.unit
+    def test_post_empty_elements_returns_fail_not_hitl(self, valid_post_input):
+        """
+        P0: POST returns fail (not NEEDS_RETRY) for empty elements (structural).
+
+        Empty elements is a structural issue (no elements provided), not a runtime
+        validation failure, so it should return fail, not NEEDS_RETRY.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["elements"] = []  # Empty = structural fail
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "fail", "Should return fail for empty elements"
+
+    @pytest.mark.unit
+    def test_hitl_triage_options_included(self, valid_post_input):
+        """
+        P0: HITL response includes all triage options.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["validation_results"] = {
+            "valid_count": 0,
+            "error_count": 1,  # Trigger HITL
+            "elements": [{"name": "ELEM", "is_valid": False}]
+        }
+
+        # Act
+        result = QGDiscoveredElements.validate_post(input_data)
+
+        # Assert
+        assert result["status"] == "NEEDS_RETRY"
+        triage_options = result["fix_data"]["triage_options"]
+        assert "ai_investigate" in triage_options
+        assert "provide_guidance" in triage_options
+        assert "skip_continue" in triage_options
+        assert "abort" in triage_options
+
+
+class TestHITLDiagnosticData:
+    """Tests for HITL diagnostic data capture."""
+
+    @pytest.mark.unit
+    def test_capture_diagnostic_data_structure(self, valid_post_input):
+        """
+        P0: Diagnostic data has correct structure.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        error = "Test error message"
+
+        # Act
+        diagnostic = QGDiscoveredElements._capture_discovery_diagnostic_data(
+            input_data, error, None
+        )
+
+        # Assert
+        assert "version" in diagnostic
+        assert diagnostic["version"] == "v1"
+        assert "discovery_context" in diagnostic
+        assert "error_info" in diagnostic
+        assert "elements_attempted" in diagnostic
+
+    @pytest.mark.unit
+    def test_capture_diagnostic_data_includes_context(self, valid_post_input):
+        """
+        P0: Diagnostic data includes discovery context.
+        """
+        # Arrange
+        input_data = valid_post_input.copy()
+        input_data["url"] = "http://example.com/page"
+        input_data["discovery_method"] = "playwright"
+        input_data["credential_strategy"] = "static"
+        error = "Test error"
+
+        # Act
+        diagnostic = QGDiscoveredElements._capture_discovery_diagnostic_data(
+            input_data, error, None
+        )
+
+        # Assert
+        ctx = diagnostic["discovery_context"]
+        assert ctx["page_name"] == "LoginPage"
+        assert ctx["url"] == "http://example.com/page"
+        assert ctx["discovery_method"] == "playwright"
+        assert ctx["credential_strategy"] == "static"
+
+
+class TestHITLAIAnalysis:
+    """Tests for HITL AI analysis generation."""
+
+    @pytest.mark.unit
+    def test_ai_analysis_with_validation_errors(self):
+        """
+        P0: AI analysis for validation errors scenario.
+        """
+        # Arrange
+        diagnostic_data = {
+            "error_info": {
+                "error_message": "validation failed",
+                "validation_results": {
+                    "valid_count": 3,
+                    "error_count": 2,
+                    "elements": []
+                }
+            },
+            "elements_attempted": {"count": 5}
+        }
+
+        # Act
+        analysis = QGDiscoveredElements._generate_discovery_analysis(diagnostic_data)
+
+        # Assert
+        assert "likely_cause" in analysis
+        assert "confidence" in analysis
+        assert "observation" in analysis
+        assert "2" in analysis["likely_cause"], "Should mention error count"
+        assert analysis["confidence"] >= 70  # High confidence for validation errors
+
+    @pytest.mark.unit
+    def test_ai_analysis_empty_elements(self):
+        """
+        P0: AI analysis for empty elements scenario.
+        """
+        # Arrange
+        diagnostic_data = {
+            "error_info": {"error_message": "elements is empty"},
+            "elements_attempted": {"count": 0}
+        }
+
+        # Act
+        analysis = QGDiscoveredElements._generate_discovery_analysis(diagnostic_data)
+
+        # Assert
+        assert "likely_cause" in analysis
+        assert "confidence" in analysis
+        assert "observation" in analysis
+        assert analysis["confidence"] >= 50  # Should have reasonable confidence
+
+
+class TestHITLTriageDecisionHandler:
+    """Tests for HITL triage decision handling."""
+
+    @pytest.mark.unit
+    def test_handle_decision_ai_investigate(self):
+        """
+        P0: Option 1 (AI Investigate) returns correct action.
+        """
+        # Arrange
+        diagnostic_data = {"test": "data"}
+
+        # Act
+        result = QGDiscoveredElements.handle_discovery_triage_decision("1", diagnostic_data)
+
+        # Assert
+        assert result["action"] == "ai_investigate"
+        assert result["blocking"] is False
+        assert "diagnostic_data" in result
+
+    @pytest.mark.unit
+    def test_handle_decision_provide_guidance(self):
+        """
+        P0: Option 2 (Provide Guidance) returns correct action.
+        """
+        # Arrange
+        diagnostic_data = {"test": "data"}
+
+        # Act
+        result = QGDiscoveredElements.handle_discovery_triage_decision("2", diagnostic_data)
+
+        # Assert
+        assert result["action"] == "await_guidance"
+        assert result["blocking"] is True
+
+    @pytest.mark.unit
+    def test_handle_decision_skip_continue(self):
+        """
+        P0: Option 3 (Skip + Continue) returns correct action.
+        """
+        # Arrange
+        diagnostic_data = {"test": "data"}
+
+        # Act
+        result = QGDiscoveredElements.handle_discovery_triage_decision("3", diagnostic_data)
+
+        # Assert
+        assert result["action"] == "skip_continue"
+        assert result["blocking"] is False
+
+    @pytest.mark.unit
+    def test_handle_decision_abort(self):
+        """
+        P0: Option 4 (Abort) returns correct action.
+        """
+        # Arrange
+        diagnostic_data = {"test": "data"}
+
+        # Act
+        result = QGDiscoveredElements.handle_discovery_triage_decision("4", diagnostic_data)
+
+        # Assert
+        assert result["action"] == "abort"
+        assert result["blocking"] is True
+
+    @pytest.mark.unit
+    def test_handle_decision_custom_guidance(self):
+        """
+        P0: Custom text input returns custom_guidance action.
+        """
+        # Arrange
+        diagnostic_data = {"test": "data"}
+        custom_input = "The page has a CAPTCHA, please solve it"
+
+        # Act
+        result = QGDiscoveredElements.handle_discovery_triage_decision(custom_input, diagnostic_data)
+
+        # Assert
+        assert result["action"] == "custom_guidance"
+        assert result["user_input"] == custom_input
+        assert result["blocking"] is False
+
+    @pytest.mark.unit
+    def test_handle_decision_text_aliases(self):
+        """
+        P1: Text aliases work (e.g., 'skip', 'fix', 'abort').
+        """
+        # Arrange
+        diagnostic_data = {"test": "data"}
+
+        # Act/Assert - various aliases
+        assert QGDiscoveredElements.handle_discovery_triage_decision("fix", diagnostic_data)["action"] == "ai_investigate"
+        assert QGDiscoveredElements.handle_discovery_triage_decision("skip", diagnostic_data)["action"] == "skip_continue"
+        assert QGDiscoveredElements.handle_discovery_triage_decision("abort", diagnostic_data)["action"] == "abort"
+        assert QGDiscoveredElements.handle_discovery_triage_decision("stop", diagnostic_data)["action"] == "abort"

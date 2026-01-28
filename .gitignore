@@ -82,6 +82,10 @@ mcp_server/_dev_tests/output/
 # MCP workflow state (runtime data, not code)
 mcp_server/state/workflow_state.json
 
+# QA workflow runtime artifacts (audit trails, state snapshots)
+tests/_audit/
+tests/_state/
+
 # docs/ now tracked for portfolio visibility and cross-workstation continuity
 
 # Environment

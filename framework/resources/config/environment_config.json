@@ -2,6 +2,9 @@
   "DEFAULT": {
     "url": "http://www.automationpractice.pl/index.php"
   },
+  "test1": {
+    "url": "https://parabank.parasoft.com/parabank/nonexistent.htm"
+  },
   "parabank": {
     "url": "https://parabank.parasoft.com"
   },
@@ -18,6 +21,12 @@
     "url": "https://parabank.parasoft.com"
   },
   "parabank13": {
+    "url": "https://parabank.parasoft.com"
+  },
+  "parabank1": {
+    "url": "https://parabank.parasoft.com"
+  },
+  "test10": {
     "url": "https://parabank.parasoft.com"
   }
 }

@@ -5,12 +5,12 @@
 
 ---
 name: qa-management-layer
-description: Guide AI through 4-step QA test generation workflow with quality gates and collaborative construction. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
+description: Guide AI through 5-step QA test generation workflow with quality gates, collaborative construction, and HITL pair programming. Use WHEN generating test automation from user stories, running MCP qa-automation tools, or executing the test generation pipeline. Triggers on "generate test", "user story", "step 1", "quality gate".
 ---
 
 # QA Guidance Layer
 
-**Purpose:** Guide AI through the 4-step QA test generation workflow (v3.1) with enforced quality gates and collaborative construction.
+**Purpose:** Guide AI through the 5-step QA test generation workflow (v4.0) with enforced quality gates, collaborative construction, and HITL pair programming on test failures.
 
 **Applies to:** QA test automation generation using MCP tools.
 
@@ -25,7 +25,7 @@ description: Guide AI through 4-step QA test generation workflow with quality ga
 Use when:
 - User wants to generate test automation code
 - User provides a user story or test requirement
-- Starting the 4-step workflow from Step 1
+- Starting the 5-step workflow from Step 1
 
 ---
 
@@ -47,7 +47,7 @@ Use when:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                      4-STEP QA WORKFLOW v3.1 (Pair Programming)              │
+│                      5-STEP QA WORKFLOW v4.0 (Pair Programming)              │
 └─────────────────────────────────────────────────────────────────────────────┘
 
   Step 1: User Input           ──► persona, URL, role_name, workflow
@@ -59,7 +59,7 @@ Use when:
   Step 3: AI Processing        ──► bdd_scenarios, expected_states, intent
       │
       ▼
-  Step 4: Collaborative Construction (HITL Loop)
+  Step 4: Collaborative Construction
       │
       ├─► Tool 2: Discover elements (bulk extraction)
       │
@@ -68,16 +68,25 @@ Use when:
       ├─► AI builds Roles manually (Edit/Write tools)
       ├─► AI builds Tests manually (Edit/Write tools)
       │
-      ├─► Gates validate each piece (framework compliance)
-      ├─► HITL triggers at blockers (human guides)
+      └─► Gates validate each piece (framework compliance)
       │
-      └─► Repeat: build → save → test → discover gap → build more
-          └─► Test passes ✓ = COMPLETE | Test fails ✗ = AWAITING TRIAGE
+      ▼
+  Step 5: Test Execution + HITL Iteration
+      │
+      ├─► run_test: Execute pytest
+      ├─► qg_execution: Validate results
+      │
+      ├── PASS ──► WORKFLOW COMPLETE ✓
+      │
+      └── FAIL ──► HITL Triage:
+                    1. Application Defect → Log + Block
+                    2. Test Issue → AI fixes + Retry
+                    3. Investigate → Show diagnostic data
 
 CHANGELOG:
+- 2026-01-26: Added Step 5 (HITL execution loop) - main differentiator
 - 2026-01-23: Removed redundant Tool 1 (generate_tests_from_user_story) - Step 3 already provides BDD
 - 2026-01-22: Archived autonomous workflow (Tools 3-6, Steps 6-11) - 96% failure rate
-- Now: 4-step collaborative construction workflow
 ```
 
 ---
@@ -90,6 +99,7 @@ CHANGELOG:
 | 2 | `references/step-02.md` | `qg_preflight` | POST-only | Pre-flight Configuration |
 | 3 | `references/step-03.md` | `qg_ai_processing` | POST-only | AI Processing |
 | 4 | `references/step-04.md` | `qg_discovered_elements`, `qg_discovery_complete` | PRE+POST, PRE-only | Discover Elements (Tool 2) + Collaborative Construction |
+| 5 | `references/step-05.md` | `qg_execution` | POST-only | Test Execution + HITL Iteration |
 
 **Archived:**
 - 2026-01-23: step-04-tool1.md (redundant Tool 1), qg_test_scenarios moved to `_archived/autonomous_workflow_v1/`
@@ -184,22 +194,23 @@ All quality gates return a consistent response format:
 
 | Mode | When Used | Behavior |
 |------|-----------|----------|
-| **POST-only** | Steps 1-3 (no operation tool) | Gate validates after AI/user provides data |
-| **PRE+POST** | Steps 4-9 (has operation tool) | PRE validates input, POST validates output |
-| **PRE-only** | Step 10 (validation) | Gate validates all code before save |
+| **POST-only** | Steps 1-3, 5 | Gate validates after AI/user provides data or operation completes |
+| **PRE+POST** | Step 4 (has operation tool) | PRE validates input, POST validates output |
 
 **PRE vs POST Validation:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  POST-only (Steps 1-3):                                                      │
+│  POST-only (Steps 1-3, 5):                                                   │
 │    AI/User provides data → Gate validates → State saved                     │
+│    OR: Operation runs → Gate validates result → State saved (Step 5)        │
 │                                                                              │
-│  PRE+POST (Steps 4-9):                                                       │
+│  PRE+POST (Step 4):                                                          │
 │    Gate PRE validates → Operation runs → Gate POST validates → State saved  │
 │                                                                              │
-│  PRE-only (Step 10):                                                         │
-│    Gate PRE validates all code → Files saved (execution in Step 11)         │
+│  HITL Pattern (Step 5):                                                      │
+│    run_test → qg_execution → PASS (done) | NEEDS_RETRY (hitl_required)      │
+│    If NEEDS_RETRY: AI presents triage options → User decides → Fix → Retry  │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 

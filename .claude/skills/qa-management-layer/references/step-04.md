@@ -34,6 +34,61 @@ The old 11-step workflow was archived on 2026-01-22. Tool 3 (generate_page_objec
 
 ---
 
+## ⚠️ CRITICAL: Runtime HITL - Immediate Triggers
+
+**READ THIS FIRST. This section takes precedence over all other instructions.**
+
+### Rule: STOP on ANY Failure
+
+When ANY failure occurs during discovery, you MUST:
+1. **STOP** - Do not attempt autonomous fixes
+2. **REPORT** - Show user exactly what failed and why
+3. **WAIT** - Get human decision before proceeding
+
+### Failure Types That Trigger HITL
+
+| Category | Examples | Action |
+|----------|----------|--------|
+| **Navigation** | Page not found, timeout, redirect loop | STOP → REPORT → HITL |
+| **Click/Interaction** | Element not clickable, stale reference, covered by overlay | STOP → REPORT → HITL |
+| **Element State** | Element not visible, disabled, detached from DOM | STOP → REPORT → HITL |
+| **Page State** | Unexpected modal, loading spinner won't clear, wrong page | STOP → REPORT → HITL |
+| **Authentication** | Login failed, session expired, access denied | STOP → REPORT → HITL |
+| **Validation** | RuntimeValidator returns is_valid=false | STOP → REPORT → HITL |
+| **Network** | API errors, resource blocked, CORS issues | STOP → REPORT → HITL |
+| **Unexpected UI** | Layout different than expected, missing elements | STOP → REPORT → HITL |
+
+### What NOT To Do
+
+❌ **Do NOT** retry silently 3 times then report
+❌ **Do NOT** assume you can fix it autonomously
+❌ **Do NOT** skip elements and continue
+❌ **Do NOT** proceed without human confirmation on failure
+
+### HITL Report Template (On Any Failure)
+
+```
+===== DISCOVERY FAILURE =====
+
+What happened: [Specific failure]
+Where: [URL, element, action]
+Error: [Exact error message]
+
+What I observed: [Browser state description]
+
+HOW SHOULD WE PROCEED?
+1. AI Investigates - I analyze and propose fix
+2. Provide Guidance - You tell me what you see
+3. Skip + Continue - Proceed without this element
+4. Abort - Stop workflow entirely
+
+Enter choice (1-4) or describe how you'd like to proceed:
+```
+
+**This is the MVP approach: Strong protocol enforcement + existing gates.**
+
+---
+
 ## C. Skill Instruction
 
 ```
@@ -86,40 +141,43 @@ GET SCOPE RESULT (BEFORE DISCOVERY):
 - **page_count = scope_result.page_count**  ← Use this for multi-page detection
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  DD-33 DECISION POINT (MANDATORY)                                            │
+│  DISCOVERY METHOD: PLAYWRIGHT ONLY (DD-33)                                   │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-  Was Playwright used to prepare page state (login, click, modal, form submit)?
-      │
-      ├── YES ──► MUST use DD-33 (Playwright snapshot extraction)
-      │           discovery_method = "playwright"
-      │
-      │           DD-33 FLOW (for EACH page in scope_result.pages):
-      │           1. browser_snapshot → get accessibility tree
-      │           2. AI extracts relevant elements (token-optimized)
-      │           3. AI builds elements array in Tool 2 format
-      │           4. CALL qg_discovered_elements PRE with:
-      │              - discovery_method="playwright"
-      │              - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
-      │           5. SKIP Tool 2 (already have elements)
-      │           6. CALL qg_discovered_elements POST with:
-      │              - discovery_method="playwright"
-      │              - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
-      │           7. If multi-page: repeat for next page
-      │           8. Proceed to Tool 3
-      │
-      └── NO ───► May use Tool 2
-                  discovery_method = "tool2"
+  **IMPORTANT:** Tool 2 (discover_page_elements) is DEPRECATED.
+  Always use Playwright snapshot extraction for element discovery.
+  This gives AI visibility into navigation failures and enables Runtime HITL.
 
-                  TOOL 2 FLOW (for EACH page in scope_result.pages):
-                  1. CALL qg_discovered_elements PRE with:
-                     - discovery_method="tool2"
-                     - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
-                  2. CALL discover_page_elements (OPERATION)
-                  3. CALL qg_discovered_elements POST with:
-                     - discovery_method="tool2"
-                     - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
-                  4. If multi-page: repeat for next page
+  PLAYWRIGHT DISCOVERY FLOW (for EACH page in scope_result.pages):
+
+  1. NAVIGATE to target URL:
+     ```python
+     mcp__playwright__browser_navigate(url=target_url)
+     ```
+     ⚠️ If navigation fails (404, timeout, error) → TRIGGER RUNTIME HITL (see Section B above)
+
+  2. TAKE SNAPSHOT:
+     ```python
+     mcp__playwright__browser_snapshot()
+     ```
+     → Returns accessibility tree with interactive elements
+
+  3. AI EXTRACTS relevant elements from snapshot (token-optimized)
+     - Look for: inputs, buttons, links, selects, textareas
+     - Build elements array in standard format
+
+  4. CALL qg_discovered_elements PRE with:
+     - discovery_method="playwright"
+     - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
+
+  5. CALL qg_discovered_elements POST with:
+     - discovery_method="playwright"
+     - elements=<extracted elements array>
+     - scope_result=scope_result.to_dict() (MANDATORY if multi-page)
+
+  6. If multi-page: repeat for next page
+
+  7. Proceed to Tool 3
 
 VALIDATE:
 - PRE: Validate URL reachable, page_name provided, discovery_method declared
@@ -303,9 +361,9 @@ AI ACTION:
 
 | Condition | Required Action | Violation Response |
 |-----------|-----------------|-------------------|
-| Playwright prepared page state | MUST use DD-33 (snapshot extraction) | BLOCKED if Tool 2 used after Playwright prep |
-| Static page (no prep needed) | May use Tool 2 | N/A |
-| discovery_method not declared | Gate fails | Must declare "playwright" or "tool2" |
+| Any page | MUST use Playwright snapshot extraction | Tool 2 is DEPRECATED |
+| discovery_method not declared | Gate fails | Must declare "playwright" |
+| discovery_method="tool2" | Gate warns (deprecated) | Use "playwright" instead |
 
 **PRE-Validation Checks:**
 
@@ -327,7 +385,77 @@ AI ACTION:
 
 ## G. Error Handling
 
-**Failure Behavior:**
+**Failure Types:**
+
+| Type | Description | Response |
+|------|-------------|----------|
+| **Structural** | AI passed wrong parameters (missing fields, wrong types) | `fail` response - AI fixes without human |
+| **Runtime** | Discovery/validation issues (elements not found, timeout, page state) | `NEEDS_RETRY` with `hitl_required` - Human triage |
+
+**Runtime Failure Indicators (triggers HITL):**
+- "elements is empty"
+- "no valid locator"
+- "error_count" > 0
+- "validation failed"
+- "element not found"
+- "timeout"
+- "stale"
+- "not interactable"
+
+**HITL Triage Workflow (on runtime failure):**
+
+When qg_discovered_elements returns `NEEDS_RETRY` with `fix_applied: "hitl_required"`:
+
+```
+===== STEP 4: DISCOVERY ISSUE =====
+
+Page: [page_name]
+URL: [current_url]
+Discovery Method: playwright
+Elements Found: [count]
+
+Result: [error message]
+[Failed elements summary if available]
+
+AI Observation (Confidence: XX%):
+[likely_cause]
+[observation]
+
+==========================================
+
+HOW SHOULD WE PROCEED?
+
+1. AI Investigates + Attempts Fix
+   -> AI analyzes the issue and proposes a solution
+   -> Re-runs discovery after fix attempt
+
+2. Provide Guidance
+   -> You describe what you observe in the browser
+   -> AI follows your instructions
+
+3. Skip + Continue
+   -> Proceed without failed elements
+   -> Can add elements manually later
+
+4. Abort Workflow
+   -> Stop the workflow entirely
+   -> Review and restart when ready
+
+Enter choice (1-4) or describe what you see:
+```
+
+**Triage Decision Actions:**
+
+| Option | Action | Blocking? |
+|--------|--------|-----------|
+| **1. AI Investigates** | AI analyzes diagnostic data, proposes fix, re-runs | NO |
+| **2. Provide Guidance** | User describes what they see, AI follows | YES (awaits input) |
+| **3. Skip + Continue** | Proceed with valid elements only | NO |
+| **4. Abort** | Stop workflow entirely | YES |
+
+**Key Rule:** AI must NOT proceed without user decision when hitl_required is returned.
+
+**Legacy Behavior (3 failures):**
 
 | Failure Point | Behavior |
 |---------------|----------|
@@ -792,23 +920,42 @@ else:
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  QUALITY GATE: qg_discovered_elements (POST-VALIDATE)                        │
 │  - Validates elements found                                                 │
+│  - Runtime failures → HITL triage (NEEDS_RETRY)                             │
+│  - Structural failures → fail response (AI fixes)                           │
 └─────────────────────────────────────────────────────────────────────────────┘
                                       │
-                          ┌───────────┴───────────┐
-                          ▼                       ▼
-                    ┌──────────┐            ┌──────────┐
-                    │  PASS    │            │  FAIL    │
-                    └────┬─────┘            └────┬─────┘
-                         │                       │
-                         ▼                       ▼
-              ┌─────────────────────┐  ┌─────────────────────┐
-              │  STATE SAVED        │  │  RETRY (max 3)      │
-              │  (by operation)     │  │  AI re-preps page   │
-              └─────────────────────┘  └─────────────────────┘
+                    ┌─────────────────┼─────────────────┐
+                    ▼                 ▼                 ▼
+              ┌──────────┐     ┌──────────────┐   ┌──────────┐
+              │  PASS    │     │ NEEDS_RETRY  │   │  FAIL    │
+              └────┬─────┘     │ (hitl_req'd) │   │(structural)
+                   │           └──────┬───────┘   └────┬─────┘
+                   │                  │                │
+                   │                  ▼                ▼
+                   │    ┌────────────────────────┐  ┌─────────────┐
+                   │    │  HITL TRIAGE:          │  │  AI FIXES   │
+                   │    │  1. AI Investigates    │  │  (no human) │
+                   │    │  2. Provide Guidance   │  └─────────────┘
+                   │    │  3. Skip + Continue    │
+                   │    │  4. Abort              │
+                   │    └────────────────────────┘
+                   │                  │
+                   │       ┌──────────┼──────────┐
+                   │       ▼          ▼          ▼
+                   │  ┌────────┐ ┌────────┐ ┌────────┐
+                   │  │ Fix +  │ │ Skip + │ │ Abort  │
+                   │  │ Retry  │ │Continue│ │        │
+                   │  └───┬────┘ └───┬────┘ └────────┘
+                   │      │          │
+                   ▼      ▼          ▼
+              ┌─────────────────────────────┐
+              │  STATE SAVED / PROCEED      │
+              │  (by operation)             │
+              └─────────────────────────────┘
                          │
                          ▼
               ┌─────────────────────┐
-              │  PROCEED TO STEP 6  │
+              │  PROCEED TO STEP 5  │
               └─────────────────────┘
 ```
 
