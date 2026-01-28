@@ -1,7 +1,8 @@
 """
 Quality Gate: Discovered Elements (Step 4).
 
-PRE+POST validation gate for Tool 2 (discover_page_elements) or DD-33 (Playwright snapshot).
+PRE+POST validation gate for DD-33 (Playwright snapshot).
+NOTE: Tool 2 (discover_page_elements) is DEPRECATED - use Playwright discovery only.
 
 PRE Validation:
 - Step 3 complete (bdd_scenarios, expected_states, intent exist in state)
@@ -19,11 +20,13 @@ POST Validation:
 - NEW (Task 2.0): Track per-page elements, track discovery progress for multi-page workflows
 - NEW (DD-44): Block Step 6 if multi-page and discovery incomplete
 - NEW (DD-46): validation_results required (from RuntimeValidator, triggers VisualFeedback)
+- NEW (HITL): Runtime failures return NEEDS_RETRY with hitl_required for human triage
 
 Enforces: DD-19, DD-20, DD-21, DD-24, DD-33, DD-44, DD-46, IC-05-01, IC-05-02, IC-05-03
 """
 
 import re
+import json
 from typing import Any, Dict, List, Optional
 
 from .base_gate import BaseGate
@@ -144,7 +147,7 @@ class QGDiscoveredElements(BaseGate):
         if discovery_method is None:
             return cls.fail_response(
                 error="Missing required field: discovery_method (DD-33)",
-                teach=f"Declare discovery_method. Use 'playwright' if Playwright prepared page state, 'tool2' for static pages. Valid options: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}"
+                teach="Declare discovery_method='playwright'. Tool 2 is deprecated - always use Playwright snapshot extraction."
             )
 
         if discovery_method not in cls.VALID_DISCOVERY_METHODS:
@@ -152,6 +155,11 @@ class QGDiscoveredElements(BaseGate):
                 error=f"Invalid discovery_method: '{discovery_method}'",
                 teach=f"Use one of: {', '.join(sorted(cls.VALID_DISCOVERY_METHODS))}. Use 'playwright' if Playwright prepared page state."
             )
+
+        # DEPRECATION WARNING: tool2 is deprecated, prefer playwright
+        deprecation_warning = None
+        if discovery_method == "tool2":
+            deprecation_warning = "DEPRECATED: discovery_method='tool2' is deprecated. Use 'playwright' for all discovery. Tool 2 bypasses Runtime HITL and navigation failure detection."
 
         # Validate element type (DEF-045 two-pass discovery)
         # Default to "input" for backward compatibility
@@ -194,7 +202,7 @@ class QGDiscoveredElements(BaseGate):
             if scope_validation is not None:
                 return scope_validation
 
-        return cls.pass_response(
+        response = cls.pass_response(
             step=5,
             gate_name="qg_discovered_elements",
             mode="PRE",
@@ -205,6 +213,12 @@ class QGDiscoveredElements(BaseGate):
                 "total_pages": scope_result.get("total_pages") if scope_result else 1
             }
         )
+
+        # Add deprecation warning if tool2 was used
+        if deprecation_warning:
+            response["warning"] = deprecation_warning
+
+        return response
 
     @classmethod
     def _validate_scope_result(cls, scope_result: Dict[str, Any], page_name: str) -> Optional[Dict[str, Any]]:
@@ -563,12 +577,15 @@ class QGDiscoveredElements(BaseGate):
         - page_name is PascalCase (IC-05-02)
 
         On PASS: Saves Step 5 state (enables DD-33 flow where Tool 2 is skipped).
+        On RUNTIME FAIL: Returns NEEDS_RETRY with hitl_required for human triage.
+        On STRUCTURAL FAIL: Returns fail response (AI should fix without human).
 
         Args:
             input_data: Dict with elements array and page_name
 
         Returns:
             {"status": "pass"} or {"status": "fail", "error": str, "teach": str}
+            or {"status": "NEEDS_RETRY", "fix_applied": "hitl_required", ...} for runtime failures
             or {"status": "blocked", ...} if max attempts exceeded
         """
         # P1: Check if blocked due to max attempts
@@ -587,6 +604,44 @@ class QGDiscoveredElements(BaseGate):
 
         # P2: Extract source from input_data for audit logging
         source = input_data.get("source")
+
+        # HITL: Check if failure should trigger human triage
+        if result.get("status") == "fail":
+            error_msg = result.get("error", "")
+            validation_results = input_data.get("validation_results")
+
+            if cls._should_trigger_hitl(error_msg, validation_results):
+                # Runtime validation failure -> HITL triage
+                diagnostic_data = cls._capture_discovery_diagnostic_data(
+                    input_data, error_msg, validation_results
+                )
+                analysis = cls._generate_discovery_analysis(diagnostic_data)
+                triage_message = cls._format_discovery_triage_presentation(
+                    diagnostic_data, analysis
+                )
+
+                # Log HITL trigger to audit
+                cls.get_audit_logger().log_gate(
+                    step=cls.STEP_NUMBER,
+                    gate_name="qg_discovered_elements",
+                    mode="POST",
+                    result="needs_retry",
+                    error=error_msg,
+                    source=source,
+                    metadata={"hitl_triggered": True, "analysis": analysis}
+                )
+
+                return {
+                    "status": "NEEDS_RETRY",
+                    "fix_applied": "hitl_required",
+                    "fix_data": {
+                        "diagnostic_data": diagnostic_data,
+                        "ai_analysis": analysis,
+                        "triage_options": ["ai_investigate", "provide_guidance", "skip_continue", "abort"],
+                        "presentation": triage_message,
+                    },
+                    "message": "Discovery issue encountered. HITL triage required - present options to user and await decision."
+                }
 
         # P1: Track attempts and log to audit
         if state_manager:
@@ -690,6 +745,16 @@ class QGDiscoveredElements(BaseGate):
         validation_error = cls._validate_validation_results(validation_results)
         if validation_error:
             return validation_error
+
+        # Check for validation errors (HITL trigger condition)
+        # This fail will be intercepted by validate_post() and converted to NEEDS_RETRY
+        error_count = validation_results.get("error_count", 0)
+        if isinstance(error_count, int) and error_count > 0:
+            valid_count = validation_results.get("valid_count", 0)
+            return cls.fail_response(
+                error=f"Element validation failed: {error_count} of {valid_count + error_count} elements have errors",
+                teach="Review failed elements in validation_results. HITL triage may be required."
+            )
 
         # Validate page_name PascalCase (IC-05-02)
         page_name = input_data.get("page_name")
@@ -945,6 +1010,299 @@ class QGDiscoveredElements(BaseGate):
                 )
 
         return None
+
+    # ==================== HITL SUPPORT METHODS ====================
+
+    @classmethod
+    def _should_trigger_hitl(
+        cls,
+        error_message: str,
+        validation_results: Optional[Dict[str, Any]] = None
+    ) -> bool:
+        """
+        Determine if failure should trigger HITL (vs structural fail).
+
+        HITL triggers when:
+        - validation_results exists AND error_count > 0 (runtime validation found issues)
+
+        Structural failures (no HITL):
+        - Missing required fields
+        - Wrong types
+        - Invalid formats (PascalCase, etc.)
+
+        Args:
+            error_message: The error message from validation
+            validation_results: Element validation results if available
+
+        Returns:
+            True if should trigger HITL, False for structural fail
+        """
+        # HITL triggers when runtime validation found issues
+        if validation_results and isinstance(validation_results, dict):
+            error_count = validation_results.get("error_count", 0)
+            if isinstance(error_count, int) and error_count > 0:
+                return True
+
+        return False
+
+    @classmethod
+    def _is_runtime_failure(cls, error_message: str) -> bool:
+        """
+        Legacy method - checks error message patterns.
+
+        Deprecated in favor of _should_trigger_hitl which uses validation_results.
+        Kept for backward compatibility.
+
+        Args:
+            error_message: The error message from validation
+
+        Returns:
+            True if runtime failure pattern detected, False otherwise
+        """
+        # Only trigger for explicit validation failure patterns
+        runtime_patterns = [
+            "error_count",
+            "validation failed",
+        ]
+        error_lower = error_message.lower()
+        return any(pattern in error_lower for pattern in runtime_patterns)
+
+    @classmethod
+    def _capture_discovery_diagnostic_data(
+        cls,
+        input_data: Dict[str, Any],
+        error: str,
+        validation_results: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Capture diagnostic data for HITL triage.
+
+        Generalized capture - shows what happened, not what we expected.
+
+        Args:
+            input_data: Original input to validation
+            error: The error that occurred
+            validation_results: Element validation results if available
+
+        Returns:
+            Dict with diagnostic data for human review
+        """
+        return {
+            "version": "v1",
+            "discovery_context": {
+                "page_name": input_data.get("page_name"),
+                "url": input_data.get("url"),
+                "discovery_method": input_data.get("discovery_method"),
+                "credential_strategy": input_data.get("credential_strategy"),
+                "element_type": input_data.get("type", "input"),
+            },
+            "error_info": {
+                "error_message": error,
+                "validation_results": validation_results,
+            },
+            "elements_attempted": {
+                "count": len(input_data.get("elements", [])),
+                "elements": input_data.get("elements", [])[:5],  # First 5 for brevity
+            },
+            "scope_info": input_data.get("scope_result"),
+        }
+
+    @classmethod
+    def _generate_discovery_analysis(
+        cls,
+        diagnostic_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Generate AI analysis of discovery issue.
+
+        Generalized - presents hypothesis, not diagnosis.
+
+        Args:
+            diagnostic_data: Captured diagnostic data
+
+        Returns:
+            Dict with likely_cause, confidence, observation
+        """
+        error_msg = diagnostic_data["error_info"]["error_message"].lower()
+        validation_results = diagnostic_data["error_info"].get("validation_results")
+
+        # Default analysis
+        likely_cause = "Discovery encountered an issue"
+        confidence = 50
+        observation = "Unable to determine specific cause"
+
+        # Heuristic analysis based on error patterns
+        if "empty" in error_msg or diagnostic_data["elements_attempted"]["count"] == 0:
+            likely_cause = "No elements discovered on page"
+            confidence = 70
+            observation = "Page may not have loaded, may require authentication, or may have no interactive elements"
+
+        elif "no valid locator" in error_msg:
+            likely_cause = "Element discovered but locator extraction failed"
+            confidence = 65
+            observation = "Element exists but couldn't generate a reliable locator"
+
+        elif validation_results and validation_results.get("error_count", 0) > 0:
+            error_count = validation_results.get("error_count", 0)
+            valid_count = validation_results.get("valid_count", 0)
+            total = error_count + valid_count
+            likely_cause = f"{error_count} of {total} elements failed validation"
+            confidence = 75
+            observation = "Some elements discovered but failed runtime validation"
+
+        elif "timeout" in error_msg:
+            likely_cause = "Discovery operation timed out"
+            confidence = 80
+            observation = "Page may be slow to load or unresponsive"
+
+        return {
+            "likely_cause": likely_cause,
+            "confidence": confidence,
+            "observation": observation,
+        }
+
+    @classmethod
+    def _format_discovery_triage_presentation(
+        cls,
+        diagnostic_data: Dict[str, Any],
+        analysis: Dict[str, Any]
+    ) -> str:
+        """
+        Format HITL triage presentation for discovery issues.
+
+        Generalized - shows what happened, offers generic actions.
+
+        Args:
+            diagnostic_data: Captured diagnostic data
+            analysis: AI analysis results
+
+        Returns:
+            Formatted triage message for user
+        """
+        ctx = diagnostic_data["discovery_context"]
+        error_info = diagnostic_data["error_info"]
+        elements = diagnostic_data["elements_attempted"]
+
+        # Build failed elements summary if validation results exist
+        failed_elements_summary = ""
+        if error_info.get("validation_results"):
+            vr = error_info["validation_results"]
+            failed = [e for e in vr.get("elements", []) if not e.get("is_valid", True)]
+            if failed:
+                failed_elements_summary = "\nFailed Elements:\n"
+                for elem in failed[:3]:  # Show first 3
+                    failed_elements_summary += f"  - {elem.get('name', 'unknown')}: {elem.get('error_category', 'unknown error')}\n"
+                if len(failed) > 3:
+                    failed_elements_summary += f"  ... and {len(failed) - 3} more\n"
+
+        message = f"""
+===== STEP 4: DISCOVERY ISSUE =====
+
+Page: {ctx.get('page_name', 'Unknown')}
+URL: {ctx.get('url', 'Unknown')}
+Discovery Method: {ctx.get('discovery_method', 'Unknown')}
+Elements Found: {elements.get('count', 0)}
+
+Result: {error_info.get('error_message', 'Unknown error')}
+{failed_elements_summary}
+AI Observation (Confidence: {analysis['confidence']}%):
+{analysis['likely_cause']}
+{analysis['observation']}
+
+==========================================
+
+HOW SHOULD WE PROCEED?
+
+1. AI Investigates + Attempts Fix
+   -> AI analyzes the issue and proposes a solution
+   -> Re-runs discovery after fix attempt
+
+2. Provide Guidance
+   -> You describe what you observe in the browser
+   -> AI follows your instructions
+
+3. Skip + Continue
+   -> Proceed without failed elements
+   -> Can add elements manually later
+
+4. Abort Workflow
+   -> Stop the workflow entirely
+   -> Review and restart when ready
+
+Enter choice (1-4) or describe what you see:
+"""
+        return message.strip()
+
+    @classmethod
+    def handle_discovery_triage_decision(
+        cls,
+        decision: str,
+        diagnostic_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Handle user's triage decision for discovery issues.
+
+        Args:
+            decision: User's choice (1-4) or custom text
+            diagnostic_data: Diagnostic data from validation
+
+        Returns:
+            Dict with action and instructions for AI
+        """
+        decision_normalized = decision.strip().lower()
+
+        # Option 1: AI Investigates
+        if decision_normalized in ["1", "investigate", "fix", "ai fix"]:
+            return {
+                "action": "ai_investigate",
+                "blocking": False,
+                "instructions": (
+                    "Analyze the diagnostic data and browser state. "
+                    "Propose a fix (navigate to correct state, adjust locators, wait for content). "
+                    "Re-run discovery after applying fix."
+                ),
+                "diagnostic_data": diagnostic_data,
+            }
+
+        # Option 2: User Guidance
+        elif decision_normalized in ["2", "guidance", "guide", "help"]:
+            return {
+                "action": "await_guidance",
+                "blocking": True,
+                "instructions": (
+                    "User will provide guidance. Wait for their description of what they observe "
+                    "in the browser and follow their instructions."
+                ),
+            }
+
+        # Option 3: Skip + Continue
+        elif decision_normalized in ["3", "skip", "continue", "proceed"]:
+            return {
+                "action": "skip_continue",
+                "blocking": False,
+                "instructions": (
+                    "Proceed with successfully discovered elements only. "
+                    "Failed elements can be added manually later if needed."
+                ),
+                "skipped_elements": diagnostic_data.get("error_info", {}).get("validation_results", {}),
+            }
+
+        # Option 4: Abort
+        elif decision_normalized in ["4", "abort", "stop", "quit"]:
+            return {
+                "action": "abort",
+                "blocking": True,
+                "instructions": "Workflow aborted by user. Review diagnostic data and restart when ready.",
+            }
+
+        # Custom guidance (user typed something else)
+        else:
+            return {
+                "action": "custom_guidance",
+                "blocking": False,
+                "user_input": decision,
+                "instructions": f"User provided guidance: {decision}. Follow their instructions.",
+            }
 
     @classmethod
     def validate(cls, input_data: Dict[str, Any]) -> Dict[str, Any]:

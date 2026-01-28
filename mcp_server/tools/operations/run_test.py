@@ -107,7 +107,8 @@ def execute_test(
     test_path: str,
     env: str = "DEFAULT",
     report_dir: str = "tests/_reports",
-    timeout: int = 300
+    timeout: int = 300,
+    headless: bool = False
 ) -> Dict[str, Any]:
     """
     Execute pytest test with standard flags and capture results.
@@ -117,6 +118,7 @@ def execute_test(
         env: Environment name (default: "DEFAULT")
         report_dir: Directory for HTML reports (default: "tests/_reports")
         timeout: Maximum execution time in seconds (default: 300 = 5 minutes)
+        headless: Whether to run browser in headless mode (default: False for pair programming)
 
     Returns:
         Dict with:
@@ -141,13 +143,15 @@ def execute_test(
     report_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Build pytest command
+    # Note: headless=False is enforced by Step 2 qg_preflight for pair programming
     cmd = [
         "python", "-m", "pytest",
         test_path,
         "-v",  # Verbose output
         f"--html={report_path}",  # HTML report
         "--self-contained-html",  # Single-file report
-        f"--env={env}"  # Environment config
+        f"--env={env}",  # Environment config
+        f"--headless={str(headless)}"  # Browser visibility (False for pair programming)
     ]
 
     # Execute pytest
@@ -232,32 +236,64 @@ async def run_test_async(arguments: dict) -> str:
 
     env = arguments.get("env")  # DEF-062: No default here
 
-    # DEF-062: If env not provided, read from Step 2 state
-    if env is None:
-        try:
-            from utils.audit_logger import AuditLogger
-            from utils.state_manager import StateManager
+    # Default values (used if Step 2 state unavailable)
+    headless = False  # Pair programming requires visible browser
+    timeout = 300  # Default timeout
 
-            audit_logger = AuditLogger()
-            state_manager = StateManager(run_id=audit_logger.run_id)
-            step2_data = state_manager.get_step(2)
+    # DEF-062: Read config from workflow state
+    # - env (detected_env_id) comes from Step 1 (User Input)
+    # - browser_config, timeout_config come from Step 2 (Pre-flight)
+    try:
+        from utils.audit_logger import AuditLogger
+        from utils.state_manager import StateManager
 
-            if step2_data:
+        audit_logger = AuditLogger()
+        state_manager = StateManager(run_id=audit_logger.run_id)
+
+        # Read env from Step 1 (where detected_env_id is saved)
+        step1_data = state_manager.get_step(1)
+        if step1_data and env is None:
+            # Use workflow as env (workflow matches env config key)
+            env = step1_data.get("workflow") or step1_data.get("detected_env_id", "DEFAULT")
+
+        # Read browser/timeout config from Step 2
+        step2_data = state_manager.get_step(2)
+
+        if step2_data:
+            # Environment ID fallback (if Step 1 didn't have it)
+            if env is None:
                 env = step2_data.get("detected_env_id", "DEFAULT")
-            else:
+
+            # Browser config - headless MUST be False for pair programming
+            browser_config = step2_data.get("browser_config", {})
+            headless = browser_config.get("headless", False)
+
+            # Timeout config - use threshold_seconds if enabled
+            timeout_config = step2_data.get("timeout_config", {})
+            if timeout_config.get("enabled", False):
+                timeout = timeout_config.get("threshold_seconds", 300)
+        else:
+            if env is None:
                 env = "DEFAULT"
-        except Exception:
+    except Exception:
+        if env is None:
             env = "DEFAULT"  # Fallback if state read fails
 
     report_dir = arguments.get("report_dir", "tests/_reports")
-    timeout = arguments.get("timeout", 300)
+
+    # Allow explicit override from arguments (for testing)
+    if "timeout" in arguments:
+        timeout = arguments["timeout"]
+    if "headless" in arguments:
+        headless = arguments["headless"]
 
     try:
         result = execute_test(
             test_path=test_path,
             env=env,
             report_dir=report_dir,
-            timeout=timeout
+            timeout=timeout,
+            headless=headless
         )
         return json.dumps(result, indent=2)
 

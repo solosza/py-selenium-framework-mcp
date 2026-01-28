@@ -1,11 +1,12 @@
 """
-Unit tests for QGExecution gate - Task 60.0
+Unit tests for QGExecution gate - Step 5 HITL Triage
 
-Test suite for Step 11 execution validation gate with HITL triage.
+Test suite for Step 5 execution validation gate with HITL triage.
+Adapted from archived Task 60.0 (Step 11) for 5-step workflow.
 
 Test Matrix:
 - Happy path: 1 test (P0) - test passed validation
-- Validation: 3 tests (P0) - test failed, missing result, invalid status
+- Validation: 3 tests (P0) - test failed (NEEDS_RETRY), missing result, invalid status
 - Diagnostic capture: 1 test (P1) - 7 data types captured
 - AI analysis: 3 tests (P1) - assertion, timeout, element not found
 - Triage presentation: 1 test (P1) - format validation
@@ -134,14 +135,14 @@ class TestQGExecutionValidation:
 
     @pytest.mark.unit
     @pytest.mark.qg_execution
-    def test_failed_test_returns_fail_with_diagnostics(self):
+    def test_failed_test_returns_needs_retry_with_hitl(self):
         """
-        P0: Verify failed test returns fail response with diagnostic data.
+        P0: Verify failed test returns NEEDS_RETRY with hitl_required (HITL pattern).
 
         AAA Pattern:
         1. Arrange - Create test result with status="failed"
         2. Act - Validate
-        3. Assert - Returns fail with diagnostic data and triage options
+        3. Assert - Returns NEEDS_RETRY with fix_applied="hitl_required" and triage options
         """
         # Arrange
         arguments = {
@@ -163,19 +164,19 @@ class TestQGExecutionValidation:
         # Act
         result = QGExecution.validate(arguments)
 
-        # Assert
-        assert result["status"] == "fail", \
-            "Failed test should return 'fail'"
-        assert "fix_hint" in result, \
-            "Failed test should include fix_hint with triage presentation"
-        assert "HOW SHOULD WE PROCEED?" in result["fix_hint"], \
-            "Fix hint should include triage options"
-        assert "1. Application Defect" in result["fix_hint"], \
-            "Fix hint should include option 1"
-        assert "2. Test Issue" in result["fix_hint"], \
-            "Fix hint should include option 2"
-        assert "3. Investigate" in result["fix_hint"], \
-            "Fix hint should include option 3"
+        # Assert - HITL pattern: NEEDS_RETRY with hitl_required
+        assert result["status"] == "NEEDS_RETRY", \
+            f"Failed test should return 'NEEDS_RETRY', got {result['status']}"
+        assert result["fix_applied"] == "hitl_required", \
+            "Failed test should trigger HITL (fix_applied='hitl_required')"
+        assert "fix_data" in result, \
+            "Failed test should include fix_data with diagnostic info"
+        assert "presentation" in result["fix_data"], \
+            "fix_data should include triage presentation"
+        assert "HOW SHOULD WE PROCEED?" in result["fix_data"]["presentation"], \
+            "Presentation should include triage options"
+        assert "triage_options" in result["fix_data"], \
+            "fix_data should include triage_options list"
 
 
 # ============================================================================
@@ -393,9 +394,9 @@ class TestTriagePresentation:
             test_path="tests/test_example.py"
         )
 
-        # Assert
-        assert "TEST EXECUTION FAILED" in triage_message, \
-            "Message should include failure header"
+        # Assert - Updated for Step 5 format
+        assert "STEP 5: TEST EXECUTION FAILED" in triage_message, \
+            "Message should include Step 5 failure header"
         assert "AI Analysis" in triage_message, \
             "Message should include AI analysis section"
         assert "Confidence: 70%" in triage_message, \

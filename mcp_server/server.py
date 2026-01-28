@@ -7,12 +7,13 @@ Provides tools following the 4-layer architecture workflow:
 ACTIVE TOOLS (4-Step Pair Programming Workflow v3.1):
 1. discover_page_elements - Page URL → discovered elements (Tool 2)
 
-QUALITY GATES (Steps 1-4):
+QUALITY GATES (Steps 1-5):
 - qg_user_input (Step 1) - User input validation
 - qg_preflight (Step 2) - Pre-flight configuration validation
 - qg_ai_processing (Step 3) - AI processing validation
 - qg_discovered_elements (Step 4) - Discovered elements validation (PRE+POST)
 - qg_discovery_complete (Step 4) - Discovery completion checkpoint
+- qg_execution (Step 5) - Execution validation with HITL triage
 
 PLANNED (Tools 7-11):
 7. list_tests - Catalog all tests
@@ -49,6 +50,7 @@ from tools.gates.qg_ai_processing import QGAIProcessing
 # qg_test_scenarios archived on 2026-01-23 (redundant Tool 1)
 from tools.gates.qg_discovered_elements import QGDiscoveredElements
 from tools.gates.qg_discovery_complete import QGDiscoveryComplete
+from tools.gates.qg_execution import QGExecution
 # Construction gates archived to _archived/autonomous_workflow_v1/gates/ on 2026-01-22
 
 # Import operations (Tool 9: run_test)
@@ -103,6 +105,12 @@ async def qg_discovered_elements(arguments: dict) -> str:
 async def qg_discovery_complete(arguments: dict) -> str:
     """Step 4: Discovery completion checkpoint (PRE-only). Validates all pages discovered."""
     result = QGDiscoveryComplete.validate_pre({})
+    return json.dumps(result, indent=2)
+
+
+async def qg_execution(arguments: dict) -> str:
+    """Step 5: Execution validation with HITL triage (POST-only)."""
+    result = QGExecution.validate(arguments)
     return json.dumps(result, indent=2)
 
 
@@ -409,6 +417,38 @@ async def list_available_tools() -> list[Tool]:
                 "type": "object",
                 "properties": {}
             }
+        ),
+
+        # Step 5: Execution Validation with HITL Triage (POST-only)
+        Tool(
+            name="qg_execution",
+            description="Step 5 quality gate: Validate test execution results with HITL triage on failure",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "test_result": {
+                        "type": "object",
+                        "description": "Test result from run_test operation",
+                        "properties": {
+                            "status": {"type": "string", "description": "Test status: passed, failed, or crashed"},
+                            "exit_code": {"type": "integer", "description": "Pytest exit code"},
+                            "output": {"type": "string", "description": "Pytest output"},
+                            "duration": {"type": "number", "description": "Test duration in seconds"},
+                            "failure_data": {"type": "object", "description": "Failure details if test failed"}
+                        },
+                        "required": ["status"]
+                    },
+                    "workflow": {
+                        "type": "string",
+                        "description": "Workflow/domain name"
+                    },
+                    "test_path": {
+                        "type": "string",
+                        "description": "Path to test file"
+                    }
+                },
+                "required": ["test_result"]
+            }
         )
 
         # =============================================================================
@@ -439,12 +479,13 @@ async def call_tool_handler(name: str, arguments: dict) -> list[TextContent]:
         "run_test": run_test,
         "analyze_failure": analyze_failure,
         "get_test_coverage": get_test_coverage,
-        # Quality Gates (Steps 1-4)
+        # Quality Gates (Steps 1-5)
         "qg_preflight": qg_preflight,                       # Step 2
         "qg_user_input": qg_user_input,                     # Step 1
         "qg_ai_processing": qg_ai_processing,               # Step 3
         "qg_discovered_elements": qg_discovered_elements,   # Step 4
         "qg_discovery_complete": qg_discovery_complete,     # Step 4 (checkpoint)
+        "qg_execution": qg_execution,                       # Step 5 (HITL)
     }
 
     if name not in handlers:
