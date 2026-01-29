@@ -253,8 +253,8 @@ async def run_test_async(arguments: dict) -> str:
         # Read env from Step 1 (where detected_env_id is saved)
         step1_data = state_manager.get_step(1)
         if step1_data and env is None:
-            # Use workflow as env (workflow matches env config key)
-            env = step1_data.get("workflow") or step1_data.get("detected_env_id", "DEFAULT")
+            # Prioritize detected_env_id (actual env config key) over workflow (folder name)
+            env = step1_data.get("detected_env_id") or step1_data.get("workflow", "DEFAULT")
 
         # Read browser/timeout config from Step 2
         step2_data = state_manager.get_step(2)

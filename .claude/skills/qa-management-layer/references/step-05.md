@@ -39,10 +39,15 @@ PRE-CHECK:
 - Verify workflow state has all metadata
 
 ACTION (2-TOOL SEQUENCE):
-1. CALL run_test with test_path
+1. CALL run_test with test_path and env
    - Executes pytest subprocess
    - Browser ALWAYS visible (non-headless) for HITL observation
-   - Parameters: test_path (required), marker (optional)
+   - Parameters:
+     - test_path (required): Path to test file
+     - env (required): Environment config key from Step 1 detected_env_id
+       Example: If URL was parabank.parasoft.com, detected_env_id = "parabank"
+       Use this value for env parameter
+     - marker (optional): Pytest marker filter
    - Captures: status, exit_code, output, duration, failure_data
    - Returns test_result object
 
