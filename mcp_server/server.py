@@ -197,12 +197,16 @@ async def list_available_tools() -> list[Tool]:
                         "type": "string",
                         "description": "Pytest path (e.g., tests/auth/test_login.py::test_valid_login)"
                     },
+                    "env": {
+                        "type": "string",
+                        "description": "Environment config key (e.g., parabank, automationex1). Must match key in environment_config.json"
+                    },
                     "marker": {
                         "type": "string",
                         "description": "Optional pytest marker filter (e.g., smoke)"
                     }
                 },
-                "required": ["test_path"]
+                "required": ["test_path", "env"]
             }
         ),
 
