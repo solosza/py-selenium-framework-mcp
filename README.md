@@ -1,207 +1,338 @@
-# Selenium Test Automation Framework
+# AI-Assisted QA Automation Framework
 
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Selenium](https://img.shields.io/badge/selenium-4.x-green.svg)](https://www.selenium.dev/)
 [![MCP](https://img.shields.io/badge/MCP-enabled-purple.svg)](https://modelcontextprotocol.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## What Is Isagawa QA?
-
-**Isagawa QA is an AI-enforced test execution system that ensures AI-generated tests follow professional QA standards by default.**
-
-Instead of asking AI to "write tests" and hoping it does the right thing, Isagawa **forces correctness** through non-bypassable workflows, quality gates, and encoded domain rules.
-
-AI does the work.
-Isagawa ensures the work is done **the right way**.
-
-This is not a suggestion layer.
-This is enforced execution.
+A production-grade Python Selenium framework with **AI-powered test generation**. Describe what you want to test in plain English, and AI generates complete, maintainable test automation code.
 
 ---
 
-### What This Is
+## What You Get
 
-- ✅ An AI-enforced QA execution engine
-- ✅ A system for governing *how* AI creates tests
-- ✅ A way to encode expert QA standards as rules
-- ✅ A replacement for manual QA oversight in AI workflows
-- ✅ The first execution pack on a broader enforcement platform
-
-### What This Is NOT
-
-- ❌ A chatbot
-- ❌ An AI agent
-- ❌ A copilot
-- ❌ A prompt library
-- ❌ A test recorder
-- ❌ A generic automation tool
-
-If you're looking for something that *suggests* tests, this isn't it.
-If you need something that **prevents bad tests from existing**, it is.
+- **AI generates tests from requirements** - Describe a user story, get working test code
+- **Production-grade architecture** - 4-layer pattern (Role > Task > Page > WebInterface) that scales
+- **Consistent code patterns** - Every generated test follows the same structure
+- **Works with your AI tool** - Claude Code, Cursor, Windsurf, or any MCP-compatible agent
 
 ---
 
-**One-sentence summary:**
-_Isagawa QA enforces how AI executes test automation — not just what it produces._
-
----
-
-A production-ready, 4-layer test automation framework with **AI-powered test generation** via Model Context Protocol (MCP). Built with Python and Selenium. Designed for teams who need structure and manual testers transitioning to automation.
+## How It Works
 
 ```
-Tests → Roles → Tasks → Pages → WebInterface
+1. You describe: "As a registered user, I want to login and view my account"
+2. AI discovers page elements automatically (via Playwright)
+3. AI generates: Page Objects, Tasks, Roles, and Tests
+4. You run: pytest tests/your_test.py
 ```
 
-## Framework Overview (How It’s Implemented)
+The generated code follows strict architectural patterns - no spaghetti, no "every engineer writes it differently" problems.
 
-This framework provides a **clean, maintainable architecture** for browser test automation. Instead of writing spaghetti Selenium code, you get organized layers that separate concerns:
+---
 
-- **Tests** - What you're verifying (assertions only)
-- **Roles** - Who is doing it (GuestUser, RegisteredUser, Admin)
-- **Tasks** - What workflow they're performing (login, browse catalog, checkout)
-- **Pages** - How to interact with UI elements (click, type, select)
+## Prerequisites
 
-**Result:** Tests that are easy to read, maintain, and scale.
+Before installing, ensure you have:
 
-## Who Is This For?
+| Requirement | Version | Check Command | Download |
+|-------------|---------|---------------|----------|
+| Python | 3.11+ | `python --version` | [python.org](https://www.python.org/downloads/) |
+| Node.js | 18+ | `node --version` | [nodejs.org](https://nodejs.org/) |
+| Chrome | Latest | Open Chrome > Help > About | [google.com/chrome](https://www.google.com/chrome/) |
+| Git | Any | `git --version` | [git-scm.com](https://git-scm.com/) |
+| MCP-compatible AI | - | - | Claude Code, Cursor, or Windsurf |
 
-| You Are | This Framework Helps You |
-|---------|-------------------------|
-| **Manual Tester** | Learn automation with clear patterns, not messy scripts |
-| **Junior Automator** | Skip the "how do I organize this?" phase |
-| **QA Team** | Get a ready-made structure instead of building from scratch |
-| **Solo Developer** | Production-grade architecture for your projects |
+### AI Agent Options
 
-## Features
+This framework requires an MCP-compatible AI coding agent:
 
-### Core Framework
-- **4-Layer Architecture** - Clean separation of concerns
-- **Page Object Model** - UI changes don't break your tests
-- **Role-Based Testing** - Test as different user personas
-- **TDD-Ready Structure** - Architecture supports test-driven development workflows
-- **Built-in Logging** - Automatic logging at every layer
-- **HTML Reports** - Professional test reports out of the box
-- **Chrome Support** - Works with Chrome browser (extensible to others)
-- **JSON Test Data** - Externalized, maintainable test data
+| Agent | MCP Support | Notes |
+|-------|-------------|-------|
+| [Claude Code](https://claude.ai/download) | Native | Recommended - best MCP integration |
+| [Cursor](https://cursor.sh/) | Via config | Requires MCP configuration |
+| [Windsurf](https://codeium.com/windsurf) | Via config | Requires MCP configuration |
 
-### AI Integration (MCP Server)
-- **AI-Powered Test Generation** - Convert requirements to working tests
-- **Element Discovery** - AI discovers page elements automatically
-- **Framework-Aware Code Generation** - Generated code follows all architecture conventions
-- **Agent Agnostic** - Works with Claude Code, Cursor, Windsurf, or any MCP-compatible agent
+---
 
-## Quick Start
+## Installation
 
-Get running in 5 minutes:
-
-### Prerequisites
-
-- Python 3.12 or higher
-- Chrome browser installed
-- Git
-- MCP-compatible AI coding agent (Claude Code, Cursor, or Windsurf) - for AI-powered test generation
-
-### Installation
+### Step 1: Clone the Repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/solosza/py-selenium-framework-mcp.git
 cd py-selenium-framework-mcp
-
-# Create virtual environment (recommended)
-python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# macOS/Linux:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
 ```
 
-For AI-powered test generation, see the [MCP Setup](#mcp-setup) section below.
+### Step 2: Create Virtual Environment
 
-### Run Your First Test
+**Windows (PowerShell):**
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+**Windows (Command Prompt):**
+```cmd
+python -m venv venv
+venv\Scripts\activate.bat
+```
+
+**macOS / Linux:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### Step 3: Install Python Dependencies
 
 ```bash
-# Run all tests
+# Core framework dependencies
+pip install -r requirements.txt
+
+# MCP server dependencies
+pip install -r mcp_server/requirements.txt
+```
+
+### Step 4: Verify Installation
+
+```bash
+# Check Selenium is installed
+python -c "import selenium; print(f'Selenium {selenium.__version__} installed')"
+
+# Check pytest is installed
+pytest --version
+
+# Check MCP dependencies
+python -c "import mcp; print('MCP SDK installed')"
+```
+
+---
+
+## MCP Server Setup
+
+The framework uses two MCP servers:
+1. **qa-automation** - Generates test automation code
+2. **playwright** - Discovers page elements via browser automation
+
+### Step 1: Locate Your Python Path
+
+**Windows:**
+```powershell
+where python
+# Example output: C:\Users\YourName\AppData\Local\Programs\Python\Python311\python.exe
+```
+
+**macOS / Linux:**
+```bash
+which python3
+# Example output: /usr/local/bin/python3
+```
+
+### Step 2: Create MCP Configuration
+
+Create or edit `.mcp.json` in your project root:
+
+**Windows Configuration:**
+```json
+{
+  "mcpServers": {
+    "qa-automation": {
+      "command": "C:/Users/YOUR_USERNAME/AppData/Local/Programs/Python/Python311/python.exe",
+      "args": ["D:/path/to/py-selenium-framework-mcp/mcp_server/server.py"],
+      "cwd": "D:/path/to/py-selenium-framework-mcp/mcp_server"
+    },
+    "playwright": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+    }
+  }
+}
+```
+
+**macOS / Linux Configuration:**
+```json
+{
+  "mcpServers": {
+    "qa-automation": {
+      "command": "/usr/local/bin/python3",
+      "args": ["/path/to/py-selenium-framework-mcp/mcp_server/server.py"],
+      "cwd": "/path/to/py-selenium-framework-mcp/mcp_server"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    }
+  }
+}
+```
+
+**Important:**
+- Replace `YOUR_USERNAME` with your actual Windows username
+- Replace `/path/to/` with your actual project path
+- Use **forward slashes** (`/`) even on Windows
+- Use **absolute paths** for reliability
+
+### Step 3: Install Playwright Browser
+
+The Playwright MCP server needs a browser installed:
+
+```bash
+npx playwright install chromium
+```
+
+### Step 4: Verify MCP Servers
+
+**Claude Code:**
+```bash
+# List configured servers
+claude mcp list
+
+# You should see both qa-automation and playwright listed
+```
+
+**Cursor / Windsurf:**
+- Open settings/preferences
+- Navigate to MCP configuration
+- Verify both servers are listed and enabled
+
+### Step 5: Test MCP Connection
+
+In your AI agent, ask:
+```
+What MCP tools are available?
+```
+
+You should see tools like:
+- `mcp__qa-automation__generate_page_object`
+- `mcp__qa-automation__generate_task`
+- `mcp__qa-automation__generate_role`
+- `mcp__playwright__browser_navigate`
+- `mcp__playwright__browser_snapshot`
+
+---
+
+## Quick Start: Generate Your First Test
+
+### Option A: Use the Workflow Command (Recommended)
+
+In Claude Code, run:
+```
+/qa-workflow
+```
+
+Then provide your requirement:
+```
+As a guest user, I want to browse the Women category on automationpractice.pl
+```
+
+The AI will:
+1. Navigate to the site and discover elements
+2. Generate Page Objects, Tasks, Roles, and Tests
+3. Save files to the correct locations
+4. Run the test
+
+### Option B: Manual Conversation
+
+Start a conversation with your AI agent:
+
+```
+I want to create a test for this requirement:
+
+As a registered user, I want to login to automationpractice.pl
+
+URL: http://www.automationpractice.pl/index.php?controller=authentication
+
+Use static credentials from tests/data/test_users.json
+```
+
+---
+
+## Running Tests
+
+### Run All Tests
+```bash
 pytest tests/ -v
-
-# Run with HTML report
-pytest tests/ -v --html=reports/report.html --self-contained-html
-
-# Run specific test category
-pytest tests/catalog/ -v
-
-# Run in headless mode (no browser window)
-pytest tests/ -v --headless=True
 ```
 
-### See Results
+### Run Specific Test File
+```bash
+pytest tests/auth/test_login.py -v
+```
 
-After running tests, open `reports/report.html` in your browser for a detailed report.
+### Run with HTML Report
+```bash
+pytest tests/ -v --html=tests/_reports/report.html --self-contained-html
+```
 
-## Architecture
+### Run in Headless Mode (No Browser Window)
+```bash
+pytest tests/ -v --headless
+```
 
-### The 4-Layer Pattern
+### View Test Report
+After running with `--html`, open `tests/_reports/report.html` in your browser.
+
+---
+
+## Architecture: The 4-Layer Pattern
+
+Generated code follows a strict 4-layer architecture:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ TEST LAYER                                                  │
-│ • Arrange, Act, Assert only                                 │
-│ • Calls ONE role method                                     │
-│ • Asserts via Page Object state-checks                      │
+│  TEST                                                        │
+│  • Arrange, Act, Assert                                      │
+│  • Calls ONE role method                                     │
+│  • Asserts via Page Object state methods                     │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ ROLE LAYER                                                  │
-│ • User personas (GuestUser, RegisteredUser)                 │
-│ • Orchestrates multiple tasks into workflows                │
-│ • Contains user context                                     │
+│  ROLE                                                        │
+│  • User personas (GuestUser, RegisteredUser)                 │
+│  • Orchestrates multiple tasks into workflows                │
+│  • Example: login > browse > add to cart > checkout          │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ TASK LAYER                                                  │
-│ • Single business operations (login, add_to_cart)           │
-│ • Calls page object methods                                 │
-│ • Domain-focused, not UI-focused                            │
+│  TASK                                                        │
+│  • Single business operations (login, add_to_cart)           │
+│  • Calls page object methods                                 │
+│  • Domain-focused, not UI-focused                            │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ PAGE OBJECT LAYER                                           │
-│ • One class per page/component                              │
-│ • Locators as class constants                               │
-│ • Atomic methods (click, type, select)                      │
+│  PAGE OBJECT                                                 │
+│  • One class per page/component                              │
+│  • Contains all locators                                     │
+│  • Atomic methods: click, type, select                       │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ WEB INTERFACE                                               │
-│ • Selenium wrapper                                          │
-│ • Handles waits, logging, error handling                    │
-│ • Single point of browser interaction                       │
+│  WEB INTERFACE                                               │
+│  • Selenium wrapper                                          │
+│  • Handles waits, logging, screenshots                       │
+│  • Single point of browser interaction                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Why This Structure?
+### Why This Matters
 
 | Problem | How This Framework Solves It |
 |---------|------------------------------|
-| UI changes break everything | Locators in ONE place (Page Objects) |
-| Tests are hard to read | Tests only have assertions, logic is in Roles/Tasks |
+| UI changes break tests | Locators in ONE place (Page Objects) |
+| Tests are hard to read | Tests only assert, logic is in Roles/Tasks |
 | Code duplication | Tasks are reusable across tests |
-| Hard to test different users | Roles encapsulate user-specific behavior |
-| Debugging is painful | Automatic logging at every layer |
+| Different coding styles | AI generates consistent patterns |
+| Hard to onboard new team members | Clear layer separation, same patterns everywhere |
 
-### Quick Reference Rules
+### Golden Rules
 
 ```
-GOLDEN RULES:
 1. Locators ONLY in Page Objects
 2. Tasks/Roles return NOTHING (None)
 3. Tests assert via Page Object state-check methods
@@ -209,175 +340,186 @@ GOLDEN RULES:
 5. One responsibility per layer
 ```
 
-For complete architecture documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
+---
 
-## MCP Integration: AI-Powered Test Generation
+## Project Structure
 
-The framework includes an **MCP (Model Context Protocol) server** that enables AI-assisted test generation specifically designed for this framework's architecture.
-
-### What It Does
-
-The end product is a **working test automation script** that tests the supplied requirement. This is achieved through AI orchestration combined with the MCP server:
-
-1. You provide a requirement (e.g., "As a registered user, I want to login")
-2. AI orchestrates the MCP tools to generate all necessary components
-3. Output: executable Page Objects, Tasks, Roles, and Tests that follow framework conventions
-
-### Why Framework-Specific?
-
-Generic AI code generation often produces code that doesn't follow project conventions. This MCP server understands the 4-layer architecture, ensuring generated code:
-- Uses correct layer separation
-- Applies proper decorators
-- Implements state-check methods for assertions
-- Returns appropriate values (self for POMs, None for Tasks/Roles)
-
-### Supported AI Agents
-
-Works with any MCP-compatible AI coding agent:
-- **Claude Code** (Anthropic)
-- **Cursor** (with MCP support)
-- **Windsurf** (Codeium)
-- **Any future MCP-compatible agent**
-
-### MCP Setup
-
-The AI-powered test generation requires two MCP servers:
-1. **qa-automation** - This framework's test generation tools
-2. **playwright** - Browser automation for element discovery
-
-#### Step 1: Install Dependencies
-
-```bash
-# Install MCP server dependencies
-pip install -r mcp_server/requirements.txt
-
-# Install Node.js (required for Playwright MCP)
-# Download from: https://nodejs.org/
+```
+py-selenium-framework-mcp/
+├── framework/                    # Reusable framework code
+│   ├── interfaces/
+│   │   └── web_interface.py      # Selenium wrapper
+│   ├── pages/                    # Page Objects (UI elements)
+│   │   ├── auth/                 # Login, registration pages
+│   │   └── catalog/              # Product pages
+│   ├── tasks/                    # Business operations
+│   │   └── auth/                 # Login, logout tasks
+│   ├── roles/                    # User personas
+│   │   └── auth/                 # RegisteredUser, GuestUser
+│   └── resources/
+│       ├── config/               # Environment settings
+│       └── utilities/            # Logging, helpers
+│
+├── tests/                        # Test files
+│   ├── conftest.py               # Pytest fixtures
+│   ├── data/                     # Test data (JSON)
+│   │   └── test_users.json       # User credentials
+│   ├── auth/                     # Authentication tests
+│   └── catalog/                  # Catalog tests
+│
+├── mcp_server/                   # AI integration
+│   ├── server.py                 # MCP server entry
+│   ├── tools/                    # Code generation tools
+│   └── requirements.txt          # MCP dependencies
+│
+└── .mcp.json                     # MCP configuration
 ```
 
-#### Step 2: Configure MCP Servers
+---
 
-Create or edit `.mcp.json` in your project root:
+## Configuration
+
+### Environment Config
+
+Edit `framework/resources/config/environment_config.json`:
 
 ```json
 {
-  "mcpServers": {
-    "qa-automation": {
-      "command": "python",
-      "args": ["mcp_server/server.py"],
-      "cwd": "/path/to/py-selenium-framework-mcp/mcp_server"
-    },
-    "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp"]
-    }
+  "DEFAULT": {
+    "url": "http://www.automationpractice.pl/index.php",
+    "browser": "chrome",
+    "headless": false,
+    "implicit_wait": 10
   }
 }
 ```
 
-**Windows users:** Use full paths and forward slashes:
+### Test Users
+
+Edit `tests/data/test_users.json`:
+
 ```json
 {
-  "mcpServers": {
-    "qa-automation": {
-      "command": "C:/Users/YOUR_USER/AppData/Local/Programs/Python/Python311/python.exe",
-      "args": ["D:/path/to/py-selenium-framework-mcp/mcp_server/server.py"],
-      "cwd": "D:/path/to/py-selenium-framework-mcp/mcp_server"
-    },
-    "playwright": {
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "@playwright/mcp"]
-    }
+  "registered_user": {
+    "email": "your-test-email@example.com",
+    "password": "YourTestPassword123"
   }
 }
 ```
 
-#### Step 3: Verify MCP Servers are Running
+---
 
-In Claude Code, check that both servers are enabled:
-```bash
-claude mcp list
+## Test Data Strategies
+
+When generating tests that require credentials, you have three options:
+
+| Strategy | Description | When to Use |
+|----------|-------------|-------------|
+| **Static** | Use existing account from `tests/data/test_users.json` | Login-only tests |
+| **Dynamic** | Register fresh user, save for later tests | Registration flows |
+| **Self-contained** | Register and use within same test | Independent tests |
+
+Tell the AI which strategy you want when providing your requirement.
+
+---
+
+## Workflow Naming
+
+To avoid overwriting files from previous test runs, use unique workflow names:
+
 ```
-
-You should see both `qa-automation` and `playwright` listed and enabled.
-
-#### Step 4: Install Skills (Required for AI-Guided Workflow)
-
-The framework includes **Claude Code skills** that guide AI through the 11-step test generation workflow with quality gates. Copy them to your project:
-
-```bash
-# Copy skills directory to your project
-cp -r .claude/skills /path/to/your/project/.claude/skills
-```
-
-**Windows:**
-```bash
-xcopy /E /I .claude\skills C:\path\to\your\project\.claude\skills
-```
-
-The skills include:
-- **qa-management-layer** - 11-step workflow with quality gates
-- **testing** - TDD and test conventions
-- **design-decisions** - Architecture decision recording
-- **documentation** - Documentation conventions
-
-These skills enable AI to:
-- Follow the correct 11-step workflow sequence
-- Validate generated code through quality gates
-- Self-heal when tool output is incomplete
-- Block progression until quality standards are met
-
-#### Workflow Naming Convention
-
-To avoid overwriting existing files from previous test runs, use **unique workflow names**:
-
-```yaml
 # First test on ParaBank
 workflow_name: "parabank"
 
-# Subsequent tests on ParaBank
+# Subsequent tests
 workflow_name: "parabank2"
-workflow_name: "parabank3"
-# etc.
+workflow_name: "parabank_login"
+workflow_name: "parabank_transfer"
 ```
 
-The framework generates files in:
+Files are generated in:
 - `framework/pages/{workflow_name}/`
 - `framework/tasks/{workflow_name}/`
 - `framework/roles/{workflow_name}/`
 - `tests/{workflow_name}/`
 
-**Reusing the same workflow name will overwrite existing files.**
+---
 
-If you intentionally want to update existing tests (e.g., improving an existing workflow), you can reuse the workflow name. Just be aware that files will be overwritten.
+## Troubleshooting
 
-**Best practice:** Append incrementing numbers or dates to workflow names for test isolation:
-- By number: `parabank`, `parabank2`, `parabank3`
-- By date: `parabank_2026_01_11`, `parabank_2026_01_12`
-- By feature: `parabank_login`, `parabank_transfer`, `parabank_admin`
+### MCP Server Not Starting
 
-#### Common MCP Issues
+**Symptom:** AI agent can't find MCP tools
 
-**Server not starting:**
-- Check Python path is correct (run `where python` or `which python`)
-- Ensure `mcp_server/server.py` path is absolute
-- Check Node.js is installed (`node --version`)
+**Solutions:**
+1. Check Python path is correct:
+   ```bash
+   # Windows
+   where python
 
-**Playwright MCP not working:**
-- Run `npx -y @playwright/mcp` manually to test
-- On Windows, use `cmd /c npx` instead of just `npx`
+   # macOS/Linux
+   which python3
+   ```
 
-**Tools not appearing:**
-- Restart Claude Code after config changes
-- Check `.mcp.json` syntax (valid JSON, no trailing commas)
+2. Verify paths in `.mcp.json` are absolute and use forward slashes
+
+3. Restart your AI agent after config changes
+
+4. Test MCP server manually:
+   ```bash
+   python mcp_server/server.py
+   # Should start without errors
+   ```
+
+### Playwright MCP Not Working
+
+**Symptom:** Element discovery fails, browser doesn't open
+
+**Solutions:**
+1. Install Playwright browser:
+   ```bash
+   npx playwright install chromium
+   ```
+
+2. Test Playwright MCP manually:
+   ```bash
+   npx -y @playwright/mcp@latest
+   ```
+
+3. Windows users: Ensure using `cmd /c npx` in `.mcp.json`
+
+### ChromeDriver Version Mismatch
+
+**Symptom:** `SessionNotCreatedException` error
+
+**Solution:** The framework uses `webdriver-manager` which auto-downloads the correct driver. Update Chrome browser to latest version.
+
+### Element Not Found / Timeout
+
+**Symptom:** `TimeoutException` during test run
+
+**Solutions:**
+1. Increase timeout in `framework/resources/config/environment_config.json`
+2. Check if target website is accessible
+3. Verify locators match current page structure
+
+### Import Errors
+
+**Symptom:** `ModuleNotFoundError` when running tests
+
+**Solutions:**
+1. Ensure virtual environment is activated
+2. Reinstall dependencies:
+   ```bash
+   pip install -r requirements.txt
+   pip install -r mcp_server/requirements.txt
+   ```
+
+---
 
 ## For Manual Testers: Your Learning Path
 
-New to automation? Start here:
-
-### Step 1: Understand the Layers
-
-Think of it like your manual testing:
+New to automation? Here's how this maps to manual testing:
 
 | Manual Testing | Framework Layer |
 |---------------|-----------------|
@@ -386,9 +528,7 @@ Think of it like your manual testing:
 | "I click the Women menu link" | Page Object (click method) |
 | "I verify products are displayed" | Test (assertion) |
 
-### Step 2: Read a Simple Test
-
-Open `tests/catalog/test_browse_category.py`:
+### Read a Simple Test
 
 ```python
 def test_browse_women_category(web_interface, config):
@@ -403,194 +543,23 @@ def test_browse_women_category(web_interface, config):
     assert product_list_page.has_products(), "Products should be displayed"
 ```
 
-That's it. The test reads like a user story.
-
-### Step 3: Trace the Flow
-
-1. Test creates a `GuestUser`
-2. Calls `guest.browse_category("Women")`
-3. Role calls `catalog_tasks.browse_category("Women")`
-4. Task calls `navigation_menu.click_category("Women")`
-5. Page Object calls `self.web.click(locator)`
-
-### Step 4: Generate Your First Test (AI-Powered)
-
-Use the MCP server with your AI coding agent:
-
-1. Set up MCP server (see MCP Setup section above)
-2. Provide a requirement: "As a guest user, I want to browse the Women category"
-3. AI orchestrates the 9-step workflow to generate all framework components
-4. Run the generated test:
-   ```bash
-   # Quick run - console output only
-   pytest tests/your_test.py -v
-
-   # With HTML report - opens in browser for detailed results
-   pytest tests/your_test.py -v --html=reports/report.html --self-contained-html
-   ```
-
-### Step 5: Go Deeper
-
-Read [ARCHITECTURE.md](ARCHITECTURE.md) for complete patterns and examples.
-
-## Project Structure
-
-```
-py-selenium-framework-mcp/
-├── framework/                    # Core framework (reusable)
-│   ├── interfaces/
-│   │   └── web_interface.py      # Selenium wrapper
-│   ├── pages/                    # Page Objects
-│   │   ├── auth/                 # Login, Registration pages
-│   │   └── catalog/              # Product listing, filters
-│   ├── tasks/                    # Business operations
-│   │   ├── common/               # Shared tasks (login, navigate)
-│   │   └── catalog/              # Catalog-specific tasks
-│   ├── roles/                    # User personas
-│   │   ├── auth/                 # RegisteredUser
-│   │   └── guest/                # GuestUser
-│   └── resources/
-│       ├── config/               # Environment settings
-│       └── utilities/            # Logging, helpers
-│
-├── tests/                        # Test scenarios
-│   ├── conftest.py               # Pytest fixtures
-│   ├── data/                     # Test data (JSON)
-│   ├── auth/                     # Authentication tests
-│   └── catalog/                  # Catalog tests
-│
-├── mcp_server/                   # MCP AI integration
-│   ├── server.py                 # MCP server entry point
-│   ├── requirements.txt          # MCP dependencies
-│   └── tools/                    # MCP tools
-│
-├── ARCHITECTURE.md               # Complete architecture reference
-└── README.md                     # This file
-```
-
-## Configuration
-
-### Environment Configuration
-
-The framework uses JSON configuration files:
-
-```
-framework/resources/config/environment_config.json
-```
-
-Default configuration points to Automation Practice demo site. To test your own application, update the URL:
-
-```json
-{
-  "DEFAULT": {
-    "url": "https://your-app-url.com"
-  }
-}
-```
-
-### Test Data
-
-Test user data is stored in:
-
-```
-framework/resources/data/users.json
-```
-
-Example structure:
-
-```json
-{
-  "registered_user": {
-    "email": "test@example.com",
-    "password": "SecurePass123!"
-  }
-}
-```
-
-## Running Tests
-
-```bash
-# All tests
-pytest tests/ -v
-
-# By marker (category)
-pytest tests/ -v -m catalog
-pytest tests/ -v -m auth
-pytest tests/ -v -m smoke
-
-# Single test file
-pytest tests/catalog/test_browse_category.py -v
-
-# Single test function
-pytest tests/catalog/test_browse_category.py::test_browse_women_category -v
-
-# With HTML report
-pytest tests/ -v --html=reports/report.html --self-contained-html
-
-# Headless mode (CI/CD)
-pytest tests/ -v --headless=True
-```
-
-### Understanding Test Output
-
-```
-tests/catalog/test_browse_category.py::test_browse_women_category PASSED [25%]
-```
-
-- `PASSED` - Test succeeded
-- `FAILED` - Assertion failed (check report for details)
-- `ERROR` - Test crashed (setup/teardown issue)
-- `SKIPPED` - Intentionally skipped (missing prerequisite)
-
-## Troubleshooting
-
-### Common Issues
-
-**ChromeDriver version mismatch**
-```
-selenium.common.exceptions.SessionNotCreatedException
-```
-Solution: The framework uses `webdriver-manager` which auto-downloads the correct driver. If issues persist, update Chrome browser.
-
-**Element not found / Timeout**
-```
-selenium.common.exceptions.TimeoutException
-```
-Solution: The target website may be slow. Increase timeout in `web_interface.py` or check if the site is accessible.
-
-### Getting Help
-
-- **Architecture questions:** Read [ARCHITECTURE.md](ARCHITECTURE.md)
-- **Bug reports:** Open an issue with Python version, error message, and steps to reproduce
-
-## Contributing
-
-The 4-layer architecture is framework-agnostic. The current implementation uses Selenium, but the patterns work with any browser automation tool.
-
-**Contribution Ideas:**
-- Port to Playwright (Python or TypeScript)
-- Port to Cypress
-- Add browser support (Firefox, Edge)
-- Improve MCP tools
-
-### Code Standards
-
-- Follow the 4-layer architecture
-- Locators only in Page Objects
-- Tasks/Roles return `None`
-- Use `@autologger` decorators
-- See [ARCHITECTURE.md](ARCHITECTURE.md) for patterns
-
-## License
-
-**Framework Code (MIT):** The test automation framework (framework/, tests/) is MIT licensed - free to use, modify, and distribute.
-
-**Skills (Proprietary):** The Claude Code skills (.claude/skills/) are proprietary. You may use them with Claude Code but may not redistribute or modify them. See [LICENSE.md](LICENSE.md) for full terms.
-
-## Author
-
-Built by [Alain Ignacio](https://github.com/solosza) as a portfolio project demonstrating QA engineering and test architecture skills.
+The test reads like a user story.
 
 ---
 
-**Questions?** Open an issue or check [ARCHITECTURE.md](ARCHITECTURE.md).
+## Support
+
+- **Issues:** [GitHub Issues](https://github.com/solosza/py-selenium-framework-mcp/issues)
+- **Architecture Details:** See `FRAMEWORK.md`
+
+---
+
+## License
+
+**Framework Code (MIT):** Free to use, modify, and distribute.
+
+See [LICENSE.md](LICENSE.md) for full terms.
+
+---
+
+Built for QA engineers who want AI to write tests the right way.
