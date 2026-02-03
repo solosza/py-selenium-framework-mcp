@@ -21,6 +21,12 @@ import re
 from pathlib import Path
 from typing import Dict, Any, Optional
 
+# Project root (parent of mcp_server/)
+# __file__ = mcp_server/tools/operations/run_test.py
+# .parent = operations/, .parent.parent = tools/, .parent.parent.parent = mcp_server/
+# .parent.parent.parent.parent = project root
+PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
+
 
 def validate_test_path(test_path: str, tests_root: str = "tests/") -> tuple[bool, Optional[str]]:
     """
@@ -36,9 +42,9 @@ def validate_test_path(test_path: str, tests_root: str = "tests/") -> tuple[bool
         - (False, error_message) if invalid
     """
     try:
-        # Resolve to absolute path
-        resolved_path = Path(test_path).resolve()
-        tests_root_resolved = Path(tests_root).resolve()
+        # Resolve to absolute path relative to PROJECT_ROOT
+        resolved_path = (PROJECT_ROOT / test_path).resolve()
+        tests_root_resolved = (PROJECT_ROOT / tests_root).resolve()
 
         # Check if path starts with tests_root
         if not str(resolved_path).startswith(str(tests_root_resolved)):
@@ -107,7 +113,7 @@ def execute_test(
     test_path: str,
     env: str = "DEFAULT",
     report_dir: str = "tests/_reports",
-    timeout: int = 300,
+    timeout: int = 60,
     headless: bool = False
 ) -> Dict[str, Any]:
     """
@@ -117,7 +123,7 @@ def execute_test(
         test_path: Path to test file or directory (must be within tests/)
         env: Environment name (default: "DEFAULT")
         report_dir: Directory for HTML reports (default: "tests/_reports")
-        timeout: Maximum execution time in seconds (default: 300 = 5 minutes)
+        timeout: Maximum execution time in seconds (default: 60 = 1 minute)
         headless: Whether to run browser in headless mode (default: False for pair programming)
 
     Returns:
@@ -162,7 +168,7 @@ def execute_test(
             capture_output=True,
             text=True,
             timeout=timeout,
-            cwd=Path.cwd()
+            cwd=PROJECT_ROOT
         )
         duration = time.time() - start_time
 
@@ -223,9 +229,9 @@ async def run_test_async(arguments: dict) -> str:
     Args:
         arguments: Dict with:
             - test_path (required): Path to test file or directory
-            - env (optional): Environment name (if not provided, reads from Step 2 state)
+            - env (required): Environment config key (e.g., parabank, automationex1)
             - report_dir (optional): Report directory (default: "tests/_reports")
-            - timeout (optional): Timeout in seconds (default: 300)
+            - timeout (optional): Timeout in seconds (default: 60)
 
     Returns:
         JSON string with execution results
@@ -234,50 +240,13 @@ async def run_test_async(arguments: dict) -> str:
     if not test_path:
         return json.dumps({"error": "Missing required parameter: test_path"}, indent=2)
 
-    env = arguments.get("env")  # DEF-062: No default here
+    env = arguments.get("env")
+    if not env:
+        return json.dumps({"error": "Missing required parameter: env. Use detected_env_id from Step 1."}, indent=2)
 
-    # Default values (used if Step 2 state unavailable)
+    # Default values - simplified, no state reading needed
     headless = False  # Pair programming requires visible browser
-    timeout = 300  # Default timeout
-
-    # DEF-062: Read config from workflow state
-    # - env (detected_env_id) comes from Step 1 (User Input)
-    # - browser_config, timeout_config come from Step 2 (Pre-flight)
-    try:
-        from utils.audit_logger import AuditLogger
-        from utils.state_manager import StateManager
-
-        audit_logger = AuditLogger()
-        state_manager = StateManager(run_id=audit_logger.run_id)
-
-        # Read env from Step 1 (where detected_env_id is saved)
-        step1_data = state_manager.get_step(1)
-        if step1_data and env is None:
-            # Prioritize detected_env_id (actual env config key) over workflow (folder name)
-            env = step1_data.get("detected_env_id") or step1_data.get("workflow", "DEFAULT")
-
-        # Read browser/timeout config from Step 2
-        step2_data = state_manager.get_step(2)
-
-        if step2_data:
-            # Environment ID fallback (if Step 1 didn't have it)
-            if env is None:
-                env = step2_data.get("detected_env_id", "DEFAULT")
-
-            # Browser config - headless MUST be False for pair programming
-            browser_config = step2_data.get("browser_config", {})
-            headless = browser_config.get("headless", False)
-
-            # Timeout config - use threshold_seconds if enabled
-            timeout_config = step2_data.get("timeout_config", {})
-            if timeout_config.get("enabled", False):
-                timeout = timeout_config.get("threshold_seconds", 300)
-        else:
-            if env is None:
-                env = "DEFAULT"
-    except Exception:
-        if env is None:
-            env = "DEFAULT"  # Fallback if state read fails
+    timeout = 60  # Default timeout (sensible for UI tests)
 
     report_dir = arguments.get("report_dir", "tests/_reports")
 

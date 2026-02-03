@@ -637,7 +637,7 @@ class QGDiscoveredElements(BaseGate):
                     "fix_data": {
                         "diagnostic_data": diagnostic_data,
                         "ai_analysis": analysis,
-                        "triage_options": ["ai_investigate", "provide_guidance", "skip_continue", "abort"],
+                        "triage_options": ["ai_investigate", "provide_guidance", "skip_continue", "abort", "other"],
                         "presentation": triage_message,
                     },
                     "message": "Discovery issue encountered. HITL triage required - present options to user and await decision."
@@ -1013,6 +1013,49 @@ class QGDiscoveredElements(BaseGate):
 
     # ==================== HITL SUPPORT METHODS ====================
 
+    # Runtime failure patterns that should trigger HITL (not autonomous AI fix loops)
+    RUNTIME_FAILURE_PATTERNS = [
+        # Element discovery failures
+        "elements is empty",
+        "no valid locator",
+        "at least one interactive element required",
+        # Validation failures
+        "error_count",
+        "validation failed",
+        "elements have errors",
+        # Timeout/loading issues
+        "timeout",
+        "timed out",
+        # Element state issues
+        "element not found",
+        "not found",
+        "stale",
+        "not interactable",
+        "not clickable",
+        "not visible",
+        "disabled",
+        "detached",
+        # Page state issues
+        "wrong page",
+        "unexpected",
+        "loading",
+        "spinner",
+        # Navigation failures
+        "navigation failed",
+        "page not found",
+        "404",
+        "redirect",
+        # Authentication failures
+        "login failed",
+        "authentication",
+        "access denied",
+        "session expired",
+        # Network issues
+        "network",
+        "connection",
+        "cors",
+    ]
+
     @classmethod
     def _should_trigger_hitl(
         cls,
@@ -1022,13 +1065,20 @@ class QGDiscoveredElements(BaseGate):
         """
         Determine if failure should trigger HITL (vs structural fail).
 
-        HITL triggers when:
-        - validation_results exists AND error_count > 0 (runtime validation found issues)
+        HITL triggers for RUNTIME failures (things that need human judgment):
+        - Element validation errors (error_count > 0)
+        - Empty elements (none found on page)
+        - No valid locator extracted
+        - Timeout/loading issues
+        - Element state issues (stale, not visible, not clickable)
+        - Page state issues (wrong page, unexpected modal)
+        - Navigation failures
+        - Authentication failures
 
-        Structural failures (no HITL):
-        - Missing required fields
-        - Wrong types
-        - Invalid formats (PascalCase, etc.)
+        Structural failures (NO HITL - AI fixes without human):
+        - Missing required fields (url, page_name, etc.)
+        - Wrong types (elements not a list)
+        - Invalid formats (PascalCase validation)
 
         Args:
             error_message: The error message from validation
@@ -1037,10 +1087,16 @@ class QGDiscoveredElements(BaseGate):
         Returns:
             True if should trigger HITL, False for structural fail
         """
-        # HITL triggers when runtime validation found issues
+        # Check 1: validation_results has errors
         if validation_results and isinstance(validation_results, dict):
             error_count = validation_results.get("error_count", 0)
             if isinstance(error_count, int) and error_count > 0:
+                return True
+
+        # Check 2: Error message contains runtime failure patterns
+        error_lower = error_message.lower()
+        for pattern in cls.RUNTIME_FAILURE_PATTERNS:
+            if pattern in error_lower:
                 return True
 
         return False
@@ -1229,7 +1285,11 @@ HOW SHOULD WE PROCEED?
    -> Stop the workflow entirely
    -> Review and restart when ready
 
-Enter choice (1-4) or describe what you see:
+5. Other
+   -> Describe what you want to do
+   -> AI follows your instructions
+
+Enter choice (1-5):
 """
         return message.strip()
 
@@ -1293,6 +1353,14 @@ Enter choice (1-4) or describe what you see:
                 "action": "abort",
                 "blocking": True,
                 "instructions": "Workflow aborted by user. Review diagnostic data and restart when ready.",
+            }
+
+        # Option 5: Other (explicit custom guidance)
+        elif decision_normalized in ["5", "other"]:
+            return {
+                "action": "prompt_for_guidance",
+                "blocking": True,
+                "instructions": "User selected 'Other'. Ask: What would you like to do?",
             }
 
         # Custom guidance (user typed something else)

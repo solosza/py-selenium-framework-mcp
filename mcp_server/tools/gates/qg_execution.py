@@ -124,7 +124,7 @@ class QGExecution(BaseGate):
             "fix_data": {
                 "diagnostic_data": diagnostic_data,
                 "ai_analysis": ai_analysis,
-                "triage_options": ["application_defect", "test_issue", "investigate"],
+                "triage_options": ["application_defect", "test_issue", "investigate", "other"],
                 "presentation": triage_message,
                 "retry_decision": retry_decision
             },
@@ -325,7 +325,11 @@ HOW SHOULD WE PROCEED?
    -> Review detailed evidence before deciding
    -> Return to these options after investigation
 
-Enter choice (1, 2, or 3) or provide custom guidance:
+4. Other
+   -> Describe what you want to do
+   -> AI follows your instructions
+
+Enter choice (1-4):
 """
         return message.strip()
 
@@ -419,7 +423,16 @@ After reviewing, make triage decision:
 """
             }
 
-        # Custom guidance
+        # Option 4: Other (explicit custom guidance)
+        elif decision_normalized in ["4", "other"]:
+            return {
+                "action": "prompt_for_guidance",
+                "next_step": "Ask user to describe what they want to do",
+                "blocking": True,
+                "instructions": "User selected 'Other'. Ask: What would you like to do?"
+            }
+
+        # Custom guidance (user typed instructions directly)
         else:
             return {
                 "action": "custom_guidance",

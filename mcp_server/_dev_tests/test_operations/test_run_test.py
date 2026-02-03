@@ -449,6 +449,32 @@ class TestAsyncWrapper:
 
     @pytest.mark.unit
     @pytest.mark.run_test
+    def test_missing_env_returns_error(self):
+        """
+        P0: Verify missing env parameter returns error.
+
+        AAA Pattern:
+        1. Arrange - Create arguments without env
+        2. Act - Call run_test_async
+        3. Assert - Returns JSON with error mentioning env
+        """
+        import asyncio
+
+        # Arrange
+        arguments = {"test_path": "tests/auth/test_login.py"}
+
+        # Act
+        result = asyncio.run(run_test_async(arguments))
+        result_dict = json.loads(result)
+
+        # Assert
+        assert "error" in result_dict, \
+            "Missing env should return error"
+        assert "env" in result_dict["error"], \
+            f"Error should mention env, got: {result_dict['error']}"
+
+    @pytest.mark.unit
+    @pytest.mark.run_test
     def test_invalid_path_returns_error(self):
         """
         P0: Verify invalid test path returns error in JSON.
@@ -461,7 +487,7 @@ class TestAsyncWrapper:
         import asyncio
 
         # Arrange
-        arguments = {"test_path": "/nonexistent/path/test.py"}
+        arguments = {"test_path": "/nonexistent/path/test.py", "env": "dev"}
 
         # Act
         result = asyncio.run(run_test_async(arguments))

@@ -35,7 +35,7 @@ class QGPreflight(BaseGate):
 
         Args:
             input_data: Dict with credential_strategy, test_data_location,
-                       browser_config, timeout_config
+                       browser_config
 
         Returns:
             {"status": "pass"} on success
@@ -52,7 +52,7 @@ class QGPreflight(BaseGate):
         # Check required fields
         missing = cls.validate_required_fields(
             input_data,
-            ["credential_strategy", "test_data_location", "browser_config", "timeout_config"]
+            ["credential_strategy", "test_data_location", "browser_config"]
         )
 
         if missing:
@@ -83,12 +83,6 @@ class QGPreflight(BaseGate):
         if browser_error:
             return browser_error
 
-        # Validate timeout_config (FR-8.2)
-        timeout_config = input_data.get("timeout_config")
-        timeout_error = cls._validate_timeout_config(timeout_config)
-        if timeout_error:
-            return timeout_error
-
         # DEF-060: Check test data infrastructure (Phase 1 scaffolding)
         infrastructure_check = cls._check_test_data_infrastructure(
             credential_strategy=credential_strategy,
@@ -106,8 +100,7 @@ class QGPreflight(BaseGate):
             state_data={
                 "credential_strategy": credential_strategy,
                 "test_data_location": test_data_location,
-                "browser_config": browser_config,
-                "timeout_config": timeout_config
+                "browser_config": browser_config
             }
         )
 
@@ -153,51 +146,6 @@ class QGPreflight(BaseGate):
                 error="browser_config.headless must be false (pair programming requires visible browser)",
                 teach="Set browser_config to: {\"headless\": false}"
             )
-
-        return None
-
-    @classmethod
-    def _validate_timeout_config(cls, timeout_config: Any) -> Optional[Dict[str, Any]]:
-        """
-        Validate timeout_config structure (FR-8.2).
-
-        Args:
-            timeout_config: Dict with enabled and threshold_seconds fields
-
-        Returns:
-            fail_response if invalid, None if valid
-        """
-        if not isinstance(timeout_config, dict):
-            return cls.fail_response(
-                error="timeout_config must be a dict",
-                teach="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
-            )
-
-        if "enabled" not in timeout_config:
-            return cls.fail_response(
-                error="timeout_config missing 'enabled' field",
-                teach="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
-            )
-
-        if not isinstance(timeout_config["enabled"], bool):
-            return cls.fail_response(
-                error="timeout_config.enabled must be a boolean",
-                teach="Set enabled to true or false"
-            )
-
-        if timeout_config["enabled"]:
-            if "threshold_seconds" not in timeout_config:
-                return cls.fail_response(
-                    error="timeout_config missing 'threshold_seconds' field when enabled",
-                    teach="timeout_config should be: {\"enabled\": true, \"threshold_seconds\": 30}"
-                )
-
-            threshold = timeout_config["threshold_seconds"]
-            if not isinstance(threshold, (int, float)) or threshold <= 0:
-                return cls.fail_response(
-                    error="timeout_config.threshold_seconds must be a positive number",
-                    teach="Set threshold_seconds to a positive number (e.g., 30, 60)"
-                )
 
         return None
 
@@ -275,11 +223,6 @@ class QGPreflight(BaseGate):
         if "browser_config" in missing_fields:
             hints.append(
                 "Provide browser_config: {\"headless\": false}"
-            )
-
-        if "timeout_config" in missing_fields:
-            hints.append(
-                "Provide timeout_config: {\"enabled\": true, \"threshold_seconds\": 30}"
             )
 
         return " | ".join(hints)

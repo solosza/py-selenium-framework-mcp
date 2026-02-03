@@ -204,6 +204,10 @@ async def list_available_tools() -> list[Tool]:
                     "marker": {
                         "type": "string",
                         "description": "Optional pytest marker filter (e.g., smoke)"
+                    },
+                    "timeout": {
+                        "type": "integer",
+                        "description": "Optional timeout in seconds (default: 60). Increase for slow tests."
                     }
                 },
                 "required": ["test_path", "env"]
@@ -252,7 +256,7 @@ async def list_available_tools() -> list[Tool]:
         # Step 2: Pre-flight Configuration (POST-only)
         Tool(
             name="qg_preflight",
-            description="Step 2 quality gate: Validate pre-flight configuration (credential_strategy, test_data_location, browser_config, timeout_config)",
+            description="Step 2 quality gate: Validate pre-flight configuration (credential_strategy, test_data_location, browser_config)",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -274,24 +278,9 @@ async def list_available_tools() -> list[Tool]:
                             }
                         },
                         "required": ["headless"]
-                    },
-                    "timeout_config": {
-                        "type": "object",
-                        "description": "Timeout configuration (e.g., {\"enabled\": true, \"threshold_seconds\": 30})",
-                        "properties": {
-                            "enabled": {
-                                "type": "boolean",
-                                "description": "Whether timeout monitoring is enabled"
-                            },
-                            "threshold_seconds": {
-                                "type": "number",
-                                "description": "Timeout threshold in seconds (required if enabled=true)"
-                            }
-                        },
-                        "required": ["enabled"]
                     }
                 },
-                "required": ["credential_strategy", "test_data_location", "browser_config", "timeout_config"]
+                "required": ["credential_strategy", "test_data_location", "browser_config"]
             }
         ),
 

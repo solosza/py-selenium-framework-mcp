@@ -25,8 +25,8 @@
 | Persona | Actions |
 |---------|---------|
 | **User** | Reviews test results, makes triage decisions on failures (app bug vs test issue) |
-| **AI** | Executes test, captures diagnostic data, presents triage options, applies fixes |
-| **Tools** | `run_test` (execute pytest), `qg_execution` (validate results + HITL triage) |
+| **AI** | Executes test via Bash, constructs test_result, captures diagnostic data, presents triage options, applies fixes |
+| **Tools** | `Bash` (execute pytest), `qg_execution` (validate results + HITL triage) |
 
 ---
 
@@ -38,18 +38,27 @@ PRE-CHECK:
 - Verify test file path exists
 - Verify workflow state has all metadata
 
-ACTION (2-TOOL SEQUENCE):
-1. CALL run_test with test_path and env
-   - Executes pytest subprocess
-   - Browser ALWAYS visible (non-headless) for HITL observation
+ACTION (2-STEP SEQUENCE):
+1. EXECUTE pytest via Bash tool (NOT run_test MCP tool):
+   - Command: python -m pytest {test_path} -v --env={env} --headless=False
    - Parameters:
      - test_path (required): Path to test file
      - env (required): Environment config key from Step 1 detected_env_id
        Example: If URL was parabank.parasoft.com, detected_env_id = "parabank"
-       Use this value for env parameter
-     - marker (optional): Pytest marker filter
-   - Captures: status, exit_code, output, duration, failure_data
-   - Returns test_result object
+   - Browser ALWAYS visible (non-headless) for HITL observation
+   - Capture exit code and output from Bash result
+   - AI constructs test_result structure from Bash output:
+     {
+       "status": "passed" | "failed" | "crashed",
+       "exit_code": <exit_code from Bash>,
+       "output": <stdout + stderr from Bash>,
+       "duration": <execution time if available>,
+       "failure_data": <parse from output if status=failed>
+     }
+   - For failure_data extraction (when status=failed):
+     - failed_assertion: Look for "E       assert" lines
+     - error_location: Look for "file.py:line:" patterns
+     - stack_trace: Content between failure markers
 
 2. CALL qg_execution with test_result
    - IF test passed -> return pass_response -> WORKFLOW COMPLETE
@@ -70,6 +79,7 @@ User selects one of:
 1. Application Defect - Log defect, block workflow (user fixes app)
 2. Test Issue - AI investigates + fixes test code, retry
 3. Investigate - Show full diagnostic data, user analyzes
+4. Other - User describes what they want to do, AI follows instructions
 
 RETRY POLICY:
 - Error signature tracking (MD5 hash of error location + message)
@@ -103,9 +113,12 @@ POST-ACTION:
 
 | Field | Value |
 |-------|-------|
-| **Operation Tool** | `run_test` (pytest subprocess execution) |
+| **Operation Tool** | `Bash` (pytest via command line) |
 | **Quality Gate** | `qg_execution` (POST-only) |
 | **Gate Mode** | POST-only (validates execution results, not inputs) |
+
+**Why Bash instead of run_test MCP tool:**
+The run_test MCP tool uses synchronous subprocess.run() which blocks the MCP server event loop, causing timeouts. Bash tool handles subprocess execution correctly without blocking.
 
 ---
 
@@ -264,7 +277,11 @@ HOW SHOULD WE PROCEED?
    -> You analyze with AI assistance
    -> Decide next action after investigation
 
-Select option (1, 2, or 3):"
+4. Other
+   -> Describe what you want to do
+   -> AI follows your instructions
+
+Select option (1-4):"
 ```
 
 **Triage Decision Actions:**
@@ -274,6 +291,7 @@ Select option (1, 2, or 3):"
 | **1. Application Defect** | Log to DEFECT_LOG.md, stop workflow | YES - User fixes app |
 | **2. Test Issue** | AI fixes test code, re-runs test | NO - AI attempts fix |
 | **3. Investigate** | Show full diagnostic data, user analyzes | YES - Awaits user decision |
+| **4. Other** | User describes custom action, AI follows | YES - Awaits user input |
 
 **Retry Policy:**
 
@@ -477,13 +495,14 @@ Step 5: Test Execution - FAILED (Awaiting Triage)
 
 2. **Present to user**
    - Show formatted triage message
-   - Show numbered options (1, 2, 3)
+   - Show numbered options (1, 2, 3, 4)
    - Wait for user input
 
 3. **Handle user decision**
    - Option 1 (App Defect): Log to DEFECT_LOG.md, stop workflow
    - Option 2 (Test Issue): Analyze code, apply fix, retry run_test
    - Option 3 (Investigate): Show full diagnostic_data, return to options
+   - Option 4 (Other): Ask user what they want to do, follow instructions
 
 4. **Retry loop**
    - After fix applied, call run_test again

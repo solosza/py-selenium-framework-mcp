@@ -5,9 +5,8 @@
 
 # Step 4: Tool 2 - Discover Elements
 
-**NOTE:** This is Step 4 in the NEW 4-step workflow (v3.1).
-The old 5-step workflow (with redundant Tool 1) was refactored on 2026-01-23.
-The old 11-step workflow was archived on 2026-01-22. Tool 3 (generate_page_object) is ARCHIVED.
+**NOTE:** This is Step 4 in the 5-step workflow (v4.0).
+The old 11-step workflow was archived on 2026-01-22.
 
 **Purpose:** Discover interactive elements on target page for manual POM construction.
 
@@ -81,8 +80,9 @@ HOW SHOULD WE PROCEED?
 2. Provide Guidance - You tell me what you see
 3. Skip + Continue - Proceed without this element
 4. Abort - Stop workflow entirely
+5. Other - Describe what you want to do
 
-Enter choice (1-4) or describe how you'd like to proceed:
+Enter choice (1-5) or describe how you'd like to proceed:
 ```
 
 **This is the MVP approach: Strong protocol enforcement + existing gates.**
@@ -441,7 +441,11 @@ HOW SHOULD WE PROCEED?
    -> Stop the workflow entirely
    -> Review and restart when ready
 
-Enter choice (1-4) or describe what you see:
+5. Other
+   -> Describe what you want to do
+   -> AI follows your instructions
+
+Enter choice (1-5):
 ```
 
 **Triage Decision Actions:**
@@ -452,6 +456,7 @@ Enter choice (1-4) or describe what you see:
 | **2. Provide Guidance** | User describes what they see, AI follows | YES (awaits input) |
 | **3. Skip + Continue** | Proceed with valid elements only | NO |
 | **4. Abort** | Stop workflow entirely | YES |
+| **5. Other** | User describes custom action, AI follows | YES (awaits input) |
 
 **Key Rule:** AI must NOT proceed without user decision when hitl_required is returned.
 
