@@ -60,7 +60,7 @@ This framework requires an MCP-compatible AI coding agent:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/solosza/py-selenium-framework-mcp.git
+git clone https://github.com/isagawa-qa/isagawa-qa.git
 cd py-selenium-framework-mcp
 ```
 
@@ -549,7 +549,7 @@ The test reads like a user story.
 
 ## Support
 
-- **Issues:** [GitHub Issues](https://github.com/solosza/py-selenium-framework-mcp/issues)
+- **Issues:** [GitHub Issues](https://github.com/isagawa-qa/isagawa-qa/issues)
 - **Architecture Details:** See `FRAMEWORK.md`
 
 ---
