@@ -11,7 +11,7 @@ Error Categories:
 - NOT_VISIBLE: Element exists but hidden/zero-size
 - NOT_INTERACTABLE: Element visible but disabled/covered
 - STALE_REFERENCE: Element was valid but is now stale
-- METHOD_NOT_FOUND: WebInterface method doesn't exist (different concern)
+- METHOD_NOT_FOUND: BrowserInterface method doesn't exist (different concern)
 
 Design Notes:
 - Uses Playwright MCP tools (browser_snapshot, browser_evaluate)
@@ -237,23 +237,23 @@ class RuntimeValidator:
 
     def validate_method_exists(self, method_name: str) -> ValidationResult:
         """
-        Check if a WebInterface method exists.
+        Check if a BrowserInterface method exists.
 
         Note: This is a placeholder. Actual implementation would use
-        WebInterfaceChecker. Included here for interface completeness.
+        BrowserInterfaceChecker. Included here for interface completeness.
 
         Args:
-            method_name: Name of WebInterface method
+            method_name: Name of BrowserInterface method
 
         Returns:
             ValidationResult with METHOD_NOT_FOUND if missing
         """
-        # This will delegate to WebInterfaceChecker in integration
+        # This will delegate to BrowserInterfaceChecker in integration
         # For now, return placeholder that indicates method check needed
         return ValidationResult.invalid(
             ErrorCategory.METHOD_NOT_FOUND,
             locator=f"method:{method_name}",
-            message="Method existence check requires WebInterfaceChecker"
+            message="Method existence check requires BrowserInterfaceChecker"
         )
 
     def get_last_snapshot(self) -> Optional[Dict[str, Any]]:

@@ -276,13 +276,13 @@ class CredentialStrategyRule(SemanticRule):
 import uuid
 
 class RegisteredUser:
-    def __init__(self, web_interface: WebInterface):
-        self.web = web_interface
+    def __init__(self, browser: BrowserInterface):
+        self.web = browser
         # Generate unique credentials
         self.email = f"test_{uuid.uuid4().hex[:8]}@example.com"
         self.password = "TestPass123!"
         # Compose tasks (no base_url needed - POMs get URL from config)
-        self.auth_tasks = AuthTasks(web_interface)
+        self.auth_tasks = AuthTasks(browser)
 """
 
     def _get_static_template(self) -> str:
@@ -290,14 +290,14 @@ class RegisteredUser:
         return """
 # Static strategy example (DD-49: POMs use self.web.config['url'])
 class RegisteredUser:
-    def __init__(self, web_interface: WebInterface, user_data: Dict[str, Any]):
-        self.web = web_interface
+    def __init__(self, browser: BrowserInterface, user_data: Dict[str, Any]):
+        self.web = browser
         # Read from test_users fixture
         self.user_data = user_data
         self.email = user_data.get('email')
         self.password = user_data.get('password')
         # Compose tasks (no base_url needed - POMs get URL from config)
-        self.auth_tasks = AuthTasks(web_interface)
+        self.auth_tasks = AuthTasks(browser)
 """
 
     def _get_dynamic_template(self) -> str:
@@ -307,12 +307,12 @@ class RegisteredUser:
 import json
 
 class RegisteredUser:
-    def __init__(self, web_interface: WebInterface):
-        self.web = web_interface
+    def __init__(self, browser: BrowserInterface):
+        self.web = browser
         # Read from config file (after registration)
         with open('tests/data/test_users.json') as f:
             users = json.load(f)
             self.user_data = users.get('registered_user')
         # Compose tasks (no base_url needed - POMs get URL from config)
-        self.auth_tasks = AuthTasks(web_interface)
+        self.auth_tasks = AuthTasks(browser)
 """

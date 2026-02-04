@@ -1,1 +1,0 @@
-# Clawdbot workflow page objects

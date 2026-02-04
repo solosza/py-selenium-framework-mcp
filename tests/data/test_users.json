@@ -1,1 +1,12 @@
-{"john_demo":{"username":"john","password":"demo"}}
+{
+  "john_demo": {
+    "username": "john",
+    "password": "demo"
+  },
+  "twenty_demo": {
+    "email": "noah@demo.dev",
+    "password": "Applecar2025",
+    "workspace": "Testing WS",
+    "workspace_url": "https://brilliant-aqua-monkey.twenty.com"
+  }
+}

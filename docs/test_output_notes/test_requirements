@@ -1,0 +1,141 @@
+  As a new customer, I want to register for an account, log in, open a new checking account, and   transfer funds to it so I can start banking.
+                                                                                                 
+  URL: https://parabank.parasoft.com/parabank/index.htm
+
+  Workflow Steps:
+
+  1. Navigate to Registration
+    - From homepage, click "Register" link
+    - Arrive at registration form page
+  2. Complete Registration Form
+    - Enter first name, last name
+    - Enter address (street, city, state, zip)
+    - Enter phone number
+    - Enter SSN
+    - Enter username and password (with confirmation)
+    - Click "Register" button
+  3. Verify Registration Success
+    - Confirm welcome message displays
+    - Confirm account was created successfully
+  4. Log In with New Credentials
+    - Enter username and password on login form
+    - Click "Log In" button
+    - Verify dashboard/accounts overview displays
+  5. Open New Checking Account
+    - Navigate to "Open New Account" section
+    - Select "CHECKING" as account type
+    - Select existing account to fund from
+    - Click "Open New Account" button
+    - Verify new account number is displayed
+  6. Transfer Funds to New Account
+    - Navigate to "Transfer Funds" section
+    - Enter amount: $100
+    - Select source account (existing)
+    - Select destination account (new checking)
+    - Click "Transfer" button
+  7. Verify Transfer Success
+    - Confirm transfer complete message displays
+    - Verify amount transferred matches $100
+	
+	
+--
+As a customer, john/demo, I want to log in,  and   transfer funds.
+                                                                                                 
+  URL: https://parabank.parasoft.com/parabank/index.htm
+
+  Workflow Steps:
+
+  1. Navigate to Registration
+    - From homepage, click "Register" link
+    - Arrive at registration form page
+  2. Complete Registration Form
+    - Enter first name, last name
+    - Enter address (street, city, state, zip)
+    - Enter phone number
+    - Enter SSN
+    - Enter username and password (with confirmation)
+    - Click "Register" button
+  3. Verify Registration Success
+    - Confirm welcome message displays
+    - Confirm account was created successfully
+  4. Log In with New Credentials
+    - Enter username and password on login form
+    - Click "Log In" button
+    - Verify dashboard/accounts overview displays
+  5. Open New Checking Account
+    - Navigate to "Open New Account" section
+    - Select "CHECKING" as account type
+    - Select existing account to fund from
+    - Click "Open New Account" button
+    - Verify new account number is displayed
+  6. Transfer Funds to New Account
+    - Navigate to "Transfer Funds" section
+    - Enter amount: $100
+    - Select source account (existing)
+    - Select destination account (new checking)
+    - Click "Transfer" button
+  7. Verify Transfer Success
+    - Confirm transfer complete message displays
+    - Verify amount transferred matches $100
+	
+---
+---
+  Top Recommendations                                                                       
+                                                                                              1. Sauce Demo (Best for showcasing)                                                       
+
+  - URL: https://www.saucedemo.com
+  - What it is: E-commerce site with login, product catalog, cart, checkout
+  - Why it's good:
+    - Pre-configured logins that change behavior (standard, locked out, problem user)       
+    - Full purchase workflow (login → browse → add to cart → checkout)
+    - Perfect for demonstrating 4-layer architecture
+  - Workflows to test: Auth, catalog browsing, cart management, checkout
+
+  2. The Internet (Herokuapp)
+
+  - URL: https://the-internet.herokuapp.com
+  - What it is: Collection of common automation scenarios
+  - Why it's good:
+    - Covers edge cases: shadow DOM, iframes, dynamic loading, file uploads
+    - Good for demonstrating gate validation on tricky elements
+  - Workflows: Form auth, dropdowns, dynamic content, alerts
+
+  3. Practice Software Testing
+
+  - URL: https://practicesoftwaretesting.com
+  - What it is: Modern demo site with checkout experience + calculator with bugs
+  - Why it's good:
+    - Modern UI, realistic workflows
+    - Has intentional bugs (good for demo)
+
+  4. UI Test Automation Playground
+
+  - URL: http://uitestingplayground.com
+  - What it is: Pitfalls in modern web apps
+  - Why it's good: Tests dynamic IDs, hidden layers, client-side delays
+
+  ---
+  My Recommendation
+
+  Start with Sauce Demo.
+  ┌───────────────────────────┬───────────────────────────────────────┐
+  │          Reason           │                 Value                 │
+  ├───────────────────────────┼───────────────────────────────────────┤
+  │ Full e-commerce workflow  │ Shows 4-layer architecture end-to-end │
+  ├───────────────────────────┼───────────────────────────────────────┤
+  │ Multiple user types       │ Shows how roles work                  │
+  ├───────────────────────────┼───────────────────────────────────────┤
+  │ Simple enough to demo     │ Not overwhelming                      │
+  ├───────────────────────────┼───────────────────────────────────────┤
+  │ Complex enough to be real │ Cart, checkout, validation            │
+  ├───────────────────────────┼───────────────────────────────────────┤
+  │ Publicly accessible       │ No setup needed                       │
+  └───────────────────────────┴───────────────────────────────────────┘
+  ---
+  Demo story:
+  "User story: As a standard user, I want to purchase a backpack so I can carry my items."  
+
+  Run through your 5-step workflow → AI generates tests → gates validate → 4-layer code     
+  output
+
+  Would showcase exactly what your platform does.

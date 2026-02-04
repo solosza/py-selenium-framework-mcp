@@ -23,9 +23,9 @@ class TestReferenceWorkflow:
     """
 
     @pytest.fixture(autouse=True)
-    def setup(self, browser_interface):
+    def setup(self, browser):
         """Setup test fixtures."""
-        self.browser = browser_interface
+        self.browser = browser
         self.inquiry_form_page = InquiryFormPage(self.browser)
 
     # ==================== TEST METHODS ====================

@@ -2,31 +2,7 @@
   "DEFAULT": {
     "url": "http://www.automationpractice.pl/index.php"
   },
-  "test1": {
-    "url": "https://parabank.parasoft.com/parabank/nonexistent.htm"
-  },
   "parabank": {
-    "url": "https://parabank.parasoft.com"
-  },
-  "helios1": {
-    "url": "https://heliosdigital-retail-qa.azurewebsites.net"
-  },
-  "automationex1": {
-    "url": "https://www.automationexercise.com"
-  },
-  "parabank11": {
-    "url": "https://parabank.parasoft.com"
-  },
-  "parabank12": {
-    "url": "https://parabank.parasoft.com"
-  },
-  "parabank13": {
-    "url": "https://parabank.parasoft.com"
-  },
-  "parabank1": {
-    "url": "https://parabank.parasoft.com"
-  },
-  "test10": {
     "url": "https://parabank.parasoft.com"
   }
 }

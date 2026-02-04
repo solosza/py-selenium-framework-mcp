@@ -1,0 +1,1791 @@
+- generic [ref=e2]:
+  - heading "0 notifications" [level=2] [ref=e3]
+  - generic [ref=e4]:
+    - generic:
+      - button [ref=e5] [cursor=pointer]:
+        - generic [ref=e7]: Skip to main content
+      - button [ref=e8] [cursor=pointer]:
+        - img [ref=e10]
+    - generic [ref=e12]:
+      - banner [ref=e14]:
+        - generic [ref=e17]:
+          - button "LinkedIn" [ref=e18] [cursor=pointer]:
+            - img "LinkedIn" [ref=e19]
+          - search [ref=e22]:
+            - generic [ref=e23]:
+              - img [ref=e25]
+              - textbox "Search" [ref=e27]
+          - generic [ref=e29]:
+            - navigation [ref=e32]:
+              - list [ref=e33]:
+                - listitem [ref=e34]:
+                  - button "Home, 1 new notification" [ref=e35] [cursor=pointer]:
+                    - img [ref=e37]
+                    - generic [ref=e40]: Home
+                - listitem [ref=e41]:
+                  - button "My Network, 0 new notifications" [ref=e42] [cursor=pointer]:
+                    - img [ref=e44]
+                    - generic [ref=e47]: My Network
+                - listitem [ref=e48]:
+                  - link "Jobs, 0 new notifications" [ref=e49] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/jobs/
+                    - img [ref=e51]
+                    - generic [ref=e54]: Jobs
+                - listitem [ref=e55]:
+                  - link "Messaging, 0 new notifications" [ref=e56] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/messaging/
+                    - img [ref=e58]
+                    - generic [ref=e61]: Messaging
+                - listitem [ref=e62]:
+                  - link "Notifications, 1 new notification" [ref=e63] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/notifications/
+                    - generic [ref=e64]:
+                      - img [ref=e65]
+                      - generic [ref=e67]: "1"
+                    - generic [ref=e69]: Notifications
+                - listitem [ref=e70]:
+                  - button "Me" [ref=e71] [cursor=pointer]:
+                    - figure [ref=e73]
+                    - generic [ref=e75]:
+                      - text: Me
+                      - img [ref=e76]
+            - generic [ref=e79]:
+              - navigation [ref=e80]:
+                - list [ref=e81]:
+                  - listitem [ref=e82]:
+                    - button "For Business" [ref=e83] [cursor=pointer]:
+                      - img [ref=e85]
+                      - generic [ref=e88]:
+                        - text: For Business
+                        - img [ref=e89]
+              - link "Try Premium for $0" [ref=e92] [cursor=pointer]:
+                - /url: https://www.linkedin.com/premium/products/?upsellOrderOrigin=Tracking%3Av1%3Apremium_nav_upsell_text%3ANav%3AIn-Product&referenceId=SompVdVnS0%2BejJb0O6%2Bmbg%3D%3D&isSS=false
+                - generic [ref=e93]:
+                  - img [ref=e94]
+                  - paragraph [ref=e98]: Try Premium for $0
+      - main [ref=e99]:
+        - main [ref=e101]:
+          - generic [ref=e103]:
+            - generic [ref=e107]:
+              - generic [ref=e111]:
+                - link [ref=e112] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/alain-ignacio-54b9823/
+                  - generic [ref=e113]:
+                    - figure [ref=e115]:
+                      - img [ref=e116]
+                    - figure [ref=e122]
+                - generic [ref=e123]:
+                  - link "Alain Ignacio QA Automation Architect | Designing How AI Executes Test Automation | Founder, Isagawa United States" [ref=e124] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/in/alain-ignacio-54b9823/
+                    - generic [ref=e125]:
+                      - generic [ref=e126]:
+                        - paragraph [ref=e128]: Alain Ignacio
+                        - img [ref=e129]
+                      - paragraph [ref=e132]: QA Automation Architect | Designing How AI Executes Test Automation | Founder, Isagawa
+                      - paragraph [ref=e133]: United States
+                  - link "Helios Digital" [ref=e134] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/in/alain-ignacio-54b9823/
+                    - generic [ref=e135]:
+                      - figure [ref=e136]:
+                        - img [ref=e137]
+                      - paragraph [ref=e143]: Helios Digital
+              - link "Grow your career with Premium Try Premium for $0" [ref=e148] [cursor=pointer]:
+                - /url: https://www.linkedin.com/premium/products/?upsellOrderOrigin=Tracking%3Av1%3Apremium_homepage_identity_upsell%3ANav%3AIn-Product&referenceId=si%2FbEEjBQPq2IbheuTIJCw%3D%3D&isSS=true
+                - generic [ref=e149]:
+                  - paragraph [ref=e150]: Grow your career with Premium
+                  - generic [ref=e152]:
+                    - img [ref=e153]
+                    - button "Try Premium for $0" [ref=e156]:
+                      - paragraph [ref=e157]: Try Premium for $0
+              - menu [ref=e160]:
+                - link "Profile viewers 10" [ref=e161] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/me/profile-views/
+                  - generic "Profile viewers 10" [ref=e162]:
+                    - paragraph [ref=e164]: Profile viewers
+                    - paragraph [ref=e165]: "10"
+                - link "Connections 183 Grow your network" [ref=e166] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/mynetwork/
+                  - generic "Connections 183 Grow your network" [ref=e167]:
+                    - generic [ref=e168]:
+                      - paragraph [ref=e169]: Connections
+                      - paragraph [ref=e170]: Grow your network
+                    - paragraph [ref=e171]: "183"
+              - menu [ref=e174]:
+                - link "Saved items" [ref=e175] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/my-items/saved-posts/
+                  - generic [ref=e176]:
+                    - img [ref=e177]
+                    - paragraph [ref=e179]: Saved items
+                - link "Groups" [ref=e180] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/groups/
+                  - generic [ref=e181]:
+                    - img [ref=e182]
+                    - paragraph [ref=e188]: Groups
+                - link "Newsletters" [ref=e189] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/mynetwork/network-manager/newsletters/
+                  - generic [ref=e190]:
+                    - img [ref=e191]
+                    - paragraph [ref=e193]: Newsletters
+                - link "Events" [ref=e194] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/events/
+                  - generic [ref=e195]:
+                    - img [ref=e196]
+                    - paragraph [ref=e198]: Events
+            - generic [ref=e200]:
+              - generic [ref=e202]:
+                - generic [ref=e203]:
+                  - link [ref=e204] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/in/alain-ignacio-54b9823/
+                    - figure [ref=e205]
+                  - button "Start a post" [ref=e207] [cursor=pointer]:
+                    - generic "Start a post" [ref=e208]:
+                      - generic [ref=e210]:
+                        - paragraph [ref=e211]: Start a post
+                        - generic:
+                          - paragraph
+                - generic [ref=e212]:
+                  - button "Video" [ref=e213] [cursor=pointer]:
+                    - generic [ref=e214]:
+                      - img [ref=e215]
+                      - paragraph [ref=e217]: Video
+                  - button "Photo" [ref=e218] [cursor=pointer]:
+                    - generic [ref=e219]:
+                      - img [ref=e220]
+                      - paragraph [ref=e222]: Photo
+                  - link "Write article" [ref=e223] [cursor=pointer]:
+                    - /url: /article/new/
+                    - generic [ref=e224]:
+                      - img [ref=e225]
+                      - paragraph [ref=e227]: Write article
+              - 'button "Sort by: Top" [ref=e229] [cursor=pointer]':
+                - generic [ref=e230]:
+                  - paragraph [ref=e231]:
+                    - text: "Sort by:"
+                    - strong [ref=e232]: Top
+                  - img [ref=e233]
+              - listitem [ref=e238]:
+                - generic [ref=e240]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e241]: Feed post
+                  - generic [ref=e242]:
+                    - paragraph [ref=e245]: Suggested
+                    - button "View more options" [ref=e246] [cursor=pointer]:
+                      - img [ref=e248]
+                    - button "Hide Post" [ref=e250] [cursor=pointer]:
+                      - img [ref=e252]
+                  - generic [ref=e254]:
+                    - link [ref=e255] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/milan-jovanovic/
+                      - figure [ref=e256]
+                    - link "Milan Jovanović • 3rd+ Practical .NET and Software Architecture Tips | Microsoft MVP 22h •" [ref=e257] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/milan-jovanovic/
+                      - generic [ref=e258]:
+                        - paragraph [ref=e260]:
+                          - text: Milan Jovanović
+                          - img [ref=e262]
+                          - generic [ref=e264]: • 3rd+
+                        - paragraph [ref=e266]: Practical .NET and Software Architecture Tips | Microsoft MVP
+                        - paragraph [ref=e268]:
+                          - text: 22h •
+                          - img [ref=e269]
+                    - button "Follow Milan Jovanović" [ref=e274] [cursor=pointer]:
+                      - generic [ref=e275]:
+                        - img [ref=e276]
+                        - generic [ref=e279]: Follow
+                  - paragraph [ref=e280]:
+                    - generic [ref=e281]:
+                      - text: Real-time updates in .NET just got way easier (no SignalR required).
+                      - text: .NET 10 adds a first-class API for Server-Sent Events (SSE) in ASPNET Core.
+                      - text: "If you only need server → client streaming (dashboards, notifications, progress updates), SSE is often the simplest tool:"
+                      - text: "- It’s just HTTP with a streaming response"
+                      - text: "- The browser supports it out of the box via EventSource"
+                      - text: "- Clients can auto-reconnect"
+                      - text: "- You can even resume a stream and avoid missed messages with Last-Event-ID"
+                      - text: And because it’s a normal HTTP endpoint, your usual
+                      - link "ASP.NET" [ref=e283] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/redir/redirect/?url=http%3A%2F%2FASP%2ENET&urlhash=plA_&mt=EP6XSRljghnvdQ6VjKuFaqhJPdAM0vqdUPkBTyGiLn1SubaM7c94XSkU5tcRJmYgsz2F2hB7uskV0GGe_245vaoQ8uJsA8-sv0UA3xCexeLrnSTkgtdNNL5Q&isSdui=true
+                        - strong [ref=e285]: ASP.NET
+                      - text: "Core patterns still apply:"
+                      - text: "- auth/authorization"
+                      - text: "- per-user targeting (only stream the current user’s updates)"
+                      - text: "- observability and diagnostics"
+                      - text: SignalR still wins when you need bi-directional real-time or richer messaging patterns. But for “push updates to the UI”, SSE is a great default.
+                      - text: "Full guide (how it works + reconnect + replay + per-user streams):"
+                      - link "https://lnkd.in/de9ecWSc" [ref=e286] [cursor=pointer]:
+                        - /url: https://lnkd.in/de9ecWSc
+                        - strong [ref=e288]: https://lnkd.in/de9ecWSc
+                      - text: "---"
+                      - text: "Do you want to simplify your development process? Grab my Clean Architecture template here and save 7 days of development time:"
+                      - link "https://lnkd.in/dYNsNb52" [ref=e289] [cursor=pointer]:
+                        - /url: https://lnkd.in/dYNsNb52
+                        - strong [ref=e291]: https://lnkd.in/dYNsNb52
+                      - button:
+                        - generic [ref=e293] [cursor=pointer]: … more
+                  - button [ref=e295] [cursor=pointer]:
+                    - figure [ref=e296]
+                  - generic [ref=e297]:
+                    - button "611 reactions" [ref=e298] [cursor=pointer]:
+                      - generic [ref=e299]:
+                        - img [ref=e300]
+                        - img [ref=e306]
+                        - img [ref=e314]
+                        - paragraph [ref=e321]:
+                          - generic [ref=e322]: 611 reactions
+                          - text: "611"
+                    - generic [ref=e323]:
+                      - button "44 comments" [ref=e324] [cursor=pointer]:
+                        - paragraph [ref=e325]: 44 comments
+                      - paragraph [ref=e326]: •
+                      - button "78 reposts" [ref=e327] [cursor=pointer]:
+                        - paragraph [ref=e328]: 78 reposts
+                  - generic [ref=e329]:
+                    - generic [ref=e331]:
+                      - 'button "Reaction button state: no reaction" [ref=e334] [cursor=pointer]':
+                        - generic [ref=e335]:
+                          - img [ref=e336]
+                          - generic [ref=e338]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e340] [cursor=pointer]
+                    - button "Comment" [ref=e342] [cursor=pointer]:
+                      - generic [ref=e343]:
+                        - img [ref=e344]
+                        - generic [ref=e347]: Comment
+                    - button "Repost" [ref=e348] [cursor=pointer]:
+                      - generic [ref=e349]:
+                        - img [ref=e350]
+                        - generic [ref=e353]: Repost
+                    - button "Send" [ref=e354] [cursor=pointer]:
+                      - generic [ref=e355]:
+                        - img [ref=e356]
+                        - generic [ref=e359]: Send
+              - listitem [ref=e363]:
+                - generic [ref=e365]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e366]: Feed post
+                  - generic [ref=e367]:
+                    - generic [ref=e368]:
+                      - figure [ref=e369]
+                      - figure [ref=e370]
+                      - paragraph [ref=e372]:
+                        - link "Alan McCorkle" [ref=e373] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/in/alanmccorkle/
+                          - strong [ref=e374]: Alan McCorkle
+                        - text: and
+                        - link "James Isaac" [ref=e375] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/in/james-isaac-5725ba/
+                          - strong [ref=e376]: James Isaac
+                        - text: follow
+                        - link "Fisher Investments" [ref=e377] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/company/fisher-investments/posts/
+                          - strong [ref=e378]: Fisher Investments
+                    - button "View more options" [ref=e379] [cursor=pointer]:
+                      - img [ref=e381]
+                  - generic [ref=e383]:
+                    - link [ref=e384] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/company/fisher-investments/posts/
+                      - figure [ref=e385]
+                    - link "Fisher Investments 300,615 followers Promoted" [ref=e386] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/company/fisher-investments/posts/
+                      - generic [ref=e387]:
+                        - paragraph [ref=e389]: Fisher Investments
+                        - paragraph [ref=e391]: 300,615 followers
+                        - paragraph [ref=e393]: Promoted
+                  - generic [ref=e396]:
+                    - paragraph [ref=e397]:
+                      - generic [ref=e398]:
+                        - text: When can you stop working? For those with a $1 million portfolio, download this guide.
+                        - link "https://lnkd.in/gTKc3FGK" [ref=e399] [cursor=pointer]:
+                          - /url: https://lnkd.in/gTKc3FGK?li_fat_id=c3f7cdb7-6fec-4016-a1fd-3d52d3cc57f9
+                          - strong [ref=e401]: https://lnkd.in/gTKc3FGK
+                    - generic [ref=e402]:
+                      - button [ref=e403] [cursor=pointer]:
+                        - figure [ref=e404]
+                      - button "7 Ways to Retire Comfortably With $1M 1,728 submits" [ref=e405] [cursor=pointer]:
+                        - generic [ref=e407]:
+                          - paragraph [ref=e409]: 7 Ways to Retire Comfortably With $1M
+                          - paragraph [ref=e411]: 1,728 submits
+                    - button "Download" [ref=e413] [cursor=pointer]:
+                      - generic [ref=e414]:
+                        - img [ref=e415]
+                        - generic [ref=e417]: Download
+                  - generic [ref=e418]:
+                    - button "87 reactions" [ref=e419] [cursor=pointer]:
+                      - generic [ref=e420]:
+                        - img [ref=e421]
+                        - img [ref=e427]
+                        - img [ref=e441]
+                        - paragraph [ref=e448]:
+                          - generic [ref=e449]: 87 reactions
+                          - text: "87"
+                    - generic [ref=e450]:
+                      - button:
+                        - paragraph
+                      - button "2 reposts" [ref=e451] [cursor=pointer]:
+                        - paragraph [ref=e452]: 2 reposts
+                  - generic [ref=e453]:
+                    - generic [ref=e455]:
+                      - 'button "Reaction button state: no reaction" [ref=e458] [cursor=pointer]':
+                        - generic [ref=e459]:
+                          - img [ref=e460]
+                          - generic [ref=e462]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e464] [cursor=pointer]
+                    - button "Comment" [disabled] [ref=e466]:
+                      - generic:
+                        - img
+                        - generic:
+                          - generic: Comment
+                    - button "Repost" [ref=e467] [cursor=pointer]:
+                      - generic [ref=e468]:
+                        - img [ref=e469]
+                        - generic [ref=e472]: Repost
+                    - button "Send" [ref=e473] [cursor=pointer]:
+                      - generic [ref=e474]:
+                        - img [ref=e475]
+                        - generic [ref=e478]: Send
+                - generic [ref=e479]:
+                  - img [ref=e480]
+                  - paragraph [ref=e482]: Comments have been turned off on this post. You can still react or repost it.
+              - listitem [ref=e486]:
+                - generic [ref=e488]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e489]: Feed post
+                  - generic [ref=e490]:
+                    - generic [ref=e491]:
+                      - link [ref=e492] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/guneet-a-singh/
+                        - figure [ref=e493]
+                      - paragraph [ref=e495]:
+                        - link "Guneet Singh ,PMP®" [ref=e496] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/in/guneet-a-singh/
+                          - strong [ref=e497]: Guneet Singh ,PMP®
+                        - text: likes this
+                    - button "View more options" [ref=e498] [cursor=pointer]:
+                      - img [ref=e500]
+                    - button "Hide Post" [ref=e502] [cursor=pointer]:
+                      - img [ref=e504]
+                  - generic [ref=e506]:
+                    - link [ref=e507] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/dharma-ramasamy/
+                      - figure [ref=e508]
+                    - link "Dharma Ramasamy • 3rd+ CEO @ CultureGuard | Measure ROI of AI tools in 30 days | Read-only, no installs | Microsoft 365 + Jira signals | 26 yrs in tech Visit my website 16h •" [ref=e509] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/dharma-ramasamy/
+                      - generic [ref=e510]:
+                        - paragraph [ref=e512]:
+                          - text: Dharma Ramasamy
+                          - img [ref=e514]
+                          - generic [ref=e516]: • 3rd+
+                        - paragraph [ref=e518]: CEO @ CultureGuard | Measure ROI of AI tools in 30 days | Read-only, no installs | Microsoft 365 + Jira signals | 26 yrs in tech
+                        - link "Visit my website" [ref=e520]:
+                          - /url: https://www.linkedin.com/redir/redirect/?url=https%3A%2F%2Fsoftskillsrewired%2Ecom%2F&urlhash=VLci&mt=mIpBG8AsBp8kP-o3-m_21uIF8z3xLO4YdqYMp0tkEXaj5OwBzCV3rlzzzxLDOGrrrrKby2cNd1QoculDJyCr6q5Yalks5piA8iN4fS4&isSdui=true
+                          - paragraph [ref=e521]: Visit my website
+                        - paragraph [ref=e523]:
+                          - text: 16h •
+                          - img [ref=e524]
+                    - button "Follow Dharma Ramasamy" [ref=e529] [cursor=pointer]:
+                      - generic [ref=e530]:
+                        - img [ref=e531]
+                        - generic [ref=e534]: Follow
+                  - paragraph [ref=e535]:
+                    - generic [ref=e536]:
+                      - text: I didn’t read 12 books to become “well-read.” I read them to buy time. Time I would’ve wasted making avoidable mistakes. Time I would’ve spent learning things the hard way. Time I didn’t have to lose. Most books say the same things. A few force you to think differently. And when your thinking changes, your results follow. Here’s what actually mattered to me after reading 12 books 👇
+                      - button:
+                        - generic [ref=e538] [cursor=pointer]: … more
+                  - generic [ref=e540]:
+                    - generic [ref=e541]:
+                      - paragraph [ref=e543]: 12 Books That Will Save You Time
+                      - paragraph [ref=e545]: 13 pages
+                    - generic [ref=e547]:
+                      - button [ref=e548] [cursor=pointer]:
+                        - img [ref=e550]
+                      - list [ref=e552]:
+                        - listitem [ref=e553]:
+                          - figure [ref=e554]
+                        - listitem [ref=e555]
+                        - listitem [ref=e569]
+                        - listitem [ref=e583]
+                        - listitem [ref=e597]
+                        - listitem [ref=e611]
+                        - listitem [ref=e625]
+                        - listitem [ref=e639]
+                        - listitem [ref=e653]
+                        - listitem [ref=e667]
+                        - listitem [ref=e681]
+                        - listitem [ref=e695]
+                        - listitem [ref=e709]
+                    - generic [ref=e723]:
+                      - paragraph [ref=e724]: 1 / 13
+                      - generic "Slide to navigate to a page" [ref=e725]:
+                        - generic [ref=e727]:
+                          - slider "Slider, 0" [ref=e728]: "0"
+                          - status: "0"
+                      - button "Full screen" [ref=e729] [cursor=pointer]:
+                        - img [ref=e731]
+                  - generic [ref=e733]:
+                    - button "Guneet Singh ,PMP® and 219 others reacted" [ref=e734] [cursor=pointer]:
+                      - generic [ref=e735]:
+                        - img [ref=e736]
+                        - img [ref=e742]
+                        - img [ref=e748]
+                        - paragraph [ref=e760]:
+                          - generic [ref=e761]: Guneet Singh ,PMP® and 219 others reacted
+                          - generic [ref=e762]: Guneet Singh ,PMP® and 219 others
+                    - generic [ref=e763]:
+                      - button "126 comments" [ref=e764] [cursor=pointer]:
+                        - paragraph [ref=e765]: 126 comments
+                      - paragraph [ref=e766]: •
+                      - button "22 reposts" [ref=e767] [cursor=pointer]:
+                        - paragraph [ref=e768]: 22 reposts
+                  - generic [ref=e769]:
+                    - generic [ref=e771]:
+                      - 'button "Reaction button state: no reaction" [ref=e774] [cursor=pointer]':
+                        - generic [ref=e775]:
+                          - img [ref=e776]
+                          - generic [ref=e778]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e780] [cursor=pointer]
+                    - button "Comment" [ref=e782] [cursor=pointer]:
+                      - generic [ref=e783]:
+                        - img [ref=e784]
+                        - generic [ref=e787]: Comment
+                    - button "Repost" [ref=e788] [cursor=pointer]:
+                      - generic [ref=e789]:
+                        - img [ref=e790]
+                        - generic [ref=e793]: Repost
+                    - button "Send" [ref=e794] [cursor=pointer]:
+                      - generic [ref=e795]:
+                        - img [ref=e796]
+                        - generic [ref=e799]: Send
+              - listitem [ref=e803]:
+                - generic [ref=e805]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e806]: Feed post
+                  - generic [ref=e807]:
+                    - paragraph [ref=e810]: Suggested
+                    - button "View more options" [ref=e811] [cursor=pointer]:
+                      - img [ref=e813]
+                    - button "Hide Post" [ref=e815] [cursor=pointer]:
+                      - img [ref=e817]
+                  - generic [ref=e819]:
+                    - link [ref=e820] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/yevhen-filipenko/
+                      - figure [ref=e821]
+                    - link "Yevhen Filipenko • 3rd+ Senior QA Engineer – Web & REST API Testing 1d •" [ref=e822] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/yevhen-filipenko/
+                      - generic [ref=e823]:
+                        - paragraph [ref=e825]:
+                          - text: Yevhen Filipenko
+                          - img [ref=e827]
+                          - generic [ref=e829]: • 3rd+
+                        - paragraph [ref=e831]: Senior QA Engineer – Web & REST API Testing
+                        - paragraph [ref=e833]:
+                          - text: 1d •
+                          - img [ref=e834]
+                    - button "Follow Yevhen Filipenko" [ref=e839] [cursor=pointer]:
+                      - generic [ref=e840]:
+                        - img [ref=e841]
+                        - generic [ref=e844]: Follow
+                  - paragraph [ref=e845]:
+                    - generic [ref=e846]:
+                      - text: Why “Shift-Left” makes me angry
+                      - text: 👶 Dad, why do you get angry when you hear about shift-left?
+                      - text: 👨‍💻 Because people talk about it like it’s something new.
+                      - text: Somehow, basic QA behavior became a trend.
+                      - text: Joining refinement.
+                      - text: Asking questions before code exists.
+                      - text: Clarifying edge cases while everything is still cheap.
+                      - text: 👶 So what did you do before shift-left?
+                      - text: 👨‍💻 The same thing.
+                      - text: "QA has always lived on the left side:"
+                      - text: – when requirements are unclear
+                      - text: – when risks are still theoretical
+                      - text: – when mistakes cost a conversation, not a rollback
+                      - text: What makes me angry is not shift-left. It’s the story around it.
+                      - text: Common sense became innovation.
+                      - text: Responsibility became a buzzword.
+                      - text: And years of quiet, unglamorous QA work were suddenly “rediscovered”.
+                      - text: We didn’t shift left.
+                      - text: We just stayed where quality belongs.
+                      - text: 🧠 Good QA is not about trends.
+                      - text: It’s about being there early – even when no one notices, applauds, or puts it on a slide.
+                      - text: 👉 What part of your job was later rebranded as a “new approach”?
+                      - link "#QA" [ref=e848] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23qa&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e850]: "#QA"
+                      - link "#ShiftLeft" [ref=e851] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23shiftleft&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e853]: "#ShiftLeft"
+                      - link "#SoftwareTesting" [ref=e854] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23softwaretesting&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e856]: "#SoftwareTesting"
+                      - link "#QualityEngineering" [ref=e857] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23qualityengineering&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e859]: "#QualityEngineering"
+                      - link "#QADad" [ref=e860] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23qadad&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e862]: "#QADad"
+                      - button:
+                        - generic [ref=e864] [cursor=pointer]: … more
+                  - button [ref=e866] [cursor=pointer]:
+                    - figure [ref=e867]
+                  - generic [ref=e868]:
+                    - button "259 reactions" [ref=e869] [cursor=pointer]:
+                      - generic [ref=e870]:
+                        - img [ref=e871]
+                        - img [ref=e877]
+                        - img [ref=e891]
+                        - paragraph [ref=e898]:
+                          - generic [ref=e899]: 259 reactions
+                          - text: "259"
+                    - generic [ref=e900]:
+                      - button "55 comments" [ref=e901] [cursor=pointer]:
+                        - paragraph [ref=e902]: 55 comments
+                      - paragraph [ref=e903]: •
+                      - button "25 reposts" [ref=e904] [cursor=pointer]:
+                        - paragraph [ref=e905]: 25 reposts
+                  - generic [ref=e906]:
+                    - generic [ref=e908]:
+                      - 'button "Reaction button state: no reaction" [ref=e911] [cursor=pointer]':
+                        - generic [ref=e912]:
+                          - img [ref=e913]
+                          - generic [ref=e915]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e917] [cursor=pointer]
+                    - button "Comment" [ref=e919] [cursor=pointer]:
+                      - generic [ref=e920]:
+                        - img [ref=e921]
+                        - generic [ref=e924]: Comment
+                    - button "Repost" [ref=e925] [cursor=pointer]:
+                      - generic [ref=e926]:
+                        - img [ref=e927]
+                        - generic [ref=e930]: Repost
+                    - button "Send" [ref=e931] [cursor=pointer]:
+                      - generic [ref=e932]:
+                        - img [ref=e933]
+                        - generic [ref=e936]: Send
+              - listitem [ref=e940]:
+                - generic [ref=e942]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e943]: Feed post
+                  - generic [ref=e944]:
+                    - generic [ref=e945]:
+                      - paragraph [ref=e946]: Search open jobs
+                      - paragraph [ref=e947]: Find a job that matches your skills
+                      - link "Get started" [ref=e948] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/jobs/search/?trk=li_GP_global_careers_jobsgtm__Winback_MacroTest_Jun2023_V1&mcid=7072847370069118977
+                        - generic [ref=e950]: Get started
+                    - link "Get started" [ref=e951] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/jobs/search/?trk=li_GP_global_careers_jobsgtm__Winback_MacroTest_Jun2023_V1&mcid=7072847370069118977
+                      - figure "Get started" [ref=e952]:
+                        - img "Get started" [ref=e953]
+                    - button "View more options" [ref=e954] [cursor=pointer]:
+                      - img [ref=e956]
+              - listitem [ref=e961]:
+                - generic [ref=e963]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e964]: Feed post
+                  - generic [ref=e965]:
+                    - generic [ref=e966]:
+                      - link [ref=e967] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/christine-veio/
+                        - figure [ref=e968]
+                      - paragraph [ref=e970]:
+                        - link "Christine Veio" [ref=e971] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/in/christine-veio/
+                          - strong [ref=e972]: Christine Veio
+                        - text: and 30 other connections follow
+                        - link "LinkedIn" [ref=e973] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/company/linkedin/posts/
+                          - strong [ref=e974]: LinkedIn
+                    - button "View more options" [ref=e975] [cursor=pointer]:
+                      - img [ref=e977]
+                  - generic [ref=e979]:
+                    - link [ref=e980] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/company/linkedin/posts/
+                      - figure [ref=e981]
+                    - link "LinkedIn 32,978,425 followers Promoted" [ref=e982] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/company/linkedin/posts/
+                      - generic [ref=e983]:
+                        - paragraph [ref=e985]: LinkedIn
+                        - paragraph [ref=e987]: 32,978,425 followers
+                        - paragraph [ref=e989]: Promoted
+                  - paragraph [ref=e990]:
+                    - generic [ref=e991]:
+                      - text: Search for a job at companies that need your skills and experience.
+                      - link "https://lnkd.in/g6jWARPy" [ref=e992] [cursor=pointer]:
+                        - /url: https://lnkd.in/g6jWARPy?li_fat_id=c3f7cdb7-6fec-4016-a1fd-3d52d3cc57f9
+                        - strong [ref=e994]: https://lnkd.in/g6jWARPy
+                  - generic [ref=e995]:
+                    - link [ref=e996] [cursor=pointer]:
+                      - /url: https://linkedin.com/jobs/search?trk=li_LOL_SCs_global_careers_jobsgtm_wb_Aug2024_scv1&mcid=7384695938910527488&li_fat_id=c3f7cdb7-6fec-4016-a1fd-3d52d3cc57f9
+                      - figure [ref=e997]
+                    - link "Get started linkedin.com Learn more" [ref=e998] [cursor=pointer]:
+                      - /url: https://linkedin.com/jobs/search?trk=li_LOL_SCs_global_careers_jobsgtm_wb_Aug2024_scv1&mcid=7384695938910527488&li_fat_id=c3f7cdb7-6fec-4016-a1fd-3d52d3cc57f9
+                      - generic [ref=e999]:
+                        - generic [ref=e1000]:
+                          - paragraph [ref=e1002]: Get started
+                          - paragraph [ref=e1004]: linkedin.com
+                        - link "Learn more" [ref=e1005]:
+                          - /url: https://linkedin.com/jobs/search?trk=li_LOL_SCs_global_careers_jobsgtm_wb_Aug2024_scv1&mcid=7384695938910527488&li_fat_id=c3f7cdb7-6fec-4016-a1fd-3d52d3cc57f9
+                          - generic [ref=e1007]: Learn more
+                  - generic [ref=e1008]:
+                    - button "21,503 reactions" [ref=e1009] [cursor=pointer]:
+                      - generic [ref=e1010]:
+                        - img [ref=e1011]
+                        - img [ref=e1017]
+                        - img [ref=e1031]
+                        - paragraph [ref=e1038]:
+                          - generic [ref=e1039]: 21,503 reactions
+                          - text: 21,503
+                    - generic [ref=e1040]:
+                      - button "435 comments" [ref=e1041] [cursor=pointer]:
+                        - paragraph [ref=e1042]: 435 comments
+                      - paragraph [ref=e1043]: •
+                      - button "281 reposts" [ref=e1044] [cursor=pointer]:
+                        - paragraph [ref=e1045]: 281 reposts
+                  - generic [ref=e1046]:
+                    - generic [ref=e1048]:
+                      - 'button "Reaction button state: no reaction" [ref=e1051] [cursor=pointer]':
+                        - generic [ref=e1052]:
+                          - img [ref=e1053]
+                          - generic [ref=e1055]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e1057] [cursor=pointer]
+                    - button "Comment" [ref=e1059] [cursor=pointer]:
+                      - generic [ref=e1060]:
+                        - img [ref=e1061]
+                        - generic [ref=e1064]: Comment
+                    - button "Repost" [ref=e1065] [cursor=pointer]:
+                      - generic [ref=e1066]:
+                        - img [ref=e1067]
+                        - generic [ref=e1070]: Repost
+                    - button "Send" [ref=e1071] [cursor=pointer]:
+                      - generic [ref=e1072]:
+                        - img [ref=e1073]
+                        - generic [ref=e1076]: Send
+              - listitem [ref=e1080]:
+                - generic [ref=e1082]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e1083]: Feed post
+                  - generic [ref=e1084]:
+                    - generic [ref=e1085]:
+                      - link [ref=e1086] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/felix-rodgers-00b57948/
+                        - figure [ref=e1087]
+                      - paragraph [ref=e1089]:
+                        - link "Felix Rodgers" [ref=e1090] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/in/felix-rodgers-00b57948/
+                          - strong [ref=e1091]: Felix Rodgers
+                        - text: likes this
+                    - button "View more options" [ref=e1092] [cursor=pointer]:
+                      - img [ref=e1094]
+                    - button "Hide Post" [ref=e1096] [cursor=pointer]:
+                      - img [ref=e1098]
+                  - generic [ref=e1100]:
+                    - link [ref=e1101] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/adamdanyal/
+                      - figure [ref=e1102]
+                    - link "Adam Danyal • 3rd+ Become better at AI in just 10 minutes a week | Founder, AI for Leaders, the premium AI weekly newsletter that smart leaders read. Subscribe now → aiforleaders.com View my newsletter 1w • Edited •" [ref=e1103] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/adamdanyal/
+                      - generic [ref=e1104]:
+                        - paragraph [ref=e1106]:
+                          - text: Adam Danyal
+                          - img [ref=e1108]
+                          - generic [ref=e1110]: • 3rd+
+                        - paragraph [ref=e1112]: Become better at AI in just 10 minutes a week | Founder, AI for Leaders, the premium AI weekly newsletter that smart leaders read. Subscribe now → aiforleaders.com
+                        - link "View my newsletter" [ref=e1114]:
+                          - /url: https://www.linkedin.com/redir/redirect/?url=https%3A%2F%2Faiforleaders%2Ecom%2Fab&urlhash=01Wd&mt=oVUGDMmtDmIkuQ0PIS_umBKVYL_CPpFQDooM4ZYxpc5prcqdjDAR1V_qxos7t6UXT7aJeRWRMf_YYCnsmbm6jqfkUI21CG5CjWjLhTW3&isSdui=true
+                          - paragraph [ref=e1115]: View my newsletter
+                        - paragraph [ref=e1117]:
+                          - text: 1w • Edited •
+                          - img [ref=e1118]
+                    - button "Follow Adam Danyal" [ref=e1123] [cursor=pointer]:
+                      - generic [ref=e1124]:
+                        - img [ref=e1125]
+                        - generic [ref=e1128]: Follow
+                  - paragraph [ref=e1129]:
+                    - generic [ref=e1130]:
+                      - text: Most people write prompts by guessing.
+                      - text: These frameworks give you structure that works every time.
+                      - text: Clear prompts shape clear output.
+                      - text: You get faster answers.
+                      - text: You make clearer decisions.
+                      - text: You stop rewriting the same request.
+                      - text: Here are six simple frameworks your team can use today.
+                      - text: 1. R-A-C-E
+                      - text: Role, Action, Context, Expectation.
+                      - text: A clean way to tell ChatGPT who it is, what you need, and what success looks like.
+                      - text: 2. R-I-S-E
+                      - text: Role, Identify, Steps, Expectation.
+                      - text: Perfect for decisions, meetings, and any task that needs direction.
+                      - text: 3. S-T-A-R
+                      - text: Situation, Task, Action, Result.
+                      - text: A strong format for reviews, summaries, and explaining outcomes.
+                      - text: 4. S-O-A-P
+                      - text: Subject, Objective, Action, Plan.
+                      - text: Great for project scopes, fixes, and outlining requests clearly.
+                      - text: 5. C-L-E-A-R
+                      - text: Context, Learn, Evaluate, Action, Review.
+                      - text: Helps break down complex topics into simple steps the model can follow.
+                      - text: 6. G-R-O-W
+                      - text: Goal, Reality, Options, Will.
+                      - text: A sharp way to plan, decide, and move work forward.
+                      - text: Use these frameworks across your week and your prompts stay consistent.
+                      - text: You save time.
+                      - text: You get stronger output without the back-and-forth.
+                      - text: Did I miss any frameworks your team uses? Comment below.
+                      - text: __________
+                      - text: 𝗕𝗲𝗰𝗼𝗺𝗲 𝗯𝗲𝘁𝘁𝗲𝗿 𝗮𝘁 𝗔𝗜 𝗶𝗻 𝗷𝘂𝘀𝘁 𝟭𝟬 𝗺𝗶𝗻𝘂𝘁𝗲𝘀 𝗮 𝘄𝗲𝗲𝗸.
+                      - text: 𝗧𝗵𝗲 𝗽𝗿𝗲𝗺𝗶𝘂𝗺 𝗔𝗜 𝗻𝗲𝘄𝘀𝗹𝗲𝘁𝘁𝗲𝗿 𝘀𝗺𝗮𝗿𝘁 𝗹𝗲𝗮𝗱𝗲𝗿𝘀 𝗿𝗲𝗮𝗱.
+                      - text: 𝗣𝗹𝘂𝘀 𝗳𝗿𝗲𝗲 𝗮𝗰𝗰𝗲𝘀𝘀 𝘁𝗼 𝗔𝗜 𝗴𝘂𝗶𝗱𝗲𝘀, 𝘃𝗶𝗱𝗲𝗼𝘀 𝗮𝗻𝗱 𝗮𝘂𝗱𝗶𝗼.
+                      - text: 𝗦𝘂𝗯𝘀𝗰𝗿𝗶𝗯𝗲 𝗻𝗼𝘄 →
+                      - link "aiforleaders.com/ap" [ref=e1132] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/redir/redirect/?url=http%3A%2F%2Faiforleaders%2Ecom%2Fap&urlhash=GIL5&mt=QPxOPfj2smkwmXxpkV06iQjlySR-YBU9303mIxlIoKetrsJv3uThNUHjS-lVy-vRH9WN5JVU7ufCboxQVLLmKxvQYR2iczQqtQdKjIUkVu_FILIkwvw_aiTk&isSdui=true
+                        - strong [ref=e1134]: aiforleaders.com/ap
+                      - button:
+                        - generic [ref=e1136] [cursor=pointer]: … more
+                  - button [ref=e1138] [cursor=pointer]:
+                    - figure [ref=e1139]:
+                      - img [ref=e1140]
+                  - generic [ref=e1141]:
+                    - button "Felix Rodgers and 1,135 others reacted" [ref=e1142] [cursor=pointer]:
+                      - generic [ref=e1143]:
+                        - img [ref=e1144]
+                        - img [ref=e1150]
+                        - img [ref=e1158]
+                        - paragraph [ref=e1165]:
+                          - generic [ref=e1166]: Felix Rodgers and 1,135 others reacted
+                          - generic [ref=e1167]: Felix Rodgers and 1,135 others
+                    - generic [ref=e1168]:
+                      - button "47 comments" [ref=e1169] [cursor=pointer]:
+                        - paragraph [ref=e1170]: 47 comments
+                      - paragraph [ref=e1171]: •
+                      - button "172 reposts" [ref=e1172] [cursor=pointer]:
+                        - paragraph [ref=e1173]: 172 reposts
+                  - generic [ref=e1174]:
+                    - generic [ref=e1176]:
+                      - 'button "Reaction button state: no reaction" [ref=e1179] [cursor=pointer]':
+                        - generic [ref=e1180]:
+                          - img [ref=e1181]
+                          - generic [ref=e1183]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e1185] [cursor=pointer]
+                    - button "Comment" [ref=e1187] [cursor=pointer]:
+                      - generic [ref=e1188]:
+                        - img [ref=e1189]
+                        - generic [ref=e1192]: Comment
+                    - button "Repost" [ref=e1193] [cursor=pointer]:
+                      - generic [ref=e1194]:
+                        - img [ref=e1195]
+                        - generic [ref=e1198]: Repost
+                    - button "Send" [ref=e1199] [cursor=pointer]:
+                      - generic [ref=e1200]:
+                        - img [ref=e1201]
+                        - generic [ref=e1204]: Send
+                - generic [ref=e1205]:
+                  - generic [ref=e1210]:
+                    - link [ref=e1212] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/juliadanyal/
+                      - figure [ref=e1213]
+                    - generic [ref=e1214]:
+                      - generic [ref=e1216]:
+                        - link "Julia Danyal • 3rd+ Become better at AI in just 10 minutes a week | Founder, AI for Leaders, the premium AI weekly newsletter that smart leaders read. Subscribe now → aiforleaders.com" [ref=e1217] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/in/juliadanyal/
+                          - generic [ref=e1218]:
+                            - paragraph [ref=e1221]:
+                              - text: Julia Danyal
+                              - img [ref=e1223]
+                              - generic [ref=e1225]: • 3rd+
+                            - paragraph [ref=e1227]: Become better at AI in just 10 minutes a week | Founder, AI for Leaders, the premium AI weekly newsletter that smart leaders read. Subscribe now → aiforleaders.com
+                        - paragraph [ref=e1229]: 1w
+                        - button "View more options" [ref=e1230] [cursor=pointer]:
+                          - img [ref=e1232]
+                      - paragraph [ref=e1237]:
+                        - generic [ref=e1238]: These frameworks make it easier for someone to know what information to include. They take the guesswork out of talking to the tool.
+                      - generic [ref=e1240]:
+                        - generic [ref=e1241]:
+                          - generic [ref=e1243]:
+                            - 'button "Reaction button state: no reaction" [ref=e1244] [cursor=pointer]':
+                              - 'button "Reaction button state: no reaction" [ref=e1247]':
+                                - 'button "Reaction button state: no reaction" [ref=e1249]':
+                                  - generic [ref=e1250]: "Reaction button state: no reaction"
+                                  - text: Like
+                            - button "Open reactions menu":
+                              - img [ref=e1252] [cursor=pointer]
+                          - button "14 reactions" [ref=e1254] [cursor=pointer]:
+                            - generic [ref=e1255]:
+                              - img [ref=e1256]
+                              - img [ref=e1262]
+                              - paragraph [ref=e1271]:
+                                - generic [ref=e1272]: 14 reactions
+                                - text: "14"
+                        - generic [ref=e1273]:
+                          - button "Reply" [ref=e1274] [cursor=pointer]:
+                            - generic [ref=e1276]: Reply
+                          - paragraph [ref=e1277]: "1"
+                  - button "Load more comments" [ref=e1279] [cursor=pointer]:
+                    - generic [ref=e1281]: Load more comments
+              - listitem [ref=e1285]:
+                - generic [ref=e1287]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e1288]: Feed post
+                  - generic [ref=e1289]:
+                    - paragraph [ref=e1292]: Suggested
+                    - button "View more options" [ref=e1293] [cursor=pointer]:
+                      - img [ref=e1295]
+                    - button "Hide Post" [ref=e1297] [cursor=pointer]:
+                      - img [ref=e1299]
+                  - generic [ref=e1301]:
+                    - link [ref=e1302] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/jay-prakash-pathak-269416225/
+                      - figure [ref=e1303]
+                    - link "Jay Prakash Pathak • 3rd+ QA Engineering Architect | Automation & DevOps | Selenium, Playwright, API| Java , C# | Remote / Consulting | 9+ Years 2d •" [ref=e1304] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/jay-prakash-pathak-269416225/
+                      - generic [ref=e1305]:
+                        - paragraph [ref=e1307]:
+                          - text: Jay Prakash Pathak
+                          - img [ref=e1309]
+                          - generic [ref=e1311]: • 3rd+
+                        - paragraph [ref=e1313]: QA Engineering Architect | Automation & DevOps | Selenium, Playwright, API| Java , C# | Remote / Consulting | 9+ Years
+                        - paragraph [ref=e1315]:
+                          - text: 2d •
+                          - img [ref=e1316]
+                    - button "Follow Jay Prakash Pathak" [ref=e1321] [cursor=pointer]:
+                      - generic [ref=e1322]:
+                        - img [ref=e1323]
+                        - generic [ref=e1326]: Follow
+                  - paragraph [ref=e1327]:
+                    - generic [ref=e1328]:
+                      - text: QA Is Not Dying. Bad QA Is.
+                      - text: Everyone is talking about “Will GenAI replace QA?”
+                      - text: "Here’s my honest answer after working as a QA Developer, Architect, Trainer, and Manager:"
+                      - text: ❌ Manual execution-focused QA is dying
+                      - text: ❌ Script-only automation QA is shrinking
+                      - text: ✅ Quality Engineers who understand systems, risk, and business are rising
+                      - text: GenAI can write test scripts.
+                      - text: GenAI can generate test data.
+                      - text: "But GenAI cannot:"
+                      - text: Decide what not to test
+                      - text: Understand real user pain
+                      - text: Challenge vague requirements
+                      - text: Balance speed vs risk
+                      - text: QA’s role is shifting from execution to judgment.
+                      - text: If you’re in QA, the question isn’t “Will AI replace me?”
+                      - text: "It’s: “Am I evolving fast enough?”"
+                      - link "#QualityEngineering" [ref=e1329] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23qualityengineering&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e1331]: "#QualityEngineering"
+                      - link "#GenAI" [ref=e1332] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23genai&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e1334]: "#GenAI"
+                      - link "#QA" [ref=e1335] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23qa&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e1337]: "#QA"
+                      - link "#Testing" [ref=e1338] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23testing&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e1340]: "#Testing"
+                      - link "#FutureOfWork" [ref=e1341] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23futureofwork&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e1343]: "#FutureOfWork"
+                      - button:
+                        - generic [ref=e1345] [cursor=pointer]: … more
+                  - generic [ref=e1346]:
+                    - button "20 reactions" [ref=e1347] [cursor=pointer]:
+                      - generic [ref=e1348]:
+                        - img [ref=e1349]
+                        - paragraph [ref=e1356]:
+                          - generic [ref=e1357]: 20 reactions
+                          - text: "20"
+                    - generic [ref=e1358]:
+                      - button:
+                        - paragraph
+                      - button:
+                        - paragraph
+                  - generic [ref=e1359]:
+                    - generic [ref=e1361]:
+                      - 'button "Reaction button state: no reaction" [ref=e1364] [cursor=pointer]':
+                        - generic [ref=e1365]:
+                          - img [ref=e1366]
+                          - generic [ref=e1368]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e1370] [cursor=pointer]
+                    - button "Comment" [ref=e1372] [cursor=pointer]:
+                      - generic [ref=e1373]:
+                        - img [ref=e1374]
+                        - generic [ref=e1377]: Comment
+                    - button "Repost" [ref=e1378] [cursor=pointer]:
+                      - generic [ref=e1379]:
+                        - img [ref=e1380]
+                        - generic [ref=e1383]: Repost
+                    - button "Send" [ref=e1384] [cursor=pointer]:
+                      - generic [ref=e1385]:
+                        - img [ref=e1386]
+                        - generic [ref=e1389]: Send
+              - listitem [ref=e1393]:
+                - generic [ref=e1395]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e1396]: Feed post
+                  - generic [ref=e1397]:
+                    - paragraph [ref=e1401]: Jobs recommended for you
+                    - generic [ref=e1405]:
+                      - list [ref=e1406]:
+                        - listitem [ref=e1407]:
+                          - link "INTL - Remote Lead Manual Tester - LATAM (Verified job) Lensa Chicago, IL (Remote) Posted on February 3, 2026, 5:27 PM" [ref=e1409] [cursor=pointer]:
+                            - /url: https://www.linkedin.com/jobs/collections/recommended/?trackingId=KmG3eBn%2FUgqmQIY3jAQY5A%3D%3D&currentJobId=4368898131&originToLandingJobPostings=4368898131%2C4368401901%2C4356431542%2C4368806877%2C4368545179
+                            - generic [ref=e1410]:
+                              - generic [ref=e1411]:
+                                - figure [ref=e1412]
+                                - generic [ref=e1416]:
+                                  - paragraph [ref=e1418]:
+                                    - generic [ref=e1419]: INTL - Remote Lead Manual Tester - LATAM (Verified job)
+                                    - generic [ref=e1420]:
+                                      - text: INTL - Remote Lead Manual Tester - LATAM
+                                      - img [ref=e1422]
+                                  - paragraph [ref=e1425]: Lensa
+                                  - paragraph [ref=e1427]: Chicago, IL (Remote)
+                              - paragraph [ref=e1430]:
+                                - generic [ref=e1431]: Posted on February 3, 2026, 5:27 PM
+                                - text: 4 hours ago
+                        - listitem [ref=e1432]:
+                          - link "Mobile QA Automation Engineer (Verified job) XOi United States (Remote) Company response time is typically 2 weeks Posted on February 2, 2026, 3:33 PM · Easy Apply" [ref=e1434] [cursor=pointer]:
+                            - /url: https://www.linkedin.com/jobs/collections/recommended/?trackingId=IeeXiXYI2Fc9o3YmCRTIeQ%3D%3D&currentJobId=4368401901&originToLandingJobPostings=4368898131%2C4368401901%2C4356431542%2C4368806877%2C4368545179
+                            - generic [ref=e1435]:
+                              - generic [ref=e1436]:
+                                - figure [ref=e1437]
+                                - generic [ref=e1438]:
+                                  - generic [ref=e1441]:
+                                    - paragraph [ref=e1443]:
+                                      - generic [ref=e1444]: Mobile QA Automation Engineer (Verified job)
+                                      - generic [ref=e1445]:
+                                        - text: Mobile QA Automation Engineer
+                                        - img [ref=e1447]
+                                    - paragraph [ref=e1450]: XOi
+                                    - paragraph [ref=e1452]: United States (Remote)
+                                  - generic [ref=e1454]:
+                                    - img [ref=e1455]
+                                    - paragraph [ref=e1459]: Company response time is typically 2 weeks
+                              - generic [ref=e1460]:
+                                - paragraph [ref=e1461]:
+                                  - generic [ref=e1462]: Posted on February 2, 2026, 3:33 PM
+                                  - text: 1 day ago
+                                - paragraph [ref=e1463]: ·
+                                - paragraph [ref=e1464]:
+                                  - img [ref=e1466]
+                                  - text: Easy Apply
+                        - listitem [ref=e1468]:
+                          - link "Senior QA Engineer [Manual & Automation] (N) (Verified job) Blue Coding United States (Remote) Actively reviewing applicants Posted on February 2, 2026, 9:05 AM · Easy Apply" [ref=e1470] [cursor=pointer]:
+                            - /url: https://www.linkedin.com/jobs/collections/recommended/?trackingId=csczSPKEem60B6p2wct%2B5g%3D%3D&currentJobId=4356431542&originToLandingJobPostings=4368898131%2C4368401901%2C4356431542%2C4368806877%2C4368545179
+                            - generic [ref=e1471]:
+                              - generic [ref=e1472]:
+                                - figure [ref=e1473]
+                                - generic [ref=e1474]:
+                                  - generic [ref=e1477]:
+                                    - paragraph [ref=e1479]:
+                                      - generic [ref=e1480]: Senior QA Engineer [Manual & Automation] (N) (Verified job)
+                                      - generic [ref=e1481]:
+                                        - text: Senior QA Engineer [Manual & Automation] (N)
+                                        - img [ref=e1483]
+                                    - paragraph [ref=e1486]: Blue Coding
+                                    - paragraph [ref=e1488]: United States (Remote)
+                                  - generic [ref=e1490]:
+                                    - img [ref=e1491]
+                                    - paragraph [ref=e1495]: Actively reviewing applicants
+                              - generic [ref=e1496]:
+                                - paragraph [ref=e1497]:
+                                  - generic [ref=e1498]: Posted on February 2, 2026, 9:05 AM
+                                  - text: 1 day ago
+                                - paragraph [ref=e1499]: ·
+                                - paragraph [ref=e1500]:
+                                  - img [ref=e1502]
+                                  - text: Easy Apply
+                        - listitem [ref=e1504]:
+                          - link "Lead Engineer, Testing (Verified job) Majesco United States (Remote) 1 connection works here Posted on February 3, 2026, 9:50 AM" [ref=e1506] [cursor=pointer]:
+                            - /url: https://www.linkedin.com/jobs/collections/recommended/?trackingId=Me9YrzN5KLL9b1rblojweA%3D%3D&currentJobId=4368806877&originToLandingJobPostings=4368898131%2C4368401901%2C4356431542%2C4368806877%2C4368545179
+                            - generic [ref=e1507]:
+                              - generic [ref=e1508]:
+                                - figure [ref=e1509]
+                                - generic [ref=e1510]:
+                                  - generic [ref=e1513]:
+                                    - paragraph [ref=e1515]:
+                                      - generic [ref=e1516]: Lead Engineer, Testing (Verified job)
+                                      - generic [ref=e1517]:
+                                        - text: Lead Engineer, Testing
+                                        - img [ref=e1519]
+                                    - paragraph [ref=e1522]: Majesco
+                                    - paragraph [ref=e1524]: United States (Remote)
+                                  - generic [ref=e1526]:
+                                    - figure [ref=e1527]
+                                    - paragraph [ref=e1529]: 1 connection works here
+                              - paragraph [ref=e1531]:
+                                - generic [ref=e1532]: Posted on February 3, 2026, 9:50 AM
+                                - text: 11 hours ago
+                        - listitem [ref=e1533]:
+                          - link "QA ENGINEER Dice - JW Delaware City, DE (Remote) Posted on February 3, 2026, 5:23 PM" [ref=e1535] [cursor=pointer]:
+                            - /url: https://www.linkedin.com/jobs/collections/recommended/?trackingId=EeOfhC%2FNhbfYxbHWuIG7jw%3D%3D&currentJobId=4368545179&originToLandingJobPostings=4368898131%2C4368401901%2C4356431542%2C4368806877%2C4368545179
+                            - generic [ref=e1536]:
+                              - generic [ref=e1537]:
+                                - figure [ref=e1538]
+                                - generic [ref=e1542]:
+                                  - paragraph [ref=e1544]: QA ENGINEER
+                                  - paragraph [ref=e1546]: Dice - JW
+                                  - paragraph [ref=e1548]: Delaware City, DE (Remote)
+                              - paragraph [ref=e1551]:
+                                - generic [ref=e1552]: Posted on February 3, 2026, 5:23 PM
+                                - text: 4 hours ago
+                      - button "Next" [ref=e1553] [cursor=pointer]:
+                        - img [ref=e1555]
+                    - link "Show more" [ref=e1557] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/jobs/collections/recommended/?discover=recommended&trackingId=KmG3eBn%2FUgqmQIY3jAQY5A%3D%3D&currentJobId=4368898131&discoveryOrigin=MAIN_FEED_JYMBII&originToLandingJobPostings=4368898131%2C4368401901%2C4356431542%2C4368806877%2C4368545179
+                      - generic [ref=e1558]:
+                        - img [ref=e1559]
+                        - generic [ref=e1561]: Show more
+              - listitem [ref=e1565]:
+                - generic [ref=e1567]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e1568]: Feed post
+                  - generic [ref=e1569]:
+                    - link [ref=e1570] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/company/national-university/posts/
+                      - figure [ref=e1571]
+                    - link "National University 251,831 followers Promoted" [ref=e1572] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/company/national-university/posts/
+                      - generic [ref=e1573]:
+                        - paragraph [ref=e1575]: National University
+                        - paragraph [ref=e1577]: 251,831 followers
+                        - paragraph [ref=e1579]: Promoted
+                    - button "View more options" [ref=e1580] [cursor=pointer]:
+                      - img [ref=e1582]
+                  - generic [ref=e1586]:
+                    - paragraph [ref=e1587]:
+                      - generic [ref=e1588]: NU’s customizable BS in Data Science allows you to choose from three future-focused concentrations. Apply today!
+                    - generic [ref=e1589]:
+                      - button [ref=e1590] [cursor=pointer]:
+                        - figure [ref=e1591]
+                      - button "4-Week Coursework 234 submits" [ref=e1592] [cursor=pointer]:
+                        - generic [ref=e1594]:
+                          - paragraph [ref=e1596]: 4-Week Coursework
+                          - paragraph [ref=e1598]: 234 submits
+                    - button "Learn more" [ref=e1600] [cursor=pointer]:
+                      - generic [ref=e1602]: Learn more
+                  - generic [ref=e1603]:
+                    - button "287 reactions" [ref=e1604] [cursor=pointer]:
+                      - generic [ref=e1605]:
+                        - img [ref=e1606]
+                        - img [ref=e1612]
+                        - img [ref=e1618]
+                        - paragraph [ref=e1633]:
+                          - generic [ref=e1634]: 287 reactions
+                          - text: "287"
+                    - generic [ref=e1635]:
+                      - button "9 comments" [ref=e1636] [cursor=pointer]:
+                        - paragraph [ref=e1637]: 9 comments
+                      - paragraph [ref=e1638]: •
+                      - button "4 reposts" [ref=e1639] [cursor=pointer]:
+                        - paragraph [ref=e1640]: 4 reposts
+                  - generic [ref=e1641]:
+                    - generic [ref=e1643]:
+                      - 'button "Reaction button state: no reaction" [ref=e1646] [cursor=pointer]':
+                        - generic [ref=e1647]:
+                          - img [ref=e1648]
+                          - generic [ref=e1650]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e1652] [cursor=pointer]
+                    - button "Comment" [ref=e1654] [cursor=pointer]:
+                      - generic [ref=e1655]:
+                        - img [ref=e1656]
+                        - generic [ref=e1659]: Comment
+                    - button "Repost" [ref=e1660] [cursor=pointer]:
+                      - generic [ref=e1661]:
+                        - img [ref=e1662]
+                        - generic [ref=e1665]: Repost
+                    - button "Send" [ref=e1666] [cursor=pointer]:
+                      - generic [ref=e1667]:
+                        - img [ref=e1668]
+                        - generic [ref=e1671]: Send
+              - listitem [ref=e1675]:
+                - generic [ref=e1677]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e1678]: Feed post
+                  - generic [ref=e1679]:
+                    - generic [ref=e1680]:
+                      - link [ref=e1681] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/lizaosterdock/
+                        - figure [ref=e1682]
+                      - paragraph [ref=e1684]:
+                        - link "Liza Osterdock" [ref=e1685] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/in/lizaosterdock/
+                          - strong [ref=e1686]: Liza Osterdock
+                        - text: celebrates this
+                    - button "View more options" [ref=e1687] [cursor=pointer]:
+                      - img [ref=e1689]
+                    - button "Hide Post" [ref=e1691] [cursor=pointer]:
+                      - img [ref=e1693]
+                  - generic [ref=e1695]:
+                    - link [ref=e1696] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/semels/
+                      - figure [ref=e1697]
+                    - link "Steve Semelsberger • 2nd Co-Founder & CEO of Autoptic. Helping CTOs tackle lurking production problems | Founder of Alder Growth Partners | Operator, Director, Advisor, Investor, Musician 1w • Edited •" [ref=e1698] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/semels/
+                      - generic [ref=e1699]:
+                        - paragraph [ref=e1701]:
+                          - text: Steve Semelsberger
+                          - img [ref=e1703]
+                          - generic [ref=e1705]: • 2nd
+                        - paragraph [ref=e1707]: Co-Founder & CEO of Autoptic. Helping CTOs tackle lurking production problems | Founder of Alder Growth Partners | Operator, Director, Advisor, Investor, Musician
+                        - paragraph [ref=e1709]:
+                          - text: 1w • Edited •
+                          - img [ref=e1710]
+                    - button "Follow Steve Semelsberger" [ref=e1715] [cursor=pointer]:
+                      - generic [ref=e1716]:
+                        - img [ref=e1717]
+                        - generic [ref=e1720]: Follow
+                  - paragraph [ref=e1721]:
+                    - generic [ref=e1722]:
+                      - text: "Exciting moment: today we announced GA of the"
+                      - link "Autoptic" [ref=e1723] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/company/autoptic/
+                        - strong [ref=e1725]: Autoptic
+                      - text: change resilience agents product! And we unveiled our first 23 seed investors.
+                      - text: Autoptic operates in the DevOps space. It exists to help enterprise CTOs and their software engineering teams better detect, diagnose, and repair lurking production problems before they become major incidents.
+                      - text: "For those who like details: Autoptic is an enterprise software solution that delivers AI-powered Agents that leverage troves of complex telemetry (logs, metrics, events, and traces) from 10+ DevOps integrations, directly and through OpenTelemetry (OTel). Integrations include CloudTrail, CloudWatch, Datadog, GitHub, Grafana LGTM, Jira, and OpenSearch. Autoptic Agents are built on Tools that are created with a DSL called PQL (Performance Query Language), enabling highly efficient and predictable change detection analytics."
+                      - text: The product has been built over the last two years under the leadership of our amazing CTO & Co-Founder,
+                      - link "Peco Karayanev" [ref=e1727] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/peco-karayanev/
+                        - strong [ref=e1729]: Peco Karayanev
+                      - text: . Thank you, Peco. What you and your team have created is innovative, powerful, and massive—and I do not use that last term lightly.
+                      - text: "Autoptic seed investors span former and current entrepreneurs, CEOs, CTOs, operators (e.g. CFOs), and professionals (e.g. venture capitalists). 14 are here in Austin, TX where we are headquartered. We are deeply grateful to each. They are:"
+                      - link "Allen Morgan" [ref=e1730] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/allenlmorgan/
+                        - strong [ref=e1732]: Allen Morgan
+                      - text: ","
+                      - link "Andrew Busey" [ref=e1733] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/busey/
+                        - strong [ref=e1735]: Andrew Busey
+                      - text: ","
+                      - link "Aneesh D." [ref=e1736] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/aneesh-d-74a796b6/
+                        - strong [ref=e1738]: Aneesh D.
+                      - text: ","
+                      - link "Aziz Gilani" [ref=e1739] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/texasvc/
+                        - strong [ref=e1741]: Aziz Gilani
+                      - text: ","
+                      - link "Brian Gambs" [ref=e1742] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/briangambs/
+                        - strong [ref=e1744]: Brian Gambs
+                      - text: ","
+                      - link "Chris Aniszczyk" [ref=e1745] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/caniszczyk/
+                        - strong [ref=e1747]: Chris Aniszczyk
+                      - text: ","
+                      - link "Cihan HIRÇIN" [ref=e1748] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/cancihanhircin/
+                        - strong [ref=e1750]: Cihan HIRÇIN
+                      - text: ","
+                      - link "Dan Van Tran" [ref=e1751] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/dantran/
+                        - strong [ref=e1753]: Dan Van Tran
+                      - text: ","
+                      - link "Damon Edwards" [ref=e1754] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/damonedwards/
+                        - strong [ref=e1756]: Damon Edwards
+                      - text: ","
+                      - link "Dave Panos" [ref=e1757] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/davepanos/
+                        - strong [ref=e1759]: Dave Panos
+                      - text: ","
+                      - link "Dimitri Vlachos" [ref=e1760] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/dvlachos/
+                        - strong [ref=e1762]: Dimitri Vlachos
+                      - text: ","
+                      - link "Dustin Kirkland" [ref=e1763] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/dustinkirkland/
+                        - strong [ref=e1765]: Dustin Kirkland
+                      - text: ","
+                      - link "Ernest Mueller" [ref=e1766] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/ernestmueller/
+                        - strong [ref=e1768]: Ernest Mueller
+                      - text: ","
+                      - link "Greg O'Reilly" [ref=e1769] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/gregoreilly/
+                        - strong [ref=e1771]: Greg O'Reilly
+                      - text: ","
+                      - link "Ilan R." [ref=e1772] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/irabinovitch/
+                        - strong [ref=e1774]: Ilan R.
+                      - text: ","
+                      - link "Jim Offerdahl" [ref=e1775] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/jim-offerdahl-04b40b/
+                        - strong [ref=e1777]: Jim Offerdahl
+                      - text: ","
+                      - link "Nacho De Marco" [ref=e1778] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/idemarco/
+                        - strong [ref=e1780]: Nacho De Marco
+                      - text: ","
+                      - link "Rob Taylor" [ref=e1781] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/robertjtaylor/
+                        - strong [ref=e1783]: Rob Taylor
+                      - text: ","
+                      - link "Scott Buxton" [ref=e1784] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/scbuxton/
+                        - strong [ref=e1786]: Scott Buxton
+                      - text: ","
+                      - link "Scott Harmon" [ref=e1787] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/scott-harmon-523a3811/
+                        - strong [ref=e1789]: Scott Harmon
+                      - text: ","
+                      - link "Terry Angelos" [ref=e1790] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/tangelos/
+                        - strong [ref=e1792]: Terry Angelos
+                      - text: ","
+                      - link "Will Ballard" [ref=e1793] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/will-ballard-b09115/
+                        - strong [ref=e1795]: Will Ballard
+                      - text: ", and"
+                      - link "William Chan" [ref=e1796] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/in/williamwchan/
+                        - strong [ref=e1798]: William Chan
+                      - text: . Thank you all, again, for your support and confidence.
+                      - text: Today, Autoptic has 6 customers. With today's product general availability, we are in active discussions with dozens more organizations and welcome large software engineering teams to explore the significant impact possible with Autoptic. Thank you to our existing design partners and customers. Thank you also to our advisors, team, and friends. We would not be here without you.
+                      - text: More details on Autoptic, including today's complete announcement, are available on the company website. There, you can also learn more about three current Job opportunities (FDEs, CoS, and Sr. Eng).
+                      - text: If you are inclined, we are grateful for your likes, comments, and shares of this post to help spread the news.
+                      - button:
+                        - generic [ref=e1800] [cursor=pointer]: … more
+                  - button "Autoptic change resilience agents help CTOs tackle lurking production problems." [ref=e1802] [cursor=pointer]:
+                    - figure "Autoptic change resilience agents help CTOs tackle lurking production problems." [ref=e1803]:
+                      - img "Autoptic change resilience agents help CTOs tackle lurking production problems." [ref=e1804]
+                  - generic [ref=e1805]:
+                    - button "Liza Osterdock and 103 others reacted" [ref=e1806] [cursor=pointer]:
+                      - generic [ref=e1807]:
+                        - img [ref=e1808]
+                        - img [ref=e1814]
+                        - img [ref=e1828]
+                        - paragraph [ref=e1835]:
+                          - generic [ref=e1836]: Liza Osterdock and 103 others reacted
+                          - generic [ref=e1837]: Liza Osterdock and 103 others
+                    - generic [ref=e1838]:
+                      - button "32 comments" [ref=e1839] [cursor=pointer]:
+                        - paragraph [ref=e1840]: 32 comments
+                      - paragraph [ref=e1841]: •
+                      - button "9 reposts" [ref=e1842] [cursor=pointer]:
+                        - paragraph [ref=e1843]: 9 reposts
+                  - generic [ref=e1844]:
+                    - generic [ref=e1846]:
+                      - 'button "Reaction button state: no reaction" [ref=e1849] [cursor=pointer]':
+                        - generic [ref=e1850]:
+                          - img [ref=e1851]
+                          - generic [ref=e1853]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e1855] [cursor=pointer]
+                    - button "Comment" [ref=e1857] [cursor=pointer]:
+                      - generic [ref=e1858]:
+                        - img [ref=e1859]
+                        - generic [ref=e1862]: Comment
+                    - button "Repost" [ref=e1863] [cursor=pointer]:
+                      - generic [ref=e1864]:
+                        - img [ref=e1865]
+                        - generic [ref=e1868]: Repost
+                    - button "Send" [ref=e1869] [cursor=pointer]:
+                      - generic [ref=e1870]:
+                        - img [ref=e1871]
+                        - generic [ref=e1874]: Send
+                - generic [ref=e1875]:
+                  - generic [ref=e1880]:
+                    - link [ref=e1882] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/kennymadden/
+                      - figure [ref=e1883]
+                    - generic [ref=e1884]:
+                      - generic [ref=e1886]:
+                        - link "🎨 Kenny Madden 🎨 • 3rd+ Enterprise Customer Success Manager" [ref=e1887] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/in/kennymadden/
+                          - generic [ref=e1888]:
+                            - paragraph [ref=e1891]:
+                              - text: 🎨 Kenny Madden 🎨
+                              - img [ref=e1893]
+                              - generic [ref=e1895]: • 3rd+
+                            - paragraph [ref=e1897]: Enterprise Customer Success Manager
+                        - paragraph [ref=e1899]: (edited) 1w
+                        - button "View more options" [ref=e1900] [cursor=pointer]:
+                          - img [ref=e1902]
+                      - paragraph [ref=e1907]:
+                        - generic [ref=e1908]: You will like this quote from a SVP many years ago " i have a 1000 vendors who try and sell me a ladder after i have fallen down a hole. I can count maybe 3 or 4 who help me avoid the hole in the first place " SVP IT equites trading platform applications Citigroup
+                      - generic [ref=e1910]:
+                        - generic [ref=e1911]:
+                          - generic [ref=e1913]:
+                            - 'button "Reaction button state: no reaction" [ref=e1914] [cursor=pointer]':
+                              - 'button "Reaction button state: no reaction" [ref=e1917]':
+                                - 'button "Reaction button state: no reaction" [ref=e1919]':
+                                  - generic [ref=e1920]: "Reaction button state: no reaction"
+                                  - text: Like
+                            - button "Open reactions menu":
+                              - img [ref=e1922] [cursor=pointer]
+                          - button "1 reaction" [ref=e1924] [cursor=pointer]:
+                            - generic [ref=e1925]:
+                              - img [ref=e1926]
+                              - paragraph [ref=e1933]:
+                                - generic [ref=e1934]: 1 reaction
+                                - text: "1"
+                        - generic [ref=e1935]:
+                          - button "Reply" [ref=e1936] [cursor=pointer]:
+                            - generic [ref=e1938]: Reply
+                          - paragraph [ref=e1939]: "3"
+                  - button "Load more comments" [ref=e1941] [cursor=pointer]:
+                    - generic [ref=e1943]: Load more comments
+              - listitem [ref=e1947]:
+                - generic [ref=e1949]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e1950]: Feed post
+                  - generic [ref=e1951]:
+                    - paragraph [ref=e1954]: Suggested
+                    - button "View more options" [ref=e1955] [cursor=pointer]:
+                      - img [ref=e1957]
+                    - button "Hide Post" [ref=e1959] [cursor=pointer]:
+                      - img [ref=e1961]
+                  - generic [ref=e1963]:
+                    - link [ref=e1964] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/shivantika-19338055/
+                      - figure [ref=e1965]
+                    - link "Shivantika . • 3rd+ Engineering Manager at Barracuda Networks 23h •" [ref=e1966] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/shivantika-19338055/
+                      - generic [ref=e1967]:
+                        - paragraph [ref=e1969]:
+                          - text: Shivantika .
+                          - img [ref=e1971]
+                          - generic [ref=e1973]: • 3rd+
+                        - paragraph [ref=e1975]: Engineering Manager at Barracuda Networks
+                        - paragraph [ref=e1977]:
+                          - text: 23h •
+                          - img [ref=e1978]
+                    - button "Follow Shivantika ." [ref=e1983] [cursor=pointer]:
+                      - generic [ref=e1984]:
+                        - img [ref=e1985]
+                        - generic [ref=e1988]: Follow
+                  - paragraph [ref=e1989]:
+                    - generic [ref=e1990]:
+                      - text: A Career Mistake That Taught Me the Most
+                      - text: Early in my QA career, I believed being “good” meant saying yes to everything.
+                      - text: More tests. More coverage. More late nights.
+                      - text: "It took time (and a few painful lessons) to realize this:"
+                      - text: Saying yes to everything often means saying no to real impact.
+                      - text: Quality didn’t improve because we did more.
+                      - text: It improved when we did better.
+                      - text: "What actually made a difference:"
+                      - text: "- Asking why before adding another test"
+                      - text: "- Focusing on risk, not test count"
+                      - text: "- Pushing back when something didn’t add value—even when it felt uncomfortable"
+                      - text: Good QA isn’t about volume.
+                      - text: It’s about judgment.
+                      - text: That shift—from execution to intent—changed how I work, how I lead, and how I think about quality.
+                      - link "#CareerLessons" [ref=e1992] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23careerlessons&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e1994]: "#CareerLessons"
+                      - link "#QualityEngineering" [ref=e1995] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23qualityengineering&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e1997]: "#QualityEngineering"
+                      - link "#Leadership" [ref=e1998] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23leadership&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2000]: "#Leadership"
+                      - link "#QA" [ref=e2001] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23qa&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2003]: "#QA"
+                      - link "#TechCareers" [ref=e2004] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23techcareers&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2006]: "#TechCareers"
+                      - button:
+                        - generic [ref=e2008] [cursor=pointer]: … more
+                  - generic [ref=e2009]:
+                    - button "65 reactions" [ref=e2010] [cursor=pointer]:
+                      - generic [ref=e2011]:
+                        - img [ref=e2012]
+                        - img [ref=e2018]
+                        - img [ref=e2026]
+                        - paragraph [ref=e2038]:
+                          - generic [ref=e2039]: 65 reactions
+                          - text: "65"
+                    - generic [ref=e2040]:
+                      - button "1 comment" [ref=e2041] [cursor=pointer]:
+                        - paragraph [ref=e2042]: 1 comment
+                      - paragraph [ref=e2043]: •
+                      - button "2 reposts" [ref=e2044] [cursor=pointer]:
+                        - paragraph [ref=e2045]: 2 reposts
+                  - generic [ref=e2046]:
+                    - generic [ref=e2048]:
+                      - 'button "Reaction button state: no reaction" [ref=e2051] [cursor=pointer]':
+                        - generic [ref=e2052]:
+                          - img [ref=e2053]
+                          - generic [ref=e2055]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e2057] [cursor=pointer]
+                    - button "Comment" [ref=e2059] [cursor=pointer]:
+                      - generic [ref=e2060]:
+                        - img [ref=e2061]
+                        - generic [ref=e2064]: Comment
+                    - button "Repost" [ref=e2065] [cursor=pointer]:
+                      - generic [ref=e2066]:
+                        - img [ref=e2067]
+                        - generic [ref=e2070]: Repost
+                    - button "Send" [ref=e2071] [cursor=pointer]:
+                      - generic [ref=e2072]:
+                        - img [ref=e2073]
+                        - generic [ref=e2076]: Send
+              - listitem [ref=e2080]:
+                - generic [ref=e2082]:
+                  - heading "Feed post" [level=2]:
+                    - generic [ref=e2083]: Feed post
+                  - generic [ref=e2084]:
+                    - generic [ref=e2085]:
+                      - link [ref=e2086] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/company/ibm/posts/
+                        - figure [ref=e2087]
+                      - paragraph [ref=e2089]:
+                        - link "IBM" [ref=e2090] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/company/ibm/posts/
+                          - strong [ref=e2091]: IBM
+                        - text: commented on this
+                    - button "View more options" [ref=e2092] [cursor=pointer]:
+                      - img [ref=e2094]
+                    - button "Hide Post" [ref=e2096] [cursor=pointer]:
+                      - img [ref=e2098]
+                  - generic [ref=e2100]:
+                    - link [ref=e2101] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/hisham-khan-617005392/
+                      - figure [ref=e2102]
+                    - link "Hisham Khan • 3rd+ Software Engineer | MERN-Stack Developer | Technical Writer 2h •" [ref=e2103] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/in/hisham-khan-617005392/
+                      - generic [ref=e2104]:
+                        - paragraph [ref=e2106]:
+                          - text: Hisham Khan
+                          - generic [ref=e2107]: • 3rd+
+                        - paragraph [ref=e2109]: Software Engineer | MERN-Stack Developer | Technical Writer
+                        - paragraph [ref=e2111]:
+                          - text: 2h •
+                          - img [ref=e2112]
+                    - button "Follow Hisham Khan" [ref=e2117] [cursor=pointer]:
+                      - generic [ref=e2118]:
+                        - img [ref=e2119]
+                        - generic [ref=e2122]: Follow
+                  - paragraph [ref=e2123]:
+                    - generic [ref=e2124]:
+                      - text: 🎉 Achievement Unlocked! 🎉
+                      - text: "I’ve completed the Supervised Machine Learning: Regression course by"
+                      - link "IBM" [ref=e2125] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/company/ibm/
+                        - strong [ref=e2127]: IBM
+                      - text: "! on 17th June 2025."
+                      - text: This course helped me learn how to build predictive models using regression techniques, a key skill in data analysis and decision-making.
+                      - text: I'm looking forward to applying these skills in future projects and continuing to grow in machine learning.
+                      - link "https://lnkd.in/dCuYnfHG" [ref=e2128] [cursor=pointer]:
+                        - /url: https://lnkd.in/dCuYnfHG
+                        - strong [ref=e2130]: https://lnkd.in/dCuYnfHG
+                      - link "#MachineLearning" [ref=e2131] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23machinelearning&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2133]: "#MachineLearning"
+                      - link "#DataScience" [ref=e2134] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23datascience&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2136]: "#DataScience"
+                      - link "#IBM" [ref=e2137] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23ibm&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2139]: "#IBM"
+                      - link "#AI" [ref=e2140] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23ai&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2142]: "#AI"
+                      - link "#PredictiveModeling" [ref=e2143] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23predictivemodeling&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2145]: "#PredictiveModeling"
+                      - link "#LearningJourney" [ref=e2146] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/search/results/all/?keywords=%23learningjourney&origin=HASH_TAG_FROM_FEED
+                        - strong [ref=e2148]: "#LearningJourney"
+                      - button:
+                        - generic [ref=e2150] [cursor=pointer]: … more
+                  - generic [ref=e2151]:
+                    - button "8 reactions" [ref=e2152] [cursor=pointer]:
+                      - generic [ref=e2153]:
+                        - img [ref=e2154]
+                        - paragraph [ref=e2161]:
+                          - generic [ref=e2162]: 8 reactions
+                          - text: "8"
+                    - generic [ref=e2163]:
+                      - button "1 comment" [ref=e2164] [cursor=pointer]:
+                        - paragraph [ref=e2165]: 1 comment
+                      - button:
+                        - paragraph
+                  - generic [ref=e2166]:
+                    - generic [ref=e2168]:
+                      - 'button "Reaction button state: no reaction" [ref=e2171] [cursor=pointer]':
+                        - generic [ref=e2172]:
+                          - img [ref=e2173]
+                          - generic [ref=e2175]: Like
+                      - button "Open reactions menu":
+                        - img [ref=e2177] [cursor=pointer]
+                    - button "Comment" [ref=e2179] [cursor=pointer]:
+                      - generic [ref=e2180]:
+                        - img [ref=e2181]
+                        - generic [ref=e2184]: Comment
+                    - button "Repost" [ref=e2185] [cursor=pointer]:
+                      - generic [ref=e2186]:
+                        - img [ref=e2187]
+                        - generic [ref=e2190]: Repost
+                    - button "Send" [ref=e2191] [cursor=pointer]:
+                      - generic [ref=e2192]:
+                        - img [ref=e2193]
+                        - generic [ref=e2196]: Send
+                - generic [ref=e2202]:
+                  - link [ref=e2204] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/company/ibm/posts/
+                    - figure [ref=e2205]
+                  - generic [ref=e2206]:
+                    - generic [ref=e2208]:
+                      - link "IBM 19,174,060 followers" [ref=e2209] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/company/ibm/posts/
+                        - generic [ref=e2210]:
+                          - paragraph [ref=e2213]: IBM
+                          - paragraph [ref=e2215]: 19,174,060 followers
+                      - paragraph [ref=e2217]: 2h
+                      - button "View more options" [ref=e2218] [cursor=pointer]:
+                        - img [ref=e2220]
+                    - paragraph [ref=e2225]:
+                      - generic [ref=e2226]: Congrats, Hisham! Outstanding achievement! 👍
+                    - generic [ref=e2228]:
+                      - generic [ref=e2229]:
+                        - generic [ref=e2231]:
+                          - 'button "Reaction button state: no reaction" [ref=e2232] [cursor=pointer]':
+                            - 'button "Reaction button state: no reaction" [ref=e2235]':
+                              - 'button "Reaction button state: no reaction" [ref=e2237]':
+                                - generic [ref=e2238]: "Reaction button state: no reaction"
+                                - text: Like
+                          - button "Open reactions menu":
+                            - img [ref=e2240] [cursor=pointer]
+                        - button "1 reaction" [ref=e2242] [cursor=pointer]:
+                          - generic [ref=e2243]:
+                            - img [ref=e2244]
+                            - paragraph [ref=e2251]:
+                              - generic [ref=e2252]: 1 reaction
+                              - text: "1"
+                      - button "Reply" [ref=e2254] [cursor=pointer]:
+                        - generic [ref=e2256]: Reply
+              - button "Load more" [ref=e2258] [cursor=pointer]:
+                - generic [ref=e2260]: Load more
+            - generic [ref=e2262]:
+              - generic [ref=e2265]:
+                - generic [ref=e2267]:
+                  - generic [ref=e2268]:
+                    - paragraph [ref=e2269]: LinkedIn News
+                    - button "Info tooltip" [ref=e2270] [cursor=pointer]:
+                      - img [ref=e2272]
+                  - paragraph [ref=e2274]: Top stories
+                  - generic [ref=e2275]:
+                    - link "Go behind the scenes of this year's Super Bowl ads 3h ago • 2,165 readers" [ref=e2277] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/news/story/go-behind-the-scenes-of-this-years-super-bowl-ads-6946444/
+                      - generic [ref=e2279]:
+                        - paragraph [ref=e2281]: Go behind the scenes of this year's Super Bowl ads
+                        - generic [ref=e2282]:
+                          - paragraph [ref=e2283]: 3h ago
+                          - paragraph [ref=e2284]: •
+                          - paragraph [ref=e2285]: 2,165 readers
+                    - link "Walmart closes above $1T market cap for the first time 3h ago • 10,076 readers" [ref=e2287] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/news/story/walmart-closes-above-1t-market-cap-for-the-first-time-6952060/
+                      - generic [ref=e2289]:
+                        - paragraph [ref=e2291]: Walmart closes above $1T market cap for the first time
+                        - generic [ref=e2292]:
+                          - paragraph [ref=e2293]: 3h ago
+                          - paragraph [ref=e2294]: •
+                          - paragraph [ref=e2295]: 10,076 readers
+                    - link "Spain bans social media for users under 16 years old 3h ago • 6,401 readers" [ref=e2297] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/news/story/spain-bans-social-media-for-users-under-16-years-old-6957660/
+                      - generic [ref=e2299]:
+                        - paragraph [ref=e2301]: Spain bans social media for users under 16 years old
+                        - generic [ref=e2302]:
+                          - paragraph [ref=e2303]: 3h ago
+                          - paragraph [ref=e2304]: •
+                          - paragraph [ref=e2305]: 6,401 readers
+                    - link "Intel plans GPU push as data center buildout accelerates 3h ago • 1,389 readers" [ref=e2307] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/news/story/intel-plans-gpu-push-as-data-center-buildout-accelerates-6953452/
+                      - generic [ref=e2309]:
+                        - paragraph [ref=e2311]: Intel plans GPU push as data center buildout accelerates
+                        - generic [ref=e2312]:
+                          - paragraph [ref=e2313]: 3h ago
+                          - paragraph [ref=e2314]: •
+                          - paragraph [ref=e2315]: 1,389 readers
+                    - link "AMD shares drop despite earnings beat 3h ago • 1,088 readers" [ref=e2317] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/news/story/amd-shares-drop-despite-earnings-beat-6965308/
+                      - generic [ref=e2319]:
+                        - paragraph [ref=e2321]: AMD shares drop despite earnings beat
+                        - generic [ref=e2322]:
+                          - paragraph [ref=e2323]: 3h ago
+                          - paragraph [ref=e2324]: •
+                          - paragraph [ref=e2325]: 1,088 readers
+                    - button "Show more" [ref=e2326] [cursor=pointer]:
+                      - generic [ref=e2327]:
+                        - img [ref=e2328]
+                        - generic [ref=e2330]: Show more
+                - generic [ref=e2332]:
+                  - paragraph [ref=e2333]: Today’s puzzles
+                  - link "Hi, I’m Brainy! Zip is LinkedIn’s daily logic puzzle" [ref=e2334] [cursor=pointer]:
+                    - /url: /games/zip/
+                    - generic [ref=e2335]:
+                      - figure [ref=e2336]
+                      - generic [ref=e2337]:
+                        - paragraph [ref=e2338]: Hi, I’m Brainy!
+                        - paragraph [ref=e2339]: Zip is LinkedIn’s daily logic puzzle
+                      - img [ref=e2340]
+              - generic [ref=e2343]:
+                - iframe [ref=e2346]:
+                  - generic [ref=f1e3]:
+                    - banner [ref=f1e4]:
+                      - generic [ref=f1e5]:
+                        - link "Promoted" [ref=f1e6] [cursor=pointer]:
+                          - /url: https://www.linkedin.com/ads/start?src=en-all-ad-li-ads_by_li&trk=ads_by_li&utm_medium=ad&utm_source=li&utm_campaign=ads_by_li
+                        - button [ref=f1e7] [cursor=pointer]:
+                          - img [ref=f1e8]
+                    - generic [ref=f1e13]:
+                      - link "Ad Image 1,160,789,463 Travel, Dining, Cash Back Explore American Express Card options today. Terms apply. Learn More. Christine Christine & 1 other connection also follow American Express" [ref=f1e14] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/li/tscp/sct?destinationUrl=https%3A%2F%2Fwww.americanexpress.com%2Fus%2Fcredit-cards%2F%3Feep%3D40513%26li_fat_id%3Dc3f7cdb7-6fec-4016-a1fd-3d52d3cc57f9&trackingEvent=%5B%7B%22eventInfo%22%3A%7B%22appId%22%3A%22com.linkedin.ads.rendering.d_web%22%2C%22eventName%22%3A%22SponsoredRightRailContentActionEvent%22%2C%22topicName%22%3A%22SponsoredRightRailContentActionEvent%22%7D%2C%22eventBody%22%3A%7B%22sponsoredEventHeader%22%3A%7B%22encryptedTrackingData%22%3A%22CwEAAAGcJy0o0LVLGz4_futryKM3bw9SU9g1LjgtJQcHL3AWNTNTy6BhwONRWsWvgeHJaUbci1ToUNi5saAoxzK-rPz6ZEtR1VKnvxcD7FyUXVQ8_4oicre9sDJHXvWCk-_pbX6kBTsYYmsUjc0UBUWdA5spO6Y-1xv3lfFUejFJWgdUfwIiwa1RoBDPj412btcLY1p5jO-05tqNAEIoO-s7MVoanoV0nukegLpHDDl2boQ2xXnV0KABC5rNtNUkng9b39mGtdPxqBZNkWPvc_O6ZquwvoOvTHkvbFSVfngngkdExrb6hlhwv3mV6_tga6WhlFCvpom_m7RYp9U9fry9kWaYPWKgLY2EZGM8unzBOiw2-9fq7_eZd5FGavim3oF80bqX2-9lzt6xrfiH3VTjWT32UjYJE2fg0B5xlrKrMsWzMlCWskBjxLS57FkKepJPN9tBq0ZsapX2N8M-7Q6WuNGgZE-Iqc1UdIBQ2g-220ROSzSyHXv0UfUQNOEDoU_ruSdkilPYZ4n7zA8A-hk1pi0EqZgstanry_dXxlxbdIUmkEYSlYCTqQ1lefZ7LEEkU_gQKHiVK2GE2JGsv91Du0VeSDzl9A5Jup5fLlZ_rphGncke2T_tUpRIyykVK8pYAFzKvqLIqID4PkzVSDikEYsnk5y0mMQEW6F9wCHlWnlLLCbFUAkkA9WURhqDuCqDfBorCcNNn_9TZoxdMuDqddDjFL2dxp4liFvgM3HRWqYXKakT1jnSTabxFNJigVDtQ1EeY8Wl3FLH3OXrY0vPn-N921AM4lqTxSLUPGbd8ktmAE_YbxNdCV4x9dh_GsrJfut1a1Bdy5S0ISIWoXgwNJP_Bo4k_cwzjNOfYFCYKD8nWcaD_XwNy-MlIlQKyMmb2n9xGgabbFqWqhRuZ5wX3BSzir97vtOQmhMC_caAWrmsmaLhuxGg0olxtqMkbMFI9o96BAt3LkmVD7FQlcr__rUSdQulGbQxQGfENx85tdemreEeH9trh75hrvAD%22%7D%2C%22header%22%3A%7B%22pageInstance%22%3A%7B%22pageUrn%22%3A%22urn%3Ali%3Apage%3Ad_flagship3_feed%22%2C%22trackingId%22%3A%222f91c17b-9b39-4020-95e2-4a67cc24fcbc%22%7D%2C%22time%22%3A1770183796944%2C%22version%22%3A%220.0.0%22%7D%2C%22requestHeader%22%3A%7B%22pageKey%22%3A%22d_flagship3_feed%22%2C%22interfaceLocale%22%3A%22en-US%22%7D%7D%7D%5D&csrfToken=ajax%3A1706859865365693655
+                        - img "Ad Image 1,160,789,463" [ref=f1e16]
+                        - generic [ref=f1e17]:
+                          - heading "Travel, Dining, Cash Back" [level=4] [ref=f1e18]
+                          - paragraph [ref=f1e19]: Explore American Express Card options today. Terms apply. Learn More.
+                          - generic [ref=f1e20]:
+                            - img "Christine" [ref=f1e22]
+                            - paragraph [ref=f1e23]: Christine & 1 other connection also follow American Express
+                      - link "Ad Image 760,683,883 Pay Overseas Suppliers Keep your supply chain moving. Pay vendors reliably & on time with Remitly." [ref=f1e24] [cursor=pointer]:
+                        - /url: https://www.linkedin.com/li/tscp/sct?destinationUrl=http%3A%2F%2Fwww.remitly.com%2Fus%2Fen%2Flanding%2Fbusiness%3Fli_fat_id%3Dc3f7cdb7-6fec-4016-a1fd-3d52d3cc57f9%26utm_campaign%3DUSA-Global_LinkedIn_SMB_Experimental_Interests-Skills_Text_EN_LF_70100%26utm_medium%3Dpaid%2Bsocial%26li_campaigngroupid%3D756306963%26utm_source%3DLinkedIn%26account_id%3D514705764%26li_campaignid%3D403438193&trackingEvent=%5B%7B%22eventInfo%22%3A%7B%22appId%22%3A%22com.linkedin.ads.rendering.d_web%22%2C%22eventName%22%3A%22SponsoredRightRailContentActionEvent%22%2C%22topicName%22%3A%22SponsoredRightRailContentActionEvent%22%7D%2C%22eventBody%22%3A%7B%22sponsoredEventHeader%22%3A%7B%22encryptedTrackingData%22%3A%22CwEAAAGcJy0oz60x1A9sxNd8oYzXHrS4XBdSsrvqCfcPAxJzvNkLvuBYYTUfBrFTfUKmmBFvv94IO-6JL_qFRlS08zDFt-PQWHBSaduZRcXDOUOz7X9uEwc_xmHiCeXQUAuNxw75Mj5Wu_I6TLfPulAdtJwVaSVwG5igo0jErXsvDUMU30tUNKmSuAoMG9C105EpoTwDkhknsw6OJVRXiBvm-Ctj3RA8LXpqnvYfHmmM9bwBok4Jonh6EO246df4ZVz8fxrNqvdvr57vAr8XkqhHZ8M_dbL1GlconG1OtOUzMGpHVC7xSRLbrCxn3JbgqI7flXr5F_JdbKIlr77r8IprfFwpYwftXQs1ZkZrpxDhR7_iakwlxwQLGbijxYksDkS-5c8sIUdnoO-0RosYbnD3MMUJYz_z9ZpCjAVMA8MvxYne4E7h6xp5SX7L4E3FvsJq2XrHkOxekcDtE5pxREty4VKoHXeYg8qvgktlPkLh_aOGQUHJ3DS2CELyaAm-ce9smSEgfHZ1x9iTG3vx9gA48IClNZE5uqZCUoxVlBkepNtiGce2QvJHftBNBHOrx-JpMY_JeHVId5mBJMunikuMRkzm8q_fuSs7xCcEZbw6TLyo5_ufhnIMM296a-lRxv-bgqI_TqytCmZaXb2T_HeWcpJaXsZc9BnX9UlcoJ8_EtzPgboNv-vAuGIyJLa_nqQ8zo0fHdldHh68_J5eB46rwUQsxyqzhCrQSuwnewuq3F1MuXLBmQarKi041ihG4gWXNcbeK3pAqRmVsgBcRqo9L-Zb1nLsbkPC5GErvZ-1MfnTqCBKw7tV7eZnSDJETkv-b4nH32pToq_8vRtWWub1_EUk_COs_qZ3H3_EpgWTE8siRwIK5JTCaNaoBNwzMM7n7LUuhFBRIaDPSCbvtvL72WAUWiqD2FLMxXQQCM8R3sTYe9XaZBRcfezUXv4YXnITxTrrGTIRHlEyirdFsWT7c1iy7IqRETdVpnU%22%7D%2C%22header%22%3A%7B%22pageInstance%22%3A%7B%22pageUrn%22%3A%22urn%3Ali%3Apage%3Ad_flagship3_feed%22%2C%22trackingId%22%3A%2218ff79e2-78dd-40d0-ab16-6bc228b87103%22%7D%2C%22time%22%3A1770183796943%2C%22version%22%3A%220.0.0%22%7D%2C%22requestHeader%22%3A%7B%22pageKey%22%3A%22d_flagship3_feed%22%2C%22interfaceLocale%22%3A%22en-US%22%7D%7D%7D%5D&csrfToken=ajax%3A1706859865365693655
+                        - img "Ad Image 760,683,883" [ref=f1e26]
+                        - generic [ref=f1e27]:
+                          - heading "Pay Overseas Suppliers" [level=4] [ref=f1e28]
+                          - paragraph [ref=f1e29]: Keep your supply chain moving. Pay vendors reliably & on time with Remitly.
+                - generic [ref=e2347]:
+                  - generic [ref=e2348]:
+                    - link "About" [ref=e2349] [cursor=pointer]:
+                      - /url: https://about.linkedin.com/
+                      - paragraph [ref=e2350]: About
+                    - link "Accessibility" [ref=e2351] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/accessibility/
+                      - paragraph [ref=e2352]: Accessibility
+                    - link "Help Center" [ref=e2353] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/help/linkedin/
+                      - paragraph [ref=e2354]: Help Center
+                    - button "Privacy & Terms" [ref=e2355] [cursor=pointer]:
+                      - generic [ref=e2356]:
+                        - paragraph [ref=e2357]: Privacy & Terms
+                        - img [ref=e2358]
+                    - link "Ad Choices" [ref=e2360] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/help/linkedin/answer/62931/
+                      - paragraph [ref=e2361]: Ad Choices
+                    - link "Advertising" [ref=e2362] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/ad/start/?trk=n_nav_ads_rr
+                      - paragraph [ref=e2363]: Advertising
+                    - button "Business Services" [ref=e2364] [cursor=pointer]:
+                      - generic [ref=e2365]:
+                        - paragraph [ref=e2366]: Business Services
+                        - img [ref=e2367]
+                    - link "Get the LinkedIn app" [ref=e2369] [cursor=pointer]:
+                      - /url: https://www.linkedin.com/mobile/
+                      - paragraph [ref=e2370]: Get the LinkedIn app
+                    - button "More" [ref=e2371] [cursor=pointer]:
+                      - paragraph [ref=e2372]: More
+                  - generic [ref=e2373]:
+                    - img [ref=e2374]
+                    - paragraph [ref=e2376]: LinkedIn Corporation © 2026
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - complementary:
+            - generic [ref=e2379]:
+              - generic [ref=e2381] [cursor=pointer]:
+                - generic [ref=e2382]:
+                  - img "Alain Ignacio" [ref=e2383]
+                  - generic [ref=e2385]: Status is online
+                - button "You are on the messaging overlay. Press enter to open the list of conversations." [ref=e2386]:
+                  - generic [ref=e2387]:
+                    - generic [ref=e2388]: Messaging
+                    - generic [ref=e2389]: You are on the messaging overlay. Press enter to open the list of conversations.
+              - generic [ref=e2390]:
+                - button "Open messenger dropdown menu" [ref=e2392] [cursor=pointer]:
+                  - img "Open messenger dropdown menu" [ref=e2393]
+                - button "Compose message" [ref=e2396] [cursor=pointer]:
+                  - img [ref=e2397]
+                  - generic [ref=e2399]: Compose message
+                - button "You are on the messaging overlay. Press enter to open the list of conversations." [ref=e2400] [cursor=pointer]:
+                  - img [ref=e2401]
+                  - generic [ref=e2403]: You are on the messaging overlay. Press enter to open the list of conversations.
+          - complementary "AI-powered assistant to get help with your career, jobs etc"
+  - iframe [ref=e2377]:
+    - generic [active] [ref=f2e12]:
+      - generic:
+        - region "Toast message":
+          - heading "0 notifications total" [level=2] [ref=f2e14]
+          - alert
+      - region [ref=f2e15]
+      - generic [ref=f2e16]:
+        - generic [ref=f2e18]:
+          - button "Skip to search" [ref=f2e19] [cursor=pointer]:
+            - generic [ref=f2e20]: Skip to search
+          - button "Skip to main content" [ref=f2e21] [cursor=pointer]:
+            - generic [ref=f2e22]: Skip to main content
+          - button "Keyboard shortcuts" [ref=f2e23] [cursor=pointer]:
+            - generic [ref=f2e24]: Keyboard shortcuts
+          - button "Close jump menu" [ref=f2e25] [cursor=pointer]:
+            - img [ref=f2e26]
+            - generic [ref=f2e28]: Close jump menu
+        - banner "Global Navigation" [ref=f2e29]:
+          - generic [ref=f2e30]:
+            - link "LinkedIn" [ref=f2e31] [cursor=pointer]:
+              - /url: https://www.linkedin.com/feed/?nis=true
+              - img "LinkedIn" [ref=f2e34]:
+                - img [ref=f2e35]
+            - generic [ref=f2e39]:
+              - combobox "Search" [ref=f2e40]
+              - generic:
+                - img
+            - navigation "Primary Navigation" [ref=f2e41]:
+              - list [ref=f2e42]:
+                - listitem [ref=f2e43]:
+                  - link "new feed updates notifications Home" [ref=f2e44] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/feed/
+                    - generic [ref=f2e45]:
+                      - generic [ref=f2e48]: new feed updates notifications
+                      - img [ref=f2e52]
+                    - generic "Home" [ref=f2e54]
+                - listitem [ref=f2e55]:
+                  - link "My Network" [ref=f2e56] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/mynetwork/?
+                    - img [ref=f2e60]
+                    - generic "My Network" [ref=f2e62]
+                - listitem [ref=f2e63]:
+                  - link "Jobs" [ref=f2e64] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/jobs/?
+                    - img [ref=f2e68]
+                    - generic "Jobs" [ref=f2e70]
+                - listitem [ref=f2e71]:
+                  - link "Messaging" [ref=f2e72] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/messaging/?
+                    - img [ref=f2e76]
+                    - generic "Messaging" [ref=f2e78]
+                - listitem [ref=f2e79]:
+                  - link "1 new notification Notifications" [ref=f2e80] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/notifications/?
+                    - generic [ref=f2e81]:
+                      - generic [ref=f2e82]:
+                        - generic [ref=f2e83]: "1"
+                        - generic [ref=f2e84]: 1 new notification
+                      - img [ref=f2e88]
+                    - generic "Notifications" [ref=f2e90]
+                - listitem [ref=f2e91]:
+                  - button "Alain Ignacio Me" [ref=f2e93] [cursor=pointer]:
+                    - img "Alain Ignacio" [ref=f2e94]
+                    - generic [ref=f2e95]:
+                      - text: Me
+                      - img [ref=f2e96]
+                - listitem [ref=f2e98]:
+                  - button "For Business" [ref=f2e100] [cursor=pointer]:
+                    - img [ref=f2e104]
+                    - generic "For Business" [ref=f2e106]:
+                      - text: For Business
+                      - img [ref=f2e107]
+                - listitem [ref=f2e109]:
+                  - link "Try Premium for $0" [ref=f2e111] [cursor=pointer]:
+                    - /url: javascript:void(0)
+                    - generic [ref=f2e112]:
+                      - img [ref=f2e113]
+                      - generic [ref=f2e115]: Try Premium for $0

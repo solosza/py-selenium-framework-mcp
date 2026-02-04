@@ -5,7 +5,7 @@ Provides reusable fixtures for test execution:
 - driver: ChromeDriver instance with headless option
 - config: Environment configuration (base URL)
 - test_users: Test user credentials
-- web_interface: WebInterface wrapper with all dependencies
+- browser: BrowserInterface wrapper with all dependencies
 """
 
 import os
@@ -20,7 +20,7 @@ FRAMEWORK_PATH = str(Path(__file__).parent.parent / "framework")
 sys.path.insert(0, FRAMEWORK_PATH)
 
 from resources.chromedriver.driver import create_driver
-from interfaces.web_interface import WebInterface
+from interfaces.browser_interface import BrowserInterface
 
 
 # ------------------------------------------------------------------------------
@@ -99,9 +99,9 @@ def test_users():
 
 
 @pytest.fixture()
-def web_interface(driver, config):
+def browser(driver, config):
     """
-    Create WebInterface wrapper with driver, config, and logger.
+    Create BrowserInterface wrapper with driver, config, and logger.
 
     Function-scoped: New instance per test.
 
@@ -110,13 +110,12 @@ def web_interface(driver, config):
         config: Environment config fixture
 
     Returns:
-        WebInterface: Configured WebInterface instance
+        BrowserInterface: Configured BrowserInterface instance
     """
-    # Create logger for WebInterface
     import logging
-    logger = logging.getLogger("WebInterface")
+    logger = logging.getLogger("BrowserInterface")
 
-    yield WebInterface(driver, config, logger)
+    yield BrowserInterface(driver, config, logger)
 
 
 # ==============================================================================
