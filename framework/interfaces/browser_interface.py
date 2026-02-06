@@ -278,6 +278,32 @@ class BrowserInterface:
             self._take_screenshot("dropdown_select_failure")
             raise
 
+    def get_dropdown_options(self, by: By, value: str, timeout: Optional[int] = None) -> list:
+        """
+        Get all option texts from a dropdown/select element.
+
+        Args:
+            by: Locator strategy
+            value: Locator value
+            timeout: Optional custom timeout
+
+        Returns:
+            List of option text values
+        """
+        timeout = timeout or self.explicit_wait
+        self.logger.info(f"Getting dropdown options from: {by}='{value}'")
+
+        try:
+            element = self.find_element(by, value, timeout=timeout)
+            select = Select(element)
+            options = [option.text for option in select.options]
+            self.logger.info(f"Found {len(options)} options in dropdown: {by}='{value}'")
+            return options
+        except Exception as e:
+            self.logger.error(f"Failed to get dropdown options: {str(e)}")
+            self._take_screenshot("dropdown_options_failure")
+            raise
+
     def get_text(self, by: By, value: str, timeout: Optional[int] = None) -> str:
         """
         Get text content of an element.
